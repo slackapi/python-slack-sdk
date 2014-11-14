@@ -1,4 +1,6 @@
 from _slackrequest import SlackRequest
+from _channel import Channel
+from _util import SearchList
 
 from websocket import create_connection
 import json
@@ -7,12 +9,12 @@ class Server(object):
     def __init__(self, token):
         self.token = token
         self.nick = None
-        self.name = None
+        self.username = None
         self.domain = None
         self.login_data = None
         self.websocket = None
-        self.users = []
-        self.channels = []
+        self.users = SearchList()
+        self.channels = SearchList()
         self.connected = False
         self.pingcounter = 0
         self.api_requester = SlackRequest()
@@ -34,21 +36,33 @@ class Server(object):
     def connect_to_slack(self):
         reply = self.api_requester.do(self.token, "rtm.start")
         if reply.code != 200:
-            raise SlackLoginError
+            raise SlackConnectionError
         else:
-            login_data = json.loads(reply.read())
-            self.parse_slack_login_data(login_data)
+            reply = json.loads(reply.read())
+            if reply["ok"]:
+                self.parse_slack_login_data(reply)
+            else:
+                raise SlackLoginError
+
     def parse_slack_login_data(self, login_data):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
-        self.name = self.login_data["self"]["name"]
+        self.username = self.login_data["self"]["name"]
+        self.parse_channel_data(login_data["channels"])
         try:
             self.websocket = create_connection(self.login_data['url'])
             self.websocket.sock.setblocking(0)
         except:
-            raise SlackLoginError
+            raise SlackConnectionError
+
+    def parse_channel_data(self, channel_data):
+        for channel in channel_data:
+            if "members" not in channel:
+                channel["members"] = []
+            self.attach_channel(channel["name"], channel["id"], channel["members"])
 
     def send_to_websocket(self, data):
+        """Send (data) directly to the websocket."""
         data = json.dumps(data)
         self.websocket.send(data)
 
@@ -56,12 +70,19 @@ class Server(object):
         return self.send_to_websocket({"type": "ping"})
 
     def websocket_safe_read(self):
+        """Returns data if available, otherwise ''. Newlines indicate multiple messages """
         data = ""
         while True:
             try:
                 data += "%s\n" % self.websocket.recv()
             except:
                 return data.rstrip()
+
+    def attach_channel(self, name, id, members=[]):
+        self.channels.append(Channel(self, name, id, members))
+
+class SlackConnectionError(Exception):
+    pass
 
 class SlackLoginError(Exception):
     pass
