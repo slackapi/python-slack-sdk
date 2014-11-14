@@ -8,7 +8,6 @@ import json
 class Server(object):
     def __init__(self, token):
         self.token = token
-        self.nick = None
         self.username = None
         self.domain = None
         self.login_data = None
