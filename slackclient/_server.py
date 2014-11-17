@@ -48,6 +48,7 @@ class Server(object):
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
         self.parse_channel_data(login_data["channels"])
+        self.parse_channel_data(login_data["ims"])
         try:
             self.websocket = create_connection(self.login_data['url'])
             self.websocket.sock.setblocking(0)
@@ -56,6 +57,8 @@ class Server(object):
 
     def parse_channel_data(self, channel_data):
         for channel in channel_data:
+            if "name" not in channel:
+                channel["name"] = channel["id"]
             if "members" not in channel:
                 channel["members"] = []
             self.attach_channel(channel["name"], channel["id"], channel["members"])
@@ -79,6 +82,9 @@ class Server(object):
 
     def attach_channel(self, name, id, members=[]):
         self.channels.append(Channel(self, name, id, members))
+
+    def join_channel(self, name):
+        print self.api_requester.do(self.token, "channels.join?name=%s" % name).read()
 
 class SlackConnectionError(Exception):
     pass
