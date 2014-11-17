@@ -1,1 +1,1 @@
-__all__ = ['slackclient']
+from _client import SlackClient
