@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import json
+
 from _server import Server
 
 class SlackClient(object):
@@ -8,3 +10,16 @@ class SlackClient(object):
         self.server = None
     def connect(self):
         self.server = Server(self.token)
+    def read(self):
+        if self.server:
+            json_data = self.server.websocket_safe_read()
+            data = []
+            if json_data != '':
+                for d in json_data.split('\n'):
+                    data.append(json.loads(d))
+            return data
+        else:
+            raise SlackNotConnected
+
+class SlackNotConnected(Exception):
+    pass
