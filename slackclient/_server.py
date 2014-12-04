@@ -28,7 +28,7 @@ class Server(object):
     def __str__(self):
         data = ""
         for key in self.__dict__.keys():
-            data += "%s : %s\n" % (key, str(self.__dict__[key])[:40])
+            data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
         return data
     def __repr__(self):
         return self.__str__()
@@ -77,7 +77,7 @@ class Server(object):
         data = ""
         while True:
             try:
-                data += "%s\n" % self.websocket.recv()
+                data += "{}\n".format(self.websocket.recv())
                 print data
             except:
                 return data.rstrip()
@@ -86,7 +86,10 @@ class Server(object):
         self.channels.append(Channel(self, name, id, members))
 
     def join_channel(self, name):
-        print self.api_requester.do(self.token, "channels.join?name=%s" % name).read()
+        print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
+
+    def api_call(self, method, params={}):
+        return self.api_requester.do(self.token, "{}".format(method)).read()
 
 class SlackConnectionError(Exception):
     pass
