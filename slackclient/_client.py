@@ -9,7 +9,11 @@ class SlackClient(object):
         self.token = token
         self.server = None
     def connect(self):
-        self.server = Server(self.token)
+        try:
+            self.server = Server(self.token)
+            return True
+        except:
+            return False
     def read(self):
         if self.server:
             json_data = self.server.websocket_safe_read()

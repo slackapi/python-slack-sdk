@@ -7,10 +7,9 @@ class SlackRequest(object):
         pass
     def do(self, token, request="?", post_data={}, domain="slack.com"):
         t = time.time()
-#        request += "?t=%s" % t
         post_data["ts"] = t
         post_data["token"] = token
         post_data = urllib.urlencode(post_data)
-        url = 'https://%s/api/%s' % (domain, request)
+        url = 'https://{}/api/{}'.format(domain, request)
         return urllib2.urlopen(url, post_data)
 

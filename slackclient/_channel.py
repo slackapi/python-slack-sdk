@@ -12,7 +12,7 @@ class Channel(object):
     def __str__(self):
         data = ""
         for key in self.__dict__.keys():
-            data += "%s : %s\n" % (key, str(self.__dict__[key])[:40])
+            data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
         return data
     def __repr__(self):
         return self.__str__()
