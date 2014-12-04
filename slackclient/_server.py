@@ -6,7 +6,7 @@ from websocket import create_connection
 import json
 
 class Server(object):
-    def __init__(self, token):
+    def __init__(self, token, connect=True):
         self.token = token
         self.username = None
         self.domain = None
@@ -18,7 +18,8 @@ class Server(object):
         self.pingcounter = 0
         self.api_requester = SlackRequest()
 
-        self.connect_to_slack()
+        if connect:
+            self.connect_to_slack()
     def __eq__(self, compare_str):
         if compare_str == self.domain or compare_str == self.token:
             return True
@@ -77,6 +78,7 @@ class Server(object):
         while True:
             try:
                 data += "%s\n" % self.websocket.recv()
+                print data
             except:
                 return data.rstrip()
 
