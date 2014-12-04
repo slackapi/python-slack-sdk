@@ -41,7 +41,6 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 ####[SlackClient.**server**]  
 Server object owns the websocket and all nested channel information.
 
-####Server Object Methods
 SlackClient.server.**ping**()  
 Send a ping to Slack via the websocket. Reply should be received.
 
