@@ -38,7 +38,7 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 ###Objects
 -----------
 
-SlackClient.**server**  
+####[SlackClient.**server**]  
 Server object owns the websocket and all nested channel information.
 
 ####Server Object Methods
@@ -53,7 +53,7 @@ Send a JSON message via the websocket. See RTM documentation for allowed types.
 
 -----------
 
-SlackClient.server.**channels**  
+####[SlackClient.server.**channels**]  
 A searchable list of all known channels within the parent server. Call `print (sc instance)` to see the entire list.
 
 SlackClient.server.**channels.find([identifier])**
