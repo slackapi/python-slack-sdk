@@ -81,11 +81,11 @@ Call the Slack method [method] with the a dict of params in [params]
 SlackClient.server.**send_to_websocket([data])**  
 Send a JSON message directly to the websocket. See RTM documentation for allowed types.
 
-SlackClient.server.**channels.find([identifier])**
+SlackClient.server.**channels.find([identifier])**  
 The identifier can be either name or Slack channel ID. See above for examples.
 
-SlackClient.server.**channnels[int].send_message([text])**
+SlackClient.server.**channnels[int].send_message([text])**  
 Send message [text] to [int] channel in the channels list.
 
-SlackClient.server.**channnels.find([identifier]).send_message([text])**
+SlackClient.server.**channnels.find([identifier]).send_message([text])**  
 Send message [text] to channel [identifier], which can be either channel name or ID. Ex "#general" or "C182391"
