@@ -19,7 +19,7 @@ class Server(object):
         self.api_requester = SlackRequest()
 
         if connect:
-            self.connect_to_slack()
+            self.rtm_connect()
     def __eq__(self, compare_str):
         if compare_str == self.domain or compare_str == self.token:
             return True
@@ -33,7 +33,7 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
-    def connect_to_slack(self):
+    def rtm_connect(self):
         reply = self.api_requester.do(self.token, "rtm.start")
         if reply.code != 200:
             raise SlackConnectionError
@@ -89,7 +89,8 @@ class Server(object):
         print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
 
     def api_call(self, method, params={}):
-        return self.api_requester.do(self.token, "{}".format(method)).read()
+        reply = self.api_requester.do(self.token, method, params)
+        return reply.read()
 
 class SlackConnectionError(Exception):
     pass
