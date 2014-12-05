@@ -5,6 +5,7 @@ import urllib2
 class SlackRequest(object):
     def __init__(self):
         pass
+
     def do(self, token, request="?", post_data={}, domain="slack.com"):
         t = time.time()
         post_data["ts"] = t
