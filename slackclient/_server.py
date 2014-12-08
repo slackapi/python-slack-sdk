@@ -78,7 +78,6 @@ class Server(object):
         while True:
             try:
                 data += "{}\n".format(self.websocket.recv())
-                print data
             except:
                 return data.rstrip()
 
