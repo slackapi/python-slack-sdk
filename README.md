@@ -8,6 +8,8 @@ This plugin is a light wrapper around the [Slack API](https://api.slack.com/). I
 
 The optional RTM connection allows you to create a persistent websocket connection, from which you can read events just like an official Slack client. This allows you to respond to events in real time without polling and send messages without making a full HTTPS request.
 
+See [python-rtmbot](https://github.com/slackhq/python-rtmbot/) for an active project utilizing this library.
+
 Dependencies
 ----------
 * websocket-client https://pypi.python.org/pypi/websocket-client/
@@ -22,7 +24,6 @@ Installation ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is reco
 Usage
 -----
 See examples in [doc/examples](doc/examples/)
-See [python-rtmbot](https://github.com/slackhq/python-rtmbot/) for an active project using this library.
 
 _Note:_ You must obtain a token for the user/bot. You can find or generate these at the [Slack API](https://api.slack.com/#auth) page.
 
