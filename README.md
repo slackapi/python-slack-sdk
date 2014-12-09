@@ -10,15 +10,12 @@ The optional RTM connection allows you to create a persistent websocket connecti
 
 See [python-rtmbot](https://github.com/slackhq/python-rtmbot/) for an active project utilizing this library.
 
-Dependencies
+Dependencies ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
 ----------
 * websocket-client https://pypi.python.org/pypi/websocket-client/
 
-Installation ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
------------
-
     pip install -r requirements.txt
-  
+
 Usage
 -----
 See examples in [doc/examples](doc/examples/)
