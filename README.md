@@ -14,7 +14,7 @@ Dependencies ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is reco
 ----------
 * websocket-client https://pypi.python.org/pypi/websocket-client/
 
-    pip install -r requirements.txt
+    `pip install -r requirements.txt`
 
 Usage
 -----
