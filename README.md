@@ -20,7 +20,7 @@ Usage
 -----
 See examples in [doc/examples](doc/examples/)
 
-_Note:_ You must obtain a token for the user/bot. You can find or generate these at the [Slack API](https://api.slack.com/#auth) page.
+_Note:_ You must obtain a token for the user/bot. You can find or generate these at the [Slack API](https://api.slack.com/web) page.
 
 ###Basic API methods
 
