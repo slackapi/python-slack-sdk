@@ -17,9 +17,7 @@ Dependencies
 Installation ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
 -----------
 
-    git clone https://github.com/liris/websocket-client.git
-    cd websocket-client
-    sudo python setup.py install
+    pip install -r requirements.txt
   
 Usage
 -----
