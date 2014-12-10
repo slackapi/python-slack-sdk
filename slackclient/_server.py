@@ -12,7 +12,7 @@ class Server(object):
         self.domain = None
         self.login_data = None
         self.websocket = None
-        self.users = SearchList()
+        self.users = {}
         self.channels = SearchList()
         self.connected = False
         self.pingcounter = 0
@@ -20,16 +20,19 @@ class Server(object):
 
         if connect:
             self.rtm_connect()
+
     def __eq__(self, compare_str):
         if compare_str == self.domain or compare_str == self.token:
             return True
         else:
             return False
+
     def __str__(self):
         data = ""
         for key in self.__dict__.keys():
             data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
         return data
+
     def __repr__(self):
         return self.__str__()
 
@@ -48,6 +51,7 @@ class Server(object):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
+        self.users = dict((u["id"], u) for u in login_data["users"])
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
         self.parse_channel_data(login_data["ims"])
