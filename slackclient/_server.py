@@ -88,8 +88,8 @@ class Server(object):
     def join_channel(self, name):
         print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
 
-    def api_call(self, method, params={}):
-        reply = self.api_requester.do(self.token, method, params)
+    def api_call(self, method, **kwargs):
+        reply = self.api_requester.do(self.token, method, kwargs)
         return reply.read()
 
 class SlackConnectionError(Exception):
