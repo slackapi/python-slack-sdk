@@ -77,12 +77,16 @@ class Server(object):
 
     def parse_user_data(self, user_data):
         for user in user_data:
-            if "realname" not in user:
-                user["realname"] = user["name"]
+            if user["deleted"]:
+                continue
+
+            if "real_name" not in user:
+                user["real_name"] = user["name"]
+
             if "tz" not in user:
                 user["tz"] = None
 
-            self.users.append(User(self, user["id"], user["name"], user["realname"], user["tz"]))
+            self.users.append(User(self, user["id"], user["name"], user["real_name"], user["tz"]))
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""

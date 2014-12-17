@@ -2,6 +2,7 @@ class Im(object):
     def __init__(self, server, user, id):
         self.server = server
         self.user = user
+
         self.id = id
 
     def __eq__(self, compare_str):
