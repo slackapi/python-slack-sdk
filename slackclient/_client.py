@@ -19,7 +19,7 @@ class SlackClient(object):
             return False
 
     def api_call(self, method, **kwargs):
-        return self.server.api_call(method, kwargs)
+        return self.server.api_call(method, **kwargs)
 
     def rtm_read(self):
         #in the future, this should handle some events internally i.e. channel creation
