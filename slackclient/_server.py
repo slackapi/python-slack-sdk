@@ -1,3 +1,4 @@
+from _config import config
 from _slackrequest import SlackRequest
 from _channel import Channel
 from _util import SearchList
@@ -6,7 +7,9 @@ from websocket import create_connection
 import json
 
 class Server(object):
-    def __init__(self, token, connect=True):
+    def __init__(self, token=None, connect=True):
+        if token is None:
+            token = config.TOKEN
         self.token = token
         self.username = None
         self.domain = None
