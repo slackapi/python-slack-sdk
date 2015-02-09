@@ -1,6 +1,6 @@
-from _slackrequest import SlackRequest
-from _channel import Channel
-from _util import SearchList
+from slackclient._slackrequest import SlackRequest
+from slackclient._channel import Channel
+from slackclient._util import SearchList
 
 from websocket import create_connection
 import json
@@ -86,7 +86,7 @@ class Server(object):
         self.channels.append(Channel(self, name, id, members))
 
     def join_channel(self, name):
-        print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
+        print(self.api_requester.do(self.token, "channels.join?name={}".format(name)).read())
 
     def api_call(self, method, **kwargs):
         reply = self.api_requester.do(self.token, method, kwargs)
