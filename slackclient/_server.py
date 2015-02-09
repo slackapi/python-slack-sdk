@@ -86,7 +86,7 @@ class Server(object):
         self.channels.append(Channel(self, name, id, members))
 
     def join_channel(self, name):
-        print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
+        print (self.api_requester.do(self.token, "channels.join?name={}".format(name)).read())
 
     def api_call(self, method, **kwargs):
         reply = self.api_requester.do(self.token, method, kwargs)
