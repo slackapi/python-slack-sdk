@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-
 from setuptools import setup
+
 
 setup(name='slackclient',
       version='0.13',
