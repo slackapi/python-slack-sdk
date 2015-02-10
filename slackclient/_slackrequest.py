@@ -1,6 +1,6 @@
 import time
-import urllib
-import urllib2
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 class SlackRequest(object):
     def __init__(self):
@@ -8,7 +8,7 @@ class SlackRequest(object):
 
     def do(self, token, request="?", post_data={}, domain="slack.com"):
         post_data["token"] = token
-        post_data = urllib.urlencode(post_data)
+        post_data = urllib.parse.urlencode(post_data)
         url = 'https://{}/api/{}'.format(domain, request)
-        return urllib2.urlopen(url, post_data)
+        return urllib.request.urlopen(url, post_data)
 
