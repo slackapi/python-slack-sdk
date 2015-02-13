@@ -1,12 +1,13 @@
-class Channel(object):
-    def __init__(self, server, name, id, members=[]):
-        self.server = server
+class User(object):
+    def __init__(self, server, id, name, real_name, tz):
+        self.tz = tz
         self.name = name
+        self.real_name = real_name
+        self.server = server
         self.id = id
-        self.members = members
 
     def __eq__(self, compare_str):
-        if self.name == compare_str or self.id == compare_str:
+        if self.id == compare_str:
             return True
         else:
             return False
@@ -20,8 +21,3 @@ class Channel(object):
 
     def __repr__(self):
         return self.__str__()
-
-    def send_message(self, message):
-        message_json = {"type": "message", "channel": self.id, "text": message}
-        self.server.send_to_websocket(message_json)
-

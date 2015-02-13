@@ -1,12 +1,11 @@
-class Channel(object):
-    def __init__(self, server, name, id, members=[]):
+class Im(object):
+    def __init__(self, server, user, id):
         self.server = server
-        self.name = name
+        self.user = user
         self.id = id
-        self.members = members
 
     def __eq__(self, compare_str):
-        if self.name == compare_str or self.id == compare_str:
+        if self.id == compare_str or self.user == compare_str:
             return True
         else:
             return False
