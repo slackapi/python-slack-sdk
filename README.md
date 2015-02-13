@@ -10,10 +10,16 @@ The optional RTM connection allows you to create a persistent websocket connecti
 
 See [python-rtmbot](https://github.com/slackhq/python-rtmbot/) for an active project utilizing this library.
 
-Dependencies ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
+Installation
 ----------
-* websocket-client https://pypi.python.org/pypi/websocket-client/
 
+#### Automatic w/ PyPI ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
+
+    `pip install slackclient`
+
+#### Manual
+
+    `git clone https://github.com/slackhq/python-slackclient.git`
     `pip install -r requirements.txt`
 
 Usage
