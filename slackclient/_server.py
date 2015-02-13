@@ -1,9 +1,10 @@
-from _slackrequest import SlackRequest
-from _channel import Channel
-from _util import SearchList
+from ._slackrequest import SlackRequest
+from ._channel import Channel
+from ._util import SearchList
 
 from websocket import create_connection
 import json
+
 
 class Server(object):
     def __init__(self, token, connect=True):
@@ -20,16 +21,19 @@ class Server(object):
 
         if connect:
             self.rtm_connect()
+
     def __eq__(self, compare_str):
         if compare_str == self.domain or compare_str == self.token:
             return True
         else:
             return False
+
     def __str__(self):
         data = ""
-        for key in self.__dict__.keys():
+        for key in list(self.__dict__.keys()):
             data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
         return data
+
     def __repr__(self):
         return self.__str__()
 
@@ -63,7 +67,9 @@ class Server(object):
                 channel["name"] = channel["id"]
             if "members" not in channel:
                 channel["members"] = []
-            self.attach_channel(channel["name"], channel["id"], channel["members"])
+            self.attach_channel(channel["name"],
+                                channel["id"],
+                                channel["members"])
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""
@@ -74,7 +80,10 @@ class Server(object):
         return self.send_to_websocket({"type": "ping"})
 
     def websocket_safe_read(self):
-        """Returns data if available, otherwise ''. Newlines indicate multiple messages """
+        """ Returns data if available, otherwise ''. Newlines indicate multiple
+            messages
+        """
+
         data = ""
         while True:
             try:
@@ -86,14 +95,17 @@ class Server(object):
         self.channels.append(Channel(self, name, id, members))
 
     def join_channel(self, name):
-        print self.api_requester.do(self.token, "channels.join?name={}".format(name)).read()
+        print(self.api_requester.do(self.token,
+                                    "channels.join?name={}".format(name)).read())
 
     def api_call(self, method, **kwargs):
         reply = self.api_requester.do(self.token, method, kwargs)
         return reply.read()
 
+
 class SlackConnectionError(Exception):
     pass
+
 
 class SlackLoginError(Exception):
     pass
