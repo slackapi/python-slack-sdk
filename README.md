@@ -15,12 +15,12 @@ Installation
 
 #### Automatic w/ PyPI ([virtualenv](http://virtualenv.readthedocs.org/en/latest/) is recommended.)
 
-    `pip install slackclient`
+    pip install slackclient
 
 #### Manual
 
-    `git clone https://github.com/slackhq/python-slackclient.git`
-    `pip install -r requirements.txt`
+    git clone https://github.com/slackhq/python-slackclient.git
+    pip install -r requirements.txt
 
 Usage
 -----
