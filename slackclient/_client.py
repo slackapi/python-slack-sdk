@@ -14,12 +14,11 @@ class SlackClient(object):
         try:
             self.server.rtm_connect()
             return True
-        except Exception as e:
-            print e
+        except:
             return False
 
     def api_call(self, method, **kwargs):
-        return self.server.api_call(method, **kwargs)
+        return self.server.api_call(method, kwargs)
 
     def rtm_read(self):
         #in the future, this should handle some events internally i.e. channel creation
@@ -34,11 +33,7 @@ class SlackClient(object):
             raise SlackNotConnected
 
     def rtm_send_message(self, channel, message):
-        if channel.startswith("D"):
-            return self.server.ims.find(channel).send_message(message)
-        else:
-            return self.server.channels.find(channel).send_message(message)
-
+        return self.server.channels.find(channel).send_message(message)
 
 class SlackNotConnected(Exception):
     pass

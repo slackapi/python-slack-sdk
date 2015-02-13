@@ -1,8 +1,6 @@
 from _slackrequest import SlackRequest
 from _channel import Channel
 from _util import SearchList
-from slackclient.slackclient._im import Im
-from slackclient.slackclient._user import User
 
 from websocket import create_connection
 import json
@@ -14,11 +12,8 @@ class Server(object):
         self.domain = None
         self.login_data = None
         self.websocket = None
-
         self.users = SearchList()
         self.channels = SearchList()
-        self.ims = SearchList()
-
         self.connected = False
         self.pingcounter = 0
         self.api_requester = SlackRequest()
@@ -55,8 +50,7 @@ class Server(object):
         self.username = self.login_data["self"]["name"]
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
-        self.parse_im_data(login_data["ims"])
-        self.parse_user_data(login_data["users"])
+        self.parse_channel_data(login_data["ims"])
         try:
             self.websocket = create_connection(self.login_data['url'])
             self.websocket.sock.setblocking(0)
@@ -70,23 +64,6 @@ class Server(object):
             if "members" not in channel:
                 channel["members"] = []
             self.attach_channel(channel["name"], channel["id"], channel["members"])
-
-    def parse_im_data(self, im_data):
-        for im in im_data:
-            self.ims.append(Im(self,  im["user"], im["id"]))
-
-    def parse_user_data(self, user_data):
-        for user in user_data:
-            if user["deleted"]:
-                continue
-
-            if "real_name" not in user:
-                user["real_name"] = user["name"]
-
-            if "tz" not in user:
-                user["tz"] = None
-
-            self.users.append(User(self, user["id"], user["name"], user["real_name"], user["tz"]))
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""

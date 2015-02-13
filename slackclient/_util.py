@@ -9,7 +9,7 @@ class SearchList(list):
                 if child == name:
                     items.append(child)
 
-        if len(items) > 0:
+        if len(items) == 1:
             return items[0]
         elif items != []:
             return items
