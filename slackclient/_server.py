@@ -42,7 +42,7 @@ class Server(object):
         if reply.code != 200:
             raise SlackConnectionError
         else:
-            reply = json.loads(reply.read())
+            reply = json.loads(reply.read().decode('utf-8'))
             if reply["ok"]:
                 self.parse_slack_login_data(reply)
             else:
