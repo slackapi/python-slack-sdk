@@ -30,6 +30,7 @@ class SlackClient(object):
                     data.append(json.loads(d))
             for item in data:
                 self.process_changes(item)
+            return data
         else:
             raise SlackNotConnected
 
