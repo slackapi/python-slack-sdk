@@ -30,31 +30,33 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 
 ###Basic API methods
 
-    import time
-    from slackclient import SlackClient
-    
-    token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/#auth)
-    sc = SlackClient(token)
-    print sc.api_call("api.test")
-    print sc.api_call("channels.info", {"channel": "C1234567890"})
+```python
+import time
+from slackclient import SlackClient
+
+token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/#auth)
+sc = SlackClient(token)
+print sc.api_call("api.test")
+print sc.api_call("channels.info", {"channel": "C1234567890"})
+````
 
 
 ### Real Time Messaging
 ---------
 
+```python
+import time
+from slackclient import SlackClient
 
-    import time
-    from slackclient import SlackClient
-    
-    token = "xoxp-28192348123947234198234"# found at https://api.slack.com/#auth)
-    sc = SlackClient(token)
-    if sc.rtm_connect():
-        while True:
-            print sc.rtm_read()
-            time.sleep(1)
-    else:
-        print "Connection Failed, invalid token?"
-
+token = "xoxp-28192348123947234198234"# found at https://api.slack.com/#auth)
+sc = SlackClient(token)
+if sc.rtm_connect():
+    while True:
+        print sc.rtm_read()
+        time.sleep(1)
+else:
+    print "Connection Failed, invalid token?"
+```
 
 ####Objects
 -----------
