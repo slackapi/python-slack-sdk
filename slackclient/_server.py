@@ -1,5 +1,6 @@
 from _slackrequest import SlackRequest
 from _channel import Channel
+from _user import User
 from _util import SearchList
 
 from websocket import create_connection
@@ -51,6 +52,7 @@ class Server(object):
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
         self.parse_channel_data(login_data["ims"])
+        self.parse_user_data(login_data["users"])
         try:
             self.websocket = create_connection(self.login_data['url'])
             self.websocket.sock.setblocking(0)
@@ -64,6 +66,10 @@ class Server(object):
             if "members" not in channel:
                 channel["members"] = []
             self.attach_channel(channel["name"], channel["id"], channel["members"])
+
+    def parse_user_data(self, user_data):
+        for user in user_data:
+            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""
@@ -82,6 +88,9 @@ class Server(object):
             except:
                 return data.rstrip()
 
+    def attach_user(self, name, id, real_name, tz):
+        self.users.append(User(self, name, id, real_name, tz))
+
     def attach_channel(self, name, id, members=[]):
         self.channels.append(Channel(self, name, id, members))
 
@@ -93,6 +102,7 @@ class Server(object):
         return reply.read()
 
 class SlackConnectionError(Exception):
+    print Exception
     pass
 
 class SlackLoginError(Exception):
