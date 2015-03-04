@@ -44,7 +44,7 @@ class Server(object):
                 self.ws_url = login_data['url']
                 if not reconnect:
                     self.parse_slack_login_data(login_data)
-                self.websocket = self.connect_slack_websocket(self.ws_url)
+                self.connect_slack_websocket(self.ws_url)
             else:
                 raise SlackLoginError
 
@@ -78,8 +78,11 @@ class Server(object):
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""
-        data = json.dumps(data)
-        self.websocket.send(data)
+        try:
+            data = json.dumps(data)
+            self.websocket.send(data)
+        except:
+            self.rtm_connect(reconnect=True)
 
     def ping(self):
         return self.send_to_websocket({"type": "ping"})
