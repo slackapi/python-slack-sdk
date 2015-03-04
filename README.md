@@ -36,7 +36,8 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
     token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/#auth)
     sc = SlackClient(token)
     print sc.api_call("api.test")
-    print sc.api_call("channels.info", {"channel": "C1234567890"})
+    print sc.api_call("channels.info", channel="C1234567890")
+    print sc.api_call("chat.postMessage", channel="C1234567890", text='hello slack')
 
 
 ### Real Time Messaging
