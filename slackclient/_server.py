@@ -39,11 +39,12 @@ class Server(object):
         if reply.code != 200:
             raise SlackConnectionError
         else:
-            reply = json.loads(reply.read())
-            if reply["ok"]:
+            login_data = json.loads(reply.read())
+            if login_data["ok"]:
+                self.ws_url = login_data['url']
                 if not reconnect:
-                    self.parse_slack_login_data(reply)
-                self.websocket = connect_slack_websocket(self.ws_url)
+                    self.parse_slack_login_data(login_data)
+                self.websocket = self.connect_slack_websocket(self.ws_url)
             else:
                 raise SlackLoginError
 
@@ -51,7 +52,6 @@ class Server(object):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
-        self.ws_url = self.login_data['url']
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
         self.parse_channel_data(login_data["ims"])
