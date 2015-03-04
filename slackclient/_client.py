@@ -35,6 +35,7 @@ class SlackClient(object):
             raise SlackNotConnected
 
     def rtm_send_message(self, channel, message):
+        channel = channel.replace('#', '')
         return self.server.channels.find(channel).send_message(message)
 
     def process_changes(self, data):
