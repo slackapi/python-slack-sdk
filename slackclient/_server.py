@@ -74,6 +74,10 @@ class Server(object):
 
     def parse_user_data(self, user_data):
         for user in user_data:
+            if "tz" not in user:
+                user["tz"] = "unknown"
+            if "real_name" not in user:
+                user["real_name"] = user["name"]
             self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
 
     def send_to_websocket(self, data):
