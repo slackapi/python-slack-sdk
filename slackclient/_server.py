@@ -34,14 +34,16 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
-    def rtm_connect(self):
+    def rtm_connect(self, reconnect=False):
         reply = self.api_requester.do(self.token, "rtm.start")
         if reply.code != 200:
             raise SlackConnectionError
         else:
             reply = json.loads(reply.read())
             if reply["ok"]:
-                self.parse_slack_login_data(reply)
+                if not reconnect:
+                    self.parse_slack_login_data(reply)
+                self.websocket = connect_slack_websocket(self.ws_url)
             else:
                 raise SlackLoginError
 
@@ -49,12 +51,15 @@ class Server(object):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
+        self.ws_url = self.login_data['url']
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
         self.parse_channel_data(login_data["ims"])
         self.parse_user_data(login_data["users"])
+
+    def connect_slack_websocket(self, ws_url):
         try:
-            self.websocket = create_connection(self.login_data['url'])
+            self.websocket = create_connection(ws_url)
             self.websocket.sock.setblocking(0)
         except:
             raise SlackConnectionError
