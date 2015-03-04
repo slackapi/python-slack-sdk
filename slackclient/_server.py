@@ -102,7 +102,6 @@ class Server(object):
         return reply.read()
 
 class SlackConnectionError(Exception):
-    print Exception
     pass
 
 class SlackLoginError(Exception):
