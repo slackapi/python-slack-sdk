@@ -59,35 +59,35 @@ else:
 ####Objects
 -----------
 
-[SlackClient.**server**]  
+[SlackClient.**server**]
 Server object owns the websocket and all nested channel information.
 
-[SlackClient.server.**channels**]  
+[SlackClient.server.**channels**]
 A searchable list of all known channels within the parent server. Call `print (sc instance)` to see the entire list.
 
 ####Methods
 -----------
 
-SlackClient.**rtm_connect()**  
+SlackClient.**rtm_connect()**
 Connect to a Slack RTM websocket. This is a persistent connection from which you can read events.
 
-SlackClient.**rtm_read()**  
+SlackClient.**rtm_read()**
 Read all data from the RTM websocket. Multiple events may be returned, always returns a list [], which is empty if there are no incoming messages.
 
-SlackClient.**rtm_send_message([channel, message])**  
+SlackClient.**rtm_send_message([channel, message])**
 Sends the text in [message] to [channel], which can be a name or identifier i.e. "#general" or "C182391"
 
 SlackClient.**api_call([method, params])**
 Call the Slack method [method] with the a dict of params in [params]
 
-SlackClient.server.**send_to_websocket([data])**  
+SlackClient.server.**send_to_websocket([data])**
 Send a JSON message directly to the websocket. See RTM documentation for allowed types.
 
-SlackClient.server.**channels.find([identifier])**  
+SlackClient.server.**channels.find([identifier])**
 The identifier can be either name or Slack channel ID. See above for examples.
 
-SlackClient.server.**channnels[int].send_message([text])**  
+SlackClient.server.**channnels[int].send_message([text])**
 Send message [text] to [int] channel in the channels list.
 
-SlackClient.server.**channnels.find([identifier]).send_message([text])**  
+SlackClient.server.**channnels.find([identifier]).send_message([text])**
 Send message [text] to channel [identifier], which can be either channel name or ID. Ex "#general" or "C182391"
