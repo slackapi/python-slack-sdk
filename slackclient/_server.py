@@ -79,6 +79,7 @@ class Server(object):
             if "real_name" not in user:
                 user["real_name"] = user["name"]
             self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
+        print self.users
 
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""
