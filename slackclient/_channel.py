@@ -6,7 +6,7 @@ class Channel(object):
         self.members = members
 
     def __eq__(self, compare_str):
-        if self.name == compare_str or self.id == compare_str:
+        if self.name == compare_str or self.name == "#" + compare_str or self.id == compare_str:
             return True
         else:
             return False

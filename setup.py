@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='slackclient',
-      version='0.14',
+      version='0.15',
       description='Python client for Slack.com',
       url='http://github.com/slackhq/python-slackclient',
       author='Ryan Huber',

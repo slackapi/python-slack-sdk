@@ -1,6 +1,7 @@
-from ._slackrequest import SlackRequest
-from ._channel import Channel
-from ._util import SearchList
+from slackclient._slackrequest import SlackRequest
+from slackclient._channel import Channel
+from slackclient._user import User
+from slackclient._util import SearchList
 
 from websocket import create_connection
 import json
@@ -37,14 +38,17 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
-    def rtm_connect(self):
+    def rtm_connect(self, reconnect=False):
         reply = self.api_requester.do(self.token, "rtm.start")
         if reply.code != 200:
             raise SlackConnectionError
         else:
-            reply = json.loads(reply.read().decode('utf-8'))
-            if reply["ok"]:
-                self.parse_slack_login_data(reply)
+            login_data = json.loads(reply.read())
+            if login_data["ok"]:
+                self.ws_url = login_data['url']
+                if not reconnect:
+                    self.parse_slack_login_data(login_data)
+                self.connect_slack_websocket(self.ws_url)
             else:
                 raise SlackLoginError
 
@@ -55,8 +59,11 @@ class Server(object):
         self.parse_channel_data(login_data["channels"])
         self.parse_channel_data(login_data["groups"])
         self.parse_channel_data(login_data["ims"])
+        self.parse_user_data(login_data["users"])
+
+    def connect_slack_websocket(self, ws_url):
         try:
-            self.websocket = create_connection(self.login_data['url'])
+            self.websocket = create_connection(ws_url)
             self.websocket.sock.setblocking(0)
         except:
             raise SlackConnectionError
@@ -71,10 +78,21 @@ class Server(object):
                                 channel["id"],
                                 channel["members"])
 
+    def parse_user_data(self, user_data):
+        for user in user_data:
+            if "tz" not in user:
+                user["tz"] = "unknown"
+            if "real_name" not in user:
+                user["real_name"] = user["name"]
+            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
+
     def send_to_websocket(self, data):
         """Send (data) directly to the websocket."""
-        data = json.dumps(data)
-        self.websocket.send(data)
+        try:
+            data = json.dumps(data)
+            self.websocket.send(data)
+        except:
+            self.rtm_connect(reconnect=True)
 
     def ping(self):
         return self.send_to_websocket({"type": "ping"})
@@ -90,6 +108,9 @@ class Server(object):
                 data += "{}\n".format(self.websocket.recv())
             except:
                 return data.rstrip()
+
+    def attach_user(self, name, id, real_name, tz):
+        self.users.append(User(self, name, id, real_name, tz))
 
     def attach_channel(self, name, id, members=[]):
         self.channels.append(Channel(self, name, id, members))

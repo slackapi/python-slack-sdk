@@ -1,5 +1,5 @@
 class User(object):
-    def __init__(self, server, id, name, real_name, tz):
+    def __init__(self, server, name, id, real_name, tz):
         self.tz = tz
         self.name = name
         self.real_name = real_name
@@ -7,7 +7,7 @@ class User(object):
         self.id = id
 
     def __eq__(self, compare_str):
-        if self.id == compare_str:
+        if self.id == compare_str or self.name == compare_str:
             return True
         else:
             return False
