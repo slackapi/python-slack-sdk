@@ -1,1 +1,1 @@
-from ._client import SlackClient
+from slackclient._client import SlackClient
