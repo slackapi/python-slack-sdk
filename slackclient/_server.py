@@ -43,7 +43,7 @@ class Server(object):
         if reply.code != 200:
             raise SlackConnectionError
         else:
-            login_data = json.loads(reply.read())
+            login_data = json.loads(reply.read().decode('utf-8'))
             if login_data["ok"]:
                 self.ws_url = login_data['url']
                 if not reconnect:
