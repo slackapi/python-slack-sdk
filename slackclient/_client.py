@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#mostly a proxy object to abstract how some of this works
+# mostly a proxy object to abstract how some of this works
 
 import json
 
@@ -21,7 +21,8 @@ class SlackClient(object):
         return self.server.api_call(method, **kwargs)
 
     def rtm_read(self):
-        #in the future, this should handle some events internally i.e. channel creation
+        # in the future, this should handle some events internally i.e. channel
+        # creation
         if self.server:
             json_data = self.server.websocket_safe_read()
             data = []
@@ -46,6 +47,7 @@ class SlackClient(object):
                 channel = data["channel"]
                 self.server.attach_channel(channel["user"], channel["id"], [])
             pass
+
 
 class SlackNotConnected(Exception):
     pass
