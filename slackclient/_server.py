@@ -49,6 +49,7 @@ class Server(object):
                 if not reconnect:
                     self.parse_slack_login_data(login_data)
                 self.connect_slack_websocket(self.ws_url)
+                self.connected = True
             else:
                 raise SlackLoginError
 
