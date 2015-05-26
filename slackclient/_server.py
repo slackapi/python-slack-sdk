@@ -2,6 +2,7 @@ from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
 from slackclient._util import SearchList
+from ssl import SSLWantReadError
 
 from websocket import create_connection
 import json
@@ -106,8 +107,9 @@ class Server(object):
         while True:
             try:
                 data += "{}\n".format(self.websocket.recv())
-            except:
-                return data.rstrip()
+            except SSLWantReadError:
+                return ''
+            return data.rstrip()
 
     def attach_user(self, name, id, real_name, tz):
         self.users.append(User(self, name, id, real_name, tz))
