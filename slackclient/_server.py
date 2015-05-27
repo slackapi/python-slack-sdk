@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
