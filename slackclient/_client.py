@@ -3,10 +3,13 @@
 
 import json
 
+from _config import config
 from slackclient._server import Server
 
 class SlackClient(object):
-    def __init__(self, token):
+    def __init__(self, token=None):
+        if token is None:
+            token = config.TOKEN
         self.token = token
         self.server = Server(self.token, False)
 

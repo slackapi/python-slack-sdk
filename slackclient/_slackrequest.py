@@ -10,11 +10,15 @@ except:
     from urllib2 import urlopen 
 
 
+from _config import config
+
 class SlackRequest(object):
     def __init__(self):
         pass
 
-    def do(self, token, request="?", post_data={}, domain="slack.com"):
+    def do(self, token, request="?", post_data={}, domain=None):
+        if domain is None:
+            domain = config.DOMAIN
         post_data["token"] = token
         post_data = urlencode(post_data)
         url = 'https://{}/api/{}'.format(domain, request)

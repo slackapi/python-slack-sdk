@@ -1,3 +1,4 @@
+from _config import config
 from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
@@ -9,7 +10,9 @@ import json
 
 
 class Server(object):
-    def __init__(self, token, connect=True):
+    def __init__(self, token=None, connect=True):
+        if token is None:
+            token = config.TOKEN
         self.token = token
         self.username = None
         self.domain = None
