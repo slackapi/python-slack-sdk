@@ -2,6 +2,7 @@ from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
 from slackclient._util import SearchList
+from ssl import SSLError
 
 from websocket import create_connection
 import json
@@ -107,8 +108,17 @@ class Server(object):
         while True:
             try:
                 data += "{}\n".format(self.websocket.recv())
-            except:
-                return data.rstrip()
+            except SSLError as e:
+                if e.errno == 2:
+                    # errno 2 occurs when trying to read or write data, but more
+                    # data needs to be received on the underlying TCP transport
+                    # before the request can be fulfilled.
+                    #
+                    # Python 2.7.9+ and Python 3.3+ give this its own exception,
+                    # SSLWantReadError
+                    return ''
+                raise
+            return data.rstrip()
 
     def attach_user(self, name, id, real_name, tz):
         self.users.append(User(self, name, id, real_name, tz))
