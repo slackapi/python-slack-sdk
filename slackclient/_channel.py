@@ -24,3 +24,12 @@ class Channel(object):
         message_json = {"type": "message", "channel": self.id, "text": message}
         self.server.send_to_websocket(message_json)
 
+    def get_history(self,latest=None,oldest=None,inclusive=None,count=None):
+        arguments = {"channel": self.id}
+        if latest: arguments["latest"] = latest
+        if oldest: arguments["oldest"] = oldest
+        if inclusive: arguments["inclusive"] = inclusive
+        if count: arguments["count"] = count
+        api = "channels.history" if self.id[0] != "G" else "groups.history"
+        return self.server.api_call(api, post_data=arguments)
+    

@@ -10,9 +10,9 @@ class SlackClient(object):
         self.token = token
         self.server = Server(self.token, False)
 
-    def rtm_connect(self):
+    def rtm_connect(self, reconnect=False):
         try:
-            self.server.rtm_connect()
+            self.server.rtm_connect(reconnect)
             return True
         except:
             return False
