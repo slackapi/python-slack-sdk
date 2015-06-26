@@ -130,13 +130,16 @@ class Server(object):
                                     "channels.join?name={}".format(name)).read())
 
     def api_call(self, method, **kwargs):
-        reply = self.api_requester.do(self.token, method, kwargs)
-        return reply.read()
-
+        reply = self.api_requester.do(self.token, method, **kwargs)
+        if reply.code != 200:
+            raise SlackApiError
+        return json.loads(reply.read().decode("utf-8"))
 
 class SlackConnectionError(Exception):
     pass
 
-
 class SlackLoginError(Exception):
+    pass
+
+class SlackApiError(Exception):
     pass
