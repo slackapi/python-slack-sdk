@@ -33,7 +33,7 @@ class Server(object):
     def __str__(self):
         data = ""
         for key in list(self.__dict__.keys()):
-            data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
+            data += "{0}: {1}\n".format(key, str(self.__dict__[key])[:40])
         return data
 
     def __repr__(self):
@@ -106,7 +106,7 @@ class Server(object):
         data = ""
         while True:
             try:
-                data += "{}\n".format(self.websocket.recv())
+                data += self.websocket.recv() + "\n"
             except SSLError as e:
                 if e.errno == 2:
                     # errno 2 occurs when trying to read or write data, but more
@@ -126,8 +126,8 @@ class Server(object):
         self.channels.append(Channel(self, name, id, members))
 
     def join_channel(self, name):
-        print(self.api_requester.do(self.token,
-                                    "channels.join?name={}".format(name)).read())
+        return self.api_requester.do(self.token,
+                                     "channels.join?name=" + name).read()
 
     def api_call(self, method, **kwargs):
         reply = self.api_requester.do(self.token, method, kwargs)
