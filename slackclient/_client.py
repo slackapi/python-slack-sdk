@@ -23,17 +23,17 @@ class SlackClient(object):
     def rtm_read(self):
         # in the future, this should handle some events internally i.e. channel
         # creation
-        if self.server:
-            json_data = self.server.websocket_safe_read()
-            data = []
-            if json_data != '':
-                for d in json_data.split('\n'):
-                    data.append(json.loads(d))
-            for item in data:
-                self.process_changes(item)
-            return data
-        else:
+        if not self.server:
             raise SlackNotConnected
+
+        json_data = self.server.websocket_safe_read()
+        data = []
+        if json_data != '':
+            for d in json_data.split('\n'):
+                data.append(json.loads(d))
+        for item in data:
+            self.process_changes(item)
+        return data
 
     def rtm_send_message(self, channel, message):
         return self.server.channels.find(channel).send_message(message)
@@ -46,7 +46,6 @@ class SlackClient(object):
             if data["type"] == 'im_created':
                 channel = data["channel"]
                 self.server.attach_channel(channel["user"], channel["id"], [])
-            pass
 
 
 class SlackNotConnected(Exception):

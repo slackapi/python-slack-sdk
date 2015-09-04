@@ -5,10 +5,7 @@ class Im(object):
         self.id = id
 
     def __eq__(self, compare_str):
-        if self.id == compare_str or self.user == compare_str:
-            return True
-        else:
-            return False
+        return self.id == compare_str or self.user == compare_str
 
     def __str__(self):
         data = ""
