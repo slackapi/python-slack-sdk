@@ -34,7 +34,7 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 import time
 from slackclient import SlackClient
 
-token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/#auth)
+token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/web#authentication
 sc = SlackClient(token)
 print sc.api_call("api.test")
 print sc.api_call("channels.info", channel="1234567890")
@@ -46,7 +46,7 @@ print sc.api_call("channels.info", channel="1234567890")
 import time
 from slackclient import SlackClient
 
-token = "xoxp-28192348123947234198234"# found at https://api.slack.com/#auth)
+token = "xoxp-28192348123947234198234"# found at https://api.slack.com/web#authentication
 sc = SlackClient(token)
 if sc.rtm_connect():
     while True:
