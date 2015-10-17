@@ -86,8 +86,8 @@ Send a JSON message directly to the websocket. See RTM documentation for allowed
 SlackClient.server.**channels.find([identifier])**
 The identifier can be either name or Slack channel ID. See above for examples.
 
-SlackClient.server.**channnels[int].send_message([text])**
+SlackClient.server.**channels[int].send_message([text])**
 Send message [text] to [int] channel in the channels list.
 
-SlackClient.server.**channnels.find([identifier]).send_message([text])**
+SlackClient.server.**channels.find([identifier]).send_message([text])**
 Send message [text] to channel [identifier], which can be either channel name or ID. Ex "#general" or "C182391"
