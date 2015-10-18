@@ -1,0 +1,2 @@
+wget https://bootstrap.pypa.io/ez_setup.py -O - | python
+wget https://pypi.python.org/packages/source/w/websocket-client/websocket_client-0.32.0.tar.gz -0 - | tar -xz && python setup.py install

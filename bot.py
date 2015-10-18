@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import ast
+import time
 from random import choice
 import urllib2 as u2
 import json
@@ -82,15 +84,29 @@ def parseMenu():
         
     return daysPlates
 
-                
+
+               
+def cacheMenus (menus):
+    with open("menus.lst","w") as menuFile:
+        menuFile.write(str(menus))
+
+
+
+def getMenus ():
+    with open("menus.lst", "r") as f:
+        s = f.read()
+        menus = ast.literal_eval(s)
 
 sc = SlackClient (TOKEN)
 chans = getListOfChan (sc)    
 plates = parseMenu()
 
-entree = plates[2][0][0]
-dessert = plates[2][0][-1]
-plats = plates[2][0][1:-1]
+day = time.localtime(time.time())[6]
+print()
+
+entree = plates[day][0][0]
+dessert = plates[day][0][-1]
+plats = plates[day][0][1:-1]
 
 hello_morning = ["Coucou mes lapinous ! ", "Salut mes choupinous, ", "Bonjour mes petits coeurs ! "]
 what_morning = ["Alors aujourd'hui au menu... \n", "On va trop bien bouffer aujourd'hui !\n", "Ahlalala, j'aimerais bien être un humain parfois vu ce que vous mangez...\n"]
@@ -104,4 +120,4 @@ choice_str = {4:["vous pourrez choisir entre %s ou %s ou %s voire %s"], 5:["vous
 what_dinner = ["Pour ce soir:", "Au diner:"]
 
 message = choice(hello_morning)+choice(what_morning)+choice(what_dejeuner)+choice(entree_str)+entree+choice(plat_str)+choice(choice_str[len(plats)])%tuple(plats)+choice(dessert_str)+dessert+"."
-sayFood(message)
+#sayFood(message)
