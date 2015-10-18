@@ -12,8 +12,7 @@ import xml.etree.ElementTree as et
 
 
 
-def getListOfChan(socket, token):
-    sc = SlackClient (token)
+def getListOfChan(sc):
     listsOfChans = json.loads(sc.api_call("channels.list"))    
     chans = {str(listsOfChans[u'channels'][i][u'name']):str(listsOfChans[u'channels'][i][u'id']) for i in range(len(listsOfChans[u'channels']))}
     return chans
@@ -29,7 +28,7 @@ def sayFood(food, chansToDisp, token):
     chans = getListOfChan(sc)
     
     for chan in chansToDisp:
-        sc.api_call("chat.postMessage", as_user="true", channel=chanNameToKey[chan], text=food)
+        sc.api_call("chat.postMessage", as_user="true", channel=chans[chan], text=food)
 
 
         
