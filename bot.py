@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from random import choice
+import time
 import hungrybotlib as l
 from slackclient import SlackClient
 
@@ -33,4 +35,4 @@ if __name__ == "__main__":
     what_dinner = ["Pour ce soir:", "Au diner:"]
     
     message = choice(hello_morning)+choice(what_morning)+choice(what_dejeuner)+choice(entree_str)+entree+choice(plat_str)+choice(choice_str[len(plats)])%tuple(plats)+choice(dessert_str)+dessert+"."
-    l.sayFood(message, DISPLAY_TO_CHAN, TOKEN)
+    l.sayFood(message, DISPLAY_TO_CHANS, TOKEN)
