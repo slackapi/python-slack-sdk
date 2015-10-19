@@ -14,14 +14,21 @@ DISPLAY_TO_CHANS = ["ahtable"]
 
 
 if __name__ == "__main__":
-
+    """
+    type of meal should be an integer and the only argument, it value can be:
+    .0 : Déjeuner au RAK
+    .1 : Diner au RAK
+    .2 : Déjeuner à la caféteria
+    .3 : Diner à la caféteria
+    """
+    typeOfMeal = int(sys.argv[1])
     plates = l.getMenus()
     
     day = time.localtime(time.time())[6]
     
-    entree = plates[day][0][0]
-    dessert = plates[day][0][-1]
-    plats = plates[day][0][1:-1]
+    entree = plates[day][typeOfMeal][0]
+    dessert = plates[day][typeOfMeal][-1]
+    plats = plates[day][typeOfMeal][1:-1]
     
     hello_morning = ["Coucou mes lapinous ! ", "Salut mes choupinous, ", "Bonjour mes petits coeurs ! "]
     what_morning = ["Alors aujourd'hui au menu... \n", "On va trop bien bouffer aujourd'hui !\n", "Ahlalala, j'aimerais bien être un humain parfois vu ce que vous mangez...\n"]
