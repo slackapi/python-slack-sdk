@@ -3,8 +3,6 @@
 
 
 import ast
-import time
-from random import choice
 import urllib2 as u2
 import json
 from slackclient import SlackClient
@@ -13,7 +11,7 @@ import xml.etree.ElementTree as et
 
 
 def getListOfChan(sc):
-    listsOfChans = json.loads(sc.api_call("channels.list"))    
+    listsOfChans = json.loads(sc.api_call("channels.list"))
     chans = {str(listsOfChans[u'channels'][i][u'name']):str(listsOfChans[u'channels'][i][u'id']) for i in range(len(listsOfChans[u'channels']))}
     return chans
 
@@ -23,23 +21,22 @@ def sayFood(food, chansToDisp, token):
     '''
     Affiche le texte food sur les channels DISPLAY_TO_CHANS
     '''
-    
-    sc = SlackClient (token)
+
+    sc = SlackClient(token)
     chans = getListOfChan(sc)
-    
+
     for chan in chansToDisp:
         sc.api_call("chat.postMessage", as_user="true", channel=chans[chan], text=food)
 
 
-        
-def parseMenu():
-    menuString = u2.urlopen('http://services.telecom-bretagne.eu/rak/rss/menus.xml')
+def parseMenu(menu_url, days):
+    menuString = u2.urlopen(menu_url)
     menuString = menuString.read()
-    menuXML = et.fromstring(menuString)    
+    menuXML = et.fromstring(menuString)
 
     weekStr = menuXML[0][3][3].text
 
-    days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    # days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
 
     daysStr = []
 
@@ -49,9 +46,8 @@ def parseMenu():
         daysStr.append(temp[0])
         weekStr = temp[1]
 
-    daysStr.pop(0) #ozef du debut
+    daysStr.pop(0)  #ozef du debut
 
-    
     # Split for each meal
     daysMenu = []
     for dayStr in daysStr:
@@ -64,7 +60,7 @@ def parseMenu():
         cafetDej = temp4[0]
         temp5 = temp4[1].split(' <BR/>--- ')
         cafetDin = temp5[0]
-        
+
         daysMenu.append([rampeDej,rampeDin,cafetDej,cafetDin])
 
     daysPlates = []
@@ -73,7 +69,7 @@ def parseMenu():
         daysPlates.append([])
         for j in range(len(daysMenu[i])):
             daysPlates[i].append([])
-            
+
             plates = daysMenu[i][j].split('|')
             for plate in plates:
                 try:
@@ -81,21 +77,18 @@ def parseMenu():
                     daysPlates[i][j].append(temp.encode('utf-8'))
                 except:
                     pass
-                
-        
+
     return daysPlates
 
 
-               
-def cacheMenus ():
-    menus = parseMenu()
-    with open("menus.lst","w") as menuFile:
+def cacheMenus(menu_file, menu_url, days):
+    menus = parseMenu(menu_url, days)
+    with open(menu_file, "w") as menuFile:
         menuFile.write(str(menus))
 
 
-
-def getMenus ():
-    with open("menus.lst", "r") as f:
+def getMenus(menu_file):
+    with open(menu_file, "r") as f:
         s = f.read()
         menus = ast.literal_eval(s)
     return menus
