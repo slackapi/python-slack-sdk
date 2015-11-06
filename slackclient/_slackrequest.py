@@ -1,13 +1,7 @@
 import time
-
-try:
-    # Try for Python3
-    from urllib.parse import urlencode 
-    from urllib.request import urlopen 
-except:
-    # Looks like Python2
-    from urllib import urlencode 
-    from urllib2 import urlopen 
+from future.moves.urllib.parse import urlparse, urlencode
+from future.moves.urllib.request import urlopen, Request
+from future.moves.urllib.error import HTTPError
 
 
 class SlackRequest(object):
