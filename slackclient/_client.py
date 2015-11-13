@@ -46,6 +46,9 @@ class SlackClient(object):
             if data["type"] == 'im_created':
                 channel = data["channel"]
                 self.server.attach_channel(channel["user"], channel["id"], [])
+            if data["type"] == "team_join":
+                user = data["user"]
+                self.server.parse_user_data([user])
             pass
 
 
