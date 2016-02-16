@@ -1,1 +1,4 @@
 *.pyc
+.cache
+.idea
+slackclient.egg-info

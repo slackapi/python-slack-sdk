@@ -1,1 +1,2 @@
-websocket-client
+websocket-client==0.35.0
+future==0.15.2
