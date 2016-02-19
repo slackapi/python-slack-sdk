@@ -11,6 +11,11 @@ class SlackRequest(object):
     def do(self, token, request="?", post_data={}, domain="slack.com"):
         post_data["token"] = token
         post_data = urlencode(post_data)
-        url = 'https://{}/api/{}'.format(domain, request)
+	post_data = adjust(post_data)
+	url = 'https://{}/api/{}'.format(domain, request)
         return urlopen(url, post_data.encode('utf-8'))
 
+    def adjust(self, post_data):
+	post_data = post_data.replace("+", "%20")
+        post_data = post_data.replace("%27", "%22")
+	return post_data	
