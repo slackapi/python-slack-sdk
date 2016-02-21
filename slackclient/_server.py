@@ -123,7 +123,9 @@ class Server(object):
         if self.users.find(channel_id) is None:
             self.users.append(User(self, name, channel_id, real_name, tz))
 
-    def attach_channel(self, name, channel_id, members=[]):
+    def attach_channel(self, name, channel_id, members=None):
+        if members is None:
+            members = []
         if self.channels.find(channel_id) is None:
             self.channels.append(Channel(self, name, channel_id, members))
 

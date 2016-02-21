@@ -1,9 +1,9 @@
 class Channel(object):
-    def __init__(self, server, name, channel_id, members=[]):
+    def __init__(self, server, name, channel_id, members=None):
         self.server = server
         self.name = name
         self.id = channel_id
-        self.members = members
+        self.members = [] if members is None else members
 
     def __eq__(self, compare_str):
         if self.name == compare_str or self.name == "#" + compare_str or self.id == compare_str:
