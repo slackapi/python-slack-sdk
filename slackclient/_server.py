@@ -19,6 +19,7 @@ class Server(object):
         self.channels = SearchList()
         self.connected = False
         self.pingcounter = 0
+        self.ws_url = None
         self.api_requester = SlackRequest()
 
         if connect:
