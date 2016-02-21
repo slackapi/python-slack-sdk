@@ -23,4 +23,3 @@ class Im(object):
     def send_message(self, message):
         message_json = {"type": "message", "channel": self.id, "text": message}
         self.server.send_to_websocket(message_json)
-
