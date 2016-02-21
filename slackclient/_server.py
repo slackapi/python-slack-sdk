@@ -106,7 +106,7 @@ class Server(object):
         data = ""
         while True:
             try:
-                data += "{}\n".format(self.websocket.recv())
+                data += "{0}\n".format(self.websocket.recv())
             except SSLError as e:
                 if e.errno == 2:
                     # errno 2 occurs when trying to read or write data, but more
