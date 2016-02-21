@@ -1,4 +1,5 @@
 *.pyc
 .cache
 .idea
+dist
 slackclient.egg-info
