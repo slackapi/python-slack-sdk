@@ -1,7 +1,23 @@
 import pytest
+import requests
 from slackclient._channel import Channel
 from slackclient._server import Server
 from slackclient._client import SlackClient
+
+
+# This is so that tests work on Travis for python 2.6, it's really hacky, but expedient
+def get_unverified_post():
+    requests_post = requests.post
+
+    def unverified_post(*args, **kwargs):
+        # don't throw SSL errors plz
+        kwargs['verify'] = False
+        return requests_post(*args, **kwargs)
+
+    return unverified_post
+
+requests.post = get_unverified_post()
+
 
 @pytest.fixture
 def server(monkeypatch):
