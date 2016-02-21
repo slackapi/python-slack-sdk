@@ -33,6 +33,6 @@ def test_Server_cantconnect(server):
 
 @pytest.mark.xfail
 def test_Server_ping(server, monkeypatch):
-    #monkeypatch.setattr("", lambda: True)
+    # monkeypatch.setattr("", lambda: True)
     monkeypatch.setattr("websocket.create_connection", lambda: True)
     reply = server.ping()
