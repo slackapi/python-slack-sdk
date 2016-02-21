@@ -41,10 +41,10 @@ class Server(object):
 
     def rtm_connect(self, reconnect=False):
         reply = self.api_requester.do(self.token, "rtm.start")
-        if reply.code != 200:
+        if reply.status_code != 200:
             raise SlackConnectionError
         else:
-            login_data = json.loads(reply.read().decode('utf-8'))
+            login_data = reply.json()
             if login_data["ok"]:
                 self.ws_url = login_data['url']
                 if not reconnect:
@@ -129,11 +129,10 @@ class Server(object):
 
     def join_channel(self, name):
         print(self.api_requester.do(self.token,
-                                    "channels.join?name={}".format(name)).read())
+                                    "channels.join?name={}".format(name)).text)
 
     def api_call(self, method, **kwargs):
-        reply = self.api_requester.do(self.token, method, kwargs)
-        return reply.read()
+        return self.api_requester.do(self.token, method, kwargs).text
 
 
 class SlackConnectionError(Exception):
