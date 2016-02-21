@@ -1,7 +1,5 @@
-import time
-from future.moves.urllib.parse import urlparse, urlencode
-from future.moves.urllib.request import urlopen, Request
-from future.moves.urllib.error import HTTPError
+from future.moves.urllib.parse import urlencode
+from future.moves.urllib.request import urlopen
 
 
 class SlackRequest(object):
