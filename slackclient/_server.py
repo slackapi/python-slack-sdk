@@ -119,13 +119,13 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, id, real_name, tz):
-        if self.users.find(id) is None:
-            self.users.append(User(self, name, id, real_name, tz))
+    def attach_user(self, name, channel_id, real_name, tz):
+        if self.users.find(channel_id) is None:
+            self.users.append(User(self, name, channel_id, real_name, tz))
 
-    def attach_channel(self, name, id, members=[]):
-        if self.channels.find(id) is None:
-            self.channels.append(Channel(self, name, id, members))
+    def attach_channel(self, name, channel_id, members=[]):
+        if self.channels.find(channel_id) is None:
+            self.channels.append(Channel(self, name, channel_id, members))
 
     def join_channel(self, name):
         print(self.api_requester.do(self.token,
