@@ -14,4 +14,3 @@ class SlackRequest(object):
         post_data = urlencode(post_data)
         url = 'https://{}/api/{}'.format(domain, request)
         return urlopen(url, post_data.encode('utf-8'))
-
