@@ -7,6 +7,8 @@ from ssl import SSLError
 from websocket import create_connection
 import json
 
+from requests.packages.urllib3.util.url import parse_url
+from os import getenv
 
 class Server(object):
     def __init__(self, token, connect=True):
@@ -21,6 +23,14 @@ class Server(object):
         self.pingcounter = 0
         self.ws_url = None
         self.api_requester = SlackRequest()
+
+        https_proxy = getenv('HTTPS_PROXY', False)
+        if https_proxy:
+            u = parse_url(https_proxy)
+            self.proxyhost = u.host
+            self.proxyport = u.port
+        else:
+            self.proxyhost = False
 
         if connect:
             self.rtm_connect()
@@ -65,7 +75,13 @@ class Server(object):
 
     def connect_slack_websocket(self, ws_url):
         try:
-            self.websocket = create_connection(ws_url)
+            if self.proxyhost:
+                self.websocket = create_connection(
+                    ws_url,
+                    http_proxy_host=self.proxyhost,
+                    http_proxy_port=self.proxyport)
+            else:
+                self.websocket = create_connection(ws_url)
             self.websocket.sock.setblocking(0)
         except:
             raise SlackConnectionError
