@@ -26,13 +26,13 @@ def server(monkeypatch):
 
 
 @pytest.fixture
-def slackclient(client_server):
+def slackclient(server):
     my_slackclient = SlackClient('xoxp-1234123412341234-12341234-1234')
     return my_slackclient
 
 
 @pytest.fixture
-def channel(channel_server):
-    my_channel = Channel(channel_server, "somechannel", "C12341234", ["user"])
+def channel(server):
+    my_channel = Channel(server, "somechannel", "C12341234", ["user"])
     return my_channel
 
