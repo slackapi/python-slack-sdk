@@ -11,6 +11,7 @@ class SearchList(list):
 
         if len(items) == 1:
             return items[0]
-        elif items != []:
+        elif items:
             return items
-
+        else:
+            return None
