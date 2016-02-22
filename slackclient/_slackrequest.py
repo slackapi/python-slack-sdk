@@ -4,7 +4,7 @@ import requests
 class SlackRequest(object):
 
     @staticmethod
-    def do(self, token, request="?", post_data=None, domain="slack.com"):
+    def do(token, request="?", post_data=None, domain="slack.com"):
         if post_data is None:
             post_data = {}
 
