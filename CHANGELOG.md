@@ -1,3 +1,12 @@
+### v0.18.0 (2016-02-21)
+
+  * Moves to use semver for versioning
+  * Adds support for private groups and MPDMs
+  * Switches to use requests instead of urllib
+  * Gets Travis CI integration working
+  * Fixes some formatting issues so the code will work for python 2.6
+  * Cleans up some unused imports, some PEP-8 fixes and a couple bad default args fixes
+
 ### v0.17 (2016-02-15)
 
   * Fixes the server so that it doesn't add duplicate users or channels to its internal lists, https://github.com/slackhq/python-slackclient/commit/0cb4bcd6e887b428e27e8059b6278b86ee661aaa
