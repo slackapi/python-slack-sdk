@@ -2,7 +2,12 @@ import requests
 
 
 class SlackRequest(object):
-    def do(self, token, request="?", post_data={}, domain="slack.com"):
+
+    @staticmethod
+    def do(self, token, request="?", post_data=None, domain="slack.com"):
+        if post_data is None:
+            post_data = {}
+
         return requests.post(
             'https://{0}/api/{1}'.format(domain, request),
             data=dict(post_data, token=token),

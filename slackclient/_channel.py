@@ -1,9 +1,9 @@
 class Channel(object):
-    def __init__(self, server, name, id, members=[]):
+    def __init__(self, server, name, channel_id, members=None):
         self.server = server
         self.name = name
-        self.id = id
-        self.members = members
+        self.id = channel_id
+        self.members = [] if members is None else members
 
     def __eq__(self, compare_str):
         if self.name == compare_str or self.name == "#" + compare_str or self.id == compare_str:
@@ -23,4 +23,3 @@ class Channel(object):
     def send_message(self, message):
         message_json = {"type": "message", "channel": self.id, "text": message}
         self.server.send_to_websocket(message_json)
-
