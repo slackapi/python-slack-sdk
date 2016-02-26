@@ -80,7 +80,7 @@ A searchable list of all known channels within the parent server. Call `print (s
 | SlackClient.**rtm_connect()** | Connect to a Slack RTM websocket. This is a persistent connection from which you can read events. |
 | SlackClient.**rtm_read()** | Read all data from the RTM websocket. Multiple events may be returned, always returns a list [], which is empty if there are no incoming messages. |
 | SlackClient.**rtm_send_message([channel, message])** | Sends the text in [message] to [channel], which can be a name or identifier i.e. "#general" or "C182391" |
-| SlackClient.**api_call([method, params])** | Call the Slack method [method] with the a dict of params in [params] |
+| SlackClient.**api_call([method])** | Call the Slack method [method]. Arguments can be passed as kwargs, for instance: sc.api_call('users.info', user='U0L85V3B4')_  |
 | SlackClient.server.**send_to_websocket([data])** | Send a JSON message directly to the websocket. See RTM documentation for allowed types.|
 | SlackClient.server.**channels.find([identifier])** | The identifier can be either name or Slack channel ID. See above for examples. |
 | SlackClient.server.**channels[int].send_message([text])** | Send message [text] to [int] channel in the channels list. |
