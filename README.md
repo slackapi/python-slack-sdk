@@ -35,16 +35,17 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 
 ```python
 import time
+import json
 from slackclient import SlackClient
 
 token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/web#authentication
 sc = SlackClient(token)
-print sc.api_call("api.test")
-print sc.api_call("channels.info", channel="1234567890")
-print sc.api_call(
+print json.loads(sc.api_call("api.test"))
+print json.loads(sc.api_call("channels.info", channel="1234567890"))
+print json.loads(sc.api_call(
     "chat.postMessage", channel="#general", text="Hello from Python! :tada:",
     username='pybot', icon_emoji=':robot_face:'
-)
+))
 ```
 
 ### Real Time Messaging
