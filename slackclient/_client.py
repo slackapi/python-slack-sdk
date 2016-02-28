@@ -23,13 +23,13 @@ class SlackClient(object):
         if self.server:
             if method == 'im.open':
                 if "ok" in result and result["ok"]:
-                    self.server.attach_channel(kwargs["user"], result["channel"]["id"], [])
+                    self.server.attach_channel(kwargs["user"], result["channel"]["id"])
             elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
                 if "ok" in result and result["ok"]:
-                    self.server.attach_channel(result['group']['name'], result['group']['id'], [])
+                    self.server.attach_channel(result['group']['name'], result['group']['id'], result['group']['members'])
             elif method in ('channels.create', 'channels.join'):
                 if 'ok' in result and result['ok']:
-                    self.server.attach_channel(result['channel']['name'], result['channel']['id'])
+                    self.server.attach_channel(result['channel']['name'], result['channel']['id'], result['channel']['members'])
         return result
 
     def rtm_read(self):
