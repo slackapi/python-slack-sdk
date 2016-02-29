@@ -1,3 +1,11 @@
+### v1.0.0 (2016-02-28)
+
+  * the `api_call` function now returns a decoded JSON object, rather than a JSON encoded string
+  * some `api_call` calls now call actions on the parent server object:
+    * `im.open`
+    * `mpim.open`, `groups.create`, `groups.createChild`
+    * `channels.create`, `channels.join`
+
 ### v0.18.0 (2016-02-21)
 
   * Moves to use semver for versioning
