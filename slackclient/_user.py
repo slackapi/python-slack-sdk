@@ -11,8 +11,8 @@ class User(object):
 
     def __str__(self):
         fmt = "{} : {:.40}"
-        return = "\n".join(fmt.format(key, str(value)) for key, value
-                           in self.__dict__.items() if key != "server")
+        return "\n".join(fmt.format(key, str(value)) for key, value
+                         in self.__dict__.items() if key != "server")
 
     def __repr__(self):
         return self.__str__()
