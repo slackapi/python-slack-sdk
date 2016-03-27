@@ -26,16 +26,11 @@ class Server(object):
             self.rtm_connect()
 
     def __eq__(self, compare_str):
-        if compare_str == self.domain or compare_str == self.token:
-            return True
-        else:
-            return False
+        return compare_str in (self.domain, self.token)
 
     def __str__(self):
-        data = ""
-        for key in list(self.__dict__.keys()):
-            data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
-        return data
+        fmt = "{} : {:.40}"
+        return "\n".join(fmt.format(key, str(value)) for key, value in self.__dict__.items())
 
     def __repr__(self):
         return self.__str__()
@@ -72,20 +67,16 @@ class Server(object):
 
     def parse_channel_data(self, channel_data):
         for channel in channel_data:
-            if "name" not in channel:
-                channel["name"] = channel["id"]
-            if "members" not in channel:
-                channel["members"] = []
+            channel["name"] = channel.get("name", channel["id"])
+            channel["members"] = channel.get("members", [])
             self.attach_channel(channel["name"],
                                 channel["id"],
                                 channel["members"])
 
     def parse_user_data(self, user_data):
         for user in user_data:
-            if "tz" not in user:
-                user["tz"] = "unknown"
-            if "real_name" not in user:
-                user["real_name"] = user["name"]
+            user["tz"] = user.get("tz", "unknown")
+            user["real_name"] = user.get("real_name", user["name"])
             self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
 
     def send_to_websocket(self, data):
@@ -125,8 +116,7 @@ class Server(object):
             self.users.append(User(self, name, channel_id, real_name, tz))
 
     def attach_channel(self, name, channel_id, members=None):
-        if members is None:
-            members = []
+        members = members or []
         if self.channels.find(channel_id) is None:
             self.channels.append(Channel(self, name, channel_id, members))
 
