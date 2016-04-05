@@ -29,8 +29,8 @@ class Server(object):
         return compare_str in (self.domain, self.token)
 
     def __str__(self):
-        fmt = "{} : {:.40}"
-        return "\n".join(fmt.format(key, str(value)) for key, value in self.__dict__.items())
+        fmt = "{0} : {1:.40}"
+        return "\n".join(fmt.format(key, value) for key, value in self.__dict__.items())
 
     def __repr__(self):
         return self.__str__()
