@@ -9,7 +9,7 @@ class Channel(object):
         return compare_str in (self.id, self.name) or "#" + compare_str == self.name
 
     def __str__(self):
-        fmt = "{} : {:.40}"
+        fmt = "{0} : {1:.40}"
         return "\n".join(fmt.format(key, str(value)) for key, value in self.__dict__.items())
 
     def __repr__(self):
