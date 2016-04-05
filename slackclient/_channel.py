@@ -10,7 +10,7 @@ class Channel(object):
 
     def __str__(self):
         fmt = "{0} : {1:.40}"
-        return "\n".join(fmt.format(key, str(value)) for key, value in self.__dict__.items())
+        return "\n".join(fmt.format(key, value) for key, value in self.__dict__.items())
 
     def __repr__(self):
         return self.__str__()
