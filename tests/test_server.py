@@ -7,7 +7,7 @@ import pytest
 
 @pytest.fixture
 def login_fixture():
-    file_login_data = open('_pytest/data/rtm.start.json', 'r').read()
+    file_login_data = open('tests/data/rtm.start.json', 'r').read()
     json_login_data = json.loads(file_login_data)
     return json_login_data
 
