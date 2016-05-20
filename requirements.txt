@@ -1,3 +1,2 @@
 future==0.15.2
-pytest==2.8.7
 websocket-client==0.35.0

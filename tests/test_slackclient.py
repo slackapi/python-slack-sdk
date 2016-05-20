@@ -6,14 +6,14 @@ import pytest
 
 @pytest.fixture
 def channel_created_fixture():
-    file_channel_created_data = open('_pytest/data/channel.created.json', 'r').read()
+    file_channel_created_data = open('tests/data/channel.created.json', 'r').read()
     json_channel_created_data = json.loads(file_channel_created_data)
     return json_channel_created_data
 
 
 @pytest.fixture
 def im_created_fixture():
-    file_channel_created_data = open('_pytest/data/im.created.json', 'r').read()
+    file_channel_created_data = open('tests/data/im.created.json', 'r').read()
     json_channel_created_data = json.loads(file_channel_created_data)
     return json_channel_created_data
 
