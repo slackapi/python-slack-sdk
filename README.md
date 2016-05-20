@@ -35,7 +35,6 @@ _Note:_ You must obtain a token for the user/bot. You can find or generate these
 ###Basic API methods
 
 ```python
-import time
 from slackclient import SlackClient
 
 token = "xoxp-28192348123947234198234"      # found at https://api.slack.com/web#authentication
