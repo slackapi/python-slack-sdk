@@ -7,17 +7,12 @@ class User(object):
         self.id = user_id
 
     def __eq__(self, compare_str):
-        if self.id == compare_str or self.name == compare_str:
-            return True
-        else:
-            return False
+        return compare_str in (self.id, self.name)
 
     def __str__(self):
-        data = ""
-        for key in list(self.__dict__.keys()):
-            if key != "server":
-                data += "{0} : {1}\n".format(key, str(self.__dict__[key])[:40])
-        return data
+        fmt = "{0} : {1:.40}"
+        return "\n".join(fmt.format(key, value) for key, value
+                         in self.__dict__.items() if key != "server")
 
     def __repr__(self):
         return self.__str__()
