@@ -11,5 +11,6 @@ setup(name='slackclient',
       install_requires=[
         'websocket-client',
         'requests',
+        'six',
       ],
       zip_safe=False)

@@ -1,5 +1,7 @@
 import json
+
 import requests
+import six
 
 
 class SlackRequest(object):
@@ -8,8 +10,8 @@ class SlackRequest(object):
     def do(token, request="?", post_data=None, domain="slack.com"):
         post_data = post_data or {}
 
-        for k, v in post_data.items():
-            if not isinstance(v, (str, unicode)):
+        for k, v in six.iteritems(post_data):
+            if not isinstance(v, six.string_types):
                 post_data[k] = json.dumps(v)
 
         url = 'https://{0}/api/{1}'.format(domain, request)
