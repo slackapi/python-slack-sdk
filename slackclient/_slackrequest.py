@@ -16,5 +16,6 @@ class SlackRequest(object):
 
         url = 'https://{0}/api/{1}'.format(domain, request)
         post_data['token'] = token
+        files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
-        return requests.post(url, data=post_data)
+        return requests.post(url, data=post_data, files=files)
