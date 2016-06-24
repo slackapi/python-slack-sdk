@@ -26,11 +26,16 @@ class Server(object):
             self.rtm_connect()
 
     def __eq__(self, compare_str):
-        return compare_str in (self.domain, self.token)
+        if compare_str in (self.domain, self.token):
+            return True
+        else:
+            return False
 
     def __str__(self):
-        fmt = "{0} : {1:.40}"
-        return "\n".join(fmt.format(key, value) for key, value in self.__dict__.items())
+        data = ""
+        for key in list(self.__dict__.keys()):
+            data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
+        return data
 
     def __repr__(self):
         return self.__str__()
