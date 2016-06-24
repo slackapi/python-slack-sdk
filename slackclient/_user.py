@@ -7,7 +7,7 @@ class User(object):
         self.id = user_id
 
     def __eq__(self, compare_str):
-        if self.id == compare_str or self.name == compare_str:
+        if compare_str in (self.id, self.name):
             return True
         else:
             return False
