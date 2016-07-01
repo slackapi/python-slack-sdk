@@ -1,3 +1,8 @@
+### v1.0.1 (2016-03-25)
+
+  * fix for __eq__ comparison in channels using '#' in channel name
+  * added copyright info to the LICENSE file
+
 ### v1.0.0 (2016-02-28)
 
   * the `api_call` function now returns a decoded JSON object, rather than a JSON encoded string
