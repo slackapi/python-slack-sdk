@@ -114,7 +114,7 @@ Submitting a Pull Request
 -------------------------
 Please feel free to sent us pull requests or issues that you'd like to see included in the python-slackclient!
 
-We ask that you include any appropriate tests or documentation in the pull request and try to follow 
+We ask that you include any appropriate tests or documentation in the pull request and try to follow
 `good commit message hygiene <https://medium.com/brigade-engineering/the-secrets-to-great-commit-messages-106fc0a92a25#.lsttwx97v>`_
 in your commit message and PR commentary.
 
@@ -124,7 +124,7 @@ To build this documentation:
 
 .. code-block:: bash
 
-	pip install requirements-dev.txt
+	pip install -r requirements-dev.txt -r requirements.txt
 	cd docs
 	make html
 

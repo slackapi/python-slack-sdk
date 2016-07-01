@@ -49,7 +49,8 @@ class SlackClient(object):
         Call the Slack Web API as documented here: https://api.slack.com/web
 
         :Args:
-            method (str): The API Method to call. See `the full list here <https://api.slack.com/methods>`_
+            method (str): The API Method to call. See
+            `the full list here <https://api.slack.com/methods>`_
         :Kwargs:
             (optional) kwargs: any arguments passed here will be bundled and sent to the api
             requester as post_data and will be passed along to the API.
