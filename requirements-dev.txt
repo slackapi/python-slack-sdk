@@ -3,6 +3,7 @@ ipdb==0.9.3
 ipython==4.1.2
 pdbpp==0.8.3
 pytest>=2.8.2
+pytest-mock>=1.1
 pytest-cov==2.2.1
 pytest-pythonpath>=0.3
 testfixtures==4.9.1
