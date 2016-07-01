@@ -113,7 +113,8 @@ class Server(object):
 
     def send_to_websocket(self, data):
         """
-        Send a JSON message directly to the websocket. See `RTM documentation <https://api.slack.com/rtm` for allowed types.
+        Send a JSON message directly to the websocket. See
+        `RTM documentation <https://api.slack.com/rtm` for allowed types.
 
         :Args:
             data (dict) the key/values to send the websocket.
@@ -165,8 +166,10 @@ class Server(object):
 
         Note: this action is not allowed by bots, they must be invited to channels.
         '''
-        return self.api_requester.do(self.token,
-                                    "channels.join?name={}".format(name)).text
+        return self.api_requester.do(
+            self.token,
+            "channels.join?name={}".format(name)
+        ).text
 
     def api_call(self, method, **kwargs):
         '''
@@ -175,12 +178,17 @@ class Server(object):
         :Args:
             method (str): The API Method to call. See here for a list: https://api.slack.com/methods
         :Kwargs:
-            (optional) kwargs: any arguments passed here will be bundled and sent to the api requester as post_data
+            (optional) kwargs: any arguments passed here will be bundled and sent to the api
+            requester as post_data
                 and will be passed along to the API.
 
         Example::
 
-            sc.server.api_call("channels.setPurpose", channel="CABC12345", purpose="Writing some code!")
+            sc.server.api_call(
+                "channels.setPurpose",
+                channel="CABC12345",
+                purpose="Writing some code!"
+            )
 
         Returns:
             str -- returns the text of the HTTP response.
