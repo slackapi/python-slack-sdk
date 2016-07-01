@@ -11,6 +11,6 @@ env
 tests/.cache
 .coverage
 .cache
-doc/_build
-doc/_static
-doc/_templates
+docs/_build
+docs/_static
+docs/_templates
