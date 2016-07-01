@@ -1,4 +1,7 @@
 class Im(object):
+    '''
+    IMs represent direct message channels between two users on Slack.
+    '''
     def __init__(self, server, user, im_id):
         self.server = server
         self.user = user
@@ -24,5 +27,14 @@ class Im(object):
         return self.__str__()
 
     def send_message(self, message):
+        '''
+        Sends a message to a this IM (or DM depending on your preferred terminology).
+
+        :Args:
+            message (message) - the string you'd like to send to the IM
+
+        :Returns:
+            None
+        '''
         message_json = {"type": "message", "channel": self.id, "text": message}
         self.server.send_to_websocket(message_json)
