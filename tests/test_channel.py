@@ -16,7 +16,7 @@ def test_channel_eq(channel):
     assert channel == 'C12345678'
     assert (channel == 'foo') is False
 
-def test_channel_hash(channel):
+def test_channel_is_hashable(channel):
     channel = Channel(
         'test-server',
         'test-channel',
