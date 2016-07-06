@@ -12,6 +12,9 @@ class User(object):
         else:
             return False
 
+    def __hash__(self):
+        return hash(self.id)
+
     def __str__(self):
         data = ""
         for key in list(self.__dict__.keys()):

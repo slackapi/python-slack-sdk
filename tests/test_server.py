@@ -16,6 +16,12 @@ def test_Server(server):
     assert type(server) == Server
 
 
+def test_Server_is_hashable(server):
+    server_map = {server: server.token}
+    assert server_map[server] == 'xoxp-1234123412341234-12341234-1234'
+    assert (server_map[server] == 'foo') is False
+
+
 def test_Server_parse_channel_data(server, login_fixture):
     server.parse_channel_data(login_fixture["channels"])
     assert type(server.channels.find('general')) == Channel
