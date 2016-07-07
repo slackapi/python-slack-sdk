@@ -7,15 +7,17 @@ from slackclient._server import Server
 
 
 class SlackClient(object):
-    def __init__(self, token):
+    def __init__(self, token, connect=False):
         self.token = token
-        self.server = Server(self.token, False)
+        self.server = Server(self.token, connect=connect)
 
-    def rtm_connect(self):
+    def rtm_connect(self, debug=False):
         try:
             self.server.rtm_connect()
             return True
         except:
+            if debug:
+                raise
             return False
 
     def api_call(self, method, **kwargs):
