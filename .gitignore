@@ -11,3 +11,6 @@ env
 tests/.cache
 .coverage
 .cache
+docs/_build
+docs/_static
+docs/_templates
