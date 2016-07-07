@@ -1,4 +1,7 @@
 class Channel(object):
+    '''
+    A Channel represents a public or private Slack Channel instance
+    '''
     def __init__(self, server, name, channel_id, members=None):
         self.server = server
         self.name = name
@@ -24,5 +27,14 @@ class Channel(object):
         return self.__str__()
 
     def send_message(self, message):
+        '''
+        Sends a message to a this Channel.
+
+        :Args:
+            message (message) - the string you'd like to send to the channel
+
+        :Returns:
+            None
+        '''
         message_json = {"type": "message", "channel": self.id, "text": message}
         self.server.send_to_websocket(message_json)
