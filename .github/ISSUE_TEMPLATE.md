@@ -7,9 +7,10 @@
 
 #### Reproducible in:
 * [ ] This is reproducible in the sample project.
-SlackTextViewController version:
-iOS version(s):
-Device(s):
+python-slackclient version:
+Python Version:
+OS Version: 
+
 
 #### Steps to reproduce:
 
