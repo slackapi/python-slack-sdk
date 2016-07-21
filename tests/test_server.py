@@ -29,7 +29,13 @@ def test_Server_parse_channel_data(server, login_fixture):
 
 def test_Server_parse_user_data(server, login_fixture):
     server.parse_user_data(login_fixture["users"])
-    assert type(server.users.find('fakeuser')) == User
+    fakeuser = server.users.find('fakeuser')
+    assert type(fakeuser) == User
+    assert fakeuser.email == 'fakeuser@example.com'
+    assert fakeuser.id == 'U10CX1234'
+    assert fakeuser.name == 'fakeuser'
+    assert fakeuser.real_name == ''
+    assert fakeuser.tz == 'America/Los_Angeles'
 
 
 def test_Server_cantconnect(server):

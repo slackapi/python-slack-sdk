@@ -109,7 +109,13 @@ class Server(object):
                 user["tz"] = "unknown"
             if "real_name" not in user:
                 user["real_name"] = user["name"]
-            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
+            if "email" not in user["profile"]:
+                user["profile"]["email"] = ""
+            self.attach_user(user["name"],
+                             user["id"],
+                             user["real_name"],
+                             user["tz"],
+                             user["profile"]["email"])
 
     def send_to_websocket(self, data):
         """
@@ -150,9 +156,9 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, channel_id, real_name, tz):
+    def attach_user(self, name, channel_id, real_name, tz, email):
         if self.users.find(channel_id) is None:
-            self.users.append(User(self, name, channel_id, real_name, tz))
+            self.users.append(User(self, name, channel_id, real_name, tz, email))
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:
