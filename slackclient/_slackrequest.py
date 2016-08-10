@@ -21,12 +21,14 @@ class SlackRequest(object):
         '''
         post_data = post_data or {}
 
+        # Pull file out so it isn't JSON encoded like normal fields.
+        files = {'file': post_data.pop('file')} if 'file' in post_data else None
+
         for k, v in six.iteritems(post_data):
             if not isinstance(v, six.string_types):
                 post_data[k] = json.dumps(v)
 
         url = 'https://{0}/api/{1}'.format(domain, request)
         post_data['token'] = token
-        files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
         return requests.post(url, data=post_data, files=files)
