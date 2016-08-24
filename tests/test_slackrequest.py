@@ -17,6 +17,18 @@ def test_post_file(mocker):
             'token': 'xoxb-123'} == kwargs['data']
     assert None != kwargs['files']
 
+def test_get_file(mocker):
+    requests = mocker.patch('slackclient._slackrequest.requests')
+
+    SlackRequest.do('xoxb-123', 'files.info', {'file': 'myFavoriteFileID'})
+
+    assert requests.post.call_count == 1
+    args, kwargs = requests.post.call_args
+    assert 'https://slack.com/api/files.info' == args[0]
+    assert {'file': "myFavoriteFileID",
+            'token': 'xoxb-123'} == kwargs['data']
+    assert None == kwargs['files']
+
 def test_post_attachements(mocker):
     requests = mocker.patch('slackclient._slackrequest.requests')
 
