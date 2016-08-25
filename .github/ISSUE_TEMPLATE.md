@@ -1,4 +1,4 @@
-* [ ] I've read and understood the [Contributing guidelines](./CONTRIBUTING.md) and have done my best effort to follow them.
+* [ ] I've read and understood the [Contributing guidelines](./.github/CONTRIBUTING.md) and have done my best effort to follow them.
 * [ ] I've read and agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
 * [ ] I've searched for any related issues and avoided creating a duplicate issue.
 
