@@ -22,7 +22,12 @@ class SlackRequest(object):
         post_data = post_data or {}
 
         # Pull file out so it isn't JSON encoded like normal fields.
-        files = {'file': post_data.pop('file')} if 'file' in post_data else None
+        # Only do this for requests that are UPLOADING files; downloading files
+        # use the 'file' argument to point to a File ID.
+        upload_requests = ['files.upload']
+        files = None
+        if request in upload_requests:
+            files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
         for k, v in six.iteritems(post_data):
             if not isinstance(v, six.string_types):
