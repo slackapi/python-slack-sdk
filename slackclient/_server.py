@@ -23,7 +23,6 @@ class Server(object):
         self.users = SearchList()
         self.channels = SearchList()
         self.connected = False
-        self.pingcounter = 0
         self.ws_url = None
         self.api_requester = SlackRequest()
 
@@ -49,7 +48,6 @@ class Server(object):
         users : []
         login_data : None
         api_requester : <slackclient._slackrequest.SlackRequest
-        pingcounter : 0
         channels : []
         token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False
