@@ -120,7 +120,21 @@ in your commit message and PR commentary.
 
 Building Documentation
 -----------------------
-To build this documentation:
+To build this documentation you'll need to create a virtual environment.
+You'll need to install `virtualenv <https://virtualenv.readthedocs.io/en/latest/>`_ if you don't already have it.
+
+.. code-block:: bash
+
+    pip install virtualenv
+
+After virtualenv is installed, create a new environment and activate it:
+
+.. code-block:: bash
+
+    virtualenv env
+    source env/bin/activate
+
+Now you're ready to install the dependencies and generate these docs for yourself!
 
 .. code-block:: bash
 
@@ -136,4 +150,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
