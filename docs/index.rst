@@ -118,6 +118,8 @@ We ask that you include any appropriate tests or documentation in the pull reque
 `good commit message hygiene <https://medium.com/brigade-engineering/the-secrets-to-great-commit-messages-106fc0a92a25#.lsttwx97v>`_
 in your commit message and PR commentary.
 
+For more information, check out our `contribution guide <https://github.com/slackhq/python-slackclient/blob/master/.github/CONTRIBUTING.md>`_.
+
 Building Documentation
 -----------------------
 To build this documentation you'll need to create a virtual environment.
