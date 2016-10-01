@@ -114,13 +114,18 @@ Submitting a Pull Request
 -------------------------
 Please feel free to sent us pull requests or issues that you'd like to see included in the python-slackclient!
 
+Reviewing our `Contributing Guidelines <https://github.com/slackhq/python-slackclient/blob/master/.github/CONTRIBUTING.md>`_ and `Code of Conduct <https://github.com/slackhq/python-slackclient/blob/master/CODE_OF_CONDUCT.md>`_ before submitting your PR will make it easier for your contributions to be accepted. :D
+
 We ask that you include any appropriate tests or documentation in the pull request and try to follow
 `good commit message hygiene <https://medium.com/brigade-engineering/the-secrets-to-great-commit-messages-106fc0a92a25#.lsttwx97v>`_
 in your commit message and PR commentary.
 
 Building Documentation
 -----------------------
-To build this documentation:
+When building this documentation it's best practice to create a virtual environment.
+`Virtualenv <https://virtualenv.readthedocs.io/en/latest/>`_ is a good option.
+
+Now you're ready to install the dependencies and generate these docs for yourself!
 
 .. code-block:: bash
 
@@ -136,4 +141,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
