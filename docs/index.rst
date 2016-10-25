@@ -112,7 +112,7 @@ Contributing
 
 Submitting a Pull Request
 -------------------------
-Please feel free to sent us pull requests or issues that you'd like to see included in the python-slackclient!
+Please feel free to send us pull requests or issues that you'd like to see included in the python-slackclient!
 
 Reviewing our `Contributing Guidelines <https://github.com/slackhq/python-slackclient/blob/master/.github/CONTRIBUTING.md>`_ and `Code of Conduct <https://github.com/slackhq/python-slackclient/blob/master/CODE_OF_CONDUCT.md>`_ before submitting your PR will make it easier for your contributions to be accepted. :D
 
