@@ -1,5 +1,5 @@
-* [ ] I've read and understood the [Contributing guidelines](https://github.com/slackhq/python-slackclient/blob/master/.github/CONTRIBUTING.md) and have done my best effort to follow them.
-* [ ] I've read and agree to the [Code of Conduct](https://github.com/slackhq/python-slackclient/blob/master/CODE_OF_CONDUCT.md).
+* [ ] I've read and understood the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/master/.github/CONTRIBUTING.md) and have done my best effort to follow them.
+* [ ] I've read and agree to the [Code of Conduct](https://github.com/slackapi/python-slackclient/blob/master/CODE_OF_CONDUCT.md).
 * [ ] I've searched for any related issues and avoided creating a duplicate issue.
 
 #### Description

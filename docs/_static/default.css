@@ -1,0 +1,50 @@
+.section h1, .section .headerlink {
+    display: none;
+}
+
+.section-title {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  letter-spacing: -1px;
+  font-weight: 700;
+  font-family: Slack-Lato, appleLogo, sans-serif;
+  margin: 0 0 1rem;
+}
+
+nav#api_nav .toctree-l1 {
+  margin-bottom: 1.5rem;
+}
+
+nav#api_nav #api_sections ul li.toctree-l1>a {
+  color: #3aa3e3;
+  letter-spacing: 0;
+  font-size: .75rem;
+  font-weight: 700;
+  font-family: Slack-Lato, appleLogo, sans-serif;
+  text-transform: uppercase;
+  border: none;
+  padding: 0;
+}
+
+nav#api_nav #api_sections ul li.toctree-l2 a {
+  color: #555459;
+  text-transform: none;
+  font-weight: inherit;
+  padding: 0;
+  color: #555459;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: .9375rem!important;
+}
+
+nav#api_nav #api_sections ul li.toctree-l2 a:hover {
+  background-color: #edf7fd;
+  border-color: #dcf0fb
+}
+
+nav#api_nav #footer #footer_nav a {
+  border: none;
+  padding: 0;
+}

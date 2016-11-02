@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Frequently Asked Questions &mdash; Slack Developer Kit for Python 1.0.1 documentation</title>
+
+    
+    <link rel="stylesheet" href="https://a.slack-edge.com/b143/style/plastic_helpers.css" type="text/css"/>
+    <link rel="stylesheet" href="https://a.slack-edge.com/58b24/style/plastic_typography.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/b900/style/plastic_layout.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/2133/style/plastic_grid.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/be9e/style/plastic_buttons.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/1d9c/style/libs/lato-1-compressed.css" type="text/css" />
+    <link rel="stylesheet" href="./_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="./_static/pygments.css" type="text/css" />
+    <link id="favicon" rel="shortcut icon" href="https://a.slack-edge.com/66f9/img/icons/favicon-32.png" type="image/png" />
+    <link rel="top" title="Slack Developer Kit for Python 1.0.1 documentation" href="index.html" />
+
+  </head>
+  <body class="api light_theme">
+    <header>
+        <a id="menu_toggle" class="no_transition show_on_mobile">
+            <span class="menu_icon"></span>
+            <span class="vert_divider"></span>
+        </a>
+        <a href="https://api.slack.com/" id="header_logo" class="api hide_on_mobile" style="float:left; display: inline-block;">
+            <img alt="Slack API" src="https://a.slack-edge.com/ae57/img/slack_api_logo.png" style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"/>
+        </a>
+        <span style="display: inline-block; padding-left: 20px; margin-top: 20px; font-weight: bold;">
+            <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
+        </span>
+        <div class="header_nav">
+            <a href="https://github.com/SlackAPI/python-slackclient" class="btn header_btn float_right" data-qa="go_to_slack">Go to GitHub</a>
+        </div>
+    </header>
+    
+
+    <div id="page">
+      <div id="page_contents" class="clearfix">
+          <!-- Sidebar Content -->
+          <nav id="api_nav" class="col span_1_of_4">
+            <div id="api_sections">
+              
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#handling-tokens-and-other-sensitive-data">Handling tokens and other sensitive data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#test-tokens">Test Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#the-oauth-flow">The OAuth flow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-the-content-of-a-message">Updating the content of a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-list-of-channels">Getting a list of channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel&#8217;s info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">Real Time Messaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-even-is-product-name-and-why-should-i-care">What even is Slack Developer Kit for Python and why should I care?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#omg-i-found-a-bug">OMG I found a bug!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hey-there-s-a-feature-missing">Hey, there&#8217;s a feature missing!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-d-like-to-contribute-but-how">I&#8217;d like to contribute...but how?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-2016-02-15">v0.17 (2016-02-15)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Slack Developer Kit for Python</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="footer">
+
+    <ul id="footer_nav">
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+    </ul>
+
+    <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+        Community
+    </p>
+</div>
+              
+            </div>
+          </nav>
+          <!-- /Sidebar Content -->
+
+          <!-- Body Content -->
+          <div class="col span_3_of_4">
+            <div class="section-title">Frequently Asked Questions</div>
+  					<div class="card">
+  <div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-even-is-product-name-and-why-should-i-care">
+<h2>What even is Slack Developer Kit for Python and why should I care?<a class="headerlink" href="#what-even-is-product-name-and-why-should-i-care" title="Permalink to this headline">¶</a></h2>
+<p>Slack Developer Kit for Python is a wrapper around commonly accessed parts of the Slack Platform. It provides basic mechanisms for
+using the Slack Web API from within your Python app.</p>
+<p>On the other hand, Slack Developer Kit for Python does not provide access to the RTM or Events bot-building APIs, although we anticipate
+adding support for these in the future.</p>
+</div>
+<div class="section" id="omg-i-found-a-bug">
+<h2>OMG I found a bug!<a class="headerlink" href="#omg-i-found-a-bug" title="Permalink to this headline">¶</a></h2>
+<p>Well, poop. Take a deep breath, and then let us know on the <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/issues">Issue Tracker</a>. If you&#8217;re feeling particularly ambitious,
+why not submit a <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/pulls">pull request</a> with a bug fix?</p>
+</div>
+<div class="section" id="hey-there-s-a-feature-missing">
+<h2>Hey, there&#8217;s a feature missing!<a class="headerlink" href="#hey-there-s-a-feature-missing" title="Permalink to this headline">¶</a></h2>
+<p>There&#8217;s always something more that could be added! You can let us know in the <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/issues">Issue Tracker</a> to start a discussion
+around the proposed feature, that&#8217;s a good start. If you&#8217;re feeling particularly ambitious, why not write the feature
+yourself, and submit a <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/pulls">pull request</a>! We love feedback and we love help and we don&#8217;t bite. Much.</p>
+</div>
+<div class="section" id="i-d-like-to-contribute-but-how">
+<h2>I&#8217;d like to contribute...but how?<a class="headerlink" href="#i-d-like-to-contribute-but-how" title="Permalink to this headline">¶</a></h2>
+<p>What an excellent question. First of all, please have a look at our general <a class="reference external" href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">contributing guidelines</a>. We&#8217;ll wait for
+you here.</p>
+<p>All done? Great! While we&#8217;re super excited to incorporate your new feature into Slack Developer Kit for Python, there are a
+couple of things we want to make sure you&#8217;ve given thought to.</p>
+<ul class="simple">
+<li>Please write unit tests for your new code. But don&#8217;t <strong>just</strong> aim to increase the test coverage, rather, we expect you
+to have written <strong>thoughtful</strong> tests that ensure your new feature will continue to work as expected, and to help future
+contributors to ensure they don&#8217;t break it!</li>
+<li>Please document your new feature. Think about <strong>concrete use cases</strong> for your feature, and add a section to the
+appropriate document, including a <strong>complete</strong> sample program that demonstrates your feature. Don&#8217;t forget to update
+the changelog in <code class="docutils literal"><span class="pre">changelog.rst</span></code>!</li>
+</ul>
+<p>Including these two items with your pull request will totally make our day—and, more importantly, your future users&#8217; days!</p>
+<p>On that note...</p>
+</div>
+<div class="section" id="how-do-i-compile-the-documentation">
+<h2>How do I compile the documentation?<a class="headerlink" href="#how-do-i-compile-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>This project&#8217;s documentation is generated with <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>. If you are editing one of the many
+reStructuredText files in the <code class="docutils literal"><span class="pre">docs-src</span></code> folder, you&#8217;ll need to rebuild the documentation. First, install the project&#8217;s
+development dependencies (ideally using <a class="reference external" href="https://virtualenv.pypa.io">virtualenv</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+<p>Then run Sphinx.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">c</span> <span class="o">./</span><span class="n">docs</span><span class="o">-</span><span class="n">src</span><span class="o">/</span><span class="n">_themes</span><span class="o">/</span><span class="n">slack</span><span class="o">/</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">docs</span><span class="o">-</span><span class="n">src</span> <span class="n">docs</span>
+</pre></div>
+</div>
+<p>Do be sure to add the <code class="docutils literal"><span class="pre">docs</span></code> folder and its contents to your pull request!</p>
+</div>
+</div>
+
+
+  						<div class="clear_both large_bottom_margin"></div>
+  					</div>
+  				</div>
+          <!-- /Body Content -->
+
+      </div>
+    </div>
+
+    <footer>
+        <p class="light tiny align_center">Copyright © 2015–2016 Slack Technologies, Inc. and contributors</p>
+    </footer>
+
+    <script type="text/javascript" src="https://a.slack-edge.com/1504/js/rollup-core_required_libs.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://a.slack-edge.com/125e0/js/rollup-core_web.js" crossorigin="anonymous"></script>
+
+  </body>
+</html>
