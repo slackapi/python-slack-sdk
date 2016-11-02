@@ -5,7 +5,7 @@
     {{ metatags }}
 
     {%- block htmltitle %}
-    <title>{{ title|striptags|e + " &mdash; "|safe + docstitle|e }}</title>
+    <title>{{ title|striptags|e + " &mdash; "|safe + project|e }}</title>
     {%- endblock %}
 
     {%- macro css() %}
