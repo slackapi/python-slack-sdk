@@ -10,19 +10,19 @@ Before contributing, please read our [Code of Conduct](./CODE_OF_CONDUCT.md). We
 
 Before opening a new issue, please consider:
 
-  - Reading [the documentation](https://github.com/slackhq/python-slackclient/blob/master/README.md) and [the changelog](https://github.com/slackhq/python-slackclient/blob/master/CHANGELOG.md) first.
+  - Reading [the documentation](https://github.com/slackapi/python-slackclient/blob/master/README.md) and [the changelog](https://github.com/slackapi/python-slackclient/blob/master/CHANGELOG.md) first.
   - Searching for any related issues and avoid creating duplicated issues.
   - Adding details, diagnoses, screenshots or any type of useful information in existing issues, even if they are marked as closed. The team will still review it.
-  - Trying out the examples [provided in this repository](https://github.com/slackhq/python-slackclient/tree/master/examples).
+  - Trying out the examples [provided in this repository](https://github.com/slackapi/python-slackclient/tree/master/examples).
   - Taking the time to think of a solution and [**open a pull request**](#new-pull-requests) for either improving the documentation, fixing a bug or suggesting a feature.
-  - Finally, **[open an issue]**(https://github.com/slackhq/python-slackclient/issues/new) to report a bug, ask for help or suggest a feature. The more information you give, the better people can help you.
+  - Finally, **[open an issue]**(https://github.com/slackapi/python-slackclient/issues/new) to report a bug, ask for help or suggest a feature. The more information you give, the better people can help you.
 
 
 ## New Pull Requests
 
 We love pull requests and we are generally very receptive to contributions. Things to keep in mind:
 
-- [Fork the repository](https://github.com/slackhq/python-slackclient) and make sure to work on a branch up to date with origin master.
+- [Fork the repository](https://github.com/slackapi/python-slackclient) and make sure to work on a branch up to date with origin master.
 - Do your thing!
 - Be mindful about doing atomic commits, adding documentation to your changes, not refactoring too much.
 - Add tests covering the new code or functionality you are adding.

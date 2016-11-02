@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Real Time Messaging &mdash; Slack Developer Kit for Python 1.0.1 documentation</title>
+
+    
+    <link rel="stylesheet" href="https://a.slack-edge.com/b143/style/plastic_helpers.css" type="text/css"/>
+    <link rel="stylesheet" href="https://a.slack-edge.com/58b24/style/plastic_typography.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/b900/style/plastic_layout.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/2133/style/plastic_grid.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/be9e/style/plastic_buttons.css" type="text/css" />
+    <link rel="stylesheet" href="https://a.slack-edge.com/1d9c/style/libs/lato-1-compressed.css" type="text/css" />
+    <link rel="stylesheet" href="./_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="./_static/pygments.css" type="text/css" />
+    <link id="favicon" rel="shortcut icon" href="https://a.slack-edge.com/66f9/img/icons/favicon-32.png" type="image/png" />
+    <link rel="top" title="Slack Developer Kit for Python 1.0.1 documentation" href="index.html" />
+
+  </head>
+  <body class="api light_theme">
+    <header>
+        <a id="menu_toggle" class="no_transition show_on_mobile">
+            <span class="menu_icon"></span>
+            <span class="vert_divider"></span>
+        </a>
+        <a href="https://api.slack.com/" id="header_logo" class="api hide_on_mobile" style="float:left; display: inline-block;">
+            <img alt="Slack API" src="https://a.slack-edge.com/ae57/img/slack_api_logo.png" style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"/>
+        </a>
+        <span style="display: inline-block; padding-left: 20px; margin-top: 20px; font-weight: bold;">
+            <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
+        </span>
+        <div class="header_nav">
+            <a href="https://github.com/SlackAPI/python-slackclient" class="btn header_btn float_right" data-qa="go_to_slack">Go to GitHub</a>
+        </div>
+    </header>
+    
+
+    <div id="page">
+      <div id="page_contents" class="clearfix">
+          <!-- Sidebar Content -->
+          <nav id="api_nav" class="col span_1_of_4">
+            <div id="api_sections">
+              
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#handling-tokens-and-other-sensitive-data">Handling tokens and other sensitive data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#test-tokens">Test Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#the-oauth-flow">The OAuth flow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-the-content-of-a-message">Updating the content of a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-list-of-channels">Getting a list of channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel&#8217;s info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rtm-events">RTM Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-even-is-product-name-and-why-should-i-care">What even is Slack Developer Kit for Python and why should I care?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#omg-i-found-a-bug">OMG I found a bug!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#hey-there-s-a-feature-missing">Hey, there&#8217;s a feature missing!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-d-like-to-contribute-but-how">I&#8217;d like to contribute...but how?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-2016-02-15">v0.17 (2016-02-15)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Slack Developer Kit for Python</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="footer">
+
+    <ul id="footer_nav">
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+    </ul>
+
+    <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+        Community
+    </p>
+</div>
+              
+            </div>
+          </nav>
+          <!-- /Sidebar Content -->
+
+          <!-- Body Content -->
+          <div class="col span_3_of_4">
+            <div class="section-title">Real Time Messaging</div>
+  					<div class="card">
+  <div class="section" id="real-time-messaging">
+<span id="id1"></span><h1>Real Time Messaging<a class="headerlink" href="#real-time-messaging" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging API</a> is a WebSocket-based API that allows you to
+receive events from Slack in real time and send messages as users.</p>
+<p>If you prefer events to be pushed to you instead, we recommend using the
+HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
+Most event types supported by the RTM API are also available
+in <a class="reference external" href="https://api.slack.com/events/api">the Events API</a>.</p>
+<p>See <a class="reference internal" href="auth.html#handling-tokens"><span class="std std-ref">Tokens &amp; Authentication</span></a> for API token handling best practices.</p>
+<div class="section" id="connecting-to-the-real-time-messaging-api">
+<h2>Connecting to the Real Time Messaging API<a class="headerlink" href="#connecting-to-the-real-time-messaging-api" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s2">&quot;Connection Failed, invalid token?&quot;</span>
+</pre></div>
+</div>
+<p>If you connect successfully the first event received will be a hello:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;hello&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If there was a problem connecting an error will be returned, including a descriptive error message:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;error&#39;</span><span class="p">,</span>
+    <span class="s1">u&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">u&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">u&#39;msg&#39;</span><span class="p">:</span> <span class="s1">u&#39;Socket URL has expired&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rtm-events">
+<h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;message&#39;</span><span class="p">,</span>
+  <span class="s1">u&#39;ts&#39;</span><span class="p">:</span> <span class="s1">u&#39;1358878749.000002&#39;</span><span class="p">,</span>
+  <span class="s1">u&#39;user&#39;</span><span class="p">:</span> <span class="s1">u&#39;U023BECGF&#39;</span><span class="p">,</span>
+  <span class="s1">u&#39;text&#39;</span><span class="p">:</span> <span class="s1">u&#39;Hello&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/rtm#events">RTM Events</a> for a complete list of events.</p>
+</div>
+<div class="section" id="sending-messages-via-the-rtm-api">
+<h2>Sending messages via the RTM API<a class="headerlink" href="#sending-messages-via-the-rtm-api" title="Permalink to this headline">¶</a></h2>
+<p>You can send a message to Slack by sending JSON over the websocket connection.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">rtm_send_message</span><span class="p">(</span><span class="s2">&quot;welcome-test&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can send a message to a private group or direct message channel in the same
+way, but using a Group ID (<code class="docutils literal"><span class="pre">C024BE91L</span></code>) or DM channel ID (<code class="docutils literal"><span class="pre">D024BE91L</span></code>).</p>
+<p>The RTM API only supports posting messages with <a class="reference external" href="https://api.slack.com/docs/message-formatting">basic formatting</a>.
+It does not support attachments or other message formatting modes.</p>
+<blockquote>
+<div>To post a more complex message as a user, see <a class="reference internal" href="basic_usage.html#web-api-examples"><span class="std std-ref">Web API usage</span></a>.</div></blockquote>
+</div>
+</div>
+
+
+  						<div class="clear_both large_bottom_margin"></div>
+  					</div>
+  				</div>
+          <!-- /Body Content -->
+
+      </div>
+    </div>
+
+    <footer>
+        <p class="light tiny align_center">Copyright © 2015–2016 Slack Technologies, Inc. and contributors</p>
+    </footer>
+
+    <script type="text/javascript" src="https://a.slack-edge.com/1504/js/rollup-core_required_libs.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://a.slack-edge.com/125e0/js/rollup-core_web.js" crossorigin="anonymous"></script>
+
+  </body>
+</html>
