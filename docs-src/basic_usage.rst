@@ -179,7 +179,7 @@ Joining a channel
   sc = SlackClient(slack_token)
 
   sc.api_call(
-    "channels.info",
+    "channels.join",
     channel="C0XXXXXXY"
   )
 
