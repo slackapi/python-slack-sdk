@@ -1,3 +1,6 @@
+from urllib import getproxies
+from urlparse import urlparse
+
 from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
@@ -86,7 +89,16 @@ class Server(object):
 
     def connect_slack_websocket(self, ws_url):
         try:
-            self.websocket = create_connection(ws_url)
+            options = {}
+            proxies = getproxies()
+            proxy = proxies.get('https', proxies.get('http'))
+            if proxy:
+                parsed_proxy = urlparse(proxy)
+                options['http_proxy_host'] = parsed_proxy.hostname
+                options['http_proxy_port'] = int(parsed_proxy.port) if parsed_proxy.port else 80
+                if parsed_proxy.username:
+                    options['http_proxy_auth'] = (parsed_proxy.username, parsed_proxy.password)
+            self.websocket = create_connection(ws_url, **options)
             self.websocket.sock.setblocking(0)
         except:
             raise SlackConnectionError
