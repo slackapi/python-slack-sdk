@@ -2,7 +2,7 @@ python-slackclient
 ================
 
 [![Build Status](https://travis-ci.org/slackapi/python-slackclient.svg?branch=master)](https://travis-ci.org/slackapi/python-slackclient)
-[![Coverage Status](https://coveralls.io/repos/github/slackapi/python-slackclient/badge.svg?branch=master)](https://coveralls.io/github/slackapi/python-slackclient?branch=master)
+[![codecov](https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg)](https://codecov.io/gh/slackapi/python-slackclient)
 [![Documentation Status](https://readthedocs.org/projects/python-slackclient/badge/?version=latest)](http://python-slackclient.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/slackclient.svg)](https://pypi.python.org/pypi/slackclient)
 
