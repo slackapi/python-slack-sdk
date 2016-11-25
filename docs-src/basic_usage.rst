@@ -223,4 +223,26 @@ Get a list of team members
 
 See `users.list <https://api.slack.com/methods/users.list>`_ for more info.
 
+--------
+
+Working behind a proxy
+------------------------------
+
+If your slack client is behind a proxy (or on a platform like Heroku where the port
+must be specified), you will need to configure the ``$HTTP_PROXY_HOST`` and
+``$HTTP_PROXY_PORT`` environment variables.
+
+This can be done by supplying them directly to your script:
+::
+
+  HTTP_PROXY_HOST="localhost" HTTP_PROXY_PORT=8080 python myapp.py
+
+Alternatively, you can set the variables in your environment, the implementation
+of which is both platform dependent and well documented in other places.
+
+Note that if either ``$HTTP_PROXY_HOST`` or ``$HTTP_PROXY_PORT`` is not set, the
+specified variables will not be used.
+
+--------
+
 .. include:: metadata.rst
