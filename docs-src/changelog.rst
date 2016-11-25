@@ -2,6 +2,12 @@
 Changelog
 ==============================================
 
+v1.0.2 (2016-11-24)
+-------------------
+
+  - allow users to specify environment variables $HTTP_PROXY_HOST and $HTTP_PROXY_PORT
+    that are used by ``create_connection`` (if specified)
+
 v1.0.1 (2016-03-25)
 -------------------
 
