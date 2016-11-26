@@ -3,8 +3,6 @@ python-slackclient
 
 A basic client for Slack.com, which can optionally connect to the Slack Real Time Messaging (RTM) API.
 
-Check out the `full documentation over here <http://slackapi.github.io/python-slackclient>`_.
-
 |build-status| |codecov| |doc-status| |pypi-version|
 
 .. |build-status| image:: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
@@ -42,6 +40,12 @@ by pulling down the source code directly into your project:
 
 	git clone https://github.com/slackapi/python-slackclient.git
 	pip install -r requirements.txt
+
+
+Documentation
+--------------
+
+For a comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
 
 Basic Usage
 ------------
