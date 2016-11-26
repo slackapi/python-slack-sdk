@@ -30,4 +30,4 @@ We love pull requests and we are generally very receptive to contributions. Thin
 - Read and agree to our [Contributor License Agreement (CLA)](https://docs.google.com/a/slack-corp.com/forms/d/1q_w8rlJG_x_xJOoSUMNl7R35rkpA7N6pUkKhfHHMD9c/viewform). _We cannot accept your PR without your agreement to our CLA_.
 - Create your pull request (yay!). If it is in relation to an existing issue, please mention it on the title or description.
 
-[Interested in knowing more about about pull requests at Slack?](https://slack.engineering/on-empathy-pull-requests-979e4257d158#.awxtvmb2z)
+[Interested in knowing more about pull requests at Slack?](https://slack.engineering/on-empathy-pull-requests-979e4257d158#.awxtvmb2z)
