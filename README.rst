@@ -223,5 +223,6 @@ joined one by accident. This is how you leave a channel.
 
 See `channels.leave <https://api.slack.com/methods/channels.leave>`_ for more info.
 
+Additional Information
+********************************************************************************************
 For a comprehensive method information and usage examples, see the `full documentation`_.
-==========================================================================================
