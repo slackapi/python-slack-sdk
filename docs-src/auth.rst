@@ -8,17 +8,20 @@ Handling tokens and other sensitive data
 Slack tokens are the keys to your—or your customers’—teams. Keep them secret. Keep them safe. One way to do that is to never explicitly hardcode them.
 
 Try to avoid this when possible:
-::
+
+.. code-block:: python
 
   token = 'xoxb-abc-1232'
 
 If you commit this code to GitHub, the world gains access to this token’s team. Rather, we recommend you pass tokens in as environment variables, or persist them in a database that is accessed at runtime. You can add a token to the environment by starting your app as:
-::
+
+.. code-block:: python
 
   SLACK_BOT_TOKEN="xoxb-abc-1232" python myapp.py
 
 Then in your code retrieve the key with:
-::
+
+.. code-block:: python
 
   import os
   SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
@@ -48,7 +51,8 @@ In order to implement OAuth in your app, you will need to include a web server. 
 As mentioned above, we're setting the app tokens and other configs in environment variables and pulling them into global variables.
 
 Depending on what actions your app will need to perform, you'll need different OAuth permission scopes. Review the available scopes `here <https://api.slack.com/docs/oauth-scopes>`_.
-::
+
+.. code-block:: python
 
   import os
   from flask import Flask, request
@@ -67,7 +71,8 @@ This directs the user to Slack's OAuth acceptance page, where the user will revi
 or refuse the permissions your app is requesting as defined by the requested scope(s).
 
 For the best user experience, use the `Add to Slack button <https://api.slack.com/docs/slack-button>`_ to direct users to approve your application for access or `Sign in with Slack <https://api.slack.com/docs/sign-in-with-slack>`_ to log users in.
-::
+
+.. code-block:: python
 
   @app.route("/begin_auth", methods=["GET"])
   def pre_install():
@@ -89,7 +94,7 @@ which do not require a token. ``oauth.access`` is one example of this. Since thi
 is the endpoint you'll use to retrieve the tokens for later API requests,
 an empty string ``""`` is acceptable for this request.
 
-::
+.. code-block:: python
 
   @app.route("/finish_auth", methods=["GET", "POST"])
   def post_install():
@@ -121,7 +126,7 @@ user, within the context of the approving team.
 When you use Web API methods on behalf of your bot user, you should use this bot
 user access token instead of the top-level access token granted to your application.
 
-::
+.. code-block:: python
 
     # Save the bot token to an environmental variable or to your data store
     # for later use
