@@ -52,7 +52,7 @@ If you get stuck, we’re here to help. The following are the best ways to get a
 Documentation
 --------------
 
-For a comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
+For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
 
 Basic Usage
 ------------
@@ -234,4 +234,4 @@ See `channels.leave <https://api.slack.com/methods/channels.leave>`_ for more in
 
 Additional Information
 ********************************************************************************************
-For a comprehensive method information and usage examples, see the `full documentation`_.
+For comprehensive method information and usage examples, see the `full documentation`_.
