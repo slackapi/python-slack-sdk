@@ -154,11 +154,11 @@ the changelog in <code class="docutils literal"><span class="pre">changelog.rst<
 <p>This project&#8217;s documentation is generated with <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>. If you are editing one of the many
 reStructuredText files in the <code class="docutils literal"><span class="pre">docs-src</span></code> folder, you&#8217;ll need to rebuild the documentation. First, install the project&#8217;s
 development dependencies (ideally using <a class="reference external" href="https://virtualenv.pypa.io">virtualenv</a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">text</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -r requirements.txt -r requirements-dev.text
 </pre></div>
 </div>
 <p>Then run Sphinx.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">c</span> <span class="o">./</span><span class="n">docs</span><span class="o">-</span><span class="n">src</span><span class="o">/</span><span class="n">_themes</span><span class="o">/</span><span class="n">slack</span><span class="o">/</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">docs</span><span class="o">-</span><span class="n">src</span> <span class="n">docs</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sphinx-build -c ./docs-src/_themes/slack/ -b html docs-src docs
 </pre></div>
 </div>
 <p>Do be sure to add the <code class="docutils literal"><span class="pre">docs</span></code> folder and its contents to your pull request!</p>
