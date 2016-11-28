@@ -71,6 +71,7 @@ The primary use of Slack is sending messages. Whether you're sending a message
 to a user or to a channel, this method handles both.
 
 To send a message to a channel, use the channel's ID. For IMs, use the user's ID.
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -91,6 +92,7 @@ page for a full list of formatting and authorship options.
 Deleting a message
 ********************
 Sometimes you need to delete things.
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -112,6 +114,7 @@ You can quickly respond to any message on Slack with an emoji reaction. Reaction
 can be used for any purpose: voting, checking off to-do items, showing excitement — and just for fun.
 
 This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``channel message``, ``group message``, or ``direct message``). One of file, file_comment, or the combination of channel and timestamp must be specified.
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -127,6 +130,7 @@ This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``ch
   )
 
 Removing an emoji reaction is basically the same format, but you'll use ``reactions.remove`` instead of ``reactions.add``
+
 .. code-block:: python
 
   sc.api_call(
@@ -144,6 +148,7 @@ Getting a list of channels
 At some point, you'll want to find out what channels are available to your app. This is how you get that list.
 
 **Note:** This call requires the ``channels:read`` scope.
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -155,7 +160,7 @@ At some point, you'll want to find out what channels are available to your app. 
 
 Archived channels are included by default. You can exclude them by passing ``exclude_archived=1`` to your request.
 
-::
+.. code-block:: python
 
   from slackclient import SlackClient
 
@@ -172,6 +177,7 @@ See `channels.list <https://api.slack.com/methods/channels.list>`_ for more info
 Getting a channel's info
 *************************
 Once you have the ID for a specific channel, you can fetch information about that channel.
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -189,6 +195,7 @@ See `channels.info <https://api.slack.com/methods/channels.info>`_ for more info
 Joining a channel
 ********************
 Channels are the social hub of most Slack teams. Here's how you hop into one:
+
 .. code-block:: python
 
   from slackclient import SlackClient
@@ -210,6 +217,7 @@ Leaving a channel
 ********************
 Maybe you've finished up all the business you had in a channel, or maybe you
 joined one by accident. This is how you leave a channel.
+
 .. code-block:: python
 
   from slackclient import SlackClient
