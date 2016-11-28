@@ -171,6 +171,7 @@ See `channels.info <https://api.slack.com/methods/channels.info>`_ for more info
 
 Joining a channel
 ------------------
+Channels are the social hub of most Slack teams. Here's how you hop into one:
 ::
 
   from slackclient import SlackClient
@@ -184,7 +185,7 @@ Joining a channel
   )
 
 If you are already in the channel, the response is slightly different.
-``already_in_channel`` will be true, and a limited ``channel`` object will be returned.
+``already_in_channel`` will be true, and a limited ``channel`` object will be returned. Bot users cannot join a channel on their own, they need to be invited by another user.
 
 See `channels.join <https://api.slack.com/methods/channels.join>`_ for more info.
 
