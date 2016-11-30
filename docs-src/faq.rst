@@ -52,13 +52,13 @@ This project's documentation is generated with `Sphinx <http://www.sphinx-doc.or
 reStructuredText files in the ``docs-src`` folder, you'll need to rebuild the documentation. First, install the project's
 development dependencies (ideally using `virtualenv <https://virtualenv.pypa.io>`_.
 
-::
+.. code-block:: bash
 
   pip install -r requirements.txt -r requirements-dev.text
 
 Then run Sphinx.
 
-::
+.. code-block:: bash
 
   sphinx-build -c ./docs-src/_themes/slack/ -b html docs-src docs
 
