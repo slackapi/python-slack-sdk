@@ -30,7 +30,7 @@ def test_Server_parse_channel_data(server, login_fixture):
 def test_Server_parse_user_data(server, login_fixture):
     server.parse_user_data(login_fixture["users"])
     fakeuser = server.users.find('fakeuser')
-    assert fakeuser.name == "fakeuser"
+    assert fakeuser == "fakeuser"
     assert type(fakeuser) == User
 
 
