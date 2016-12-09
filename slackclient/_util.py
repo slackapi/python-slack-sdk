@@ -15,3 +15,9 @@ class SearchList(list):
             return items
         else:
             return None
+
+
+class SearchDict(dict):
+
+    def find(self, name):
+        return self.get(name)
