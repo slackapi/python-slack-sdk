@@ -1,7 +1,7 @@
 from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
-from slackclient._util import SearchList
+from slackclient._util import SearchList, SearchDict
 from ssl import SSLError
 
 from websocket import create_connection
@@ -20,7 +20,7 @@ class Server(object):
         self.domain = None
         self.login_data = None
         self.websocket = None
-        self.users = SearchList()
+        self.users = SearchDict()
         self.channels = SearchList()
         self.connected = False
         self.ws_url = None
@@ -107,7 +107,7 @@ class Server(object):
                 user["tz"] = "unknown"
             if "real_name" not in user:
                 user["real_name"] = user["name"]
-            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
+            self.attach_user(user["name"], user["name"], user["id"], user["real_name"], user["tz"])
 
     def send_to_websocket(self, data):
         """
@@ -148,9 +148,8 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, channel_id, real_name, tz):
-        if self.users.find(channel_id) is None:
-            self.users.append(User(self, name, channel_id, real_name, tz))
+    def attach_user(self, id, name, channel_id, real_name, tz):
+        self.users.update({id: User(self, name, channel_id, real_name, tz)})
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:
