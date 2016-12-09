@@ -107,7 +107,7 @@ class Server(object):
                 user["tz"] = "unknown"
             if "real_name" not in user:
                 user["real_name"] = user["name"]
-            self.attach_user(user["name"], user["name"], user["id"], user["real_name"], user["tz"])
+            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
 
     def send_to_websocket(self, data):
         """
