@@ -2,6 +2,11 @@
 Changelog
 ==============================================
 
+v1.0.3 (2016-12-13)
+-------------------
+
+  - fixed an issue causing RTM connections to fail for large teams
+
 v1.0.1 (2016-03-25)
 -------------------
 
