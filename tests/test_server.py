@@ -38,6 +38,9 @@ def test_Server_parse_user_data(server, login_fixture):
     userbyid = server.users.find('U10CX1234')
     assert type(userbyid) == User
     assert userbyid == "fakeuser"
+    # Don't find invalid user
+    userbyid = server.users.find('invaliduser')
+    assert type(userbyid) != User
 
 
 def test_Server_cantconnect(server):
