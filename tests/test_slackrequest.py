@@ -2,6 +2,14 @@ from slackclient._slackrequest import SlackRequest
 import json
 import os
 
+def test_post_headers(mocker):
+    requests = mocker.patch('slackclient._slackrequest.requests')
+    SlackRequest.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+
+    args, kwargs = requests.post.call_args
+    assert None != kwargs['headers']['user-agent']
+    assert "slackclient" in kwargs['headers']['user-agent']
+
 def test_post_file(mocker):
     requests = mocker.patch('slackclient._slackrequest.requests')
 
