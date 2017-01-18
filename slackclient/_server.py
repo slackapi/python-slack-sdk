@@ -61,9 +61,6 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
-    def get_user_agent(self):
-        return self.api_requester.get_user_agent()
-
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 

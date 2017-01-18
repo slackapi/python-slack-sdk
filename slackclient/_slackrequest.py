@@ -18,11 +18,7 @@ class SlackRequest(object):
         # Construct the user-agent header with the package info, Python version and OS version.
         self.default_user_agent = {
             "client": "{0}/{1}".format(client_name, client_version),
-            "python": "Python/{0}.{1}.{2}".format(
-                sys.version_info[0],
-                sys.version_info[1],
-                sys.version_info[2]
-            ),
+            "python": "Python/{v.major}.{v.minor}.{v.micro}".format(v=sys.version_info),
             "system": "{0}/{1}".format(platform.system(), platform.release())
         }
 
@@ -44,10 +40,8 @@ class SlackRequest(object):
         return user_agent_string
 
     def append_user_agent(self, name, version):
-        name = str.replace(name, "/", ":")
-        version = str.replace(version, "/", ":")
         if self.custom_user_agent:
-            self.custom_user_agent.append([name, version])
+            self.custom_user_agent.append([name.replace("/", ":"), version.replace("/", ":")])
         else:
             self.custom_user_agent = [[name, version]]
 

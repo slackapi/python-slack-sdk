@@ -17,7 +17,6 @@ def test_custom_user_agent(mocker):
 
     request.append_user_agent("fooagent1","0.1")
     request.append_user_agent("baragent/2","0.2")
-    assert "fooagent1/0.1" in request.get_user_agent()
 
     request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args

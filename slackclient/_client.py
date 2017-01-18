@@ -27,9 +27,6 @@ class SlackClient(object):
         self.token = token
         self.server = Server(self.token, False)
 
-    def get_user_agent(self):
-        return self.server.get_user_agent()
-
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
