@@ -45,7 +45,7 @@ class SlackRequest(object):
 
     def append_user_agent(self, name, version):
         name = str.replace(name, "/", ":")
-        version = str.replace(name, "/", ":")
+        version = str.replace(version, "/", ":")
         if self.custom_user_agent:
             self.custom_user_agent.append([name, version])
         else:
