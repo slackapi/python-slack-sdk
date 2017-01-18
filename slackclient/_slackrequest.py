@@ -7,22 +7,32 @@ import sys
 import platform
 from .version import __version__
 
+
 class SlackRequest(object):
     def __init__(self):
-        client_name = __name__.split('.')[0]  # __name__ returns 'slackclient._slackrequest', we only want 'slackclient'
+
+        # __name__ returns 'slackclient._slackrequest', we only want 'slackclient'
+        client_name = __name__.split('.')[0]
         client_version = __version__  # Version is returned from version.py
 
         # Construct the user-agent header with the package info, Python version and OS version.
-        self.default_user_agent = {"client": "{0}/{1}".format(client_name, client_version),
-                      "python": "Python/{0}.{1}.{2}".format(sys.version_info[0], sys.version_info[1], sys.version_info[2]),
-                      "system": "{0}/{1}".format(platform.system(), platform.release())}
+        self.default_user_agent = {
+            "client": "{0}/{1}".format(client_name, client_version),
+            "python": "Python/{0}.{1}.{2}".format(
+                sys.version_info[0],
+                sys.version_info[1],
+                sys.version_info[2]
+            ),
+            "system": "{0}/{1}".format(platform.system(), platform.release())
+        }
 
         self.custom_user_agent = None
 
     def get_user_agent(self):
         # Check for custom user-agent and append if found
         if self.custom_user_agent:
-            custom_ua_string = " ".join([ "/".join(client_info) for client_info in self.custom_user_agent])
+            custom_ua_list = ["/".join(client_info) for client_info in self.custom_user_agent]
+            custom_ua_string = " ".join(custom_ua_list)
             self.default_user_agent['custom'] = custom_ua_string
 
         # Concatenate and format the user-agent string to be passed into request headers
@@ -39,7 +49,7 @@ class SlackRequest(object):
         if self.custom_user_agent:
             self.custom_user_agent.append([name, version])
         else:
-            self.custom_user_agent = [ [name, version] ]
+            self.custom_user_agent = [[name, version]]
 
     def do(self, token, request="?", post_data=None, domain="slack.com"):
         """
