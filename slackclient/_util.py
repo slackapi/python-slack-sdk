@@ -19,12 +19,12 @@ class SearchList(list):
 
 class SearchDict(dict):
     def find(self, search_string):
-        # Find the user by name
+        # Find the user by ID
         user = self.get(search_string)
         if user:
             return user
         else:
-            # If the user can't be found by name, try searching by ID
+            # If the user can't be found by ID, try searching by name
             for id, user in self.items():
                 if str(user.name) == search_string:
                     return user
