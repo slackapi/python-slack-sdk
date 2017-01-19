@@ -25,6 +25,6 @@ class SearchDict(dict):
             return user
         else:
             # If the user can't be found by name, try searching by ID
-            for name, user in self.items():
-                if str(user.id) == search_string:
+            for id, user in self.items():
+                if str(user.name) == search_string:
                     return user

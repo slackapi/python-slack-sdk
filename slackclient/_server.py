@@ -148,8 +148,8 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, channel_id, real_name, tz):
-        self.users.update({name: User(self, name, channel_id, real_name, tz)})
+    def attach_user(self, name, user_id, real_name, tz):
+        self.users.update({user_id: User(self, name, user_id, real_name, tz)})
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:
