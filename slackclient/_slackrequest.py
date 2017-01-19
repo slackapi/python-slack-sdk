@@ -46,7 +46,7 @@ class SlackRequest(object):
             self.custom_user_agent = [[name, version]]
 
     def do(self, token, request="?", post_data=None, domain="slack.com", timeout=None):
-        '''
+        """
         Perform a POST request to the Slack Web API
 
         Args:
