@@ -7,13 +7,14 @@ import six
 class SlackRequest(object):
 
     @staticmethod
-    def do(token, request="?", post_data=None, domain="slack.com"):
+    def do(token, request="?", post_data=None, domain="slack.com", timeout=None):
         '''
         Perform a POST request to the Slack Web API
 
         Args:
             token (str): your authentication token
             request (str): the method to call from the Slack API. For example: 'channels.list'
+            timeout (float): stop waiting for a response after a given number of seconds
             post_data (dict): key/value arguments to pass for the request. For example:
                 {'channel': 'CABC12345'}
             domain (str): if for some reason you want to send your request to something other
@@ -36,4 +37,4 @@ class SlackRequest(object):
         url = 'https://{0}/api/{1}'.format(domain, request)
         post_data['token'] = token
 
-        return requests.post(url, data=post_data, files=files)
+        return requests.post(url, data=post_data, files=files, timeout=timeout)
