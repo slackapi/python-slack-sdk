@@ -1,7 +1,7 @@
 from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
-from slackclient._util import SearchList
+from slackclient._util import SearchList, SearchDict
 from ssl import SSLError
 
 from websocket import create_connection
@@ -21,7 +21,7 @@ class Server(object):
         self.domain = None
         self.login_data = None
         self.websocket = None
-        self.users = SearchList()
+        self.users = SearchDict()
         self.channels = SearchList()
         self.connected = False
         self.ws_url = None
@@ -62,8 +62,11 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
-    def rtm_connect(self, reconnect=False):
-        reply = self.api_requester.do(self.token, "rtm.start")
+    def append_user_agent(self, name, version):
+        self.api_requester.append_user_agent(name, version)
+
+    def rtm_connect(self, reconnect=False, timeout=None):
+        reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout)
         if reply.status_code != 200:
             raise SlackConnectionError
         else:
@@ -156,9 +159,8 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, channel_id, real_name, tz):
-        if self.users.find(channel_id) is None:
-            self.users.append(User(self, name, channel_id, real_name, tz))
+    def attach_user(self, name, user_id, real_name, tz):
+        self.users.update({user_id: User(self, name, user_id, real_name, tz)})
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:
@@ -166,7 +168,7 @@ class Server(object):
         if self.channels.find(channel_id) is None:
             self.channels.append(Channel(self, name, channel_id, members))
 
-    def join_channel(self, name):
+    def join_channel(self, name, timeout=None):
         '''
         Join a channel by name.
 
@@ -174,16 +176,18 @@ class Server(object):
         '''
         return self.api_requester.do(
             self.token,
-            "channels.join?name={}".format(name)
+            "channels.join?name={}".format(name),
+            timeout=timeout
         ).text
 
-    def api_call(self, method, **kwargs):
+    def api_call(self, method, timeout=None, **kwargs):
         '''
         Call the Slack Web API as documented here: https://api.slack.com/web
 
         :Args:
             method (str): The API Method to call. See here for a list: https://api.slack.com/methods
         :Kwargs:
+            (optional) timeout: stop waiting for a response after a given number of seconds
             (optional) kwargs: any arguments passed here will be bundled and sent to the api
             requester as post_data
                 and will be passed along to the API.
@@ -207,7 +211,7 @@ class Server(object):
 
             See here for more information on responses: https://api.slack.com/web
         '''
-        return self.api_requester.do(self.token, method, kwargs).text
+        return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
 
 
 class SlackConnectionError(Exception):

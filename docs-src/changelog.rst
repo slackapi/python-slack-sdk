@@ -2,11 +2,24 @@
 Changelog
 ==============================================
 
-v1.0.2 (2016-11-24)
+v1.0.4 (2016-12-15)
 -------------------
 
-  - allow users to specify environment variables $HTTP_PROXY_HOST and $HTTP_PROXY_PORT
-    that are used by ``create_connection`` (if specified)
+  - fixed the ability to search for a user by ID
+
+v1.0.3 (2016-12-13)
+-------------------
+
+  - fixed an issue causing RTM connections to fail for large teams
+
+v1.0.2 (2016-09-22)
+-------------------
+
+  - removed unused ping counter
+  - fixed contributor guidelines links
+  - updated documentation
+  - Fix bug preventing API calls requiring a file ID
+  - Removes files from api_calls before JSON encoding, so the request is properly formatted
 
 v1.0.1 (2016-03-25)
 -------------------

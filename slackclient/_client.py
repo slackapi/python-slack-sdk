@@ -27,6 +27,9 @@ class SlackClient(object):
         self.token = token
         self.server = Server(self.token, False)
 
+    def append_user_agent(self, name, version):
+        self.server.append_user_agent(name, version)
+
     def rtm_connect(self):
         '''
         Connects to the RTM Websocket
@@ -44,7 +47,7 @@ class SlackClient(object):
         except:
             return False
 
-    def api_call(self, method, **kwargs):
+    def api_call(self, method, timeout=None, **kwargs):
         '''
         Call the Slack Web API as documented here: https://api.slack.com/web
 
@@ -74,7 +77,7 @@ class SlackClient(object):
 
             See here for more information on responses: https://api.slack.com/web
         '''
-        result = json.loads(self.server.api_call(method, **kwargs))
+        result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
         if self.server:
             if method == 'im.open':
                 if "ok" in result and result["ok"]:
