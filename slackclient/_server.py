@@ -61,6 +61,9 @@ class Server(object):
     def __repr__(self):
         return self.__str__()
 
+    def append_user_agent(self, name, version):
+        self.api_requester.append_user_agent(name, version)
+
     def rtm_connect(self, reconnect=False, timeout=None):
         reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout)
         if reply.status_code != 200:
