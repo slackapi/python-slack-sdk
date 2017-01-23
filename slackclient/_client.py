@@ -131,7 +131,7 @@ class SlackClient(object):
         else:
             raise SlackNotConnected
 
-    def rtm_send_message(self, channel, message):
+    def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
         '''
         Sends a message to a given channel.
 
@@ -139,12 +139,20 @@ class SlackClient(object):
             channel (str) - the string identifier for a channel or channel name (e.g. 'C1234ABC',
             'bot-test' or '#bot-test')
             message (message) - the string you'd like to send to the channel
+            thread (str or None) - the parent message ID, if sending to a
+                thread
+            reply_broadcast (bool) - if messaging a thread, whether to
+                also send the message back to the channel
 
         :Returns:
             None
 
         '''
-        return self.server.channels.find(channel).send_message(message)
+        return self.server.channels.find(channel).send_message(
+            message,
+            thread,
+            reply_broadcast,
+        )
 
     def process_changes(self, data):
         '''
