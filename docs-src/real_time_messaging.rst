@@ -76,6 +76,22 @@ You can send a message to Slack by sending JSON over the websocket connection.
 You can send a message to a private group or direct message channel in the same
 way, but using a Group ID (``C024BE91L``) or DM channel ID (``D024BE91L``).
 
+You can send a message in reply to a thread using the ``thread`` argument, and
+optionally broadcast that message back to the channel by setting
+``reply_broadcast`` to ``True``.
+
+::
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  sc.rtm_send_message("welcome-test", "test", "1482960137.003543", True)
+
+See `Threading messages <https://api.slack.com/docs/message-threading#threads_party>`_
+for more details on using threads.
+
 The RTM API only supports posting messages with `basic formatting <https://api.slack.com/docs/message-formatting>`_.
 It does not support attachments or other message formatting modes.
 
