@@ -40,6 +40,36 @@ page for a full list of formatting and authorship options.
 
 --------
 
+Starting or replying to a threaded message
+-----------------------
+Threaded messages are just like regular messages, except thread replies are grouped to gether to provide greater context
+to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message's `ts`
+ID in the `thread_ts` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts`
+ID of the message you're replying to.
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  sc.api_call(
+    "chat.postMessage",
+    channel="#python",
+    text="Hello from Python! :tada:",
+    thread_ts="1476746830.000003"
+  )
+
+A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps.
+When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not
+appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.
+See our `Threading messages together <https://api.slack.com/docs/message-threading#forking_conversations>`_.
+
+Updates and deletion of threaded replies works the same as regular messages.
+
+--------
+
 Updating the content of a message
 ----------------------------------
 Let's say you have a bot which posts the status of a request. When that request
