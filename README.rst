@@ -22,11 +22,6 @@ service into your Slack workflows, Slack Developer Kit for Python allows you to 
 of Python to get your project up and running as quickly as possible.
 
 
-Documentation
---------------
-
-For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
-
 Requirements and Installation
 ******************************
 
@@ -46,6 +41,11 @@ by pulling down the source code directly into your project:
 
 	git clone https://github.com/slackapi/python-slackclient.git
 	pip install -r requirements.txt
+
+Documentation
+--------------
+
+For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
 
 Getting Help
 -------------
