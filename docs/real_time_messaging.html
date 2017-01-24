@@ -52,6 +52,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#replying-to-messages-and-creating-threads">Replying to messages and creating threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-the-content-of-a-message">Updating the content of a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
@@ -77,6 +78,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
@@ -178,6 +182,19 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 </div>
 <p>You can send a message to a private group or direct message channel in the same
 way, but using a Group ID (<code class="docutils literal"><span class="pre">C024BE91L</span></code>) or DM channel ID (<code class="docutils literal"><span class="pre">D024BE91L</span></code>).</p>
+<p>You can send a message in reply to a thread using the <code class="docutils literal"><span class="pre">thread</span></code> argument, and
+optionally broadcast that message back to the channel by setting
+<code class="docutils literal"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">rtm_send_message</span><span class="p">(</span><span class="s2">&quot;welcome-test&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;1482960137.003543&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/docs/message-threading#threads_party">Threading messages</a>
+for more details on using threads.</p>
 <p>The RTM API only supports posting messages with <a class="reference external" href="https://api.slack.com/docs/message-formatting">basic formatting</a>.
 It does not support attachments or other message formatting modes.</p>
 <blockquote>
