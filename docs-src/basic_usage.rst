@@ -66,7 +66,8 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
   )
 
 
-By default, `reply_broadcast` is set to `False`. To indicate your reply is germane to all members of a channel, set the reply_broadcast boolean parameter to `True`.
+By default, `reply_broadcast` is set to `False`. To indicate your reply is germane to all members of a channel,
+set the `reply_broadcast` boolean parameter to `True`.
 
 .. code-block:: python
 
