@@ -52,6 +52,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replying-to-messages-and-creating-threads">Replying to messages and creating threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-the-content-of-a-message">Updating the content of a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-a-message">Deleting a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
@@ -144,6 +145,52 @@ to a user or to a channel, this method handles both.</p>
 <p>There are some unique options specific to sending IMs, so be sure to read the <strong>channels</strong>
 section of the <a class="reference external" href="https://api.slack.com/methods/chat.postMessage#channels">chat.postMessage</a>
 page for a full list of formatting and authorship options.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="replying-to-messages-and-creating-threads">
+<h2>Replying to messages and creating threads<a class="headerlink" href="#replying-to-messages-and-creating-threads" title="Permalink to this headline">¶</a></h2>
+<p>Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context
+to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message&#8217;s <code class="docutils literal"><span class="pre">ts</span></code>
+ID in the <code class="docutils literal"><span class="pre">thread_ts</span></code> attribute when posting a message. If you&#8217;re replying to a threaded message, you&#8217;ll pass the <cite>thread_ts</cite>
+ID of the message you&#8217;re replying to.</p>
+<p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps.
+When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not
+appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal"><span class="pre">reply_broadcast</span></code> is set to <code class="docutils literal"><span class="pre">False</span></code>. To indicate your reply is germane to all members of a channel,
+set the <code class="docutils literal"><span class="pre">reply_broadcast</span></code> boolean parameter to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+  <span class="n">reply_broadcast</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> While threaded messages may contain attachments and message buttons, when your reply is broadcast to the
+channel, it&#8217;ll actually be a reference to your reply, not the reply itself.
+So, when appearing in the channel, it won&#8217;t contain any attachments or message buttons. Also note that updates and
+deletion of threaded replies works the same as regular messages.</p>
+<p>See the <a class="reference external" href="https://api.slack.com/docs/message-threading#forking_conversations">Threading messages together</a>
+article for more information.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="updating-the-content-of-a-message">
