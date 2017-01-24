@@ -94,8 +94,8 @@ page for a full list of formatting and authorship options.
 Replying to messages and creating threads
 ********************
 Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context
-to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message's `ts`
-ID in the `thread_ts` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts`
+to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message's ``ts``
+ID in the ``thread_ts`` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts`
 ID of the message you're replying to.
 
 A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps.
@@ -117,8 +117,8 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
   )
 
 
-By default, `reply_broadcast` is set to `False`. To indicate your reply is germane to all members of a channel,
-set the `reply_broadcast` boolean parameter to `True`.
+By default, ``reply_broadcast`` is set to ``False``. To indicate your reply is germane to all members of a channel,
+set the ``reply_broadcast`` boolean parameter to ``True``.
 
 .. code-block:: python
 
@@ -136,8 +136,10 @@ set the `reply_broadcast` boolean parameter to `True`.
   )
 
 
-*Note:* While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply, not the reply itself.
-So, when appearing in the channel, it won't contain any attachments or message buttons. Also note that updates and deletion of threaded replies works the same as regular messages.
+**Note:** While threaded messages may contain attachments and message buttons, when your reply is broadcast to the
+channel, it'll actually be a reference to your reply, not the reply itself.
+So, when appearing in the channel, it won't contain any attachments or message buttons. Also note that updates and
+deletion of threaded replies works the same as regular messages.
 
 See the `Threading messages together <https://api.slack.com/docs/message-threading#forking_conversations>`_
 article for more information.
