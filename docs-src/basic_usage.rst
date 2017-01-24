@@ -85,10 +85,8 @@ set the `reply_broadcast` boolean parameter to `True`.
   )
 
 
-When your reply is broadcast to the channel, it'll actually be a reference to your reply, not the reply itself.
-So, when appearing in the channel, it won't contain any attachments or message buttons.
-
-Updates and deletion of threaded replies works the same as regular messages.
+*Note:* While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply, not the reply itself.
+So, when appearing in the channel, it won't contain any attachments or message buttons. Also note that updates and deletion of threaded replies works the same as regular messages.
 
 See the `Threading messages together <https://api.slack.com/docs/message-threading#forking_conversations>`_
 article for more information.
