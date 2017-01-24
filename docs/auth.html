@@ -52,6 +52,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#replying-to-messages-and-creating-threads">Replying to messages and creating threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-the-content-of-a-message">Updating the content of a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
@@ -217,7 +218,7 @@ user, within the context of the approving team.</p>
 user access token instead of the top-level access token granted to your application.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Save the bot token to an environmental variable or to your data store</span>
 <span class="c1"># for later use</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_USER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;user_access_token&#39;</span><span class="p">]</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_USER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;bot_access_token&#39;</span><span class="p">]</span>
 
 <span class="c1"># Don&#39;t forget to let the user know that auth has succeeded!</span>
