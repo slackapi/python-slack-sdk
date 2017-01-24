@@ -2,6 +2,15 @@
 Changelog
 ==============================================
 
+v1.0.5 (2017-1-23)
+-------------------
+
+  - Allow RTM Channel.send_message to reply to a thread
+  - Index users by ID instead of Name (non-breaking change)
+  - Added timeout to api calls.
+  - Fixed a typo about token access in auth.rst, thanks @kelvintaywl!
+  - Added Message Threads to the docs
+
 v1.0.4 (2016-12-15)
 -------------------
 
