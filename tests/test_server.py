@@ -53,3 +53,38 @@ def test_Server_ping(server, monkeypatch):
     # monkeypatch.setattr("", lambda: True)
     monkeypatch.setattr("websocket.create_connection", lambda: True)
     reply = server.ping()
+
+def test_Server_ping_args(server, mocker, monkeypatch):
+    # Mock out send_to_websocket since it will just cause errors.
+    sendmock = mocker.Mock()
+    sendmock.return_value = None
+    monkeypatch.setattr(server, 'send_to_websocket', sendmock)
+    # No id.
+    reply = server.ping()
+    assert reply == (None, None)
+    args, kwargs = sendmock.call_args
+    assert args == ({"type": "ping"},)
+    # Provide an id in the pingid argument.
+    sendmock.reset_mock()
+    reply = server.ping(1234)
+    assert reply == (1234, None)
+    args, kwargs = sendmock.call_args
+    assert args == ({"type": "ping", "id": 1234},)
+    # Provide and id in kwargs and in pingid. pingid has priority.
+    sendmock.reset_mock()
+    reply = server.ping(1234, id=42)
+    assert reply == (1234, None)
+    args, kwargs = sendmock.call_args
+    assert args == ({"type": "ping", "id":1234},)
+    # Provide an id in kwargs only.
+    sendmock.reset_mock()
+    reply = server.ping(id=42)
+    assert reply == (42, None)
+    args, kwargs = sendmock.call_args
+    assert args == ({"type": "ping", "id":42},)
+    # Provide extra arguments.
+    sendmock.reset_mock()
+    reply = server.ping(1234, timestamp=1000, user="USOMEUSER")
+    assert reply == (1234, None)
+    args, kwargs = sendmock.call_args
+    assert args == ({"type": "ping", "id": 1234, "timestamp":1000, "user": "USOMEUSER"},)
