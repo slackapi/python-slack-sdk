@@ -77,26 +77,29 @@ class SlackClient(object):
 
             See here for more information on responses: https://api.slack.com/web
         '''
-        result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
-        if self.server:
-            if method == 'im.open':
-                if "ok" in result and result["ok"]:
-                    self.server.attach_channel(kwargs["user"], result["channel"]["id"])
-            elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
-                if "ok" in result and result["ok"]:
-                    self.server.attach_channel(
-                        result['group']['name'],
-                        result['group']['id'],
-                        result['group']['members']
-                    )
-            elif method in ('channels.create', 'channels.join'):
-                if 'ok' in result and result['ok']:
-                    self.server.attach_channel(
-                        result['channel']['name'],
-                        result['channel']['id'],
-                        result['channel']['members']
-                    )
-        return result
+        try:
+            result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
+            if self.server:
+                if method == 'im.open':
+                    if "ok" in result and result["ok"]:
+                        self.server.attach_channel(kwargs["user"], result["channel"]["id"])
+                elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
+                    if "ok" in result and result["ok"]:
+                        self.server.attach_channel(
+                            result['group']['name'],
+                            result['group']['id'],
+                            result['group']['members']
+                        )
+                elif method in ('channels.create', 'channels.join'):
+                    if 'ok' in result and result['ok']:
+                        self.server.attach_channel(
+                            result['channel']['name'],
+                            result['channel']['id'],
+                            result['channel']['members']
+                        )
+            return result
+        except:
+            return {"ok": False}
 
     def rtm_read(self):
         '''
