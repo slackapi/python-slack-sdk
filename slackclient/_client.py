@@ -30,12 +30,12 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self):
+    def rtm_connect(self, raise_exceptions=False):
         '''
         Connects to the RTM Websocket
 
         :Args:
-            None
+            raise_exceptions (bool): Flag deciding if exceptions raised during rtm_connect should be reraised
 
         :Returns:
             False on exceptions
@@ -45,6 +45,8 @@ class SlackClient(object):
             self.server.rtm_connect()
             return True
         except:
+            if raise_exceptions:
+                raise
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
