@@ -35,7 +35,8 @@ class SlackClient(object):
         Connects to the RTM Websocket
 
         :Args:
-            raise_exceptions (bool): Flag deciding if exceptions raised during rtm_connect should be reraised
+            raise_exceptions (bool): Flag deciding if exceptions raised during rtm_connect
+            should be reraised
 
         :Returns:
             False on exceptions
