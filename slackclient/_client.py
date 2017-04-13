@@ -44,7 +44,7 @@ class SlackClient(object):
         try:
             self.server.rtm_connect()
             return True
-        except:
+        except Exception:
             return False
 
     def api_call(self, method, timeout=None, **kwargs):

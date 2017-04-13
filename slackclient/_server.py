@@ -2,8 +2,10 @@ from slackclient._slackrequest import SlackRequest
 from slackclient._channel import Channel
 from slackclient._user import User
 from slackclient._util import SearchList, SearchDict
+import socket
 from ssl import SSLError
 
+import websocket
 from websocket import create_connection
 import json
 
@@ -91,7 +93,7 @@ class Server(object):
         try:
             self.websocket = create_connection(ws_url)
             self.websocket.sock.setblocking(0)
-        except:
+        except (websocket.WebSocketException, socket.error):
             raise SlackConnectionError
 
     def parse_channel_data(self, channel_data):
@@ -124,7 +126,7 @@ class Server(object):
         try:
             data = json.dumps(data)
             self.websocket.send(data)
-        except:
+        except websocket.WebSocketException:
             self.rtm_connect(reconnect=True)
 
     def ping(self):
