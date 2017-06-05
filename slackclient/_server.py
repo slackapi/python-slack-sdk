@@ -6,6 +6,7 @@ from ssl import SSLError
 
 from websocket import create_connection
 import json
+import os
 
 
 class Server(object):
@@ -89,7 +90,14 @@ class Server(object):
 
     def connect_slack_websocket(self, ws_url):
         try:
-            self.websocket = create_connection(ws_url)
+            host = os.environ.get('HTTP_PROXY_HOST')
+            port = os.environ.get('HTTP_PROXY_PORT')
+            if None not in (host, port):
+                self.websocket = create_connection(ws_url,
+                                                   http_proxy_host=host,
+                                                   http_proxy_port=port)
+            else:
+                self.websocket = create_connection(ws_url)
             self.websocket.sock.setblocking(0)
         except:
             raise SlackConnectionError

@@ -3,6 +3,7 @@ from slackclient._server import Server, SlackLoginError
 from slackclient._channel import Channel
 import json
 import pytest
+from unittest.mock import patch
 
 
 @pytest.fixture
@@ -53,3 +54,37 @@ def test_Server_ping(server, monkeypatch):
     # monkeypatch.setattr("", lambda: True)
     monkeypatch.setattr("websocket.create_connection", lambda: True)
     reply = server.ping()
+
+
+def test_Server_proxy_success(server, monkeypatch):
+    url = 'url'
+    host = 'localhost'
+    port = '8080'
+    monkeypatch.setenv('HTTP_PROXY_HOST', host)
+    monkeypatch.setenv('HTTP_PROXY_PORT', port)
+
+    @patch('websocket.create_connection')
+    def test_connect_slack_websocket_proxy(mocked_create_connection):
+        server.connect_slack_websocket(url)
+        mocked_create_connection.assert_called_once_with(url, host, port)
+
+
+def test_Server_proxy_host_not_set(server, monkeypatch):
+    url = 'url'
+    monkeypatch.setenv('HTTP_PROXY_PORT', '8080')
+
+    @patch('websocket.create_connection')
+    def test_connect_slack_websocket_proxy(mocked_create_connection):
+        server.connect_slack_websocket(url)
+        mocked_create_connection.assert_called_once_with(url)
+
+
+def test_Server_proxy_port_not_set(server, monkeypatch):
+    url = 'url'
+    monkeypatch.setenv('HTTP_PROXY_HOST', 'localhost')
+
+    @patch('websocket.create_connection')
+    def test_connect_slack_websocket_proxy(mocked_create_connection):
+        server.connect_slack_websocket(url)
+        mocked_create_connection.assert_called_once_with(url)
+
