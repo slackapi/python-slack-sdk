@@ -77,7 +77,10 @@ class SlackClient(object):
 
             See here for more information on responses: https://api.slack.com/web
         '''
-        result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
+        try:
+            result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
+        except ValueError:
+            return {"ok": False}
         if self.server:
             if method == 'im.open':
                 if "ok" in result and result["ok"]:
