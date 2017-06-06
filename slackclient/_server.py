@@ -72,9 +72,9 @@ class Server(object):
             login_data = reply.json()
             if login_data["ok"]:
                 self.ws_url = login_data['url']
+                self.connect_slack_websocket(self.ws_url)
                 if not reconnect:
                     self.parse_slack_login_data(login_data)
-                self.connect_slack_websocket(self.ws_url)
             else:
                 raise SlackLoginError
 
