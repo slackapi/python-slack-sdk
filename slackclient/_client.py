@@ -21,11 +21,14 @@ class SlackClient(object):
             token (str): Your Slack Authentication token. You can find or generate a test token
             `here <https://api.slack.com/docs/oauth-test-tokens>`_
             Note: Be `careful with your token <https://api.slack.com/docs/oauth-safety>`_
+            proxies (dict): Proxies to use when create websocket or api calls,
+            declare http and websocket proxies using {'http': 'http://127.0.0.1'},
+            and https proxy using {'https': 'https://127.0.0.1:443'}
     '''
-    def __init__(self, token):
+    def __init__(self, token, proxies=None):
 
         self.token = token
-        self.server = Server(self.token, False)
+        self.server = Server(self.token, False, proxies)
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)

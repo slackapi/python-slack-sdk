@@ -1,4 +1,5 @@
 from slackclient._slackrequest import SlackRequest
+from requests.packages.urllib3.util.url import parse_url
 from slackclient._channel import Channel
 from slackclient._user import User
 from slackclient._util import SearchList, SearchDict
@@ -14,7 +15,7 @@ class Server(object):
 
 
     '''
-    def __init__(self, token, connect=True):
+    def __init__(self, token, connect=True, proxies=None):
         self.token = token
         self.username = None
         self.domain = None
@@ -24,7 +25,8 @@ class Server(object):
         self.channels = SearchList()
         self.connected = False
         self.ws_url = None
-        self.api_requester = SlackRequest()
+        self.proxies = proxies
+        self.api_requester = SlackRequest(proxies=proxies)
 
         if connect:
             self.rtm_connect()
@@ -88,11 +90,23 @@ class Server(object):
         self.parse_user_data(login_data["users"])
 
     def connect_slack_websocket(self, ws_url):
+        """Uses http proxy if available"""
+        if self.proxies and 'http' in self.proxies:
+            parts = parse_url(self.proxies['http'])
+            proxy_host, proxy_port = parts.host, parts.port
+            auth = parts.auth
+            proxy_auth = auth and auth.split(':')
+        else:
+            proxy_auth, proxy_port, proxy_host = None, None, None
+
         try:
-            self.websocket = create_connection(ws_url)
+            self.websocket = create_connection(ws_url,
+                                               http_proxy_host=proxy_host,
+                                               http_proxy_port=proxy_port,
+                                               http_proxy_auth=proxy_auth)
             self.websocket.sock.setblocking(0)
-        except:
-            raise SlackConnectionError
+        except Exception as e:
+            raise SlackConnectionError(str(e))
 
     def parse_channel_data(self, channel_data):
         for channel in channel_data:
@@ -204,6 +218,10 @@ class Server(object):
             See here for more information on responses: https://api.slack.com/web
         '''
         return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
+
+
+class SlackCongigurationError(Exception):
+    pass
 
 
 class SlackConnectionError(Exception):

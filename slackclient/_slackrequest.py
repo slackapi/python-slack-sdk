@@ -9,7 +9,7 @@ from .version import __version__
 
 
 class SlackRequest(object):
-    def __init__(self):
+    def __init__(self, proxies=None):
 
         # __name__ returns 'slackclient._slackrequest', we only want 'slackclient'
         client_name = __name__.split('.')[0]
@@ -23,6 +23,7 @@ class SlackRequest(object):
         }
 
         self.custom_user_agent = None
+        self.proxies = proxies
 
     def get_user_agent(self):
         # Check for custom user-agent and append if found
@@ -76,4 +77,9 @@ class SlackRequest(object):
         post_data['token'] = token
         headers = {'user-agent': self.get_user_agent()}
 
-        return requests.post(url, headers=headers, data=post_data, files=files, timeout=timeout)
+        return requests.post(url,
+                             headers=headers,
+                             data=post_data,
+                             files=files,
+                             timeout=timeout,
+                             proxies=self.proxies)
