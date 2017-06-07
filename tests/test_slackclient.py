@@ -1,7 +1,11 @@
-from slackclient._client import SlackClient
-from slackclient._channel import Channel
 import json
+
 import pytest
+from requests.exceptions import ProxyError
+
+from slackclient._channel import Channel
+from slackclient._client import SlackClient
+from slackclient._server import SlackConnectionError
 
 
 @pytest.fixture
@@ -16,6 +20,25 @@ def im_created_fixture():
     file_channel_created_data = open('tests/data/im.created.json', 'r').read()
     json_channel_created_data = json.loads(file_channel_created_data)
     return json_channel_created_data
+
+
+def test_proxy():
+    proxies = {'http': 'some-bad-proxy', 'https': 'some-bad-proxy'}
+    client = SlackClient('xoxp-1234123412341234-12341234-1234', proxies=proxies)
+    server = client.server
+
+    assert server.proxies == proxies
+
+    with pytest.raises(ProxyError):
+        server.rtm_connect()
+
+    with pytest.raises(SlackConnectionError):
+        server.connect_slack_websocket('wss://mpmulti-xw58.slack-msgs.com/websocket/bad-token')
+
+    api_requester = server.api_requester
+    assert api_requester.proxies == proxies
+    with pytest.raises(ProxyError):
+        api_requester.do('xoxp-1234123412341234-12341234-1234', request='channels.list')
 
 
 def test_SlackClient(slackclient):
