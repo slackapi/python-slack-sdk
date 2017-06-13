@@ -2,6 +2,13 @@
 Changelog
 ==============================================
 
+v1.0.6 (2017-6-12)
+-------------------
+
+  - Added proxy support (thanks @timfeirg!)
+  - Tidied up docs (thanks @schlueter!)
+  - Added tox settings for Python 3 testing (thanks @cclauss!)
+
 v1.0.5 (2017-1-23)
 -------------------
 
