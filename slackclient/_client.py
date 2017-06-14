@@ -33,7 +33,7 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self):
+    def rtm_connect(self, reconnect=False):
         '''
         Connects to the RTM Websocket
 
@@ -45,7 +45,7 @@ class SlackClient(object):
         '''
 
         try:
-            self.server.rtm_connect()
+            self.server.rtm_connect(reconnect=reconnect)
             return True
         except:
             return False
@@ -123,14 +123,17 @@ class SlackClient(object):
         # in the future, this should handle some events internally i.e. channel
         # creation
         if self.server:
-            json_data = self.server.websocket_safe_read()
-            data = []
-            if json_data != '':
-                for d in json_data.split('\n'):
-                    data.append(json.loads(d))
-            for item in data:
-                self.process_changes(item)
-            return data
+            try:
+                json_data = self.server.websocket_safe_read()
+                data = []
+                if json_data != '':
+                    for d in json_data.split('\n'):
+                        data.append(json.loads(d))
+                for item in data:
+                    self.process_changes(item)
+                return data
+            except:
+                self.rtm_connect(reconnect=True)
         else:
             raise SlackNotConnected
 
