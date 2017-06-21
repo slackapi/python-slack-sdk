@@ -49,18 +49,12 @@ How do I compile the documentation?
 ***********************************
 
 This project's documentation is generated with `Sphinx <http://www.sphinx-doc.org>`_. If you are editing one of the many
-reStructuredText files in the ``docs-src`` folder, you'll need to rebuild the documentation. First, install the project's
-development dependencies (ideally using `virtualenv <https://virtualenv.pypa.io>`_.
+reStructuredText files in the ``docs-src`` folder, you'll need to rebuild the documentation. It is recommended to run
+the following steps inside a ``virtualenv`` environment.
 
 .. code-block:: bash
 
-  pip install -r requirements.txt -r requirements-dev.text
-
-Then run Sphinx.
-
-.. code-block:: bash
-
-  sphinx-build -c ./docs-src/_themes/slack/ -b html docs-src docs
+  tox -e docs
 
 
 Do be sure to add the ``docs`` folder and its contents to your pull request!
