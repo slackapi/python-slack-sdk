@@ -3,9 +3,9 @@ import json
 import pytest
 from requests.exceptions import ProxyError
 
-from slackclient._channel import Channel
-from slackclient._client import SlackClient
-from slackclient._server import SlackConnectionError
+from slackclient.channel import Channel
+from slackclient.client import SlackClient
+from slackclient.server import SlackConnectionError
 
 
 @pytest.fixture

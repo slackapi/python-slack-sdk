@@ -57,7 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-list-of-channels">Getting a list of channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel&#8217;s info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
@@ -72,12 +72,14 @@
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#what-even-is-product-name-and-why-should-i-care">What even is Slack Developer Kit for Python and why should I care?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#omg-i-found-a-bug">OMG I found a bug!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#hey-there-s-a-feature-missing">Hey, there&#8217;s a feature missing!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-d-like-to-contribute-but-how">I&#8217;d like to contribute...but how?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#hey-there-s-a-feature-missing">Hey, there’s a feature missing!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-d-like-to-contribute-but-how">I’d like to contribute…but how?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-6-12">v1.0.6 (2017-6-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-1-23">v1.0.5 (2017-1-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
@@ -142,16 +144,16 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 </div>
 <p>If you connect successfully the first event received will be a hello:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;hello&#39;</span>
+  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;hello&#39;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>If there was a problem connecting an error will be returned, including a descriptive error message:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;error&#39;</span><span class="p">,</span>
-    <span class="s1">u&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">u&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s1">u&#39;msg&#39;</span><span class="p">:</span> <span class="s1">u&#39;Socket URL has expired&#39;</span>
+  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">,</span>
+    <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="sa">u</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="sa">u</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Socket URL has expired&#39;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -160,10 +162,10 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 <div class="section" id="rtm-events">
 <h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s1">u&#39;type&#39;</span><span class="p">:</span> <span class="s1">u&#39;message&#39;</span><span class="p">,</span>
-  <span class="s1">u&#39;ts&#39;</span><span class="p">:</span> <span class="s1">u&#39;1358878749.000002&#39;</span><span class="p">,</span>
-  <span class="s1">u&#39;user&#39;</span><span class="p">:</span> <span class="s1">u&#39;U023BECGF&#39;</span><span class="p">,</span>
-  <span class="s1">u&#39;text&#39;</span><span class="p">:</span> <span class="s1">u&#39;Hello&#39;</span>
+  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
+  <span class="sa">u</span><span class="s1">&#39;ts&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
+  <span class="sa">u</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
+  <span class="sa">u</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Hello&#39;</span>
 <span class="p">}</span>
 </pre></div>
 </div>

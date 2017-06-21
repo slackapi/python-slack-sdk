@@ -57,7 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-list-of-channels">Getting a list of channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel&#8217;s info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
@@ -72,12 +72,14 @@
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#what-even-is-product-name-and-why-should-i-care">What even is Slack Developer Kit for Python and why should I care?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#omg-i-found-a-bug">OMG I found a bug!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#hey-there-s-a-feature-missing">Hey, there&#8217;s a feature missing!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-d-like-to-contribute-but-how">I&#8217;d like to contribute...but how?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#hey-there-s-a-feature-missing">Hey, there’s a feature missing!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-d-like-to-contribute-but-how">I’d like to contribute…but how?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-6-12">v1.0.6 (2017-6-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-1-23">v1.0.5 (2017-1-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
@@ -150,10 +152,10 @@
 </div>
 <div class="section" id="the-oauth-flow">
 <h2>The OAuth flow<a class="headerlink" href="#the-oauth-flow" title="Permalink to this headline">¶</a></h2>
-<p>Authentication for Slack&#8217;s APIs is done using OAuth, so you&#8217;ll want to read up on <a class="reference external" href="https://api.slack.com/docs/oauth">OAuth</a>.</p>
-<p>In order to implement OAuth in your app, you will need to include a web server. In this example, we&#8217;ll use <a class="reference external" href="http://flask.pocoo.org/">Flask</a>.</p>
-<p>As mentioned above, we&#8217;re setting the app tokens and other configs in environment variables and pulling them into global variables.</p>
-<p>Depending on what actions your app will need to perform, you&#8217;ll need different OAuth permission scopes. Review the available scopes <a class="reference external" href="https://api.slack.com/docs/oauth-scopes">here</a>.</p>
+<p>Authentication for Slack’s APIs is done using OAuth, so you’ll want to read up on <a class="reference external" href="https://api.slack.com/docs/oauth">OAuth</a>.</p>
+<p>In order to implement OAuth in your app, you will need to include a web server. In this example, we’ll use <a class="reference external" href="http://flask.pocoo.org/">Flask</a>.</p>
+<p>As mentioned above, we’re setting the app tokens and other configs in environment variables and pulling them into global variables.</p>
+<p>Depending on what actions your app will need to perform, you’ll need different OAuth permission scopes. Review the available scopes <a class="reference external" href="https://api.slack.com/docs/oauth-scopes">here</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
@@ -162,12 +164,12 @@
 <span class="n">client_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_CLIENT_SECRET&quot;</span><span class="p">]</span>
 <span class="n">oauth_scope</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_SCOPE&quot;</span><span class="p">]</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>The OAuth initiation link:</strong></p>
-<p>To begin the OAuth flow, you&#8217;ll need to provide the user with a link to Slack&#8217;s OAuth page,
-This directs the user to Slack&#8217;s OAuth acceptance page, where the user will review and accept
+<p>To begin the OAuth flow, you’ll need to provide the user with a link to Slack’s OAuth page,
+This directs the user to Slack’s OAuth acceptance page, where the user will review and accept
 or refuse the permissions your app is requesting as defined by the requested scope(s).</p>
 <p>For the best user experience, use the <a class="reference external" href="https://api.slack.com/docs/slack-button">Add to Slack button</a> to direct users to approve your application for access or <a class="reference external" href="https://api.slack.com/docs/sign-in-with-slack">Sign in with Slack</a> to log users in.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
@@ -180,13 +182,13 @@ or refuse the permissions your app is requesting as defined by the requested sco
 </pre></div>
 </div>
 <p><strong>The OAuth completion page</strong></p>
-<p>Once the user has agreed to the permissions you&#8217;ve requested on Slack&#8217;s OAuth
+<p>Once the user has agreed to the permissions you’ve requested on Slack’s OAuth
 page, Slack will redirect the user to your auth completion page. Included in this
 redirect is a <code class="docutils literal"><span class="pre">code</span></code> query string param which you’ll use to request access
 tokens from the <code class="docutils literal"><span class="pre">oauth.access</span></code> endpoint.</p>
 <p>Generally, Web API requests require a valid OAuth token, but there are a few endpoints
 which do not require a token. <code class="docutils literal"><span class="pre">oauth.access</span></code> is one example of this. Since this
-is the endpoint you&#8217;ll use to retrieve the tokens for later API requests,
+is the endpoint you’ll use to retrieve the tokens for later API requests,
 an empty string <code class="docutils literal"><span class="pre">&quot;&quot;</span></code> is acceptable for this request.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">post_install</span><span class="p">():</span>
@@ -210,7 +212,7 @@ an empty string <code class="docutils literal"><span class="pre">&quot;&quot;</s
 token and a <code class="docutils literal"><span class="pre">bot</span></code> token. The <code class="docutils literal"><span class="pre">user</span></code> token <code class="docutils literal"><span class="pre">auth_response['access_token']</span></code>
 is used to make requests on behalf of the authorizing user and the <code class="docutils literal"><span class="pre">bot</span></code>
 token <code class="docutils literal"><span class="pre">auth_response['bot']['bot_access_token']</span></code> is for making requests
-on behalf of your app&#8217;s bot user.</p>
+on behalf of your app’s bot user.</p>
 <p>If your Slack app includes a bot user, upon approval the JSON response will contain
 an additional node containing an access token to be specifically used for your bot
 user, within the context of the approving team.</p>
@@ -225,8 +227,8 @@ user access token instead of the top-level access token granted to your applicat
 <span class="k">return</span> <span class="s2">&quot;Auth complete!&quot;</span>
 </pre></div>
 </div>
-<p>Once your user has completed the OAuth flow, you&#8217;ll be able to use the provided
-tokens to make a variety of Web API calls on behalf of the user and your app&#8217;s bot user.</p>
+<p>Once your user has completed the OAuth flow, you’ll be able to use the provided
+tokens to make a variety of Web API calls on behalf of the user and your app’s bot user.</p>
 <p>See the <a class="reference internal" href="basic_usage.html#web-api-examples"><span class="std std-ref">Web API usage</span></a> section of this documentation for usage examples.</p>
 </div>
 </div>
