@@ -1,8 +1,8 @@
 import pytest
 import requests
-from slackclient._channel import Channel
-from slackclient._server import Server
-from slackclient._client import SlackClient
+from slackclient.channel import Channel
+from slackclient.server import Server
+from slackclient.client import SlackClient
 
 
 # This is so that tests work on Travis for python 2.6, it's really hacky, but expedient
@@ -15,6 +15,7 @@ def get_unverified_post():
         return requests_post(*args, **kwargs)
 
     return unverified_post
+
 
 requests.post = get_unverified_post()
 

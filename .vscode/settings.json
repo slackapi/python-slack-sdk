@@ -1,0 +1,5 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": true
+}
