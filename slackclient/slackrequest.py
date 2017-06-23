@@ -11,7 +11,7 @@ from .version import __version__
 class SlackRequest(object):
     def __init__(self, proxies=None):
 
-        # __name__ returns 'slackclient._slackrequest', we only want 'slackclient'
+        # __name__ returns 'slackclient.slackrequest', we only want 'slackclient'
         client_name = __name__.split('.')[0]
         client_version = __version__  # Version is returned from version.py
 

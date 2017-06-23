@@ -1,9 +1,9 @@
-from slackclient._channel import Channel
-import pytest
+from slackclient.channel import Channel
 
 
 def test_channel(channel):
     assert type(channel) == Channel
+
 
 def test_channel_eq(channel):
     channel = Channel(
@@ -15,6 +15,7 @@ def test_channel_eq(channel):
     assert channel == '#test-channel'
     assert channel == 'C12345678'
     assert (channel == 'foo') is False
+
 
 def test_channel_is_hashable(channel):
     channel = Channel(

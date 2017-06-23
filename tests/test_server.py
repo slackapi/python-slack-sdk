@@ -1,6 +1,6 @@
-from slackclient._user import User
-from slackclient._server import Server, SlackLoginError
-from slackclient._channel import Channel
+from slackclient.user import User
+from slackclient.server import Server, SlackLoginError
+from slackclient.channel import Channel
 import json
 import pytest
 

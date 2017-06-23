@@ -1,15 +1,21 @@
-*.pyc
-.cache
-.idea
-dist
-slackclient.egg-info
-*.log
-env
-.tox
-*.un~
-0/
-tests/.cache
+# general things to ignore
+build/
+dist/
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+*.so
+*~
+
+# virtualenv
+env/
+venv/
+
+# codecov / coverage
 .coverage
+cov_*
+
+# due to using tox and pytest
+.tox
 .cache
-.DS_Store
-.ropeproject
