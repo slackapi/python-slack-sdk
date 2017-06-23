@@ -3,7 +3,7 @@
 
 import json
 
-from slackclient._server import Server
+from .server import Server
 
 
 class SlackClient(object):

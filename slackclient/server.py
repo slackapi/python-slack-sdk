@@ -1,8 +1,8 @@
-from slackclient._slackrequest import SlackRequest
+from .slackrequest import SlackRequest
 from requests.packages.urllib3.util.url import parse_url
-from slackclient._channel import Channel
-from slackclient._user import User
-from slackclient._util import SearchList, SearchDict
+from .channel import Channel
+from .user import User
+from .util import SearchList, SearchDict
 from ssl import SSLError
 
 from websocket import create_connection
@@ -49,7 +49,7 @@ class Server(object):
         websocket : None
         users : []
         login_data : None
-        api_requester : <slackclient._slackrequest.SlackRequest
+        api_requester : <slackclient.slackrequest.SlackRequest
         channels : []
         token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False

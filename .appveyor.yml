@@ -1,0 +1,40 @@
+# credit: https://packaging.python.org/guides/supporting-windows-using-appveyor/
+
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27"
+      PYTHON_VERSION: "py27-x86"
+    - PYTHON: "C:\\Python33"
+      PYTHON_VERSION: "py33-x86"
+    - PYTHON: "C:\\Python34"
+      PYTHON_VERSION: "py34-x86"
+    - PYTHON: "C:\\Python35"
+      PYTHON_VERSION: "py35-x86"
+    - PYTHON: "C:\\Python36"
+      PYTHON_VERSION: "py36-x86"
+    - PYTHON: "C:\\Python27-x64"
+      PYTHON_VERSION: "py27-x64"
+    - PYTHON: "C:\\Python33-x64"
+      PYTHON_VERSION: "py33-x64"
+    - PYTHON: "C:\\Python34-x64"
+      PYTHON_VERSION: "py34-x64"
+    - PYTHON: "C:\\Python35-x64"
+      PYTHON_VERSION: "py35-x64"
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "py36-x64"
+
+install:
+  - "%PYTHON%\\python.exe -m pip install wheel"
+  - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
+  - "%PYTHON%\\python.exe -m pip install flake8"
+  - "%PYTHON%\\python.exe -m pip install -r test_requirements.txt"
+
+build: off
+
+test_script:
+  - "%PYTHON%\\python.exe -m flake8 slackclient"
+  - "%PYTHON%\\python.exe -m pytest --cov-report= --cov=slackclient tests"
+
+# maybe `after_test:`?
+on_success:
+  - "%PYTHON%\\python.exe -m codecov -e win-%PYTHON_VERSION%"
