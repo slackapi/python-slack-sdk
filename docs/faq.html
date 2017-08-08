@@ -158,13 +158,9 @@ the changelog in <code class="docutils literal"><span class="pre">changelog.rst<
 <div class="section" id="how-do-i-compile-the-documentation">
 <h2>How do I compile the documentation?<a class="headerlink" href="#how-do-i-compile-the-documentation" title="Permalink to this headline">¶</a></h2>
 <p>This project’s documentation is generated with <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>. If you are editing one of the many
-reStructuredText files in the <code class="docutils literal"><span class="pre">docs-src</span></code> folder, you’ll need to rebuild the documentation. First, install the project’s
-development dependencies (ideally using <a class="reference external" href="https://virtualenv.pypa.io">virtualenv</a>.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -r requirements.txt -r requirements-dev.text
-</pre></div>
-</div>
-<p>Then run Sphinx.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>sphinx-build -c ./docs-src/_themes/slack/ -b html docs-src docs
+reStructuredText files in the <code class="docutils literal"><span class="pre">docs-src</span></code> folder, you’ll need to rebuild the documentation. It is recommended to run
+the following steps inside a <code class="docutils literal"><span class="pre">virtualenv</span></code> environment.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>tox -e docs
 </pre></div>
 </div>
 <p>Do be sure to add the <code class="docutils literal"><span class="pre">docs</span></code> folder and its contents to your pull request!</p>
