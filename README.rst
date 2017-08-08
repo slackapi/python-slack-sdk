@@ -94,6 +94,25 @@ There are some unique options specific to sending IMs, so be sure to read the **
 section of the `chat.postMessage <https://api.slack.com/methods/chat.postMessage#channels>`_
 page for a full list of formatting and authorship options.
 
+Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same 
+as sending a regular message, but with an additional ``user`` parameter.
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  sc.api_call(
+    "chat.postEphemeral",
+    channel="#python",
+    text="Hello from Python! :tada:",
+    user="U0XXXXXXX"
+  )
+
+See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for more info.
+
 
 Replying to messages and creating threads
 *****************************************
