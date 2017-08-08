@@ -147,6 +147,22 @@ to a user or to a channel, this method handles both.</p>
 <p>There are some unique options specific to sending IMs, so be sure to read the <strong>channels</strong>
 section of the <a class="reference external" href="https://api.slack.com/methods/chat.postMessage#channels">chat.postMessage</a>
 page for a full list of formatting and authorship options.</p>
+<p>Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
+as sending a regular message, but with an additional <code class="docutils literal"><span class="pre">user</span></code> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;chat.postEphemeral&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="replying-to-messages-and-creating-threads">
