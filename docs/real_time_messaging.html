@@ -65,6 +65,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rtm-events">RTM Events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
 </ul>
@@ -139,7 +140,7 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
         <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s2">&quot;Connection Failed, invalid token?&quot;</span>
+    <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
 </pre></div>
 </div>
 <p>If you connect successfully the first event received will be a hello:</p>
@@ -158,6 +159,28 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 <span class="p">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="rtm-start-vs-rtm-connect">
+<h2>rtm.start vs rtm.connect<a class="headerlink" href="#rtm-start-vs-rtm-connect" title="Permalink to this headline">¶</a></h2>
+<p>If you expect your app to be used on large teams, we recommend using starting the RTM client with <cite>rtm.connect</cite> rather than <cite>rtm.start</cite>, which is the default connection method for this client.
+<cite>rtm.connect</cite> provides a lighter initial connection payload, without the team’s channel and user information included. You’ll need to request channel and user info via
+the Web API separately.</p>
+<p>To do this, simply pass <cite>with_team_state=False</cite> into the <cite>rtm_connect</cite> call, like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">(</span><span class="n">with_team_state</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> and the <a href="#id3"><span class="problematic" id="id4">`rtm.connect docs&lt;https://api.slack.com/methods/rtm.connect&gt;`_</span></a>
+for more details.</p>
 </div>
 <div class="section" id="rtm-events">
 <h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
