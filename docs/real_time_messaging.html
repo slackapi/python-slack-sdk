@@ -162,7 +162,7 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 </div>
 <div class="section" id="rtm-start-vs-rtm-connect">
 <h2>rtm.start vs rtm.connect<a class="headerlink" href="#rtm-start-vs-rtm-connect" title="Permalink to this headline">¶</a></h2>
-<p>If you expect your app to be used on large teams, we recommend using starting the RTM client with <cite>rtm.connect</cite> rather than <cite>rtm.start</cite>, which is the default connection method for this client.
+<p>If you expect your app to be used on large teams, we recommend starting the RTM client with <cite>rtm.connect</cite> rather than the default connection method for this client, <cite>rtm.start</cite>.
 <cite>rtm.connect</cite> provides a lighter initial connection payload, without the team’s channel and user information included. You’ll need to request channel and user info via
 the Web API separately.</p>
 <p>To do this, simply pass <cite>with_team_state=False</cite> into the <cite>rtm_connect</cite> call, like so:</p>

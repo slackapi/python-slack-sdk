@@ -50,7 +50,7 @@ If there was a problem connecting an error will be returned, including a descrip
 rtm.start vs rtm.connect
 ---------------------------
 
-If you expect your app to be used on large teams, we recommend using starting the RTM client with `rtm.connect` rather than `rtm.start`, which is the default connection method for this client.
+If you expect your app to be used on large teams, we recommend starting the RTM client with `rtm.connect` rather than the default connection method for this client, `rtm.start`.
 `rtm.connect` provides a lighter initial connection payload, without the team's channel and user information included. You'll need to request channel and user info via
 the Web API separately.
 
