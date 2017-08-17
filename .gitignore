@@ -1,8 +1,8 @@
 # general things to ignore
-.idea
 build/
 dist/
 docs/_sources/
+docs/.doctrees
 *.egg-info/
 *.egg
 *.py[cod]
