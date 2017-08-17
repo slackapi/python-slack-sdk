@@ -45,11 +45,11 @@ class SlackClient(object):
             False on exceptions
         '''
 
-        # try:
-        self.server.rtm_connect(use_rtm_start=with_team_state)
-        return True
-        # except:
-        #     return False
+        try:
+            self.server.rtm_connect(use_rtm_start=with_team_state)
+            return True
+        except:
+            return False
 
     def api_call(self, method, timeout=None, **kwargs):
         '''
