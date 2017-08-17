@@ -39,7 +39,7 @@ class SlackClient(object):
 
         :Args:
             with_team_state (bool): Connect via `rtm.start` to pull workspace state information.
-            `false` connects via `rtm.connect, which is lighter weight and better for very large teams.
+            `False` connects via `rtm.connect`, which is lighter weight and better for very large teams.
 
         :Returns:
             False on exceptions
