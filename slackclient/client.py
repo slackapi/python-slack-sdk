@@ -33,7 +33,7 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self):
+    def rtm_connect(self, **kwargs):
         '''
         Connects to the RTM Websocket
 
@@ -45,7 +45,7 @@ class SlackClient(object):
         '''
 
         try:
-            self.server.rtm_connect()
+            self.server.rtm_connect(**kwargs)
             return True
         except:
             return False
