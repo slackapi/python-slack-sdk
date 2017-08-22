@@ -2,6 +2,7 @@
 # mostly a proxy object to abstract how some of this works
 
 import json
+import traceback
 
 from .server import Server
 
@@ -48,6 +49,7 @@ class SlackClient(object):
             self.server.rtm_connect(**kwargs)
             return True
         except:
+            traceback.print_exc()
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
