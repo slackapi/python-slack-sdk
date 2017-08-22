@@ -67,7 +67,7 @@ class Server(object):
         self.api_requester.append_user_agent(name, version)
 
     def rtm_connect(self, reconnect=False, timeout=None, **kwargs):
-        reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout, **kwargs)
+        reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout, post_data=kwargs)
         if reply.status_code != 200:
             raise SlackConnectionError
         else:
