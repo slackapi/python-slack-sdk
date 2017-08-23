@@ -33,21 +33,19 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self, with_team_state=True):
+    def rtm_connect(self):
         '''
         Connects to the RTM Websocket
 
         :Args:
-            with_team_state (bool): Connect via `rtm.start` to pull workspace state information.
-            `False` connects via `rtm.connect`, which is lighter weight and better for very large
-            teams.
+            None
 
         :Returns:
             False on exceptions
         '''
 
         try:
-            self.server.rtm_connect(use_rtm_start=with_team_state)
+            self.server.rtm_connect()
             return True
         except:
             return False
