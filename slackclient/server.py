@@ -66,10 +66,8 @@ class Server(object):
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 
-    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True):
-        # rtm.start returns user and channel info, rtm.connect does not.
-        connect_url = "rtm.start" if use_rtm_start else "rtm.connect"
-        reply = self.api_requester.do(self.token, connect_url, timeout=timeout)
+    def rtm_connect(self, reconnect=False, timeout=None):
+        reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout)
 
         if reply.status_code != 200:
             raise SlackConnectionError
@@ -79,21 +77,18 @@ class Server(object):
                 self.ws_url = login_data['url']
                 self.connect_slack_websocket(self.ws_url)
                 if not reconnect:
-                    self.parse_slack_login_data(login_data, use_rtm_start)
+                    self.parse_slack_login_data(login_data)
             else:
                 raise SlackLoginError
 
-    def parse_slack_login_data(self, login_data, use_rtm_start):
+    def parse_slack_login_data(self, login_data):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
-
-        # if the connection was made via rtm.start, update the server's state
-        if use_rtm_start:
-            self.parse_channel_data(login_data["channels"])
-            self.parse_channel_data(login_data["groups"])
-            self.parse_user_data(login_data["users"])
-            self.parse_channel_data(login_data["ims"])
+        self.parse_channel_data(login_data["channels"])
+        self.parse_channel_data(login_data["groups"])
+        self.parse_user_data(login_data["users"])
+        self.parse_channel_data(login_data["ims"])
 
     def connect_slack_websocket(self, ws_url):
         """Uses http proxy if available"""
