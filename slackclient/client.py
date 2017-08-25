@@ -151,11 +151,14 @@ class SlackClient(object):
             None
 
         '''
-        return self.server.channels.find(channel).send_message(
-            message,
-            thread,
-            reply_broadcast,
-        )
+        message_json = {"type": "message", "channel": channel, "text": message}
+        if thread is not None:
+            message_json["thread_ts"] = thread
+            if reply_broadcast:
+                message_json['reply_broadcast'] = True
+
+        self.server.send_to_websocket(message_json)
+
 
     def process_changes(self, data):
         '''
