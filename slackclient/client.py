@@ -58,6 +58,7 @@ class SlackClient(object):
 
         :Args:
             method (str): The API Method to call. See
+            method (str): The API Method to call. See
             `the full list here <https://api.slack.com/methods>`_
         :Kwargs:
             (optional) kwargs: any arguments passed here will be bundled and sent to the api
@@ -153,11 +154,14 @@ class SlackClient(object):
             None
 
         '''
-        return self.server.channels.find(channel).send_message(
-            message,
-            thread,
-            reply_broadcast,
-        )
+        message_json = {"type": "message", "channel": channel, "text": message}
+        if thread is not None:
+            message_json["thread_ts"] = thread
+            if reply_broadcast:
+                message_json['reply_broadcast'] = True
+
+        self.server.send_to_websocket(message_json)
+
 
     def process_changes(self, data):
         '''
