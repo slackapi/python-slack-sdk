@@ -172,7 +172,6 @@ class Server(object):
 
         self.send_to_websocket(message_json)
 
-
     def ping(self):
         return self.send_to_websocket({"type": "ping"})
 
