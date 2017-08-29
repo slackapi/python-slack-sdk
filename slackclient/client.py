@@ -58,7 +58,6 @@ class SlackClient(object):
 
         :Args:
             method (str): The API Method to call. See
-            method (str): The API Method to call. See
             `the full list here <https://api.slack.com/methods>`_
         :Kwargs:
             (optional) kwargs: any arguments passed here will be bundled and sent to the api
