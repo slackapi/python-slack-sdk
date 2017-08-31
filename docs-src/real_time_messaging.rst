@@ -47,6 +47,32 @@ If there was a problem connecting an error will be returned, including a descrip
     }
   }
 
+rtm.start vs rtm.connect
+---------------------------
+
+If you expect your app to be used on large teams, we recommend starting the RTM client with `rtm.connect` rather than the default connection method for this client, `rtm.start`.
+`rtm.connect` provides a lighter initial connection payload, without the team's channel and user information included. You'll need to request channel and user info via
+the Web API separately.
+
+To do this, simply pass `with_team_state=False` into the `rtm_connect` call, like so:
+::
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  if sc.rtm_connect(with_team_state=False):
+      while True:
+          print sc.rtm_read()
+          time.sleep(1)
+  else:
+      print "Connection Failed"
+
+
+See the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ and the `rtm.connect docs<https://api.slack.com/methods/rtm.connect>`_
+for more details.
+
 
 RTM Events
 -------------

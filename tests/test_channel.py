@@ -32,28 +32,14 @@ def test_channel_send_message(channel, mocker, monkeypatch):
     mock_server = mocker.Mock()
     monkeypatch.setattr(channel, 'server', mock_server)
     channel.send_message('hi')
-    mock_server.send_to_websocket.assert_called_with({
-        'text': 'hi',
-        'channel': channel.id,
-        'type': 'message',
-    })
+    mock_server.rtm_send_message.assert_called_with(channel.id, 'hi', None, False)
 
 
 def test_channel_send_message_to_thread(channel, mocker, monkeypatch):
     mock_server = mocker.Mock()
     monkeypatch.setattr(channel, 'server', mock_server)
     channel.send_message('hi', thread='123456.789')
-    mock_server.send_to_websocket.assert_called_with({
-        'text': 'hi',
-        'channel': channel.id,
-        'type': 'message',
-        'thread_ts': '123456.789',
-    })
+    mock_server.rtm_send_message.assert_called_with(channel.id, 'hi', '123456.789', False)
+
     channel.send_message('hi', thread='123456.789', reply_broadcast=True)
-    mock_server.send_to_websocket.assert_called_with({
-        'text': 'hi',
-        'channel': channel.id,
-        'type': 'message',
-        'thread_ts': '123456.789',
-        'reply_broadcast': True,
-    })
+    mock_server.rtm_send_message.assert_called_with(channel.id, 'hi', '123456.789', True)

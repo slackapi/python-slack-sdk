@@ -66,8 +66,10 @@ class Server(object):
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 
-    def rtm_connect(self, reconnect=False, timeout=None):
-        reply = self.api_requester.do(self.token, "rtm.start", timeout=timeout)
+    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True):
+        # rtm.start returns user and channel info, rtm.connect does not.
+        connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
+        reply = self.api_requester.do(self.token, connect_method, timeout=timeout)
 
         if reply.status_code != 200:
             raise SlackConnectionError
@@ -77,18 +79,21 @@ class Server(object):
                 self.ws_url = login_data['url']
                 self.connect_slack_websocket(self.ws_url)
                 if not reconnect:
-                    self.parse_slack_login_data(login_data)
+                    self.parse_slack_login_data(login_data, use_rtm_start)
             else:
                 raise SlackLoginError
 
-    def parse_slack_login_data(self, login_data):
+    def parse_slack_login_data(self, login_data, use_rtm_start):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
-        self.parse_channel_data(login_data["channels"])
-        self.parse_channel_data(login_data["groups"])
-        self.parse_user_data(login_data["users"])
-        self.parse_channel_data(login_data["ims"])
+
+        # if the connection was made via rtm.start, update the server's state
+        if use_rtm_start:
+            self.parse_channel_data(login_data["channels"])
+            self.parse_channel_data(login_data["groups"])
+            self.parse_user_data(login_data["users"])
+            self.parse_channel_data(login_data["ims"])
 
     def connect_slack_websocket(self, ws_url):
         """Uses http proxy if available"""
@@ -141,6 +146,31 @@ class Server(object):
             self.websocket.send(data)
         except:
             self.rtm_connect(reconnect=True)
+
+    def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
+        '''
+        Sends a message to a given channel.
+
+        :Args:
+            channel (str) - the string identifier for a channel or channel name (e.g. 'C1234ABC',
+            'bot-test' or '#bot-test')
+            message (message) - the string you'd like to send to the channel
+            thread (str or None) - the parent message ID, if sending to a
+                thread
+            reply_broadcast (bool) - if messaging a thread, whether to
+                also send the message back to the channel
+
+        :Returns:
+            None
+
+        '''
+        message_json = {"type": "message", "channel": channel, "text": message}
+        if thread is not None:
+            message_json["thread_ts"] = thread
+            if reply_broadcast:
+                message_json['reply_broadcast'] = True
+
+        self.send_to_websocket(message_json)
 
     def ping(self):
         return self.send_to_websocket({"type": "ping"})
