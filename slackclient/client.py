@@ -153,24 +153,17 @@ class SlackClient(object):
             None
 
         '''
-        found_channel = self.server.channels.find(channel)
-        if found_channel:
-            # If the channel is found in cache, send to it's `send_message` method
-            return found_channel.send_message(
-                message,
-                thread,
-                reply_broadcast,
-            )
-        else:
-            # If the channel is not found in the cache, call the server's `rtm_send_message`
-            # method, passing the message identifier. This identifier must be the channel ID,
-            # rather than the channel name.
-            return self.server.rtm_send_message(
-                channel,
-                message,
-                thread,
-                reply_broadcast
-            )
+        # The `channel` argument can be a channel name or an ID. At first its assumed to be a
+        # name and an attempt is made to find the ID in the workspace state cache.
+        # If that lookup fails, the argument is used as the channel ID.
+        found_channel = self.server.channels.find(channel).id
+        channel_id = found_channel.id if found_channel.id else channel
+        return self.server.rtm_send_message(
+            channel_id,
+            message,
+            thread,
+            reply_broadcast
+        )
 
     def process_changes(self, data):
         '''
