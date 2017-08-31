@@ -43,10 +43,4 @@ class Channel(object):
         :Returns:
             None
         '''
-        message_json = {"type": "message", "channel": self.id, "text": message}
-        if thread is not None:
-            message_json["thread_ts"] = thread
-            if reply_broadcast:
-                message_json['reply_broadcast'] = True
-
-        self.server.send_to_websocket(message_json)
+        self.server.rtm_send_message(self.id, message, thread, reply_broadcast)

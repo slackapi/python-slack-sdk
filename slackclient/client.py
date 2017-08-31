@@ -34,19 +34,21 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self, **kwargs):
+    def rtm_connect(self, with_team_state=True, **kwargs):
         '''
         Connects to the RTM Websocket
 
         :Args:
-            None
+            with_team_state (bool): Connect via `rtm.start` to pull workspace state information.
+            `False` connects via `rtm.connect`, which is lighter weight and better for very large
+            teams.
 
         :Returns:
             False on exceptions
         '''
 
         try:
-            self.server.rtm_connect(**kwargs)
+            self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return True
         except:
             traceback.print_exc()
@@ -153,10 +155,16 @@ class SlackClient(object):
             None
 
         '''
-        return self.server.channels.find(channel).send_message(
+        # The `channel` argument can be a channel name or an ID. At first its assumed to be a
+        # name and an attempt is made to find the ID in the workspace state cache.
+        # If that lookup fails, the argument is used as the channel ID.
+        found_channel = self.server.channels.find(channel).id
+        channel_id = found_channel.id if found_channel.id else channel
+        return self.server.rtm_send_message(
+            channel_id,
             message,
             thread,
-            reply_broadcast,
+            reply_broadcast
         )
 
     def process_changes(self, data):
