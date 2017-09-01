@@ -156,7 +156,7 @@ class SlackClient(object):
         # The `channel` argument can be a channel name or an ID. At first its assumed to be a
         # name and an attempt is made to find the ID in the workspace state cache.
         # If that lookup fails, the argument is used as the channel ID.
-        found_channel = self.server.channels.find(channel).id
+        found_channel = self.server.channels.find(channel)
         channel_id = found_channel.id if found_channel.id else channel
         return self.server.rtm_send_message(
             channel_id,
