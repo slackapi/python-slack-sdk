@@ -1,2 +1,2 @@
 # see: http://legacy.python.org/dev/peps/pep-0440/#public-version-identifiers
-__version__ = '1.0.8'
+__version__ = '1.0.9'
