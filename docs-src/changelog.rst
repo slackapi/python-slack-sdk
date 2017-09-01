@@ -2,7 +2,18 @@
 Changelog
 ==============================================
 
-v1.0.6 (2017-6-12)
+v1.0.8 (2017-8-31)
+-------------------
+
+  - Added rtm.connect support
+
+v1.0.7 (2017-08-02)
+-------------------
+
+  - Fixes an issue where connecting over RTM to large teams may result in “Websocket URL expired” errors
+  - A load of packaging improvements
+
+v1.0.6 (2017-06-12)
 -------------------
 
   - Added proxy support (thanks @timfeirg!)
