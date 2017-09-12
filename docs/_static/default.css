@@ -1,5 +1,5 @@
-.section h1, .section .headerlink {
-    display: none;
+a.headerlink {
+    display: none !important;
 }
 
 .section-title {
