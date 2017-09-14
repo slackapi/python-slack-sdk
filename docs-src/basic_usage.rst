@@ -60,7 +60,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 --------
 
 Replying to messages and creating threads
------------------------
+------------------------------------------
 Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context
 to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message's ``ts``
 ID in the ``thread_ts`` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts`

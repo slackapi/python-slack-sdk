@@ -4,6 +4,7 @@
    self
    auth
    basic_usage
+   conversations
    real_time_messaging
    faq
    changelog
