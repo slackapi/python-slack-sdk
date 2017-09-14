@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Real Time Messaging &mdash; Slack Developer Kit for Python</title>
+    <title>Conversations API &mdash; Slack Developer Kit for Python</title>
 
     
     <link rel="stylesheet" href="https://a.slack-edge.com/b143/style/plastic_helpers.css" type="text/css"/>
@@ -64,20 +64,20 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-a-direct-message-or-multi-person-direct-message">Creating a direct message or multi-person direct message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-a-public-or-private-channel">Creating a public or private channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-information-about-a-conversation">Getting information about a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-a-list-of-conversations">Getting a list of conversations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#leaving-a-conversation">Leaving a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#get-conversation-members">Get conversation members</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Conversations API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-direct-message-or-multi-person-direct-message">Creating a direct message or multi-person direct message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-public-or-private-channel">Creating a public or private channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-information-about-a-conversation">Getting information about a conversation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-a-list-of-conversations">Getting a list of conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#leaving-a-conversation">Leaving a conversation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-conversation-members">Get conversation members</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rtm-events">RTM Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">Real Time Messaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
@@ -130,113 +130,135 @@
 
           <!-- Body Content -->
           <div class="col span_3_of_4">
-            <div class="section-title">Real Time Messaging</div>
+            <div class="section-title">Conversations API</div>
   					<div class="card">
-  <div class="section" id="real-time-messaging">
-<span id="id1"></span><h1>Real Time Messaging<a class="headerlink" href="#real-time-messaging" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging API</a> is a WebSocket-based API that allows you to
-receive events from Slack in real time and send messages as users.</p>
-<p>If you prefer events to be pushed to you instead, we recommend using the
-HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
-Most event types supported by the RTM API are also available
-in <a class="reference external" href="https://api.slack.com/events/api">the Events API</a>.</p>
-<p>See <a class="reference internal" href="auth.html#handling-tokens"><span class="std std-ref">Tokens &amp; Authentication</span></a> for API token handling best practices.</p>
-<div class="section" id="connecting-to-the-real-time-messaging-api">
-<h2>Connecting to the Real Time Messaging API<a class="headerlink" href="#connecting-to-the-real-time-messaging-api" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="conversations-api">
+<span id="id1"></span><h1>Conversations API<a class="headerlink" href="#conversations-api" title="Permalink to this headline">¶</a></h1>
+<p>The Slack Conversations API provides your app with a unified interface to work with all the
+channel-like things encountered in Slack; public channels, private channels, direct messages, group
+direct messages, and our newest channel type, Shared Channels.</p>
+<p>See <a class="reference external" href="https://api.slack.com/docs/conversations-api">Conversations API</a> docs for more info.</p>
+<hr class="docutils" />
+<div class="section" id="creating-a-direct-message-or-multi-person-direct-message">
+<h2>Creating a direct message or multi-person direct message<a class="headerlink" href="#creating-a-direct-message-or-multi-person-direct-message" title="Permalink to this headline">¶</a></h2>
+<p>This Conversations API method opens a multi-person direct message or just a 1:1 direct message.</p>
+<p><em>Use conversations.create for public or private channels.</em></p>
+<p>Provide 1 to 8 user IDs in the <code class="docutils literal"><span class="pre">user</span></code> parameter to open or resume a conversation. Providing only
+1 ID will create a direct message. Providing more will create an <code class="docutils literal"><span class="pre">mpim</span></code>.</p>
+<p>If there are no conversations already in progress including that exact set of members, a new
+multi-person direct message conversation begins.</p>
+<p>Subsequent calls to <code class="docutils literal"><span class="pre">conversations.open</span></code> with the same set of users will return the already
+existing conversation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">():</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;conversations.open&quot;</span><span class="p">,</span>
+  <span class="n">users</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;W1234567890&quot;</span><span class="p">,</span><span class="s2">&quot;U2345678901&quot;</span><span class="p">,</span><span class="s2">&quot;U3456789012&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>If you connect successfully the first event received will be a hello:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;hello&#39;</span>
-<span class="p">}</span>
-</pre></div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.open">conversations.open</a> additional info.</p>
 </div>
-<p>If there was a problem connecting an error will be returned, including a descriptive error message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">,</span>
-    <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="sa">u</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="sa">u</span><span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Socket URL has expired&#39;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="rtm-start-vs-rtm-connect">
-<h2>rtm.start vs rtm.connect<a class="headerlink" href="#rtm-start-vs-rtm-connect" title="Permalink to this headline">¶</a></h2>
-<p>If you expect your app to be used on large teams, we recommend starting the RTM client with <cite>rtm.connect</cite> rather than the default connection method for this client, <cite>rtm.start</cite>.
-<cite>rtm.connect</cite> provides a lighter initial connection payload, without the team’s channel and user information included. You’ll need to request channel and user info via
-the Web API separately.</p>
-<p>To do this, simply pass <cite>with_team_state=False</cite> into the <cite>rtm_connect</cite> call, like so:</p>
+<hr class="docutils" />
+<div class="section" id="creating-a-public-or-private-channel">
+<h2>Creating a public or private channel<a class="headerlink" href="#creating-a-public-or-private-channel" title="Permalink to this headline">¶</a></h2>
+<p>Initiates a public or private channel-based conversation</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">(</span><span class="n">with_team_state</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;conversations.create&quot;</span><span class="p">,</span>
+  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;myprivatechannel&quot;</span><span class="p">,</span>
+  <span class="n">is_private</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>See the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> and the <a href="#id3"><span class="problematic" id="id4">`rtm.connect docs&lt;https://api.slack.com/methods/rtm.connect&gt;`_</span></a>
-for more details.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.create">conversations.create</a> additional info.</p>
 </div>
-<div class="section" id="rtm-events">
-<h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
-  <span class="sa">u</span><span class="s1">&#39;ts&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
-  <span class="sa">u</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
-  <span class="sa">u</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Hello&#39;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>See <a class="reference external" href="https://api.slack.com/rtm#events">RTM Events</a> for a complete list of events.</p>
-</div>
-<div class="section" id="sending-messages-via-the-rtm-api">
-<h2>Sending messages via the RTM API<a class="headerlink" href="#sending-messages-via-the-rtm-api" title="Permalink to this headline">¶</a></h2>
-<p>You can send a message to Slack by sending JSON over the websocket connection.</p>
+<hr class="docutils" />
+<div class="section" id="getting-information-about-a-conversation">
+<h2>Getting information about a conversation<a class="headerlink" href="#getting-information-about-a-conversation" title="Permalink to this headline">¶</a></h2>
+<p>This Conversations API method returns information about a workspace conversation.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="n">sc</span><span class="o">.</span><span class="n">rtm_send_message</span><span class="p">(</span><span class="s2">&quot;welcome-test&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;conversations.info&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>You can send a message to a private group or direct message channel in the same
-way, but using a Group ID (<code class="docutils literal"><span class="pre">C024BE91L</span></code>) or DM channel ID (<code class="docutils literal"><span class="pre">D024BE91L</span></code>).</p>
-<p>You can send a message in reply to a thread using the <code class="docutils literal"><span class="pre">thread</span></code> argument, and
-optionally broadcast that message back to the channel by setting
-<code class="docutils literal"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.info">conversations.info</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="getting-a-list-of-conversations">
+<h2>Getting a list of conversations<a class="headerlink" href="#getting-a-list-of-conversations" title="Permalink to this headline">¶</a></h2>
+<p>This Conversations API method returns a list of all channel-like conversations in a workspace.
+The “channels” returned depend on what the calling token has access to and the directives placed
+in the <code class="docutils literal"><span class="pre">types</span></code> parameter.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="n">sc</span><span class="o">.</span><span class="n">rtm_send_message</span><span class="p">(</span><span class="s2">&quot;welcome-test&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;1482960137.003543&quot;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span><span class="s2">&quot;conversations.list&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/docs/message-threading#threads_party">Threading messages</a>
-for more details on using threads.</p>
-<p>The RTM API only supports posting messages with <a class="reference external" href="https://api.slack.com/docs/message-formatting">basic formatting</a>.
-It does not support attachments or other message formatting modes.</p>
-<blockquote>
-<div>To post a more complex message as a user, see <a class="reference internal" href="basic_usage.html#web-api-examples"><span class="std std-ref">Web API usage</span></a>.</div></blockquote>
+<p>Only public conversations are included by default. You can include DMs and MPIMs by passing
+<code class="docutils literal"><span class="pre">public_channel,private_channel</span></code> as the <code class="docutils literal"><span class="pre">types</span></code> in your request.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;conversations.list&quot;</span><span class="p">,</span>
+  <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;public_channel&quot;</span><span class="p">,</span><span class="s2">&quot;private_channel&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.list">conversations.list</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="leaving-a-conversation">
+<h2>Leaving a conversation<a class="headerlink" href="#leaving-a-conversation" title="Permalink to this headline">¶</a></h2>
+<p>Maybe you’ve finished up all the business you had in a conversation, or maybe you
+joined one by accident. This is how you leave a conversation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;conversations.leave&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.leave">conversations.leave</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="get-conversation-members">
+<h2>Get conversation members<a class="headerlink" href="#get-conversation-members" title="Permalink to this headline">¶</a></h2>
+<p>Get a list fo the members of a conversation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span><span class="s2">&quot;conversations.members&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.members">users.list</a> for more info.</p>
 </div>
 </div>
 
