@@ -70,7 +70,7 @@ To do this, simply pass `with_team_state=False` into the `rtm_connect` call, lik
       print "Connection Failed"
 
 
-See the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ and the `rtm.connect docs<https://api.slack.com/methods/rtm.connect>`_
+See the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ and the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_
 for more details.
 
 
