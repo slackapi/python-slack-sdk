@@ -2,6 +2,7 @@
 # mostly a proxy object to abstract how some of this works
 
 import json
+import traceback
 
 from .server import Server
 
@@ -33,7 +34,7 @@ class SlackClient(object):
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
 
-    def rtm_connect(self, with_team_state=True):
+    def rtm_connect(self, with_team_state=True, **kwargs):
         '''
         Connects to the RTM Websocket
 
@@ -47,9 +48,10 @@ class SlackClient(object):
         '''
 
         try:
-            self.server.rtm_connect(use_rtm_start=with_team_state)
+            self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return True
         except:
+            traceback.print_exc()
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
