@@ -159,7 +159,7 @@ class SlackClient(object):
         # name and an attempt is made to find the ID in the workspace state cache.
         # If that lookup fails, the argument is used as the channel ID.
         found_channel = self.server.channels.find(channel)
-        channel_id = found_channel.id if found_channel.id else channel
+        channel_id = found_channel.id if found_channel else channel
         return self.server.rtm_send_message(
             channel_id,
             message,
