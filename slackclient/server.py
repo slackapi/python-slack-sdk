@@ -66,10 +66,10 @@ class Server(object):
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 
-    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True):
+    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
-        reply = self.api_requester.do(self.token, connect_method, timeout=timeout)
+        reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
             raise SlackConnectionError
