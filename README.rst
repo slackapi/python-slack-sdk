@@ -7,8 +7,8 @@ A basic client for Slack.com, which can optionally connect to the Slack Real Tim
 
 .. |build-status| image:: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
     :target: https://travis-ci.org/slackapi/python-slackclient
-.. |windows-build-status| image:: https://ci.appveyor.com/api/projects/status/github/slackapi/python-slackclient?branch=master&svg=true
-    :target: https://ci.appveyor.com/project/aoberoi/python-slackclient
+.. |windows-build-status| image:: https://ci.appveyor.com/api/projects/status/rif04t60ptslj32x/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/slackapi/python-slackclient
 .. |codecov| image:: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/slackapi/python-slackclient
 .. |doc-status| image:: https://readthedocs.org/projects/python-slackclient/badge/?version=latest
@@ -91,7 +91,7 @@ There are some unique options specific to sending IMs, so be sure to read the **
 section of the `chat.postMessage <https://api.slack.com/methods/chat.postMessage#channels>`_
 page for a full list of formatting and authorship options.
 
-Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same 
+Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
 as sending a regular message, but with an additional ``user`` parameter.
 
 .. code-block:: python
