@@ -211,16 +211,18 @@ in the <code class="docutils literal"><span class="pre">types</span></code> para
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span><span class="s2">&quot;conversations.list&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Only public conversations are included by default. You can include DMs and MPIMs by passing
-<code class="docutils literal"><span class="pre">public_channel,private_channel</span></code> as the <code class="docutils literal"><span class="pre">types</span></code> in your request.</p>
+<p>Only public conversations are included by default. You may include additional conversations types
+by passing <code class="docutils literal"><span class="pre">types</span></code> (as a string) into your list request. Additional conversation types include
+<code class="docutils literal"><span class="pre">public_channel</span></code> and <code class="docutils literal"><span class="pre">private_channel</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
+<span class="c1"># Note that `types` is a string</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
   <span class="s2">&quot;conversations.list&quot;</span><span class="p">,</span>
-  <span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;public_channel&quot;</span><span class="p">,</span><span class="s2">&quot;private_channel&quot;</span><span class="p">]</span>
+  <span class="n">types</span><span class="o">=</span><span class="s2">&quot;public_channel, private_channel&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
