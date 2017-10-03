@@ -102,8 +102,9 @@ in the ``types`` parameter.
 
   sc.api_call("conversations.list")
 
-Only public conversations are included by default. You can include DMs and MPIMs by passing
-``public_channel,private_channel`` as the ``types`` in your request.
+Only public conversations are included by default. You may include additional conversations types
+by passing ``types`` (as a string) into your list request. Additional conversation types include
+``public_channel`` and ``private_channel``.
 
 
 .. code-block:: python
@@ -113,9 +114,10 @@ Only public conversations are included by default. You can include DMs and MPIMs
   slack_token = os.environ["SLACK_API_TOKEN"]
   sc = SlackClient(slack_token)
 
+  # Note that `types` is a string
   sc.api_call(
     "conversations.list",
-    types=["public_channel","private_channel"]
+    types="public_channel, private_channel"
   )
 
 See `conversations.list <https://api.slack.com/methods/conversations.list>`_ for more info.
