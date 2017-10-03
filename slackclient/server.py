@@ -251,10 +251,6 @@ class Server(object):
         return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
 
 
-class SlackCongigurationError(Exception):
-    pass
-
-
 class SlackConnectionError(Exception):
     pass
 
