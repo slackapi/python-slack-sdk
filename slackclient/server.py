@@ -72,7 +72,7 @@ class Server(object):
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
-            raise SlackConnectionError
+            raise SlackConnectionError(reply=reply)
         else:
             login_data = reply.json()
             if login_data["ok"]:
@@ -81,7 +81,7 @@ class Server(object):
                 if not reconnect:
                     self.parse_slack_login_data(login_data, use_rtm_start)
             else:
-                raise SlackLoginError
+                raise SlackLoginError(reply=reply)
 
     def parse_slack_login_data(self, login_data, use_rtm_start):
         self.login_data = login_data
@@ -112,7 +112,7 @@ class Server(object):
                                                http_proxy_auth=proxy_auth)
             self.websocket.sock.setblocking(0)
         except Exception as e:
-            raise SlackConnectionError(str(e))
+            raise SlackConnectionError(message=str(e))
 
     def parse_channel_data(self, channel_data):
         for channel in channel_data:
@@ -252,8 +252,12 @@ class Server(object):
 
 
 class SlackConnectionError(Exception):
-    pass
+    def __init__(self, message='', reply=None):
+        super(SlackConnectionError, self).__init__(message)
+        self.reply = reply
 
 
 class SlackLoginError(Exception):
-    pass
+    def __init__(self, message='', reply=None):
+        super(SlackLoginError, self).__init__(message)
+        self.reply = reply
