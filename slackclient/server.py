@@ -114,6 +114,15 @@ class Server(object):
         except Exception as e:
             raise SlackConnectionError(message=str(e))
 
+    def disconnect_slack_websocket(self):
+        """
+          Disconnects from Slack by closing the websocket
+        """
+        try:
+            self.websocket.close()
+        except Exception as e:
+            raise SlackConnectionError(message=str(e))
+
     def parse_channel_data(self, channel_data):
         for channel in channel_data:
             if "name" not in channel:

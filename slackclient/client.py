@@ -54,6 +54,20 @@ class SlackClient(object):
             traceback.print_exc()
             return False
 
+    def disconnect(self):
+        '''
+        Disconnects from the RTM Websocket
+
+        :Returns:
+            False on exception
+        '''
+        try:
+            self.server.disconnect_slack_websocket()
+            return True
+        except:
+            traceback.print_exc()
+            return False
+
     def api_call(self, method, timeout=None, **kwargs):
         '''
         Call the Slack Web API as documented here: https://api.slack.com/web
