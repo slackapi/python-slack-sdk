@@ -134,7 +134,7 @@ class Server(object):
 
         :Args:
             pingid (Optional[int]): The id of the ping. The reply_to
-                value of the response pongwill use this value. This
+                value of the response pong will use this value. This
                 argument takes priority of the id key in kwargs, if
                 present.
         :Kwargs:
