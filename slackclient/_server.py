@@ -129,8 +129,8 @@ class Server(object):
         return None
 
     def ping(self, pingid=None, **kwargs):
-        """ Send a ping message over the websocket. ping accepts any
-        key:value: pair and returns those values with the pong response.
+        """ Send a ping message over the websocket. ping accepts any 
+        key-value pair and returns those values with the pong response
 
         :Args:
             pingid (Optional[int]): The id of the ping. The reply_to
