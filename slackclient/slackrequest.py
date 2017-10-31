@@ -70,7 +70,7 @@ class SlackRequest(object):
             files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
         for k, v in nine.iteritems(post_data):
-            if not isinstance(v, str):
+            if not isinstance(v, nine.basestring):
                 post_data[k] = json.dumps(v)
 
         url = 'https://{0}/api/{1}'.format(domain, request)
