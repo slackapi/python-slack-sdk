@@ -1,7 +1,7 @@
 import json
 
 import requests
-import six
+import nine
 
 import sys
 import platform
@@ -69,8 +69,8 @@ class SlackRequest(object):
         if request in upload_requests:
             files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
-        for k, v in six.iteritems(post_data):
-            if not isinstance(v, six.string_types):
+        for k, v in nine.iteritems(post_data):
+            if not isinstance(v, str):
                 post_data[k] = json.dumps(v)
 
         url = 'https://{0}/api/{1}'.format(domain, request)
