@@ -50,7 +50,7 @@ class SlackClient(object):
         try:
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return True
-        except:
+        except Exception:
             traceback.print_exc()
             return False
 
