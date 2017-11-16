@@ -15,6 +15,7 @@ class Server(object):
 
 
     '''
+
     def __init__(self, token, connect=True, proxies=None):
         self.token = token
         self.username = None
@@ -92,7 +93,7 @@ class Server(object):
         if use_rtm_start:
             self.parse_channel_data(login_data["channels"])
             self.parse_channel_data(login_data["groups"])
-            self.parse_user_data(login_data["users"])
+            self.parse_user_data(login_data["users"], login_data["team"])
             self.parse_channel_data(login_data["ims"])
 
     def connect_slack_websocket(self, ws_url):
@@ -124,13 +125,19 @@ class Server(object):
                                 channel["id"],
                                 channel["members"])
 
-    def parse_user_data(self, user_data):
+    def parse_user_data(self, user_data, team_data):
         for user in user_data:
             if "tz" not in user:
                 user["tz"] = "unknown"
             if "real_name" not in user:
                 user["real_name"] = user["name"]
-            self.attach_user(user["name"], user["id"], user["real_name"], user["tz"])
+            if "profile" in user and "email" in user["profile"]:
+                user["email"] = user["profile"]["email"]
+            elif team_data and "email_domain" in team_data:
+                user["email"] = "{}@{}".format(user["name"], team_data["email_domain"])
+            else:
+                user["email"] = ""  # default to empty.
+            self.attach_user(user["name"], user["id"], user["real_name"], user["email"], user["tz"])
 
     def send_to_websocket(self, data):
         """
@@ -196,8 +203,8 @@ class Server(object):
                 raise
             return data.rstrip()
 
-    def attach_user(self, name, user_id, real_name, tz):
-        self.users.update({user_id: User(self, name, user_id, real_name, tz)})
+    def attach_user(self, name, user_id, real_name, email, tz):
+        self.users.update({user_id: User(self, name, user_id, real_name, email, tz)})
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:

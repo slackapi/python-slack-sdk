@@ -1,8 +1,9 @@
 class User(object):
-    def __init__(self, server, name, user_id, real_name, tz):
+    def __init__(self, server, name, user_id, real_name, email, tz):
         self.tz = tz
         self.name = name
         self.real_name = real_name
+        self.email = email
         self.server = server
         self.id = user_id
 

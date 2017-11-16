@@ -32,12 +32,14 @@ def test_server_parse_channel_data(server, rtm_start_fixture):
 
 
 def test_server_parse_user_data(server, rtm_start_fixture):
-    server.parse_user_data(rtm_start_fixture["users"])
+    server.parse_user_data(rtm_start_fixture["users"], rtm_start_fixture["team"])
     # Find user by Name
     userbyname = server.users.find('fakeuser')
     assert type(userbyname) == User
     assert userbyname == "fakeuser"
     assert userbyname != "someotheruser"
+    assert userbyname.email == "fakeuser@example.com"
+
     # Find user by ID
     userbyid = server.users.find('U10CX1234')
     assert type(userbyid) == User
