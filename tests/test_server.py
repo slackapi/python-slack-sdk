@@ -42,6 +42,7 @@ def test_server_parse_user_data(server, rtm_start_fixture):
     userbyid = server.users.find('U10CX1234')
     assert type(userbyid) == User
     assert userbyid == "fakeuser"
+    assert userbyid.email == 'fakeuser@example.com'
     # Don't find invalid user
     userbyid = server.users.find('invaliduser')
     assert type(userbyid) != User
