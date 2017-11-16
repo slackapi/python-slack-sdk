@@ -1,10 +1,11 @@
 class User(object):
-    def __init__(self, server, name, user_id, real_name, tz):
+    def __init__(self, server, name, user_id, real_name, tz, email):
         self.tz = tz
         self.name = name
         self.real_name = real_name
         self.server = server
         self.id = user_id
+        self.email = email
 
     def __eq__(self, compare_str):
         if compare_str in (self.id, self.name):
