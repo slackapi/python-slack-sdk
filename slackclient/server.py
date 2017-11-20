@@ -150,7 +150,7 @@ class Server(object):
         try:
             data = json.dumps(data)
             self.websocket.send(data)
-        except:
+        except Exception:
             self.rtm_connect(reconnect=True)
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
