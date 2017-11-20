@@ -1,5 +1,4 @@
 class SearchList(list):
-
     def find(self, name):
         items = []
         for child in self:

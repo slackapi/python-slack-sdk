@@ -4,6 +4,7 @@
 import json
 import traceback
 
+from .log import logger
 from .server import Server
 
 
@@ -26,6 +27,7 @@ class SlackClient(object):
             declare http and websocket proxies using {'http': 'http://127.0.0.1'},
             and https proxy using {'https': 'https://127.0.0.1:443'}
     '''
+
     def __init__(self, token, proxies=None):
 
         self.token = token
@@ -51,6 +53,7 @@ class SlackClient(object):
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return True
         except Exception as e:
+            logger.exception(e)
             traceback.print_exc()
             return False
 

@@ -2,6 +2,7 @@ class Im(object):
     '''
     IMs represent direct message channels between two users on Slack.
     '''
+
     def __init__(self, server, user, im_id):
         self.server = server
         self.user = user

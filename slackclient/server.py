@@ -3,6 +3,7 @@ from requests.packages.urllib3.util.url import parse_url
 from .channel import Channel
 from .user import User
 from .util import SearchList, SearchDict
+from .log import logger
 from ssl import SSLError
 
 from websocket import create_connection
@@ -112,6 +113,7 @@ class Server(object):
                                                http_proxy_auth=proxy_auth)
             self.websocket.sock.setblocking(0)
         except Exception as e:
+            logger.exception(e)
             raise SlackConnectionError(message=str(e))
 
     def parse_channel_data(self, channel_data):
@@ -151,6 +153,7 @@ class Server(object):
             data = json.dumps(data)
             self.websocket.send(data)
         except Exception as e:
+            logger.exception(e)
             self.rtm_connect(reconnect=True)
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
@@ -191,6 +194,7 @@ class Server(object):
             try:
                 data += "{0}\n".format(self.websocket.recv())
             except SSLError as e:
+                logger.exception(e)
                 if e.errno == 2:
                     # errno 2 occurs when trying to read or write data, but more
                     # data needs to be received on the underlying TCP transport

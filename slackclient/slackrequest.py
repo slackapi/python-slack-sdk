@@ -1,10 +1,10 @@
 import json
+import platform
+import sys
 
 import requests
 import six
 
-import sys
-import platform
 from .version import __version__
 
 

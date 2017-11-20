@@ -2,6 +2,7 @@ class Channel(object):
     '''
     A Channel represents a public or private Slack Channel instance
     '''
+
     def __init__(self, server, name, channel_id, members=None):
         self.server = server
         self.name = name
