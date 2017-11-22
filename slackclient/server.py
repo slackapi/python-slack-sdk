@@ -4,6 +4,7 @@ from .channel import Channel
 from .user import User
 from .util import SearchList, SearchDict
 from .log import logger
+from .exceptions import SlackClientError
 from ssl import SSLError
 
 from websocket import create_connection
@@ -260,14 +261,18 @@ class Server(object):
         '''
         return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
 
+# TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
+# major change because any clients already referencing these types in order to catch them
+# specifically would need to deal with the symbol names changing.
 
-class SlackConnectionError(Exception):
+
+class SlackConnectionError(SlackClientError):
     def __init__(self, message='', reply=None):
         super(SlackConnectionError, self).__init__(message)
         self.reply = reply
 
 
-class SlackLoginError(Exception):
+class SlackLoginError(SlackClientError):
     def __init__(self, message='', reply=None):
         super(SlackLoginError, self).__init__(message)
         self.reply = reply

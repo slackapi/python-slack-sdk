@@ -6,6 +6,7 @@ import traceback
 
 from .log import logger
 from .server import Server
+from .exceptions import ParseResponseError
 
 
 class SlackClient(object):
@@ -87,7 +88,11 @@ class SlackClient(object):
 
             See here for more information on responses: https://api.slack.com/web
         '''
-        result = json.loads(self.server.api_call(method, timeout=timeout, **kwargs))
+        response_body = self.server.api_call(method, timeout=timeout, **kwargs)
+        try:
+            result = json.loads(response_body)
+        except ValueError as json_decode_error:
+            raise ParseResponseError(response_body, json_decode_error)
         if self.server:
             if method == 'im.open':
                 if "ok" in result and result["ok"]:
