@@ -2,6 +2,18 @@
 Changelog
 ==============================================
 
+v1.1.0 (2917-11-21)
+-------------------
+
+ - Aadds new SlackClientError and ResponseParseError types to describe errors - thanks @aoberoi!
+ - Fix Build Error (#245) - thanks @stasfilin!
+ - include email as user property (#173) - thanks @acaire!
+ - Add http reply into slack login and slack connection error (#216) - thanks @harlowja!
+ - Removed unused exception class (#233)
+ - Fix rtm_send_message bug (#225) - thanks @kt5356!
+ - Allow use of custom parameters on rtm_connect() (#210) - thanks @kamushadenes!
+ - Fix link to rtm.connect docs (#223) - @sampart!
+
 v1.0.9 (2017-8-31)
 -------------------
 
