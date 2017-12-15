@@ -205,5 +205,6 @@ class SlackClient(object):
             return self.server.login_data['self']
         return None
 
+
 class SlackNotConnected(Exception):
     pass
