@@ -193,6 +193,17 @@ class SlackClient(object):
                 self.server.parse_user_data([user])
             pass
 
+    def get_login_data(self):
+        """Fetch logged in data.
+        response:
+            id: id of logged in user.
+            name: name of the logged in user.
+            etc: all data related to logged in user
+        return: dict of data | None
+        """
+        if self.server.login_data and 'self' in self.server.login_data:
+            return self.server.login_data['self']
+        return None
 
 class SlackNotConnected(Exception):
     pass
