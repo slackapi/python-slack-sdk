@@ -1,4 +1,4 @@
-pytest
+pytest<3.3
 codecov
 coverage
 pytest-cov
