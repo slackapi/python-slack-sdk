@@ -356,5 +356,5 @@ containing the number of seconds until you can retry.
     time.sleep(delay)
     send_slack_message(message, channel)
 
-See the documentation on `Rate Limiting<https://api.slack.com/docs/rate-limits>`_ for more info.
+See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
 
