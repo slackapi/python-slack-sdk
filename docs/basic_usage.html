@@ -62,7 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-a-list-of-team-members">Get a list of team members</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rate-limits">Rate Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
@@ -390,8 +390,9 @@ joined one by accident. This is how you leave a channel.</p>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/users.list">users.list</a> for more info.</p>
 </div>
-<div class="section" id="rate-limits">
-<h2>Rate Limits<a class="headerlink" href="#rate-limits" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="web-api-rate-limits">
+<h2>Web API Rate Limits<a class="headerlink" href="#web-api-rate-limits" title="Permalink to this headline">¶</a></h2>
 <p>Slack allows applications to send no more than one message per second. We allow bursts over that
 limit for short periods. However, if your app continues to exceed the limit over a longer period
 of time it will be rate limited.</p>
