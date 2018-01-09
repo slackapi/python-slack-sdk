@@ -312,8 +312,10 @@ See `users.list <https://api.slack.com/methods/users.list>`_ for more info.
 
 .. include:: metadata.rst
 
-Rate Limits
-------------------
+--------
+
+Web API Rate Limits
+--------------------
 Slack allows applications to send no more than one message per second. We allow bursts over that
 limit for short periods. However, if your app continues to exceed the limit over a longer period
 of time it will be rate limited.
