@@ -2,7 +2,7 @@
 Changelog
 ==============================================
 
-v1.1.0 (2917-11-21)
+v1.1.0 (2017-11-21)
 -------------------
 
  - Aadds new SlackClientError and ResponseParseError types to describe errors - thanks @aoberoi!
@@ -14,12 +14,12 @@ v1.1.0 (2917-11-21)
  - Allow use of custom parameters on rtm_connect() (#210) - thanks @kamushadenes!
  - Fix link to rtm.connect docs (#223) - @sampart!
 
-v1.0.9 (2017-8-31)
+v1.0.9 (2017-08-31)
 -------------------
 
   - Fixed rtm_send_message ID bug introduced in 1.0.8
 
-v1.0.8 (2017-8-31)
+v1.0.8 (2017-08-31)
 -------------------
 
   - Added rtm.connect support
@@ -37,7 +37,7 @@ v1.0.6 (2017-06-12)
   - Tidied up docs (thanks @schlueter!)
   - Added tox settings for Python 3 testing (thanks @cclauss!)
 
-v1.0.5 (2017-1-23)
+v1.0.5 (2017-01-23)
 -------------------
 
   - Allow RTM Channel.send_message to reply to a thread
@@ -90,8 +90,8 @@ v0.18.0 (2016-02-21)
   - Fixes some formatting issues so the code will work for python 2.6
   - Cleans up some unused imports, some PEP-8 fixes and a couple bad default args fixes
 
-v0.17 (2016-02-15)
-------------------
+v0.17.0 (2016-02-15)
+--------------------
 
   - Fixes the server so that it doesn't add duplicate users or channels to its internal lists, https://github.com/slackapi/python-slackclient/commit/0cb4bcd6e887b428e27e8059b6278b86ee661aaa
   - README updates:
