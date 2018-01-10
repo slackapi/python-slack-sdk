@@ -1,6 +1,7 @@
 import json
 import pytest
 import requests
+import responses
 from slackclient.user import User
 from slackclient.server import Server, SlackLoginError
 from slackclient.channel import Channel
@@ -24,6 +25,28 @@ def test_server_is_hashable(server):
     server_map = {server: server.token}
     assert server_map[server] == 'xoxp-1234123412341234-12341234-1234'
     assert (server_map[server] == 'foo') is False
+
+
+def test_response_headers(server):
+    # Testing for rate limit retry headers
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/auth.test",
+            status=429,
+            json={"ok": True},
+            headers={'Retry-After': "1"}
+        )
+
+        res = json.loads(server.api_call("auth.test"))
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/auth.test"
+            ]
+            assert call.response.status_code == 429
+        print(res)
+        assert res["headers"]['Retry-After'] == "1"
 
 
 def test_server_parse_channel_data(server, rtm_start_fixture):
