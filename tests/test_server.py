@@ -34,7 +34,7 @@ def test_response_headers(server):
             responses.POST,
             "https://slack.com/api/auth.test",
             status=429,
-            json={"ok": True},
+            json={"ok": False},
             headers={'Retry-After': "1"}
         )
 
