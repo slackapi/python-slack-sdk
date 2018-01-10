@@ -343,7 +343,7 @@ containing the number of seconds until you can retry.
       text=message
     )
 
-  # Make the API call and return save results to `response`
+  # Make the API call and save results to `response`
   response = send_slack_message("#python", "Hello, from Python!")
 
   # Check to see if the message sent successfully.
