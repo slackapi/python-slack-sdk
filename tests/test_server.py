@@ -45,7 +45,6 @@ def test_response_headers(server):
                 "https://slack.com/api/auth.test"
             ]
             assert call.response.status_code == 429
-        print(res)
         assert res["headers"]['Retry-After'] == "1"
 
 
