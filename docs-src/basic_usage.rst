@@ -311,3 +311,52 @@ Get a list of team members
 See `users.list <https://api.slack.com/methods/users.list>`_ for more info.
 
 .. include:: metadata.rst
+
+--------
+
+Web API Rate Limits
+--------------------
+Slack allows applications to send no more than one message per second. We allow bursts over that
+limit for short periods. However, if your app continues to exceed the limit over a longer period
+of time it will be rate limited.
+
+Here's a very basic example of how one might deal with rate limited requests.
+
+If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error,
+a JSON object containing the number of calls you have been making, and a Retry-After header
+containing the number of seconds until you can retry.
+
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+  import time
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  # Simple wrapper for sending a Slack message
+  def send_slack_message(channel, message):
+    return sc.api_call(
+      "chat.postMessage",
+      channel=channel,
+      text=message
+    )
+
+  # Make the API call and save results to `response`
+  response = send_slack_message("#python", "Hello, from Python!")
+
+  # Check to see if the message sent successfully.
+  # If the message succeeded, `response["ok"]`` will be `True`
+  if response["ok"]:
+    print("Message posted successfully: " + response["message"]["ts"])
+    # If the message failed, check for rate limit headers in the response
+  elif response["ok"] is False and response["headers"]["Retry-After"]:
+    # The `Retry-After` header will tell you how long to wait before retrying
+    delay = int(response["headers"]["Retry-After"])
+    print("Rate limited. Retrying in " + str(delay) + " seconds")
+    time.sleep(delay)
+    send_slack_message(message, channel)
+
+See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
+

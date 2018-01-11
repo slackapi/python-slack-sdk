@@ -11,11 +11,11 @@ import json
 
 
 class Server(object):
-    '''
+    """
     The Server object owns the websocket connection and all attached channel information.
 
 
-    '''
+    """
     def __init__(self, token, connect=True, proxies=None):
         self.token = token
         self.username = None
@@ -42,7 +42,7 @@ class Server(object):
         return hash(self.token)
 
     def __str__(self):
-        '''
+        """
         Example Output::
 
         username : None
@@ -55,7 +55,7 @@ class Server(object):
         token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False
         ws_url : None
-        '''
+        """
         data = ""
         for key in list(self.__dict__.keys()):
             data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
@@ -155,7 +155,7 @@ class Server(object):
             self.rtm_connect(reconnect=True)
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
-        '''
+        """
         Sends a message to a given channel.
 
         :Args:
@@ -170,7 +170,7 @@ class Server(object):
         :Returns:
             None
 
-        '''
+        """
         message_json = {"type": "message", "channel": channel, "text": message}
         if thread is not None:
             message_json["thread_ts"] = thread
@@ -183,8 +183,9 @@ class Server(object):
         return self.send_to_websocket({"type": "ping"})
 
     def websocket_safe_read(self):
-        """ Returns data if available, otherwise ''. Newlines indicate multiple
-            messages
+        """
+        Returns data if available, otherwise ''. Newlines indicate multiple
+        messages
         """
 
         data = ""
@@ -213,19 +214,20 @@ class Server(object):
             self.channels.append(Channel(self, name, channel_id, members))
 
     def join_channel(self, name, timeout=None):
-        '''
+        """
         Join a channel by name.
 
         Note: this action is not allowed by bots, they must be invited to channels.
-        '''
-        return self.api_requester.do(
-            self.token,
-            "channels.join?name={}".format(name),
+        """
+        response = self.api_call(
+            "channels.join",
+            channel=name,
             timeout=timeout
-        ).text
+        )
+        return response
 
     def api_call(self, method, timeout=None, **kwargs):
-        '''
+        """
         Call the Slack Web API as documented here: https://api.slack.com/web
 
         :Args:
@@ -245,7 +247,7 @@ class Server(object):
             )
 
         Returns:
-            str -- returns the text of the HTTP response.
+            str -- returns HTTP response text and headers as JSON.
 
             Examples::
 
@@ -254,8 +256,11 @@ class Server(object):
                 u'{"ok":false,"error":"channel_not_found"}'
 
             See here for more information on responses: https://api.slack.com/web
-        '''
-        return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
+        """
+        response = self.api_requester.do(self.token, method, kwargs, timeout=timeout)
+        response_json = json.loads(response.text)
+        response_json["headers"] = dict(response.headers)
+        return json.dumps(response_json)
 
 # TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
 # major change because any clients already referencing these types in order to catch them
