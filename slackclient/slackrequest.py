@@ -74,8 +74,10 @@ class SlackRequest(object):
                 post_data[k] = json.dumps(v)
 
         url = 'https://{0}/api/{1}'.format(domain, request)
-        post_data['token'] = token
-        headers = {'user-agent': self.get_user_agent()}
+        headers = {
+            'user-agent': self.get_user_agent(),
+            'Authorization': 'Bearer {}'.format(token)
+        }
 
         return requests.post(url,
                              headers=headers,
