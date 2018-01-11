@@ -3,3 +3,4 @@ codecov
 coverage
 pytest-cov
 pytest-mock
+responses
