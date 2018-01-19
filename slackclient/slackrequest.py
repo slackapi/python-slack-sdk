@@ -63,7 +63,7 @@ class SlackRequest(object):
         url = 'https://{0}/api/{1}'.format(domain, request)
 
         # Override token header if token is passed in form params
-        if "token" in post_data:
+        if post_data is not None and "token" in post_data:
             token = post_data['token']
 
         headers = {
