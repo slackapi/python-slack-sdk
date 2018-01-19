@@ -60,28 +60,33 @@ class SlackRequest(object):
                 than slack.com
         """
 
+        url = 'https://{0}/api/{1}'.format(domain, request)
+
+        # Override token header if token is passed in form params
+        if "token" in post_data:
+            token = post_data['token']
+
+        headers = {
+            'user-agent': self.get_user_agent(),
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {}'.format(token)
+        }
+
         # Pull file out so it isn't JSON encoded like normal fields.
         # Only do this for requests that are UPLOADING files; downloading files
         # use the 'file' argument to point to a File ID.
         post_data = post_data or {}
         upload_requests = ['files.upload']
+
         files = None
         if request in upload_requests:
             files = {'file': post_data.pop('file')} if 'file' in post_data else None
 
-        for k, v in six.iteritems(post_data):
-            if not isinstance(v, six.string_types):
-                post_data[k] = json.dumps(v)
-
-        url = 'https://{0}/api/{1}'.format(domain, request)
-        headers = {
-            'user-agent': self.get_user_agent(),
-            'Authorization': 'Bearer {}'.format(token)
-        }
-
-        return requests.post(url,
-                             headers=headers,
-                             data=post_data,
-                             files=files,
-                             timeout=timeout,
-                             proxies=self.proxies)
+        return requests.post(
+            url,
+            headers=headers,
+            data=json.dumps(post_data),
+            files=files,
+            timeout=timeout,
+            proxies=self.proxies
+        )

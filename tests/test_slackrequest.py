@@ -54,7 +54,7 @@ def test_post_file(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/files.upload' == args[0]
-    assert {'filename': 'slack_logo.png'} == kwargs['data']
+    assert {'filename': 'slack_logo.png'} == json.loads(kwargs['data'])
     assert kwargs['files'] is not None
 
 
@@ -67,7 +67,7 @@ def test_get_file(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/files.info' == args[0]
-    assert {'file': "myFavoriteFileID"} == kwargs['data']
+    assert {'file': "myFavoriteFileID"} == json.loads(kwargs['data'])
     assert kwargs['files'] is None
 
 
@@ -82,5 +82,5 @@ def test_post_attachements(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/chat.postMessage' == args[0]
-    assert {'attachments': json.dumps([{'title': 'hello'}])} == kwargs['data']
+    assert {'attachments': [{'title': 'hello'}]} == json.loads(kwargs['data'])
     assert kwargs['files'] is None
