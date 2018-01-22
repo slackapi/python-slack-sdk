@@ -66,7 +66,7 @@ Depending on what actions your app will need to perform, you'll need different O
 
 **The OAuth initiation link:**
 
-To begin the OAuth flow, you'll need to provide the user with a link to Slack's OAuth page,
+To begin the OAuth flow, you'll need to provide the user with a link to Slack's OAuth page.
 This directs the user to Slack's OAuth acceptance page, where the user will review and accept
 or refuse the permissions your app is requesting as defined by the requested scope(s).
 
