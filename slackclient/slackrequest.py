@@ -1,7 +1,7 @@
 import json
 
 import requests
-import six
+import six  # noqa: F401
 
 import sys
 import platform
