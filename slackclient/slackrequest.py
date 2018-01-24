@@ -78,7 +78,7 @@ class SlackRequest(object):
         post_data = post_data or {}
 
         # Check for plural fields and convert them to comma-separated strings if needed
-        for field in {'channels', 'user_ids', 'types'} & set(post_data.keys()):
+        for field in {'channels', 'users', 'types'} & set(post_data.keys()):
             if isinstance(post_data[field], list):
                 post_data[field] = ",".join(post_data[field])
 
