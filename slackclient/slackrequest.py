@@ -76,6 +76,13 @@ class SlackRequest(object):
         # Only do this for requests that are UPLOADING files; downloading files
         # use the 'file' argument to point to a File ID.
         post_data = post_data or {}
+
+        # Check for plural fields and convert them to comma-separated strings if needed
+        for field in {'channels', 'users', 'types'} & set(post_data.keys()):
+            if isinstance(post_data[field], list):
+                post_data[field] = ",".join(post_data[field])
+
+        # Move singular file objects into `files`
         upload_requests = ['files.upload']
 
         files = None
