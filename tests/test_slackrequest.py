@@ -51,7 +51,7 @@ def test_plural_field(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/conversations.open' == args[0]
-    assert kwargs['data'] == '{"users": "U123,U234,U345"}'
+    assert kwargs['data'] == {'users': 'U123,U234,U345'}
 
 
 def test_post_file(mocker):
@@ -66,7 +66,7 @@ def test_post_file(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/files.upload' == args[0]
-    assert {'filename': 'slack_logo.png'} == json.loads(kwargs['data'])
+    assert {'filename': 'slack_logo.png'} == kwargs['data']
     assert kwargs['files'] is not None
 
 
@@ -79,7 +79,7 @@ def test_get_file(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/files.info' == args[0]
-    assert {'file': "myFavoriteFileID"} == json.loads(kwargs['data'])
+    assert {'file': "myFavoriteFileID"} == kwargs['data']
     assert kwargs['files'] is None
 
 
@@ -94,5 +94,5 @@ def test_post_attachements(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/chat.postMessage' == args[0]
-    assert {'attachments': [{'title': 'hello'}]} == json.loads(kwargs['data'])
+    assert {'attachments': json.dumps([{'title': 'hello'}])}
     assert kwargs['files'] is None
