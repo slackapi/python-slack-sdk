@@ -149,7 +149,7 @@ class Server(object):
 
         """
         try:
-            data = json.dumps(data)
+            data = json.dumps(data, ensure_ascii=False)
             self.websocket.send(data)
         except Exception:
             self.rtm_connect(reconnect=True)
@@ -260,7 +260,7 @@ class Server(object):
         response = self.api_requester.do(self.token, method, kwargs, timeout=timeout)
         response_json = json.loads(response.text)
         response_json["headers"] = dict(response.headers)
-        return json.dumps(response_json)
+        return json.dumps(response_json, ensure_ascii=False)
 
 # TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
 # major change because any clients already referencing these types in order to catch them
