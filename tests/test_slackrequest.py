@@ -41,6 +41,20 @@ def test_auth_header(mocker):
 
     assert "Bearer xoxb-123" in kwargs['headers']['Authorization']
 
+def test_token_override(mocker):
+    requests = mocker.patch('slackclient.slackrequest.requests')
+    request = SlackRequest()
+
+    request.do('xoxb-123', 'chat.postMessage',
+               {
+                   'token': "newtoken",
+                   'text': 'test',
+                   'channel': '#general'
+                })
+    args, kwargs = requests.post.call_args
+
+    assert "Bearer newtoken" in kwargs['headers']['Authorization']
+
 
 def test_plural_field(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
