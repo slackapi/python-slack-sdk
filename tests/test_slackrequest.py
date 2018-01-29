@@ -63,9 +63,12 @@ def test_plural_field(mocker):
     request.do('xoxb-123','conversations.open', {'users': ['U123', 'U234', 'U345']})
     args, kwargs = requests.post.call_args
 
-    assert requests.post.call_count == 1
-    assert 'https://slack.com/api/conversations.open' == args[0]
     assert kwargs['data'] == {'users': 'U123,U234,U345'}
+
+    request.do('xoxb-123','conversations.open', {'users': "U123,U234,U345"})
+    args2, kwargs2 = requests.post.call_args
+
+    assert kwargs2['data'] == {'users': 'U123,U234,U345'}
 
 
 def test_post_file(mocker):
