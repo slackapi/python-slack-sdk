@@ -187,11 +187,13 @@ class Server(object):
         Returns data if available, otherwise ''. Newlines indicate multiple
         messages
         """
-
         data = ""
         while True:
             try:
-                data += "{0}\n".format(self.websocket.recv())
+                message = self.websocket.recv()
+                if not message:
+                    break
+                data += "{0}\n".format(message)
             except SSLError as e:
                 if e.errno == 2:
                     # errno 2 occurs when trying to read or write data, but more
@@ -200,9 +202,9 @@ class Server(object):
                     #
                     # Python 2.7.9+ and Python 3.3+ give this its own exception,
                     # SSLWantReadError
-                    return ''
+                    break
                 raise
-            return data.rstrip()
+        return data.rstrip()
 
     def attach_user(self, name, user_id, real_name, tz, email):
         self.users.update({user_id: User(self, name, user_id, real_name, tz, email)})
