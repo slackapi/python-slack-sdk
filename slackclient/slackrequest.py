@@ -1,5 +1,3 @@
-import json
-
 import requests
 import six  # noqa: F401
 
@@ -68,7 +66,6 @@ class SlackRequest(object):
 
         headers = {
             'user-agent': self.get_user_agent(),
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer {}'.format(token)
         }
 
@@ -92,7 +89,7 @@ class SlackRequest(object):
         return requests.post(
             url,
             headers=headers,
-            data=json.dumps(post_data),
+            data=post_data,
             files=files,
             timeout=timeout,
             proxies=self.proxies
