@@ -111,5 +111,5 @@ def test_post_attachements(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/chat.postMessage' == args[0]
-    assert {'attachments': json.dumps([{'title': 'hello'}])}
+    assert {'attachments': [{'title': 'hello'}]} == kwargs['data']
     assert kwargs['files'] is None
