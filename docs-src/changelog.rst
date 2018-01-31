@@ -2,6 +2,12 @@
 Changelog
 ==============================================
 
+v1.1.1 (2018-01-21)
+-------------------
+
+ - Adds HTTP response headers to `api_call` responses to expose things like rate limit info
+ - Moves `token` into auth header rather than request params
+
 v1.1.0 (2017-11-21)
 -------------------
 
