@@ -41,6 +41,7 @@ def test_auth_header(mocker):
 
     assert "Bearer xoxb-123" in kwargs['headers']['Authorization']
 
+
 def test_token_override(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
@@ -111,5 +112,5 @@ def test_post_attachements(mocker):
 
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/chat.postMessage' == args[0]
-    assert {'attachments': [{'title': 'hello'}]} == kwargs['data']
-    assert kwargs['files'] is None
+    assert {'attachments': '[{"title": "hello"}]'} == kwargs['data']
+    assert isinstance(kwargs["data"]["attachments"], str)
