@@ -2,7 +2,12 @@
 Changelog
 ==============================================
 
-v1.1.1 (2018-01-21)
+v1.1.2 (2018-01-31)
+-------------------
+
+- Fixed an encoding issue which was encoding some Web API params incorrectly (sorry)
+
+v1.1.1 (2018-01-30)
 -------------------
 
  - Adds HTTP response headers to `api_call` responses to expose things like rate limit info
