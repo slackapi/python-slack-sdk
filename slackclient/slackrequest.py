@@ -1,6 +1,6 @@
 import requests
-import six  # noqa: F401
-
+import json
+import six
 import sys
 import platform
 from .version import __version__
@@ -60,10 +60,11 @@ class SlackRequest(object):
 
         url = 'https://{0}/api/{1}'.format(domain, request)
 
-        # Override token header if token is passed in form params
+        # Override token header if `token` is passed in post_data
         if post_data is not None and "token" in post_data:
             token = post_data['token']
 
+        # Set user-agent and auth headers
         headers = {
             'user-agent': self.get_user_agent(),
             'Authorization': 'Bearer {}'.format(token)
@@ -74,18 +75,26 @@ class SlackRequest(object):
         # use the 'file' argument to point to a File ID.
         post_data = post_data or {}
 
+        # Move singular file objects into `files`
+        upload_requests = ['files.upload']
+
+        # Move file content into requests' `files` param
+        files = None
+        if request in upload_requests:
+            files = {'file': post_data.pop('file')} if 'file' in post_data else None
+
         # Check for plural fields and convert them to comma-separated strings if needed
         for field in {'channels', 'users', 'types'} & set(post_data.keys()):
             if isinstance(post_data[field], list):
                 post_data[field] = ",".join(post_data[field])
 
-        # Move singular file objects into `files`
-        upload_requests = ['files.upload']
+        # Convert any params which aren't integer, string or bool to JSON
+        # Example: `attachments` is a dict
+        for k, v in six.iteritems(post_data):
+            if not isinstance(v, (six.string_types, six.integer_types, bool)):
+                post_data[k] = json.dumps(v)
 
-        files = None
-        if request in upload_requests:
-            files = {'file': post_data.pop('file')} if 'file' in post_data else None
-
+        # Submit the request
         return requests.post(
             url,
             headers=headers,
