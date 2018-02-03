@@ -6,9 +6,10 @@ from .util import SearchList, SearchDict
 from .exceptions import SlackClientError
 from ssl import SSLError
 
+import time
+
 from websocket import create_connection
 import json
-
 
 class Server(object):
     """
@@ -67,13 +68,17 @@ class Server(object):
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 
-    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
+    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, depth=0, **kwargs):
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
-            raise SlackConnectionError(reply=reply)
+            if depth < 10 and reply.status_code == 429 and reply.json()['error'] == "ratelimited":
+                time.sleep(int(reply.headers.get('retry-after', 120)))
+                self.rtm_connect(reconnect=reconnect, timeout=timeout, depth=depth + 1)
+            else:
+                raise SlackConnectionError(reply=reply)
         else:
             login_data = reply.json()
             if login_data["ok"]:
@@ -148,6 +153,7 @@ class Server(object):
             data (dict) the key/values to send the websocket.
 
         """
+        
         try:
             data = json.dumps(data)
             self.websocket.send(data)
@@ -193,7 +199,7 @@ class Server(object):
             try:
                 data += "{0}\n".format(self.websocket.recv())
             except SSLError as e:
-                if e.errno == 2:
+                if e.errno == 2 or e.errno == 11:
                     # errno 2 occurs when trying to read or write data, but more
                     # data needs to be received on the underlying TCP transport
                     # before the request can be fulfilled.
