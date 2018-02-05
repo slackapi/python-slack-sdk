@@ -11,6 +11,7 @@ import time
 from websocket import create_connection
 import json
 
+
 class Server(object):
     """
     The Server object owns the websocket connection and all attached channel information.
@@ -153,7 +154,6 @@ class Server(object):
             data (dict) the key/values to send the websocket.
 
         """
-        
         try:
             data = json.dumps(data)
             self.websocket.send(data)
