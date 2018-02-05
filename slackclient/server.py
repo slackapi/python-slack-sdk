@@ -199,7 +199,7 @@ class Server(object):
             try:
                 data += "{0}\n".format(self.websocket.recv())
             except SSLError as e:
-                if e.errno == 2 or e.errno == 11:
+                if e.errno == 2:
                     # errno 2 occurs when trying to read or write data, but more
                     # data needs to be received on the underlying TCP transport
                     # before the request can be fulfilled.
