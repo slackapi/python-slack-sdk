@@ -1,6 +1,4 @@
 import json
-from unittest.mock import Mock
-from websocket import WebSocket
 import pytest
 import requests
 import responses
@@ -78,14 +76,20 @@ def test_server_cant_connect(server):
 
 
 def test_server_multiple_rtm_messages(server):
+    # setup test data
     test_messages = ['{"type": "message", "text": "the first message"}',
                      '{"type": "message", "text": "the second message"}']
     expected = '\n'.join(test_messages)
+    # mock server.websocket
+    class MockWebSocket():
+        def __init__(self, test_messages):
+            self.test_messages = test_messages
+        def recv(self):
+            return self.test_messages.pop(0) if len(self.test_messages) > 0 else None
 
-    ws = Mock(WebSocket)
-    ws.recv = lambda: test_messages.pop(0) if len(test_messages) > 0 else None
+    ws = MockWebSocket(test_messages)
     setattr(server, 'websocket', ws)
-
+    # test messages processed
     messages = server.websocket_safe_read()
     assert expected == messages
 
