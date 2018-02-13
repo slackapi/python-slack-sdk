@@ -26,7 +26,8 @@ class SlackRequest(object):
     def get_user_agent(self):
         # Check for custom user-agent and append if found
         if self.custom_user_agent:
-            custom_ua_list = ["/".join(client_info) for client_info in self.custom_user_agent]
+            custom_ua_list = ["/".join(client_info)
+                              for client_info in self.custom_user_agent]
             custom_ua_string = " ".join(custom_ua_list)
             self.default_user_agent['custom'] = custom_ua_string
 
@@ -40,7 +41,8 @@ class SlackRequest(object):
 
     def append_user_agent(self, name, version):
         if self.custom_user_agent:
-            self.custom_user_agent.append([name.replace("/", ":"), version.replace("/", ":")])
+            self.custom_user_agent.append(
+                [name.replace("/", ":"), version.replace("/", ":")])
         else:
             self.custom_user_agent = [[name, version]]
 
@@ -81,10 +83,12 @@ class SlackRequest(object):
         # Move file content into requests' `files` param
         files = None
         if request in upload_requests:
-            files = {'file': post_data.pop('file')} if 'file' in post_data else None
+            files = {'file': post_data.pop(
+                'file')} if 'file' in post_data else None
 
         # Check for plural fields and convert them to comma-separated strings if needed
-        for field in {'channels', 'users', 'types'} & set(post_data.keys()):
+        fields = {'channels', 'users', 'types'} & set(post_data.keys())
+        for field in fields:
             if isinstance(post_data[field], list):
                 post_data[field] = ",".join(post_data[field])
 

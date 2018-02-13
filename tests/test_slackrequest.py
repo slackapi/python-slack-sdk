@@ -8,7 +8,8 @@ def test_http_headers(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.do('xoxb-123', 'chat.postMessage',
+               {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     assert kwargs['headers']['user-agent'] is not None
@@ -21,11 +22,13 @@ def test_custom_user_agent(mocker):
     request.append_user_agent("fooagent1", "0.1")
     request.append_user_agent("baragent/2", "0.2")
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.do('xoxb-123', 'chat.postMessage',
+               {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     # Verify user-agent includes both default and custom agent info
-    assert "slackclient/{}".format(__version__) in kwargs['headers']['user-agent']
+    assert "slackclient/{}".format(
+        __version__) in kwargs['headers']['user-agent']
     assert "fooagent1/0.1" in kwargs['headers']['user-agent']
 
     # verify escaping of slashes in custom agent name
@@ -36,7 +39,8 @@ def test_auth_header(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.do('xoxb-123', 'chat.postMessage',
+               {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     assert "Bearer xoxb-123" in kwargs['headers']['Authorization']
@@ -51,7 +55,7 @@ def test_token_override(mocker):
                    'token': "newtoken",
                    'text': 'test',
                    'channel': '#general'
-                })
+               })
     args, kwargs = requests.post.call_args
 
     assert "Bearer newtoken" in kwargs['headers']['Authorization']
@@ -61,15 +65,25 @@ def test_plural_field(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123','conversations.open', {'users': ['U123', 'U234', 'U345']})
+    request.do('xoxb-123', 'conversations.open',
+               {'users': ['U123', 'U234', 'U345']})
     args, kwargs = requests.post.call_args
 
     assert kwargs['data'] == {'users': 'U123,U234,U345'}
 
-    request.do('xoxb-123','conversations.open', {'users': "U123,U234,U345"})
+    request.do('xoxb-123', 'conversations.open', {'users': "U123,U234,U345"})
     args2, kwargs2 = requests.post.call_args
 
     assert kwargs2['data'] == {'users': 'U123,U234,U345'}
+
+    test_plural_fields_data = {'users': ['U123', 'U234', 'U345'],
+                               'channel': 'C123,C234,C345'}
+
+    request.do('xoxb-123', 'conversations.open', test_plural_fields_data)
+    args2, kwargs2 = requests.post.call_args
+
+    assert kwargs2['data'] == {'users': 'U123,U234,U345',
+                               'channel': 'C123,C234,C345'}
 
 
 def test_post_file(mocker):
