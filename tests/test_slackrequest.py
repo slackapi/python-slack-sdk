@@ -27,8 +27,7 @@ def test_custom_user_agent(mocker):
     args, kwargs = requests.post.call_args
 
     # Verify user-agent includes both default and custom agent info
-    assert "slackclient/{}".format(
-        __version__) in kwargs['headers']['user-agent']
+    assert "slackclient/{}".format(__version__) in kwargs['headers']['user-agent']
     assert "fooagent1/0.1" in kwargs['headers']['user-agent']
 
     # verify escaping of slashes in custom agent name
