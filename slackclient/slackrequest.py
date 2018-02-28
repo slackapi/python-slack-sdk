@@ -91,7 +91,7 @@ class SlackRequest(object):
         # Convert any params which aren't integer, string or bool to JSON
         # Example: `attachments` is a dict
         for k, v in six.iteritems(post_data):
-            if not isinstance(v, (six.string_types, six.integer_types, bool)):
+            if isinstance(v, (list, dict)):
                 post_data[k] = json.dumps(v)
 
         # Submit the request
