@@ -310,7 +310,29 @@ Get a list of team members
 
 See `users.list <https://api.slack.com/methods/users.list>`_ for more info.
 
-.. include:: metadata.rst
+
+--------
+
+Uploading files
+------------------------------
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  with open('thinking_very_much.png') as file_content:
+      sc.api_call(
+          "files.upload",
+          channels="C3UKJTQAC",
+          file=file_content,
+          title="Test upload"
+      )
+
+See `users.list <https://api.slack.com/methods/files.upload>`_ for more info.
+
 
 --------
 
@@ -359,4 +381,6 @@ containing the number of seconds until you can retry.
     send_slack_message(message, channel)
 
 See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
+
+.. include:: metadata.rst
 
