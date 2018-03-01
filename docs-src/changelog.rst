@@ -2,6 +2,11 @@
 Changelog
 ==============================================
 
+v1.1.3 (2018-03-01)
+-------------------
+
+- Fixed another API param encoding bug. It encodes things properly now.
+
 v1.1.2 (2018-01-31)
 -------------------
 
