@@ -159,7 +159,7 @@ to a user or to a channel, this method handles both.</p>
 
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
   <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -176,7 +176,7 @@ as sending a regular message, but with an additional <code class="docutils liter
 
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
   <span class="s2">&quot;chat.postEphemeral&quot;</span><span class="p">,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
   <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
 <span class="p">)</span>
@@ -201,7 +201,7 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
 
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
   <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
   <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span>
 <span class="p">)</span>
@@ -216,7 +216,7 @@ set the <code class="docutils literal notranslate"><span class="pre">reply_broad
 
 <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
   <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
   <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
   <span class="n">reply_broadcast</span><span class="o">=</span><span class="bp">True</span>
@@ -438,7 +438,7 @@ containing the number of seconds until you can retry.</p>
   <span class="p">)</span>
 
 <span class="c1"># Make the API call and save results to `response`</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="s2">&quot;#python&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello, from Python!&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello, from Python!&quot;</span><span class="p">)</span>
 
 <span class="c1"># Check to see if the message sent successfully.</span>
 <span class="c1"># If the message succeeded, `response[&quot;ok&quot;]`` will be `True`</span>
