@@ -30,7 +30,7 @@ To send a message to a channel, use the channel's ID. For IMs, use the user's ID
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:"
   )
 
@@ -50,7 +50,7 @@ as sending a regular message, but with an additional ``user`` parameter.
 
   sc.api_call(
     "chat.postEphemeral",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     user="U0XXXXXXX"
   )
@@ -79,7 +79,7 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003"
   )
@@ -97,7 +97,7 @@ set the ``reply_broadcast`` boolean parameter to ``True``.
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003",
     reply_broadcast=True
@@ -366,7 +366,7 @@ containing the number of seconds until you can retry.
     )
 
   # Make the API call and save results to `response`
-  response = send_slack_message("#python", "Hello, from Python!")
+  response = send_slack_message("C0XXXXXX", "Hello, from Python!")
 
   # Check to see if the message sent successfully.
   # If the message succeeded, `response["ok"]`` will be `True`
