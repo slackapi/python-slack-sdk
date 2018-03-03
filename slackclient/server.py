@@ -1,13 +1,16 @@
-from .slackrequest import SlackRequest
-from requests.packages.urllib3.util.url import parse_url
 from .channel import Channel
+from .exceptions import SlackClientError
+from .slackrequest import SlackRequest
 from .user import User
 from .util import SearchList, SearchDict
-from .exceptions import SlackClientError
-from ssl import SSLError
 
-from websocket import create_connection
 import json
+import logging
+
+from requests.packages.urllib3.util.url import parse_url
+from ssl import SSLError
+from websocket import create_connection
+from websocket._exceptions import WebSocketConnectionClosedException
 
 
 class Server(object):
@@ -17,6 +20,8 @@ class Server(object):
 
     """
     def __init__(self, token, connect=True, proxies=None):
+        self.logger = logging.getLogger(__name__)
+        self.auto_reconnect = False
         self.token = token
         self.username = None
         self.domain = None
@@ -70,6 +75,8 @@ class Server(object):
     def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
+        if kwargs and kwargs["auto_reconnect"] is True:
+            self.auto_reconnect = True
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
@@ -202,6 +209,13 @@ class Server(object):
                     # SSLWantReadError
                     return ''
                 raise
+            except WebSocketConnectionClosedException as e:
+                if self.auto_reconnect:
+                    self.logger.info("Websocket disconnected, reconnecting...")
+                    self.rtm_connect(auto_reconnect=True, reconnect=True)
+                else:
+                    self.logger.info("Websocket disconnected")
+                    raise
             return data.rstrip()
 
     def attach_user(self, name, user_id, real_name, tz, email):
