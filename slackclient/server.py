@@ -98,7 +98,7 @@ class Server(object):
                 # Back off after the the first attempt
                 if (time.time() - self.last_connected_at) < 180:
                     # Random offset to prevent stampeding reconnects of multiple RTM clients
-                    offset = random.randint(0, 4)
+                    offset = random.randint(1, 4)
                     reconnect_timeout = (offset * self.reconnect_attempt * self.reconnect_attempt)
                     logging.debug("Reconnecting in {} seconds".format(reconnect_timeout))
                     time.sleep(reconnect_timeout)
@@ -247,7 +247,7 @@ class Server(object):
                 logging.debug("RTM disconnected")
                 self.connected = False
                 if self.auto_reconnect:
-                    self.rtm_connect(auto_reconnect=True, reconnect=True)
+                    self.rtm_connect(reconnect=True)
                 else:
                     raise SlackConnectionError("Unable to send due to closed RTM websocket")
             return data.rstrip()
