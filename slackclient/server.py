@@ -5,6 +5,7 @@ from .user import User
 from .util import SearchList, SearchDict
 
 import json
+import logging
 import time
 import random
 
@@ -13,8 +14,6 @@ from ssl import SSLError
 from websocket import create_connection
 from websocket._exceptions import WebSocketConnectionClosedException
 
-
-import logging
 
 class Server(object):
     """
@@ -98,7 +97,9 @@ class Server(object):
             elif self.reconnect_attempt > 0:
                 # Back off after the the first attempt
                 if (time.time() - self.last_connected_at) < 180:
-                    reconnect_timeout = (3 * self.reconnect_attempt * self.reconnect_attempt)
+                    # Random offset to prevent stampeding reconnects of multiple RTM clients
+                    offset = random.randint(0, 4)
+                    reconnect_timeout = (offset * self.reconnect_attempt * self.reconnect_attempt)
                     logging.debug("Reconnecting in {} seconds".format(reconnect_timeout))
                     time.sleep(reconnect_timeout)
                 else:
