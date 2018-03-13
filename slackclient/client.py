@@ -91,12 +91,10 @@ class SlackClient(object):
         response_body = self.server.api_call(method, timeout=timeout, **kwargs)
         try:
             result = json.loads(response_body)
-        except ValueError as json_decode_error:
-            raise ParseResponseError(response_body, json_decode_error)
-        if self.server:
             if method == 'im.open':
                 if "ok" in result and result["ok"]:
                     self.server.attach_channel(kwargs["user"], result["channel"]["id"])
+            # If the call was for a `group` or `im` endpoint, attach the group data
             elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
                 if "ok" in result and result["ok"]:
                     self.server.attach_channel(
@@ -104,6 +102,7 @@ class SlackClient(object):
                         result['group']['id'],
                         result['group']['members']
                     )
+            # If the call was for a `channel` endpoint, attach the group data
             elif method in ('channels.create', 'channels.join'):
                 if 'ok' in result and result['ok']:
                     self.server.attach_channel(
@@ -111,7 +110,10 @@ class SlackClient(object):
                         result['channel']['id'],
                         result['channel']['members']
                     )
-        return result
+            return result
+
+        except ValueError as json_decode_error:
+            raise ParseResponseError(response_body, json_decode_error)
 
     def rtm_read(self):
         '''
