@@ -7,6 +7,7 @@ from slackclient.server import Server, SlackLoginError
 from slackclient.channel import Channel
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
@@ -19,6 +20,23 @@ def rtm_start_fixture():
 
 def test_server(server):
     assert type(server) == Server
+
+
+def test_server_connect(server, rtm_start_fixture):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.start",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        sc = Server("token", connect=True)
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.start"
+            ]
 
 
 def test_server_is_hashable(server):
@@ -73,6 +91,41 @@ def test_server_parse_user_data(server, rtm_start_fixture):
 def test_server_cant_connect(server):
     with pytest.raises(SlackLoginError):
         reply = server.ping()
+
+
+def test_reconnect_flag(server, rtm_start_fixture):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.start",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.rtm_connect(auto_reconnect=True)
+        assert server.auto_reconnect is True
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.start"
+            ]
+
+
+def test_rtm_reconnect(server, rtm_start_fixture):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.connect",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.rtm_connect(use_rtm_start=False)
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.connect"
+            ]
 
 
 @pytest.mark.xfail
