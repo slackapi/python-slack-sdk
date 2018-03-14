@@ -68,7 +68,7 @@ This package is a modular wrapper designed to make Slack `Web API <https://api.s
 app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
 a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
 
-See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>` for API token handling best practices.
+See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
 
 Sending a message
 ********************
