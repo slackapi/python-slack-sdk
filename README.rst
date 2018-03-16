@@ -57,7 +57,7 @@ Getting Help
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
 - Use our `Github Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ for reporting bugs or requesting features.
-- Visit the `dev4slack channel <http://dev4slack.xoxco.com>`_ for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+- Visit the `Bot Developer Hangout <https://community.botkit.ai/>`_ for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
 Basic Usage
 ------------
