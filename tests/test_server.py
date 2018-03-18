@@ -1,9 +1,10 @@
 import json
+import time
 import pytest
 import requests
 import responses
 from slackclient.user import User
-from slackclient.server import Server, SlackLoginError
+from slackclient.server import Server, SlackLoginError, SlackConnectionError
 from slackclient.channel import Channel
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
@@ -18,11 +19,14 @@ def rtm_start_fixture():
     return json_login_data
 
 
-def test_server(server):
+def test_server():
+    server = Server("valid_token", connect=False, )
     assert type(server) == Server
+    assert server == "valid_token"
+    assert server != "invalid_token"
 
 
-def test_server_connect(server, rtm_start_fixture):
+def test_server_connect(rtm_start_fixture):
     with responses.RequestsMock() as rsps:
         rsps.add(
             responses.POST,
@@ -31,7 +35,7 @@ def test_server_connect(server, rtm_start_fixture):
             json=rtm_start_fixture
         )
 
-        sc = Server("token", connect=True)
+        Server("token", connect=True)
 
         for call in rsps.calls:
             assert call.request.url in [
@@ -66,6 +70,11 @@ def test_response_headers(server):
         assert res["headers"]['Retry-After'] == "1"
 
 
+def test_custom_agent(server):
+    server.append_user_agent("test agent", 1.0)
+    assert server.api_requester.custom_user_agent[0] == ['test agent', 1.0]
+
+
 def test_server_parse_channel_data(server, rtm_start_fixture):
     server.parse_channel_data(rtm_start_fixture["channels"])
     assert type(server.channels.find('general')) == Channel
@@ -74,23 +83,31 @@ def test_server_parse_channel_data(server, rtm_start_fixture):
 def test_server_parse_user_data(server, rtm_start_fixture):
     server.parse_user_data(rtm_start_fixture["users"])
     # Find user by Name
-    userbyname = server.users.find('fakeuser')
-    assert type(userbyname) == User
-    assert userbyname == "fakeuser"
-    assert userbyname != "someotheruser"
+    user_by_name = server.users.find('fakeuser')
+    assert type(user_by_name) == User
+    assert user_by_name == "fakeuser"
+    assert user_by_name != "someotheruser"
     # Find user by ID
-    userbyid = server.users.find('U10CX1234')
-    assert type(userbyid) == User
-    assert userbyid == "fakeuser"
-    assert userbyid.email == 'fakeuser@example.com'
+    user_by_id = server.users.find('U10CX1234')
+    assert type(user_by_id) == User
+    assert user_by_id== "fakeuser"
+    assert user_by_id.email == 'fakeuser@example.com'
     # Don't find invalid user
-    userbyid = server.users.find('invaliduser')
-    assert type(userbyid) != User
+    user_by_id = server.users.find('invaliduser')
+    assert type(user_by_id) != User
 
 
 def test_server_cant_connect(server):
-    with pytest.raises(SlackLoginError):
-        reply = server.ping()
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.start",
+            status=403,
+            json={"ok": False}
+        )
+
+        with pytest.raises(SlackConnectionError) as e:
+            server.ping()
 
 
 def test_reconnect_flag(server, rtm_start_fixture):
@@ -120,12 +137,57 @@ def test_rtm_reconnect(server, rtm_start_fixture):
             json=rtm_start_fixture
         )
 
-        server.rtm_connect(use_rtm_start=False)
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
 
         for call in rsps.calls:
             assert call.request.url in [
                 "https://slack.com/api/rtm.connect"
             ]
+
+
+def test_max_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.connect",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.reconnect_attempt = 1
+        server.last_connected_at = time.time() - 180
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.connect"
+            ]
+
+
+def test_max_rtm_reconnect_timeout_not_recently_connected(server, rtm_start_fixture):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.connect",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.reconnect_attempt = 1
+        server.last_connected_at = time.time() + 181
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
+
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.connect"
+            ]
+
+
+def test_max_rtm_reconnect_attempts(server):
+    with pytest.raises(SlackConnectionError) as e:
+        server.reconnect_attempt = 5
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
+        assert e.message == "RTM connection failed, reached max reconnects."
 
 
 @pytest.mark.xfail
