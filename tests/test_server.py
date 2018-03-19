@@ -107,7 +107,7 @@ def test_server_cant_connect(server):
         )
 
         with pytest.raises(SlackConnectionError) as e:
-            server.ping()
+            server.rtm_connect()
 
 
 def test_reconnect_flag(server, rtm_start_fixture):
@@ -145,7 +145,29 @@ def test_rtm_reconnect(server, rtm_start_fixture):
             ]
 
 
-def test_max_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture):
+def test_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture):
+    # If reconnected recently, server must wait to reconnect and increment the counter
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.connect",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.reconnect_attempt = 1
+        server.last_connected_at = time.time()
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
+
+        assert server.reconnect_attempt == 2
+        for call in rsps.calls:
+            assert call.request.url in [
+                "https://slack.com/api/rtm.connect"
+            ]
+
+
+def test_rtm_reconnect_timeout_not_recently_connected(server, rtm_start_fixture):
+    # If reconnecting after 3 minutes since last reconnect, reset counter and connect without wait
     with responses.RequestsMock() as rsps:
         rsps.add(
             responses.POST,
@@ -158,25 +180,7 @@ def test_max_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture)
         server.last_connected_at = time.time() - 180
         server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
 
-        for call in rsps.calls:
-            assert call.request.url in [
-                "https://slack.com/api/rtm.connect"
-            ]
-
-
-def test_max_rtm_reconnect_timeout_not_recently_connected(server, rtm_start_fixture):
-    with responses.RequestsMock() as rsps:
-        rsps.add(
-            responses.POST,
-            "https://slack.com/api/rtm.connect",
-            status=200,
-            json=rtm_start_fixture
-        )
-
-        server.reconnect_attempt = 1
-        server.last_connected_at = time.time() + 181
-        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
-
+        assert server.reconnect_attempt == 1
         for call in rsps.calls:
             assert call.request.url in [
                 "https://slack.com/api/rtm.connect"
