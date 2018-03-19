@@ -91,7 +91,7 @@ class Server(object):
 
         # If this is an auto reconnect, rate limit reconnect attempts
         if self.auto_reconnect and reconnect:
-            # Raise a SlackConnectionError after 5 retries
+            # Raise a SlackConnectionError after 5 retries within 3 minutes
             if self.reconnect_attempt == 5:
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
             elif self.reconnect_attempt > 0:
