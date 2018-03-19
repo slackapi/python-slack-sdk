@@ -20,8 +20,10 @@ def rtm_start_fixture():
 
 
 def test_server():
-    server = Server("valid_token", connect=False, )
+    server = Server("valid_token", connect=False)
     assert type(server) == Server
+
+    # The server eqs to a string, either the token or workspace domain
     assert server == "valid_token"
     assert server != "invalid_token"
 
@@ -90,11 +92,11 @@ def test_server_parse_user_data(server, rtm_start_fixture):
     # Find user by ID
     user_by_id = server.users.find('U10CX1234')
     assert type(user_by_id) == User
-    assert user_by_id== "fakeuser"
+    assert user_by_id == "fakeuser"
     assert user_by_id.email == 'fakeuser@example.com'
     # Don't find invalid user
     user_by_id = server.users.find('invaliduser')
-    assert type(user_by_id) != User
+    assert user_by_id is None
 
 
 def test_server_cant_connect(server):
