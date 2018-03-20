@@ -50,7 +50,7 @@ class SlackClient(object):
 
         try:
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
-            return True
+            return self.server.connected
         except Exception:
             traceback.print_exc()
             return False
@@ -90,24 +90,14 @@ class SlackClient(object):
             result = json.loads(response_body)
         except ValueError as json_decode_error:
             raise ParseResponseError(response_body, json_decode_error)
-        if self.server:
+
+        if "ok" in result and result["ok"]:
             if method == 'im.open':
-                if "ok" in result and result["ok"]:
-                    self.server.attach_channel(kwargs["user"], result["channel"]["id"])
+                self.server.attach_channel(kwargs["user"], result["channel"]["id"])
             elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
-                if "ok" in result and result["ok"]:
-                    self.server.attach_channel(
-                        result['group']['name'],
-                        result['group']['id'],
-                        result['group']['members']
-                    )
+                self.server.parse_channel_data([result['group']])
             elif method in ('channels.create', 'channels.join'):
-                if 'ok' in result and result['ok']:
-                    self.server.attach_channel(
-                        result['channel']['name'],
-                        result['channel']['id'],
-                        result['channel']['members']
-                    )
+                self.server.parse_channel_data([result['channel']])
         return result
 
     def rtm_read(self):

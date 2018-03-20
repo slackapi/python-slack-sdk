@@ -155,7 +155,7 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">():</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+  <span class="k">while</span> <span class="n">sc</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">connected</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
         <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
@@ -198,6 +198,7 @@ the Web API separately.</p>
     <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
 </pre></div>
 </div>
+<p>Passing <cite>auto_reconnect=True</cite> will tell the websocket client to automatically reconnect if the connection gets dropped.</p>
 <p>See the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> and the <a class="reference external" href="https://api.slack.com/methods/rtm.connect">rtm.connect docs</a>
 for more details.</p>
 </div>
