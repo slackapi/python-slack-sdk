@@ -120,7 +120,8 @@ class Server(object):
                     # Back off after the the first attempt
                     backoff_offset_multiplier = random.randint(1, 4)
                     retry_timeout = (backoff_offset_multiplier * recon_attempt * recon_attempt)
-                    logging.debug("Reconnecting in {} seconds".format(retry_timeout))
+                    logging.debug("Reconnecting in %d seconds", retry_timeout)
+
                     time.sleep(retry_timeout)
                 self.reconnect_attempt += 1
             else:
