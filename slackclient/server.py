@@ -38,7 +38,7 @@ class Server(object):
         self.websocket = None
         self.ws_url = None
         self.connected = False
-        self.last_connected_at = None
+        self.last_connected_at = 0
         self.auto_reconnect = False
         self.reconnect_attempt = 0
 
@@ -82,6 +82,24 @@ class Server(object):
         self.api_requester.append_user_agent(name, version)
 
     def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
+        """
+        Connects to the RTM API - https://api.slack.com/rtm
+
+        If `auto_reconnect` is set to `True` then the SlackClient is initialized, this method
+        will be used to reconnect on websocket read failures, which indicate disconnection
+
+        :Args:
+            reconnect (boolean) Whether this method is being called to reconnect to RTM
+            timeout (int): Timeout for Web API calls
+            use_rtm_start (boolean): `True` to connect using `rtm.start` or
+            `False` to connect using`rtm.connect`
+            https://api.slack.com/rtm#connecting_with_rtm.connect_vs._rtm.start
+
+        :Returns:
+            None
+
+        """
+
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
 
@@ -92,22 +110,22 @@ class Server(object):
         # If this is an auto reconnect, rate limit reconnect attempts
         if self.auto_reconnect and reconnect:
             # Raise a SlackConnectionError after 5 retries within 3 minutes
-            reconnect_attempt = self.reconnect_attempt
-            if reconnect_attempt == 5:
+            recon_attempt = self.reconnect_attempt
+            if recon_attempt == 5:
                 logging.error("RTM connection failed, reached max reconnects.")
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
-            elif reconnect_attempt > 0:
-                # Back off after the the first attempt
-                if (time.time() - self.last_connected_at) < 180:
+            # Wait to reconnect if the last reconnect was more than 3 minutes ago
+            if (time.time() - self.last_connected_at) < 180:
+                if recon_attempt > 0:
+                    # Back off after the the first attempt
                     backoff_offset_multiplier = random.randint(1, 4)
-                    timeout = (backoff_offset_multiplier * reconnect_attempt * reconnect_attempt)
-                    logging.debug("Reconnecting in {} seconds".format(timeout))
-                    time.sleep(timeout)
-                else:
-                    # If the last reconnect was more than 3 minutes ago, reset the timeout
-                    self.reconnect_attempt = 0
+                    retry_timeout = (backoff_offset_multiplier * recon_attempt * recon_attempt)
+                    logging.debug("Reconnecting in {} seconds".format(retry_timeout))
+                    time.sleep(retry_timeout)
+                self.reconnect_attempt += 1
+            else:
+                self.reconnect_attempt = 0
 
-        self.reconnect_attempt += 1
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
