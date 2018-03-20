@@ -92,16 +92,17 @@ class Server(object):
         # If this is an auto reconnect, rate limit reconnect attempts
         if self.auto_reconnect and reconnect:
             # Raise a SlackConnectionError after 5 retries within 3 minutes
-            if self.reconnect_attempt == 5:
+            reconnect_attempt = self.reconnect_attempt
+            if reconnect_attempt == 5:
+                logging.error("RTM connection failed, reached max reconnects.")
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
-            elif self.reconnect_attempt > 0:
+            elif reconnect_attempt > 0:
                 # Back off after the the first attempt
                 if (time.time() - self.last_connected_at) < 180:
-                    # Random offset to prevent stampeding reconnects of multiple RTM clients
-                    offset = random.randint(1, 4)
-                    reconnect_timeout = (offset * self.reconnect_attempt * self.reconnect_attempt)
-                    logging.debug("Reconnecting in {} seconds".format(reconnect_timeout))
-                    time.sleep(reconnect_timeout)
+                    backoff_offset_multiplier = random.randint(1, 4)
+                    timeout = (backoff_offset_multiplier * reconnect_attempt * reconnect_attempt)
+                    logging.debug("Reconnecting in {} seconds".format(timeout))
+                    time.sleep(timeout)
                 else:
                     # If the last reconnect was more than 3 minutes ago, reset the timeout
                     self.reconnect_attempt = 0
