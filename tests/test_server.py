@@ -157,11 +157,11 @@ def test_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture):
             json=rtm_start_fixture
         )
 
-        server.reconnect_attempt = 1
+        server.reconnect_attempt = 0
         server.last_connected_at = time.time()
         server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
 
-        assert server.reconnect_attempt == 2
+        assert server.reconnect_attempt == 1
         for call in rsps.calls:
             assert call.request.url in [
                 "https://slack.com/api/rtm.connect"
@@ -182,7 +182,7 @@ def test_rtm_reconnect_timeout_not_recently_connected(server, rtm_start_fixture)
         server.last_connected_at = time.time() - 180
         server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
 
-        assert server.reconnect_attempt == 1
+        assert server.reconnect_attempt == 0
         for call in rsps.calls:
             assert call.request.url in [
                 "https://slack.com/api/rtm.connect"
