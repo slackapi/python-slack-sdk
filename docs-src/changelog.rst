@@ -2,6 +2,11 @@
 Changelog
 ==============================================
 
+v1.2.0 (2018-03-20)
+-------------------
+
+- You can now tell the RTM client to automatically reconnect by passing `auto_reconnect=True`
+
 v1.1.3 (2018-03-01)
 -------------------
 
