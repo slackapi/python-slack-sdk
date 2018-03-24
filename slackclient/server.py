@@ -131,7 +131,9 @@ class Server(object):
 
         if reply.status_code != 200:
             if depth < 10 and reply.status_code == 429 and reply.json()['error'] == "ratelimited":
-                time.sleep(int(reply.headers.get('retry-after', 120)))
+                ratelimit_timeout = reply.headers.get('retry-after', 120)
+                logging.debug("Rate limited. Retrying in %d seconds", ratelimit_timeout)
+                time.sleep(int(ratelimit_timeout))
                 self.rtm_connect(reconnect=reconnect, timeout=timeout, depth=depth + 1)
             else:
                 raise SlackConnectionError(reply=reply)
