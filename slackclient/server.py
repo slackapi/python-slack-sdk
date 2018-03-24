@@ -1,15 +1,18 @@
-from .slackrequest import SlackRequest
-from requests.packages.urllib3.util.url import parse_url
 from .channel import Channel
+from .exceptions import SlackClientError
+from .slackrequest import SlackRequest
 from .user import User
 from .util import SearchList, SearchDict
-from .exceptions import SlackClientError
-from ssl import SSLError
 
-import time
-
-from websocket import create_connection
 import json
+import logging
+import time
+import random
+
+from requests.packages.urllib3.util.url import parse_url
+from ssl import SSLError
+from websocket import create_connection
+from websocket._exceptions import WebSocketConnectionClosedException
 
 
 class Server(object):
@@ -19,18 +22,27 @@ class Server(object):
 
     """
     def __init__(self, token, connect=True, proxies=None):
+        # Slack client configs
         self.token = token
-        self.username = None
-        self.domain = None
-        self.login_data = None
-        self.websocket = None
-        self.users = SearchDict()
-        self.channels = SearchList()
-        self.connected = False
-        self.ws_url = None
         self.proxies = proxies
         self.api_requester = SlackRequest(proxies=proxies)
 
+        # Workspace metadata
+        self.username = None
+        self.domain = None
+        self.login_data = None
+        self.users = SearchDict()
+        self.channels = SearchList()
+
+        # RTM configs
+        self.websocket = None
+        self.ws_url = None
+        self.connected = False
+        self.last_connected_at = 0
+        self.auto_reconnect = False
+        self.reconnect_attempt = 0
+
+        # Connect to RTM on load
         if connect:
             self.rtm_connect()
 
@@ -69,9 +81,52 @@ class Server(object):
     def append_user_agent(self, name, version):
         self.api_requester.append_user_agent(name, version)
 
-    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, depth=0, **kwargs):
+    def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
+        """
+        Connects to the RTM API - https://api.slack.com/rtm
+
+        If `auto_reconnect` is set to `True` then the SlackClient is initialized, this method
+        will be used to reconnect on websocket read failures, which indicate disconnection
+
+        :Args:
+            reconnect (boolean) Whether this method is being called to reconnect to RTM
+            timeout (int): Timeout for Web API calls
+            use_rtm_start (boolean): `True` to connect using `rtm.start` or
+            `False` to connect using`rtm.connect`
+            https://api.slack.com/rtm#connecting_with_rtm.connect_vs._rtm.start
+
+        :Returns:
+            None
+
+        """
+
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
+
+        # If the `auto_reconnect` param was passed, set the server's `auto_reconnect` attr
+        if kwargs and kwargs["auto_reconnect"] is True:
+            self.auto_reconnect = True
+
+        # If this is an auto reconnect, rate limit reconnect attempts
+        if self.auto_reconnect and reconnect:
+            # Raise a SlackConnectionError after 5 retries within 3 minutes
+            recon_attempt = self.reconnect_attempt
+            if recon_attempt == 5:
+                logging.error("RTM connection failed, reached max reconnects.")
+                raise SlackConnectionError("RTM connection failed, reached max reconnects.")
+            # Wait to reconnect if the last reconnect was more than 3 minutes ago
+            if (time.time() - self.last_connected_at) < 180:
+                if recon_attempt > 0:
+                    # Back off after the the first attempt
+                    backoff_offset_multiplier = random.randint(1, 4)
+                    retry_timeout = (backoff_offset_multiplier * recon_attempt * recon_attempt)
+                    logging.debug("Reconnecting in %d seconds", retry_timeout)
+
+                    time.sleep(retry_timeout)
+                self.reconnect_attempt += 1
+            else:
+                self.reconnect_attempt = 0
+
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
@@ -117,8 +172,12 @@ class Server(object):
                                                http_proxy_host=proxy_host,
                                                http_proxy_port=proxy_port,
                                                http_proxy_auth=proxy_auth)
+            self.connected = True
+            self.last_connected_at = time.time()
+            logging.debug("RTM connected")
             self.websocket.sock.setblocking(0)
         except Exception as e:
+            self.connected = False
             raise SlackConnectionError(message=str(e))
 
     def parse_channel_data(self, channel_data):
@@ -208,6 +267,13 @@ class Server(object):
                     # SSLWantReadError
                     return ''
                 raise
+            except WebSocketConnectionClosedException as e:
+                logging.debug("RTM disconnected")
+                self.connected = False
+                if self.auto_reconnect:
+                    self.rtm_connect(reconnect=True)
+                else:
+                    raise SlackConnectionError("Unable to send due to closed RTM websocket")
             return data.rstrip()
 
     def attach_user(self, name, user_id, real_name, tz, email):

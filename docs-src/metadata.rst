@@ -5,7 +5,7 @@
 .. |github_username| replace:: SlackAPI
 .. |twitter_username| replace:: SlackAPI
 
-.. _dev4slack channel: http://https://dev4slack.slack.com/archives/sdk-python-slackclient
+.. _Bot Developer Hangout: https://dev4slack.slack.com/archives/sdk-python-slackclient
 .. _Issue Tracker: http://github.com/SlackAPI/python-slackclient/issues
 .. _pull request: http://github.com/SlackAPI/python-slackclient/pulls
 .. _Python RTMBot: https://slackapi.github.io/python-rtmbot

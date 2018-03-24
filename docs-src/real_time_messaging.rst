@@ -23,7 +23,7 @@ Connecting to the Real Time Messaging API
   sc = SlackClient(slack_token)
 
   if sc.rtm_connect():
-      while True:
+    while sc.server.connected is True:
           print sc.rtm_read()
           time.sleep(1)
   else:
@@ -68,6 +68,9 @@ To do this, simply pass `with_team_state=False` into the `rtm_connect` call, lik
           time.sleep(1)
   else:
       print "Connection Failed"
+
+
+Passing `auto_reconnect=True` will tell the websocket client to automatically reconnect if the connection gets dropped.
 
 
 See the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ and the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_

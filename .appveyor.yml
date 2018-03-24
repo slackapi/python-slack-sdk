@@ -10,8 +10,6 @@ environment:
       PYTHON_VERSION: "py34-x86"
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "py35-x86"
-    - PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "py36-x86"
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "py27-x64"
     - PYTHON: "C:\\Python33-x64"
@@ -20,8 +18,6 @@ environment:
       PYTHON_VERSION: "py34-x64"
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "py35-x64"
-    - PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "py36-x64"
 
 install:
   - "%PYTHON%\\python.exe -m pip install wheel"
