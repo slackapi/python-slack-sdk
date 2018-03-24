@@ -51,25 +51,22 @@ def test_server_is_hashable(server):
     assert (server_map[server] == 'foo') is False
 
 
-def test_response_headers(server):
+def test_rate_limiting(server):
     # Testing for rate limit retry headers
     with responses.RequestsMock() as rsps:
         rsps.add(
             responses.POST,
-            "https://slack.com/api/auth.test",
+            "https://slack.com/api/rtm.start",
             status=429,
             json={"ok": False},
             headers={'Retry-After': "1"}
         )
 
-        res = json.loads(server.api_call("auth.test"))
-
-        for call in rsps.calls:
-            assert call.request.url in [
-                "https://slack.com/api/auth.test"
-            ]
-            assert call.response.status_code == 429
-        assert res["headers"]['Retry-After'] == "1"
+        with pytest.raises(SlackConnectionError) as e:
+            server.rtm_connect()
+            for call in rsps.calls:
+                assert call.response.status_code == 429
+            assert e.message == "RTM connection attempt was rate limited 10 times."
 
 
 def test_custom_agent(server):
@@ -145,6 +142,23 @@ def test_rtm_reconnect(server, rtm_start_fixture):
             assert call.request.url in [
                 "https://slack.com/api/rtm.connect"
             ]
+
+
+def test_rtm_max_reconnect_timeout(server, rtm_start_fixture):
+    # If reconnected recently, server must wait to reconnect and increment the counter
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/rtm.connect",
+            status=200,
+            json=rtm_start_fixture
+        )
+
+        server.reconnect_attempt = 4
+        server.last_connected_at = time.time()
+        server.rtm_connect(auto_reconnect=True, reconnect=True, use_rtm_start=False)
+
+        assert server.reconnect_attempt == 5
 
 
 def test_rtm_reconnect_timeout_recently_connected(server, rtm_start_fixture):

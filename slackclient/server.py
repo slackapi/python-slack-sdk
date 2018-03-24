@@ -90,7 +90,7 @@ class Server(object):
 
         :Args:
             reconnect (boolean) Whether this method is being called to reconnect to RTM
-            timeout (int): Timeout for Web API calls
+            timeout (int): Stop waiting for Web API response after this many seconds
             use_rtm_start (boolean): `True` to connect using `rtm.start` or
             `False` to connect using`rtm.connect`
             https://api.slack.com/rtm#connecting_with_rtm.connect_vs._rtm.start
@@ -134,13 +134,13 @@ class Server(object):
                 depth = kwargs["depth"]
             else:
                 depth = 0
-            if depth < 10 and reply.status_code == 429 and reply.json()['error'] == "ratelimited":
+            if depth < 10 and reply.status_code == 429:
                 ratelimit_timeout = int(reply.headers.get('retry-after', 120))
-                logging.debug("Rate limited. Retrying in %d seconds", ratelimit_timeout)
+                logging.debug("HTTP 429: Rate limited. Retrying in %d seconds", ratelimit_timeout)
                 time.sleep(ratelimit_timeout)
                 self.rtm_connect(reconnect=reconnect, timeout=timeout, depth=depth + 1)
             else:
-                raise SlackConnectionError(reply=reply)
+                raise SlackConnectionError("RTM connection attempt was rate limited 10 times.")
         else:
             login_data = reply.json()
             if login_data["ok"]:
