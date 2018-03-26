@@ -38,9 +38,10 @@ class Server(object):
         self.websocket = None
         self.ws_url = None
         self.connected = False
-        self.last_connected_at = 0
         self.auto_reconnect = False
-        self.reconnect_attempt = 0
+        self.last_connected_at = 0
+        self.reconnect_count = 0
+        self.rtm_connect_retries = 0
 
         # Connect to RTM on load
         if connect:
@@ -90,7 +91,7 @@ class Server(object):
 
         :Args:
             reconnect (boolean) Whether this method is being called to reconnect to RTM
-            timeout (int): Timeout for Web API calls
+            timeout (int): Stop waiting for Web API response after this many seconds
             use_rtm_start (boolean): `True` to connect using `rtm.start` or
             `False` to connect using`rtm.connect`
             https://api.slack.com/rtm#connecting_with_rtm.connect_vs._rtm.start
@@ -104,34 +105,42 @@ class Server(object):
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
 
         # If the `auto_reconnect` param was passed, set the server's `auto_reconnect` attr
-        if kwargs and kwargs["auto_reconnect"] is True:
-            self.auto_reconnect = True
+        if 'auto_reconnect' in kwargs:
+            self.auto_reconnect = kwargs["auto_reconnect"]
 
         # If this is an auto reconnect, rate limit reconnect attempts
         if self.auto_reconnect and reconnect:
             # Raise a SlackConnectionError after 5 retries within 3 minutes
-            recon_attempt = self.reconnect_attempt
-            if recon_attempt == 5:
+            recon_count = self.reconnect_count
+            if recon_count == 5:
                 logging.error("RTM connection failed, reached max reconnects.")
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
             # Wait to reconnect if the last reconnect was more than 3 minutes ago
             if (time.time() - self.last_connected_at) < 180:
-                if recon_attempt > 0:
+                if recon_count > 0:
                     # Back off after the the first attempt
                     backoff_offset_multiplier = random.randint(1, 4)
-                    retry_timeout = (backoff_offset_multiplier * recon_attempt * recon_attempt)
+                    retry_timeout = (backoff_offset_multiplier * recon_count * recon_count)
                     logging.debug("Reconnecting in %d seconds", retry_timeout)
 
                     time.sleep(retry_timeout)
-                self.reconnect_attempt += 1
+                self.reconnect_count += 1
             else:
-                self.reconnect_attempt = 0
+                self.reconnect_count = 0
 
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
-            raise SlackConnectionError(reply=reply)
+            if self.rtm_connect_retries < 5 and reply.status_code == 429:
+                self.rtm_connect_retries += 1
+                retry_after = int(reply.headers.get('retry-after', 120))
+                logging.debug("HTTP 429: Rate limited. Retrying in %d seconds", retry_after)
+                time.sleep(retry_after)
+                self.rtm_connect(reconnect=reconnect, timeout=timeout)
+            else:
+                raise SlackConnectionError("RTM connection attempt was rate limited 10 times.")
         else:
+            self.rtm_connect_retries = 0
             login_data = reply.json()
             if login_data["ok"]:
                 self.ws_url = login_data['url']
