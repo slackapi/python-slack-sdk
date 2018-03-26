@@ -2,6 +2,12 @@
 Changelog
 ==============================================
 
+v1.2.1 (2018-03-26)
+-------------------
+
+- Added rate limit handling for rtm connections (thanks @jayalane!)
+
+
 v1.2.0 (2018-03-20)
 -------------------
 
