@@ -115,7 +115,7 @@ class Server(object):
             if recon_count == 5:
                 logging.error("RTM connection failed, reached max reconnects.")
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
-            # Wait to reconnect if the last reconnect was more than 3 minutes ago
+            # Wait to reconnect if the last reconnect was less than 3 minutes ago
             if (time.time() - self.last_connected_at) < 180:
                 if recon_count > 0:
                     # Back off after the the first attempt
@@ -138,7 +138,7 @@ class Server(object):
                 time.sleep(retry_after)
                 self.rtm_connect(reconnect=reconnect, timeout=timeout)
             else:
-                raise SlackConnectionError("RTM connection attempt was rate limited 10 times.")
+                raise SlackConnectionError("RTM connection attempt was rate limited 5 times.")
         else:
             self.rtm_connect_retries = 0
             login_data = reply.json()
