@@ -2,6 +2,33 @@
 Changelog
 ==============================================
 
+v1.2.1 (2018-03-26)
+-------------------
+
+- Added rate limit handling for rtm connections (thanks @jayalane!)
+
+
+v1.2.0 (2018-03-20)
+-------------------
+
+- You can now tell the RTM client to automatically reconnect by passing `auto_reconnect=True`
+
+v1.1.3 (2018-03-01)
+-------------------
+
+- Fixed another API param encoding bug. It encodes things properly now.
+
+v1.1.2 (2018-01-31)
+-------------------
+
+- Fixed an encoding issue which was encoding some Web API params incorrectly (sorry)
+
+v1.1.1 (2018-01-30)
+-------------------
+
+ - Adds HTTP response headers to `api_call` responses to expose things like rate limit info
+ - Moves `token` into auth header rather than request params
+
 v1.1.0 (2017-11-21)
 -------------------
 

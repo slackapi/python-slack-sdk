@@ -2,6 +2,7 @@ import json
 
 import pytest
 from requests.exceptions import ProxyError
+import responses
 
 from slackclient.channel import Channel
 from slackclient.client import SlackClient
@@ -51,3 +52,82 @@ def test_SlackClient_process_changes(slackclient, channel_created_fixture, im_cr
     slackclient.process_changes(im_created_fixture)
     assert type(slackclient.server.channels.find('U123BL234')) == Channel
 
+
+def test_api_not_ok(slackclient):
+    # Testing for rate limit retry headers
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/im.open",
+            status=200,
+            json={
+                "ok": False,
+            },
+            headers={}
+        )
+
+        slackclient.api_call(
+            "im.open",
+            user="UXXXX"
+        )
+
+        for call in rsps.calls:
+            assert call.response.status_code == 200
+            assert call.request.url in [
+                "https://slack.com/api/im.open"
+            ]
+
+
+def test_im_open(slackclient):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/im.open",
+            status=200,
+            json={
+                "ok": True,
+                "channel": {"id":"CXXXXXX"}
+            },
+            headers={}
+        )
+
+        slackclient.api_call(
+            "im.open",
+            user="UXXXX"
+        )
+
+        for call in rsps.calls:
+            assert call.response.status_code == 200
+            assert call.request.url in [
+                "https://slack.com/api/im.open"
+            ]
+
+
+def test_channel_join(slackclient):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/channels.join",
+            status=200,
+            json={
+                "ok": True,
+                "channel": {
+                    "id": "CXXXX",
+                    "name": "test",
+                    "members": ("U0G9QF9C6", "U1QNSQB9U")
+                }
+            }
+        )
+
+        slackclient.api_call(
+            "channels.join",
+            channel="CXXXX"
+        )
+
+        for call in rsps.calls:
+            assert call.response.status_code == 200
+            assert call.request.url in [
+                "https://slack.com/api/channels.join"
+            ]
+            response_json = call.response.json()
+            assert response_json["ok"] is True
