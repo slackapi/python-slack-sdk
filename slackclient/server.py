@@ -1,35 +1,51 @@
-from .slackrequest import SlackRequest
-from requests.packages.urllib3.util.url import parse_url
 from .channel import Channel
+from .exceptions import SlackClientError
+from .slackrequest import SlackRequest
 from .user import User
 from .util import SearchList, SearchDict
 from .log import logger
-from .exceptions import SlackClientError
 from ssl import SSLError
 
-from websocket import create_connection
 import json
+import logging
+import time
+import random
+
+from requests.packages.urllib3.util.url import parse_url
+from ssl import SSLError
+from websocket import create_connection
+from websocket._exceptions import WebSocketConnectionClosedException
 
 
 class Server(object):
-    '''
+    """
     The Server object owns the websocket connection and all attached channel information.
 
 
-    '''
+    """
     def __init__(self, token, connect=True, proxies=None):
+        # Slack client configs
         self.token = token
-        self.username = None
-        self.domain = None
-        self.login_data = None
-        self.websocket = None
-        self.users = SearchDict()
-        self.channels = SearchList()
-        self.connected = False
-        self.ws_url = None
         self.proxies = proxies
         self.api_requester = SlackRequest(proxies=proxies)
 
+        # Workspace metadata
+        self.username = None
+        self.domain = None
+        self.login_data = None
+        self.users = SearchDict()
+        self.channels = SearchList()
+
+        # RTM configs
+        self.websocket = None
+        self.ws_url = None
+        self.connected = False
+        self.auto_reconnect = False
+        self.last_connected_at = 0
+        self.reconnect_count = 0
+        self.rtm_connect_retries = 0
+
+        # Connect to RTM on load
         if connect:
             self.rtm_connect()
 
@@ -43,7 +59,7 @@ class Server(object):
         return hash(self.token)
 
     def __str__(self):
-        '''
+        """
         Example Output::
 
         username : None
@@ -56,7 +72,7 @@ class Server(object):
         token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False
         ws_url : None
-        '''
+        """
         data = ""
         for key in list(self.__dict__.keys()):
             data += "{} : {}\n".format(key, str(self.__dict__[key])[:40])
@@ -69,13 +85,64 @@ class Server(object):
         self.api_requester.append_user_agent(name, version)
 
     def rtm_connect(self, reconnect=False, timeout=None, use_rtm_start=True, **kwargs):
+        """
+        Connects to the RTM API - https://api.slack.com/rtm
+
+        If `auto_reconnect` is set to `True` then the SlackClient is initialized, this method
+        will be used to reconnect on websocket read failures, which indicate disconnection
+
+        :Args:
+            reconnect (boolean) Whether this method is being called to reconnect to RTM
+            timeout (int): Stop waiting for Web API response after this many seconds
+            use_rtm_start (boolean): `True` to connect using `rtm.start` or
+            `False` to connect using`rtm.connect`
+            https://api.slack.com/rtm#connecting_with_rtm.connect_vs._rtm.start
+
+        :Returns:
+            None
+
+        """
+
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
+
+        # If the `auto_reconnect` param was passed, set the server's `auto_reconnect` attr
+        if 'auto_reconnect' in kwargs:
+            self.auto_reconnect = kwargs["auto_reconnect"]
+
+        # If this is an auto reconnect, rate limit reconnect attempts
+        if self.auto_reconnect and reconnect:
+            # Raise a SlackConnectionError after 5 retries within 3 minutes
+            recon_count = self.reconnect_count
+            if recon_count == 5:
+                logging.error("RTM connection failed, reached max reconnects.")
+                raise SlackConnectionError("RTM connection failed, reached max reconnects.")
+            # Wait to reconnect if the last reconnect was less than 3 minutes ago
+            if (time.time() - self.last_connected_at) < 180:
+                if recon_count > 0:
+                    # Back off after the the first attempt
+                    backoff_offset_multiplier = random.randint(1, 4)
+                    retry_timeout = (backoff_offset_multiplier * recon_count * recon_count)
+                    logging.debug("Reconnecting in %d seconds", retry_timeout)
+
+                    time.sleep(retry_timeout)
+                self.reconnect_count += 1
+            else:
+                self.reconnect_count = 0
+
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
 
         if reply.status_code != 200:
-            raise SlackConnectionError(reply=reply)
+            if self.rtm_connect_retries < 5 and reply.status_code == 429:
+                self.rtm_connect_retries += 1
+                retry_after = int(reply.headers.get('retry-after', 120))
+                logging.debug("HTTP 429: Rate limited. Retrying in %d seconds", retry_after)
+                time.sleep(retry_after)
+                self.rtm_connect(reconnect=reconnect, timeout=timeout)
+            else:
+                raise SlackConnectionError("RTM connection attempt was rate limited 5 times.")
         else:
+            self.rtm_connect_retries = 0
             login_data = reply.json()
             if login_data["ok"]:
                 self.ws_url = login_data['url']
@@ -112,9 +179,13 @@ class Server(object):
                                                http_proxy_host=proxy_host,
                                                http_proxy_port=proxy_port,
                                                http_proxy_auth=proxy_auth)
+            self.connected = True
+            self.last_connected_at = time.time()
+            logging.debug("RTM connected")
             self.websocket.sock.setblocking(0)
         except Exception as e:
             logger.exception(e)
+            self.connected = False
             raise SlackConnectionError(message=str(e))
 
     def parse_channel_data(self, channel_data):
@@ -158,7 +229,7 @@ class Server(object):
             self.rtm_connect(reconnect=True)
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
-        '''
+        """
         Sends a message to a given channel.
 
         :Args:
@@ -173,7 +244,7 @@ class Server(object):
         :Returns:
             None
 
-        '''
+        """
         message_json = {"type": "message", "channel": channel, "text": message}
         if thread is not None:
             message_json["thread_ts"] = thread
@@ -186,8 +257,9 @@ class Server(object):
         return self.send_to_websocket({"type": "ping"})
 
     def websocket_safe_read(self):
-        """ Returns data if available, otherwise ''. Newlines indicate multiple
-            messages
+        """
+        Returns data if available, otherwise ''. Newlines indicate multiple
+        messages
         """
 
         data = ""
@@ -205,6 +277,13 @@ class Server(object):
                     # SSLWantReadError
                     return ''
                 raise
+            except WebSocketConnectionClosedException as e:
+                logging.debug("RTM disconnected")
+                self.connected = False
+                if self.auto_reconnect:
+                    self.rtm_connect(reconnect=True)
+                else:
+                    raise SlackConnectionError("Unable to send due to closed RTM websocket")
             return data.rstrip()
 
     def attach_user(self, name, user_id, real_name, tz, email):
@@ -217,19 +296,20 @@ class Server(object):
             self.channels.append(Channel(self, name, channel_id, members))
 
     def join_channel(self, name, timeout=None):
-        '''
+        """
         Join a channel by name.
 
         Note: this action is not allowed by bots, they must be invited to channels.
-        '''
-        return self.api_requester.do(
-            self.token,
-            "channels.join?name={}".format(name),
+        """
+        response = self.api_call(
+            "channels.join",
+            channel=name,
             timeout=timeout
-        ).text
+        )
+        return response
 
     def api_call(self, method, timeout=None, **kwargs):
-        '''
+        """
         Call the Slack Web API as documented here: https://api.slack.com/web
 
         :Args:
@@ -249,7 +329,7 @@ class Server(object):
             )
 
         Returns:
-            str -- returns the text of the HTTP response.
+            str -- returns HTTP response text and headers as JSON.
 
             Examples::
 
@@ -258,8 +338,11 @@ class Server(object):
                 u'{"ok":false,"error":"channel_not_found"}'
 
             See here for more information on responses: https://api.slack.com/web
-        '''
-        return self.api_requester.do(self.token, method, kwargs, timeout=timeout).text
+        """
+        response = self.api_requester.do(self.token, method, kwargs, timeout=timeout)
+        response_json = json.loads(response.text)
+        response_json["headers"] = dict(response.headers)
+        return json.dumps(response_json)
 
 # TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
 # major change because any clients already referencing these types in order to catch them

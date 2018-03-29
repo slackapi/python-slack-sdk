@@ -62,6 +62,8 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
@@ -89,18 +91,24 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-8-31">v1.0.9 (2017-8-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-8-31">v1.0.8 (2017-8-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-1-2018-03-26">v1.2.1 (2018-03-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-0-2018-03-20">v1.2.0 (2018-03-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-3-2018-03-01">v1.1.3 (2018-03-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-2-2018-01-31">v1.1.2 (2018-01-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2018-01-30">v1.1.1 (2018-01-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2017-11-21">v1.1.0 (2017-11-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-08-31">v1.0.9 (2017-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-08-31">v1.0.8 (2017-08-31)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-7-2017-08-02">v1.0.7 (2017-08-02)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-06-12">v1.0.6 (2017-06-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-1-23">v1.0.5 (2017-1-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-01-23">v1.0.5 (2017-01-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-2016-02-15">v0.17 (2016-02-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-0-2016-02-15">v0.17.0 (2016-02-15)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
@@ -114,8 +122,8 @@
 
     <ul id="footer_nav">
         <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+        <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
         <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
     </ul>
 
@@ -138,15 +146,15 @@
 <span id="handling-tokens"></span><h2>Handling tokens and other sensitive data<a class="headerlink" href="#handling-tokens-and-other-sensitive-data" title="Permalink to this headline">¶</a></h2>
 <p>Slack tokens are the keys to your—or your customers’—teams. Keep them secret. Keep them safe. One way to do that is to never explicitly hardcode them.</p>
 <p>Try to avoid this when possible:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;xoxb-abc-1232&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;xoxb-abc-1232&#39;</span>
 </pre></div>
 </div>
 <p>If you commit this code to GitHub, the world gains access to this token’s team. Rather, we recommend you pass tokens in as environment variables, or persist them in a database that is accessed at runtime. You can add a token to the environment by starting your app as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">SLACK_BOT_TOKEN</span><span class="o">=</span><span class="s2">&quot;xoxb-abc-1232&quot;</span> <span class="n">python</span> <span class="n">myapp</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SLACK_BOT_TOKEN</span><span class="o">=</span><span class="s2">&quot;xoxb-abc-1232&quot;</span> <span class="n">python</span> <span class="n">myapp</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Then in your code retrieve the key with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">SLACK_BOT_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -170,7 +178,7 @@
 <p>In order to implement OAuth in your app, you will need to include a web server. In this example, we’ll use <a class="reference external" href="http://flask.pocoo.org/">Flask</a>.</p>
 <p>As mentioned above, we’re setting the app tokens and other configs in environment variables and pulling them into global variables.</p>
 <p>Depending on what actions your app will need to perform, you’ll need different OAuth permission scopes. Review the available scopes <a class="reference external" href="https://api.slack.com/docs/oauth-scopes">here</a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
@@ -182,11 +190,11 @@
 </pre></div>
 </div>
 <p><strong>The OAuth initiation link:</strong></p>
-<p>To begin the OAuth flow, you’ll need to provide the user with a link to Slack’s OAuth page,
+<p>To begin the OAuth flow, you’ll need to provide the user with a link to Slack’s OAuth page.
 This directs the user to Slack’s OAuth acceptance page, where the user will review and accept
 or refuse the permissions your app is requesting as defined by the requested scope(s).</p>
 <p>For the best user experience, use the <a class="reference external" href="https://api.slack.com/docs/slack-button">Add to Slack button</a> to direct users to approve your application for access or <a class="reference external" href="https://api.slack.com/docs/sign-in-with-slack">Sign in with Slack</a> to log users in.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">pre_install</span><span class="p">():</span>
   <span class="k">return</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">      &lt;a href=&quot;https://slack.com/oauth/authorize?scope={0}&amp;client_id={1}&quot;&gt;</span>
@@ -198,13 +206,13 @@ or refuse the permissions your app is requesting as defined by the requested sco
 <p><strong>The OAuth completion page</strong></p>
 <p>Once the user has agreed to the permissions you’ve requested on Slack’s OAuth
 page, Slack will redirect the user to your auth completion page. Included in this
-redirect is a <code class="docutils literal"><span class="pre">code</span></code> query string param which you’ll use to request access
-tokens from the <code class="docutils literal"><span class="pre">oauth.access</span></code> endpoint.</p>
+redirect is a <code class="docutils literal notranslate"><span class="pre">code</span></code> query string param which you’ll use to request access
+tokens from the <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> endpoint.</p>
 <p>Generally, Web API requests require a valid OAuth token, but there are a few endpoints
-which do not require a token. <code class="docutils literal"><span class="pre">oauth.access</span></code> is one example of this. Since this
+which do not require a token. <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> is one example of this. Since this
 is the endpoint you’ll use to retrieve the tokens for later API requests,
-an empty string <code class="docutils literal"><span class="pre">&quot;&quot;</span></code> is acceptable for this request.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+an empty string <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> is acceptable for this request.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">post_install</span><span class="p">():</span>
 
   <span class="c1"># Retrieve the auth code from the request params</span>
@@ -222,17 +230,17 @@ an empty string <code class="docutils literal"><span class="pre">&quot;&quot;</s
   <span class="p">)</span>
 </pre></div>
 </div>
-<p>A successful request to <code class="docutils literal"><span class="pre">oauth.access</span></code> will yield two tokens: A <code class="docutils literal"><span class="pre">user</span></code>
-token and a <code class="docutils literal"><span class="pre">bot</span></code> token. The <code class="docutils literal"><span class="pre">user</span></code> token <code class="docutils literal"><span class="pre">auth_response['access_token']</span></code>
-is used to make requests on behalf of the authorizing user and the <code class="docutils literal"><span class="pre">bot</span></code>
-token <code class="docutils literal"><span class="pre">auth_response['bot']['bot_access_token']</span></code> is for making requests
+<p>A successful request to <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> will yield two tokens: A <code class="docutils literal notranslate"><span class="pre">user</span></code>
+token and a <code class="docutils literal notranslate"><span class="pre">bot</span></code> token. The <code class="docutils literal notranslate"><span class="pre">user</span></code> token <code class="docutils literal notranslate"><span class="pre">auth_response['access_token']</span></code>
+is used to make requests on behalf of the authorizing user and the <code class="docutils literal notranslate"><span class="pre">bot</span></code>
+token <code class="docutils literal notranslate"><span class="pre">auth_response['bot']['bot_access_token']</span></code> is for making requests
 on behalf of your app’s bot user.</p>
 <p>If your Slack app includes a bot user, upon approval the JSON response will contain
 an additional node containing an access token to be specifically used for your bot
 user, within the context of the approving team.</p>
 <p>When you use Web API methods on behalf of your bot user, you should use this bot
 user access token instead of the top-level access token granted to your application.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Save the bot token to an environmental variable or to your data store</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save the bot token to an environmental variable or to your data store</span>
 <span class="c1"># for later use</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_USER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;bot_access_token&#39;</span><span class="p">]</span>
@@ -262,6 +270,12 @@ tokens to make a variety of Web API calls on behalf of the user and your app’s
 
     <script type="text/javascript" src="https://a.slack-edge.com/1504/js/rollup-core_required_libs.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://a.slack-edge.com/125e0/js/rollup-core_web.js" crossorigin="anonymous"></script>
+    <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-56978219-13', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
 
   </body>
 </html>

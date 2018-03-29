@@ -30,7 +30,7 @@ To send a message to a channel, use the channel's ID. For IMs, use the user's ID
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:"
   )
 
@@ -50,7 +50,7 @@ as sending a regular message, but with an additional ``user`` parameter.
 
   sc.api_call(
     "chat.postEphemeral",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     user="U0XXXXXXX"
   )
@@ -79,7 +79,7 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003"
   )
@@ -97,7 +97,7 @@ set the ``reply_broadcast`` boolean parameter to ``True``.
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003",
     reply_broadcast=True
@@ -310,4 +310,77 @@ Get a list of team members
 
 See `users.list <https://api.slack.com/methods/users.list>`_ for more info.
 
+
+--------
+
+Uploading files
+------------------------------
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  with open('thinking_very_much.png') as file_content:
+      sc.api_call(
+          "files.upload",
+          channels="C3UKJTQAC",
+          file=file_content,
+          title="Test upload"
+      )
+
+See `users.list <https://api.slack.com/methods/files.upload>`_ for more info.
+
+
+--------
+
+Web API Rate Limits
+--------------------
+Slack allows applications to send no more than one message per second. We allow bursts over that
+limit for short periods. However, if your app continues to exceed the limit over a longer period
+of time it will be rate limited.
+
+Here's a very basic example of how one might deal with rate limited requests.
+
+If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error,
+a JSON object containing the number of calls you have been making, and a Retry-After header
+containing the number of seconds until you can retry.
+
+
+.. code-block:: python
+
+  from slackclient import SlackClient
+  import time
+
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+  # Simple wrapper for sending a Slack message
+  def send_slack_message(channel, message):
+    return sc.api_call(
+      "chat.postMessage",
+      channel=channel,
+      text=message
+    )
+
+  # Make the API call and save results to `response`
+  response = send_slack_message("C0XXXXXX", "Hello, from Python!")
+
+  # Check to see if the message sent successfully.
+  # If the message succeeded, `response["ok"]`` will be `True`
+  if response["ok"]:
+    print("Message posted successfully: " + response["message"]["ts"])
+    # If the message failed, check for rate limit headers in the response
+  elif response["ok"] is False and response["headers"]["Retry-After"]:
+    # The `Retry-After` header will tell you how long to wait before retrying
+    delay = int(response["headers"]["Retry-After"])
+    print("Rate limited. Retrying in " + str(delay) + " seconds")
+    time.sleep(delay)
+    send_slack_message(message, channel)
+
+See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
+
 .. include:: metadata.rst
+

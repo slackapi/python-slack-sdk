@@ -62,6 +62,8 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
@@ -89,18 +91,24 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-8-31">v1.0.9 (2017-8-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-8-31">v1.0.8 (2017-8-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-1-2018-03-26">v1.2.1 (2018-03-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-0-2018-03-20">v1.2.0 (2018-03-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-3-2018-03-01">v1.1.3 (2018-03-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-2-2018-01-31">v1.1.2 (2018-01-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2018-01-30">v1.1.1 (2018-01-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2017-11-21">v1.1.0 (2017-11-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-08-31">v1.0.9 (2017-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-08-31">v1.0.8 (2017-08-31)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-7-2017-08-02">v1.0.7 (2017-08-02)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-06-12">v1.0.6 (2017-06-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-1-23">v1.0.5 (2017-1-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-01-23">v1.0.5 (2017-01-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-2016-02-15">v0.17 (2016-02-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-0-2016-02-15">v0.17.0 (2016-02-15)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
@@ -114,8 +122,8 @@
 
     <ul id="footer_nav">
         <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+        <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
         <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
     </ul>
 
@@ -154,7 +162,7 @@ yourself, and submit a <a class="reference external" href="http://github.com/Sla
 </div>
 <div class="section" id="i-d-like-to-contribute-but-how">
 <h2>I’d like to contribute…but how?<a class="headerlink" href="#i-d-like-to-contribute-but-how" title="Permalink to this headline">¶</a></h2>
-<p>What an excellent question. First of all, please have a look at our general <a class="reference external" href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">contributing guidelines</a>. We’ll wait for
+<p>What an excellent question. First of all, please have a look at our general <a class="reference external" href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">contributing guidelines</a>. We’ll wait for
 you here.</p>
 <p>All done? Great! While we’re super excited to incorporate your new feature into Slack Developer Kit for Python, there are a
 couple of things we want to make sure you’ve given thought to.</p>
@@ -164,7 +172,7 @@ to have written <strong>thoughtful</strong> tests that ensure your new feature w
 contributors to ensure they don’t break it!</li>
 <li>Please document your new feature. Think about <strong>concrete use cases</strong> for your feature, and add a section to the
 appropriate document, including a <strong>complete</strong> sample program that demonstrates your feature. Don’t forget to update
-the changelog in <code class="docutils literal"><span class="pre">changelog.rst</span></code>!</li>
+the changelog in <code class="docutils literal notranslate"><span class="pre">changelog.rst</span></code>!</li>
 </ul>
 <p>Including these two items with your pull request will totally make our day—and, more importantly, your future users’ days!</p>
 <p>On that note…</p>
@@ -172,12 +180,12 @@ the changelog in <code class="docutils literal"><span class="pre">changelog.rst<
 <div class="section" id="how-do-i-compile-the-documentation">
 <h2>How do I compile the documentation?<a class="headerlink" href="#how-do-i-compile-the-documentation" title="Permalink to this headline">¶</a></h2>
 <p>This project’s documentation is generated with <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>. If you are editing one of the many
-reStructuredText files in the <code class="docutils literal"><span class="pre">docs-src</span></code> folder, you’ll need to rebuild the documentation. It is recommended to run
-the following steps inside a <code class="docutils literal"><span class="pre">virtualenv</span></code> environment.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>tox -e docs
+reStructuredText files in the <code class="docutils literal notranslate"><span class="pre">docs-src</span></code> folder, you’ll need to rebuild the documentation. It is recommended to run
+the following steps inside a <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox -e docs
 </pre></div>
 </div>
-<p>Do be sure to add the <code class="docutils literal"><span class="pre">docs</span></code> folder and its contents to your pull request!</p>
+<p>Do be sure to add the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder and its contents to your pull request!</p>
 </div>
 </div>
 
@@ -196,6 +204,12 @@ the following steps inside a <code class="docutils literal"><span class="pre">vi
 
     <script type="text/javascript" src="https://a.slack-edge.com/1504/js/rollup-core_required_libs.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://a.slack-edge.com/125e0/js/rollup-core_web.js" crossorigin="anonymous"></script>
+    <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-56978219-13', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
 
   </body>
 </html>

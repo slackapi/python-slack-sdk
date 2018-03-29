@@ -62,6 +62,8 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#get-a-list-of-team-members">Get a list of team members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
@@ -89,18 +91,24 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-8-31">v1.0.9 (2017-8-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-8-31">v1.0.8 (2017-8-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-1-2018-03-26">v1.2.1 (2018-03-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-0-2018-03-20">v1.2.0 (2018-03-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-3-2018-03-01">v1.1.3 (2018-03-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-2-2018-01-31">v1.1.2 (2018-01-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2018-01-30">v1.1.1 (2018-01-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2017-11-21">v1.1.0 (2017-11-21)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-08-31">v1.0.9 (2017-08-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-08-31">v1.0.8 (2017-08-31)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-7-2017-08-02">v1.0.7 (2017-08-02)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-06-12">v1.0.6 (2017-06-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-1-23">v1.0.5 (2017-1-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-01-23">v1.0.5 (2017-01-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-2016-02-15">v0.17 (2016-02-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-0-2016-02-15">v0.17.0 (2016-02-15)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
@@ -114,8 +122,8 @@
 
     <ul id="footer_nav">
         <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+        <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
         <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
     </ul>
 
@@ -143,13 +151,13 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 <p>See <a class="reference internal" href="auth.html#handling-tokens"><span class="std std-ref">Tokens &amp; Authentication</span></a> for API token handling best practices.</p>
 <div class="section" id="connecting-to-the-real-time-messaging-api">
 <h2>Connecting to the Real Time Messaging API<a class="headerlink" href="#connecting-to-the-real-time-messaging-api" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_connect</span><span class="p">():</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+  <span class="k">while</span> <span class="n">sc</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">connected</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
         <span class="k">print</span> <span class="n">sc</span><span class="o">.</span><span class="n">rtm_read</span><span class="p">()</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
@@ -157,13 +165,13 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 </pre></div>
 </div>
 <p>If you connect successfully the first event received will be a hello:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;hello&#39;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>If there was a problem connecting an error will be returned, including a descriptive error message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">,</span>
     <span class="sa">u</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="p">{</span>
     <span class="sa">u</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -179,7 +187,7 @@ in <a class="reference external" href="https://api.slack.com/events/api">the Eve
 <cite>rtm.connect</cite> provides a lighter initial connection payload, without the team’s channel and user information included. You’ll need to request channel and user info via
 the Web API separately.</p>
 <p>To do this, simply pass <cite>with_team_state=False</cite> into the <cite>rtm_connect</cite> call, like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
@@ -192,12 +200,13 @@ the Web API separately.</p>
     <span class="k">print</span> <span class="s2">&quot;Connection Failed&quot;</span>
 </pre></div>
 </div>
+<p>Passing <cite>auto_reconnect=True</cite> will tell the websocket client to automatically reconnect if the connection gets dropped.</p>
 <p>See the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> and the <a class="reference external" href="https://api.slack.com/methods/rtm.connect">rtm.connect docs</a>
 for more details.</p>
 </div>
 <div class="section" id="rtm-events">
 <h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="sa">u</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
   <span class="sa">u</span><span class="s1">&#39;ts&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
   <span class="sa">u</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
@@ -210,7 +219,7 @@ for more details.</p>
 <div class="section" id="sending-messages-via-the-rtm-api">
 <h2>Sending messages via the RTM API<a class="headerlink" href="#sending-messages-via-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <p>You can send a message to Slack by sending JSON over the websocket connection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
@@ -219,11 +228,11 @@ for more details.</p>
 </pre></div>
 </div>
 <p>You can send a message to a private group or direct message channel in the same
-way, but using a Group ID (<code class="docutils literal"><span class="pre">C024BE91L</span></code>) or DM channel ID (<code class="docutils literal"><span class="pre">D024BE91L</span></code>).</p>
-<p>You can send a message in reply to a thread using the <code class="docutils literal"><span class="pre">thread</span></code> argument, and
+way, but using a Group ID (<code class="docutils literal notranslate"><span class="pre">C024BE91L</span></code>) or DM channel ID (<code class="docutils literal notranslate"><span class="pre">D024BE91L</span></code>).</p>
+<p>You can send a message in reply to a thread using the <code class="docutils literal notranslate"><span class="pre">thread</span></code> argument, and
 optionally broadcast that message back to the channel by setting
-<code class="docutils literal"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal"><span class="pre">True</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
@@ -255,6 +264,12 @@ It does not support attachments or other message formatting modes.</p>
 
     <script type="text/javascript" src="https://a.slack-edge.com/1504/js/rollup-core_required_libs.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://a.slack-edge.com/125e0/js/rollup-core_web.js" crossorigin="anonymous"></script>
+    <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-56978219-13', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
 
   </body>
 </html>

@@ -2,12 +2,51 @@
 Changelog
 ==============================================
 
-v1.0.9 (2017-8-31)
+v1.2.1 (2018-03-26)
+-------------------
+
+- Added rate limit handling for rtm connections (thanks @jayalane!)
+
+
+v1.2.0 (2018-03-20)
+-------------------
+
+- You can now tell the RTM client to automatically reconnect by passing `auto_reconnect=True`
+
+v1.1.3 (2018-03-01)
+-------------------
+
+- Fixed another API param encoding bug. It encodes things properly now.
+
+v1.1.2 (2018-01-31)
+-------------------
+
+- Fixed an encoding issue which was encoding some Web API params incorrectly (sorry)
+
+v1.1.1 (2018-01-30)
+-------------------
+
+ - Adds HTTP response headers to `api_call` responses to expose things like rate limit info
+ - Moves `token` into auth header rather than request params
+
+v1.1.0 (2017-11-21)
+-------------------
+
+ - Aadds new SlackClientError and ResponseParseError types to describe errors - thanks @aoberoi!
+ - Fix Build Error (#245) - thanks @stasfilin!
+ - include email as user property (#173) - thanks @acaire!
+ - Add http reply into slack login and slack connection error (#216) - thanks @harlowja!
+ - Removed unused exception class (#233)
+ - Fix rtm_send_message bug (#225) - thanks @kt5356!
+ - Allow use of custom parameters on rtm_connect() (#210) - thanks @kamushadenes!
+ - Fix link to rtm.connect docs (#223) - @sampart!
+
+v1.0.9 (2017-08-31)
 -------------------
 
   - Fixed rtm_send_message ID bug introduced in 1.0.8
 
-v1.0.8 (2017-8-31)
+v1.0.8 (2017-08-31)
 -------------------
 
   - Added rtm.connect support
@@ -25,7 +64,7 @@ v1.0.6 (2017-06-12)
   - Tidied up docs (thanks @schlueter!)
   - Added tox settings for Python 3 testing (thanks @cclauss!)
 
-v1.0.5 (2017-1-23)
+v1.0.5 (2017-01-23)
 -------------------
 
   - Allow RTM Channel.send_message to reply to a thread
@@ -78,8 +117,8 @@ v0.18.0 (2016-02-21)
   - Fixes some formatting issues so the code will work for python 2.6
   - Cleans up some unused imports, some PEP-8 fixes and a couple bad default args fixes
 
-v0.17 (2016-02-15)
-------------------
+v0.17.0 (2016-02-15)
+--------------------
 
   - Fixes the server so that it doesn't add duplicate users or channels to its internal lists, https://github.com/slackapi/python-slackclient/commit/0cb4bcd6e887b428e27e8059b6278b86ee661aaa
   - README updates:

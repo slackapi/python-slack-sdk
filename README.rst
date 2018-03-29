@@ -1,7 +1,7 @@
 python-slackclient
 ===================
 
-A basic client for Slack.com, which can optionally connect to the Slack Real Time Messaging (RTM) API.
+A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API.
 
 |build-status| |windows-build-status| |codecov| |doc-status| |pypi-version| |python-version|
 
@@ -48,13 +48,16 @@ Documentation
 
 For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
 
+
+You may also review our `Development Roadmap <https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap>`_ in the project wiki.
+
 Getting Help
 -------------
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
 - Use our `Github Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ for reporting bugs or requesting features.
-- Visit the `dev4slack channel <http://dev4slack.xoxco.com>`_ for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+- Visit the `Bot Developer Hangout <http://community.botkit.ai>`_ for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
 Basic Usage
 ------------
@@ -65,7 +68,7 @@ This package is a modular wrapper designed to make Slack `Web API <https://api.s
 app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
 a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
 
-See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>` for API token handling best practices.
+See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
 
 Sending a message
 ********************
@@ -83,7 +86,7 @@ To send a message to a channel, use the channel's ID. For IMs, use the user's ID
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:"
   )
 
@@ -103,7 +106,7 @@ as sending a regular message, but with an additional ``user`` parameter.
 
   sc.api_call(
     "chat.postEphemeral",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     user="U0XXXXXXX"
   )
@@ -131,7 +134,7 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003"
   )
@@ -149,7 +152,7 @@ set the ``reply_broadcast`` boolean parameter to ``True``.
 
   sc.api_call(
     "chat.postMessage",
-    channel="#python",
+    channel="C0XXXXXX",
     text="Hello from Python! :tada:",
     thread_ts="1476746830.000003",
     reply_broadcast=True

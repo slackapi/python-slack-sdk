@@ -1,5 +1,7 @@
-pytest
+pytest<3.3
 codecov
 coverage
+mock
 pytest-cov
 pytest-mock
+responses
