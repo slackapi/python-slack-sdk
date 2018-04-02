@@ -7,12 +7,87 @@ from .util import SearchList, SearchDict
 import json
 import logging
 import time
-import random
+
+import tenacity
+from tenacity import wait
 
 from requests.packages.urllib3.util.url import parse_url
 from ssl import SSLError
 from websocket import create_connection
 from websocket._exceptions import WebSocketConnectionClosedException
+
+LOG = logging.getLogger(__name__)
+
+
+class wait_exponential_rate_limited(wait.wait_base):
+    MAX_BACKOFF = (2**32) - 1
+    IMMEDIATE_RETRY = 180
+
+    def __init__(self, last_connected_at=None,
+                 exp_base=2, max_backoff=None,
+                 multiplier=1):
+        if max_backoff is None:
+            max_backoff = self.MAX_BACKOFF
+        self.max_backoff = max_backoff
+        self.exp_base = exp_base
+        self.last_connected_at = last_connected_at
+        self.multiplier = multiplier
+        self.subtractions = 0
+
+    def _should_try_immediate(self):
+        if self.last_connected_at is not None:
+            since_last_connected = time.time() - self.last_connected_at
+            if since_last_connected >= self.IMMEDIATE_RETRY:
+                # If we haven't connected in a while and this is our
+                # first failure, just try again immediately before starting
+                # to do the backoff algorithm...
+                return True
+        return False
+
+    def __call__(self, previous_attempt_number, delay_since_first_attempt,
+                 last_result=None):
+        if previous_attempt_number == 1 and self._should_try_immediate():
+            self.subtractions += 1
+            return 0
+        if last_result is not None:
+            last_result = last_result.result()
+        if (last_result is not None and
+                last_result.status_code == 429 and
+                'retry-after' in last_result.headers):
+            backoff = int(last_result.headers['retry-after'])
+            self.subtractions += 1
+        else:
+            # Take off all returns that were not using the backoff
+            # algorithm since we don't want to be counting those attempts
+            # here.
+            exp = previous_attempt_number - self.subtractions
+            try:
+                backoff = self.exp_base ** exp
+                backoff = self.multiplier * backoff
+            except OverflowError:
+                backoff = self.max_backoff
+        backoff = min(backoff, self.max_backoff)
+        return max(0, backoff)
+
+
+def is_bad_result(last_result):
+    if last_result.status_code != 200:
+        return True
+    return False
+
+
+def make_rtm_retry(last_connected_at=None, max_attempts=5, max_backoff=60):
+    retry_kwargs = {
+        'stop': tenacity.stop_after_attempt(max_attempts),
+        'wait': wait_exponential_rate_limited(
+            max_backoff=max_backoff,
+            last_connected_at=last_connected_at),
+        'retry': tenacity.retry_if_result(is_bad_result),
+        'before': tenacity.before_log(LOG, logging.DEBUG),
+        'reraise': False,
+        'sleep': time.sleep,
+    }
+    return tenacity.Retrying(**retry_kwargs)
 
 
 class Server(object):
@@ -39,9 +114,7 @@ class Server(object):
         self.ws_url = None
         self.connected = False
         self.auto_reconnect = False
-        self.last_connected_at = 0
-        self.reconnect_count = 0
-        self.rtm_connect_retries = 0
+        self.last_connected_at = None
 
         # Connect to RTM on load
         if connect:
@@ -109,46 +182,37 @@ class Server(object):
             self.auto_reconnect = kwargs["auto_reconnect"]
 
         # If this is an auto reconnect, rate limit reconnect attempts
+        retry = None
         if self.auto_reconnect and reconnect:
-            # Raise a SlackConnectionError after 5 retries within 3 minutes
-            recon_count = self.reconnect_count
-            if recon_count == 5:
-                logging.error("RTM connection failed, reached max reconnects.")
+            retry = kwargs.pop('retry', None)
+            if retry is None:
+                retry = make_rtm_retry(last_connected_at=self.last_connected_at)
+            try:
+                reply = retry.call(self.api_requester.do,
+                                   self.token, connect_method,
+                                   timeout=timeout, post_data=kwargs)
+            except tenacity.RetryError:
                 raise SlackConnectionError("RTM connection failed, reached max reconnects.")
-            # Wait to reconnect if the last reconnect was less than 3 minutes ago
-            if (time.time() - self.last_connected_at) < 180:
-                if recon_count > 0:
-                    # Back off after the the first attempt
-                    backoff_offset_multiplier = random.randint(1, 4)
-                    retry_timeout = (backoff_offset_multiplier * recon_count * recon_count)
-                    logging.debug("Reconnecting in %d seconds", retry_timeout)
-
-                    time.sleep(retry_timeout)
-                self.reconnect_count += 1
-            else:
-                self.reconnect_count = 0
-
-        reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
-
-        if reply.status_code != 200:
-            if self.rtm_connect_retries < 5 and reply.status_code == 429:
-                self.rtm_connect_retries += 1
-                retry_after = int(reply.headers.get('retry-after', 120))
-                logging.debug("HTTP 429: Rate limited. Retrying in %d seconds", retry_after)
-                time.sleep(retry_after)
-                self.rtm_connect(reconnect=reconnect, timeout=timeout)
-            else:
-                raise SlackConnectionError("RTM connection attempt was rate limited 5 times.")
         else:
-            self.rtm_connect_retries = 0
-            login_data = reply.json()
-            if login_data["ok"]:
-                self.ws_url = login_data['url']
-                self.connect_slack_websocket(self.ws_url)
-                if not reconnect:
-                    self.parse_slack_login_data(login_data, use_rtm_start)
+            reply = self.api_requester.do(self.token, connect_method,
+                                          timeout=timeout, post_data=kwargs)
+            if is_bad_result(reply):
+                raise SlackConnectionError("RTM connection failed")
+
+        self.last_connected_at = time.time()
+
+        login_data = reply.json()
+        if login_data["ok"]:
+            self.ws_url = login_data['url']
+            self.connect_slack_websocket(self.ws_url)
+            if not reconnect:
+                self.parse_slack_login_data(login_data, use_rtm_start)
+            if retry is not None:
+                return dict(retry.statistics)
             else:
-                raise SlackLoginError(reply=reply)
+                return {}
+        else:
+            raise SlackLoginError(reply=reply)
 
     def parse_slack_login_data(self, login_data, use_rtm_start):
         self.login_data = login_data
@@ -179,7 +243,7 @@ class Server(object):
                                                http_proxy_auth=proxy_auth)
             self.connected = True
             self.last_connected_at = time.time()
-            logging.debug("RTM connected")
+            LOG.debug("RTM connected")
             self.websocket.sock.setblocking(0)
         except Exception as e:
             self.connected = False
@@ -273,7 +337,7 @@ class Server(object):
                     return ''
                 raise
             except WebSocketConnectionClosedException as e:
-                logging.debug("RTM disconnected")
+                LOG.debug("RTM disconnected")
                 self.connected = False
                 if self.auto_reconnect:
                     self.rtm_connect(reconnect=True)

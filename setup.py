@@ -53,4 +53,5 @@ setup(name='slackclient',
           'websocket-client >=0.35, <1.0a0',
           'requests >=2.11, <3.0a0',
           'six >=1.10, <2.0a0',
+          'tenacity >= 4.0'
       ])
