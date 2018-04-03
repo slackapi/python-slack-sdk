@@ -2,10 +2,12 @@
 # mostly a proxy object to abstract how some of this works
 
 import json
-import traceback
+import logging
 
 from .server import Server
 from .exceptions import ParseResponseError
+
+LOG = logging.getLogger(__name__)
 
 
 class SlackClient(object):
@@ -52,7 +54,7 @@ class SlackClient(object):
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return self.server.connected
         except Exception:
-            traceback.print_exc()
+            LOG.warn("Failed RTM connect", exc_info=True)
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
