@@ -26,11 +26,15 @@ class SlackClient(object):
             proxies (dict): Proxies to use when create websocket or api calls,
             declare http and websocket proxies using {'http': 'http://127.0.0.1'},
             and https proxy using {'https': 'https://127.0.0.1:443'}
+            enable_multithread: Enable the underlying websocket connection to
+            be thread safe (ie, locks will occur on read and write to avoid
+            contention).
     '''
-    def __init__(self, token, proxies=None):
+    def __init__(self, token, proxies=None, enable_multithread=False):
 
         self.token = token
-        self.server = Server(self.token, False, proxies)
+        self.server = Server(self.token, False, proxies,
+                             enable_multithread=enable_multithread)
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)

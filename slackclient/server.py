@@ -21,7 +21,8 @@ class Server(object):
 
 
     """
-    def __init__(self, token, connect=True, proxies=None):
+    def __init__(self, token, connect=True, proxies=None,
+                 enable_multithread=False):
         # Slack client configs
         self.token = token
         self.proxies = proxies
@@ -42,6 +43,9 @@ class Server(object):
         self.last_connected_at = 0
         self.reconnect_count = 0
         self.rtm_connect_retries = 0
+
+        # This makes the whole websocket layer thread safe...
+        self.enable_multithread = enable_multithread
 
         # Connect to RTM on load
         if connect:
@@ -173,10 +177,10 @@ class Server(object):
             proxy_auth, proxy_port, proxy_host = None, None, None
 
         try:
-            self.websocket = create_connection(ws_url,
-                                               http_proxy_host=proxy_host,
-                                               http_proxy_port=proxy_port,
-                                               http_proxy_auth=proxy_auth)
+            self.websocket = create_connection(
+                ws_url, http_proxy_host=proxy_host,
+                http_proxy_port=proxy_port, http_proxy_auth=proxy_auth,
+                enable_multithread=self.enable_multithread)
             self.connected = True
             self.last_connected_at = time.time()
             logging.debug("RTM connected")
