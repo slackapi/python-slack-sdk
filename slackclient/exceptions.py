@@ -1,3 +1,9 @@
+# Warning can be removed once we bump semver
+import warnings
+warnings.warn(
+'Exceptions: SlackConnectionError and SlackLoginError have been moved '
+'to exceptions imports from server are no longer supported and will be removed')
+
 class SlackClientError(Exception):
     """
     Base exception for all errors raised by the SlackClient library
@@ -21,3 +27,15 @@ class ParseResponseError(SlackClientError, ValueError):
         )
         self.response_body = response_body
         self.original_exception = original_exception
+
+
+class SlackConnectionError(SlackClientError):
+    def __init__(self, message='', reply=None):
+        super(SlackConnectionError, self).__init__(message)
+        self.reply = reply
+
+
+class SlackLoginError(SlackClientError):
+    def __init__(self, message='', reply=None):
+        super(SlackLoginError, self).__init__(message)
+        self.reply = reply
