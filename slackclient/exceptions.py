@@ -1,8 +1,10 @@
 # Warning can be removed once we bump semver
 import warnings
 warnings.warn(
-'Exceptions: SlackConnectionError and SlackLoginError have been moved '
-'to exceptions imports from server are no longer supported and will be removed')
+    'Exceptions: SlackConnectionError and SlackLoginError have been moved '
+    'to exceptions imports from server are no longer supported and will be removed'
+)
+
 
 class SlackClientError(Exception):
     """
