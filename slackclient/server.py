@@ -1,7 +1,7 @@
 from .channel import Channel
 from .exceptions import SlackClientError
 # Imported manually as these are here to support backwards compatability
-from .exceptions import SlackConnectionError, SlackLoginError
+from .exceptions import SlackConnectionError, SlackLoginError  # NOQA
 from .slackrequest import SlackRequest
 from .user import User
 from .util import SearchList, SearchDict
