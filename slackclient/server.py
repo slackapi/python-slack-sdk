@@ -1,7 +1,7 @@
 from .channel import Channel
-from .exceptions import SlackClientError
+from .exceptions import SlackClientError  # pylint: disable=unused-import
 # Imported manually as these are here to support backwards compatability
-from .exceptions import SlackConnectionError, SlackLoginError  # NOQA
+from .exceptions import SlackConnectionError, SlackLoginError  # pylint: disable=unused-import
 from .slackrequest import SlackRequest
 from .user import User
 from .util import SearchList, SearchDict
