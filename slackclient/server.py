@@ -249,8 +249,13 @@ class Server(object):
 
         self.send_to_websocket(message_json)
 
-    def ping(self):
-        return self.send_to_websocket({"type": "ping"})
+    def ping(self, extra_flat_args=None):
+        out_data = {
+            'type': 'ping',
+        }
+        if extra_flat_args is not None:
+            out_data.update(extra_flat_args)
+        return self.send_to_websocket(out_data)
 
     def websocket_safe_read(self):
         """
