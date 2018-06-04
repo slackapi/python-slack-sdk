@@ -108,6 +108,8 @@ class Server(object):
         if 'auto_reconnect' in kwargs:
             self.auto_reconnect = kwargs["auto_reconnect"]
 
+        auto_retry = kwargs.pop("auto_retry", True)
+
         # If this is an auto reconnect, rate limit reconnect attempts
         if self.auto_reconnect and reconnect:
             # Raise a SlackConnectionError after 5 retries within 3 minutes
@@ -129,8 +131,9 @@ class Server(object):
                 self.reconnect_count = 0
 
         reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
-
         if reply.status_code != 200:
+            if not auto_retry:
+                raise SlackConnectionError("RTM connection failed.", reply=reply)
             if self.rtm_connect_retries < 5 and reply.status_code == 429:
                 self.rtm_connect_retries += 1
                 retry_after = int(reply.headers.get('retry-after', 120))
@@ -138,7 +141,8 @@ class Server(object):
                 time.sleep(retry_after)
                 self.rtm_connect(reconnect=reconnect, timeout=timeout)
             else:
-                raise SlackConnectionError("RTM connection attempt was rate limited 5 times.")
+                raise SlackConnectionError("RTM connection attempt"
+                                           " was rate limited 5 times.", reply=reply)
         else:
             self.rtm_connect_retries = 0
             login_data = reply.json()
