@@ -21,11 +21,13 @@ class Server(object):
 
 
     """
-    def __init__(self, token, connect=True, proxies=None):
+    def __init__(self, token, connect=True, protocol="https", api_domain="slack.com",
+                 port=443, proxies=None):
         # Slack client configs
         self.token = token
         self.proxies = proxies
-        self.api_requester = SlackRequest(proxies=proxies)
+        self.api_requester = SlackRequest(
+            protocol=protocol, api_domain=api_domain, port=port, proxies=proxies)
 
         # Workspace metadata
         self.username = None

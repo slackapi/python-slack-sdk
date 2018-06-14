@@ -25,14 +25,17 @@ class SlackClient(object):
             token (str): Your Slack Authentication token. You can find or generate a test token
             `here <https://api.slack.com/docs/oauth-test-tokens>`_
             Note: Be `careful with your token <https://api.slack.com/docs/oauth-safety>`_
+            protocol (str): 'http' or 'https', default https
+            domain (str): default 'slack.com' (requires change if steno test framework used)
+            port (int|str): default port 443
             proxies (dict): Proxies to use when create websocket or api calls,
             declare http and websocket proxies using {'http': 'http://127.0.0.1'},
             and https proxy using {'https': 'https://127.0.0.1:443'}
     '''
-    def __init__(self, token, proxies=None):
+    def __init__(self, token, protocol='https', api_domain='slack.com', port=443, proxies=None):
 
         self.token = token
-        self.server = Server(self.token, False, proxies)
+        self.server = Server(self.token, False, protocol, api_domain, port, proxies)
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)

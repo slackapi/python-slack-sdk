@@ -7,7 +7,7 @@ from .version import __version__
 
 
 class SlackRequest(object):
-    def __init__(self, proxies=None):
+    def __init__(self, protocol="https", api_domain="slack.com", port=443, proxies=None):
 
         # __name__ returns 'slackclient.slackrequest', we only want 'slackclient'
         client_name = __name__.split('.')[0]
@@ -21,6 +21,9 @@ class SlackRequest(object):
         }
 
         self.custom_user_agent = None
+        self.protocol = protocol
+        self.api_domain = api_domain
+        self.port = port
         self.proxies = proxies
 
     def get_user_agent(self):
@@ -44,7 +47,7 @@ class SlackRequest(object):
         else:
             self.custom_user_agent = [[name, version]]
 
-    def do(self, token, request="?", post_data=None, domain="slack.com", timeout=None):
+    def do(self, token, request="?", post_data=None, timeout=None):
         """
         Perform a POST request to the Slack Web API
 
@@ -57,8 +60,10 @@ class SlackRequest(object):
             domain (str): if for some reason you want to send your request to something other
                 than slack.com
         """
-
-        url = 'https://{0}/api/{1}'.format(domain, request)
+        url = '{0}://{1}/api/{2}'.format(
+            self.protocol, self.api_domain, request) if (
+                self.api_domain == 'slack.com') else '{0}://{1}:{2}/api/{3}'.format(
+                        self.protocol, self.api_domain, self.port, request)
 
         # Override token header if `token` is passed in post_data
         if post_data is not None and "token" in post_data:
