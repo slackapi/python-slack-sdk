@@ -176,21 +176,20 @@ class Server(object):
 
     def connect_slack_websocket(self, ws_url):
         """Uses http proxy if available"""
-        if self.proxies and "http" in self.proxies:
-            parts = parse_url(self.proxies["http"])
-            proxy_host, proxy_port = parts.host, parts.port
+        if self.proxies and 'http' in self.proxies:
+            parts = parse_url(self.proxies['http'])
+            proxy_type, proxy_host, proxy_port = parts.scheme, parts.host, parts.port
             auth = parts.auth
             proxy_auth = auth and auth.split(":")
         else:
-            proxy_auth, proxy_port, proxy_host = None, None, None
+            proxy_type, proxy_auth, proxy_port, proxy_host = None, None, None, None
 
         try:
-            self.websocket = create_connection(
-                ws_url,
-                http_proxy_host=proxy_host,
-                http_proxy_port=proxy_port,
-                http_proxy_auth=proxy_auth,
-            )
+            self.websocket = create_connection(ws_url,
+                                               proxy_type=proxy_type,
+                                               http_proxy_host=proxy_host,
+                                               http_proxy_port=proxy_port,
+                                               http_proxy_auth=proxy_auth)
             self.connected = True
             self.last_connected_at = time.time()
             logging.debug("RTM connected")
