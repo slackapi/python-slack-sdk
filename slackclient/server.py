@@ -182,7 +182,7 @@ class Server(object):
             auth = parts.auth
             proxy_auth = auth and auth.split(":")
         else:
-            proxy_type, proxy_auth, proxy_port, proxy_host = None, None, None, None
+            proxy_type, proxy_auth, proxy_port, proxy_host = 'http', None, None, None
 
         try:
             self.websocket = create_connection(ws_url,
