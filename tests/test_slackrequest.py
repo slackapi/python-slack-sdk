@@ -1,6 +1,7 @@
+import os
+
 from slackclient.slackrequest import SlackRequest
 from slackclient.version import __version__
-import os
 
 
 def test_http_headers(mocker):
@@ -104,11 +105,80 @@ def test_post_attachements(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123',
-               'chat.postMessage',
-               {'attachments': [{'title': 'hello'}]})
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'list-param': [
+                {'title': 'List parameter'}
+            ]
+        }
+    )
     args, kwargs = requests.post.call_args
-
     assert requests.post.call_count == 1
     assert 'https://slack.com/api/chat.postMessage' == args[0]
-    assert isinstance(kwargs["data"]["attachments"], str)
+    assert isinstance(kwargs["data"]["list-param"], str)
+
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'tuple-param': (
+                {'title': 'Tuple parameter'},
+            )
+        }
+    )
+    args, kwargs = requests.post.call_args
+    assert requests.post.call_count == 2
+    assert 'https://slack.com/api/chat.postMessage' == args[0]
+    assert isinstance(kwargs["data"]["tuple-param"], str)
+
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'set-param': {1, 2, 3}
+        }
+    )
+    args, kwargs = requests.post.call_args
+    assert requests.post.call_count == 3
+    assert 'https://slack.com/api/chat.postMessage' == args[0]
+    assert isinstance(kwargs["data"]["set-param"], str)
+
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'generator-param': (x for x in range(3))
+        }
+    )
+    args, kwargs = requests.post.call_args
+    assert requests.post.call_count == 4
+    assert 'https://slack.com/api/chat.postMessage' == args[0]
+    assert isinstance(kwargs["data"]["generator-param"], str)
+
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'dict-param': {
+                'Dict': 'parameter'
+            }
+        }
+    )
+    args, kwargs = requests.post.call_args
+    assert requests.post.call_count == 5
+    assert 'https://slack.com/api/chat.postMessage' == args[0]
+    assert isinstance(kwargs["data"]["dict-param"], str)
+
+    request.do(
+        'xoxb-123',
+        'chat.postMessage',
+        {
+            'non-iterable': 123
+        }
+    )
+    args, kwargs = requests.post.call_args
+    assert requests.post.call_count == 6
+    assert 'https://slack.com/api/chat.postMessage' == args[0]
+    assert isinstance(kwargs["data"]["non-iterable"], int)
