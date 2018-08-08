@@ -207,7 +207,8 @@ class Server(object):
                              user["id"],
                              user["real_name"],
                              user["tz"],
-                             user["profile"]["email"])
+                             user["profile"]["email"],
+                             user["profile"])
 
     def send_to_websocket(self, data):
         """
@@ -281,8 +282,8 @@ class Server(object):
                     raise SlackConnectionError("Unable to send due to closed RTM websocket")
             return data.rstrip()
 
-    def attach_user(self, name, user_id, real_name, tz, email):
-        self.users.update({user_id: User(self, name, user_id, real_name, tz, email)})
+    def attach_user(self, name, user_id, real_name, tz, email, profile):
+        self.users.update({user_id: User(self, name, user_id, real_name, tz, email, profile)})
 
     def attach_channel(self, name, channel_id, members=None):
         if members is None:
