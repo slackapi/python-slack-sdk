@@ -3,25 +3,32 @@ import json
 import six
 import sys
 import platform
+from .exceptions import SlackClientError
 from .version import __version__
 
 
 class SlackRequest(object):
-    def __init__(self, proxies=None):
-
-        # __name__ returns 'slackclient.slackrequest', we only want 'slackclient'
-        client_name = __name__.split('.')[0]
-        client_version = __version__  # Version is returned from version.py
-
+    def __init__(self, proxies=None, domain = None, access_token = None, refresh_token = None, client_id = None, client_secret = None, refresh_callback = None):
         # Construct the user-agent header with the package info, Python version and OS version.
         self.default_user_agent = {
-            "client": "{0}/{1}".format(client_name, client_version),
+            # __name__ returns 'slackclient.slackrequest', we only want 'slackclient'
+            "client": "{0}/{1}".format(__name__.split('.')[0], __version__),
             "python": "Python/{v.major}.{v.minor}.{v.micro}".format(v=sys.version_info),
             "system": "{0}/{1}".format(platform.system(), platform.release())
         }
 
+        # HTTP configs
         self.custom_user_agent = None
         self.proxies = proxies
+        self.domain = domain
+
+        # Slack application configs
+        self.refresh_token = refresh_token
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.refresh_callback = refresh_callback
+        self.token = access_token
+        self.token_expires_at = None
 
     def get_user_agent(self):
         # Check for custom user-agent and append if found
@@ -58,7 +65,8 @@ class SlackRequest(object):
                 than slack.com
         """
 
-        url = 'https://{0}/api/{1}'.format(domain, request)
+        # if token is None and "refresh_token" in post_data:
+        #     token = post_data['refresh_token']
 
         # Override token header if `token` is passed in post_data
         if post_data is not None and "token" in post_data:
@@ -95,11 +103,18 @@ class SlackRequest(object):
                 post_data[k] = json.dumps(v)
 
         # Submit the request
-        return requests.post(
-            url,
+        res = requests.post(
+            'https://{0}/api/{1}'.format(domain, request),
             headers=headers,
             data=post_data,
             files=files,
             timeout=timeout,
             proxies=self.proxies
         )
+
+        refresh_data = json.loads(res.content)
+        if (not refresh_data['ok']):
+            # raise SlackClientError(refresh_data['error'])
+            self.request_opts['refresh_callback'](refresh_data)
+        else:
+            return res

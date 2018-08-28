@@ -5,7 +5,7 @@ import json
 import logging
 
 from .server import Server
-from .exceptions import ParseResponseError
+from .exceptions import ParseResponseError, SlackClientError
 
 LOG = logging.getLogger(__name__)
 
@@ -19,20 +19,49 @@ class SlackClient(object):
     is associated with.
 
     For more information, check out the `Slack API Docs <https://api.slack.com/>`_
-
-    Init:
-        :Args:
-            token (str): Your Slack Authentication token. You can find or generate a test token
-            `here <https://api.slack.com/docs/oauth-test-tokens>`_
-            Note: Be `careful with your token <https://api.slack.com/docs/oauth-safety>`_
-            proxies (dict): Proxies to use when create websocket or api calls,
-            declare http and websocket proxies using {'http': 'http://127.0.0.1'},
-            and https proxy using {'https': 'https://127.0.0.1:443'}
     '''
-    def __init__(self, token, proxies=None):
 
-        self.token = token
-        self.server = Server(self.token, False, proxies)
+    def __init__(self, token=None, proxies=None, refresh_token=None, client_id=None, client_secret=None, refresh_callback=None, **kwargs):
+        '''
+        Init:
+            :Args:
+                token (str): Your Slack Authentication token. You can find or generate a test token
+                `here <https://api.slack.com/docs/oauth-test-tokens>`_
+                Note: Be `careful with your token <https://api.slack.com/docs/oauth-safety>`_
+                proxies (dict): Proxies to use when create websocket or api calls,
+                declare http and websocket proxies using {'http': 'http://127.0.0.1'},
+                and https proxy using {'https': 'https://127.0.0.1:443'}
+                refresh_token (str): Your Slack app's refresh token. This token is used to
+                update your app's OAuth access token
+                client_id (str): Your app's Client ID
+                client_secret (srt): Your app's Client Secret (Used for OAuth requests)
+                refresh_callback (function): Your application's function for updating Slack
+                OAuth tokens inside your data store
+        '''
+        self.access_token = token
+
+        if (refresh_token):
+            if (callable(refresh_callback)):
+                self.server = Server(
+                    token=token,
+                    connect=False,
+                    proxies=proxies,
+                    refresh_token=refresh_token,
+                    client_id=client_id,
+                    client_secret=client_secret,
+                    refresh_callback=refresh_callback,
+                    **kwargs
+                )
+            else:
+                raise SlackClientError("Token refresh callback function is required when using refresh token.")
+        else:
+            # Slack app configs
+            self.server = Server(
+                token=token,
+                connect=False,
+                proxies=proxies,
+                **kwargs
+            )
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)

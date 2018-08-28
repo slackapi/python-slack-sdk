@@ -18,14 +18,18 @@ from websocket._exceptions import WebSocketConnectionClosedException
 class Server(object):
     """
     The Server object owns the websocket connection and all attached channel information.
-
-
     """
-    def __init__(self, token, connect=True, proxies=None):
-        # Slack client configs
+    def __init__(self, token, connect=True, proxies=None, refresh_token=None, client_id=None, client_secret=None, refresh_callback=None, **kwargs):
+        # Slack app configs
         self.token = token
+        self.refresh_token = refresh_token
+        self.client_id = client_id
+        self.client_secret = client_secret
+
+        # api configs
         self.proxies = proxies
-        self.api_requester = SlackRequest(proxies=proxies)
+
+        self.api_requester = SlackRequest(proxies=proxies,refresh_token=refresh_token,client_id=client_id,client_secret=client_secret, refresh_callback=refresh_callback)
 
         # Workspace metadata
         self.username = None
@@ -337,7 +341,6 @@ class Server(object):
         response = self.api_requester.do(self.token, method, kwargs, timeout=timeout)
         response_json = json.loads(response.text)
         response_json["headers"] = dict(response.headers)
-        return json.dumps(response_json)
 
 # TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
 # major change because any clients already referencing these types in order to catch them
