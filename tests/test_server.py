@@ -21,12 +21,11 @@ def rtm_start_fixture():
 
 
 def test_server():
-    server = Server("valid_token", connect=False)
+    server = Server(access_token="valid_token", connect=False)
     assert type(server) == Server
 
     # The server eqs to a string, either the token or workspace domain
-    assert server == "valid_token"
-    assert server != "invalid_token"
+    assert server.api_requester.access_token == "valid_token"
 
 
 def test_server_connect(rtm_start_fixture):
@@ -38,7 +37,7 @@ def test_server_connect(rtm_start_fixture):
             json=rtm_start_fixture
         )
 
-        Server("token", connect=True)
+        Server(access_token="token", connect=True)
 
         for call in rsps.calls:
             assert call.request.url in [
@@ -47,7 +46,7 @@ def test_server_connect(rtm_start_fixture):
 
 
 def test_server_is_hashable(server):
-    server_map = {server: server.token}
+    server_map = {server: server.api_requester.access_token}
     assert server_map[server] == 'xoxp-1234123412341234-12341234-1234'
     assert (server_map[server] == 'foo') is False
 

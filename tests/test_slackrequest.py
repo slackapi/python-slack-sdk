@@ -8,7 +8,7 @@ def test_http_headers(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.make_http_request('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     assert kwargs['headers']['user-agent'] is not None
@@ -21,7 +21,7 @@ def test_custom_user_agent(mocker):
     request.append_user_agent("fooagent1", "0.1")
     request.append_user_agent("baragent/2", "0.2")
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.make_http_request('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     # Verify user-agent includes both default and custom agent info
@@ -36,7 +36,7 @@ def test_auth_header(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
+    request.make_http_request('xoxb-123', 'chat.postMessage', {'text': 'test', 'channel': '#general'})
     args, kwargs = requests.post.call_args
 
     assert "Bearer xoxb-123" in kwargs['headers']['Authorization']
@@ -46,7 +46,7 @@ def test_token_override(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'chat.postMessage',
+    request.make_http_request('xoxb-123', 'chat.postMessage',
                {
                    'token': "newtoken",
                    'text': 'test',
@@ -61,12 +61,12 @@ def test_plural_field(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123','conversations.open', {'users': ['U123', 'U234', 'U345']})
+    request.make_http_request('xoxb-123','conversations.open', {'users': ['U123', 'U234', 'U345']})
     args, kwargs = requests.post.call_args
 
     assert kwargs['data'] == {'users': 'U123,U234,U345'}
 
-    request.do('xoxb-123','conversations.open', {'users': "U123,U234,U345"})
+    request.make_http_request('xoxb-123','conversations.open', {'users': "U123,U234,U345"})
     args2, kwargs2 = requests.post.call_args
 
     assert kwargs2['data'] == {'users': 'U123,U234,U345'}
@@ -76,7 +76,7 @@ def test_post_file(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123',
+    request.make_http_request('xoxb-123',
                'files.upload',
                {'file': open(os.path.join('.', 'tests', 'data', 'slack_logo.png'), 'rb'),
                 'filename': 'slack_logo.png'})
@@ -92,7 +92,7 @@ def test_get_file(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123', 'files.info', {'file': 'myFavoriteFileID'})
+    request.make_http_request('xoxb-123', 'files.info', {'file': 'myFavoriteFileID'})
     args, kwargs = requests.post.call_args
 
     assert requests.post.call_count == 1
@@ -105,7 +105,7 @@ def test_post_attachements(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123',
+    request.make_http_request('xoxb-123',
                'chat.postMessage',
                {'attachments': [{'title': 'hello'}]})
     args, kwargs = requests.post.call_args

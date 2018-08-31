@@ -68,7 +68,34 @@ This package is a modular wrapper designed to make Slack `Web API <https://api.s
 app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
 a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
 
+Tokens and Authentication
+********************
+The SlackClient library allows you to use a variety of Slack authentication tokens.
+
+Automatic Token Refresh
+.. code-block:: python
+  import os
+  from slackclient import SlackClient
+  slack_refresh_token = os.environ["SLACK_REFRESH_TOKEN"]
+  slack_client_id = os.environ["SLACK_CLIENT_ID"]
+  slack_client_secret = os.environ["SLACK_CLIENT_SECRET"]
+
+  def token_update_callback(update_data):
+    print("Team ID: {}".format(update_data["team_id"]))
+    print("Access Token: {}".format(update_data["access_token"]))
+    print("Access Token expires in (ms): {}".format(update_data["expires_in"]))
+
+  sc = SlackClient(
+    refresh_token=slack_refresh_token,
+    client_id=slack_client_id,
+    client_secret=slack_client_secret,
+    refresh_callback=token_update_callback
+  )
+
+
+
 See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
+
 
 Sending a message
 ********************

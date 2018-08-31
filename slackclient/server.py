@@ -19,9 +19,19 @@ class Server(object):
     """
     The Server object owns the websocket connection and all attached channel information.
     """
-    def __init__(self, token, connect=True, proxies=None, refresh_token=None, client_id=None, client_secret=None, refresh_callback=None, **kwargs):
+    def __init__(
+            self,
+            client=None,
+            access_token=None,
+            connect=True,
+            proxies=None,
+            refresh_token=None,
+            client_id=None,
+            client_secret=None,
+            refresh_callback=None,
+            **kwargs
+    ):
         # Slack app configs
-        self.token = token
         self.refresh_token = refresh_token
         self.client_id = client_id
         self.client_secret = client_secret
@@ -29,7 +39,16 @@ class Server(object):
         # api configs
         self.proxies = proxies
 
-        self.api_requester = SlackRequest(proxies=proxies,refresh_token=refresh_token,client_id=client_id,client_secret=client_secret, refresh_callback=refresh_callback)
+        # HTTP Request handler
+        self.api_requester = SlackRequest(
+            client=client,
+            proxies=proxies,
+            access_token=access_token,
+            refresh_token=refresh_token,
+            client_id=client_id,
+            client_secret=client_secret,
+            refresh_callback=refresh_callback
+        )
 
         # Workspace metadata
         self.username = None
@@ -52,13 +71,13 @@ class Server(object):
             self.rtm_connect()
 
     def __eq__(self, compare_str):
-        if compare_str == self.domain or compare_str == self.token:
+        if compare_str == self.domain or compare_str == self.api_requester.access_token:
             return True
         else:
             return False
 
     def __hash__(self):
-        return hash(self.token)
+        return hash(self.api_requester.access_token)
 
     def __str__(self):
         """
@@ -71,7 +90,7 @@ class Server(object):
         login_data : None
         api_requester : <slackclient.slackrequest.SlackRequest
         channels : []
-        token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
+        access_token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False
         ws_url : None
         """
@@ -104,7 +123,6 @@ class Server(object):
             None
 
         """
-
         # rtm.start returns user and channel info, rtm.connect does not.
         connect_method = "rtm.start" if use_rtm_start else "rtm.connect"
 
@@ -132,7 +150,11 @@ class Server(object):
             else:
                 self.reconnect_count = 0
 
-        reply = self.api_requester.do(self.token, connect_method, timeout=timeout, post_data=kwargs)
+        reply = self.api_requester.make_http_request(
+            api_method=connect_method,
+            timeout=timeout,
+            post_data=kwargs
+        )
 
         if reply.status_code != 200:
             if self.rtm_connect_retries < 5 and reply.status_code == 429:
@@ -338,9 +360,15 @@ class Server(object):
 
             See here for more information on responses: https://api.slack.com/web
         """
-        response = self.api_requester.do(self.token, method, kwargs, timeout=timeout)
+        response = self.api_requester.make_http_request(
+            self.api_requester.access_token,
+            method,
+            kwargs,
+            timeout=timeout
+        )
         response_json = json.loads(response.text)
         response_json["headers"] = dict(response.headers)
+        return json.dumps(response_json)
 
 # TODO: Move the error types defined below into the .exceptions namespace. This would be a semver
 # major change because any clients already referencing these types in order to catch them

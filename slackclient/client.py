@@ -4,6 +4,8 @@
 import json
 import logging
 
+from datetime import datetime
+
 from .server import Server
 from .exceptions import ParseResponseError, SlackClientError
 
@@ -20,9 +22,17 @@ class SlackClient(object):
 
     For more information, check out the `Slack API Docs <https://api.slack.com/>`_
     '''
-
-    def __init__(self, token=None, proxies=None, refresh_token=None, client_id=None, client_secret=None, refresh_callback=None, **kwargs):
-        '''
+    def __init__(
+            self,
+            access_token=None,
+            refresh_token=None,
+            client_id=None,
+            client_secret=None,
+            refresh_callback=None,
+            proxies=None,
+            **kwargs
+    ):
+        """
         Init:
             :Args:
                 token (str): Your Slack Authentication token. You can find or generate a test token
@@ -37,13 +47,11 @@ class SlackClient(object):
                 client_secret (srt): Your app's Client Secret (Used for OAuth requests)
                 refresh_callback (function): Your application's function for updating Slack
                 OAuth tokens inside your data store
-        '''
-        self.access_token = token
-
+        """
         if (refresh_token):
             if (callable(refresh_callback)):
                 self.server = Server(
-                    token=token,
+                    client=self,
                     connect=False,
                     proxies=proxies,
                     refresh_token=refresh_token,
@@ -53,15 +61,39 @@ class SlackClient(object):
                     **kwargs
                 )
             else:
-                raise SlackClientError("Token refresh callback function is required when using refresh token.")
+                raise SlackClientError(
+                    "Token refresh callback function is required when using refresh token."
+                )
         else:
             # Slack app configs
             self.server = Server(
-                token=token,
+                access_token=access_token,
                 connect=False,
                 proxies=proxies,
                 **kwargs
             )
+        self.token = access_token  # noqa TODO: Change this to `self.access_token` in the next major version bump
+
+    def update_client_tokens(self, team_id, access_token, expires_in):
+        """
+        This method is used to update this client instance's
+        OAuth access tokens upon a token refresh event
+
+        :Args:
+            access_token (str): The client's OAuth access token, used for Web API requests
+            refresh_token(str): The OAuth token used for making access token refresh requests
+            expires_in (int): OAuth access token lifespan. This is used to set the `expires_at` TTL
+            refresh_callback (obj): A callable object to be executed upon token refresh
+        """
+        # Set the client's team ID and access token
+        setattr(self.server.api_requester, 'team_id', team_id)
+        setattr(self.server.api_requester, 'access_token', access_token)
+        setattr(self, 'token', access_token)
+
+        # Update the token expiration timestamp
+        current_ts = int(datetime.now().strftime("%s")) * 1000
+        expires_at = int(current_ts + expires_in)
+        setattr(self.server.api_requester, 'access_token_expires_at', expires_at)
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
@@ -79,6 +111,9 @@ class SlackClient(object):
             False on exceptions
         '''
 
+        if (self.server.refresh_token):
+            raise SlackClientError("Workspace tokens may not be used to connect to the RTM API.")
+
         try:
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return self.server.connected
@@ -87,7 +122,7 @@ class SlackClient(object):
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
-        '''
+        """
         Call the Slack Web API as documented here: https://api.slack.com/web
 
         :Args:
@@ -99,7 +134,7 @@ class SlackClient(object):
 
             Example::
 
-                sc.server.api_call(
+                sc.api_call(
                     "channels.setPurpose",
                     channel="CABC12345",
                     purpose="Writing some code!"
@@ -115,7 +150,7 @@ class SlackClient(object):
                 u'{"ok":false,"error":"channel_not_found"}'
 
             See here for more information on responses: https://api.slack.com/web
-        '''
+        """
         response_body = self.server.api_call(method, timeout=timeout, **kwargs)
         try:
             result = json.loads(response_body)
