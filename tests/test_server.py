@@ -1,17 +1,16 @@
 import json
-import time
 import pytest
-import requests
 import responses
+import time
+import urllib3
+
 from mock import patch
+
 from slackclient.user import User
-from slackclient.server import Server, SlackLoginError, SlackConnectionError
+from slackclient.server import Server, SlackConnectionError
 from slackclient.channel import Channel
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 @pytest.fixture
 def rtm_start_fixture():
