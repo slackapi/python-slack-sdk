@@ -3,9 +3,7 @@ import platform
 import requests
 import six
 import sys
-import time
 
-from slackclient.exceptions import SlackClientError
 from .version import __version__
 
 

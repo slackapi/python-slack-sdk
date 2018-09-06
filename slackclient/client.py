@@ -48,12 +48,12 @@ class SlackClient(object):
                 OAuth tokens inside your data store
         """
 
-        self.client_id=client_id
-        self.client_secret=client_secret
-        self.refresh_token=refresh_token
-        self.token_update_callback=token_update_callback
-        self.token=token
-        self.access_token_expires_at=0
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.refresh_token = refresh_token
+        self.token_update_callback = token_update_callback
+        self.token = token
+        self.access_token_expires_at = 0
 
         if (refresh_token):
             if (callable(token_update_callback)):
@@ -89,14 +89,14 @@ class SlackClient(object):
             'client_secret': self.client_secret
         }
         response = self.server.api_requester.post_http_request(
-            self.refresh_token, api_method='oauth.access',post_data=post_data)
+            self.refresh_token, api_method='oauth.access', post_data=post_data)
         response_json = json.loads(response.text)
 
         # If Slack returned an updated access token, update the client, otherwise
         # raise SlackClientError exception with the error returned from the API
         if response_json['ok']:
             # Update the client's access token and expiration timestamp
-            self.server.api_requester.enterprise_id=response_json['enterprise_id']
+            self.server.api_requester.enterprise_id = response_json['enterprise_id']
             self.team_id = response_json['team_id']
             self.token = response_json['access_token']
             self.server.token = response_json['access_token']
