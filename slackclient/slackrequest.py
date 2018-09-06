@@ -13,8 +13,6 @@ class SlackRequest(object):
             proxies=None,
             domain="slack.com"
     ):
-        # TODO: add pydoc comments
-
         # HTTP configs
         self.custom_user_agent = None
         self.proxies = proxies
