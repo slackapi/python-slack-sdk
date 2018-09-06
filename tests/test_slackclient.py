@@ -25,18 +25,19 @@ def im_created_fixture():
 def test_proxy():
     proxies = {'http': 'some-bad-proxy', 'https': 'some-bad-proxy'}
     client = SlackClient('xoxp-1234123412341234-12341234-1234', proxies=proxies)
+    server = client.server
 
-    assert client.server.proxies == proxies
+    assert server.proxies == proxies
 
-    # with pytest.raises(ConnectionError):
-    #     client.rtm_connect()
+    with pytest.raises(ProxyError):
+        server.rtm_connect()
 
     with pytest.raises(SlackConnectionError):
-        client.server.connect_slack_websocket('wss://mpmulti-xw58.slack-msgs.com/websocket/bad-token')
+        server.connect_slack_websocket('wss://mpmulti-xw58.slack-msgs.com/websocket/bad-token')
 
-    api_requester = client.server.api_requester
+    api_requester = server.api_requester
     assert api_requester.proxies == proxies
-    with pytest.raises(ConnectionError):
+    with pytest.raises(ProxyError):
         api_requester.do('xoxp-1234123412341234-12341234-1234', request='channels.list')
 
 
