@@ -66,7 +66,7 @@ class SlackRequest(object):
         else:
             self.custom_user_agent = [[name, version]]
 
-    def make_http_request(self, token=None, api_method="?", post_data=None, timeout=None):
+    def do(self, token=None, api_method="?", post_data=None, timeout=None):
         """
         Perform a POST request to the Slack Web API
         Args:
@@ -160,7 +160,6 @@ class SlackRequest(object):
         request_args = {
             'api_method': 'oauth.access',
             'post_data': {
-                'token': self.refresh_token,
                 'refresh_token': self.refresh_token,
                 'grant_type': 'refresh_token',
                 'client_id': self.client_id,
@@ -177,6 +176,7 @@ class SlackRequest(object):
         if (response_json['ok']):
             # Update the client's access token and expiration timestamp
             self.client.update_client_tokens(
+                # response_json['enterprise_id'], # TODO uncomment once it's returned from the API
                 response_json['team_id'],
                 response_json['access_token'],
                 response_json['expires_in']

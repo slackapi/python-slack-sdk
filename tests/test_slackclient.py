@@ -37,7 +37,7 @@ def test_proxy():
     api_requester = client.server.api_requester
     assert api_requester.proxies == proxies
     with pytest.raises(ConnectionError):
-        api_requester.make_http_request('xoxp-1234123412341234-12341234-1234', api_method='channels.list')
+        api_requester.do('xoxp-1234123412341234-12341234-1234', api_method='channels.list')
 
 
 def test_SlackClient(slackclient):

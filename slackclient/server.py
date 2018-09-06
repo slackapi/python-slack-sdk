@@ -150,7 +150,7 @@ class Server(object):
             else:
                 self.reconnect_count = 0
 
-        reply = self.api_requester.make_http_request(
+        reply = self.api_requester.do(
             api_method=connect_method,
             timeout=timeout,
             post_data=kwargs
@@ -360,7 +360,7 @@ class Server(object):
 
             See here for more information on responses: https://api.slack.com/web
         """
-        response = self.api_requester.make_http_request(
+        response = self.api_requester.do(
             self.api_requester.access_token,
             method,
             kwargs,
