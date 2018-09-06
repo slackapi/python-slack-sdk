@@ -1,10 +1,11 @@
-import requests
 import json
+import platform
+import requests
 import six
 import sys
-import platform
-from datetime import datetime
-from .exceptions import SlackClientError
+import time
+
+from slackclient.exceptions import SlackClientError
 from .version import __version__
 
 
@@ -114,7 +115,7 @@ class SlackRequest(object):
         # Check the access token's expiration timestamp before submitting
         # the API request and refresh if expired
         if(self.refresh_token and self.access_token_expires_at):
-            current_ts = int(datetime.now().strftime("%s")) * 1000
+            current_ts = int(time.time()) * 1000
             if(current_ts > self.access_token_expires_at):
                 self.access_token_expires_at = None
                 self.refresh_access_token()

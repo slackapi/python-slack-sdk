@@ -3,8 +3,7 @@
 
 import json
 import logging
-
-from datetime import datetime
+import time
 
 from .server import Server
 from .exceptions import ParseResponseError, SlackClientError
@@ -91,7 +90,7 @@ class SlackClient(object):
         setattr(self, 'token', access_token)
 
         # Update the token expiration timestamp
-        current_ts = int(datetime.now().strftime("%s")) * 1000
+        current_ts = int(time.time()) * 1000
         expires_at = int(current_ts + expires_in)
         setattr(self.server.api_requester, 'access_token_expires_at', expires_at)
 
