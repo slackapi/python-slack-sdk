@@ -44,6 +44,9 @@ def test_proxy():
 def test_SlackClient(slackclient):
     assert type(slackclient) == SlackClient
 
+def test_custom_user_agent(slackclient):
+    slackclient.append_user_agent("customua", "1.0.0")
+    assert 'customua' in slackclient.server.api_requester.get_user_agent()
 
 def test_SlackClient_process_changes(slackclient, channel_created_fixture, im_created_fixture):
     slackclient.process_changes(channel_created_fixture)
