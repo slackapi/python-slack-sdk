@@ -56,8 +56,7 @@ class SlackClient(object):
                     refresh_token=refresh_token,
                     client_id=client_id,
                     client_secret=client_secret,
-                    refresh_callback=refresh_callback,
-                    **kwargs
+                    refresh_callback=refresh_callback
                 )
             else:
                 raise SlackClientError(
@@ -68,8 +67,7 @@ class SlackClient(object):
             self.server = Server(
                 access_token=access_token,
                 connect=False,
-                proxies=proxies,
-                **kwargs
+                proxies=proxies
             )
         self.token = access_token  # noqa TODO: Change this to `self.access_token` in the next major version bump
 
