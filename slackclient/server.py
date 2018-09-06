@@ -21,17 +21,16 @@ class Server(object):
     """
     def __init__(
             self,
-            client=None,
-            access_token=None,
+            token=None,
             connect=True,
             proxies=None,
             refresh_token=None,
             client_id=None,
             client_secret=None,
-            refresh_callback=None,
             **kwargs
     ):
         # Slack app configs
+        self.token = token
         self.refresh_token = refresh_token
         self.client_id = client_id
         self.client_secret = client_secret
@@ -40,15 +39,7 @@ class Server(object):
         self.proxies = proxies
 
         # HTTP Request handler
-        self.api_requester = SlackRequest(
-            client=client,
-            proxies=proxies,
-            access_token=access_token,
-            refresh_token=refresh_token,
-            client_id=client_id,
-            client_secret=client_secret,
-            refresh_callback=refresh_callback
-        )
+        self.api_requester = SlackRequest(proxies=proxies)
 
         # Workspace metadata
         self.username = None
@@ -71,13 +62,13 @@ class Server(object):
             self.rtm_connect()
 
     def __eq__(self, compare_str):
-        if compare_str == self.domain or compare_str == self.api_requester.access_token:
+        if compare_str == self.domain or compare_str == self.token:
             return True
         else:
             return False
 
     def __hash__(self):
-        return hash(self.api_requester.access_token)
+        return hash(self.token)
 
     def __str__(self):
         """
@@ -90,7 +81,7 @@ class Server(object):
         login_data : None
         api_requester : <slackclient.slackrequest.SlackRequest
         channels : []
-        access_token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
+        token : xoxb-asdlfkyadsofii7asdf734lkasdjfllakjba7zbu
         connected : False
         ws_url : None
         """
@@ -150,11 +141,7 @@ class Server(object):
             else:
                 self.reconnect_count = 0
 
-        reply = self.api_requester.do(
-            api_method=connect_method,
-            timeout=timeout,
-            post_data=kwargs
-        )
+        reply = self.api_requester.post_http_request(self.token, connect_method, kwargs)
 
         if reply.status_code != 200:
             if self.rtm_connect_retries < 5 and reply.status_code == 429:
@@ -329,7 +316,7 @@ class Server(object):
         )
         return response
 
-    def api_call(self, method, timeout=None, **kwargs):
+    def api_call(self, token, request='?', timeout=None, **kwargs):
         """
         Call the Slack Web API as documented here: https://api.slack.com/web
 
@@ -361,8 +348,8 @@ class Server(object):
             See here for more information on responses: https://api.slack.com/web
         """
         response = self.api_requester.do(
-            self.api_requester.access_token,
-            method,
+            token,
+            request,
             kwargs,
             timeout=timeout
         )

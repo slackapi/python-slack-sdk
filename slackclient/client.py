@@ -23,11 +23,11 @@ class SlackClient(object):
     '''
     def __init__(
             self,
-            access_token=None,
+            token=None,
             refresh_token=None,
+            token_update_callback=None,
             client_id=None,
             client_secret=None,
-            refresh_callback=None,
             proxies=None,
             **kwargs
     ):
@@ -47,16 +47,23 @@ class SlackClient(object):
                 refresh_callback (function): Your application's function for updating Slack
                 OAuth tokens inside your data store
         """
+
+        self.client_id=client_id
+        self.client_secret=client_secret
+        self.refresh_token=refresh_token
+        self.token_update_callback=token_update_callback
+        self.token=token
+        self.access_token_expires_at=0
+
         if (refresh_token):
-            if (callable(refresh_callback)):
+            if (callable(token_update_callback)):
                 self.server = Server(
-                    client=self,
                     connect=False,
                     proxies=proxies,
                     refresh_token=refresh_token,
                     client_id=client_id,
                     client_secret=client_secret,
-                    refresh_callback=refresh_callback
+                    token_update_callback=token_update_callback
                 )
             else:
                 raise SlackClientError(
@@ -65,32 +72,50 @@ class SlackClient(object):
         else:
             # Slack app configs
             self.server = Server(
-                access_token=access_token,
+                token=token,
                 connect=False,
                 proxies=proxies
             )
-        self.token = access_token  # noqa TODO: Change this to `self.access_token` in the next major version bump
 
-    def update_client_tokens(self, team_id, access_token, expires_in):
+    def refresh_access_token(self):
         """
-        This method is used to update this client instance's
-        OAuth access tokens upon a token refresh event
-
-        :Args:
-            access_token (str): The client's OAuth access token, used for Web API requests
-            refresh_token(str): The OAuth token used for making access token refresh requests
-            expires_in (int): OAuth access token lifespan. This is used to set the `expires_at` TTL
-            refresh_callback (obj): A callable object to be executed upon token refresh
+        Refresh the client's OAUth access tokens
+        https://api.slack.com/docs/rotating-and-refreshing-credentials
         """
-        # Set the client's team ID and access token
-        setattr(self.server.api_requester, 'team_id', team_id)
-        setattr(self.server.api_requester, 'access_token', access_token)
-        setattr(self, 'token', access_token)
+        post_data = {
+            'refresh_token': self.refresh_token,
+            'grant_type': 'refresh_token',
+            'client_id': self.client_id,
+            'client_secret': self.client_secret
+        }
+        response = self.server.api_requester.post_http_request(
+            self.refresh_token, api_method='oauth.access',post_data=post_data)
+        response_json = json.loads(response.text)
 
-        # Update the token expiration timestamp
-        current_ts = int(time.time()) * 1000
-        expires_at = int(current_ts + expires_in)
-        setattr(self.server.api_requester, 'access_token_expires_at', expires_at)
+        # If Slack returned an updated access token, update the client, otherwise
+        # raise SlackClientError exception with the error returned from the API
+        if response_json['ok']:
+            # Update the client's access token and expiration timestamp
+            self.server.api_requester.enterprise_id=response_json['enterprise_id']
+            self.team_id = response_json['team_id']
+            self.token = response_json['access_token']
+            self.server.token = response_json['access_token']
+
+            # Update the token expiration timestamp
+            current_ts = int(time.time()) * 1000
+            expires_at = int(current_ts + response_json['expires_in'])
+            self.access_token_expires_at = expires_at
+            # Call the developer's token update callback
+            update_args = {
+                'enterprise_id': response_json['enterprise_id'],
+                'team_id': response_json['team_id'],
+                'access_token': response_json['access_token'],
+                'expires_in': response_json['expires_in']
+            }
+            self.token_update_callback(update_args)
+            return response_json
+        else:
+            raise SlackClientError("Token refresh failed")
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
@@ -108,7 +133,7 @@ class SlackClient(object):
             False on exceptions
         '''
 
-        if (self.server.refresh_token):
+        if self.server.refresh_token:
             raise SlackClientError("Workspace tokens may not be used to connect to the RTM API.")
 
         try:
@@ -148,19 +173,39 @@ class SlackClient(object):
 
             See here for more information on responses: https://api.slack.com/web
         """
-        response_body = self.server.api_call(method, timeout=timeout, **kwargs)
+        # Check for missing or expired access token before submitting the request
+        if method != 'oauth.access' and self.refresh_token:
+            current_ts = int(time.time()) * 1000
+            expired_token = current_ts > self.access_token_expires_at
+            if (expired_token or self.token is None):
+                self.refresh_access_token()
+
+        response_body = self.server.api_call(self.token, request=method, timeout=timeout, **kwargs)
+
+        # Attempt to parse the response as JSON
         try:
             result = json.loads(response_body)
         except ValueError as json_decode_error:
             raise ParseResponseError(response_body, json_decode_error)
+        response_json = json.loads(response_body)
 
-        if "ok" in result and result["ok"]:
+        if result["ok"]:
             if method == 'im.open':
                 self.server.attach_channel(kwargs["user"], result["channel"]["id"])
             elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
                 self.server.parse_channel_data([result['group']])
             elif method in ('channels.create', 'channels.join'):
                 self.server.parse_channel_data([result['channel']])
+        else:
+            # if the API request returns an invalid_auth error, refresh the token and try again
+            if 'retry' in kwargs:
+                raise SlackClientError("Request failing after token refresh")
+
+            elif (self.refresh_token and response_json['error'] == 'invalid_auth'):
+                    # If the API returns 'ok' false, attempt to refresh the client's access token
+                    self.refresh_access_token()
+                    # If token refresh was successful, retry the original API request
+                    return self.api_call(method, timeout, retry=True, **kwargs)
         return result
 
     def rtm_read(self):

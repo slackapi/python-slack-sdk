@@ -37,7 +37,7 @@ def test_proxy():
     api_requester = client.server.api_requester
     assert api_requester.proxies == proxies
     with pytest.raises(ConnectionError):
-        api_requester.do('xoxp-1234123412341234-12341234-1234', api_method='channels.list')
+        api_requester.do('xoxp-1234123412341234-12341234-1234', request='channels.list')
 
 
 def test_SlackClient(slackclient):
@@ -53,6 +53,8 @@ def test_SlackClient_process_changes(slackclient, channel_created_fixture, im_cr
 
 def test_api_not_ok(slackclient):
     # Testing for rate limit retry headers
+    client = SlackClient('xoxp-1234123412341234-12341234-1234')
+
     with responses.RequestsMock() as rsps:
         rsps.add(
             responses.POST,
@@ -65,7 +67,7 @@ def test_api_not_ok(slackclient):
             headers={}
         )
 
-        slackclient.api_call(
+        client.api_call(
             "im.open",
             user="UXXXX"
         )
@@ -138,7 +140,7 @@ def test_noncallable_refresh_callback():
             client_id='12345',
             client_secret='12345',
             refresh_token="refresh_token",
-            refresh_callback='THIS IS A STRING, NOT A CALLABLE METHOD'
+            token_update_callback='THIS IS A STRING, NOT A CALLABLE METHOD'
         )
 
 def test_no_RTM_with_workspace_tokens():
@@ -150,7 +152,7 @@ def test_no_RTM_with_workspace_tokens():
             client_id='12345',
             client_secret='12345',
             refresh_token="refresh_token",
-            refresh_callback=token_update_callback
+            token_update_callback=token_update_callback
         )
 
         sc.rtm_connect()
@@ -159,6 +161,7 @@ def test_token_refresh_on_initial_api_request():
     # Client should fetch and append an access token on the first API request
 
     # When the token is refreshed, the client will call this callback
+    access_token = 'xoxa-2-abcdef'
     client_args = {}
     def token_update_callback(update_data):
         client_args[update_data['team_id']]=update_data
@@ -167,7 +170,7 @@ def test_token_refresh_on_initial_api_request():
         client_id='12345',
         client_secret='12345',
         refresh_token="refresh_token",
-        refresh_callback=token_update_callback
+        token_update_callback=token_update_callback
     )
 
     # The client starts out with an empty token
@@ -177,12 +180,9 @@ def test_token_refresh_on_initial_api_request():
     with responses.RequestsMock() as rsps:
         rsps.add(
             responses.POST,
-            "https://slack.com/api/channels.list",
+            "https://slack.com/api/auth.test",
             status=200,
-            json={
-                'ok': False,
-                'error': 'invalid_auth'
-                }
+            json={'ok': True}
         )
 
         rsps.add(
@@ -191,15 +191,16 @@ def test_token_refresh_on_initial_api_request():
             status=200,
             json={
                 'ok': True,
-                'access_token': 'xoxa-2-abcdef',
+                'access_token': access_token,
                 'token_type': 'app',
                 'expires_in': 3600,
-                'team_id': 'T2U81E2FP'
+                'team_id': 'T2U81E2FP',
+                'enterprise_id': 'T2U81ELK'
                 }
         )
 
         # Calling the API for the first time will trigger a token refresh
-        sc.api_call("channels.list")
+        sc.api_call("auth.test")
 
         # Store the calls in order
         calls = {}
@@ -208,13 +209,12 @@ def test_token_refresh_on_initial_api_request():
 
         # After the initial call, the refresh method will update the client's token,
         # then the callback will update client_args
-        assert sc.token == 'xoxa-2-abcdef'
-        assert client_args['T2U81E2FP']['access_token'] == 'xoxa-2-abcdef'
+        assert sc.token == access_token
+        assert client_args['T2U81E2FP']['access_token'] == access_token
 
         # Verify that the client first tried to call the API, refreshed the token, then retried
-        assert calls[0]['url'] == 'https://slack.com/api/channels.list'
-        assert calls[1]['url'] == 'https://slack.com/api/oauth.access'
-        assert calls[2]['url'] == 'https://slack.com/api/channels.list'
+        assert calls[0]['url'] == 'https://slack.com/api/oauth.access'
+        assert calls[1]['url'] == 'https://slack.com/api/auth.test'
 
 def test_token_refresh_failed():
     # Client should raise SlackClientError is token refresh returns error
@@ -225,7 +225,7 @@ def test_token_refresh_failed():
         client_id='12345',
         client_secret='12345',
         refresh_token="refresh_token",
-        refresh_callback=token_update_callback
+        token_update_callback=token_update_callback
     )
 
     with pytest.raises(SlackClientError):
@@ -258,17 +258,11 @@ def test_token_refresh_on_expired_token():
         client_id='12345',
         client_secret='12345',
         refresh_token="refresh_token",
-        refresh_callback=token_update_callback
-    )
-
-    sc.update_client_tokens(
-        team_id='T2U81E2FP',
-        access_token='xoxa-2-abcdef',
-        expires_in=3600
+        token_update_callback=token_update_callback
     )
 
     # Set the token TTL to some time in the past
-    sc.server.api_requester.access_token_expires_at = 12345678
+    sc.access_token_expires_at = 0
 
     # Mock both the main API request and the token refresh request
     with responses.RequestsMock() as rsps:
@@ -288,7 +282,8 @@ def test_token_refresh_on_expired_token():
                 'access_token': 'xoxa-2-abcdef',
                 'token_type': 'app',
                 'expires_in': 3600,
-                'team_id': 'T2U81E2FP'
+                'team_id': 'T2U81E2FP',
+                'enterprise_id': 'T2U81ELK'
                 }
         )
 

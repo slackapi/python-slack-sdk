@@ -22,7 +22,7 @@ requests.post = get_unverified_post()
 
 @pytest.fixture
 def server(monkeypatch):
-    my_server = Server(access_token='xoxp-1234123412341234-12341234-1234', connect=False)
+    my_server = Server(token='xoxp-1234123412341234-12341234-1234', connect=False)
     return my_server
 
 
