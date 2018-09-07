@@ -102,7 +102,7 @@ class SlackClient(object):
             self.server.token = response_json['access_token']
 
             # Update the token expiration timestamp
-            current_ts = int(time.time()) * 1000
+            current_ts = int(time.time())
             expires_at = int(current_ts + response_json['expires_in'])
             self.access_token_expires_at = expires_at
             # Call the developer's token update callback
@@ -175,7 +175,7 @@ class SlackClient(object):
         """
         # Check for missing or expired access token before submitting the request
         if method != 'oauth.access' and self.refresh_token:
-            current_ts = int(time.time()) * 1000
+            current_ts = int(time.time())
             expired_token = current_ts > self.access_token_expires_at
             if (expired_token or self.token is None):
                 self.refresh_access_token()
