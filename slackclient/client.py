@@ -8,11 +8,12 @@ import time
 from .server import Server
 from .exceptions import ParseResponseError, TokenRefreshError
 
+
 LOG = logging.getLogger(__name__)
 
 
 class SlackClient(object):
-    '''
+    """
     The SlackClient makes API Calls to the `Slack Web API <https://api.slack.com/web>`_ as well as
     managing connections to the `Real-time Messaging API via websocket <https://api.slack.com/rtm>`_
 
@@ -20,16 +21,17 @@ class SlackClient(object):
     is associated with.
 
     For more information, check out the `Slack API Docs <https://api.slack.com/>`_
-    '''
+    """
+
     def __init__(
-            self,
-            token=None,
-            refresh_token=None,
-            token_update_callback=None,
-            client_id=None,
-            client_secret=None,
-            proxies=None,
-            **kwargs
+        self,
+        token=None,
+        refresh_token=None,
+        token_update_callback=None,
+        client_id=None,
+        client_secret=None,
+        proxies=None,
+        **kwargs
     ):
         """
         Init:
@@ -55,15 +57,15 @@ class SlackClient(object):
         self.token = token
         self.access_token_expires_at = 0
 
-        if (refresh_token):
-            if (callable(token_update_callback)):
+        if refresh_token:
+            if callable(token_update_callback):
                 self.server = Server(
                     connect=False,
                     proxies=proxies,
                     refresh_token=refresh_token,
                     client_id=client_id,
                     client_secret=client_secret,
-                    token_update_callback=token_update_callback
+                    token_update_callback=token_update_callback,
                 )
             else:
                 raise TokenRefreshError(
@@ -71,11 +73,7 @@ class SlackClient(object):
                 )
         else:
             # Slack app configs
-            self.server = Server(
-                token=token,
-                connect=False,
-                proxies=proxies
-            )
+            self.server = Server(token=token, connect=False, proxies=proxies)
 
     def refresh_access_token(self):
         """
@@ -83,34 +81,35 @@ class SlackClient(object):
         https://api.slack.com/docs/rotating-and-refreshing-credentials
         """
         post_data = {
-            'refresh_token': self.refresh_token,
-            'grant_type': 'refresh_token',
-            'client_id': self.client_id,
-            'client_secret': self.client_secret
+            "refresh_token": self.refresh_token,
+            "grant_type": "refresh_token",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
         }
         response = self.server.api_requester.post_http_request(
-            self.refresh_token, api_method='oauth.access', post_data=post_data)
+            self.refresh_token, api_method="oauth.access", post_data=post_data
+        )
         response_json = json.loads(response.text)
 
         # If Slack returned an updated access token, update the client, otherwise
         # raise TokenRefreshError exception with the error returned from the API
-        if response_json['ok']:
+        if response_json["ok"]:
             # Update the client's access token and expiration timestamp
-            self.team_id = response_json['team_id']
+            self.team_id = response_json["team_id"]
             # TODO: Minimize the numer of places token is stored.
-            self.token = response_json['access_token']
-            self.server.token = response_json['access_token']
+            self.token = response_json["access_token"]
+            self.server.token = response_json["access_token"]
 
             # Update the token expiration timestamp
             current_ts = int(time.time())
-            expires_at = int(current_ts + response_json['expires_in'])
+            expires_at = int(current_ts + response_json["expires_in"])
             self.access_token_expires_at = expires_at
             # Call the developer's token update callback
             update_args = {
-                'enterprise_id': response_json['enterprise_id'],
-                'team_id': response_json['team_id'],
-                'access_token': response_json['access_token'],
-                'expires_in': response_json['expires_in']
+                "enterprise_id": response_json["enterprise_id"],
+                "team_id": response_json["team_id"],
+                "access_token": response_json["access_token"],
+                "expires_in": response_json["expires_in"],
             }
             self.token_update_callback(update_args)
         else:
@@ -120,7 +119,7 @@ class SlackClient(object):
         self.server.append_user_agent(name, version)
 
     def rtm_connect(self, with_team_state=True, **kwargs):
-        '''
+        """
         Connects to the RTM Websocket
 
         :Args:
@@ -130,10 +129,12 @@ class SlackClient(object):
 
         :Returns:
             False on exceptions
-        '''
+        """
 
         if self.refresh_token:
-            raise TokenRefreshError("Workspace tokens may not be used to connect to the RTM API.")
+            raise TokenRefreshError(
+                "Workspace tokens may not be used to connect to the RTM API."
+            )
 
         try:
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
@@ -173,13 +174,15 @@ class SlackClient(object):
             See here for more information on responses: https://api.slack.com/web
         """
         # Check for missing or expired access token before submitting the request
-        if method != 'oauth.access' and self.refresh_token:
+        if method != "oauth.access" and self.refresh_token:
             current_ts = int(time.time())
             token_is_expired = current_ts > self.access_token_expires_at
-            if (token_is_expired or self.token is None):
+            if token_is_expired or self.token is None:
                 self.refresh_access_token()
 
-        response_body = self.server.api_call(self.token, request=method, timeout=timeout, **kwargs)
+        response_body = self.server.api_call(
+            self.token, request=method, timeout=timeout, **kwargs
+        )
 
         # Attempt to parse the response as JSON
         try:
@@ -189,26 +192,26 @@ class SlackClient(object):
         response_json = json.loads(response_body)
 
         if result.get("ok", False):
-            if method == 'im.open':
+            if method == "im.open":
                 self.server.attach_channel(kwargs["user"], result["channel"]["id"])
-            elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
-                self.server.parse_channel_data([result['group']])
-            elif method in ('channels.create', 'channels.join'):
-                self.server.parse_channel_data([result['channel']])
+            elif method in ("mpim.open", "groups.create", "groups.createchild"):
+                self.server.parse_channel_data([result["group"]])
+            elif method in ("channels.create", "channels.join"):
+                self.server.parse_channel_data([result["channel"]])
         else:
             # if the API request returns an invalid_auth error, refresh the token and try again
-            if 'retry' in kwargs:
-                raise TokenRefreshError("Request failing after token refresh")
-            elif (self.refresh_token and
-                    'error' in response_json and response_json['error'] == 'invalid_auth'):
-                    # If the API returns 'ok' false, attempt to refresh the client's access token
-                    self.refresh_access_token()
-                    # If token refresh was successful, retry the original API request
-                    return self.api_call(method, timeout, retry=True, **kwargs)
+            if (
+                self.refresh_token
+                and "error" in response_json
+                and response_json["error"] == "invalid_auth"
+            ):
+                self.refresh_access_token()
+                # If token refresh was successful, retry the original API request
+                return self.api_call(method, timeout, **kwargs)
         return result
 
     def rtm_read(self):
-        '''
+        """
         Reads from the RTM Websocket stream then calls `self.process_changes(item)` for each line
         in the returned data.
 
@@ -225,14 +228,14 @@ class SlackClient(object):
 
         :Raises:
             SlackNotConnected if self.server is not defined.
-        '''
+        """
         # in the future, this should handle some events internally i.e. channel
         # creation
         if self.server:
             json_data = self.server.websocket_safe_read()
             data = []
-            if json_data != '':
-                for d in json_data.split('\n'):
+            if json_data != "":
+                for d in json_data.split("\n"):
                     data.append(json.loads(d))
             for item in data:
                 self.process_changes(item)
@@ -241,7 +244,7 @@ class SlackClient(object):
             raise SlackNotConnected
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
-        '''
+        """
         Sends a message to a given channel.
 
         :Args:
@@ -256,33 +259,30 @@ class SlackClient(object):
         :Returns:
             None
 
-        '''
+        """
         # The `channel` argument can be a channel name or an ID. At first its assumed to be a
         # name and an attempt is made to find the ID in the workspace state cache.
         # If that lookup fails, the argument is used as the channel ID.
         found_channel = self.server.channels.find(channel)
         channel_id = found_channel.id if found_channel else channel
         return self.server.rtm_send_message(
-            channel_id,
-            message,
-            thread,
-            reply_broadcast
+            channel_id, message, thread, reply_broadcast
         )
 
     def process_changes(self, data):
-        '''
+        """
         Internal method which processes RTM events and modifies the local data store
         accordingly.
 
         Stores new channels when joining a group (Multi-party DM), IM (DM) or channel.
 
         Stores user data on a team join event.
-        '''
+        """
         if "type" in data.keys():
-            if data["type"] in ('channel_created', 'group_joined'):
+            if data["type"] in ("channel_created", "group_joined"):
                 channel = data["channel"]
                 self.server.attach_channel(channel["name"], channel["id"], [])
-            if data["type"] == 'im_created':
+            if data["type"] == "im_created":
                 channel = data["channel"]
                 self.server.attach_channel(channel["user"], channel["id"], [])
             if data["type"] == "team_join":
