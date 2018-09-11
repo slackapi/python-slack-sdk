@@ -21,3 +21,9 @@ class ParseResponseError(SlackClientError, ValueError):
         )
         self.response_body = response_body
         self.original_exception = original_exception
+
+
+class TokenRefreshError(SlackClientError):
+    """
+    This exception is rasied when a token related error occurs within the client
+    """

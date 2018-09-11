@@ -6,7 +6,7 @@ import logging
 import time
 
 from .server import Server
-from .exceptions import ParseResponseError, SlackClientError
+from .exceptions import ParseResponseError, TokenRefreshError
 
 LOG = logging.getLogger(__name__)
 
@@ -66,7 +66,7 @@ class SlackClient(object):
                     token_update_callback=token_update_callback
                 )
             else:
-                raise SlackClientError(
+                raise TokenRefreshError(
                     "Token refresh callback function is required when using refresh token."
                 )
         else:
@@ -93,11 +93,11 @@ class SlackClient(object):
         response_json = json.loads(response.text)
 
         # If Slack returned an updated access token, update the client, otherwise
-        # raise SlackClientError exception with the error returned from the API
+        # raise TokenRefreshError exception with the error returned from the API
         if response_json['ok']:
             # Update the client's access token and expiration timestamp
-            self.server.api_requester.enterprise_id = response_json['enterprise_id']
             self.team_id = response_json['team_id']
+            # TODO: Minimize the numer of places token is stored.
             self.token = response_json['access_token']
             self.server.token = response_json['access_token']
 
@@ -113,9 +113,8 @@ class SlackClient(object):
                 'expires_in': response_json['expires_in']
             }
             self.token_update_callback(update_args)
-            return response_json
         else:
-            raise SlackClientError("Token refresh failed")
+            raise TokenRefreshError("Token refresh failed")
 
     def append_user_agent(self, name, version):
         self.server.append_user_agent(name, version)
@@ -134,7 +133,7 @@ class SlackClient(object):
         '''
 
         if self.server.refresh_token:
-            raise SlackClientError("Workspace tokens may not be used to connect to the RTM API.")
+            raise TokenRefreshError("Workspace tokens may not be used to connect to the RTM API.")
 
         try:
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
@@ -189,7 +188,7 @@ class SlackClient(object):
             raise ParseResponseError(response_body, json_decode_error)
         response_json = json.loads(response_body)
 
-        if result["ok"]:
+        if result.get("ok", False):
             if method == 'im.open':
                 self.server.attach_channel(kwargs["user"], result["channel"]["id"])
             elif method in ('mpim.open', 'groups.create', 'groups.createchild'):
@@ -199,9 +198,9 @@ class SlackClient(object):
         else:
             # if the API request returns an invalid_auth error, refresh the token and try again
             if 'retry' in kwargs:
-                raise SlackClientError("Request failing after token refresh")
-
-            elif (self.refresh_token and response_json['error'] == 'invalid_auth'):
+                raise TokenRefreshError("Request failing after token refresh")
+            elif (self.refresh_token and
+                    'error' in response_json and response_json['error'] == 'invalid_auth'):
                     # If the API returns 'ok' false, attempt to refresh the client's access token
                     self.refresh_access_token()
                     # If token refresh was successful, retry the original API request

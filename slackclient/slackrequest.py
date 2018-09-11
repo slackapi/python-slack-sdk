@@ -10,13 +10,11 @@ from .version import __version__
 class SlackRequest(object):
     def __init__(
             self,
-            proxies=None,
-            domain="slack.com"
+            proxies=None
     ):
         # HTTP configs
         self.custom_user_agent = None
         self.proxies = proxies
-        self.domain = domain
 
         # Construct the user-agent header with the package info, Python version and OS version.
         self.default_user_agent = {
@@ -47,7 +45,7 @@ class SlackRequest(object):
         else:
             self.custom_user_agent = [[name, version]]
 
-    def do(self, token=None, request="?", post_data=None, timeout=None):
+    def do(self, token=None, request="?", post_data=None, domain="slack.com", timeout=None):
         """
         Perform a POST request to the Slack Web API
         Args:
@@ -55,6 +53,8 @@ class SlackRequest(object):
             request (str): the method to call from the Slack API. For example: 'channels.list'
             post_data (dict): key/value arguments to pass for the request. For example:
                 {'channel': 'CABC12345'}
+            domain (str): if for some reason you want to send your request to something other
+                than slack.com
             timeout (float): stop waiting for a response after a given number of seconds
         """
         # Pull `file` out so it isn't JSON encoded like normal fields.
@@ -81,15 +81,17 @@ class SlackRequest(object):
             if isinstance(v, (list, dict)):
                 post_data[k] = json.dumps(v)
 
-        return self.post_http_request(token, request, post_data, files, timeout)
+        return self.post_http_request(token, request, post_data, files, timeout, domain)
 
-    def post_http_request(self, token, api_method, post_data, files=None, timeout=None):
+    def post_http_request(self, token, api_method, post_data,
+                          files=None, timeout=None, domain="slack.com"):
         """
         This method build and submits the Web API HTTP request
 
         :param token: You app's Slack access token
         :param api_method: The API method endpoint to submit the request to
         :param post_data: The request payload
+        :param domain: The URL to submit the API request to
         :param files: Any files to be submitted during upload calls
         :param timeout: Stop waiting for a response after a given number of seconds
         :return:
@@ -106,7 +108,7 @@ class SlackRequest(object):
 
         # Submit the request
         res = requests.post(
-            'https://{0}/api/{1}'.format(self.domain, api_method),
+            'https://{0}/api/{1}'.format(domain, api_method),
             headers=headers,
             data=post_data,
             files=files,
