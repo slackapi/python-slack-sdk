@@ -1,6 +1,6 @@
 import json
 import pytest
-from requests.exceptions import ProxyError, ConnectionError
+from requests.exceptions import ProxyError
 import responses
 from slackclient.exceptions import SlackClientError
 from slackclient.channel import Channel

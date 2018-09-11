@@ -24,16 +24,10 @@ class Server(object):
             token=None,
             connect=True,
             proxies=None,
-            refresh_token=None,
-            client_id=None,
-            client_secret=None,
             **kwargs
     ):
         # Slack app configs
         self.token = token
-        self.refresh_token = refresh_token
-        self.client_id = client_id
-        self.client_secret = client_secret
 
         # api configs
         self.proxies = proxies
@@ -141,7 +135,7 @@ class Server(object):
             else:
                 self.reconnect_count = 0
 
-        reply = self.api_requester.post_http_request(self.token, connect_method, kwargs)
+        reply = self.api_requester.do(self.token, connect_method, kwargs)
 
         if reply.status_code != 200:
             if self.rtm_connect_retries < 5 and reply.status_code == 429:

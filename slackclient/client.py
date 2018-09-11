@@ -132,7 +132,7 @@ class SlackClient(object):
             False on exceptions
         '''
 
-        if self.server.refresh_token:
+        if self.refresh_token:
             raise TokenRefreshError("Workspace tokens may not be used to connect to the RTM API.")
 
         try:
@@ -175,8 +175,8 @@ class SlackClient(object):
         # Check for missing or expired access token before submitting the request
         if method != 'oauth.access' and self.refresh_token:
             current_ts = int(time.time())
-            expired_token = current_ts > self.access_token_expires_at
-            if (expired_token or self.token is None):
+            token_is_expired = current_ts > self.access_token_expires_at
+            if (token_is_expired or self.token is None):
                 self.refresh_access_token()
 
         response_body = self.server.api_call(self.token, request=method, timeout=timeout, **kwargs)
