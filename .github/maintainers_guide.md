@@ -45,8 +45,8 @@ You can generate the documentation by running `tox -e docs`.
     *  Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slackclient/version.py`.
     *  Add a changelog entry. Release notes should mention contributors (@-mentions) and issues/PRs (#-mentions). An
        entry is a new section in the `docs-src/changelog.rst` file.
-    *  Commit with a message including the new version number. For example `1.0.6`.
-    *  Tag the commit with the version number. For example `v1.0.6`.
+    *  Commit with a message including the new version number. For example `git commit -m "1.0.6"`.
+    *  Tag the commit with the version number. For example `git tag -a v1.0.6 -m "1.0.6"`.
 
 2.  Make a pull request, get reivewer approval, and merge.
     *  Push the branch to your own fork. For example `git push username master:rel-v1.0.6`
