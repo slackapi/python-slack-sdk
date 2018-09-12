@@ -18,7 +18,7 @@ You should also make sure you have the latest versions of `pip`, `setuptools`, `
 [`tox`](https://tox.readthedocs.io/en/latest/) installed with your version of Python.
 
 On macOS, the easiest way to install these tools is by using [Homebrew](https://brew.sh/) and installing the `python`
-and `python3` packages. Some of the above packages are preinstalled and you can install the remaining on your own:
+and `python@2` packages. Some of the above packages are preinstalled and you can install the remaining on your own:
 `pip install virtualenv wheel twine tox && pip3 install virtualenv twine tox`.
 
 ## Tasks
@@ -39,9 +39,14 @@ You can generate the documentation by running `tox -e docs`.
 
 ### Releasing
 
+0.  Update generated content. Reference documentation is updated using `tox -e docs`.
+
 1.  Create the commit for the release:
     *  Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slackclient/version.py`.
+    *  Add a changelog entry. Release notes should mention contributors (@-mentions) and issues/PRs (#-mentions). An
+       entry is a new section in the `docs-src/changelog.rst` file.
     *  Commit with a message including the new version number. For example `1.0.6`.
+    *  Tag the commit with the version number. For example `v1.0.6`.
 
 2.  Distribute the release
     *  Build the distribtuions: `python setup.py sdist bdist_wheel`. This will create artifacts in the `dist` directory.
