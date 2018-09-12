@@ -5,7 +5,9 @@ Tokens & Authentication
 
 Handling tokens and other sensitive data
 ----------------------------------------
-Slack tokens are the keys to your—or your customers’—teams. Keep them secret. Keep them safe. One way to do that is to never explicitly hardcode them.
+⚠️ **Slack tokens are the keys to your—or your customers’—data.Keep them secret. Keep them safe.**
+
+One way to do that is to never explicitly hardcode them.
 
 Try to avoid this when possible:
 
@@ -13,13 +15,15 @@ Try to avoid this when possible:
 
   token = 'xoxb-abc-1232'
 
-If you commit this code to GitHub, the world gains access to this token’s team. Rather, we recommend you pass tokens in as environment variables, or persist them in a database that is accessed at runtime. You can add a token to the environment by starting your app as:
+⚠️ **Never share test tokens with other users or applications. Do not publish test tokens in public code repositories.**
+
+We recommend you pass tokens in as environment variables, or persist them in a database that is accessed at runtime. You can add a token to the environment by starting your app as:
 
 .. code-block:: python
 
   SLACK_BOT_TOKEN="xoxb-abc-1232" python myapp.py
 
-Then in your code retrieve the key with:
+Then retrieve the key with:
 
 .. code-block:: python
 
@@ -34,13 +38,15 @@ You can use the same technique for other kinds of sensitive data that ne’er-do
 
 For additional information, please see our `Safely Storing Credentials <https://api.slack.com/docs/oauth-safety>`_ page.
 
-Test Tokens
+Single-Workspace Apps
 -----------------------
-During development (prior to implementing OAuth) you can use a test token provided by the `Test Token Generator <https://api.slack.com/docs/oauth-test-tokens>`_. These tokens provide access to your private data and that of your team.
+If you're building an application for a single Slack workspace, there's no need to build out the entire OAuth flow.
 
-**Tester tokens are not intended to replace OAuth 2.0 tokens.** Once your app is ready for users, replace this token with a proper OAuth token implementation.
+Once you've setup your features, click on the **Install App to Team** button found on the **Install App** page.
+If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to
+your workspace for changes to take effect.
 
-**Never share test tokens with other users or applications. Do not publish test tokens in public code repositories.**
+For additional information, see the `Installing Apps <https://api.slack.com/slack-apps#installing_apps>`_ of our `Building Slack apps <https://api.slack.com/slack-apps#installing_apps>`_ page.
 
 The OAuth flow
 -------------------------

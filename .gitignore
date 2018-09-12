@@ -21,3 +21,6 @@ cov_*
 # due to using tox and pytest
 .tox
 .cache
+.pytest_cache/
+.python-version
+pip

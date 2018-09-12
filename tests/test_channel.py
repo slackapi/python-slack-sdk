@@ -14,6 +14,8 @@ def test_channel_eq(channel):
     assert channel == 'test-channel'
     assert channel == '#test-channel'
     assert channel == 'C12345678'
+    assert 'C12345678' in str(channel)
+    assert 'C12345678' in "%r" % channel
     assert (channel == 'foo') is False
 
 

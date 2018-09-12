@@ -14,6 +14,6 @@
 .. _Contributing: https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md
 .. _contributing guidelines: https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md
 .. _Contributor License Agreement: https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform
-.. _Real Time Messaging API: https://api.slack.com/rtm
+.. _Real Time Messaging (RTM) API: https://api.slack.com/rtm
 .. _Web API: https://api.slack.com/web
 
