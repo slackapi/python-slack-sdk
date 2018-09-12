@@ -1,27 +1,28 @@
-import requests
 import json
+import platform
+import requests
 import six
 import sys
-import platform
+
 from .version import __version__
 
 
 class SlackRequest(object):
-    def __init__(self, proxies=None):
-
-        # __name__ returns 'slackclient.slackrequest', we only want 'slackclient'
-        client_name = __name__.split('.')[0]
-        client_version = __version__  # Version is returned from version.py
+    def __init__(
+            self,
+            proxies=None
+    ):
+        # HTTP configs
+        self.custom_user_agent = None
+        self.proxies = proxies
 
         # Construct the user-agent header with the package info, Python version and OS version.
         self.default_user_agent = {
-            "client": "{0}/{1}".format(client_name, client_version),
+            # __name__ returns all classes, we only want the client
+            "client": "{0}/{1}".format(__name__.split('.')[0], __version__),
             "python": "Python/{v.major}.{v.minor}.{v.micro}".format(v=sys.version_info),
             "system": "{0}/{1}".format(platform.system(), platform.release())
         }
-
-        self.custom_user_agent = None
-        self.proxies = proxies
 
     def get_user_agent(self):
         # Check for custom user-agent and append if found
@@ -44,33 +45,19 @@ class SlackRequest(object):
         else:
             self.custom_user_agent = [[name, version]]
 
-    def do(self, token, request="?", post_data=None, domain="slack.com", timeout=None):
+    def do(self, token=None, request="?", post_data=None, domain="slack.com", timeout=None):
         """
         Perform a POST request to the Slack Web API
-
         Args:
             token (str): your authentication token
             request (str): the method to call from the Slack API. For example: 'channels.list'
-            timeout (float): stop waiting for a response after a given number of seconds
             post_data (dict): key/value arguments to pass for the request. For example:
                 {'channel': 'CABC12345'}
             domain (str): if for some reason you want to send your request to something other
                 than slack.com
+            timeout (float): stop waiting for a response after a given number of seconds
         """
-
-        url = 'https://{0}/api/{1}'.format(domain, request)
-
-        # Override token header if `token` is passed in post_data
-        if post_data is not None and "token" in post_data:
-            token = post_data['token']
-
-        # Set user-agent and auth headers
-        headers = {
-            'user-agent': self.get_user_agent(),
-            'Authorization': 'Bearer {}'.format(token)
-        }
-
-        # Pull file out so it isn't JSON encoded like normal fields.
+        # Pull `file` out so it isn't JSON encoded like normal fields.
         # Only do this for requests that are UPLOADING files; downloading files
         # use the 'file' argument to point to a File ID.
         post_data = post_data or {}
@@ -94,12 +81,38 @@ class SlackRequest(object):
             if isinstance(v, (list, dict)):
                 post_data[k] = json.dumps(v)
 
+        return self.post_http_request(token, request, post_data, files, timeout, domain)
+
+    def post_http_request(self, token, api_method, post_data,
+                          files=None, timeout=None, domain="slack.com"):
+        """
+        This method build and submits the Web API HTTP request
+
+        :param token: You app's Slack access token
+        :param api_method: The API method endpoint to submit the request to
+        :param post_data: The request payload
+        :param domain: The URL to submit the API request to
+        :param files: Any files to be submitted during upload calls
+        :param timeout: Stop waiting for a response after a given number of seconds
+        :return:
+        """
+        # Override token header if `token` is passed in post_data
+        if post_data is not None and "token" in post_data:
+            token = post_data['token']
+
+        # Set user-agent and auth headers
+        headers = {
+            'user-agent': self.get_user_agent(),
+            'Authorization': 'Bearer {}'.format(token)
+        }
+
         # Submit the request
-        return requests.post(
-            url,
+        res = requests.post(
+            'https://{0}/api/{1}'.format(domain, api_method),
             headers=headers,
             data=post_data,
             files=files,
             timeout=timeout,
             proxies=self.proxies
         )
+        return res

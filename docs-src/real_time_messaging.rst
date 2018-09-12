@@ -1,9 +1,9 @@
 .. _real-time-messaging:
 
 ==============================================
-Real Time Messaging
+Real Time Messaging (RTM)
 ==============================================
-The `Real Time Messaging API`_ is a WebSocket-based API that allows you to
+The `Real Time Messaging (RTM) API`_ is a WebSocket-based API that allows you to
 receive events from Slack in real time and send messages as users.
 
 If you prefer events to be pushed to you instead, we recommend using the
@@ -13,7 +13,7 @@ in `the Events API <https://api.slack.com/events/api>`_.
 
 See :ref:`Tokens & Authentication <handling-tokens>` for API token handling best practices.
 
-Connecting to the Real Time Messaging API
+Connecting to the RTM API
 ------------------------------------------
 ::
 

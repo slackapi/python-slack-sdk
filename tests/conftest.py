@@ -22,12 +22,12 @@ requests.post = get_unverified_post()
 
 @pytest.fixture
 def server(monkeypatch):
-    my_server = Server('xoxp-1234123412341234-12341234-1234', False)
+    my_server = Server(token='xoxp-1234123412341234-12341234-1234', connect=False)
     return my_server
 
 
 @pytest.fixture
-def slackclient(server):
+def slackclient():
     my_slackclient = SlackClient('xoxp-1234123412341234-12341234-1234')
     return my_slackclient
 

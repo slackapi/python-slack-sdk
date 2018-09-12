@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Real Time Messaging &mdash; Slack Developer Kit for Python</title>
+    <title>Real Time Messaging (RTM) &mdash; Slack Developer Kit for Python</title>
 
     
     <link rel="stylesheet" href="https://a.slack-edge.com/b143/style/plastic_helpers.css" type="text/css"/>
@@ -47,7 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#handling-tokens-and-other-sensitive-data">Handling tokens and other sensitive data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#test-tokens">Test Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-apps">Single-Workspace Apps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#the-oauth-flow">The OAuth flow</a></li>
 </ul>
 </li>
@@ -75,8 +75,8 @@
 <li class="toctree-l2"><a class="reference internal" href="conversations.html#get-conversation-members">Get conversation members</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-real-time-messaging-api">Connecting to the Real Time Messaging API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging (RTM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-rtm-api">Connecting to the RTM API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rtm-events">RTM Events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
@@ -138,19 +138,19 @@
 
           <!-- Body Content -->
           <div class="col span_3_of_4">
-            <div class="section-title">Real Time Messaging</div>
+            <div class="section-title">Real Time Messaging (RTM)</div>
   					<div class="card">
-  <div class="section" id="real-time-messaging">
-<span id="id1"></span><h1>Real Time Messaging<a class="headerlink" href="#real-time-messaging" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging API</a> is a WebSocket-based API that allows you to
+  <div class="section" id="real-time-messaging-rtm">
+<span id="real-time-messaging"></span><h1>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging (RTM) API</a> is a WebSocket-based API that allows you to
 receive events from Slack in real time and send messages as users.</p>
 <p>If you prefer events to be pushed to you instead, we recommend using the
 HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
 Most event types supported by the RTM API are also available
 in <a class="reference external" href="https://api.slack.com/events/api">the Events API</a>.</p>
 <p>See <a class="reference internal" href="auth.html#handling-tokens"><span class="std std-ref">Tokens &amp; Authentication</span></a> for API token handling best practices.</p>
-<div class="section" id="connecting-to-the-real-time-messaging-api">
-<h2>Connecting to the Real Time Messaging API<a class="headerlink" href="#connecting-to-the-real-time-messaging-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connecting-to-the-rtm-api">
+<h2>Connecting to the RTM API<a class="headerlink" href="#connecting-to-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
