@@ -48,18 +48,25 @@ You can generate the documentation by running `tox -e docs`.
     *  Commit with a message including the new version number. For example `1.0.6`.
     *  Tag the commit with the version number. For example `v1.0.6`.
 
-2.  Distribute the release
+2.  Make a pull request, get reivewer approval, and merge.
+    *  Push the branch to your own fork. For example `git push username master:rel-v1.0.6`
+    *  Using the github.com website, make a pull request to the upstream repo.
+    *  Find a reviewer to approve the PR. It's important to let the rest of the team know a change is going out.
+    *  Once the reviewer has approved, merge the PR.
+    *  Push the tags! Just because you made a pull request doesn't mean the tag was pushed. For example `git push --tags origin`.
+
+3.  Distribute the release
     *  Build the distribtuions: `python setup.py sdist bdist_wheel`. This will create artifacts in the `dist` directory.
     *  Publish to PyPI: `twine upload dist/*`. You must have access to the credentials to publish.
     *  Create a GitHub Release. You will select the commit with updated version number (e.g. `1.0.6`) to assiociate with
        the tag, and name the tag after this version (e.g. `1.0.6`). This will also serve as a Changelog for the project.
        Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
-3.  (Slack Internal) Communicate the release internally. Include a link to the GitHub Release.
+4.  (Slack Internal) Communicate the release internally. Include a link to the GitHub Release.
 
-4.  Announce on Slack Team dev4slack in #slack-api
+5.  Announce on Slack Team dev4slack in #slack-api
 
-5.  (Slack Internal) Tweet? Not necessary for patch updates, might be needed for minor updates, definitely needed for
+6.  (Slack Internal) Tweet? Not necessary for patch updates, might be needed for minor updates, definitely needed for
     major updates. Include a link to the GitHub Release.
 
 ## Workflow
