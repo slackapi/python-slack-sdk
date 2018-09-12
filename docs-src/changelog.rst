@@ -2,6 +2,19 @@
 Changelog
 ==============================================
 
+v1.3.0 (2018-09-11)
+-------------------
+
+## New Features
+- Adds support for short lived tokens and automatic token refresh #347 (Thanks @roach!)
+
+## Other
+- update RTM rate limiting comment and error message #308 (Thanks @benoitlavigne!)
+- Use logging instead of traceback #309 (Thanks @harlowja!)
+- Remove Python 3.3 from test environments #346 (Thanks @roach!)
+- Enforced linting when using VSCode. #347 (Thanks @roach!)
+
+
 v1.2.1 (2018-03-26)
 -------------------
 
