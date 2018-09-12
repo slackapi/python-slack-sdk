@@ -1,6 +1,5 @@
 from slackclient.slackrequest import SlackRequest
 from slackclient.version import __version__
-import json
 import os
 
 
@@ -61,12 +60,12 @@ def test_plural_field(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')
     request = SlackRequest()
 
-    request.do('xoxb-123','conversations.open', {'users': ['U123', 'U234', 'U345']})
+    request.do('xoxb-123', 'conversations.open', {'users': ['U123', 'U234', 'U345']})
     args, kwargs = requests.post.call_args
 
     assert kwargs['data'] == {'users': 'U123,U234,U345'}
 
-    request.do('xoxb-123','conversations.open', {'users': "U123,U234,U345"})
+    request.do('xoxb-123', 'conversations.open', {'users': "U123,U234,U345"})
     args2, kwargs2 = requests.post.call_args
 
     assert kwargs2['data'] == {'users': 'U123,U234,U345'}

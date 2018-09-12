@@ -25,6 +25,15 @@ Whether you're building a custom app for your team, or integrating a third party
 service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility
 of Python to get your project up and running as quickly as possible.
 
+Documentation
+***************
+
+For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
+
+If you're building a project to receive content and events from Slack, check out the `Python Slack Events API Adapter <https://github.com/slackapi/python-slack-events-api/>`_ library.
+
+You may also review our `Development Roadmap <https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap>`_ in the project wiki.
+
 
 Requirements and Installation
 ******************************
@@ -43,16 +52,8 @@ by pulling down the source code directly into your project:
 	git clone https://github.com/slackapi/python-slackclient.git
 	pip install -r requirements.txt
 
-Documentation
---------------
-
-For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
-
-
-You may also review our `Development Roadmap <https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap>`_ in the project wiki.
-
 Getting Help
--------------
+*************
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
@@ -68,7 +69,6 @@ This package is a modular wrapper designed to make Slack `Web API <https://api.s
 app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
 a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
 
-See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
 
 Sending a message
 ********************
@@ -79,6 +79,7 @@ To send a message to a channel, use the channel's ID. For IMs, use the user's ID
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -99,6 +100,7 @@ as sending a regular message, but with an additional ``user`` parameter.
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -127,6 +129,7 @@ appear directly in the channel, instead relegated to a kind of forked timeline d
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -145,6 +148,7 @@ set the ``reply_broadcast`` boolean parameter to ``True``.
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -174,6 +178,7 @@ Sometimes you need to delete things.
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -196,6 +201,7 @@ This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``ch
 
 .. code-block:: python
 
+  import os
   from slackclient import SlackClient
 
   slack_token = os.environ["SLACK_API_TOKEN"]
@@ -230,21 +236,11 @@ At some point, you'll want to find out what channels are available to your app. 
 
 .. code-block:: python
 
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
   sc.api_call("channels.list")
 
 Archived channels are included by default. You can exclude them by passing ``exclude_archived=1`` to your request.
 
 .. code-block:: python
-
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
 
   sc.api_call(
     "channels.list",
@@ -259,11 +255,6 @@ Once you have the ID for a specific channel, you can fetch information about tha
 
 .. code-block:: python
 
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
   sc.api_call(
     "channels.info",
     channel="C0XXXXXXX"
@@ -276,11 +267,6 @@ Joining a channel
 Channels are the social hub of most Slack teams. Here's how you hop into one:
 
 .. code-block:: python
-
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
 
   sc.api_call(
     "channels.join",
@@ -299,17 +285,70 @@ joined one by accident. This is how you leave a channel.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
   sc.api_call(
     "channels.leave",
     channel="C0XXXXXXX"
   )
 
 See `channels.leave <https://api.slack.com/methods/channels.leave>`_ for more info.
+
+
+Tokens and Authentication
+**************************
+
+The simplest way to create an instance of the client, as shown in the samples above, is to use a bot (xoxb) access token:
+
+.. code-block:: python
+
+  # Get the access token from environmental variable
+  slack_token = os.environ["SLACK_API_TOKEN"]
+  sc = SlackClient(slack_token)
+
+
+The SlackClient library allows you to use a variety of Slack authentication tokens.
+
+To take advantage of automatic token refresh, you'll need to instantiate the client a little differently than when using
+a bot access token. With a bot token, you have the access (xoxb) token when you create the client, when using refresh tokens,
+you won't know the access token when the client is created.
+
+Upon the first request, the SlackClient will request a new access (xoxa) token on behalf of your application, using your app's
+refresh token, client ID, and client secret.
+
+.. code-block:: python
+
+    # Get the access token from environmental variable
+    slack_refresh_token = os.environ["SLACK_REFRESH_TOKEN"]
+    slack_client_id = os.environ["SLACK_CLIENT_ID"]
+    slack_client_secret = os.environ["SLACK_CLIENT_SECRET"]
+
+
+Since your app's access tokens will be expiring and refreshed, the client requires a callback method to be passed in on creation of the client.
+Once Slack returns an access token for your app, the SlackClient will call your provided callback to update the access token in your datastore.
+
+.. code-block:: python
+
+    # This is where you'll add your data store update logic
+    def token_update_callback(update_data):
+        print("Enterprise ID: {}".format(update_data["enterprise_id"]))
+        print("Workspace ID: {}".format(update_data["team_id"]))
+        print("Access Token: {}".format(update_data["access_token"]))
+        print("Access Token expires in (ms): {}".format(update_data["expires_in"]))
+
+    # When creating an instance of the client, pass the client details and token update callback
+    sc = SlackClient(
+      refresh_token=slack_refresh_token,
+      client_id=slack_client_id,
+      client_secret=slack_client_secret,
+      token_update_callback=token_update_callback
+    )
+
+
+Slack will send your callback function the **app's access token**, **token expiration TTL**, **team ID**, and **enterprise ID** (for enterprise workspaces)
+
+
+See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
+
+
 
 Additional Information
 ********************************************************************************************
