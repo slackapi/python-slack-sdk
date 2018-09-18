@@ -106,11 +106,12 @@ class SlackClient(object):
             self.access_token_expires_at = expires_at
             # Call the developer's token update callback
             update_args = {
-                "enterprise_id": response_json["enterprise_id"],
                 "team_id": response_json["team_id"],
                 "access_token": response_json["access_token"],
-                "expires_in": response_json["expires_in"],
+                "expires_in": response_json["expires_in"]
             }
+            if "enterprise_id" in response_json:
+                update_args["enterprise_id"] = response_json["enterprise_id"]
             self.token_update_callback(update_args)
         else:
             raise TokenRefreshError("Token refresh failed")
