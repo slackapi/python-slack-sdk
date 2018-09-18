@@ -45,7 +45,8 @@ class SlackRequest(object):
         else:
             self.custom_user_agent = [[name, version]]
 
-    def do(self, token=None, request="?", post_data=None, domain="slack.com", timeout=None):
+    def do(self, token=None, request="?", post_data=None,
+           as_user=None, domain="slack.com", timeout=None):
         """
         Perform a POST request to the Slack Web API
         Args:
@@ -53,6 +54,7 @@ class SlackRequest(object):
             request (str): the method to call from the Slack API. For example: 'channels.list'
             post_data (dict): key/value arguments to pass for the request. For example:
                 {'channel': 'CABC12345'}
+            as_user (str): if using a workspace app, the user_id of the user to act on behalf of
             domain (str): if for some reason you want to send your request to something other
                 than slack.com
             timeout (float): stop waiting for a response after a given number of seconds
@@ -81,19 +83,20 @@ class SlackRequest(object):
             if isinstance(v, (list, dict)):
                 post_data[k] = json.dumps(v)
 
-        return self.post_http_request(token, request, post_data, files, timeout, domain)
+        return self.post_http_request(token, request, post_data, as_user, files, timeout, domain)
 
     def post_http_request(self, token, api_method, post_data,
-                          files=None, timeout=None, domain="slack.com"):
+                          as_user=None, files=None, timeout=None, domain="slack.com"):
         """
         This method build and submits the Web API HTTP request
 
         :param token: You app's Slack access token
         :param api_method: The API method endpoint to submit the request to
         :param post_data: The request payload
-        :param domain: The URL to submit the API request to
+        :param as_user: The user_id if using a workspace app on behalf of a user
         :param files: Any files to be submitted during upload calls
         :param timeout: Stop waiting for a response after a given number of seconds
+        :param domain: The URL to submit the API request to
         :return:
         """
         # Override token header if `token` is passed in post_data
@@ -105,6 +108,8 @@ class SlackRequest(object):
             'user-agent': self.get_user_agent(),
             'Authorization': 'Bearer {}'.format(token)
         }
+        if as_user:
+            headers["X-Slack-User"] = as_user
 
         # Submit the request
         res = requests.post(
