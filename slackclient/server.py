@@ -315,7 +315,7 @@ class Server(object):
         response = self.api_call("channels.join", channel=name, timeout=timeout)
         return response
 
-    def api_call(self, token, request="?", timeout=None, **kwargs):
+    def api_call(self, token, request="?", timeout=None, domain="slack.com", **kwargs):
         """
         Call the Slack Web API as documented here: https://api.slack.com/web
 
@@ -346,7 +346,7 @@ class Server(object):
 
             See here for more information on responses: https://api.slack.com/web
         """
-        response = self.api_requester.do(token, request, kwargs, timeout=timeout)
+        response = self.api_requester.do(token, request, kwargs, domain, timeout=timeout)
         response_json = {}
         resp_text = response.text
         if resp_text:
