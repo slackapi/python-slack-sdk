@@ -331,7 +331,7 @@ Uploading files
           title="Test upload"
       )
 
-See `users.list <https://api.slack.com/methods/files.upload>`_ for more info.
+See `files.upload <https://api.slack.com/methods/files.upload>`_ for more info.
 
 
 --------
