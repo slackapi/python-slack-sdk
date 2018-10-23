@@ -295,6 +295,15 @@ class Server(object):
                     raise SlackConnectionError(
                         "Unable to send due to closed RTM websocket"
                     )
+            except ConnectionResetError as e:
+                logging.debug("Connection Reset")
+                self.connected = False
+                if self.auto_reconnect:
+                    self.rtm_connect(reconnect=True)
+                else:
+                    raise SlackConnectionError(
+                        "Unable to send due to reset connection."
+                    )
             return data.rstrip()
 
     def attach_user(self, name, user_id, real_name, tz, email):
