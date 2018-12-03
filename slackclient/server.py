@@ -32,6 +32,7 @@ class Server(object):
 
         # Workspace metadata
         self.username = None
+        self.userid = None
         self.domain = None
         self.login_data = None
         self.users = SearchDict()
@@ -64,6 +65,7 @@ class Server(object):
         Example Output::
 
         username : None
+        userid : None
         domain : None
         websocket : None
         users : []
@@ -166,6 +168,7 @@ class Server(object):
         self.login_data = login_data
         self.domain = self.login_data["team"]["domain"]
         self.username = self.login_data["self"]["name"]
+        self.userid = self.login_data["self"]["id"]
 
         # if the connection was made via rtm.start, update the server's state
         if use_rtm_start:
