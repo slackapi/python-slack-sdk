@@ -286,7 +286,7 @@ class Server(object):
                     # SSLWantReadError
                     return ""
                 raise
-            except WebSocketConnectionClosedException as e:
+            except WebSocketConnectionClosedException:
                 logging.debug("RTM disconnected")
                 self.connected = False
                 if self.auto_reconnect:
