@@ -8,8 +8,8 @@ What even is |product_name| and why should I care?
 |product_name| is a wrapper around commonly accessed parts of the Slack Platform. It provides basic mechanisms for
 using the Slack Web API from within your Python app.
 
-On the other hand, |product_name| does not provide access to the RTM or Events bot-building APIs, although we anticipate
-adding support for these in the future.
+On the other hand, |product_name| does not provide access to the Events bot-building API, but
+[this adapter](https://github.com/slackapi/python-slack-events-api) does.
 
 OMG I found a bug!
 ******************
