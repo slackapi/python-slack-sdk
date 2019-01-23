@@ -7,7 +7,6 @@ a.headerlink {
   line-height: 2.5rem;
   letter-spacing: -1px;
   font-weight: 700;
-  font-family: Slack-Lato, appleLogo, sans-serif;
   margin: 0 0 1rem;
 }
 
@@ -15,36 +14,61 @@ nav#api_nav .toctree-l1 {
   margin-bottom: 1.5rem;
 }
 
+nav#api_nav #api_sections ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 nav#api_nav #api_sections ul li.toctree-l1>a {
-  color: #3aa3e3;
+  color: #1264a3;
   letter-spacing: 0;
-  font-size: .75rem;
-  font-weight: 700;
-  font-family: Slack-Lato, appleLogo, sans-serif;
+  font-size: .8rem;
+  font-weight: 800;
   text-transform: uppercase;
   border: none;
   padding: 0;
 }
 
+nav#api_nav #api_sections ul li.toctree-l2 {
+  margin: 0;
+  padding: 0;
+}
+
 nav#api_nav #api_sections ul li.toctree-l2 a {
-  color: #555459;
+  color: #1d1c1d;
   text-transform: none;
   font-weight: inherit;
   padding: 0;
-  color: #555459;
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: .9375rem!important;
+  font-size: 15px!important;
+  line-height:15px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }
 
 nav#api_nav #api_sections ul li.toctree-l2 a:hover {
-  background-color: #edf7fd;
-  border-color: #dcf0fb
+  cursor: pointer;
+  text-decoration: none;
+  background-color:#e8f5fa;
+  border-color:#dcf0fb;
+}
+
+nav#api_nav #footer #footer_nav {
+  font-size: .9375rem;
 }
 
 nav#api_nav #footer #footer_nav a {
   border: none;
   padding: 0;
+  color: #616061;
+}
+
+nav#api_nav #footer #footer_nav a:hover {
+  text-decoration: none;
+  color: #1c1c1c;
 }
