@@ -140,7 +140,7 @@ class SlackClient(object):
             self.server.rtm_connect(use_rtm_start=with_team_state, **kwargs)
             return self.server.connected
         except Exception:
-            LOG.warn("Failed RTM connect", exc_info=True)
+            LOG.warning("Failed RTM connect", exc_info=True)
             return False
 
     def api_call(self, method, timeout=None, **kwargs):
