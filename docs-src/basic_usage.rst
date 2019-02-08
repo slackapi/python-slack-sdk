@@ -59,7 +59,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 
 --------
 
-Customizing a message layout
+Customizing a message's layout
 -----------------------
 The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. 
 Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.
