@@ -86,6 +86,19 @@ def test_post_file(mocker):
     assert {'filename': 'slack_logo.png'} == kwargs['data']
     assert kwargs['files'] is not None
 
+def test_upload_image(mocker):
+    requests = mocker.patch('slackclient.slackrequest.requests')
+    request = SlackRequest()
+
+    request.do('xoxb-123',
+               'users.setPhoto',
+               {'as_user': True,'image': open(os.path.join('.', 'tests', 'data', 'slack_logo.png'), 'rb')})
+    args, kwargs = requests.post.call_args
+
+    assert requests.post.call_count == 1
+    assert 'https://slack.com/api/users.setPhoto' == args[0]
+    assert {'as_user': True} == kwargs['data']
+    assert kwargs['files'] is not None
 
 def test_get_file(mocker):
     requests = mocker.patch('slackclient.slackrequest.requests')

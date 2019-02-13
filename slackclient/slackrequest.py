@@ -63,12 +63,15 @@ class SlackRequest(object):
         post_data = post_data or {}
 
         # Move singular file objects into `files`
-        upload_requests = ['files.upload']
+        upload_requests = ['files.upload', 'users.setPhoto']
 
         # Move file content into requests' `files` param
         files = None
         if request in upload_requests:
-            files = {'file': post_data.pop('file')} if 'file' in post_data else None
+            if 'file' in post_data:
+                files = {'file': post_data.pop('file')}
+            elif 'image' in post_data:
+                files = {'image': post_data.pop('image')}
 
         # Check for plural fields and convert them to comma-separated strings if needed
         for field in {'channels', 'users', 'types'} & set(post_data.keys()):
