@@ -59,6 +59,55 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 
 --------
 
+Customizing a message's layout
+-----------------------
+The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. 
+Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.
+
+To send a message to a channel, use the channel's ID. For IMs, use the user's ID.
+
+.. code-block:: python
+
+  sc.api_call(
+    "chat.postMessage",
+    channel="C0XXXXXX",
+    blocks=[
+      {
+          "type": "section",
+          "text": {
+              "type": "mrkdwn",
+              "text": "Danny Torrence left the following review for your property:"
+          }
+      },
+      {
+          "type": "section",
+          "text": {
+              "type": "mrkdwn",
+              "text": "<https://example.com|Overlook Hotel> \n :star: \n Doors had too many axe holes, guest in room " +
+              "237 was far too rowdy, whole place felt stuck in the 1920s."
+          },
+          "accessory": {
+              "type": "image",
+              "image_url": "https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg",
+              "alt_text": "Haunted hotel image"
+          }
+      },
+      {
+          "type": "section",
+          "fields": [
+              {
+                  "type": "mrkdwn",
+                  "text": "*Average Rating*\n1.0"
+              }
+          ]
+      }
+    ]
+  )
+
+**Note:** You can use the `Block Kit Builder <https://api.slack.com/tools/block-kit-builder>`for a playground where you can prototype your message's look and feel.
+
+--------
+
 Replying to messages and creating threads
 ------------------------------------------
 Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context

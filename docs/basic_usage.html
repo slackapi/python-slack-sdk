@@ -67,6 +67,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sending-a-message">Sending a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-a-message-s-layout">Customizing a message’s layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#replying-to-messages-and-creating-threads">Replying to messages and creating threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-the-content-of-a-message">Updating the content of a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-a-message">Deleting a message</a></li>
@@ -200,6 +201,51 @@ as sending a regular message, but with an additional <code class="docutils liter
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="customizing-a-message-s-layout">
+<h2>Customizing a message’s layout<a class="headerlink" href="#customizing-a-message-s-layout" title="Permalink to this headline">¶</a></h2>
+<p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message.
+Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.</p>
+<p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+  <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Danny Torrence left the following review for your property:&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;https://example.com|Overlook Hotel&gt; </span><span class="se">\n</span><span class="s2"> :star: </span><span class="se">\n</span><span class="s2"> Doors had too many axe holes, guest in room &quot;</span> <span class="o">+</span>
+            <span class="s2">&quot;237 was far too rowdy, whole place felt stuck in the 1920s.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;accessory&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;alt_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Haunted hotel image&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;*Average Rating*</span><span class="se">\n</span><span class="s2">1.0&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> You can use the <a href="#id1"><span class="problematic" id="id2">`</span></a>Block Kit Builder &lt;<a class="reference external" href="https://api.slack.com/tools/block-kit-builder">https://api.slack.com/tools/block-kit-builder</a>&gt;`for a playground where you can prototype your message’s look and feel.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="replying-to-messages-and-creating-threads">
