@@ -3,7 +3,9 @@ import platform
 import requests
 import six
 import sys
+import time
 
+from .exceptions import SlackClientError
 from .version import __version__
 
 
@@ -115,4 +117,33 @@ class SlackRequest(object):
             timeout=timeout,
             proxies=self.proxies
         )
-        return res
+
+        # Handle API rate limiting
+        if res.status_code == 429:
+            body = json.loads(res.text)
+            if 'ok' in body and 'error' in body:
+                if body['ok'] is False and body['error'] == 'ratelimited' \
+                                       and 'Retry-After' in res.headers:
+                    if res.headers['Retry-After'].isdigit() is True:
+                        time.sleep(int(res.headers['Retry-After']))
+                        res = requests.post(
+                            'https://{0}/api/{1}'.format(
+                                                  domain, api_method),
+                            headers=headers,
+                            data=post_data,
+                            files=files,
+                            timeout=timeout,
+                            proxies=self.proxies
+                        )
+
+        if res.ok:
+            return res
+        else:
+            message = "Error %d, body: %s" % (res.status_code, res.text)
+            raise SlackRequestError(message=message)
+
+
+class SlackRequestError(SlackClientError):
+    def __init__(self, message="", reply=None):
+        super(SlackRequestError, self).__init__(message)
+        self.reply = reply
