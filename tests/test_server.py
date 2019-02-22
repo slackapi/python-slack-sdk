@@ -51,7 +51,7 @@ def test_server_is_hashable(server):
 
 
 @patch('time.sleep', return_value=None)
-def test_rate_limiting(patched_time_sleep, server):
+def test_rate_limiting_rtm(patched_time_sleep, server):
     # Testing for rate limit retry headers
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -67,6 +67,23 @@ def test_rate_limiting(patched_time_sleep, server):
             for call in rsps.calls:
                 assert call.response.status_code == 429
             assert e.message == "RTM connection attempt was rate limited 10 times."
+
+@patch('time.sleep', return_value=None)
+def test_rate_limiting_web(patched_time_sleep, server):
+    # Testing for rate limit retry headers
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/?",
+            status=429,
+            json={"ok": False},
+            headers={'Retry-After': "1"},
+            match_querystring=False
+        )
+
+        server.api_call("dummy_method")
+        for call in rsps.calls:
+            assert call.response.status_code == 429
 
 
 def test_custom_agent(server):

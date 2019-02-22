@@ -347,8 +347,16 @@ class Server(object):
             See here for more information on responses: https://api.slack.com/web
         """
         response = self.api_requester.do(token, request, kwargs, timeout=timeout)
+
+        if response.status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", 120))
+            logging.debug("HTTP 429: Rate limited. Retrying in %d seconds", retry_after)
+            time.sleep(retry_after)
+            response = self.api_requester.do(token, request, kwargs, timeout=timeout)
+
         response_json = json.loads(response.text)
         response_json["headers"] = dict(response.headers)
+
         return json.dumps(response_json)
 
 
