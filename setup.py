@@ -49,7 +49,7 @@ setup(name='slackclient',
       keywords='slack slack-web slack-rtm chat chatbots bots chatops',
       packages=find_packages(exclude=['docs', 'docs-src', 'tests']),
       install_requires=[
-          'websocket-client >=0.35, <1.0a0',
+          'websocket-client >=0.35, <0.55.0',
           'requests >=2.11, <3.0a0',
           'six >=1.10, <2.0a0',
       ])
