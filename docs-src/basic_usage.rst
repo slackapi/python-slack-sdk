@@ -167,7 +167,7 @@ article for more information.
 Updating the content of a message
 ----------------------------------
 Let's say you have a bot which posts the status of a request. When that request
-is updated, you'll want to update the message to reflect it's state. Or your user
+is updated, you'll want to update the message to reflect its state. Or your user
 might want to fix a typo or change some wording. This is how you'll make those changes.
 
 .. code-block:: python
