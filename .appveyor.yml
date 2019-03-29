@@ -24,8 +24,8 @@ install:
 build: off
 
 test_script:
-  - "%PYTHON%\\python.exe -m flake8 slackclient"
-  - "%PYTHON%\\python.exe -m pytest --cov-report= --cov=slackclient tests"
+  - "%PYTHON%\\python.exe -m flake8 slack"
+  - "%PYTHON%\\python.exe -m pytest --cov-report= --cov=slack tests"
 
 # maybe `after_test:`?
 on_success:

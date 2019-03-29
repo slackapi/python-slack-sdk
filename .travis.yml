@@ -2,16 +2,14 @@ sudo: false
 dist: trusty
 language: python
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
   - "3.6"
+  - "3.7"
 install:
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install flake8
   - travis_retry pip install -r test_requirements.txt
 script:
-  - flake8 slackclient
-  - py.test --cov-report= --cov=slackclient tests
+  - flake8 slack
+  - py.test --cov-report= --cov=slack tests
 after_success:
   - codecov -e $TRAVIS_PYTHON_VERSION
