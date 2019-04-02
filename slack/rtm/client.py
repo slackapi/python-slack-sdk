@@ -38,9 +38,8 @@ class RTMClient(object):
             specified period of seconds. If set to 0, do not send automatically.
             Default is 30.
         ping_timeout (int): The amount of seconds the ping should timeout.
-            If the pong message is not received. Default is 10.
+            If the pong message is not received. Default is 30.
         ssl (SSLContext): The SSLContext object to be used.
-            Default is created with the SSL found by `certifi`.
         proxies (dict): If you need to use a proxy, you can pass a dict
             of proxy configs. e.g. {'https': "https://user:pass@127.0.0.1:8080"}
             Default is None.
@@ -60,14 +59,15 @@ class RTMClient(object):
     def say_hello(**payload):
         data = payload['data']
         web_client = payload['web_client']
+        rtm_client = payload['rtm_client']
         if 'Hello' in data['text']:
             channel_id = data['channel']
             thread_ts = data['ts']
             user = data['user']
 
-            web_client.api_call('chat.postMessage'
+            web_client.chat_postMessage(
                 channel=channel_id,
-                text="Hi <@{}>!".format(user),
+                text=f"Hi <@{user}>!",
                 thread_ts=thread_ts
             )
 
@@ -365,8 +365,8 @@ class RTMClient(object):
                     break
                 callback(rtm_client=self, web_client=self._web_client, data=data)
             except Exception as err:
-                # SLACKCLIENTCALLBACK EXCEPTION.
-                # TODO: we should reraise a specific exception with the traceback.
+                # TODO: We should make this configurable. If they opt-in catch the exception.
+                # If not we raise a specific SLACKCLIENTCALLBACK exception with the traceback.
                 name = callback.__name__
                 module = callback.__module__
                 msg = "When calling '%s#%s()' the following error was raised: %s"
@@ -407,7 +407,8 @@ class RTMClient(object):
     async def _wait_exponentially(self, exception, max_wait_time=300):
         """Wait exponentially longer for each connection attempt.
 
-        Add a random number of milliseconds to avoid coincendental
+        Calculate the number of seconds to wait and then add
+        a random number of milliseconds to avoid coincendental
         synchronized client retries. Wait up to the maximium amount
         of wait time specified via 'max_wait_time'. However,
         if Slack returned how long to wait use that.

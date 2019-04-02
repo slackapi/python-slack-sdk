@@ -187,7 +187,7 @@ class WebClient(SlackAPIMixin, object):
                 e.g. {
                     'Content-Type': 'application/json;charset=utf-8',
                     'Authorization': 'Bearer xoxb-1234-1243',
-                    'user-agent': 'Python/2.7.15 slack/2.0.0 Darwin/17.7.0'
+                    'user-agent': 'Python/3.6 slack/2.0.0 Darwin/17.7.0'
                 }
         """
         headers = {
