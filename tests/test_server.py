@@ -57,10 +57,10 @@ def test_api_call_for_empty_slack_responses(server):
         chat_postMessage_response = rsps.calls[0].response
 
         assert chat_postMessage_response.text == ""
-        expected_response = (
-            '{"headers": {"Content-Type": "text/plain", "Retry-After": "1"}}'
-        )
-        assert response_received == expected_response
+        expected_response = {
+            "headers": {"Content-Type": "text/plain", "Retry-After": "1"}
+        }
+        assert json.loads(response_received) == expected_response
 
 
 def test_server_is_hashable(server):
