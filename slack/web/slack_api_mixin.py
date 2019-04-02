@@ -542,20 +542,20 @@ class SlackAPIMixin(object):
 
 
         Args:
-            file_ (str): Supply a file path or file object
+            file (str): Supply a file path.
                 when you'd like to upload a specific file. e.g. 'dramacat.gif'
             content (str): Supply content when you'd like to create an
                 editable text file containing the specified text. e.g. 'launch plan'
         Raises:
-            SlackRequestError: If niether or both the `file_` and `content` args are specified.
+            SlackRequestError: If niether or both the `file` and `content` args are specified.
         """
         if file is None and content is None:
             raise e.SlackRequestError(
-                "The file_ or content argument must be specified."
+                "The file or content argument must be specified."
             )
         if file is not None and content is not None:
             raise e.SlackRequestError(
-                "You cannot specify both the file_ and the content argument."
+                "You cannot specify both the file and the content argument."
             )
 
         if file:
