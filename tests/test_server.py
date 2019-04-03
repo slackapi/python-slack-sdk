@@ -44,6 +44,25 @@ def test_server_connect(rtm_start_fixture):
             ]
 
 
+def test_api_call_for_empty_slack_responses(server):
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.POST,
+            "https://slack.com/api/chat.postMessage",
+            status=429,
+            headers={"Retry-After": "1"},
+        )
+
+        response_received = server.api_call("token", "chat.postMessage")
+        chat_postMessage_response = rsps.calls[0].response
+
+        assert chat_postMessage_response.text == ""
+        expected_response = {
+            "headers": {"Content-Type": "text/plain", "Retry-After": "1"}
+        }
+        assert json.loads(response_received) == expected_response
+
+
 def test_server_is_hashable(server):
     server_map = {server: server.token}
     assert server_map[server] == 'xoxp-1234123412341234-12341234-1234'

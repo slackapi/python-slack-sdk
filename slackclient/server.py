@@ -347,7 +347,10 @@ class Server(object):
             See here for more information on responses: https://api.slack.com/web
         """
         response = self.api_requester.do(token, request, kwargs, timeout=timeout)
-        response_json = json.loads(response.text)
+        response_json = {}
+        resp_text = response.text
+        if resp_text:
+            response_json = json.loads(resp_text)
         response_json["headers"] = dict(response.headers)
         return json.dumps(response_json)
 
