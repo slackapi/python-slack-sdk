@@ -2,6 +2,6 @@ pytest<4
 codecov
 coverage
 mock
-pytest-cov
+pytest-cov>=2.4.0,<2.6
 pytest-mock
 responses
