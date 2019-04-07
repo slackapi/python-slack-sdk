@@ -550,9 +550,7 @@ class SlackAPIMixin(object):
             SlackRequestError: If niether or both the `file` and `content` args are specified.
         """
         if file is None and content is None:
-            raise e.SlackRequestError(
-                "The file or content argument must be specified."
-            )
+            raise e.SlackRequestError("The file or content argument must be specified.")
         if file is not None and content is not None:
             raise e.SlackRequestError(
                 "You cannot specify both the file and the content argument."

@@ -43,6 +43,9 @@ class RTMClient(object):
         proxies (dict): If you need to use a proxy, you can pass a dict
             of proxy configs. e.g. {'https': "https://user:pass@127.0.0.1:8080"}
             Default is None.
+        loop (AbstractEventLoop): An event loop provided by asyncio.
+            If None is specified we attempt to use the current loop
+            with `get_event_loop`. Default is None.
 
     Methods:
         ping: Sends a ping message over the websocket to Slack.
@@ -98,6 +101,7 @@ class RTMClient(object):
         ping_timeout=30,
         ssl=None,
         proxies=None,
+        loop=None,
     ):
         self.token = token
         self.base_url = base_url
@@ -115,7 +119,7 @@ class RTMClient(object):
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
-        self._event_loop = None
+        self._event_loop = loop or asyncio.get_event_loop()
 
     @staticmethod
     def run_on(event):
@@ -169,7 +173,6 @@ class RTMClient(object):
         Raises:
             SlackApiError: Unable to retreive RTM URL from Slack.
         """
-        self._event_loop = asyncio.get_event_loop()
         try:
             # These signals depend on the OS.
             # SIGHUP=Reload/Restart, SIGINT=Hard Exit, SIGTERM=Graceful/Hard Exit
