@@ -65,14 +65,23 @@ class TestConnectedRTMClient(unittest.TestCase):
                 json.dumps({"type": "message", "message_sent": json.loads(message)})
             )
 
+    async def mock_server(self):
+        async with websockets.serve(self.echo, "localhost", 8765):
+            await self.stop
+
     def setUp(self):
-        asyncio.ensure_future(websockets.serve(self.echo, "localhost", 8765))
+        self.loop = asyncio.get_event_loop()
+        self.stop = self.loop.create_future()
+        task = asyncio.ensure_future(self.mock_server())
+        self.loop.run_until_complete(asyncio.wait([task], timeout=0.1))
+
         self.client = slack.RTMClient()
         mock_retreive_websocket_info = mock.MagicMock(name="_retreive_websocket_info")
         mock_retreive_websocket_info.return_value = "ws://localhost:8765", {}
         self.client._retreive_websocket_info = mock_retreive_websocket_info
 
     def tearDown(self):
+        self.stop.set_result(None)
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
     def test_stop_closes_websocket(self):
@@ -112,3 +121,29 @@ class TestConnectedRTMClient(unittest.TestCase):
             rtm_client.stop()
 
         self.client.start()
+
+
+# send_over_websocket calls self._websocket.send(json.dumps(payload)) with expected payload
+# send_over_websocket raises error when not connected.
+
+# ping calls calls self._websocket.send(json.dumps(payload)) with expected payload
+
+# typing calls self._websocket.send(json.dumps(payload)) with expected payload
+
+
+# when start is called...
+
+# It retreives the URL from the correct Start Method.
+
+# it raises SlackApiError if url isn't included response from RTM connect method and auto_reconnect is false.
+
+# Test that an open event is dispatched once connected. It should include RTM payload, web and rtm client.  self._dispatch_event(event='open', data=data)
+
+# Test that message events are dispatched. It should include the message payload, web and rtm client. self._dispatch_event(event, data=payload)
+
+# It waits and reconnects when an exception is thrown if auto_reconnect is specified.
+
+
+# the stop method is called when these signals are triggered. (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+
+# Test that a close event is dispatched once everything is torn down. i.e. self._dispatch_event(event='close')
