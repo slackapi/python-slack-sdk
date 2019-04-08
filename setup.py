@@ -99,6 +99,6 @@ setup(
     install_requires=["websockets>6.0", "requests>2.20"],
     setup_requires=["pytest-runner", "flake8", "black"],
     test_suite="tests",
-    tests_require=["pytest, codecov"],
+    tests_require=["pytest", "codecov"],
     cmdclass={"upload": UploadCommand, "lint": LintCommand},
 )
