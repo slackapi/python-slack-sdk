@@ -15,6 +15,8 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
+tests_require = ["pytest", "codecov", "flake8", "black"]
+
 
 class BaseCommand(Command):
     """Base Command"""
@@ -64,6 +66,10 @@ class LintCommand(BaseCommand):
     description = "Run Python static code analyzer (flake8) and formatter (black)."
 
     def run(self):
+
+        self.status("Install dependencies…")
+        subprocess.check_call([sys.executable, "-m", "pip", "install"] + tests_require)
+
         self.status("Running black…")
         subprocess.check_call([sys.executable, "-m", "black", "{0}/slack".format(here)])
 
@@ -103,6 +109,6 @@ setup(
     install_requires=["websockets>6.0", "requests>2.20"],
     setup_requires=["pytest-runner"],
     test_suite="tests",
-    tests_require=["pytest", "codecov", "flake8", "black"],
+    tests_require=tests_require,
     cmdclass={"upload": UploadCommand, "lint": LintCommand},
 )
