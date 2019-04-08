@@ -85,7 +85,7 @@ class ValidateCommand(BaseCommand):
                 sys.executable,
                 "-m",
                 "pytest",
-                "--cov-report=",
+                "--cov-report=xml",
                 f"--cov={here}/slack",
                 "tests/",
             ],
