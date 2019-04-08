@@ -92,7 +92,6 @@ class ValidateCommand(BaseCommand):
                 "pytest",
                 "-p",
                 "pytest_cov",
-                "--cov-report=",
                 "--cov=slack",
                 "tests/",
             ],
