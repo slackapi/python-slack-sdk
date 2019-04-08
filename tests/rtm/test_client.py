@@ -75,7 +75,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         task = asyncio.ensure_future(self.mock_server())
         self.loop.run_until_complete(asyncio.wait([task], timeout=0.1))
 
-        self.client = slack.RTMClient()
+        self.client = slack.RTMClient(loop=self.loop)
         mock_retreive_websocket_info = mock.MagicMock(name="_retreive_websocket_info")
         mock_retreive_websocket_info.return_value = "ws://localhost:8765", {}
         self.client._retreive_websocket_info = mock_retreive_websocket_info
