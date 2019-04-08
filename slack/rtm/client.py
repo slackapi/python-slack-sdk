@@ -177,8 +177,8 @@ class RTMClient(object):
         try:
             # These kill signals depend on the OS.
             if os.name == "nt":
-                signal.signal(signal.CTRL_C_EVENT, self.stop)
-                signal.signal(signal.CTRL_BREAK_EVENT, self.stop)
+                signal.signal(signal.CTRL_C_EVENT, self.nt_signal_handler)
+                signal.signal(signal.CTRL_BREAK_EVENT, self.nt_signal_handler)
             else:
                 signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
                 for s in signals:
@@ -186,6 +186,10 @@ class RTMClient(object):
             self._event_loop.run_until_complete(self._connect_and_read())
         finally:
             self._dispatch_event(event="close")
+
+    def nt_signal_handler(self, signal, frame):
+        """Run stop() if Ctrl+C is received."""
+        self.stop()
 
     def stop(self):
         """Closes the websocket connection and ensures it won't reconnect."""
