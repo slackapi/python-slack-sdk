@@ -177,11 +177,12 @@ class RTMClient(object):
         try:
             # These kill signals depend on the OS.
             if os.name == "nt":
-                signals = (signal.CTRL_C_EVENT, signal.CTRL_BREAK_EVENT)
+                signal.signal(signal.CTRL_C_EVENT, self.stop)
+                signal.signal(signal.CTRL_BREAK_EVENT, self.stop)
             else:
                 signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
-            for s in signals:
-                self._event_loop.add_signal_handler(s, self.stop)
+                for s in signals:
+                    self._event_loop.add_signal_handler(s, self.stop)
             self._event_loop.run_until_complete(self._connect_and_read())
         finally:
             self._dispatch_event(event="close")
