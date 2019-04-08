@@ -68,9 +68,9 @@ class UploadCommand(BaseCommand):
 
 
 class ValidateCommand(BaseCommand):
-    """Support setup.py lint."""
+    """Support setup.py validate."""
 
-    description = "Run Python static code analyzer (flake8), formatter (black) and unittests (pytest)."
+    description = "Run Python static code analyzer (flake8), formatter (black) and unit tests (pytest)."
 
     def run(self):
         self._run(

@@ -17,6 +17,7 @@ venv/
 # codecov / coverage
 .coverage
 cov_*
+coverage.xml
 
 # due to using tox and pytest
 .tox
