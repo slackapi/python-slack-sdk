@@ -36,7 +36,7 @@ class BaseCommand(Command):
 
     def _run(self, s, command):
         try:
-            self.status(s)
+            self.status(s + "\n" + " ".join(command))
             subprocess.check_call(command)
         except subprocess.CalledProcessError as error:
             sys.exit(error.returncode)
@@ -77,24 +77,11 @@ class ValidateCommand(BaseCommand):
             "Installing test dependencies…",
             [sys.executable, "-m", "pip", "install"] + tests_require,
         )
-        self._run(
-            "Running black…", [sys.executable, "-m", "black", "{0}/slack".format(here)]
-        )
-        self._run(
-            "Running flake8…",
-            [sys.executable, "-m", "flake8", "{0}/slack".format(here)],
-        )
+        self._run("Running black…", [sys.executable, "-m", "black", f"{here}/slack"])
+        self._run("Running flake8…", [sys.executable, "-m", "flake8", f"{here}/slack"])
         self._run(
             "Running pytest…",
-            [
-                sys.executable,
-                "-m",
-                "pytest",
-                "-p",
-                "pytest_cov",
-                "--cov=slack",
-                "tests/",
-            ],
+            [sys.executable, "-m", "pytest", f"--cov={here}/slack", "tests/"],
         )
 
 
