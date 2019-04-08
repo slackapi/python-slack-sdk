@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import subprocess
 import sys
 from shutil import rmtree
 from setuptools import setup, find_packages, Command
@@ -64,10 +65,13 @@ class LintCommand(BaseCommand):
 
     def run(self):
         self.status("Running black…")
-        os.system("{0} -m black {1}/slack".format(sys.executable, here))
+        subprocess.check_call([sys.executable, "-m", "black", "{0}/slack".format(here)])
 
         self.status("Running flake8…")
-        os.system("{0} -m flake8 {1}/slack".format(sys.executable, here))
+        subprocess.check_call(
+            [sys.executable, "-m", "flake8", "{0}/slack".format(here)]
+        )
+
         sys.exit()
 
 
@@ -97,8 +101,8 @@ setup(
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
     packages=find_packages(exclude=["docs", "docs-src", "tests", "tests.*"]),
     install_requires=["websockets>6.0", "requests>2.20"],
-    setup_requires=["pytest-runner", "flake8", "black"],
+    setup_requires=["pytest-runner"],
     test_suite="tests",
-    tests_require=["pytest", "codecov"],
+    tests_require=["pytest", "codecov", "flake8", "black"],
     cmdclass={"upload": UploadCommand, "lint": LintCommand},
 )
