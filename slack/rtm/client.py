@@ -1,6 +1,7 @@
 """A Python module for iteracting with Slack's RTM API."""
 
 # Standard Imports
+import os
 import logging
 import random
 import json
@@ -174,9 +175,11 @@ class RTMClient(object):
             SlackApiError: Unable to retreive RTM URL from Slack.
         """
         try:
-            # These signals depend on the OS.
-            # SIGHUP=Reload/Restart, SIGINT=Hard Exit, SIGTERM=Graceful/Hard Exit
-            signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+            # These kill signals depend on the OS.
+            if os.name == "nt":
+                signals = (signal.CTRL_C_EVENT, signal.CTRL_BREAK_EVENT)
+            else:
+                signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
             self._event_loop.run_until_complete(self._connect_and_read())
