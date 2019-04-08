@@ -15,7 +15,7 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
-tests_require = ["pytest", "codecov", "flake8", "black"]
+tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black"]
 
 
 class BaseCommand(Command):
@@ -33,6 +33,13 @@ class BaseCommand(Command):
 
     def finalize_options(self):
         pass
+
+    def _run(self, s, command):
+        try:
+            self.status(s)
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError as error:
+            sys.exit(error.returncode)
 
 
 class UploadCommand(BaseCommand):
@@ -60,25 +67,26 @@ class UploadCommand(BaseCommand):
         sys.exit()
 
 
-class LintCommand(BaseCommand):
+class ValidateCommand(BaseCommand):
     """Support setup.py lint."""
 
-    description = "Run Python static code analyzer (flake8) and formatter (black)."
+    description = "Run Python static code analyzer (flake8), formatter (black) and unittests (pytest)."
 
     def run(self):
-
-        self.status("Install dependencies…")
-        subprocess.check_call([sys.executable, "-m", "pip", "install"] + tests_require)
-
-        self.status("Running black…")
-        subprocess.check_call([sys.executable, "-m", "black", "{0}/slack".format(here)])
-
-        self.status("Running flake8…")
-        subprocess.check_call(
-            [sys.executable, "-m", "flake8", "{0}/slack".format(here)]
+        self._run(
+            "Installing test dependencies…",
+            [sys.executable, "-m", "pip", "install"] + tests_require,
         )
-
-        sys.exit()
+        self._run(
+            "Running black…", [sys.executable, "-m", "black", "{0}/slack".format(here)]
+        )
+        self._run(
+            "Running flake8…",
+            [sys.executable, "-m", "flake8", "{0}/slack".format(here)],
+        )
+        self._run(
+            "Running pytest…", [sys.executable, "-m", "pytest", "-p", "pytest_cov"]
+        )
 
 
 setup(
@@ -110,5 +118,5 @@ setup(
     setup_requires=["pytest-runner"],
     test_suite="tests",
     tests_require=tests_require,
-    cmdclass={"upload": UploadCommand, "lint": LintCommand},
+    cmdclass={"upload": UploadCommand, "validate": ValidateCommand},
 )
