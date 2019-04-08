@@ -54,17 +54,23 @@ class UploadCommand(BaseCommand):
         except OSError:
             pass
 
-        self.status("Building Source and Wheel (universal) distribution…")
-        os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
+        self._run(
+            "Building Source and Wheel (universal) distribution…",
+            [sys.executable, "setup.py", "sdist", "bdist_wheel", "--universal"],
+        )
 
-        self.status("Uploading the package to PyPI via Twine…")
-        os.system("twine upload dist/*")
+        self._run(
+            "Installing Twine dependency…",
+            [sys.executable, "-m", "pip", "install", "twine"],
+        )
 
-        self.status("Pushing git tags…")
-        os.system("git tag v{0}".format(__version__))
-        os.system("git push --tags")
+        self._run(
+            "Uploading the package to PyPI via Twine…",
+            [sys.executable, "-m", "twine", "upload", "dist/*"],
+        )
 
-        sys.exit()
+        self._run("Creating git tags…", ["git", "tag", f"v{__version__}"])
+        self._run("Pushing git tags…", ["git", "push", "--tags"])
 
 
 class ValidateCommand(BaseCommand):
