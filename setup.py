@@ -81,7 +81,14 @@ class ValidateCommand(BaseCommand):
         self._run("Running flake8…", [sys.executable, "-m", "flake8", f"{here}/slack"])
         self._run(
             "Running pytest…",
-            [sys.executable, "-m", "pytest", f"--cov={here}/slack", "tests/"],
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--cov-report=",
+                f"--cov={here}/slack",
+                "tests/",
+            ],
         )
 
 
