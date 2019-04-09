@@ -57,6 +57,14 @@ class TestRTMClient(unittest.TestCase):
         error = str(context.exception)
         self.assertEqual(error, expected_error)
 
+    def test_send_over_websocket_raises_when_not_connected(self):
+        with self.assertRaises(e.SlackClientError) as context:
+            self.client.send_over_websocket({})
+
+        expected_error = "Websocket connection is closed."
+        error = str(context.exception)
+        self.assertEqual(error, expected_error)
+
 
 class TestConnectedRTMClient(unittest.TestCase):
     async def echo(self, ws, path):
@@ -96,7 +104,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         self.client.start()
         self.assertIsNone(self.client._websocket)
 
-    def test_send_over_websocket(self):
+    def test_send_over_websocket_sends_expected_message(self):
         @slack.RTMClient.run_on(event="open")
         def echo_message(**payload):
             rtm_client = payload["rtm_client"]
@@ -122,13 +130,35 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.start()
 
+    def test_ping_sends_expected_message(self):
+        @slack.RTMClient.run_on(event="open")
+        def echo_message(**payload):
+            rtm_client = payload["rtm_client"]
+            rtm_client.ping()
 
-# send_over_websocket calls self._websocket.send(json.dumps(payload)) with expected payload
-# send_over_websocket raises error when not connected.
+        @slack.RTMClient.run_on(event="message")
+        def check_message(**payload):
+            message = {"id": 1, "type": "ping"}
+            rtm_client = payload["rtm_client"]
+            self.assertDictEqual(payload["data"]["message_sent"], message)
+            rtm_client.stop()
 
-# ping calls calls self._websocket.send(json.dumps(payload)) with expected payload
+        self.client.start()
 
-# typing calls self._websocket.send(json.dumps(payload)) with expected payload
+    def test_typing_sends_expected_message(self):
+        @slack.RTMClient.run_on(event="open")
+        def echo_message(**payload):
+            rtm_client = payload["rtm_client"]
+            rtm_client.typing(channel="C01234567")
+
+        @slack.RTMClient.run_on(event="message")
+        def check_message(**payload):
+            message = {"id": 1, "type": "typing", "channel": "C01234567"}
+            rtm_client = payload["rtm_client"]
+            self.assertDictEqual(payload["data"]["message_sent"], message)
+            rtm_client.stop()
+
+        self.client.start()
 
 
 # when start is called...
@@ -142,7 +172,6 @@ class TestConnectedRTMClient(unittest.TestCase):
 # Test that message events are dispatched. It should include the message payload, web and rtm client. self._dispatch_event(event, data=payload)
 
 # It waits and reconnects when an exception is thrown if auto_reconnect is specified.
-
 
 # the stop method is called when these signals are triggered. (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
 

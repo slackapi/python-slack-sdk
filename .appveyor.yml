@@ -14,6 +14,3 @@ build: off
 
 test_script:
   - "%PYTHON%\\python.exe setup.py validate"
-
-on_success:
-  - "%PYTHON%\\python.exe -m codecov -e win-%PYTHON_VERSION%"

@@ -27,3 +27,9 @@ class SlackApiError(SlackClientError):
         msg = ("{m}\nThe server responded with: {r}").format(m=message, r=response)
         self.response = response
         super(SlackApiError, self).__init__(msg)
+
+
+class CallbackError(SlackClientError):
+    """Error raised when executing a callback raises an exception."""
+
+    pass

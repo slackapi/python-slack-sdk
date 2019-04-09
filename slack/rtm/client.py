@@ -212,7 +212,7 @@ class RTMClient(object):
         Raises:
             SlackClientError: Websocket connection is closed.
         """
-        if self._websocket is None and self._event_loop is None:
+        if self._websocket is None or self._event_loop is None:
             raise client_err.SlackClientError("Websocket connection is closed.")
         asyncio.ensure_future(
             self._websocket.send(json.dumps(payload)), loop=self._event_loop
@@ -369,12 +369,10 @@ class RTMClient(object):
                     break
                 callback(rtm_client=self, web_client=self._web_client, data=data)
             except Exception as err:
-                # TODO: We should make this configurable. If they opt-in catch the exception.
-                # If not we raise a specific SLACKCLIENTCALLBACK exception with the traceback.
                 name = callback.__name__
                 module = callback.__module__
-                msg = "When calling '%s#%s()' the following error was raised: %s"
-                self._logger.error(msg, module, name, err)
+                msg = f"When calling '{module}#{name}()' the following error was raised: {err}"
+                raise client_err.CallbackError(msg) from err
 
     def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.
