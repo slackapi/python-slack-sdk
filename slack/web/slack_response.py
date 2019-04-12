@@ -51,14 +51,22 @@ class SlackResponse(object):
         removed at anytime.
     """
 
-    def __init__(self, client, prepared_req, response):
-        self.data = response.json()
-        self.headers = response.headers
-        self.status_code = response.status_code
+    def __init__(
+        self, client, http_verb, api_url, req_args, data, headers, status_code
+    ):
+        self.http_verb = http_verb
+        self.api_url = api_url
+        self.req_args = req_args
+        self.data = data
+        self.headers = headers
+        self.status_code = status_code
         self._client = client
-        self._prepared_req = prepared_req
         self._logger = logging.getLogger(__name__)
         self._iteration = 0
+
+    def __str__(self):
+        """Return the Response data if object is converted to a string."""
+        return f"{self.data}"
 
     def __getitem__(self, key):
         """Retreives any key from the data store.
@@ -108,14 +116,15 @@ class SlackResponse(object):
         if self._iteration == 1:
             return self
         if self._next_cursor_is_present(self.data):
-            params = {"cursor": self.data["response_metadata"]["next_cursor"]}
-            req = self._prepared_req.copy()
-            url = req.url
-            req.prepare_url(url, params)
-            response = self._client._send(req)
-            self.data = response.json()
-            self.headers = response.headers
-            self.status_code = response.status_code
+            self.req_args.get("params", {}).update(
+                {"cursor": self.data["response_metadata"]["next_cursor"]}
+            )
+            data, headers, status_code = self._client._send(
+                self.http_verb, self.api_url, self.req_args
+            )
+            self.data = data
+            self.headers = headers
+            self.status_code = status_code
             return self.validate()
         else:
             raise StopIteration

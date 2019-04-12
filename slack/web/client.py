@@ -139,7 +139,7 @@ class WebClient(SlackAPIMixin, object):
             msg = "Json data can only be submitted as POST requests."
             raise e.SlackRequestError(msg)
 
-        url = self._get_url(api_method)
+        api_url = self._get_url(api_method)
         has_json = json is not None
         has_files = files is not None
         headers = self._get_headers(has_json, has_files)
@@ -153,15 +153,19 @@ class WebClient(SlackAPIMixin, object):
             "json": json,
         }
 
-        prepared_req = requests.Request(http_verb, url, **req_args).prepare()
         self._logger.debug(
             "Sending a '%s' request to '%s' with the following data: %s",
             http_verb,
-            url,
+            api_url,
             req_args,
         )
-        response = self._send(prepared_req)
-        return SlackResponse(self, prepared_req, response).validate()
+        data, headers, status_code = self._send(
+            http_verb=http_verb, api_url=api_url, req_args=req_args
+        )
+        res = SlackResponse(
+            self, http_verb, api_url, req_args, data, headers, status_code
+        )
+        return res.validate()
 
     def _get_url(self, api_method):
         """Joins the base Slack URL and an API method to form an absolute URL.
@@ -208,19 +212,31 @@ class WebClient(SlackAPIMixin, object):
         # We should ask them if it makes sense for the requests library to handle this.
         return headers
 
-    def _send(self, prepared_req):
-        """Sends the prepared requests out for transmission.
+    def _send(self, http_verb, api_url, req_args):
+        """Sends the request out for transmission.
 
         Temporarily creates a new session if not already defined.
 
         Args:
-            prepared_req (PreparedRequest)
-
+            http_verb (str): The HTTP verb. e.g. 'GET' or 'POST'.
+            api_url (str): The Slack API url. e.g. 'https://slack.com/api/chat.postMessage'
+            req_args (dict): The request arguments to be attached to the request.
+            e.g.
+            {
+                json: {
+                    'attachments': [{"pretext": "pre-hello", "text": "text-world"}],
+                    'channel': '#random'
+                }
+            }
         Returns:
             (requests.Response)
         """
+        prepared_req = requests.Request(http_verb, api_url, **req_args).prepare()
         session = self._session or requests.Session()
-        return session.send(prepared_req, proxies=self.proxies, timeout=self.timeout)
+        response = session.send(
+            prepared_req, proxies=self.proxies, timeout=self.timeout
+        )
+        return response.json(), response.headers, response.status_code
 
     @staticmethod
     def _encode_data(data):
