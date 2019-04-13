@@ -45,6 +45,7 @@ class WebClient(SlackAPIMixin, object):
 
     Example of recommended usage:
     ```python
+        import os
         import slack
 
         client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
@@ -57,6 +58,7 @@ class WebClient(SlackAPIMixin, object):
 
     Example manually creating an API request:
     ```python
+        import os
         import slack
 
         client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])

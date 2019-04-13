@@ -57,6 +57,7 @@ class RTMClient(object):
 
     Example:
     ```python
+    import os
     import slack
 
     @slack.RTMClient.run_on(event='message')
