@@ -16,7 +16,7 @@ import slack.errors as e
 def mock_req_args(data=None, params={}, json=None):
     req_args = {
         "headers": {
-            "user-agent": "Python/3.6.7 slack/2.0.0 Darwin/17.7.0",
+            "user-agent": slack.WebClient._get_user_agent(),
             "Authorization": "Bearer None",
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         },
