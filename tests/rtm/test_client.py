@@ -67,7 +67,7 @@ class TestRTMClient(unittest.TestCase):
 
         expected_error = "The specified callback 'a' is not callable."
         error = str(context.exception)
-        self.assertEqual(error, expected_error)
+        self.assertIn(expected_error, error)
 
     def test_on_raises_when_kwargs_not_accepted(self):
         def invalid_cb():
@@ -80,7 +80,7 @@ class TestRTMClient(unittest.TestCase):
             "The callback 'invalid_cb' must accept keyword arguments (**kwargs)."
         )
         error = str(context.exception)
-        self.assertEqual(error, expected_error)
+        self.assertIn(expected_error, error)
 
     def test_send_over_websocket_raises_when_not_connected(self):
         with self.assertRaises(e.SlackClientError) as context:
@@ -88,7 +88,7 @@ class TestRTMClient(unittest.TestCase):
 
         expected_error = "Websocket connection is closed."
         error = str(context.exception)
-        self.assertEqual(error, expected_error)
+        self.assertIn(expected_error, error)
 
     @mock.patch("slack.WebClient._send", return_value=({"ok": True}, {}, 200))
     def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(self, mock_send):
@@ -96,18 +96,8 @@ class TestRTMClient(unittest.TestCase):
             slack.RTMClient(auto_reconnect=False).start()
 
         expected_error = "Unable to retreive RTM URL from Slack"
-        self.assertTrue(expected_error in str(context.exception))
+        self.assertIn(expected_error, str(context.exception))
 
-
-# when start is called...
-
-# Event dispatching
-# Test that an open event is dispatched once connected. It should include RTM payload, web and rtm client.  self._dispatch_event(event='open', data=data)
-# Test that message events are dispatched. It should include the message payload, web and rtm client. self._dispatch_event(event, data=payload)
-# Test that no other events get dispatched if stopped. e.g. if self._stopped and event not in ["close", "error"]:
-# Test that we raise CallbackError's
-# Test that error events are dispatched.
-# Test that a close event is dispatched once everything is torn down. i.e. self._dispatch_event(event='close')
 
 # It waits and reconnects when an exception is thrown if auto_reconnect is specified. via @mock.patch('', side_effect=mock_side_effect)
 # Test that it uses the Retry-After if passed.
@@ -121,7 +111,20 @@ class TestRTMClient(unittest.TestCase):
 
 @mock.patch(
     "slack.WebClient._send",
-    return_value=({"ok": True, "url": "ws://localhost:8765"}, {}, 200),
+    return_value=(
+        {
+            "ok": True,
+            "url": "ws://localhost:8765",
+            "self": {"id": "U01234ABC", "name": "robotoverlord"},
+            "team": {
+                "domain": "exampledomain",
+                "id": "T123450FP",
+                "name": "ExampleName",
+            },
+        },
+        {"header": "fake"},
+        200,
+    ),
 )
 class TestConnectedRTMClient(unittest.TestCase):
     async def echo(self, ws, path):
@@ -145,6 +148,17 @@ class TestConnectedRTMClient(unittest.TestCase):
     def tearDown(self):
         self.stop.set_result(None)
         slack.RTMClient._callbacks = collections.defaultdict(list)
+
+    def test_open_event_receives_expected_arguments(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def stop_on_open(**payload):
+            self.assertIsInstance(payload["data"], dict)
+            self.assertIsInstance(payload["web_client"], slack.WebClient)
+            rtm_client = payload["rtm_client"]
+            self.assertIsInstance(rtm_client, slack.RTMClient)
+            rtm_client.stop()
+
+        self.client.start()
 
     def test_stop_closes_websocket(self, mock_send):
         @slack.RTMClient.run_on(event="open")
@@ -219,7 +233,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
     def test_ping_sends_expected_message(self, mock_send):
         @slack.RTMClient.run_on(event="open")
-        def echo_message(**payload):
+        def ping_message(**payload):
             rtm_client = payload["rtm_client"]
             rtm_client.ping()
 
@@ -234,7 +248,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
     def test_typing_sends_expected_message(self, mock_send):
         @slack.RTMClient.run_on(event="open")
-        def echo_message(**payload):
+        def typing_message(**payload):
             rtm_client = payload["rtm_client"]
             rtm_client.typing(channel="C01234567")
 
@@ -246,4 +260,32 @@ class TestConnectedRTMClient(unittest.TestCase):
             rtm_client.stop()
 
         self.client.start()
+
+    def test_on_error_callbacks(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def raise_an_error(**payload):
+            raise e.SlackClientNotConnectedError("Testing error handling.")
+
+        @slack.RTMClient.run_on(event="error")
+        def error_callback(**payload):
+            self.error_hanlding_mock(str(payload["data"]))
+
+        self.error_hanlding_mock = mock.Mock()
+        with self.assertRaises(e.CallbackError):
+            self.client.start()
+        self.error_hanlding_mock.assert_called_once()
+
+    def test_callback_errors_are_raised(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def raise_an_error(**payload):
+            raise Exception("Testing error handling.")
+
+        with self.assertRaises(Exception) as context:
+            self.client.start()
+
+        expected_error = (
+            "When calling '#raise_an_error()' in the 'test_client' module the"
+            " following error was raised: Testing error handling."
+        )
+        self.assertIn(expected_error, str(context.exception))
 
