@@ -200,6 +200,8 @@ class RTMClient(object):
             we recommend users send messages via the Web API methods.
             e.g. web_client.chat_postMessage()
 
+            If the message "id" is not specified in the payload, it'll be added.
+
         Args:
             payload (dict): The message to send over the wesocket.
             e.g.
@@ -210,10 +212,14 @@ class RTMClient(object):
             }
 
         Raises:
-            SlackClientError: Websocket connection is closed.
+            SlackClientNotConnectedError: Websocket connection is closed.
         """
         if self._websocket is None or self._event_loop is None:
-            raise client_err.SlackClientError("Websocket connection is closed.")
+            raise client_err.SlackClientNotConnectedError(
+                "Websocket connection is closed."
+            )
+        if "id" not in payload:
+            payload["id"] = self._next_msg_id()
         asyncio.ensure_future(
             self._websocket.send(json.dumps(payload)), loop=self._event_loop
         )
@@ -225,7 +231,7 @@ class RTMClient(object):
         so the RTM protocol also supports ping/pong messages.
 
         Raises:
-            SlackClientError: Websocket connection is closed.
+            SlackClientNotConnectedError: Websocket connection is closed.
         """
         payload = {"id": self._next_msg_id(), "type": "ping"}
         self.send_over_websocket(payload=payload)
@@ -240,7 +246,7 @@ class RTMClient(object):
             channel (str): The channel id. e.g. 'C024BE91L'
 
         Raises:
-            SlackClientError: Websocket connection is closed.
+            SlackClientNotConnectedError: Websocket connection is closed.
         """
         payload = {"id": self._next_msg_id(), "type": "typing", "channel": channel}
         self.send_over_websocket(payload=payload)
@@ -314,6 +320,8 @@ class RTMClient(object):
                     self._dispatch_event(event="open", data=data)
                     await self._read_messages()
             except (
+                client_err.SlackClientNotConnectedError,
+                client_err.CallbackError,
                 client_err.SlackApiError,
                 socket_err.InvalidState,
                 socket_err.InvalidHandshake,
@@ -371,7 +379,7 @@ class RTMClient(object):
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
-                msg = f"When calling '{module}#{name}()' the following error was raised: {err}"
+                msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
                 raise client_err.CallbackError(msg) from err
 
     def _retreive_websocket_info(self):
@@ -383,11 +391,11 @@ class RTMClient(object):
             (
                 "wss://...",
                 {
-                    "self": {"id": "U4X318ZMZ","name": "robotoverlord"},
+                    "self": {"id": "U01234ABC","name": "robotoverlord"},
                     "team": {
-                        "domain": "slackdemo",
-                        "id": "T2U81E2FP",
-                        "name": "SlackDemo"
+                        "domain": "exampledomain",
+                        "id": "T123450FP",
+                        "name": "ExampleName"
                     }
                 }
             )

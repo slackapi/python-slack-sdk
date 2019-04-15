@@ -33,3 +33,9 @@ class CallbackError(SlackClientError):
     """Error raised when executing a callback raises an exception."""
 
     pass
+
+
+class SlackClientNotConnectedError(SlackClientError):
+    """Error raised when attempting to send messages over the websocket when the connection is closed."""
+
+    pass
