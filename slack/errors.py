@@ -29,12 +29,6 @@ class SlackApiError(SlackClientError):
         super(SlackApiError, self).__init__(msg)
 
 
-class CallbackError(SlackClientError):
-    """Error raised when executing a callback raises an exception."""
-
-    pass
-
-
 class SlackClientNotConnectedError(SlackClientError):
     """Error raised when attempting to send messages over the websocket when the connection is closed."""
 
