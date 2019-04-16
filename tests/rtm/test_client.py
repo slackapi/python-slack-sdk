@@ -1,7 +1,9 @@
 # Standard Imports
+import os
 import collections
 import unittest
 from unittest import mock
+import signal
 
 # ThirdParty Imports
 import asyncio
@@ -99,16 +101,6 @@ class TestRTMClient(unittest.TestCase):
         self.assertIn(expected_error, str(context.exception))
 
 
-# It waits and reconnects when an exception is thrown if auto_reconnect is specified. via @mock.patch('', side_effect=mock_side_effect)
-# Test that it uses the Retry-After if passed.
-# We likely should mock out asyncio.sleep.
-
-# the stop method is called when these signals are triggered. (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
-# Mock out self._websocket.close() and ensure it gets called when the signal is killed.
-
-# Test when sending messages over the websocket it autoincrements the message id. e.g. _next_msg_id
-
-
 @mock.patch(
     "slack.WebClient._send",
     return_value=(
@@ -148,6 +140,45 @@ class TestConnectedRTMClient(unittest.TestCase):
     def tearDown(self):
         self.stop.set_result(None)
         slack.RTMClient._callbacks = collections.defaultdict(list)
+
+    def test_kill_signals_are_handled_gracefully(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def kill_on_open(**payload):
+            rtm_client = payload["rtm_client"]
+            self.assertFalse(rtm_client._stopped)
+            os.kill(os.getpid(), signal.SIGINT)
+
+        self.client.start()
+        self.assertTrue(self.client._stopped)
+        self.assertIsNone(self.client._websocket)
+
+    def test_client_auto_reconnects_if_connection_randomly_closes(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def stop_on_open(**payload):
+            rtm_client = payload["rtm_client"]
+
+            if rtm_client._connection_attempts == 1:
+                rtm_client._close_websocket()
+            else:
+                self.assertEqual(rtm_client._connection_attempts, 2)
+                rtm_client.stop()
+
+        client = slack.RTMClient(auto_reconnect=True)
+        client.start()
+
+    def test_client_auto_reconnects_if_an_error_is_thrown(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def stop_on_open(**payload):
+            rtm_client = payload["rtm_client"]
+
+            if rtm_client._connection_attempts == 1:
+                raise e.SlackApiError("Test Error", {"headers": {"Retry-After": 0.001}})
+            else:
+                self.assertEqual(rtm_client._connection_attempts, 2)
+                rtm_client.stop()
+
+        client = slack.RTMClient(auto_reconnect=True)
+        client.start()
 
     def test_open_event_receives_expected_arguments(self, mock_send):
         @slack.RTMClient.run_on(event="open")
@@ -271,7 +302,7 @@ class TestConnectedRTMClient(unittest.TestCase):
             self.error_hanlding_mock(str(payload["data"]))
 
         self.error_hanlding_mock = mock.Mock()
-        with self.assertRaises(e.CallbackError):
+        with self.assertRaises(e.SlackClientNotConnectedError):
             self.client.start()
         self.error_hanlding_mock.assert_called_once()
 
@@ -283,9 +314,18 @@ class TestConnectedRTMClient(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             self.client.start()
 
-        expected_error = (
-            "When calling '#raise_an_error()' in the 'test_client' module the"
-            " following error was raised: Testing error handling."
-        )
+        expected_error = "Testing error handling."
         self.assertIn(expected_error, str(context.exception))
 
+    def test_on_close_callbacks(self, mock_send):
+        @slack.RTMClient.run_on(event="open")
+        def stop_on_open(**payload):
+            payload["rtm_client"].stop()
+
+        @slack.RTMClient.run_on(event="close")
+        def assert_on_close(**payload):
+            self.close_mock(str(payload["data"]))
+
+        self.close_mock = mock.Mock()
+        self.client.start()
+        self.close_mock.assert_called_once()

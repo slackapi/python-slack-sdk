@@ -321,7 +321,6 @@ class RTMClient(object):
                     await self._read_messages()
             except (
                 client_err.SlackClientNotConnectedError,
-                client_err.CallbackError,
                 client_err.SlackApiError,
                 socket_err.InvalidState,
                 socket_err.InvalidHandshake,
@@ -342,7 +341,7 @@ class RTMClient(object):
 
         Iteration terminates when the client is stopped or it disconnects.
         """
-        while not self._stopped:
+        while not self._stopped and self._websocket is not None:
             async for message in self._websocket:
                 payload = json.loads(message)
                 self._logger.debug(f"The Websocket received a new message. {payload}")
@@ -380,7 +379,8 @@ class RTMClient(object):
                 name = callback.__name__
                 module = callback.__module__
                 msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
-                raise client_err.CallbackError(msg) from err
+                self._logger.error(msg)
+                raise
 
     def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.
