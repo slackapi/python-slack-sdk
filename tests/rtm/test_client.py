@@ -141,16 +141,17 @@ class TestConnectedRTMClient(unittest.TestCase):
         self.stop.set_result(None)
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
-    def test_kill_signals_are_handled_gracefully(self, mock_send):
-        @slack.RTMClient.run_on(event="open")
-        def kill_on_open(**payload):
-            rtm_client = payload["rtm_client"]
-            self.assertFalse(rtm_client._stopped)
-            os.kill(os.getpid(), signal.SIGINT)
+    if os.name != "nt":
+        def test_kill_signals_are_handled_gracefully(self, mock_send):
+            @slack.RTMClient.run_on(event="open")
+            def kill_on_open(**payload):
+                rtm_client = payload["rtm_client"]
+                self.assertFalse(rtm_client._stopped)
+                os.kill(os.getpid(), signal.SIGINT)
 
-        self.client.start()
-        self.assertTrue(self.client._stopped)
-        self.assertIsNone(self.client._websocket)
+            self.client.start()
+            self.assertTrue(self.client._stopped)
+            self.assertIsNone(self.client._websocket)
 
     def test_client_auto_reconnects_if_connection_randomly_closes(self, mock_send):
         @slack.RTMClient.run_on(event="open")
