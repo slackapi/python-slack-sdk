@@ -52,7 +52,7 @@ class SlackResponse(object):
     """
 
     def __init__(
-        self, client, http_verb, api_url, req_args, data, headers, status_code
+        self, *, client, http_verb, api_url, req_args, data, headers, status_code
     ):
         self.http_verb = http_verb
         self.api_url = api_url

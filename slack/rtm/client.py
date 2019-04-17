@@ -12,8 +12,7 @@ import signal
 
 # ThirdParty Imports
 import asyncio
-import websockets
-import websockets.exceptions as socket_err
+import aiohttp
 
 # Internal Imports
 from slack.web.client import WebClient
@@ -103,6 +102,7 @@ class RTMClient(object):
         ssl=None,
         proxies=None,
         loop=None,
+        run_async=False,
     ):
         self.token = token
         self.base_url = base_url
@@ -112,15 +112,20 @@ class RTMClient(object):
         self.ping_timeout = ping_timeout
         self.ssl = ssl
         self.proxies = proxies
+        self.run_async = run_async
+        self._event_loop = loop or asyncio.get_event_loop()
         self._web_client = WebClient(
-            token=self.token, base_url=self.base_url, proxies=self.proxies
+            token=self.token,
+            base_url=self.base_url,
+            proxies=self.proxies,
+            run_async=run_async,
+            loop=self._event_loop,
         )
         self._websocket = None
         self._logger = logging.getLogger(__name__)
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
-        self._event_loop = loop or asyncio.get_event_loop()
 
     @staticmethod
     def run_on(event):
@@ -174,15 +179,19 @@ class RTMClient(object):
         Raises:
             SlackApiError: Unable to retreive RTM URL from Slack.
         """
-        try:
-            # TODO: Add Windows support for graceful shutdowns.
-            if os.name != "nt":
-                signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
-                for s in signals:
-                    self._event_loop.add_signal_handler(s, self.stop)
-            self._event_loop.run_until_complete(self._connect_and_read())
-        finally:
-            self._dispatch_event(event="close")
+        # TODO: Add Windows support for graceful shutdowns.
+        if os.name != "nt":
+            signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+            for s in signals:
+                self._event_loop.add_signal_handler(s, self.stop)
+
+        future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
+        future.add_done_callback(self._dispatch_event(event="close"))
+
+        if self.run_async or self._event_loop.is_running():
+            return future
+
+        return self._event_loop.run_until_complete(future)
 
     def stop(self):
         """Closes the websocket connection and ensures it won't reconnect."""
@@ -221,7 +230,7 @@ class RTMClient(object):
         if "id" not in payload:
             payload["id"] = self._next_msg_id()
         asyncio.ensure_future(
-            self._websocket.send(json.dumps(payload)), loop=self._event_loop
+            self._websocket.send_str(json.dumps(payload)), loop=self._event_loop
         )
 
     def ping(self):
@@ -307,23 +316,19 @@ class RTMClient(object):
         while not self._stopped:
             try:
                 self._connection_attempts += 1
-                url, data = self._retreive_websocket_info()
-                async with websockets.connect(
-                    url,
-                    ping_interval=self.ping_interval,
-                    ping_timeout=self.ping_timeout,
-                    loop=self._event_loop,
-                    ssl=self.ssl,
-                ) as websocket:
-                    self._logger.debug("The Websocket connection has been opened.")
-                    self._websocket = websocket
-                    self._dispatch_event(event="open", data=data)
-                    await self._read_messages()
+                url, data = await self._retreive_websocket_info()
+                async with aiohttp.ClientSession() as session:
+                    async with session.ws_connect(
+                        url, heartbeat=self.ping_interval, ssl=self.ssl
+                    ) as websocket:
+                        self._logger.debug("The Websocket connection has been opened.")
+                        self._websocket = websocket
+                        self._dispatch_event(event="open", data=data)
+                        await self._read_messages()
             except (
                 client_err.SlackClientNotConnectedError,
                 client_err.SlackApiError,
-                socket_err.InvalidState,
-                socket_err.InvalidHandshake,
+                # TODO: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 self._logger.debug(str(exception))
                 self._dispatch_event(event="error", data=exception)
@@ -343,10 +348,15 @@ class RTMClient(object):
         """
         while not self._stopped and self._websocket is not None:
             async for message in self._websocket:
-                payload = json.loads(message)
-                self._logger.debug(f"The Websocket received a new message. {payload}")
-                event = payload.pop("type", "Unknown")
-                self._dispatch_event(event, data=payload)
+                if message.type == aiohttp.WSMsgType.TEXT:
+                    payload = message.json()
+                    self._logger.debug(
+                        f"The Websocket received a new message. {payload}"
+                    )
+                    event = payload.pop("type", "Unknown")
+                    self._dispatch_event(event, data=payload)
+                elif message.type == aiohttp.WSMsgType.ERROR:
+                    break
 
     def _dispatch_event(self, event, data=None):
         """Dispatches the event and executes any associated callbacks.
@@ -382,7 +392,7 @@ class RTMClient(object):
                 self._logger.error(msg)
                 raise
 
-    def _retreive_websocket_info(self):
+    async def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.
 
         Returns:
@@ -405,9 +415,9 @@ class RTMClient(object):
         """
         self._logger.debug("Retrieving websocket info.")
         if self.connect_method in ["rtm.start", "rtm_start"]:
-            resp = self._web_client.rtm_start()
+            resp = await self._web_client.rtm_start()
         else:
-            resp = self._web_client.rtm_connect()
+            resp = await self._web_client.rtm_connect()
         url = resp.get("url")
         if url is None:
             msg = "Unable to retreive RTM URL from Slack."
