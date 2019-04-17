@@ -22,12 +22,33 @@ def mock_req_args(data=None, params={}, json=None):
             "Authorization": "Bearer None",
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         },
-        "files": None,
         "data": data,
         "params": params,
         "json": json,
+        "ssl": None,
     }
     return req_args
+
+
+def SendMock():
+    coro = mock.Mock(name="SendResult")
+    coro.return_value = {
+        "headers": {},
+        "data": {
+            "ok": True,
+            "url": "ws://localhost:8765",
+            "self": {"id": "U01234ABC", "name": "robotoverlord"},
+            "team": {
+                "domain": "exampledomain",
+                "id": "T123450FP",
+                "name": "ExampleName",
+            },
+        },
+        "status_code": 200,
+    }
+    corofunc = mock.Mock(name="_send", side_effect=asyncio.coroutine(coro))
+    corofunc.coro = coro
+    return corofunc
 
 
 class TestRTMClient(unittest.TestCase):
@@ -92,8 +113,14 @@ class TestRTMClient(unittest.TestCase):
         error = str(context.exception)
         self.assertIn(expected_error, error)
 
-    @mock.patch("slack.WebClient._send", return_value=({"ok": True}, {}, 200))
+    @mock.patch("slack.WebClient._send", new_callable=SendMock)
     def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(self, mock_send):
+        mock_send.coro.return_value = {
+            "data": {"ok": True},
+            "headers": {},
+            "status_code": 200,
+        }
+
         with self.assertRaises(e.SlackApiError) as context:
             slack.RTMClient(auto_reconnect=False).start()
 
@@ -101,23 +128,7 @@ class TestRTMClient(unittest.TestCase):
         self.assertIn(expected_error, str(context.exception))
 
 
-@mock.patch(
-    "slack.WebClient._send",
-    return_value=(
-        {
-            "ok": True,
-            "url": "ws://localhost:8765",
-            "self": {"id": "U01234ABC", "name": "robotoverlord"},
-            "team": {
-                "domain": "exampledomain",
-                "id": "T123450FP",
-                "name": "ExampleName",
-            },
-        },
-        {"header": "fake"},
-        200,
-    ),
-)
+@mock.patch("slack.WebClient._send", new_callable=SendMock)
 class TestConnectedRTMClient(unittest.TestCase):
     async def echo(self, ws, path):
         async for message in ws:
@@ -132,7 +143,7 @@ class TestConnectedRTMClient(unittest.TestCase):
     def setUp(self):
         self.loop = asyncio.get_event_loop()
         self.stop = self.loop.create_future()
-        task = asyncio.ensure_future(self.mock_server())
+        task = asyncio.ensure_future(self.mock_server(), loop=self.loop)
         self.loop.run_until_complete(asyncio.wait([task], timeout=0.1))
 
         self.client = slack.RTMClient(loop=self.loop, auto_reconnect=False)
@@ -142,6 +153,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
     if os.name != "nt":
+
         def test_kill_signals_are_handled_gracefully(self, mock_send):
             @slack.RTMClient.run_on(event="open")
             def kill_on_open(**payload):
@@ -195,9 +207,8 @@ class TestConnectedRTMClient(unittest.TestCase):
     def test_stop_closes_websocket(self, mock_send):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
-            self.assertEqual(
-                self.client._websocket.state, websockets.protocol.State.OPEN
-            )
+            self.assertFalse(self.client._websocket.closed)
+
             rtm_client = payload["rtm_client"]
             rtm_client.stop()
 
@@ -207,9 +218,7 @@ class TestConnectedRTMClient(unittest.TestCase):
     def test_start_calls_rtm_connect_by_default(self, mock_send):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
-            self.assertEqual(
-                self.client._websocket.state, websockets.protocol.State.OPEN
-            )
+            self.assertFalse(self.client._websocket.closed)
             rtm_client = payload["rtm_client"]
             rtm_client.stop()
 
@@ -223,9 +232,7 @@ class TestConnectedRTMClient(unittest.TestCase):
     def test_start_calls_rtm_start_when_specified(self, mock_send):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
-            self.assertEqual(
-                self.client._websocket.state, websockets.protocol.State.OPEN
-            )
+            self.assertFalse(self.client._websocket.closed)
             rtm_client = payload["rtm_client"]
             rtm_client.stop()
 
