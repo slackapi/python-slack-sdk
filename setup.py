@@ -123,7 +123,7 @@ setup(
     ],
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
     packages=find_packages(exclude=["docs", "docs-src", "tests", "tests.*"]),
-    install_requests=["aiohttp>3.5.2", "aiodns>1"],
+    install_requires=["aiohttp>3.5.2", "aiodns>1"],
     setup_requires=["pytest-runner"],
     test_suite="tests",
     tests_require=tests_require,
