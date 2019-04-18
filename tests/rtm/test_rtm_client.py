@@ -7,7 +7,7 @@ import signal
 
 # ThirdParty Imports
 import asyncio
-import websockets
+from aiohttp import web, WSCloseCode
 import json
 
 # Internal Imports
@@ -137,19 +137,45 @@ class TestConnectedRTMClient(unittest.TestCase):
             )
 
     async def mock_server(self):
-        async with websockets.serve(self.echo, "localhost", 8765):
-            await self.stop
+        # async with websockets.serve(self.echo, "localhost", 8765):
+        #     await self.stop
+        app = web.Application()
+        app["websockets"] = []
+        app.router.add_get("/", self.websocket_handler)
+        app.on_shutdown.append(self.on_shutdown)
+        runner = web.AppRunner(app)
+        await runner.setup()
+        self.site = web.TCPSite(runner, "localhost", 8765)
+        await self.site.start()
+        # # wait for finish signal
+        # await runner.cleanup()
+
+    async def websocket_handler(self, request):
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
+
+        request.app["websockets"].append(ws)
+        try:
+            async for msg in ws:
+                await ws.send_json({"type": "message", "message_sent": msg.json()})
+        finally:
+            request.app["websockets"].discard(ws)
+        return ws
+
+    async def on_shutdown(self, app):
+        for ws in set(app["websockets"]):
+            await ws.close(code=WSCloseCode.GOING_AWAY, message="Server shutdown")
 
     def setUp(self):
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
         self.stop = self.loop.create_future()
         task = asyncio.ensure_future(self.mock_server(), loop=self.loop)
-        self.loop.run_until_complete(asyncio.wait([task], timeout=0.1))
-
+        self.loop.run_until_complete(asyncio.wait_for(task, 0.1))
         self.client = slack.RTMClient(loop=self.loop, auto_reconnect=False)
 
     def tearDown(self):
-        self.stop.set_result(None)
+        self.loop.run_until_complete(self.site.stop())
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
     if os.name != "nt":
