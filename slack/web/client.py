@@ -47,7 +47,7 @@ class WebClient(BaseClient):
     Attributes:
         token (str): A string specifying an xoxp or xoxb token.
         use_session (bool): An boolean specifying if the client
-            should take advantage of urllib3's connection pooling.
+            should take advantage of connection pooling.
             Default is True.
         base_url (str): A string representing the Slack API base URL.
             Default is 'https://www.slack.com/api/'

@@ -37,8 +37,6 @@ class RTMClient(object):
         ping_interval (int): automatically send "ping" command every
             specified period of seconds. If set to 0, do not send automatically.
             Default is 30.
-        ping_timeout (int): The amount of seconds the ping should timeout.
-            If the pong message is not received. Default is 30.
         ssl (SSLContext): The SSLContext object to be used.
         proxies (dict): If you need to use a proxy, you can pass a dict
             of proxy configs. e.g. {'https': "https://user:pass@127.0.0.1:8080"}
@@ -98,7 +96,6 @@ class RTMClient(object):
         connect_method=None,
         auto_reconnect=True,
         ping_interval=30,
-        ping_timeout=30,
         ssl=None,
         proxies=None,
         loop=None,
@@ -109,7 +106,6 @@ class RTMClient(object):
         self.connect_method = connect_method
         self.auto_reconnect = auto_reconnect
         self.ping_interval = ping_interval
-        self.ping_timeout = ping_timeout
         self.ssl = ssl
         self.proxies = proxies
         self.run_async = run_async

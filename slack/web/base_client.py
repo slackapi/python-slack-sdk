@@ -29,6 +29,7 @@ class BaseClient:
         loop=None,
         ssl=None,
         run_async=False,
+        use_session=True,
     ):
         self.token = token
         self.base_url = base_url
@@ -38,6 +39,18 @@ class BaseClient:
         self.run_async = run_async
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop or asyncio.get_event_loop()
+        self._session = None
+        if use_session:
+            self._event_loop.run_until_complete(self._set_session())
+
+    def __del__(self):
+        """Ensures the session is closed when object is destroyed."""
+        if self._session is not None and self._event_loop is not None:
+            # FYI: self._event_loop is already closed at this point.
+            asyncio.get_event_loop().run_until_complete(self._session.close())
+
+    async def _set_session(self):
+        self._session = aiohttp.ClientSession()
 
     def api_call(
         self,
@@ -192,7 +205,7 @@ class BaseClient:
                 }
             }
         """
-        async with aiohttp.ClientSession() as session:
+        async with self._session or aiohttp.ClientSession() as session:
             async with session.request(http_verb, api_url, **req_args) as res:
                 response = {}
                 response["data"] = await res.json()
