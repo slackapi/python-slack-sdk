@@ -85,7 +85,7 @@ _For more examples and usage, please refer to the [Slack API Documentation site]
 ### Basic Usage of the Web Client
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods].
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage][basic-usage] guide
 
 
 #### Sending a message to Slack
@@ -226,3 +226,4 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [migration-guide]: https://api.slack.com
 [files.upload]: https://api.slack.com/methods/files.upload
 [auth-guide]: docs/auth.md
+[basic-usage]: docs/basic_usage.md
