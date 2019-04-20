@@ -116,12 +116,10 @@ We've changed the process for uploading files to Slack to be much easier and str
     client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
 
     response = client.files_upload(
-        channel='#random',
+        channels='#random',
         file="my_file.pdf")
     assert response["ok"]
 ```
-
-Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
 
 </br>
 
