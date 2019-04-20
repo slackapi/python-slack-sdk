@@ -20,9 +20,11 @@ The **Python slackclient** allows interaction with:
 - The Slack web api methods available at our [Api Docs site][api-methods]
 - Interaction with our [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api]
+If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
 
-![](header.png)
+Details on the Tokens and Authentication can be found in our [Auth Guide][auth-guide].
+
+</br>
 
 ## Table of contents
 
@@ -30,6 +32,8 @@ If you want to use our [Events API][events-docs], please check the [Slack Events
 * [Installation](#installation)
 * [Build your first app](#build-an-app-in-10-minutes)
 * [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
+    * [Sending a message to Slack](#sending-a-message-to-slack)
+    * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
 * [Support](#support)
 * [Change Logs](#change-logs)
@@ -103,7 +107,6 @@ One of the most common use-cases is sending a message to Slack. If you want to s
 
 Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
 
-</br>
 
 #### Uploading files to Slack
 
@@ -137,7 +140,7 @@ link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message event][message-event] and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
+In our example below, we watch for a [message event][message-event] that contains "Hello" and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
 ```python
     import os
@@ -222,3 +225,4 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
 [migration-guide]: https://api.slack.com
 [files.upload]: https://api.slack.com/methods/files.upload
+[auth-guide]: docs/auth.md
