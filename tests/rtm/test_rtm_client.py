@@ -13,42 +13,7 @@ import json
 # Internal Imports
 import slack
 import slack.errors as e
-
-
-def mock_req_args(data=None, params={}, json=None):
-    req_args = {
-        "headers": {
-            "user-agent": slack.WebClient._get_user_agent(),
-            "Authorization": "Bearer None",
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-        },
-        "data": data,
-        "params": params,
-        "json": json,
-        "ssl": None,
-    }
-    return req_args
-
-
-def SendMock():
-    coro = mock.Mock(name="SendResult")
-    coro.return_value = {
-        "headers": {},
-        "data": {
-            "ok": True,
-            "url": "ws://localhost:8765",
-            "self": {"id": "U01234ABC", "name": "robotoverlord"},
-            "team": {
-                "domain": "exampledomain",
-                "id": "T123450FP",
-                "name": "ExampleName",
-            },
-        },
-        "status_code": 200,
-    }
-    corofunc = mock.Mock(name="_send", side_effect=asyncio.coroutine(coro))
-    corofunc.coro = coro
-    return corofunc
+from tests.helpers import mock_req_args, mock_rtm_response
 
 
 class TestRTMClient(unittest.TestCase):
@@ -113,9 +78,11 @@ class TestRTMClient(unittest.TestCase):
         error = str(context.exception)
         self.assertIn(expected_error, error)
 
-    @mock.patch("slack.WebClient._send", new_callable=SendMock)
-    def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(self, mock_send):
-        mock_send.coro.return_value = {
+    @mock.patch("slack.WebClient._send", new_callable=mock_rtm_response)
+    def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(
+        self, mock_rtm_response
+    ):
+        mock_rtm_response.coro.return_value = {
             "data": {"ok": True},
             "headers": {},
             "status_code": 200,
@@ -128,7 +95,7 @@ class TestRTMClient(unittest.TestCase):
         self.assertIn(expected_error, str(context.exception))
 
 
-@mock.patch("slack.WebClient._send", new_callable=SendMock)
+@mock.patch("slack.WebClient._send", new_callable=mock_rtm_response)
 class TestConnectedRTMClient(unittest.TestCase):
     async def echo(self, ws, path):
         async for message in ws:
@@ -180,7 +147,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
     if os.name != "nt":
 
-        def test_kill_signals_are_handled_gracefully(self, mock_send):
+        def test_kill_signals_are_handled_gracefully(self, mock_rtm_response):
             @slack.RTMClient.run_on(event="open")
             def kill_on_open(**payload):
                 rtm_client = payload["rtm_client"]
@@ -191,7 +158,9 @@ class TestConnectedRTMClient(unittest.TestCase):
             self.assertTrue(self.client._stopped)
             self.assertIsNone(self.client._websocket)
 
-    def test_client_auto_reconnects_if_connection_randomly_closes(self, mock_send):
+    def test_client_auto_reconnects_if_connection_randomly_closes(
+        self, mock_rtm_response
+    ):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             rtm_client = payload["rtm_client"]
@@ -205,7 +174,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         client = slack.RTMClient(auto_reconnect=True)
         client.start()
 
-    def test_client_auto_reconnects_if_an_error_is_thrown(self, mock_send):
+    def test_client_auto_reconnects_if_an_error_is_thrown(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             rtm_client = payload["rtm_client"]
@@ -219,7 +188,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         client = slack.RTMClient(auto_reconnect=True)
         client.start()
 
-    def test_open_event_receives_expected_arguments(self, mock_send):
+    def test_open_event_receives_expected_arguments(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             self.assertIsInstance(payload["data"], dict)
@@ -230,7 +199,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.start()
 
-    def test_stop_closes_websocket(self, mock_send):
+    def test_stop_closes_websocket(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             self.assertFalse(self.client._websocket.closed)
@@ -241,7 +210,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         self.client.start()
         self.assertIsNone(self.client._websocket)
 
-    def test_start_calls_rtm_connect_by_default(self, mock_send):
+    def test_start_calls_rtm_connect_by_default(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             self.assertFalse(self.client._websocket.closed)
@@ -249,13 +218,13 @@ class TestConnectedRTMClient(unittest.TestCase):
             rtm_client.stop()
 
         self.client.start()
-        mock_send.assert_called_once_with(
+        mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.connect",
             req_args=mock_req_args(),
         )
 
-    def test_start_calls_rtm_start_when_specified(self, mock_send):
+    def test_start_calls_rtm_start_when_specified(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             self.assertFalse(self.client._websocket.closed)
@@ -264,13 +233,13 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.connect_method = "rtm.start"
         self.client.start()
-        mock_send.assert_called_once_with(
+        mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.start",
             req_args=mock_req_args(),
         )
 
-    def test_send_over_websocket_sends_expected_message(self, mock_send):
+    def test_send_over_websocket_sends_expected_message(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def echo_message(**payload):
             rtm_client = payload["rtm_client"]
@@ -296,7 +265,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.start()
 
-    def test_ping_sends_expected_message(self, mock_send):
+    def test_ping_sends_expected_message(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def ping_message(**payload):
             rtm_client = payload["rtm_client"]
@@ -311,7 +280,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.start()
 
-    def test_typing_sends_expected_message(self, mock_send):
+    def test_typing_sends_expected_message(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def typing_message(**payload):
             rtm_client = payload["rtm_client"]
@@ -326,7 +295,7 @@ class TestConnectedRTMClient(unittest.TestCase):
 
         self.client.start()
 
-    def test_on_error_callbacks(self, mock_send):
+    def test_on_error_callbacks(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def raise_an_error(**payload):
             raise e.SlackClientNotConnectedError("Testing error handling.")
@@ -340,7 +309,7 @@ class TestConnectedRTMClient(unittest.TestCase):
             self.client.start()
         self.error_hanlding_mock.assert_called_once()
 
-    def test_callback_errors_are_raised(self, mock_send):
+    def test_callback_errors_are_raised(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def raise_an_error(**payload):
             raise Exception("Testing error handling.")
@@ -351,7 +320,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         expected_error = "Testing error handling."
         self.assertIn(expected_error, str(context.exception))
 
-    def test_on_close_callbacks(self, mock_send):
+    def test_on_close_callbacks(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
         def stop_on_open(**payload):
             payload["rtm_client"].stop()

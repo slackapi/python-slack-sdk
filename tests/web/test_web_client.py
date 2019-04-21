@@ -1,6 +1,5 @@
 # Standard Imports
 import unittest
-import asyncio
 from unittest import mock
 
 # import collections
@@ -10,30 +9,12 @@ from unittest import mock
 
 # Internal Imports
 import slack
+from tests.helpers import mock_api_response, async_test, mock_req_args
 
 # import slack.errors as e
 
 
-def async_test(coro):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    def wrapper(*args, **kwargs):
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(coro(*args, **kwargs))
-
-    return wrapper
-
-
-def SendMock():
-    coro = mock.Mock(name="SendResult")
-    coro.return_value = {"data": {"ok": True}, "status_code": 200}
-    corofunc = mock.Mock(name="_send", side_effect=asyncio.coroutine(coro))
-    corofunc.coro = coro
-    return corofunc
-
-
-@mock.patch("slack.WebClient._send", new_callable=SendMock)
+@mock.patch("slack.WebClient._send", new_callable=mock_api_response)
 class TestWebClient(unittest.TestCase):
     def setUp(self):
         self.client = slack.WebClient()
@@ -41,12 +22,24 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_api_test(self, mock_send):
-        resp = self.client.api_test()
-        self.assertTrue(resp["ok"])
+    def test_api_test(self, mock_api_response):
+        self.client.api_test()
+        mock_api_response.assert_called_once_with(
+            http_verb="POST",
+            api_url="https://www.slack.com/api/api.test",
+            req_args=mock_req_args(),
+        )
+
+    def test_api_test_with_json(self, mock_api_response):
+        self.client.api_test(msg="bye")
+        mock_api_response.assert_called_once_with(
+            http_verb="POST",
+            api_url="https://www.slack.com/api/api.test",
+            req_args=mock_req_args(json={"msg": "bye"}),
+        )
 
     @async_test
-    async def test_api_test_async_again(self, mock_send):
+    async def test_api_test_async_again(self, mock_api_response):
         self.client.run_async = True
         resp = await self.client.api_test()
         self.assertTrue(resp["ok"])

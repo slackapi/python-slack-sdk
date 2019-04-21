@@ -2,6 +2,7 @@
 
 # Standard Imports
 import logging
+import asyncio
 
 # Internal Imports
 import slack.errors as e
@@ -119,12 +120,14 @@ class SlackResponse(object):
             self.req_args.get("params", {}).update(
                 {"cursor": self.data["response_metadata"]["next_cursor"]}
             )
-            data, headers, status_code = self._client._send(
-                self.http_verb, self.api_url, self.req_args
+
+            response = asyncio.get_event_loop().run_until_complete(
+                self._client._send(self.http_verb, self.api_url, self.req_args)
             )
-            self.data = data
-            self.headers = headers
-            self.status_code = status_code
+
+            self.data = response.get("data", {})
+            self.headers = response.get("headers", {})
+            self.status_code = response.get("status_code", None)
             return self.validate()
         else:
             raise StopIteration
