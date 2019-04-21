@@ -1,38 +1,8 @@
 """A Python module for iteracting with Slack's Web API."""
 
-# Standard Imports
-import functools
-
 # Internal Imports
-from slack.web.base_client import BaseClient
+from slack.web.base_client import BaseClient, xoxp_token_only
 import slack.errors as e
-
-
-def xoxp_token_only(api_method):
-    """Ensures that an xoxp token is used when the specified method is called.
-
-    Args:
-        api_method (func): The api method that only works with xoxp tokens.
-    Raises:
-        BotUserAccessError: If the API method is called with a Bot User OAuth Access Token.
-    """
-
-    def xoxp_token_only_decorator(func):
-        @functools.wraps(func)
-        def func_wrapper(*args, **kwargs):
-            client = args[0]
-            # The first argument is 'slack.web.client.WebClient' aka 'self'.
-            if client.token.startswith("xoxb"):
-                method_name = api_method.__name__
-                msg = "The API method '{}' cannot be called with a Bot Token.".format(
-                    method_name
-                )
-                raise e.BotUserAccessError(msg)
-            return func(*args, **kwargs)
-
-        return func_wrapper
-
-    return xoxp_token_only_decorator(api_method)
 
 
 class WebClient(BaseClient):
@@ -51,9 +21,6 @@ class WebClient(BaseClient):
             Default is True.
         base_url (str): A string representing the Slack API base URL.
             Default is 'https://www.slack.com/api/'
-        proxies (dict): If you need to use a proxy, you can pass a dict
-            of proxy configs. e.g. {'https': "https://127.0.0.1:8080"}
-            Default is None.
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
@@ -610,8 +577,7 @@ class WebClient(BaseClient):
             )
 
         if file:
-            with open(file, "rb") as f:
-                return self.api_call("files.upload", files={"file": f}, data=kwargs)
+            return self.api_call("files.upload", files={"file": file}, data=kwargs)
         elif content:
             data = kwargs.copy()
             data.update({"content": content})
@@ -1199,8 +1165,7 @@ class WebClient(BaseClient):
             image (str): Supply the path of the image you'd like to upload.
                 e.g. 'myimage.png'
         """
-        with open(image, "rb") as i:
-            return self.api_call("users.setPhoto", files={"image": i}, data=kwargs)
+        return self.api_call("users.setPhoto", files={"image": image}, data=kwargs)
 
     def users_setPresence(self, **kwargs):
         """Manually sets user presence.
