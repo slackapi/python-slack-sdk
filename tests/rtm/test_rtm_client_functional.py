@@ -51,7 +51,6 @@ class TestRTMClientFunctional(unittest.TestCase):
     def setUp(self):
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
-        self.stop = self.loop.create_future()
         task = asyncio.ensure_future(self.mock_server(), loop=self.loop)
         self.loop.run_until_complete(asyncio.wait_for(task, 0.1))
         self.client = slack.RTMClient(loop=self.loop, auto_reconnect=False)
