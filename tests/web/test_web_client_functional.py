@@ -32,6 +32,13 @@ class TestWebClientFunctional(unittest.TestCase):
         assert request.content_type == "application/json"
         return web.json_response({"ok": True})
 
-    def test_api_test(self):
+    def test_requests_with_use_session_turned_off(self):
+        self.client.use_session = False
+        resp = self.client.api_test()
+        assert resp["ok"]
+
+    def test_subsequent_requests_with_a_session_succeeds(self):
+        resp = self.client.api_test()
+        assert resp["ok"]
         resp = self.client.api_test()
         assert resp["ok"]

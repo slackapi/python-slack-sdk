@@ -350,9 +350,6 @@ class RTMClient(object):
             async for message in self._websocket:
                 if message.type == aiohttp.WSMsgType.TEXT:
                     payload = message.json()
-                    self._logger.debug(
-                        f"The Websocket received a new message. {payload}"
-                    )
                     event = payload.pop("type", "Unknown")
                     self._dispatch_event(event, data=payload)
                 elif message.type == aiohttp.WSMsgType.ERROR:

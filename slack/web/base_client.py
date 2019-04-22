@@ -143,12 +143,6 @@ class BaseClient:
             "ssl": self.ssl,
             "proxy": self.proxy,
         }
-        self._logger.debug(
-            "Sending a '%s' request to '%s' with the following data: %s",
-            http_verb,
-            api_url,
-            req_args,
-        )
 
         req_future = asyncio.ensure_future(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
