@@ -121,7 +121,7 @@ class BaseClient:
             "User-Agent": self._get_user_agent(),
             "Authorization": "Bearer {}".format(self.token),
         }
-        if files:
+        if files is not None:
             form_data = aiohttp.FormData()
             for k, v in files.items():
                 if isinstance(v, str):
@@ -129,7 +129,7 @@ class BaseClient:
                 else:
                     form_data.add_field(k, v)
 
-            if data:
+            if data is not None:
                 for k, v in data.items():
                     form_data.add_field(k, str(v))
 
