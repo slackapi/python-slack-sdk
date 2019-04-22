@@ -26,22 +26,21 @@ def xoxp_token_only(api_method):
         BotUserAccessError: If the API method is called with a Bot User OAuth Access Token.
     """
 
-    def xoxp_token_only_decorator(func):
-        @functools.wraps(func)
-        def func_wrapper(*args, **kwargs):
-            client = args[0]
-            # The first argument is 'slack.web.client.WebClient' aka 'self'.
-            if client.token.startswith("xoxb"):
-                method_name = api_method.__name__
-                msg = "The API method '{}' cannot be called with a Bot Token.".format(
-                    method_name
-                )
-                raise err.BotUserAccessError(msg)
-            return func(*args, **kwargs)
+    # NOTE: Intellisense docstrings do not follow functools.wraps() semantics.
+    # https://github.com/Microsoft/vscode-python/issues/2596
+    @functools.wraps(api_method)
+    def xoxp_token_only_decorator(*args, **kwargs):
+        client = args[0]
+        # The first argument is 'slack.web.client.WebClient' aka 'self'.
+        if client.token.startswith("xoxb"):
+            method_name = api_method.__name__
+            msg = "The API method '{}' cannot be called with a Bot Token.".format(
+                method_name
+            )
+            raise err.BotUserAccessError(msg)
+        return api_method(*args, **kwargs)
 
-        return func_wrapper
-
-    return xoxp_token_only_decorator(api_method)
+    return xoxp_token_only_decorator
 
 
 class BaseClient:

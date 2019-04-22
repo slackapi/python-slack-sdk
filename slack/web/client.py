@@ -846,11 +846,9 @@ class WebClient(BaseClient):
     def pins_add(self, **kwargs):
         """Pins an item to a channel.
 
-        Note: We've called it file_id to avoid conflicting naming issues Python.
-
         Args:
             channel (str): Channel to pin the item in. e.g. 'C1234567890'
-            file_id (str): File id to pin. e.g. 'F1234567890'
+            file (str): File id to pin. e.g. 'F1234567890'
             file_comment (str): File comment to pin. e.g. 'Fc1234567890'
             timestamp (str): Timestamp of message to pin. e.g. '1234567890.123456'
         """
@@ -867,11 +865,9 @@ class WebClient(BaseClient):
     def pins_remove(self, **kwargs):
         """Un-pins an item from a channel.
 
-        Note: We've called it file_id to avoid conflicting naming issues Python.
-
         Args:
             channel (str): Channel to pin the item in. e.g. 'C1234567890'
-            file_id (str): File id to pin. e.g. 'F1234567890'
+            file (str): File id to pin. e.g. 'F1234567890'
             file_comment (str): File comment to pin. e.g. 'Fc1234567890'
             timestamp (str): Timestamp of message to pin. e.g. '1234567890.123456'
         """
@@ -991,12 +987,10 @@ class WebClient(BaseClient):
     def stars_add(self, **kwargs):
         """Adds a star to an item.
 
-        Note: We've called it file_id to avoid conflicting naming issues Python.
-
         Args:
             channel (str): Channel to add star to, or channel where the message to add
                 star to was posted (used with timestamp). e.g. 'C1234567890'
-            file_id (str): File to add star to. e.g. 'F1234567890'
+            file (str): File to add star to. e.g. 'F1234567890'
             file_comment (str): File comment to add star to. e.g. 'Fc1234567890'
             timestamp (str): Timestamp of the message to add star to. e.g. '1234567890.123456'
         """
@@ -1010,12 +1004,10 @@ class WebClient(BaseClient):
     def stars_remove(self, **kwargs):
         """Removes a star from an item.
 
-        Note: We've called it file_id to avoid conflicting naming issues Python.
-
         Args:
             channel (str): Channel to remove star from, or channel where
                 the message to remove star from was posted (used with timestamp). e.g. 'C1234567890'
-            file_id (str): File to remove star from. e.g. 'F1234567890'
+            file (str): File to remove star from. e.g. 'F1234567890'
             file_comment (str): File comment to remove star from. e.g. 'Fc1234567890'
             timestamp (str): Timestamp of the message to remove star from. e.g. '1234567890.123456'
         """
