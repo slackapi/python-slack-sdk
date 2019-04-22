@@ -49,7 +49,7 @@ class BaseClient:
 
     def __init__(
         self,
-        token=None,
+        token,
         base_url=BASE_URL,
         timeout=30,
         loop=None,
@@ -73,9 +73,6 @@ class BaseClient:
         """Ensures the session is closed when object is destroyed."""
         if self._session and not self._session.closed:
             asyncio.get_event_loop().run_until_complete(self._session.close())
-
-    async def _set_session(self):
-        self._session = aiohttp.ClientSession()
 
     def api_call(
         self,
@@ -125,7 +122,7 @@ class BaseClient:
             "User-Agent": self._get_user_agent(),
             "Authorization": "Bearer {}".format(self.token),
         }
-        if files is not None:
+        if files:
             form_data = aiohttp.FormData()
             for k, v in files.items():
                 if isinstance(v, str):
@@ -133,8 +130,9 @@ class BaseClient:
                 else:
                     form_data.add_field(k, v)
 
-            for k, v in data.items():
-                form_data.add_field(k, str(v))
+            if data:
+                for k, v in data.items():
+                    form_data.add_field(k, str(v))
 
             data = form_data
 
@@ -196,7 +194,7 @@ class BaseClient:
     async def _get_session(self):
         if self.use_session:
             if not self._session or self._session.closed:
-                await self._set_session()
+                self._session = aiohttp.ClientSession()
             return self._session
         return aiohttp.ClientSession()
 
@@ -216,13 +214,13 @@ class BaseClient:
             }
         """
         session = await self._get_session()
-        async with session.request(http_verb, api_url, **req_args) as res:
-            response = {}
-            response["data"] = await res.json()
-            response["headers"] = res.headers
-            response["status_code"] = res.status
+        res = await session.request(http_verb, api_url, **req_args)
+        response = {}
+        response["data"] = await res.json()
+        response["headers"] = res.headers
+        response["status_code"] = res.status
 
-            return response
+        return response
 
     @staticmethod
     def _get_user_agent():

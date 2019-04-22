@@ -316,7 +316,10 @@ class RTMClient(object):
                 url, data = await self._retreive_websocket_info()
                 async with aiohttp.ClientSession() as session:
                     async with session.ws_connect(
-                        url, heartbeat=self.ping_interval, ssl=self.ssl
+                        url,
+                        heartbeat=self.ping_interval,
+                        ssl=self.ssl,
+                        proxy=self.proxy,
                     ) as websocket:
                         self._logger.debug("The Websocket connection has been opened.")
                         self._websocket = websocket

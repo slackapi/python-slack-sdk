@@ -8,12 +8,12 @@ import asyncio
 import slack
 
 
-def mock_req_args(data=mock.ANY, params=mock.ANY, json=mock.ANY):
+def fake_req_args(token=mock.ANY, data=mock.ANY, params=mock.ANY, json=mock.ANY):
 
     req_args = {
         "headers": {
             "User-Agent": slack.WebClient._get_user_agent(),
-            "Authorization": "Bearer None",
+            "Authorization": token,
         },
         "data": data,
         "params": params,
@@ -50,15 +50,16 @@ def async_test(coro):
     asyncio.set_event_loop(loop)
 
     def wrapper(*args, **kwargs):
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(coro(*args, **kwargs))
+        return asyncio.get_event_loop().run_until_complete(coro(*args, **kwargs))
 
     return wrapper
 
 
-def mock_api_response():
-    coro = mock.Mock(name="SendResult")
-    coro.return_value = {"data": {"ok": True}, "status_code": 200}
-    corofunc = mock.Mock(name="_send", side_effect=asyncio.coroutine(coro))
-    corofunc.coro = coro
-    return corofunc
+def mock_send():
+    response_mock = mock.Mock(name="Response")
+    response_mock.return_value = {"data": {"ok": True}, "status_code": 200}
+    send_request = mock.Mock(
+        name="Request", side_effect=asyncio.coroutine(response_mock)
+    )
+    send_request.response = response_mock
+    return send_request
