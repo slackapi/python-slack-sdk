@@ -13,7 +13,7 @@ import json
 # Internal Imports
 import slack
 import slack.errors as e
-from tests.helpers import mock_req_args, mock_rtm_response
+from tests.helpers import fake_req_args, mock_rtm_response
 
 
 class TestRTMClient(unittest.TestCase):
@@ -104,8 +104,6 @@ class TestConnectedRTMClient(unittest.TestCase):
             )
 
     async def mock_server(self):
-        # async with websockets.serve(self.echo, "localhost", 8765):
-        #     await self.stop
         app = web.Application()
         app["websockets"] = []
         app.router.add_get("/", self.websocket_handler)
@@ -114,8 +112,6 @@ class TestConnectedRTMClient(unittest.TestCase):
         await runner.setup()
         self.site = web.TCPSite(runner, "localhost", 8765)
         await self.site.start()
-        # # wait for finish signal
-        # await runner.cleanup()
 
     async def websocket_handler(self, request):
         ws = web.WebSocketResponse()
@@ -221,7 +217,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.connect",
-            req_args=mock_req_args(),
+            req_args=fake_req_args(),
         )
 
     def test_start_calls_rtm_start_when_specified(self, mock_rtm_response):
@@ -236,7 +232,7 @@ class TestConnectedRTMClient(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.start",
-            req_args=mock_req_args(),
+            req_args=fake_req_args(),
         )
 
     def test_send_over_websocket_sends_expected_message(self, mock_rtm_response):
