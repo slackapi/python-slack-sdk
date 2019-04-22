@@ -1206,7 +1206,7 @@ class WebClient(BaseClient):
 
     @xoxp_token_only
     def usergroups_users_update(
-        self, usergroup: str, users: List(str), **kwargs
+        self, usergroup: str, users: List[str], **kwargs
     ) -> SlackResponse:
         """Update the list of users for a User Group
 
