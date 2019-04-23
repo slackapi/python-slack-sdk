@@ -35,6 +35,7 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
     * [Sending a message to Slack](#sending-a-message-to-slack)
     * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
+* [Advanced Options](#advanced-options)
 * [Support](#support)
 * [Change Logs](#change-logs)
 
@@ -169,6 +170,21 @@ In our example below, we watch for a [message event][message-event] that contain
 
 </br>
 
+### Advanced Options
+
+The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their inbuilt SSL and Proxy support. You can pass it directly into the call while constructing the Slack Client for both the RTM and the Web client.
+
+```python
+import os
+import slack
+    
+client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy=proxyinfo)
+
+```
+
+We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
+</br>
+
 ### Support
 ---
 
@@ -227,3 +243,4 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [files.upload]: https://api.slack.com/methods/files.upload
 [auth-guide]: docs/auth.md
 [basic-usage]: docs/basic_usage.md
+[aiohttp]: https://aiohttp.readthedocs.io/
