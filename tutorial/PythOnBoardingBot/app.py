@@ -1,4 +1,5 @@
 import os
+import pdb
 import logging
 import slack
 import ssl as ssl_lib
@@ -19,6 +20,17 @@ def store_message_sent(
     onboarding_messages_sent[team_id][user_id] = onboarding_message
 
 
+def start_onboarding(web_client, user_id, team_id):
+    # Post the onboarding message.
+    onboarding_message = OnboardingMessage(user_id)
+    response = web_client.chat_postMessage(**onboarding_message.to_dict())
+    # We'll save the timestamp of the message we've just posted so
+    # we can use it to update the message after a user
+    # has completed an onboarding task.
+    onboarding_message.timestamp = response["ts"]
+    store_message_sent(team_id, user_id, onboarding_message)
+
+
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
 # Here we'll link the onboarding_message callback to the 'team_join' event.
@@ -28,23 +40,13 @@ def onboarding_message(**payload):
     time stamp of this message so we can update this message in the future.
     """
     # Get the id of the Slack team associated with the incoming event
-    team_id = payload["data"]["team_id"]
+    team_id = payload["data"]["user"]["team_id"]
     # Get the id of the Slack user associated with the incoming event
-    user_id = payload["data"]["event"]["user"]["id"]
+    user_id = payload["data"]["user"]["id"]
     # Get WebClient so you can communicate back to Slack.
     web_client = payload["web_client"]
 
-    # Open a DM to send a welcome message.
-    dm_channel_id = web_client.im_open(user=user_id)["channel"]["id"]
-
-    # Post the onboarding message.
-    onboarding_message = OnboardingMessage(dm_channel_id)
-    response = web_client.chat_postMessage(**onboarding_message)
-    # We'll save the timestamp of the message we've just posted so
-    # we can use it to update the message after a user
-    # has completed an onboarding task.
-    onboarding_message.timestamp = response["ts"]
-    store_message_sent(team_id, user_id, onboarding_message)
+    start_onboarding(web_client, user_id, team_id)
 
 
 # ============= Reaction Added Events ============= #
@@ -57,8 +59,8 @@ def update_emoji(**payload):
     event from Slack. Update timestamp for welcome message as well.
     """
     web_client = payload["web_client"]
-    team_id = payload["data"]["team_id"]
-    user_id = payload["data"]["event"]["user"]
+    team_id = payload["data"]["user"]["team_id"]
+    user_id = payload["data"]["user"]["id"]
 
     # Get the original message sent.
     message = onboarding_messages_sent[team_id][user_id]
@@ -82,8 +84,8 @@ def update_pin(**payload):
     event from Slack. Update timestamp for welcome message as well.
     """
     web_client = payload["web_client"]
-    team_id = payload["data"]["team_id"]
-    user_id = payload["data"]["event"]["user"]
+    team_id = payload["data"]["user"]["team_id"]
+    user_id = payload["data"]["user"]["id"]
 
     # Get the original message sent.
     message = onboarding_messages_sent[team_id][user_id]
@@ -110,13 +112,11 @@ def update_share(**payload):
     data = payload["data"]
     web_client = payload["web_client"]
 
-    if (
-        "attachements" in data["event"]
-        and "is_share" in data["event"]["attachments"][0]
-    ):
-        team_id = data["team_id"]
-        user_id = data["event"]["user"]
+    team_id = data["team"]
+    user_id = data["user"]
+    start_onboarding(web_client, user_id, team_id)
 
+    if "attachments" in data and "is_share" in data["attachments"][0]:
         # Get the original message sent.
         message = onboarding_messages_sent[team_id][user_id]
 
@@ -135,6 +135,6 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
     ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
-    slack_token = os.environ["SLACK_XOXB_TOKEN"]
+    slack_token = os.environ["SLACK_BOT_TOKEN"]
     rtm_client = slack.RTMClient(token=slack_token, ssl=ssl_context)
     rtm_client.start()
