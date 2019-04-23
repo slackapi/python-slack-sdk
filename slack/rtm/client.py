@@ -9,6 +9,7 @@ import collections
 import functools
 import inspect
 import signal
+import threading
 
 # ThirdParty Imports
 import asyncio
@@ -99,6 +100,7 @@ class RTMClient(object):
         ssl=None,
         proxy=None,
         loop=None,
+        timeout=30,
         run_async=False,
     ):
         self.token = token
@@ -109,13 +111,14 @@ class RTMClient(object):
         self.ssl = ssl
         self.proxy = proxy
         self.run_async = run_async
+        self.timeout = timeout
         self._event_loop = loop or asyncio.get_event_loop()
         self._web_client = WebClient(
             token=self.token,
             base_url=self.base_url,
             ssl=self.ssl,
             proxy=self.proxy,
-            run_async=run_async,
+            run_async=True,
             loop=self._event_loop,
         )
         self._websocket = None
@@ -374,13 +377,32 @@ class RTMClient(object):
         """
         for callback in self._callbacks[event]:
             self._logger.debug(
-                "Running %s callbacks for event: '%s'", len(self._callbacks[event]), event
+                "Running %s callbacks for event: '%s'",
+                len(self._callbacks[event]),
+                event,
             )
             try:
                 if self._stopped and event not in ["close", "error"]:
                     # Don't run callbacks if client was stopped unless they're close/error callbacks.
                     break
-                callback(rtm_client=self, web_client=self._web_client, data=data)
+
+                if not self.run_async:
+                    web_client = WebClient(
+                        token=self.token,
+                        base_url=self.base_url,
+                        ssl=self.ssl,
+                        proxy=self.proxy,
+                    )
+                    thread = threading.Thread(
+                        target=callback,
+                        kwargs={
+                            "rtm_client": self,
+                            "web_client": web_client,
+                            "data": data,
+                        },
+                    )
+                    thread.start()
+                    thread.join(timeout=self.timeout)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
