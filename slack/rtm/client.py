@@ -183,7 +183,6 @@ class RTMClient(object):
                 self._event_loop.add_signal_handler(s, self.stop)
 
         future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
-        future.add_done_callback(self._dispatch_event(event="close"))
 
         if self.run_async or self._event_loop.is_running():
             return future
@@ -373,10 +372,10 @@ class RTMClient(object):
                 }
             }
         """
-        self._logger.debug(
-            "Running %s callbacks for event: '%s'", len(self._callbacks[event]), event
-        )
         for callback in self._callbacks[event]:
+            self._logger.debug(
+                "Running %s callbacks for event: '%s'", len(self._callbacks[event]), event
+            )
             try:
                 if self._stopped and event not in ["close", "error"]:
                     # Don't run callbacks if client was stopped unless they're close/error callbacks.
@@ -446,3 +445,4 @@ class RTMClient(object):
         if callable(close_method):
             asyncio.ensure_future(close_method(), loop=self._event_loop)
         self._websocket = None
+        self._dispatch_event(event="close")
