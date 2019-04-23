@@ -38,8 +38,8 @@ class RTMClient(object):
             specified period of seconds. If set to 0, do not send automatically.
             Default is 30.
         ssl (SSLContext): The SSLContext object to be used.
-        proxies (dict): If you need to use a proxy, you can pass a dict
-            of proxy configs. e.g. {'https': "https://user:pass@127.0.0.1:8080"}
+        proxy (str): If you need to use a proxy, you can pass a dict
+            of proxy configs. e.g. "https://user:pass@127.0.0.1:8080"
             Default is None.
         loop (AbstractEventLoop): An event loop provided by asyncio.
             If None is specified we attempt to use the current loop
@@ -97,7 +97,7 @@ class RTMClient(object):
         auto_reconnect=True,
         ping_interval=30,
         ssl=None,
-        proxies=None,
+        proxy=None,
         loop=None,
         run_async=False,
     ):
@@ -107,13 +107,14 @@ class RTMClient(object):
         self.auto_reconnect = auto_reconnect
         self.ping_interval = ping_interval
         self.ssl = ssl
-        self.proxies = proxies
+        self.proxy = proxy
         self.run_async = run_async
         self._event_loop = loop or asyncio.get_event_loop()
         self._web_client = WebClient(
             token=self.token,
             base_url=self.base_url,
-            proxies=self.proxies,
+            ssl=self.ssl,
+            proxy=self.proxy,
             run_async=run_async,
             loop=self._event_loop,
         )
@@ -315,7 +316,10 @@ class RTMClient(object):
                 url, data = await self._retreive_websocket_info()
                 async with aiohttp.ClientSession() as session:
                     async with session.ws_connect(
-                        url, heartbeat=self.ping_interval, ssl=self.ssl
+                        url,
+                        heartbeat=self.ping_interval,
+                        ssl=self.ssl,
+                        proxy=self.proxy,
                     ) as websocket:
                         self._logger.debug("The Websocket connection has been opened.")
                         self._websocket = websocket
@@ -346,9 +350,6 @@ class RTMClient(object):
             async for message in self._websocket:
                 if message.type == aiohttp.WSMsgType.TEXT:
                     payload = message.json()
-                    self._logger.debug(
-                        f"The Websocket received a new message. {payload}"
-                    )
                     event = payload.pop("type", "Unknown")
                     self._dispatch_event(event, data=payload)
                 elif message.type == aiohttp.WSMsgType.ERROR:
