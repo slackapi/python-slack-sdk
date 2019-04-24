@@ -55,7 +55,7 @@ class BaseClient:
         ssl=None,
         proxy=None,
         run_async=False,
-        use_session=True,
+        use_pooling=True,
     ):
         self.token = token
         self.base_url = base_url
@@ -63,15 +63,17 @@ class BaseClient:
         self.ssl = ssl
         self.proxy = proxy
         self.run_async = run_async
-        self.use_session = use_session
+        self.use_pooling = use_pooling
         self._logger = logging.getLogger(__name__)
-        self._event_loop = loop or asyncio.get_event_loop()
-        self._session = None
+        self._event_loop = loop or self._new_event_loop()
+        self._connector = None
+        if self.use_pooling:
+            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
 
-    def __del__(self):
-        """Ensures the session is closed when object is destroyed."""
-        if self._session and not self._session.closed:
-            asyncio.get_event_loop().run_until_complete(self._session.close())
+    def _new_event_loop(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop
 
     def api_call(
         self,
@@ -144,20 +146,15 @@ class BaseClient:
             "proxy": self.proxy,
         }
 
-        req_future = asyncio.ensure_future(
-            self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
-            loop=self._event_loop,
+        if self.run_async:
+            return asyncio.ensure_future(
+                self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
+                loop=self._event_loop,
+            )
+
+        return self._event_loop.run_until_complete(
+            self._send(http_verb=http_verb, api_url=api_url, req_args=req_args)
         )
-
-        res_future = asyncio.ensure_future(
-            self._get_response(http_verb, api_url, req_args, req_future),
-            loop=self._event_loop,
-        )
-
-        if self.run_async or self._event_loop.is_running():
-            return res_future
-
-        return self._event_loop.run_until_complete(res_future)
 
     async def _get_response(self, http_verb, api_url, req_args, request_future):
         response = await request_future
@@ -184,13 +181,6 @@ class BaseClient:
         """
         return urljoin(self.base_url, api_method)
 
-    async def _get_session(self):
-        if self.use_session:
-            if not self._session or self._session.closed:
-                self._session = aiohttp.ClientSession()
-            return self._session
-        return aiohttp.ClientSession()
-
     async def _send(self, http_verb, api_url, req_args):
         """Sends the request out for transmission.
 
@@ -206,14 +196,18 @@ class BaseClient:
                 }
             }
         """
-        session = await self._get_session()
-        res = await session.request(http_verb, api_url, **req_args)
-        response = {}
-        response["data"] = await res.json()
-        response["headers"] = res.headers
-        response["status_code"] = res.status
-
-        return response
+        async with aiohttp.ClientSession(connector=self._connector) as session:
+            async with session.request(http_verb, api_url, **req_args) as res:
+                data = {
+                    "client": self,
+                    "http_verb": http_verb,
+                    "api_url": api_url,
+                    "req_args": req_args,
+                    "data": await res.json(),
+                    "headers": res.headers,
+                    "status_code": res.status,
+                }
+                return SlackResponse(**data).validate()
 
     @staticmethod
     def _get_user_agent():

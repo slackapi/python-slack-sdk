@@ -22,7 +22,7 @@ class OnboardingMessage:
         self.pin_task_completed = False
         self.share_task_completed = False
 
-    def __dict__(self):
+    def to_dict(self):
         return {
             "channel": self.channel,
             "username": self.username,
@@ -76,11 +76,13 @@ class OnboardingMessage:
         )
         return self._get_task_block(text, information)
 
+    @staticmethod
     def _get_checkmark(task_completed: bool) -> str:
         if task_completed:
             return ":white_check_mark:"
         return ":white_large_square:"
 
+    @staticmethod
     def _get_task_block(text, information):
         return [
             {"type": "section", "text": {"type": "mrkdwn", "text": text}},
