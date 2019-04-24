@@ -15,7 +15,9 @@ class TestWebClientFunctional(unittest.TestCase):
         asyncio.set_event_loop(self.loop)
         task = asyncio.ensure_future(self.mock_server(), loop=self.loop)
         self.loop.run_until_complete(asyncio.wait_for(task, 0.1))
-        self.client = slack.WebClient("xoxb-abc-123", base_url="http://localhost:8765")
+        self.client = slack.WebClient(
+            "xoxb-abc-123", base_url="http://localhost:8765", loop=self.loop
+        )
 
     def tearDown(self):
         self.loop.run_until_complete(self.site.stop())

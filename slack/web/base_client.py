@@ -65,15 +65,13 @@ class BaseClient:
         self.run_async = run_async
         self.use_pooling = use_pooling
         self._logger = logging.getLogger(__name__)
-        self._event_loop = loop or self._new_event_loop()
+        self._event_loop = loop
         self._connector = None
-        if self.use_pooling:
-            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
 
-    def _new_event_loop(self):
+    def _set_event_loop(self):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        return loop
+        self._event_loop = loop
 
     def api_call(
         self,
@@ -146,6 +144,12 @@ class BaseClient:
             "proxy": self.proxy,
         }
 
+        if self._event_loop is None:
+            self._set_event_loop()
+
+        if self._connector is None and self.use_pooling:
+            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
+
         if self.run_async:
             return asyncio.ensure_future(
                 self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
@@ -155,19 +159,6 @@ class BaseClient:
         return self._event_loop.run_until_complete(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args)
         )
-
-    async def _get_response(self, http_verb, api_url, req_args, request_future):
-        response = await request_future
-        data = {
-            "client": self,
-            "http_verb": http_verb,
-            "api_url": api_url,
-            "req_args": req_args,
-            "data": response.get("data", {}),
-            "headers": response.get("headers", {}),
-            "status_code": response.get("status_code", None),
-        }
-        return SlackResponse(**data).validate()
 
     def _get_url(self, api_method):
         """Joins the base Slack URL and an API method to form an absolute URL.
@@ -196,7 +187,9 @@ class BaseClient:
                 }
             }
         """
-        async with aiohttp.ClientSession(connector=self._connector) as session:
+        async with aiohttp.ClientSession(
+            connector=self._connector, loop=self._event_loop
+        ) as session:
             async with session.request(http_verb, api_url, **req_args) as res:
                 data = {
                     "client": self,
