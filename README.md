@@ -239,7 +239,7 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [gh-issues]: https://github.com/slackapi/python-slackclient/issues
 [bd-hangout]: http://community.botkit.ai/
 [dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
-[migration-guide]: https://api.slack.com
+[migration-guide]: Migration.md
 [files.upload]: https://api.slack.com/methods/files.upload
 [auth-guide]: docs/auth.md
 [basic-usage]: docs/basic_usage.md
