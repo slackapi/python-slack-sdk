@@ -1,36 +1,32 @@
 # Standard Imports
-from unittest import mock
+from unittest.mock import ANY, Mock
 
 # ThirdParty Imports
 import asyncio
 
 # Internal Imports
-import slack
 from slack.web.slack_response import SlackResponse
 
 
-def fake_req_args(token=mock.ANY, data=mock.ANY, params=mock.ANY, json=mock.ANY):
+def fake_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
     req_args = {
-        "headers": {
-            "User-Agent": slack.WebClient._get_user_agent(),
-            "Authorization": token,
-        },
+        "headers": headers,
         "data": data,
         "params": params,
         "json": json,
-        "ssl": mock.ANY,
-        "proxy": mock.ANY,
+        "ssl": ANY,
+        "proxy": ANY,
     }
     return req_args
 
 
 def mock_rtm_response():
-    coro = mock.Mock(name="RTMResponse")
+    coro = Mock(name="RTMResponse")
     data = {
-        "client": mock.ANY,
-        "http_verb": mock.ANY,
-        "api_url": mock.ANY,
-        "req_args": mock.ANY,
+        "client": ANY,
+        "http_verb": ANY,
+        "api_url": ANY,
+        "req_args": ANY,
         "data": {
             "ok": True,
             "url": "ws://localhost:8765",
@@ -41,11 +37,11 @@ def mock_rtm_response():
                 "name": "ExampleName",
             },
         },
-        "headers": mock.ANY,
+        "headers": ANY,
         "status_code": 200,
     }
     coro.return_value = SlackResponse(**data)
-    corofunc = mock.Mock(name="mock_rtm_response", side_effect=asyncio.coroutine(coro))
+    corofunc = Mock(name="mock_rtm_response", side_effect=asyncio.coroutine(coro))
     corofunc.coro = coro
     return corofunc
 
@@ -60,21 +56,11 @@ def async_test(coro):
     return wrapper
 
 
-def mock_send():
-    response_mock = mock.Mock(name="Response")
-    data = {
-        "client": mock.ANY,
-        "http_verb": mock.ANY,
-        "api_url": mock.ANY,
-        "req_args": mock.ANY,
-        "data": {"ok": True},
-        "headers": mock.ANY,
-        "status_code": 200,
-    }
-    response_mock.return_value = SlackResponse(**data)
+def mock_request():
+    response_mock = Mock(name="Response")
+    data = {"data": {"ok": True}, "headers": ANY, "status_code": 200}
+    response_mock.return_value = data
 
-    send_request = mock.Mock(
-        name="Request", side_effect=asyncio.coroutine(response_mock)
-    )
+    send_request = Mock(name="Request", side_effect=asyncio.coroutine(response_mock))
     send_request.response = response_mock
     return send_request

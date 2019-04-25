@@ -68,10 +68,18 @@ class BaseClient:
         self._event_loop = loop
         self._connector = None
 
+    def __del__(self):
+        # TODO: Identify a better way to close a session.
+        if self._connector:
+            self._connector._close()
+
     def _set_event_loop(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        self._event_loop = loop
+        if self.run_async:
+            self._event_loop = asyncio.get_event_loop()
+        else:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            self._event_loop = loop
 
     def api_call(
         self,
@@ -147,9 +155,6 @@ class BaseClient:
         if self._event_loop is None:
             self._set_event_loop()
 
-        if self._connector is None and self.use_pooling:
-            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
-
         if self.run_async:
             return asyncio.ensure_future(
                 self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
@@ -187,20 +192,30 @@ class BaseClient:
                 }
             }
         """
-        async with aiohttp.ClientSession(
-            connector=self._connector, loop=self._event_loop
-        ) as session:
-            async with session.request(http_verb, api_url, **req_args) as res:
-                data = {
-                    "client": self,
-                    "http_verb": http_verb,
-                    "api_url": api_url,
-                    "req_args": req_args,
-                    "data": await res.json(),
-                    "headers": res.headers,
-                    "status_code": res.status,
-                }
-                return SlackResponse(**data).validate()
+        res = await self._request(
+            http_verb=http_verb, api_url=api_url, req_args=req_args
+        )
+        data = {
+            "client": self,
+            "http_verb": http_verb,
+            "api_url": api_url,
+            "req_args": req_args,
+        }
+        return SlackResponse(**{**data, **res}).validate()
+
+    async def _request(self, *, http_verb, api_url, req_args):
+        if self._connector is None and self.use_pooling:
+            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
+
+        session = aiohttp.ClientSession(
+            loop=self._event_loop, connector=self._connector
+        )
+        async with session.request(http_verb, api_url, **req_args) as res:
+            return {
+                "data": await res.json(),
+                "headers": res.headers,
+                "status_code": res.status,
+            }
 
     @staticmethod
     def _get_user_agent():

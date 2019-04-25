@@ -63,7 +63,6 @@ class SlackResponse(object):
         self.status_code = status_code
         self._client = client
         self._logger = logging.getLogger(__name__)
-        self._iteration = 0
 
     def __str__(self):
         """Return the Response data if object is converted to a string."""
@@ -92,6 +91,7 @@ class SlackResponse(object):
         Returns:
             (SlackResponse) self
         """
+        self._iteration = 0
         return self
 
     def __next__(self):
@@ -124,10 +124,9 @@ class SlackResponse(object):
             response = asyncio.get_event_loop().run_until_complete(
                 self._client._send(self.http_verb, self.api_url, self.req_args)
             )
-
-            self.data = response.get("data", {})
-            self.headers = response.get("headers", {})
-            self.status_code = response.get("status_code", None)
+            self.data = response.data
+            self.headers = response.headers
+            self.status_code = response.status_code
             return self.validate()
         else:
             raise StopIteration

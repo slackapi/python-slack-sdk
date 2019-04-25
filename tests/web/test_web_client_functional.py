@@ -35,7 +35,7 @@ class TestWebClientFunctional(unittest.TestCase):
         return web.json_response({"ok": True})
 
     def test_requests_with_use_session_turned_off(self):
-        self.client.use_session = False
+        self.client.use_pooling = False
         resp = self.client.api_test()
         assert resp["ok"]
 
