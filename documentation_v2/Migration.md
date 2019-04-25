@@ -2,7 +2,7 @@
 
 This tutorial will guide you through the process of updating your app from using the `python slackclient v1.x` to using the updated client, v2.0.
 
-> **NOTE**: It will not be possible to just update your Python SlackClient library without code changes. We have changed a large amount of the client and you should only upgrade once you have fully tested it in your development environment. Please be sure to pin your module for the Python slackclient to `1.3.1` if you don't wish to upgrade yet.
+> **NOTE**: It will not be possible to just update your Python SlackClient library without code changes. We have changed a large amount of the client and you should only upgrade once you have fully tested it in your development environment. Please be sure to pin your module for the Python slackclient to `1.3.1` if you don't wish to upgrade yet. If you do experience issues, you will be able to install the previous version by using `pip install slackclient==1.3.1` or whichever version of the library you were using.
 
 </br>
 
