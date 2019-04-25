@@ -6,13 +6,7 @@ import asyncio
 
 # Internal Imports
 import slack
-from tests.helpers import (
-    mock_response,
-    async_test,
-    fake_req_args,
-    AsyncMock,
-    mock_request,
-)
+from tests.helpers import async_test, fake_req_args, mock_request
 import slack.errors as err
 
 
