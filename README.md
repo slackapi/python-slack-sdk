@@ -239,8 +239,8 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [gh-issues]: https://github.com/slackapi/python-slackclient/issues
 [bd-hangout]: http://community.botkit.ai/
 [dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
-[migration-guide]: Migration.md
+[migration-guide]: documentation_v2/Migration.md
 [files.upload]: https://api.slack.com/methods/files.upload
-[auth-guide]: docs/auth.md
-[basic-usage]: docs/basic_usage.md
+[auth-guide]: documentation_v2/auth.md
+[basic-usage]: documentation_v2/basic_usage.md
 [aiohttp]: https://aiohttp.readthedocs.io/
