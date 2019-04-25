@@ -6,10 +6,10 @@ import asyncio
 
 # Internal Imports
 import slack
+from slack.web.slack_response import SlackResponse
 
 
 def fake_req_args(token=mock.ANY, data=mock.ANY, params=mock.ANY, json=mock.ANY):
-
     req_args = {
         "headers": {
             "User-Agent": slack.WebClient._get_user_agent(),
@@ -26,8 +26,11 @@ def fake_req_args(token=mock.ANY, data=mock.ANY, params=mock.ANY, json=mock.ANY)
 
 def mock_rtm_response():
     coro = mock.Mock(name="RTMResponse")
-    coro.return_value = {
-        "headers": {},
+    data = {
+        "client": mock.ANY,
+        "http_verb": mock.ANY,
+        "api_url": mock.ANY,
+        "req_args": mock.ANY,
         "data": {
             "ok": True,
             "url": "ws://localhost:8765",
@@ -38,8 +41,10 @@ def mock_rtm_response():
                 "name": "ExampleName",
             },
         },
+        "headers": mock.ANY,
         "status_code": 200,
     }
+    coro.return_value = SlackResponse(**data)
     corofunc = mock.Mock(name="mock_rtm_response", side_effect=asyncio.coroutine(coro))
     corofunc.coro = coro
     return corofunc
@@ -57,7 +62,17 @@ def async_test(coro):
 
 def mock_send():
     response_mock = mock.Mock(name="Response")
-    response_mock.return_value = {"data": {"ok": True}, "status_code": 200}
+    data = {
+        "client": mock.ANY,
+        "http_verb": mock.ANY,
+        "api_url": mock.ANY,
+        "req_args": mock.ANY,
+        "data": {"ok": True},
+        "headers": mock.ANY,
+        "status_code": 200,
+    }
+    response_mock.return_value = SlackResponse(**data)
+
     send_request = mock.Mock(
         name="Request", side_effect=asyncio.coroutine(response_mock)
     )

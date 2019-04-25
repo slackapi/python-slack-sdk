@@ -9,7 +9,7 @@ import collections
 import functools
 import inspect
 import signal
-import threading
+import concurrent.futures
 
 # ThirdParty Imports
 import asyncio
@@ -187,6 +187,7 @@ class RTMClient(object):
 
         future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
+        # Test if/why this event_loop check is necessary.
         if self.run_async or self._event_loop.is_running():
             return future
 
@@ -386,23 +387,27 @@ class RTMClient(object):
                     # Don't run callbacks if client was stopped unless they're close/error callbacks.
                     break
 
-                if not self.run_async:
+                if self.run_async:
+                    callback(rtm_client=self, web_client=self._web_client, data=data)
+                else:
                     web_client = WebClient(
                         token=self.token,
                         base_url=self.base_url,
                         ssl=self.ssl,
                         proxy=self.proxy,
                     )
-                    thread = threading.Thread(
-                        target=callback,
-                        kwargs={
-                            "rtm_client": self,
-                            "web_client": web_client,
-                            "data": data,
-                        },
-                    )
-                    thread.start()
-                    thread.join(timeout=self.timeout)
+                    with concurrent.futures.ThreadPoolExecutor(
+                        max_workers=1
+                    ) as executor:
+                        # Execute the call on a separate thread,
+                        future = executor.submit(
+                            callback, rtm_client=self, web_client=web_client, data=data
+                        )
+
+                        while future.running():
+                            pass
+
+                        future.result()
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
