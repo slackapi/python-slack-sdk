@@ -1,4 +1,4 @@
-# Migrating to 2.x
+# Migrating to 2.0
 
 This tutorial will guide you through the process of updating your app from using the `python slackclient v1.x` to using the updated client, v2.0.
 
