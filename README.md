@@ -1,355 +1,246 @@
-python-slackclient
-===================
+# Python slackclient
+The Python slackclient is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
 
-A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API.
+> **Note**: This client should not be used in any current SlackClient apps without regarding our Migration Guide located [here][migration-guide].
 
-|build-status| |windows-build-status| |codecov| |doc-status| |pypi-version| |python-version|
-
-.. |build-status| image:: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
-    :target: https://travis-ci.org/slackapi/python-slackclient
-.. |windows-build-status| image:: https://ci.appveyor.com/api/projects/status/rif04t60ptslj32x/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/slackapi/python-slackclient
-.. |codecov| image:: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/slackapi/python-slackclient
-.. |doc-status| image:: https://readthedocs.org/projects/python-slackclient/badge/?version=latest
-    :target: http://python-slackclient.readthedocs.io/en/latest/?badge=latest
-.. |pypi-version| image:: https://badge.fury.io/py/slackclient.svg
-    :target: https://pypi.python.org/pypi/slackclient
-.. |python-version| image:: https://img.shields.io/pypi/pyversions/slackclient.svg
-    :target: https://pypi.python.org/pypi/slackclient
-
-Overview
---------
-
-Whether you're building a custom app for your team, or integrating a third party
-service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility
-of Python to get your project up and running as quickly as possible.
-
-Documentation
-***************
-
-For comprehensive method information and usage examples, see the `full documentation <http://slackapi.github.io/python-slackclient>`_.
-
-If you're building a project to receive content and events from Slack, check out the `Python Slack Events API Adapter <https://github.com/slackapi/python-slack-events-api/>`_ library.
-
-You may also review our `Development Roadmap <https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap>`_ in the project wiki.
+[![pypi package][pypi-image]][pypi-url]
+[![Build Status][travis-image]][travis-url]
+[![Build Status][windows-build-status]][windows-build-url]
+[![Python Version][python-version]][pypi-url]
+[![codecov][codecov-image]][codecov-url]
+[![contact][contact-image]][contact-url]
 
 
-Requirements and Installation
-******************************
+Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
-We recommend using `PyPI <https://pypi.python.org/pypi>`_ to install Slack Developer Kit for Python
+You may also review our [Development Roadmap][dev-roadmap] in the project wiki.
 
-.. code-block:: bash
+The **Python slackclient** allows interaction with:
 
-	pip install slackclient
+- The Slack web api methods available at our [Api Docs site][api-methods]
+- Interaction with our [RTM API][rtm-docs]
 
-Of course, if you prefer doing things the hard way, you can always implement Slack Developer Kit for Python
-by pulling down the source code directly into your project:
+If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
 
-.. code-block:: bash
+Details on the Tokens and Authentication can be found in our [Auth Guide][auth-guide].
 
-	git clone https://github.com/slackapi/python-slackclient.git
-	pip install -r requirements.txt
+</br>
 
-Getting Help
-*************
+## Table of contents
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Build your first app](#build-an-app-in-10-minutes)
+* [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
+    * [Sending a message to Slack](#sending-a-message-to-slack)
+    * [Uploading files to Slack](#uploading-files-to-slack)
+* [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
+* [Advanced Options](#advanced-options)
+* [Support](#support)
+* [Change Logs](#change-logs)
+
+</br>
+
+### Requirements
+---
+This Library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.3.1][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
+
+> **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
+
+
+```bash
+python --version
+
+-- or --
+
+python3 --version
+```
+</br>
+
+### Installation
+
+We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
+
+
+```bash
+pip3 install slackclient
+```
+
+If you require Python 2 support, you can use the following to install the previous version of our Developer Kit
+
+```bash
+pip install slackclient==1.3.1
+```
+
+</br>
+
+### Build an app in 10 minutes
+---
+
+> _Link to the "Build an app in 10 minutes" guide_
+
+_For more examples and usage, please refer to the [Slack API Documentation site][api-docs]._
+
+</br>
+
+### Basic Usage of the Web Client
+---
+
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage][basic-usage] guide
+
+
+#### Sending a message to Slack
+
+One of the most common use-cases is sending a message to Slack. If you want to send a message as your app, or as a user, this method can do both. In our examples, we specify the channel name, however it is recommended to use the `channel_id` where possible.
+
+```python
+    import os
+    import slack
+
+    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+
+    response = client.chat_postMessage(
+        channel='#random',
+        text="Hello world!")
+    assert response["ok"]
+    assert response["message"]["text"] == "Hello world!"
+```
+
+Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
+
+
+#### Uploading files to Slack
+
+We've changed the process for uploading files to Slack to be much easier and straight forward. You can now just include a path to the file directly in the API call and upload it that way. You can find the details on this api call [here][files.upload]
+
+```python
+    import os
+    import slack
+
+    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+
+    response = client.files_upload(
+        channels='#random',
+        file="my_file.pdf")
+    assert response["ok"]
+```
+
+</br>
+
+### Basic Usage of the RTM Client
+---
+
+The [Real Time Messaging (RTM) API][rtm-docs] is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
+
+If you prefer events to be pushed to you instead, we recommend using the HTTP-based [Events API][events-docs] instead. Most event types supported by the RTM API are also available in the Events API. You can check out our [Python Slack Events Adaptor][events-sdk] if you want to use this API instead.
+
+An RTMClient allows apps to communicate with the Slack Platform's RTM API.
+
+The event-driven architecture of this client allows you to simply
+link callbacks to their corresponding events. When an event occurs
+this client executes your callback while passing along any
+information it receives. We also give you the ability to call our web client from inside your callbacks.
+
+In our example below, we watch for a [message event][message-event] that contains "Hello" and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
+
+```python
+    import os
+    import slack
+
+    @slack.RTMClient.run_on(event='message')
+    def say_hello(**payload):
+        data = payload['data']
+        web_client = payload['web_client']
+        rtm_client = payload['rtm_client']
+        if 'Hello' in data['text']:
+            channel_id = data['channel']
+            thread_ts = data['ts']
+            user = data['user']
+
+            web_client.chat_postMessage(
+                channel=channel_id,
+                text=f"Hi <@{user}>!",
+                thread_ts=thread_ts
+            )
+
+    slack_token = os.environ["SLACK_API_TOKEN"]
+    rtm_client = slack.RTMClient(slack_token)
+    rtm_client.start()
+```
+
+</br>
+
+### Advanced Options
+
+The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their inbuilt SSL and Proxy support. You can pass it directly into the call while constructing the Slack Client for both the RTM and the Web client.
+
+```python
+import os
+import slack
+    
+client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy=proxyinfo)
+
+```
+
+We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
+</br>
+
+### Support
+---
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
-- Use our `Github Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ for reporting bugs or requesting features.
-- Visit the `Bot Developer Hangout <http://community.botkit.ai>`_ for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
-
-Basic Usage
-------------
-The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations
-we provide out of the box.
-
-This package is a modular wrapper designed to make Slack `Web API <https://api.slack.com/web>`_ calls simpler and easier for your
-app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
-a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
-
-
-Sending a message
-********************
-The primary use of Slack is sending messages. Whether you're sending a message
-to a user or to a channel, this method handles both.
-
-To send a message to a channel, use the channel's ID. For IMs, use the user's ID.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "chat.postMessage",
-    channel="C0XXXXXX",
-    text="Hello from Python! :tada:"
-  )
-
-There are some unique options specific to sending IMs, so be sure to read the **channels**
-section of the `chat.postMessage <https://api.slack.com/methods/chat.postMessage#channels>`_
-page for a full list of formatting and authorship options.
-
-Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
-as sending a regular message, but with an additional ``user`` parameter.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "chat.postEphemeral",
-    channel="C0XXXXXX",
-    text="Hello from Python! :tada:",
-    user="U0XXXXXXX"
-  )
-
-See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for more info.
-
-
-Replying to messages and creating threads
-*****************************************
-Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context
-to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message's ``ts``
-ID in the ``thread_ts`` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts`
-ID of the message you're replying to.
-
-A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps.
-When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not
-appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "chat.postMessage",
-    channel="C0XXXXXX",
-    text="Hello from Python! :tada:",
-    thread_ts="1476746830.000003"
-  )
-
-
-By default, ``reply_broadcast`` is set to ``False``. To indicate your reply is germane to all members of a channel,
-set the ``reply_broadcast`` boolean parameter to ``True``.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "chat.postMessage",
-    channel="C0XXXXXX",
-    text="Hello from Python! :tada:",
-    thread_ts="1476746830.000003",
-    reply_broadcast=True
-  )
-
-
-**Note:** While threaded messages may contain attachments and message buttons, when your reply is broadcast to the
-channel, it'll actually be a reference to your reply, not the reply itself.
-So, when appearing in the channel, it won't contain any attachments or message buttons. Also note that updates and
-deletion of threaded replies works the same as regular messages.
-
-See the `Threading messages together <https://api.slack.com/docs/message-threading#forking_conversations>`_
-article for more information.
-
-
-Deleting a message
-********************
-Sometimes you need to delete things.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "chat.delete",
-    channel="C0XXXXXX",
-    ts="1476745373.000002"
-  )
-
-See `chat.delete <https://api.slack.com/methods/chat.delete>`_ for more info.
-
-Adding or removing an emoji reaction
-****************************************
-You can quickly respond to any message on Slack with an emoji reaction. Reactions
-can be used for any purpose: voting, checking off to-do items, showing excitement — and just for fun.
-
-This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``channel message``, ``group message``, or ``direct message``). One of file, file_comment, or the combination of channel and timestamp must be specified.
-
-.. code-block:: python
-
-  import os
-  from slackclient import SlackClient
-
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-  sc.api_call(
-    "reactions.add",
-    channel="C0XXXXXXX",
-    name="thumbsup",
-    timestamp="1234567890.123456"
-  )
-
-Removing an emoji reaction is basically the same format, but you'll use ``reactions.remove`` instead of ``reactions.add``
-
-.. code-block:: python
-
-  sc.api_call(
-    "reactions.remove",
-    channel="C0XXXXXXX",
-    name="thumbsup",
-    timestamp="1234567890.123456"
-  )
-
-
-See `reactions.add <https://api.slack.com/methods/reactions.add>`_ and `reactions.remove <https://api.slack.com/methods/reactions.remove>`_ for more info.
-
-Getting a list of channels
-******************************
-At some point, you'll want to find out what channels are available to your app. This is how you get that list.
-
-**Note:** This call requires the ``channels:read`` scope.
-
-.. code-block:: python
-
-  sc.api_call("channels.list")
-
-Archived channels are included by default. You can exclude them by passing ``exclude_archived=1`` to your request.
-
-.. code-block:: python
-
-  sc.api_call(
-    "channels.list",
-    exclude_archived=1
-  )
-
-See `channels.list <https://api.slack.com/methods/channels.list>`_ for more info.
-
-Getting a channel's info
-*************************
-Once you have the ID for a specific channel, you can fetch information about that channel.
-
-.. code-block:: python
-
-  sc.api_call(
-    "channels.info",
-    channel="C0XXXXXXX"
-  )
-
-See `channels.info <https://api.slack.com/methods/channels.info>`_ for more info.
-
-Joining a channel
-********************
-Channels are the social hub of most Slack teams. Here's how you hop into one:
-
-.. code-block:: python
-
-  sc.api_call(
-    "channels.join",
-    channel="C0XXXXXXY"
-  )
-
-If you are already in the channel, the response is slightly different.
-``already_in_channel`` will be true, and a limited ``channel`` object will be returned. Bot users cannot join a channel on their own, they need to be invited by another user.
-
-See `channels.join <https://api.slack.com/methods/channels.join>`_ for more info.
-
-Leaving a channel
-********************
-Maybe you've finished up all the business you had in a channel, or maybe you
-joined one by accident. This is how you leave a channel.
-
-.. code-block:: python
-
-  sc.api_call(
-    "channels.leave",
-    channel="C0XXXXXXX"
-  )
-
-See `channels.leave <https://api.slack.com/methods/channels.leave>`_ for more info.
-
-
-Tokens and Authentication
-**************************
-
-The simplest way to create an instance of the client, as shown in the samples above, is to use a bot (xoxb) access token:
-
-.. code-block:: python
-
-  # Get the access token from environmental variable
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
-
-
-The SlackClient library allows you to use a variety of Slack authentication tokens.
-
-To take advantage of automatic token refresh, you'll need to instantiate the client a little differently than when using
-a bot access token. With a bot token, you have the access (xoxb) token when you create the client, when using refresh tokens,
-you won't know the access token when the client is created.
-
-Upon the first request, the SlackClient will request a new access (xoxa) token on behalf of your application, using your app's
-refresh token, client ID, and client secret.
-
-.. code-block:: python
-
-    # Get the access token from environmental variable
-    slack_refresh_token = os.environ["SLACK_REFRESH_TOKEN"]
-    slack_client_id = os.environ["SLACK_CLIENT_ID"]
-    slack_client_secret = os.environ["SLACK_CLIENT_SECRET"]
-
-
-Since your app's access tokens will be expiring and refreshed, the client requires a callback method to be passed in on creation of the client.
-Once Slack returns an access token for your app, the SlackClient will call your provided callback to update the access token in your datastore.
-
-.. code-block:: python
-
-    # This is where you'll add your data store update logic
-    def token_update_callback(update_data):
-        print("Enterprise ID: {}".format(update_data["enterprise_id"]))
-        print("Workspace ID: {}".format(update_data["team_id"]))
-        print("Access Token: {}".format(update_data["access_token"]))
-        print("Access Token expires in (ms): {}".format(update_data["expires_in"]))
-
-    # When creating an instance of the client, pass the client details and token update callback
-    sc = SlackClient(
-      refresh_token=slack_refresh_token,
-      client_id=slack_client_id,
-      client_secret=slack_client_secret,
-      token_update_callback=token_update_callback
-    )
-
-
-Slack will send your callback function the **app's access token**, **token expiration TTL**, **team ID**, and **enterprise ID** (for enterprise workspaces)
-
-
-See `Tokens & Authentication <http://slackapi.github.io/python-slackclient/auth.html#handling-tokens>`_ for API token handling best practices.
-
-
-
-Additional Information
-********************************************************************************************
-For comprehensive method information and usage examples, see the `full documentation`_.
+Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
+Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+
+</br>
+
+### Change Logs
+---
+
+<details>
+  <summary><strong>Release History</strong> (click to expand)</summary>
+
+<!-- rel -->
+
+* 2.0.0
+    * To be added
+* 1.3.1
+    * To be added
+<!-- relstop -->
+
+
+</details>
+
+</br>
+
+<!-- Markdown links -->
+[pypi-image]: https://badge.fury.io/py/slackclient.svg
+[pypi-url]: https://pypi.python.org/pypi/slackclient
+[windows-build-status]: https://ci.appveyor.com/api/projects/status/rif04t60ptslj32x/branch/master?svg=true
+[windows-build-url]: https://ci.appveyor.com/project/slackapi/python-slackclient
+[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
+[travis-url]: https://travis-ci.org/slackapi/python-slackclient
+[python-version]:  https://img.shields.io/pypi/pyversions/slackclient.svg
+[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
+[contact-image]: https://img.shields.io/badge/contact-support-green.svg
+[contact-url]: https://slack.com/support
+[api-docs]: https://api.slack.com
+[slackclientv1]: https://github.com/slackapi/python-slackclient/
+[api-methods]: https://api.slack.com/methods
+[rtm-docs]: https://api.slack.com/rtm
+[events-docs]: https://api.slack.com/events-api
+[events-sdk]: https://github.com/slackapi/python-slack-events-api
+[message-event]: https://api.slack.com/events/message
+[python-slack-events-api]: https://github.com/slackapi/python-slack-events-api
+[pypi]: https://pypi.python.org/pypi
+[pipenv]: https://pypi.org/project/pipenv/
+[gh-issues]: https://github.com/slackapi/python-slackclient/issues
+[bd-hangout]: http://community.botkit.ai/
+[dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
+[migration-guide]: documentation_v2/Migration.md
+[files.upload]: https://api.slack.com/methods/files.upload
+[auth-guide]: documentation_v2/auth.md
+[basic-usage]: documentation_v2/basic_usage.md
+[aiohttp]: https://aiohttp.readthedocs.io/
