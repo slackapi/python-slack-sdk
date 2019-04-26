@@ -68,6 +68,7 @@ class BaseClient:
 
     def __del__(self):
         # TODO: Identify a better way to close a session.
+        # https://github.com/aio-libs/aiohttp/issues/2800
         if self._session and self._session._connector:
             self._session._connector._close()
 

@@ -20,10 +20,10 @@ class OnboardingMessage:
         self.timestamp = ""
         self.reaction_task_completed = False
         self.pin_task_completed = False
-        self.share_task_completed = False
 
     def to_dict(self):
         return {
+            "ts": self.timestamp,
             "channel": self.channel,
             "username": self.username,
             "icon_emoji": self.icon_emoji,
@@ -33,8 +33,6 @@ class OnboardingMessage:
                 *self._get_reaction_block(),
                 self.DIVIDER_BLOCK,
                 *self._get_pin_block(),
-                self.DIVIDER_BLOCK,
-                *self._get_share_block(),
             ],
         }
 
@@ -61,18 +59,6 @@ class OnboardingMessage:
         information = (
             ":information_source: *<https://get.slack.help/hc/en-us/articles/205239997-Pinning-messages-and-files"
             "|Learn How to Pin a Message>*"
-        )
-        return self._get_task_block(text, information)
-
-    def _get_share_block(self):
-        task_checkmark = self._get_checkmark(self.share_task_completed)
-        text = (
-            f"{task_checkmark} *Share this Message* :mailbox_with_mail:\nSharing messages in Slack can"
-            " help keep conversations on your team organized. And, it's easy to do!"
-        )
-        information = (
-            ":information_source: *<https://get.slack.help/hc/en-us/articles/203274767-Share-messages-in-Slack"
-            "|Learn How to Share a Message in Slack>*"
         )
         return self._get_task_block(text, information)
 
