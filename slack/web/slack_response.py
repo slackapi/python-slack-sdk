@@ -23,6 +23,7 @@ class SlackResponse(object):
 
     Example:
     ```python
+    import os
     import slack
 
     client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
