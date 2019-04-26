@@ -55,7 +55,6 @@ class BaseClient:
         ssl=None,
         proxy=None,
         run_async=False,
-        use_pooling=True,
     ):
         self.token = token
         self.base_url = base_url
@@ -63,15 +62,14 @@ class BaseClient:
         self.ssl = ssl
         self.proxy = proxy
         self.run_async = run_async
-        self.use_pooling = use_pooling
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
-        self._connector = None
+        self._session = None
 
     def __del__(self):
         # TODO: Identify a better way to close a session.
-        if self._connector:
-            self._connector._close()
+        if self._session and self._session._connector:
+            self._session._connector._close()
 
     def _set_event_loop(self):
         if self.run_async:
@@ -204,13 +202,9 @@ class BaseClient:
         return SlackResponse(**{**data, **res}).validate()
 
     async def _request(self, *, http_verb, api_url, req_args):
-        if self._connector is None and self.use_pooling:
-            self._connector = aiohttp.TCPConnector(ssl=self.ssl, loop=self._event_loop)
-
-        session = aiohttp.ClientSession(
-            loop=self._event_loop, connector=self._connector
-        )
-        async with session.request(http_verb, api_url, **req_args) as res:
+        if self._session is None:
+            self._session = aiohttp.ClientSession(loop=self._event_loop)
+        async with self._session.request(http_verb, api_url, **req_args) as res:
             return {
                 "data": await res.json(),
                 "headers": res.headers,
