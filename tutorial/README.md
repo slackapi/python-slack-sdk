@@ -44,9 +44,9 @@ $ source env/bin/activate
 Open up your new project folder "PythOnBoardingBot" in your text editor.
 
 ## Table of contents
-[01 - Creating the Slack app (n min)](/01-creating-the-slack-app.md)
-[02 - Building the backend (n min)](/02-building-the-backend.md)
-[03 - Running the app (n min)](/03-running-the-app.md)
+- [01 - Creating the Slack app](/tutorial/01-creating-the-slack-app.md)
+- [02 - Building the backend](/tutorial/02-building-the-backend.md)
+- [03 - Running the app](/tutorial/03-running-the-app.md)
 
 ## Coming up next
 - Add tests to your app.

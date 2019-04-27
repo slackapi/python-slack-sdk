@@ -3,31 +3,32 @@ import logging
 import slack
 import ssl as ssl_lib
 import certifi
-from onboarding_message import OnboardingMessage
+from onboarding_tutorial import OnboardingTutorial
 
-# For simplicity we'll store our bot data with the following data structure.
-# onboarding_messages = {'team_id': {"user_id": "onboarding_message_ts"}}
-onboarding_messages_sent = {}
-
-
-def store_message_sent(
-    channel_id: str, user_id: str, onboarding_message: OnboardingMessage
-):
-    """Store the message sent in onboarding_messages_sent."""
-    if channel_id not in onboarding_messages_sent:
-        onboarding_messages_sent[channel_id] = {}
-    onboarding_messages_sent[channel_id][user_id] = onboarding_message
+# For simplicity we'll store our app data with the following data structure.
+# onboarding_tutorials_sent = {"channel": {"user_id": OnboardingTutorial}}
+onboarding_tutorials_sent = {}
 
 
-def start_onboarding(web_client, user_id, channel):
-    # Post the onboarding message.
-    onboarding_message = OnboardingMessage(channel)
-    response = web_client.chat_postMessage(**onboarding_message.to_dict())
-    # We'll save the timestamp of the message we've just posted so
+def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
+    # Create a new onboarding tutorial.
+    onboarding_tutorial = OnboardingTutorial(channel)
+
+    # Get the onboarding message payload
+    message = onboarding_tutorial.get_message_payload()
+
+    # Post the onboarding message in Slack
+    response = web_client.chat_postMessage(**message)
+
+    # Capture the timestamp of the message we've just posted so
     # we can use it to update the message after a user
     # has completed an onboarding task.
-    onboarding_message.timestamp = response["ts"]
-    store_message_sent(channel, user_id, onboarding_message)
+    onboarding_tutorial.timestamp = response["ts"]
+
+    # Store the message sent in onboarding_tutorials_sent
+    if channel not in onboarding_tutorials_sent:
+        onboarding_tutorials_sent[channel] = {}
+    onboarding_tutorials_sent[channel][user_id] = onboarding_tutorial
 
 
 # ================ Team Join Event =============== #
@@ -65,17 +66,20 @@ def update_emoji(**payload):
     channel_id = data["item"]["channel"]
     user_id = data["user"]
 
-    # Get the original message sent.
-    message = onboarding_messages_sent[channel_id][user_id]
+    # Get the original tutorial sent.
+    onboarding_tutorial = onboarding_tutorials_sent[channel_id][user_id]
 
     # Mark the reaction task as completed.
-    message.reaction_task_completed = True
+    onboarding_tutorial.reaction_task_completed = True
 
-    # Update the message in Slack
-    updated_message = web_client.chat_update(**message.to_dict())
+    # Get the new message payload
+    message = onboarding_tutorial.get_message_payload()
 
-    # Update the timestamp saved on the message object
-    message.timestamp = updated_message["ts"]
+    # Post the updated message in Slack
+    updated_message = web_client.chat_update(**message)
+
+    # Update the timestamp saved on the onboarding tutorial object
+    onboarding_tutorial.timestamp = updated_message["ts"]
 
 
 # =============== Pin Added Events ================ #
@@ -91,17 +95,20 @@ def update_pin(**payload):
     channel_id = data["channel_id"]
     user_id = data["user"]
 
-    # Get the original message sent.
-    message = onboarding_messages_sent[channel_id][user_id]
+    # Get the original tutorial sent.
+    onboarding_tutorial = onboarding_tutorials_sent[channel_id][user_id]
 
-    # Mark the reaction task as completed.
-    message.pin_task_completed = True
+    # Mark the pin task as completed.
+    onboarding_tutorial.pin_task_completed = True
 
-    # Update the message in Slack
-    updated_message = web_client.chat_update(**message.to_dict())
+    # Get the new message payload
+    message = onboarding_tutorial.get_message_payload()
 
-    # Update the timestamp saved on the message object
-    message.timestamp = updated_message["ts"]
+    # Post the updated message in Slack
+    updated_message = web_client.chat_update(**message)
+
+    # Update the timestamp saved on the onboarding tutorial object
+    onboarding_tutorial.timestamp = updated_message["ts"]
 
 
 # ============== Message Events ============= #

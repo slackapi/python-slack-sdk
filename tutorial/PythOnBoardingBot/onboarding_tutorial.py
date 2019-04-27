@@ -1,5 +1,7 @@
-class OnboardingMessage:
-    # TODO: Create a better Block Builder: https://github.com/slackapi/python-slackclient/issues/392
+class OnboardingTutorial:
+    # TODO: Create a better Block Builder:
+    # https://github.com/slackapi/python-slackclient/issues/392
+    # https://github.com/slackapi/python-slackclient/pull/400
 
     WELCOME_BLOCK = {
         "type": "section",
@@ -21,7 +23,7 @@ class OnboardingMessage:
         self.reaction_task_completed = False
         self.pin_task_completed = False
 
-    def to_dict(self):
+    def get_message_payload(self):
         return {
             "ts": self.timestamp,
             "channel": self.channel,
