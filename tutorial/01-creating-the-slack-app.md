@@ -1,6 +1,6 @@
-# 01 - Create a Slack app (n min)
+# 01 - Create a Slack app
 
-### Creating a new Slack App on [api.slack.com](https://api.slack.com/apps)
+## Create a new Slack App on [api.slack.com](https://api.slack.com/apps)
 
 In your browser, on [api.slack.com/apps](https://api.slack.com/apps) you'll find a green button labeled [Create New App](https://api.slack.com/apps/new) on the top right of the page.
 <img width="1049" alt="Create New App" src="https://user-images.githubusercontent.com/3329665/56550880-ae1b2080-653b-11e9-8e83-94bcdb8380d3.png">
@@ -10,7 +10,7 @@ Once you click that you'll see a modal apppear.
 2. Select the team you'd like to build your app on.
 <img width="570" alt="Create-A-Slack-App" src="https://user-images.githubusercontent.com/3329665/56550657-13224680-653b-11e9-8f91-15c17e6977b7.png">
 
-### Adding A Bot User
+## Add A Bot User
 
 Let's get ourselves a shiny new **Bot User** so our app can communicate on Slack. On the left side navigation of your app's settings page you'll find the **Bot Users** tab where you can create a new bot user for your app.
 
@@ -28,15 +28,18 @@ You should briefly see a success banner.
 
 <img width="1050" alt="Success banner" src="https://user-images.githubusercontent.com/3329665/56551675-d60b8380-653d-11e9-983a-5dd53cb55a97.png">
 
-### Add Permissions
-TODO: Which permissions do we need and why it's needed for this app.
-TODO: Copy your token.
+## Install the app in your workspace
+Under "Settings" on the lefthand side, click "Install App" and then "Install App to Workspace".
+<img width="961" alt="Install App" src="https://user-images.githubusercontent.com/3329665/56844936-c2c62400-686d-11e9-8417-f79d92b7ae27.png">
 
-### Install the app in your workspace
-TODO: Install your app to your workspace
+Next you'll need to authorize the app for the Bot User permissions.
+<img width="527" alt="Authorize the app" src="https://user-images.githubusercontent.com/3329665/56844940-e6896a00-686d-11e9-922c-045031c418b9.png">
+
+Finally copy and save your token. You'll need this to communicate with Slack's Platform.
+<img width="786" alt="Copy the Bot token" src="https://user-images.githubusercontent.com/3329665/56845230-ec357e80-6872-11e9-83d4-5f953aee20b5.png">
 
 ---
 
-**Next section: [02 - ???](02-.md#readme)**
+**Next section: [02 - Building the backend](02-building-the-backend.md).**
 
-**Back to the [table of contents](https://github.com/slackapi/python-slackclient/tutorial#table-of-contents).**
+**Back to the [Table of contents](https://github.com/slackapi/python-slackclient/tutorial#table-of-contents).**

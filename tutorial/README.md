@@ -8,11 +8,11 @@ This tutorial serves as a walkthrough guide and example of the types of Slack ap
 
 PythOnBoardingBot is designed to greet new users on your team and introduce them to some nifty features in Slack.
 
-When a user first joins a team it'll send you a message with the following tasks that you must complete.
+When a user first joins a team it'll send you a message with the following tasks that you must complete:
 - Pin a message to the channel.
 - React to a message.
-- Message was shared in DM.
-As you complete each task you'll see the message update. Once the final task is completed. You'll see the message update with a congradulations message.
+
+As you complete each task you'll see the message update with a green checkmark.
 
 ## What you'll need before you get started:
 
@@ -44,8 +44,9 @@ $ source env/bin/activate
 Open up your new project folder "PythOnBoardingBot" in your text editor.
 
 ## Table of contents
-[01 - Create a Slack app (n min)](/tutorial/01-node-yarn-package-json.md#readme)
-
+[01 - Creating the Slack app (n min)](/01-creating-the-slack-app.md)
+[02 - Building the backend (n min)](/02-building-the-backend.md)
+[03 - Running the app (n min)](/03-running-the-app.md)
 
 ## Coming up next
 - Add tests to your app.
@@ -57,4 +58,4 @@ Open up your new project folder "PythOnBoardingBot" in your text editor.
 - How to run this app on multiple teams.
 
 ## Credits
-This tutorial app was originally built by @karishay. Thank you! :bow:
+This tutorial app was originally built by @karishay . Thank you! :bow:
