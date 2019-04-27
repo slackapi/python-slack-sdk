@@ -40,6 +40,6 @@ Finally copy and save your token. You'll need this to communicate with Slack's P
 
 ---
 
-**Next section: [02 - Building the backend](02-building-the-backend.md).**
+**Next section: [02 - Building a message](02-building-a-message.md).**
 
 **Back to the [Table of contents](https://github.com/slackapi/python-slackclient/tutorial#table-of-contents).**

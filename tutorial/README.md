@@ -45,8 +45,9 @@ Open up your new project folder "PythOnBoardingBot" in your text editor.
 
 ## Table of contents
 - [01 - Creating the Slack app](/tutorial/01-creating-the-slack-app.md)
-- [02 - Building the backend](/tutorial/02-building-the-backend.md)
-- [03 - Running the app](/tutorial/03-running-the-app.md)
+- [02 - Building a message](/tutorial/02-building-a-message.md)
+- [03 - Responding to Slack events](/tutorial/03-running-the-app.md)
+- [04 - Running the app](/tutorial/04-running-the-app.md)
 
 ## Coming up next
 - Add tests to your app.

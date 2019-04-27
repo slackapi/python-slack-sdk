@@ -58,7 +58,7 @@ We have to send a json payload that looks like this:
 }
 ```
 
-To make this simpler, more pleasant and more productive we'll create a OnboardingTutorial class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
+To make this simpler, more pleasant and more productive we'll create a file `onboarding_tutorial.py` with a `OnboardingTutorial` class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
 ```Python
 class OnboardingTutorial:
     """Constructs the onboarding message and stores the state of which tasks were completed."""
