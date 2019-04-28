@@ -184,6 +184,8 @@ if __name__ == "__main__":
 ```
 **Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
 
+**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](/tutorial/PythOnBoardingBot/async_app.py).
+
 ---
 
 **Next section: [04 - Running the app](/tutorial/04-running-the-app.md).**

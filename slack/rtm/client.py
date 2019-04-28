@@ -389,32 +389,50 @@ class RTMClient(object):
                     break
 
                 if self.run_async:
-                    callback(rtm_client=self, web_client=self._web_client, data=data)
+                    self._execute_callback_async(callback, data)
                 else:
-                    web_client = WebClient(
-                        token=self.token,
-                        base_url=self.base_url,
-                        ssl=self.ssl,
-                        proxy=self.proxy,
-                    )
-                    with concurrent.futures.ThreadPoolExecutor(
-                        max_workers=1
-                    ) as executor:
-                        # Execute the call on a separate thread,
-                        future = executor.submit(
-                            callback, rtm_client=self, web_client=web_client, data=data
-                        )
-
-                        while future.running():
-                            pass
-
-                        future.result()
+                    self._execute_callback(callback, data)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
                 msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
                 self._logger.error(msg)
                 raise
+
+    def _execute_callback_async(self, callback, data):
+        """Execute the callback asynchronously.
+
+        If the callback is not a coroutine, convert it.
+
+        Note: The WebClient passed into the callback is running in "async" mode.
+        This means all responses will be futures.
+        """
+        if asyncio.iscoroutine(callback):
+            asyncio.ensure_future(
+                callback(rtm_client=self, web_client=self._web_client, data=data)
+            )
+        else:
+            asyncio.ensure_future(
+                asyncio.coroutine(callback)(
+                    rtm_client=self, web_client=self._web_client, data=data
+                )
+            )
+
+    def _execute_callback(self, callback, data):
+        """Execute the callback in another thread. Wait for and return the results."""
+        web_client = WebClient(
+            token=self.token, base_url=self.base_url, ssl=self.ssl, proxy=self.proxy
+        )
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            # Execute the callback on a separate thread,
+            future = executor.submit(
+                callback, rtm_client=self, web_client=web_client, data=data
+            )
+
+            while future.running():
+                pass
+
+            future.result()
 
     async def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.

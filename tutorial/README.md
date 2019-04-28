@@ -53,7 +53,6 @@ Open up your new project folder "PythOnBoardingBot" in your text editor.
 
 ## Coming up next
 - Add tests to your app.
-- When you send the app a message that says "start" it restarts the onboarding.
 - Add starring a message as an onboarding task.
 - Run this app on [Glitch](https://glitch.com/).
 - Creating a Slack "MessageBuilder" object. This would aid in the creation of complex messages.
