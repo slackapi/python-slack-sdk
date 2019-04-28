@@ -10,7 +10,7 @@ The code for this step is also available [here](/tutorial/PythOnBoardingBot).
 slackclient>=2.0.0
 certifi
 ```
-> 💡 Certifi is a carefully curated collection of Root Certificates for validating the trustworthiness of SSL certificates while verifying the identity of TLS hosts. It has been extracted from the Requests project.
+> 💡 **[Certifi](https://github.com/certifi/python-certifi)** is a carefully curated collection of Root Certificates for validating the trustworthiness of SSL certificates while verifying the identity of TLS hosts. It has been extracted from the Requests project.
 
 - Next you can install those dependencies by running the following command from your terminal:
 ```
@@ -62,7 +62,7 @@ def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
         onboarding_tutorials_sent[channel] = {}
     onboarding_tutorials_sent[channel][user_id] = onboarding_tutorial
 ```
-*Note:* We're using the `WebClient` to send messages into Slack.
+**Note:** We're using the `WebClient` to send messages into Slack.
 > 💡 **[WebClient](/slack/web/client.py)** A WebClient allows apps to communicate with the Slack Platform's Web API. This client handles constructing and sending HTTP requests to Slack as well as parsing any responses received into a `SlackResponse` dictionary-like object.
 
 ### Responding to events in Slack
@@ -177,10 +177,12 @@ Finally, we need to make our app runnable.
 - 🏁 Add the following lines of code to the end of `app.py`.
 ```Python
 if __name__ == "__main__":
+    ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
     slack_token = os.environ["SLACK_BOT_TOKEN"]
-    rtm_client = slack.RTMClient(slack_token)
+    rtm_client = slack.RTMClient(token=slack_token, ssl=ssl_context)
     rtm_client.start()
 ```
+**Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
 
 ---
 

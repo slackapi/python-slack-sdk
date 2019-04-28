@@ -1,6 +1,4 @@
-# 01 - Create a Slack app
-
-## Slack Apps
+# Create a Slack app
 > 💡 Build useful apps, internal tools, simplified workflows, or brillant bots for just your team or Slack's millions of users.
 
 - To get started, create a new Slack App on [api.slack.com](https://api.slack.com/apps?new_app=1).
