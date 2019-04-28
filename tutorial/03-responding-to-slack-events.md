@@ -1,5 +1,5 @@
 # Responding to Slack events
-The code for this step is also available [here](/tutorial/PythOnBoardingBot).
+The code for this step is available [here](/tutorial/PythOnBoardingBot).
 
 ## Install the dependencies
 > 💡 **[“Requirements files”](https://pip.pypa.io/en/stable/user_guide/#id12)** are files containing a list of items to be installed using pip install. Details on the format of the files are here: [Requirements File Format](https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format).

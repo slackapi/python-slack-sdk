@@ -14,12 +14,14 @@ When a user first joins a team it'll send you a message with the following tasks
 
 As you complete each task you'll see the message update with a green checkmark.
 
+![Onboarding](https://user-images.githubusercontent.com/3329665/56870674-ab02b300-69c7-11e9-9101-eb823235f3c2.gif)
+
 ## What you'll need before you get started:
 
-0. A Slack team.
+1. A Slack team.
 Before anything else you'll need a Slack team. You can [Sign into an existing Slack workspace](https://get.slack.help/hc/en-us/articles/212681477-Sign-in-to-Slack) or you can [create a new Slack workspace](https://get.slack.help/hc/en-us/articles/206845317-Create-a-Slack-workspace) to test your app first.
 
-1. A terminal with Python 3.6+ installed.
+2. A terminal with Python 3.6+ installed.
 Check your installation by running the following command in your terminal:
 ```
 $ python3 --version
@@ -40,7 +42,7 @@ $ python3 -m venv env/
 $ source env/bin/activate
 ```
 
-2. A text editor of your choice.
+3. A text editor of your choice.
 Open up your new project folder "PythOnBoardingBot" in your text editor.
 
 ## Table of contents
