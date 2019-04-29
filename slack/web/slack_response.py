@@ -54,7 +54,15 @@ class SlackResponse(object):
     """
 
     def __init__(
-        self, *, client, http_verb, api_url, req_args, data, headers, status_code
+        self,
+        *,
+        client,
+        http_verb: str,
+        api_url: str,
+        req_args: dict,
+        data: dict,
+        headers: dict,
+        status_code: int,
     ):
         self.http_verb = http_verb
         self.api_url = api_url
@@ -123,11 +131,15 @@ class SlackResponse(object):
             )
 
             response = asyncio.get_event_loop().run_until_complete(
-                self._client._send(self.http_verb, self.api_url, self.req_args)
+                self._client._request(
+                    http_verb=self.http_verb,
+                    api_url=self.api_url,
+                    req_args=self.req_args,
+                )
             )
-            self.data = response.data
-            self.headers = response.headers
-            self.status_code = response.status_code
+            self.data = response["data"]
+            self.headers = response["headers"]
+            self.status_code = response["status_code"]
             return self.validate()
         else:
             raise StopIteration

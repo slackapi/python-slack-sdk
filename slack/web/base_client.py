@@ -6,7 +6,7 @@ import platform
 import sys
 import logging
 import asyncio
-import functools
+import inspect
 
 # ThirdParty Imports
 import aiohttp
@@ -15,32 +15,6 @@ import aiohttp
 from slack.web.slack_response import SlackResponse
 import slack.version as ver
 import slack.errors as err
-
-
-def xoxp_token_only(api_method):
-    """Ensures that an xoxp token is used when the specified method is called.
-
-    Args:
-        api_method (func): The api method that only works with xoxp tokens.
-    Raises:
-        BotUserAccessError: If the API method is called with a Bot User OAuth Access Token.
-    """
-
-    # NOTE: Intellisense docstrings do not follow functools.wraps() semantics.
-    # https://github.com/Microsoft/vscode-python/issues/2596
-    @functools.wraps(api_method)
-    def xoxp_token_only_decorator(*args, **kwargs):
-        client = args[0]
-        # The first argument is 'slack.web.client.WebClient' aka 'self'.
-        if client.token.startswith("xoxb"):
-            method_name = api_method.__name__
-            msg = "The API method '{}' cannot be called with a Bot Token.".format(
-                method_name
-            )
-            raise err.BotUserAccessError(msg)
-        return api_method(*args, **kwargs)
-
-    return xoxp_token_only_decorator
 
 
 class BaseClient:
@@ -77,12 +51,13 @@ class BaseClient:
 
     def api_call(
         self,
-        api_method,
-        http_verb="POST",
-        files=None,
-        data=None,
-        params=None,
-        json=None,
+        api_method: str,
+        *,
+        http_verb: str = "POST",
+        files: dict = None,
+        data: dict = None,
+        params: dict = None,
+        json: dict = None,
     ):
         """Create a request and execute the API call to Slack.
 
@@ -149,15 +124,29 @@ class BaseClient:
         if self._event_loop is None:
             self._set_event_loop()
 
-        if self.run_async:
-            return asyncio.ensure_future(
-                self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
-                loop=self._event_loop,
-            )
-
-        return self._event_loop.run_until_complete(
-            self._send(http_verb=http_verb, api_url=api_url, req_args=req_args)
+        future = asyncio.ensure_future(
+            self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
+            loop=self._event_loop,
         )
+
+        if self.run_async:
+            return future
+
+        return self._event_loop.run_until_complete(future)
+
+    def _validate_xoxp_token(self):
+        """Ensures that an xoxp token is used when the specified method is called.
+
+        Raises:
+            BotUserAccessError: If the API method is called with a Bot User OAuth Access Token.
+        """
+
+        if self.token.startswith("xoxb"):
+            method_name = inspect.stack()[1][3]
+            msg = "The method '{}' cannot be called with a Bot Token.".format(
+                method_name
+            )
+            raise err.BotUserAccessError(msg)
 
     def _get_url(self, api_method):
         """Joins the base Slack URL and an API method to form an absolute URL.

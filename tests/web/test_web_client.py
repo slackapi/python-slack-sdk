@@ -89,7 +89,7 @@ class TestWebClient(unittest.TestCase):
     def test_xoxb_token_validation(self, mock_request):
         with self.assertRaises(err.BotUserAccessError):
             # Channels can only be created with xoxa tokens.
-            self.client.channels_create("test")
+            self.client.channels_create(name="test")
 
     def test_json_can_only_be_sent_with_post_requests(self, mock_request):
         with self.assertRaises(err.SlackRequestError):
