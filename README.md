@@ -1,8 +1,6 @@
 # Python slackclient
 The Python slackclient is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
 
-> **Note**: This client should not be used in any current SlackClient apps without regarding our Migration Guide located [here](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x).
-
 [![pypi package][pypi-image]][pypi-url]
 [![Build Status][travis-image]][travis-url]
 [![Build Status][windows-build-status]][windows-build-url]
@@ -32,8 +30,8 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
     * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
 * [Advanced Options](#advanced-options)
+* [Migrating from v1.x](#migrating-from-v1)
 * [Support](#support)
-* [Change Logs](#change-logs)
 
 ### Requirements
 ---
@@ -168,6 +166,11 @@ client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy
 ```
 
 We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
+
+### Migrating from v1
+If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating. 
+
+[Migration Guide](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)
 
 ### Support
 ---
