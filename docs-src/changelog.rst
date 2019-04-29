@@ -2,6 +2,31 @@
 Changelog
 ==============================================
 
+v2.0.0 (2019-04-29)
+-------------------
+[Original RFC](https://github.com/slackapi/python-slackclient/issues/384)
+[v2 PR](https://github.com/slackapi/python-slackclient/pull/394)
+
+**New Features**
+1. Client Decomposition: We’ve split the client into two.
+    1. WebClient: A HTTP client focused on Slack's Web API.
+    2. RTMClient: A websocket client focused on Slack's RTM API.
+2. RTMClient: Completely redesigned, this client allows you to link your application's callbacks to corresponding Slack events.
+3. WebClient: The WebClient now provides built-in methods for Slack's Web API. These methods act as helpers enabling you to focus less on how the request is constructed. Here are a few things that this provides:
+    1. Basic information about each method through the docstring.
+    2. Easy File Uploads: You can now pass in the location of a file and the library will handle opening and retrieving the file object to be transmitted.
+    3. Token type validation: This gives you better error messaging when you're attempting to consume an api method that your token doesn't have access to.
+    4. Constructs requests using Slack's preferred HTTP methods and content-types.
+
+**Breaking Changes:**
+If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.
+
+[Check out the Migration Guide here!](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)
+
+**Thank you!**
+This release would not have been possible without the support of our community. Thank you to everyone who’s contributed to this release.
+
+
 v1.3.1 (2019-02-28)
 -------------------
 
