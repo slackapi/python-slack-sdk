@@ -1,2 +1,2 @@
-slackclient>=2.0
+slackclient>=2.0.0b1
 certifi
