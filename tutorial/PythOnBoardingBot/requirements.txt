@@ -1,5 +1,2 @@
-# slackclient>=2.0.0
-# Typically you'll want to install from PyPi.
-# Below we're installing from the source since this repo lives in 'PYTHON-SLACKCLIENT'.
-../..
+slackclient>=2.0
 certifi
