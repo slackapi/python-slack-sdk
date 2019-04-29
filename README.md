@@ -1,7 +1,7 @@
 # Python slackclient
 The Python slackclient is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
 
-> **Note**: This client should not be used in any current SlackClient apps without regarding our Migration Guide located [here][migration-guide].
+> **Note**: This client should not be used in any current SlackClient apps without regarding our Migration Guide located [here](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x).
 
 [![pypi package][pypi-image]][pypi-url]
 [![Build Status][travis-image]][travis-url]
@@ -13,8 +13,6 @@ The Python slackclient is a developer kit for interfacing with the Slack Web API
 
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
-You may also review our [Development Roadmap][dev-roadmap] in the project wiki.
-
 The **Python slackclient** allows interaction with:
 
 - The Slack web api methods available at our [Api Docs site][api-methods]
@@ -23,8 +21,6 @@ The **Python slackclient** allows interaction with:
 If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
 
 Details on the Tokens and Authentication can be found in our [Auth Guide][auth-guide].
-
-</br>
 
 ## Table of contents
 
@@ -39,11 +35,9 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
 * [Support](#support)
 * [Change Logs](#change-logs)
 
-</br>
-
 ### Requirements
 ---
-This Library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.3.1][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
+This Library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.x][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
 
 > **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
 
@@ -55,7 +49,6 @@ python --version
 
 python3 --version
 ```
-</br>
 
 ### Installation
 
@@ -72,16 +65,12 @@ If you require Python 2 support, you can use the following to install the previo
 pip install slackclient==1.3.1
 ```
 
-</br>
-
 ### Build an app in 10 minutes
 ---
 
-> _Link to the "Build an app in 10 minutes" guide_
+[Getting started tutorial.](/tutorial)
 
-_For more examples and usage, please refer to the [Slack API Documentation site][api-docs]._
-
-</br>
+We've created this tutorial to build a basic Slack app quickly. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
 
 ### Basic Usage of the Web Client
 ---
@@ -125,8 +114,6 @@ We've changed the process for uploading files to Slack to be much easier and str
     assert response["ok"]
 ```
 
-</br>
-
 ### Basic Usage of the RTM Client
 ---
 
@@ -168,11 +155,9 @@ In our example below, we watch for a [message event][message-event] that contain
     rtm_client.start()
 ```
 
-</br>
-
 ### Advanced Options
 
-The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their inbuilt SSL and Proxy support. You can pass it directly into the call while constructing the Slack Client for both the RTM and the Web client.
+The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) support. You can pass these options directly into both the RTM and the Web client.
 
 ```python
 import os
@@ -183,7 +168,6 @@ client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy
 ```
 
 We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
-</br>
 
 ### Support
 ---
@@ -193,26 +177,6 @@ If you get stuck, we’re here to help. The following are the best ways to get a
 Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
 Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
-</br>
-
-### Change Logs
----
-
-<details>
-  <summary><strong>Release History</strong> (click to expand)</summary>
-
-<!-- rel -->
-
-* 2.0.0
-    * To be added
-* 1.3.1
-    * To be added
-<!-- relstop -->
-
-
-</details>
-
-</br>
 
 <!-- Markdown links -->
 [pypi-image]: https://badge.fury.io/py/slackclient.svg
