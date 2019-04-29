@@ -65,9 +65,12 @@ If you require Python 2 support, you can use the following to install the previo
 pip install slackclient==1.3.1
 ```
 
-### [Getting started tutorial](/tutorial)
+### Getting started tutorial
 ---
+
 We've created this [tutorial](/tutorial) to build a basic Slack app in less than 10 minutes. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
+
+**[Read the tutorial to get started!](/tutorial)**
 
 ### Basic Usage of the Web Client
 ---
