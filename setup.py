@@ -122,7 +122,9 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
-    packages=find_packages(exclude=["docs", "docs-src", "tests", "tests.*"]),
+    packages=find_packages(
+        exclude=["docs", "docs-src", "tests", "tests.*", "tutorial"]
+    ),
     install_requires=["aiohttp>3.5.2", "aiodns>1"],
     setup_requires=["pytest-runner"],
     test_suite="tests",

@@ -53,7 +53,9 @@ class TestRTMClientFunctional(unittest.TestCase):
         asyncio.set_event_loop(self.loop)
         task = asyncio.ensure_future(self.mock_server(), loop=self.loop)
         self.loop.run_until_complete(asyncio.wait_for(task, 0.1))
-        self.client = slack.RTMClient(loop=self.loop, auto_reconnect=False)
+        self.client = slack.RTMClient(
+            token="xoxa-1234", loop=self.loop, auto_reconnect=False
+        )
 
     def tearDown(self):
         self.loop.run_until_complete(self.site.stop())
@@ -72,7 +74,7 @@ class TestRTMClientFunctional(unittest.TestCase):
                 self.assertEqual(rtm_client._connection_attempts, 2)
                 rtm_client.stop()
 
-        client = slack.RTMClient(auto_reconnect=True)
+        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True)
         client.start()
 
     def test_client_auto_reconnects_if_an_error_is_thrown(self, mock_rtm_response):
@@ -86,7 +88,7 @@ class TestRTMClientFunctional(unittest.TestCase):
                 self.assertEqual(rtm_client._connection_attempts, 2)
                 rtm_client.stop()
 
-        client = slack.RTMClient(auto_reconnect=True)
+        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True)
         client.start()
 
     def test_open_event_receives_expected_arguments(self, mock_rtm_response):
@@ -150,7 +152,7 @@ class TestRTMClientFunctional(unittest.TestCase):
                 "channel": "C024BE91L",
                 "text": "Hello world",
             }
-            rtm_client.send_over_websocket(message)
+            rtm_client.send_over_websocket(payload=message)
 
         @slack.RTMClient.run_on(event="message")
         def check_message(**payload):

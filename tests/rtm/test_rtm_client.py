@@ -11,7 +11,7 @@ from tests.helpers import mock_rtm_response
 
 class TestRTMClient(unittest.TestCase):
     def setUp(self):
-        self.client = slack.RTMClient(auto_reconnect=False)
+        self.client = slack.RTMClient(token="xoxp-1234", auto_reconnect=False)
 
     def tearDown(self):
         slack.RTMClient._callbacks = collections.defaultdict(list)
@@ -65,7 +65,7 @@ class TestRTMClient(unittest.TestCase):
 
     def test_send_over_websocket_raises_when_not_connected(self):
         with self.assertRaises(e.SlackClientError) as context:
-            self.client.send_over_websocket({})
+            self.client.send_over_websocket(payload={})
 
         expected_error = "Websocket connection is closed."
         error = str(context.exception)
@@ -82,7 +82,7 @@ class TestRTMClient(unittest.TestCase):
         }
 
         with self.assertRaises(e.SlackApiError) as context:
-            slack.RTMClient(auto_reconnect=False).start()
+            slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
         expected_error = "Unable to retreive RTM URL from Slack"
         self.assertIn(expected_error, str(context.exception))

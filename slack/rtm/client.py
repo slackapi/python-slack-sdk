@@ -10,6 +10,8 @@ import functools
 import inspect
 import signal
 import concurrent.futures
+from typing import Optional, Callable
+from ssl import SSLContext
 
 # ThirdParty Imports
 import asyncio
@@ -30,18 +32,28 @@ class RTMClient(object):
 
     Attributes:
         token (str): A string specifying an xoxp or xoxb token.
+        run_async (bool): A boolean specifying if the client should
+            be run in async mode. Default is False.
+        auto_reconnect (bool): When true the client will automatically
+            reconnect when (not manually) disconnected. Default is True.
+        ssl (SSLContext): To use SSL support, pass an SSLContext object here.
+            Default is None.
+        proxy (str): To use proxy support, pass the string of the proxy server.
+            e.g. "http://proxy.com"
+            Authentication credentials can be passed in proxy URL.
+            e.g. "http://user:pass@some.proxy.com"
+            Default is None.
+        timeout (int): The amount of seconds the session should wait before timing out.
+            Default is 30.
+        base_url (str): The base url for all HTTP requests.
+            Note: This is only used in the WebClient.
+            Default is "https://www.slack.com/api/".
         connect_method (str): An string specifying if the client
             will connect with `rtm.connect` or `rtm.start`.
             Default is `rtm.connect`.
-        auto_reconnect (bool): When true the client will automatically
-            reconnect when (not manually) disconnected. Default is True.
         ping_interval (int): automatically send "ping" command every
             specified period of seconds. If set to 0, do not send automatically.
             Default is 30.
-        ssl (SSLContext): The SSLContext object to be used.
-        proxy (str): If you need to use a proxy, you can pass a dict
-            of proxy configs. e.g. "https://user:pass@127.0.0.1:8080"
-            Default is None.
         loop (AbstractEventLoop): An event loop provided by asyncio.
             If None is specified we attempt to use the current loop
             with `get_event_loop`. Default is None.
@@ -50,6 +62,7 @@ class RTMClient(object):
         ping: Sends a ping message over the websocket to Slack.
         typing: Sends a typing indicator to the specified channel.
         on: Stores and links callbacks to websocket and Slack events.
+        run_on: Decorator that stores and links callbacks to websocket and Slack events.
         start: Starts an RTM Session with Slack.
         stop: Closes the websocket connection and ensures it won't reconnect.
 
@@ -93,62 +106,57 @@ class RTMClient(object):
 
     def __init__(
         self,
-        token=None,
-        base_url=WebClient.BASE_URL,
-        connect_method=None,
-        auto_reconnect=True,
-        ping_interval=30,
-        ssl=None,
-        proxy=None,
-        loop=None,
-        timeout=30,
-        run_async=False,
+        *,
+        token: str,
+        run_async: Optional[bool] = False,
+        auto_reconnect: Optional[bool] = True,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
+        timeout: Optional[int] = 30,
+        base_url: Optional[str] = WebClient.BASE_URL,
+        connect_method: Optional[str] = None,
+        ping_interval: Optional[int] = 30,
+        loop: Optional[asyncio.AbstractEventLoop] = None,
     ):
         self.token = token
-        self.base_url = base_url
-        self.connect_method = connect_method
+        self.run_async = run_async
         self.auto_reconnect = auto_reconnect
-        self.ping_interval = ping_interval
         self.ssl = ssl
         self.proxy = proxy
-        self.run_async = run_async
         self.timeout = timeout
+        self.base_url = base_url
+        self.connect_method = connect_method
+        self.ping_interval = ping_interval
         self._event_loop = loop or asyncio.get_event_loop()
-        self._web_client = WebClient(
-            token=self.token,
-            base_url=self.base_url,
-            ssl=self.ssl,
-            proxy=self.proxy,
-            run_async=True,
-            loop=self._event_loop,
-        )
+        self._web_client = None
         self._websocket = None
+        self._session = None
         self._logger = logging.getLogger(__name__)
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
 
     @staticmethod
-    def run_on(event):
+    def run_on(*, event: str):
         """A decorator to store and link a callback to an event."""
 
         def decorator(callback):
             @functools.wraps(callback)
             def decorator_wrapper():
-                RTMClient.on(event, callback)
+                RTMClient.on(event=event, callback=callback)
 
             return decorator_wrapper()
 
         return decorator
 
     @classmethod
-    def on(cls, event, callback):
+    def on(cls, *, event: str, callback: Callable):
         """Stores and links the callback(s) to the event.
 
         Args:
             event (str): A string that specifies a Slack or websocket event.
                 e.g. 'channel_joined' or 'open'
-            callback (obj): Any object or a list of objects that can be called.
+            callback (Callable): Any object or a list of objects that can be called.
                 e.g. <function say_hello at 0x101234567> or
                 [<function say_hello at 0x10123>,<function say_bye at 0x10456>]
 
@@ -165,7 +173,7 @@ class RTMClient(object):
             cls._validate_callback(callback)
             cls._callbacks[event].append(callback)
 
-    def start(self):
+    def start(self) -> asyncio.Future:
         """Starts an RTM Session with Slack.
 
         Makes an authenticated call to Slack's RTM API to retrieve
@@ -188,7 +196,6 @@ class RTMClient(object):
 
         future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
-        # Test if/why this event_loop check is necessary.
         if self.run_async or self._event_loop.is_running():
             return future
 
@@ -200,7 +207,7 @@ class RTMClient(object):
         self._stopped = True
         self._close_websocket()
 
-    def send_over_websocket(self, payload):
+    def send_over_websocket(self, *, payload: dict):
         """Sends a message to Slack over the WebSocket connection.
 
         Note:
@@ -246,7 +253,7 @@ class RTMClient(object):
         payload = {"id": self._next_msg_id(), "type": "ping"}
         self.send_over_websocket(payload=payload)
 
-    def typing(self, channel):
+    def typing(self, *, channel: str):
         """Sends a typing indicator to the specified channel.
 
         This indicates that this app is currently
@@ -317,8 +324,12 @@ class RTMClient(object):
         while not self._stopped:
             try:
                 self._connection_attempts += 1
-                url, data = await self._retreive_websocket_info()
-                async with aiohttp.ClientSession() as session:
+                async with aiohttp.ClientSession(
+                    loop=self._event_loop,
+                    timeout=aiohttp.ClientTimeout(total=self.timeout),
+                ) as session:
+                    self._session = session
+                    url, data = await self._retreive_websocket_info()
                     async with session.ws_connect(
                         url,
                         heartbeat=self.ping_interval,
@@ -455,6 +466,16 @@ class RTMClient(object):
         Raises:
             SlackApiError: Unable to retreive RTM URL from Slack.
         """
+        if self._web_client is None:
+            self._web_client = WebClient(
+                token=self.token,
+                base_url=self.base_url,
+                ssl=self.ssl,
+                proxy=self.proxy,
+                run_async=True,
+                loop=self._event_loop,
+                session=self._session,
+            )
         self._logger.debug("Retrieving websocket info.")
         if self.connect_method in ["rtm.start", "rtm_start"]:
             resp = await self._web_client.rtm_start()

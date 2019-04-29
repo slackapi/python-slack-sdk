@@ -55,6 +55,7 @@ class BaseClient:
         ssl=None,
         proxy=None,
         run_async=False,
+        session=None,
     ):
         self.token = token
         self.base_url = base_url
@@ -62,15 +63,9 @@ class BaseClient:
         self.ssl = ssl
         self.proxy = proxy
         self.run_async = run_async
+        self.session = session
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
-        self._session = None
-
-    def __del__(self):
-        # TODO: Identify a better way to close a session.
-        # https://github.com/aio-libs/aiohttp/issues/2800
-        if self._session and self._session._connector:
-            self._session._connector._close()
 
     def _set_event_loop(self):
         if self.run_async:
@@ -190,6 +185,8 @@ class BaseClient:
                     'channel': '#random'
                 }
             }
+        Returns:
+            The response parsed into a SlackResponse object.
         """
         res = await self._request(
             http_verb=http_verb, api_url=api_url, req_args=req_args
@@ -203,14 +200,28 @@ class BaseClient:
         return SlackResponse(**{**data, **res}).validate()
 
     async def _request(self, *, http_verb, api_url, req_args):
-        if self._session is None:
-            self._session = aiohttp.ClientSession(loop=self._event_loop)
-        async with self._session.request(http_verb, api_url, **req_args) as res:
-            return {
-                "data": await res.json(),
-                "headers": res.headers,
-                "status_code": res.status,
-            }
+        """Submit the HTTP request with the running session or a new session.
+        Returns:
+            A dictionary of the response data.
+        """
+        if self.session and not self.session.closed:
+            async with self.session.request(http_verb, api_url, **req_args) as res:
+                self._logger.debug("Ran the request with existing session.")
+                return {
+                    "data": await res.json(),
+                    "headers": res.headers,
+                    "status_code": res.status,
+                }
+        async with aiohttp.ClientSession(
+            loop=self._event_loop, timeout=aiohttp.ClientTimeout(total=self.timeout)
+        ) as session:
+            async with session.request(http_verb, api_url, **req_args) as res:
+                self._logger.debug("Ran the request with a new session.")
+                return {
+                    "data": await res.json(),
+                    "headers": res.headers,
+                    "status_code": res.status,
+                }
 
     @staticmethod
     def _get_user_agent():
