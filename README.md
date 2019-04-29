@@ -26,7 +26,7 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
 
 * [Requirements](#requirements)
 * [Installation](#installation)
-* [Build your first app](#build-an-app-in-10-minutes)
+* [Getting started tutorial](#getting-started-tutorial)
 * [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
     * [Sending a message to Slack](#sending-a-message-to-slack)
     * [Uploading files to Slack](#uploading-files-to-slack)
@@ -65,12 +65,9 @@ If you require Python 2 support, you can use the following to install the previo
 pip install slackclient==1.3.1
 ```
 
-### Build an app in 10 minutes
+### [Getting started tutorial](/tutorial)
 ---
-
-[Getting started tutorial.](/tutorial)
-
-We've created this tutorial to build a basic Slack app quickly. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
+We've created this [tutorial](/tutorial) to build a basic Slack app in less than 10 minutes. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
 
 ### Basic Usage of the Web Client
 ---
@@ -191,7 +188,7 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
 [contact-url]: https://slack.com/support
 [api-docs]: https://api.slack.com
-[slackclientv1]: https://github.com/slackapi/python-slackclient/
+[slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
 [api-methods]: https://api.slack.com/methods
 [rtm-docs]: https://api.slack.com/rtm
 [events-docs]: https://api.slack.com/events-api
