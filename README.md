@@ -168,9 +168,10 @@ client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy
 We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
 
 ### Migrating from v1
+---
 If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating. 
 
-[Migration Guide](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)
+**[Check out the Migration Guide here!](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)**
 
 ### Support
 ---
