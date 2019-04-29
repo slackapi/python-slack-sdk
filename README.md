@@ -35,7 +35,7 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
 
 ### Requirements
 ---
-**This version of the library is currently beta! If you're looking the last release please see [SlackClient - v1.x][slackclientv1]**
+**This version of the library is currently in 'beta'! If you're looking the last release please see [SlackClient - v1.x][slackclientv1]**
 
 This library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.x][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
 
