@@ -56,7 +56,7 @@ We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
 
 ```bash
-pip3 install slackclient
+pip3 install slackclient==2.0.0b1
 ```
 
 If you require Python 2 support, you can use the following to install the previous version of our Developer Kit
