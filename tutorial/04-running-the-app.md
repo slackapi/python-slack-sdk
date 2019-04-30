@@ -17,6 +17,7 @@ $ python3 app.py
 ```
 
 ### 🎉 That's it. Congradulations! You've just built a Slack app. 🤖
+To demo the app, simply send the bot a message that says "start".
 ![Onboarding](https://user-images.githubusercontent.com/3329665/56870674-ab02b300-69c7-11e9-9101-eb823235f3c2.gif)
 ---
 
