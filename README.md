@@ -35,8 +35,6 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
 
 ### Requirements
 ---
-**This version of the library is currently in beta! If you're looking the last release please see [SlackClient - v1.x][slackclientv1]**
-
 This library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.x][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
 
 > **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
@@ -56,13 +54,7 @@ We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
 
 ```bash
-pip3 install slackclient==2.0.0b1
-```
-
-If you require Python 2 support, you can use the following to install the previous version of our Developer Kit
-
-```bash
-pip install slackclient==1.3.1
+pip3 install slackclient==2.0.0
 ```
 
 ### Getting started tutorial
