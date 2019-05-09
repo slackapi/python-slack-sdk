@@ -1,0 +1,34 @@
+/* Updates body font */
+body {
+  font-family: Slack-Lato,appleLogo,sans-serif;
+}
+
+/* Replaces old sidebar styled links */
+.sidebar_menu h5 {
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+/* Aligns footer navigation to the left of the sidebar */
+.footer_nav {
+  margin: 0 !important;
+}
+
+/* Styles the signature all nice and pretty <3 */
+#footer_signature {
+  color:#e01e5a;
+  font-size:.9rem;
+  margin-top: 10px;
+}
+
+/* Fixes link hover state */
+a:hover {
+  text-decoration: underline;
+}
+
+/* Makes footer consistent */
+footer {
+  background-color: transparent;
+  border: 0;
+}
