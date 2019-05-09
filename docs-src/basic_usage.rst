@@ -3,6 +3,9 @@
 ==============================================
 Basic Usage
 ==============================================
+Slack's APIs allow anyone to build full featured integrations that extend and expand the capabilites of your Slack workspace.
+
+
 The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations
 we provide out of the box.
 
@@ -38,7 +41,7 @@ There are some unique options specific to sending IMs, so be sure to read the **
 section of the `chat.postMessage <https://api.slack.com/methods/chat.postMessage#channels>`_
 page for a full list of formatting and authorship options.
 
-Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same 
+Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
 as sending a regular message, but with an additional ``user`` parameter.
 
 .. code-block:: python
@@ -61,7 +64,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 
 Customizing a message's layout
 -----------------------
-The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. 
+The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message.
 Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.
 
 To send a message to a channel, use the channel's ID. For IMs, use the user's ID.
