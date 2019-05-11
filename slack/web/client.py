@@ -585,7 +585,7 @@ class WebClient(BaseClient):
         Args:
             id (str): The file id. e.g. 'F1234467890'
         """
-        kwargs.update({"id": id})
+        kwargs.update({"file": id})
         return self.api_call("files.delete", json=kwargs)
 
     def files_info(self, *, id: str, **kwargs) -> SlackResponse:
@@ -594,7 +594,7 @@ class WebClient(BaseClient):
         Args:
             id (str): The file id. e.g. 'F1234467890'
         """
-        kwargs.update({"id": id})
+        kwargs.update({"file": id})
         return self.api_call("files.info", http_verb="GET", params=kwargs)
 
     def files_list(self, **kwargs) -> SlackResponse:
@@ -609,7 +609,7 @@ class WebClient(BaseClient):
             id (str): The file id. e.g. 'F1234467890'
         """
         self._validate_xoxp_token()
-        kwargs.update({"id": id})
+        kwargs.update({"file": id})
         return self.api_call("files.revokePublicURL", json=kwargs)
 
     def files_sharedPublicURL(self, *, id: str, **kwargs) -> SlackResponse:
@@ -619,7 +619,7 @@ class WebClient(BaseClient):
             id (str): The file id. e.g. 'F1234467890'
         """
         self._validate_xoxp_token()
-        kwargs.update({"id": id})
+        kwargs.update({"file": id})
         return self.api_call("files.sharedPublicURL", json=kwargs)
 
     def files_upload(
