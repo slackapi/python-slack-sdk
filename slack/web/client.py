@@ -239,6 +239,16 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "ts": ts})
         return self.api_call("chat.delete", json=kwargs)
 
+    def chat_deleteScheduledMessage(self, *, channel: str, scheduled_message_id: str, **kwargs) -> SlackResponse:
+        """Deletes a scheduled message.
+
+        Args:
+            channel (str): The channel the scheduled_message is posting to. e.g. 'C1234567890'
+            scheduled_message_id (str): scheduled_message_id returned from call to chat.scheduleMessage e.g. 'Q1234ABCD'
+        """
+        kwargs.update({"channel": channel, "scheduled_message_id": scheduled_message_id})
+        return self.api_call("chat.deleteScheduledMessage", json=kwargs)
+
     def chat_getPermalink(
         self, *, channel: str, message_ts: str, **kwargs
     ) -> SlackResponse:
@@ -290,6 +300,17 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel})
         return self.api_call("chat.postMessage", json=kwargs)
 
+    def chat_ScheduledMessage(self, *, channel: str, post_at: str, text: str, **kwargs) -> SlackResponse:
+        """Schedules a message.
+
+        Args:
+            channel (str): The channel the scheduled_message is posting to. e.g. 'C1234567890'
+            post_at (str): Unix EPOCH timestamp of time in future to send the message. e.g. '299876400'
+            text (str): The message you'd like to send. e.g. 'Hello world'
+        """
+        kwargs.update({"channel": channel, "post_at": post_at, "text": text})
+        return self.api_call("chat.ScheduledMessage", json=kwargs)
+
     def chat_unfurl(
         self, *, channel: str, ts: str, unfurls: dict, **kwargs
     ) -> SlackResponse:
@@ -319,6 +340,10 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel": channel, "ts": ts})
         return self.api_call("chat.update", json=kwargs)
+
+    def chat_ScheduledMessages_list(self, **kwargs) -> SlackResponse:
+        """Lists all scheduled messages."""
+        return self.api_call("chat.ScheduledMessages.list", json=kwargs)
 
     def conversations_archive(self, *, channel: str, **kwargs) -> SlackResponse:
         """Archives a conversation.
@@ -544,17 +569,6 @@ class WebClient(BaseClient):
         """Lists custom emoji for a team."""
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
-    def files_comments_add(self, *, comment: str, file: str, **kwargs) -> SlackResponse:
-        """Add a comment to an existing file.
-
-        Args:
-            comment (str): The body of the comment.
-                e.g. 'Everyone should take a moment to read this file.'
-            file (str): The file id. e.g. 'F1234467890'
-        """
-        kwargs.update({"comment": comment, "file": file})
-        return self.api_call("files.comments.add", json=kwargs)
-
     def files_comments_delete(self, *, file: str, id: str, **kwargs) -> SlackResponse:
         """Deletes an existing comment on a file.
 
@@ -565,21 +579,7 @@ class WebClient(BaseClient):
         kwargs.update({"file": file, "id": id})
         return self.api_call("files.comments.delete", json=kwargs)
 
-    def files_comments_edit(
-        self, *, comment: str, file: str, id: str, **kwargs
-    ) -> SlackResponse:
-        """Edit an existing file comment.
-
-        Args:
-            comment (str): The body of the comment.
-                e.g. 'Everyone should take a moment to read this file.'
-            file (str): The file id. e.g. 'F1234467890'
-            id (str): The file comment id. e.g. 'Fc1234567890'
-        """
-        kwargs.update({"comment": comment, "file": file, "id": id})
-        return self.api_call("files.comments.edit", json=kwargs)
-
-    def files_delete(self, *, file: str, **kwargs) -> SlackResponse:
+    def files_delete(self, *, id: str, **kwargs) -> SlackResponse:
         """Deletes a file.
 
         Args:
