@@ -186,7 +186,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "name": name})
         return self.api_call("channels.rename", json=kwargs)
 
-    def channels_replies(self, *, channel: str, thread_ts: str, **kwargs) -> SlackResponse:
+    def channels_replies(
+        self, *, channel: str, thread_ts: str, **kwargs
+    ) -> SlackResponse:
         """Retrieve a thread of messages posted to a channel
 
         Args:
@@ -239,14 +241,18 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "ts": ts})
         return self.api_call("chat.delete", json=kwargs)
 
-    def chat_deleteScheduledMessage(self, *, channel: str, scheduled_message_id: str, **kwargs) -> SlackResponse:
+    def chat_deleteScheduledMessage(
+        self, *, channel: str, scheduled_message_id: str, **kwargs
+    ) -> SlackResponse:
         """Deletes a scheduled message.
 
         Args:
             channel (str): The channel the scheduled_message is posting to. e.g. 'C1234567890'
             scheduled_message_id (str): scheduled_message_id returned from call to chat.scheduleMessage e.g. 'Q1234ABCD'
         """
-        kwargs.update({"channel": channel, "scheduled_message_id": scheduled_message_id})
+        kwargs.update(
+            {"channel": channel, "scheduled_message_id": scheduled_message_id}
+        )
         return self.api_call("chat.deleteScheduledMessage", json=kwargs)
 
     def chat_getPermalink(
@@ -300,7 +306,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel})
         return self.api_call("chat.postMessage", json=kwargs)
 
-    def chat_ScheduledMessage(self, *, channel: str, post_at: str, text: str, **kwargs) -> SlackResponse:
+    def chat_ScheduledMessage(
+        self, *, channel: str, post_at: str, text: str, **kwargs
+    ) -> SlackResponse:
         """Schedules a message.
 
         Args:
@@ -453,7 +461,9 @@ class WebClient(BaseClient):
         """Opens or resumes a direct message or multi-person direct message."""
         return self.api_call("conversations.open", json=kwargs)
 
-    def conversations_rename(self, *, channel: str, name: str, **kwargs) -> SlackResponse:
+    def conversations_rename(
+        self, *, channel: str, name: str, **kwargs
+    ) -> SlackResponse:
         """Renames a conversation.
 
         Args:
@@ -464,7 +474,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "name": name})
         return self.api_call("conversations.rename", json=kwargs)
 
-    def conversations_replies(self, *, channel: str, ts: str, **kwargs) -> SlackResponse:
+    def conversations_replies(
+        self, *, channel: str, ts: str, **kwargs
+    ) -> SlackResponse:
         """Retrieve a thread of messages posted to a conversation
 
         Args:
@@ -579,7 +591,7 @@ class WebClient(BaseClient):
         kwargs.update({"file": file, "id": id})
         return self.api_call("files.comments.delete", json=kwargs)
 
-    def files_delete(self, *, id: str, **kwargs) -> SlackResponse:
+    def files_delete(self, *, file: str, **kwargs) -> SlackResponse:
         """Deletes a file.
 
         Args:
@@ -763,7 +775,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "name": name})
         return self.api_call("groups.rename", json=kwargs)
 
-    def groups_replies(self, *, channel: str, thread_ts: str, **kwargs) -> SlackResponse:
+    def groups_replies(
+        self, *, channel: str, thread_ts: str, **kwargs
+    ) -> SlackResponse:
         """Retrieve a thread of messages posted to a private channel
 
         Args:
@@ -775,7 +789,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("groups.replies", http_verb="GET", params=kwargs)
 
-    def groups_setPurpose(self, *, channel: str, purpose: str, **kwargs) -> SlackResponse:
+    def groups_setPurpose(
+        self, *, channel: str, purpose: str, **kwargs
+    ) -> SlackResponse:
         """Sets the purpose for a private channel.
 
         Args:
