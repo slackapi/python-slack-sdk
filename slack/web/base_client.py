@@ -219,10 +219,10 @@ class BaseClient:
 
         Returns:
             The user agent string.
-            e.g. 'Python/3.6.7 slack/2.0.0 Darwin/17.7.0'
+            e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
         """
         # __name__ returns all classes, we only want the client
-        client = "{0}/{1}".format(__name__.split(".")[0], ver.__version__)
+        client = "{0}/{1}".format("slackclient", ver.__version__)
         python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(
             v=sys.version_info
         )
