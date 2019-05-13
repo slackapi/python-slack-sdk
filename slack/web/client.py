@@ -579,22 +579,22 @@ class WebClient(BaseClient):
         kwargs.update({"comment": comment, "file": file, "id": id})
         return self.api_call("files.comments.edit", json=kwargs)
 
-    def files_delete(self, *, file_id: str, **kwargs) -> SlackResponse:
+    def files_delete(self, *, file: str, **kwargs) -> SlackResponse:
         """Deletes a file.
 
         Args:
-            file_id (str): The file id. e.g. 'F1234467890'
+            file (str): The file id. e.g. 'F1234467890'
         """
-        kwargs.update({"file": file_id})
+        kwargs.update({"file": file})
         return self.api_call("files.delete", json=kwargs)
 
-    def files_info(self, *, file_id: str, **kwargs) -> SlackResponse:
+    def files_info(self, *, file: str, **kwargs) -> SlackResponse:
         """Gets information about a team file.
 
         Args:
-            file_id (str): The file id. e.g. 'F1234467890'
+            file (str): The file id. e.g. 'F1234467890'
         """
-        kwargs.update({"file": file_id})
+        kwargs.update({"file": file})
         return self.api_call("files.info", http_verb="GET", params=kwargs)
 
     def files_list(self, **kwargs) -> SlackResponse:
@@ -602,24 +602,24 @@ class WebClient(BaseClient):
         self._validate_xoxp_token()
         return self.api_call("files.list", http_verb="GET", params=kwargs)
 
-    def files_revokePublicURL(self, *, file_id: str, **kwargs) -> SlackResponse:
+    def files_revokePublicURL(self, *, file: str, **kwargs) -> SlackResponse:
         """Revokes public/external sharing access for a file
 
         Args:
-            file_id (str): The file id. e.g. 'F1234467890'
+            file (str): The file id. e.g. 'F1234467890'
         """
         self._validate_xoxp_token()
-        kwargs.update({"file": file_id})
+        kwargs.update({"file": file})
         return self.api_call("files.revokePublicURL", json=kwargs)
 
-    def files_sharedPublicURL(self, *, file_id: str, **kwargs) -> SlackResponse:
+    def files_sharedPublicURL(self, *, file: str, **kwargs) -> SlackResponse:
         """Enables a file for public/external sharing.
 
         Args:
-            file_id (str): The file id. e.g. 'F1234467890'
+            file (str): The file id. e.g. 'F1234467890'
         """
         self._validate_xoxp_token()
-        kwargs.update({"file": file_id})
+        kwargs.update({"file": file})
         return self.api_call("files.sharedPublicURL", json=kwargs)
 
     def files_upload(
