@@ -310,7 +310,7 @@ elif response["ok"] is False and response["headers"]["Retry-After"]:
 ```
 See the documentation on [Rate Limiting][rate-limiting] for more info.
 
-[auth]: basic_usage.md
+[auth]: auth.md
 [chat.postMessage]: https://api.slack.com/methods/chat.postMessage
 [chat.postEphemeral]: https://api.slack.com/methods/chat.postEphemeral
 [blockkit-builder]: https://api.slack.com/tools/block-kit-builder
