@@ -2,6 +2,7 @@
 import unittest
 from unittest import mock
 import asyncio
+import re
 
 
 # Internal Imports
@@ -18,10 +19,33 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
+    pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
+    pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
+
     def test_api_calls_return_a_response_when_run_in_sync_mode(self, mock_request):
         resp = self.client.api_test()
         self.assertFalse(asyncio.isfuture(resp))
         self.assertTrue(resp["ok"])
+
+    def test_api_calls_include_user_agent(self, mock_request):
+        self.client.api_test()
+        mock_call_kwargs = mock_request.call_args[1]
+        self.assertIn("req_args", mock_call_kwargs)
+        mock_call_req_args = mock_call_kwargs["req_args"]
+        self.assertIn("headers", mock_call_req_args)
+        mock_call_headers = mock_call_req_args["headers"]
+        self.assertIn("User-Agent", mock_call_headers)
+        mock_call_user_agent = mock_call_headers["User-Agent"]
+        self.assertRegex(
+            mock_call_user_agent,
+            self.pattern_for_package_identifier,
+            "User Agent contains slackclient and version",
+        )
+        self.assertRegex(
+            mock_call_user_agent,
+            self.pattern_for_language,
+            "User Agent contains Python and version",
+        )
 
     @async_test
     async def test_api_calls_return_a_future_when_run_in_async_mode(self, mock_request):
