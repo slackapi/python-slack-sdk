@@ -143,7 +143,7 @@ In our example below, we watch for a [message event][message-event] that contain
             )
 
     slack_token = os.environ["SLACK_API_TOKEN"]
-    rtm_client = slack.RTMClient(slack_token)
+    rtm_client = slack.RTMClient(token=slack_token)
     rtm_client.start()
 ```
 
