@@ -130,14 +130,14 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "user": user})
         return self.api_call("channels.invite", json=kwargs)
 
-    def channels_join(self, *, channel: str, **kwargs) -> SlackResponse:
+    def channels_join(self, *, name: str, **kwargs) -> SlackResponse:
         """Joins a channel, creating it if needed.
 
         Args:
             name (str): The channel name. e.g. '#general'
         """
         self._validate_xoxp_token()
-        kwargs.update({"channel": channel})
+        kwargs.update({"name": name})
         return self.api_call("channels.join", json=kwargs)
 
     def channels_kick(self, *, channel: str, user: str, **kwargs) -> SlackResponse:
