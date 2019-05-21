@@ -1,63 +1,119 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta
+      http-equiv="Content-Type"
+      content="text/html; charset=utf-8"
+    />
+    
+    <title>About &mdash; Slack Developer Kit for Python</title>
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  
-  <title>About &mdash; Slack Developer Kit for Python</title>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          'gtm.start': new Date().getTime(),
+          event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+    </script>
+    <!-- End Google Tag Manager -->
+    
+    <link
+      href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="./_static/default.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="./_static/pygments.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="./_static/docs.css"
+      type="text/css"
+    />
+    <link
+      id="favicon"
+      rel="shortcut icon"
+      href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+      type="image/png"
+    />
+    <link
+      rel="top"
+      title="Slack Developer Kit for Python 1.0.1 documentation"
+      href="index.html"
+    />
+  </head>
 
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');</script>
-  <!-- End Google Tag Manager -->
-  
-  <link href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css" rel="stylesheet" type="text/css">
-  <link href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="./_static/default.css" type="text/css" />
-  <link rel="stylesheet" href="./_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="./_static/docs.css" type="text/css" />
-  <link id="favicon" rel="shortcut icon" href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png" type="image/png" />
-  <link rel="top" title="Slack Developer Kit for Python 1.0.1 documentation" href="index.html" />
+  <body class="api light_theme">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <header>
+      <a id="menu_toggle" class="no_transition show_on_mobile">
+        <span class="menu_icon"></span>
+        <span class="vert_divider"></span>
+      </a>
+      <a
+        href="https://api.slack.com/"
+        id="header_logo"
+        class="api hide_on_mobile"
+        style="float:left; display: inline-block;"
+      >
+        <img
+          alt="Slack API"
+          src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+          style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+        />
+      </a>
+      <span
+        style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+      >
+        <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
+      </span>
+      <div class="header_nav">
+        <a
+          href="https://github.com/SlackAPI/python-slackclient"
+          class="btn header_btn float_right"
+          data-qa="go_to_slack"
+          >Go to GitHub</a
+        >
+      </div>
+    </header>
+    
 
-
-
-</head>
-
-<body class="api light_theme">
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <header>
-    <a id="menu_toggle" class="no_transition show_on_mobile">
-      <span class="menu_icon"></span>
-      <span class="vert_divider"></span>
-    </a>
-    <a href="https://api.slack.com/" id="header_logo" class="api hide_on_mobile" style="float:left; display: inline-block;">
-      <img alt="Slack API" src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png" style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;" />
-    </a>
-    <span style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;">
-      <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
-    </span>
-    <div class="header_nav">
-      <a href="https://github.com/SlackAPI/python-slackclient" class="btn header_btn float_right" data-qa="go_to_slack">Go
-        to GitHub</a>
-    </div>
-  </header>
-  
-
-  <div id="page">
-    <div id="page_contents" class="clearfix">
-      <!-- Sidebar Content -->
-      <nav id="api_nav" class="col span_1_of_4">
-        <div id="api_sections">
-          
-          <ul class="current">
+    <div id="page">
+      <div id="page_contents" class="clearfix">
+        <!-- Sidebar Content -->
+        <nav id="api_nav" class="col span_1_of_4">
+          <div id="api_sections">
+             <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#handling-tokens-and-other-sensitive-data">Handling tokens and other sensitive data</a></li>
@@ -148,16 +204,15 @@
     <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
         Community
     </p>
-</div>
-          
-        </div>
-      </nav>
-      <!-- /Sidebar Content -->
+</div> 
+          </div>
+        </nav>
+        <!-- /Sidebar Content -->
 
-      <!-- Body Content -->
-      <div class="col span_3_of_4">
-        <div class="section-title">About</div>
-        <div class="card">
+        <!-- Body Content -->
+        <div class="col span_3_of_4">
+          <!-- <div class="section-title">About</div> -->
+          <div class="card">
   <div class="section" id="about">
 <h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="product-name">
@@ -174,25 +229,29 @@
 </div>
 
 
-          <div class="clear_both large_bottom_margin"></div>
+            <div class="clear_both large_bottom_margin"></div>
+          </div>
         </div>
+        <!-- /Body Content -->
       </div>
-      <!-- /Body Content -->
-
     </div>
-  </div>
 
-  <footer>
-    <p class="light tiny align_center">© 2019 Slack Technologies, Inc. and contributors</p>
-  </footer>
+    <footer>
+      <p class="light tiny align_center">
+        © 2019 Slack Technologies, Inc. and contributors
+      </p>
+    </footer>
 
-  <script>
-    window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
-    ga('create', 'UA-56978219-13', 'auto');
-    ga('send', 'pageview');
-  </script>
-  <script async src='https://www.google-analytics.com/analytics.js'></script>
-
-</body>
-
+    <script>
+      window.ga =
+        window.ga ||
+        function() {
+          (ga.q = ga.q || []).push(arguments);
+        };
+      ga.l = +new Date();
+      ga('create', 'UA-56978219-13', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
+  </body>
 </html>

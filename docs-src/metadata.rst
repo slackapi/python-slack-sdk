@@ -1,5 +1,7 @@
 .. Site settings
 .. |product_name| replace:: Slack Developer Kit for Python
+.. |current_version| replace:: 2.0
+.. |latest_release_date| replace:: April 29, 2019
 .. |email| replace:: opensource@slack.com
 .. |repo_name| replace:: python-slackclient
 .. |github_username| replace:: SlackAPI
@@ -16,4 +18,3 @@
 .. _Contributor License Agreement: https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform
 .. _Real Time Messaging (RTM) API: https://api.slack.com/rtm
 .. _Web API: https://api.slack.com/web
-

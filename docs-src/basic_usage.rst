@@ -3,15 +3,8 @@
 ==============================================
 Basic Usage
 ==============================================
-Slack's APIs allow anyone to build full featured integrations that extend and expand the capabilites of your Slack workspace.
 
-
-The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations
-we provide out of the box.
-
-This package is a modular wrapper designed to make Slack `Web API`_ calls simpler and easier for your
-app. Provided below are examples of how to interact with commonly used API endpoints, but this is by no means
-a complete list. Review the full list of available methods `here <https://api.slack.com/methods>`_.
+This package is a modular wrapper designed to make calls to Slack's APIs simpler and easier for your app. `Each of these API methods <https://api.slack.com/methods>`_ is fully documented on our developer site at api.slack.com
 
 See :ref:`Tokens & Authentication <handling-tokens>` for API token handling best practices.
 
@@ -63,7 +56,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 --------
 
 Customizing a message's layout
------------------------
+------------------------------
 The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message.
 Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.
 
@@ -107,7 +100,7 @@ To send a message to a channel, use the channel's ID. For IMs, use the user's ID
     ]
   )
 
-**Note:** You can use the `Block Kit Builder <https://api.slack.com/tools/block-kit-builder>`for a playground where you can prototype your message's look and feel.
+**Note:** You can use the `Block Kit Builder <https://api.slack.com/tools/block-kit-builder>`_ for a playground where you can prototype your message's look and feel.
 
 --------
 
