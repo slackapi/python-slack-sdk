@@ -69,11 +69,7 @@ This link directs the user to Slack's OAuth acceptance page, where the user will
 
   @app.route("/begin_auth", methods=["GET"])
   def pre_install():
-    return '''
-        <a href="https://slack.com/oauth/authorize?scope={0}&client_id={1}">
-            Add to Slack
-        </a>
-    '''.format(oauth_scope, client_id)
+    return f'<a href="https://slack.com/oauth/authorize?scope={ oauth_scope }&client_id={ client_id }">Add to Slack</a>'
 
 **The OAuth completion page**
 
@@ -83,20 +79,18 @@ Once the user has agreed to the permissions you've requested, Slack will redirec
 
   @app.route("/finish_auth", methods=["GET", "POST"])
   def post_install():
-
     # Retrieve the auth code from the request params
-    auth_code = request.args['code']
+      auth_code = request.args['code']
 
     # An empty string is a valid token for this request
-    sc = SlackClient("")
+      client = slack.WebClient(token="")
 
     # Request the auth tokens from Slack
-    auth_response = sc.api_call(
-      "oauth.access",
-      client_id=client_id,
-      client_secret=client_secret,
-      code=auth_code
-    )
+      response = client.oauth_access(
+          client_id=client_id,
+          client_secret=client_secret,
+          code=auth_code
+      )
 
 A successful request to ``oauth.access`` will yield a JSON payload with at least one token, a user token that begins with ``xoxp``. This ``user`` token is used to make requests on behalf of the user who installed the app.
 
@@ -104,13 +98,14 @@ If your Slack app includes a `bot user <https://api.slack.com/docs/bots>`_, the 
 
 .. code-block:: python
 
-    # Save the bot token to an environmental variable or to your data store
-    # for later use
-    os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
-    os.environ["SLACK_BOT_TOKEN"] = auth_response['bot']['bot_access_token']
 
-    # Don't forget to let the user know that auth has succeeded!
-    return "Auth complete!"
+  # Save the bot token to an environmental variable or to your data store
+  # for later use
+  os.environ["SLACK_USER_TOKEN"] = response['access_token']
+  os.environ["SLACK_BOT_TOKEN"] = response['bot']['bot_access_token']
+
+  # Don't forget to let the user know that auth has succeeded!
+  return "Auth complete!"
 
 Once your user has completed the OAuth flow, you'll be able to use the provided tokens to call any of Slack's API methods that require an access token.
 

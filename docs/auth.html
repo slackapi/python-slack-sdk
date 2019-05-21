@@ -262,39 +262,33 @@ your workspace for changes to take effect.</p>
 <p>This link directs the user to Slack’s OAuth acceptance page, where the user will review and accept or refuse the permissions your app is requesting as defined by the scope(s).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">pre_install</span><span class="p">():</span>
-  <span class="k">return</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">      &lt;a href=&quot;https://slack.com/oauth/authorize?scope={0}&amp;client_id={1}&quot;&gt;</span>
-<span class="s1">          Add to Slack</span>
-<span class="s1">      &lt;/a&gt;</span>
-<span class="s1">  &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oauth_scope</span><span class="p">,</span> <span class="n">client_id</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;&lt;a href=&quot;https://slack.com/oauth/authorize?scope={ oauth_scope }&amp;client_id={ client_id }&quot;&gt;Add to Slack&lt;/a&gt;&#39;</span>
 </pre></div>
 </div>
 <p><strong>The OAuth completion page</strong></p>
 <p>Once the user has agreed to the permissions you’ve requested, Slack will redirect the user to your auth completion page, which includes a <code class="docutils literal notranslate"><span class="pre">code</span></code> query string param. You’ll use the <code class="docutils literal notranslate"><span class="pre">code</span></code> param to call the <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> <a class="reference external" href="https://api.slack.com/methods/oauth.access">endpoint</a> that will finally grant you the token.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">post_install</span><span class="p">():</span>
-
   <span class="c1"># Retrieve the auth code from the request params</span>
-  <span class="n">auth_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>
+    <span class="n">auth_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>
 
   <span class="c1"># An empty string is a valid token for this request</span>
-  <span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
   <span class="c1"># Request the auth tokens from Slack</span>
-  <span class="n">auth_response</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-    <span class="s2">&quot;oauth.access&quot;</span><span class="p">,</span>
-    <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
-    <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
-    <span class="n">code</span><span class="o">=</span><span class="n">auth_code</span>
-  <span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">oauth_access</span><span class="p">(</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+        <span class="n">code</span><span class="o">=</span><span class="n">auth_code</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 <p>A successful request to <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> will yield a JSON payload with at least one token, a user token that begins with <code class="docutils literal notranslate"><span class="pre">xoxp</span></code>. This <code class="docutils literal notranslate"><span class="pre">user</span></code> token is used to make requests on behalf of the user who installed the app.</p>
 <p>If your Slack app includes a <a class="reference external" href="https://api.slack.com/docs/bots">bot user</a>, the JSON response will contain an additional node containing an <code class="docutils literal notranslate"><span class="pre">xoxb</span></code> token to be used for on behalf of the bot user. When you intend to act on behalf of the bot user, be sure to use this token instead of the user (<code class="docutils literal notranslate"><span class="pre">xoxp</span></code>) token.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save the bot token to an environmental variable or to your data store</span>
 <span class="c1"># for later use</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_USER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth_response</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;bot_access_token&#39;</span><span class="p">]</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_USER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;bot_access_token&#39;</span><span class="p">]</span>
 
 <span class="c1"># Don&#39;t forget to let the user know that auth has succeeded!</span>
 <span class="k">return</span> <span class="s2">&quot;Auth complete!&quot;</span>
