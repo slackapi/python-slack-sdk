@@ -116,19 +116,19 @@
              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#handling-tokens-and-other-sensitive-data">Handling tokens and other sensitive data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-apps">Single-Workspace Apps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#the-oauth-flow">The OAuth flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#keeping-tokens-safe">Keeping tokens safe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-install">Single Workspace Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#multiple-workspace-install">Multiple Workspace Install</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sending-a-message">Sending a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#customizing-a-message-s-layout">Customizing a message’s layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#replying-to-messages-and-creating-threads">Replying to messages and creating threads</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#updating-the-content-of-a-message">Updating the content of a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#formatting-with-block-kit">Formatting with Block Kit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#threading-messages">Threading Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-a-message">Updating a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-a-message">Deleting a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-or-removing-an-emoji-reaction">Adding or removing an emoji reaction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#getting-a-list-of-channels">Getting a list of channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#emoji-reactions">Emoji reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#listing-channels">Listing channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#leaving-a-channel">Leaving a channel</a></li>
@@ -215,40 +215,35 @@
           <div class="card">
   <div class="section" id="basic-usage">
 <span id="web-api-examples"></span><h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
-<p>This package is a modular wrapper designed to make calls to Slack’s APIs simpler and easier for your app. <a class="reference external" href="https://api.slack.com/methods">Each of these API methods</a> is fully documented on our developer site at api.slack.com</p>
-<p>See <a class="reference internal" href="auth.html#handling-tokens"><span class="std std-ref">Tokens &amp; Authentication</span></a> for API token handling best practices.</p>
-<hr class="docutils" />
+<p>The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations we provide out of the box.</p>
+<p>Access Slack’s API methods requires an OAuth token – see the <a class="reference external" href="auth">Tokens &amp; Authentication</a> section for more on how Slack uses OAuth tokens as well as best practices.</p>
+<p><a class="reference external" href="https://api.slack.com/methods">Each of these API methods</a> is fully documented on our developer site at api.slack.com</p>
 <div class="section" id="sending-a-message">
 <h2>Sending a message<a class="headerlink" href="#sending-a-message" title="Permalink to this headline">¶</a></h2>
-<p>The primary use of Slack is sending messages. Whether you’re sending a message
-to a user or to a channel, this method handles both.</p>
-<p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<p>One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">slack</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+<span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>There are some unique options specific to sending IMs, so be sure to read the <strong>channels</strong>
-section of the <a class="reference external" href="https://api.slack.com/methods/chat.postMessage#channels">chat.postMessage</a>
-page for a full list of formatting and authorship options.</p>
 <p>Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
 as sending a regular message, but with an additional <code class="docutils literal notranslate"><span class="pre">user</span></code> parameter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">slack</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.postEphemeral&quot;</span><span class="p">,</span>
+<span class="n">client</span><span class="o">.</span><span class="n">chat_postEphemeral</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello silently from your app! :tada:&quot;</span><span class="p">,</span>
   <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -256,13 +251,12 @@ as sending a regular message, but with an additional <code class="docutils liter
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="customizing-a-message-s-layout">
-<h2>Customizing a message’s layout<a class="headerlink" href="#customizing-a-message-s-layout" title="Permalink to this headline">¶</a></h2>
-<p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message.
-Blocks for Web API methods are all specified in a single object literal, so just add additional keys for any optional argument.</p>
+<div class="section" id="formatting-with-block-kit">
+<h2>Formatting with Block Kit<a class="headerlink" href="#formatting-with-block-kit" title="Permalink to this headline">¶</a></h2>
+<p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/docs/block-kit">blocks</a>.</p>
+<p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.</p>
 <p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
     <span class="p">{</span>
@@ -298,42 +292,24 @@ Blocks for Web API methods are all specified in a single object literal, so just
 <span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> You can use the <a class="reference external" href="https://api.slack.com/tools/block-kit-builder">Block Kit Builder</a> for a playground where you can prototype your message’s look and feel.</p>
+<p><strong>Note:</strong> You can use the <a class="reference external" href="https://api.slack.com/tools/block-kit-builder">Block Kit Builder</a> to prototype your message’s look and feel.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="replying-to-messages-and-creating-threads">
-<h2>Replying to messages and creating threads<a class="headerlink" href="#replying-to-messages-and-creating-threads" title="Permalink to this headline">¶</a></h2>
-<p>Threaded messages are just like regular messages, except thread replies are grouped together to provide greater context
-to the user. You can reply to a thread or start a new threaded conversation by simply passing the original message’s <code class="docutils literal notranslate"><span class="pre">ts</span></code>
-ID in the <code class="docutils literal notranslate"><span class="pre">thread_ts</span></code> attribute when posting a message. If you’re replying to a threaded message, you’ll pass the <cite>thread_ts</cite>
-ID of the message you’re replying to.</p>
-<p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps.
-When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not
-appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
-  <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span>
+<div class="section" id="threading-messages">
+<h2>Threading Messages<a class="headerlink" href="#threading-messages" title="Permalink to this headline">¶</a></h2>
+<p>Threaded messages are a way of grouping messages together to provide greater context. You can reply to a thread or start a new threaded conversation by simply passing the original message’s <code class="docutils literal notranslate"><span class="pre">ts</span></code> ID in the <code class="docutils literal notranslate"><span class="pre">thread_ts</span></code> attribute when posting a message. If you’re replying to a threaded message, you’ll pass the <cite>thread_ts</cite> ID of the message you’re replying to.</p>
+<p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps. When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
+    <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>. To indicate your reply is germane to all members of a channel,
-set the <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> boolean parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>. To indicate your reply is germane to all members of a channel, and therefore a notification of the reply should be posted in-channel, set the <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
   <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
   <span class="n">reply_broadcast</span><span class="o">=</span><span class="bp">True</span>
 <span class="p">)</span>
@@ -347,38 +323,23 @@ deletion of threaded replies works the same as regular messages.</p>
 article for more information.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="updating-the-content-of-a-message">
-<h2>Updating the content of a message<a class="headerlink" href="#updating-the-content-of-a-message" title="Permalink to this headline">¶</a></h2>
-<p>Let’s say you have a bot which posts the status of a request. When that request
-is updated, you’ll want to update the message to reflect it’s state. Or your user
-might want to fix a typo or change some wording. This is how you’ll make those changes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.update&quot;</span><span class="p">,</span>
+<div class="section" id="updating-a-message">
+<h2>Updating a message<a class="headerlink" href="#updating-a-message" title="Permalink to this headline">¶</a></h2>
+<p>Let’s say you have a bot which posts the status of a request. When that request changes, you’ll want to update the message to reflect it’s state.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_update</span><span class="p">(</span>
   <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from Python! :tada:&quot;</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;updates from your app! :tada:&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/methods/chat.update">chat.update</a> for formatting options
-and some special considerations when calling this with a bot user.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/chat.update">chat.update</a> for formatting options and some special considerations when calling this with a bot user.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="deleting-a-message">
 <h2>Deleting a message<a class="headerlink" href="#deleting-a-message" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes you need to delete things.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;chat.delete&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_delete</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476745373.000002&quot;</span>
 <span class="p">)</span>
@@ -387,18 +348,11 @@ and some special considerations when calling this with a bot user.</p>
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.delete">chat.delete</a> for more info.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="adding-or-removing-an-emoji-reaction">
-<h2>Adding or removing an emoji reaction<a class="headerlink" href="#adding-or-removing-an-emoji-reaction" title="Permalink to this headline">¶</a></h2>
-<p>You can quickly respond to any message on Slack with an emoji reaction. Reactions
-can be used for any purpose: voting, checking off to-do items, showing excitement — and just for fun.</p>
+<div class="section" id="emoji-reactions">
+<h2>Emoji reactions<a class="headerlink" href="#emoji-reactions" title="Permalink to this headline">¶</a></h2>
+<p>You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.</p>
 <p>This method adds a reaction (emoji) to an item (<code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">comment</span></code>, <code class="docutils literal notranslate"><span class="pre">channel</span> <span class="pre">message</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">message</span></code>, or <code class="docutils literal notranslate"><span class="pre">direct</span> <span class="pre">message</span></code>). One of file, file_comment, or the combination of channel and timestamp must be specified.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;reactions.add&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">reactions_add</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
   <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
   <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
@@ -406,8 +360,7 @@ can be used for any purpose: voting, checking off to-do items, showing excitemen
 </pre></div>
 </div>
 <p>Removing an emoji reaction is basically the same format, but you’ll use <code class="docutils literal notranslate"><span class="pre">reactions.remove</span></code> instead of <code class="docutils literal notranslate"><span class="pre">reactions.add</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;reactions.remove&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">reactions_remove</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
   <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
   <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
@@ -417,26 +370,14 @@ can be used for any purpose: voting, checking off to-do items, showing excitemen
 <p>See <a class="reference external" href="https://api.slack.com/methods/reactions.add">reactions.add</a> and <a class="reference external" href="https://api.slack.com/methods/reactions.remove">reactions.remove</a> for more info.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="getting-a-list-of-channels">
-<h2>Getting a list of channels<a class="headerlink" href="#getting-a-list-of-channels" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="listing-channels">
+<h2>Listing channels<a class="headerlink" href="#listing-channels" title="Permalink to this headline">¶</a></h2>
 <p>At some point, you’ll want to find out what channels are available to your app. This is how you get that list.</p>
-<p><strong>Note:</strong> This call requires the <code class="docutils literal notranslate"><span class="pre">channels:read</span></code> scope.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span><span class="s2">&quot;channels.list&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_list</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Archived channels are included by default. You can exclude them by passing <code class="docutils literal notranslate"><span class="pre">exclude_archived=1</span></code> to your request.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;channels.list&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_list</span><span class="p">(</span>
   <span class="n">exclude_archived</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 </pre></div>
@@ -447,13 +388,7 @@ can be used for any purpose: voting, checking off to-do items, showing excitemen
 <div class="section" id="getting-a-channel-s-info">
 <h2>Getting a channel’s info<a class="headerlink" href="#getting-a-channel-s-info" title="Permalink to this headline">¶</a></h2>
 <p>Once you have the ID for a specific channel, you can fetch information about that channel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;channels.info&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_info</span><span class="p">(,</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -464,13 +399,7 @@ can be used for any purpose: voting, checking off to-do items, showing excitemen
 <div class="section" id="joining-a-channel">
 <h2>Joining a channel<a class="headerlink" href="#joining-a-channel" title="Permalink to this headline">¶</a></h2>
 <p>Channels are the social hub of most Slack teams. Here’s how you hop into one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;channels.join&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_join</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXY&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -484,13 +413,7 @@ can be used for any purpose: voting, checking off to-do items, showing excitemen
 <h2>Leaving a channel<a class="headerlink" href="#leaving-a-channel" title="Permalink to this headline">¶</a></h2>
 <p>Maybe you’ve finished up all the business you had in a channel, or maybe you
 joined one by accident. This is how you leave a channel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-  <span class="s2">&quot;channels.leave&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_leave</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -500,12 +423,7 @@ joined one by accident. This is how you leave a channel.</p>
 <hr class="docutils" />
 <div class="section" id="get-a-list-of-team-members">
 <h2>Get a list of team members<a class="headerlink" href="#get-a-list-of-team-members" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span><span class="s2">&quot;users.list&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">users_list</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/users.list">users.list</a> for more info.</p>
@@ -513,18 +431,11 @@ joined one by accident. This is how you leave a channel.</p>
 <hr class="docutils" />
 <div class="section" id="uploading-files">
 <h2>Uploading files<a class="headerlink" href="#uploading-files" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;thinking_very_much.png&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_content</span><span class="p">:</span>
-    <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-        <span class="s2">&quot;files.upload&quot;</span><span class="p">,</span>
-        <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
-        <span class="nb">file</span><span class="o">=</span><span class="n">file_content</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
-    <span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
+  <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
+  <span class="nb">file</span><span class="o">=</span><span class="s2">&quot;files.pdf&quot;</span><span class="p">,</span>
+  <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/files.upload">files.upload</a> for more info.</p>
@@ -532,23 +443,18 @@ joined one by accident. This is how you leave a channel.</p>
 <hr class="docutils" />
 <div class="section" id="web-api-rate-limits">
 <h2>Web API Rate Limits<a class="headerlink" href="#web-api-rate-limits" title="Permalink to this headline">¶</a></h2>
-<p>Slack allows applications to send no more than one message per second. We allow bursts over that
-limit for short periods. However, if your app continues to exceed the limit over a longer period
-of time it will be rate limited.</p>
+<p>When posting messages to a channel, Slack allows applications to send no more than one message per channel per second. We allow bursts over that limit for short periods. However, if your app continues to exceed the limit over a longer period of time it will be rate limited. Different API methods have other rate limits – be sure to <a class="reference external" href="https://api.slack.com/docs/rate-limits">check the limits</a> and test that your application has a graceful fallback if it should hit those limits.</p>
+<p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error, a JSON object containing the number of calls you have been making, and a Retry-After header containing the number of seconds until you can retry.</p>
 <p>Here’s a very basic example of how one might deal with rate limited requests.</p>
-<p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error,
-a JSON object containing the number of calls you have been making, and a Retry-After header
-containing the number of seconds until you can retry.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slackclient</span> <span class="kn">import</span> <span class="n">SlackClient</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
 
 <span class="c1"># Simple wrapper for sending a Slack message</span>
 <span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-  <span class="k">return</span> <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
-    <span class="s2">&quot;chat.postMessage&quot;</span><span class="p">,</span>
+  <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
     <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
     <span class="n">text</span><span class="o">=</span><span class="n">message</span>
   <span class="p">)</span>
@@ -559,7 +465,7 @@ containing the number of seconds until you can retry.</p>
 <span class="c1"># Check to see if the message sent successfully.</span>
 <span class="c1"># If the message succeeded, `response[&quot;ok&quot;]`` will be `True`</span>
 <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]:</span>
-  <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Message posted successfully: &quot;</span> <span class="o">+</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;ts&quot;</span><span class="p">])</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Message posted successfully: {response[&quot;</span><span class="n">message</span><span class="s2">&quot;][&quot;</span><span class="n">ts</span><span class="s2">&quot;]}&quot;</span><span class="p">)</span>
   <span class="c1"># If the message failed, check for rate limit headers in the response</span>
 <span class="k">elif</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">False</span> <span class="ow">and</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">][</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">]:</span>
   <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
