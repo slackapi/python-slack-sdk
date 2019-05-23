@@ -88,7 +88,7 @@ class RTMClient(object):
             )
 
     slack_token = os.environ["SLACK_API_TOKEN"]
-    rtm_client = slack.RTMClient(slack_token)
+    rtm_client = slack.RTMClient(token=slack_token)
     rtm_client.start()
     ```
 
