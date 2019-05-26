@@ -3,19 +3,19 @@
 Here is a simple example showing how to use the new `WebClient` in an asynchronous way.
 
 To run this example you will need to prepare your `SLACK_TOKEN`, ideally a Bot token so you do not have to deal with permissions scopes.
-Id of a slack channel (`MEMBERS_CHANNEL`) with users who should receive this message. You can simply obdatin this by using a browser slack client and copy the ID from a url, eg. https://<your-workspace>.slack.com/messages/<channel ID>/
+Id of a slack channel (`MEMBERS_CHANNEL`) with users who should receive this message. You can simply obdatin this by using a browser slack client and copy the ID from a url, eg. `https://<your-workspace>.slack.com/messages/<channel ID>/`
 
 ```python
 import asyncio
 import os
 
-from slack import WebClient
+import slack
 
 SLACK_TOKEN = <your slack token>
 MEMBERS_CHANNEL = <channel ID>
 
 # instantiate WebClient in async mode
-sc = WebClient(SLACK_TOKEN, run_async=True)
+sc = slack.WebClient(SLACK_TOKEN, run_async=True)
 
 
 async def send_message(user_id, message):
