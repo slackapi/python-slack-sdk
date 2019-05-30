@@ -146,7 +146,12 @@ class Server(object):
                     "HTTP 429: Rate limited. Retrying in %d seconds", retry_after
                 )
                 time.sleep(retry_after)
-                self.rtm_connect(reconnect=reconnect, timeout=timeout, use_rtm_start=use_rtm_start, **kwargs)
+                self.rtm_connect(
+                    reconnect=reconnect,
+                    timeout=timeout,
+                    use_rtm_start=use_rtm_start,
+                    **kwargs
+                )
             else:
                 raise SlackConnectionError(
                     "RTM connection attempt was rate limited 5 times."
