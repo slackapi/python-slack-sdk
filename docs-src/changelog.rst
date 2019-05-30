@@ -2,6 +2,11 @@
 Changelog
 ==============================================
 
+v1.3.2 (2019-05-30)
+-------------------
+- Fixing an issue where reconnects used rtm.start istead of rtm.connect. #422
+
+
 v1.3.1 (2019-02-28)
 -------------------
 
