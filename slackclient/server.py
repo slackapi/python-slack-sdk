@@ -146,7 +146,7 @@ class Server(object):
                     "HTTP 429: Rate limited. Retrying in %d seconds", retry_after
                 )
                 time.sleep(retry_after)
-                self.rtm_connect(reconnect=reconnect, timeout=timeout)
+                self.rtm_connect(reconnect=reconnect, timeout=timeout, use_rtm_start=use_rtm_start, **kwargs)
             else:
                 raise SlackConnectionError(
                     "RTM connection attempt was rate limited 5 times."
@@ -236,7 +236,7 @@ class Server(object):
             data = json.dumps(data)
             self.websocket.send(data)
         except Exception:
-            self.rtm_connect(reconnect=True)
+            self.rtm_connect(reconnect=True, use_rtm_start=False)
 
     def rtm_send_message(self, channel, message, thread=None, reply_broadcast=None):
         """
@@ -290,7 +290,7 @@ class Server(object):
                 logging.debug("RTM disconnected")
                 self.connected = False
                 if self.auto_reconnect:
-                    self.rtm_connect(reconnect=True)
+                    self.rtm_connect(reconnect=True, use_rtm_start=False)
                 else:
                     raise SlackConnectionError(
                         "Unable to send due to closed RTM websocket"
