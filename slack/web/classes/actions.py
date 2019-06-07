@@ -78,23 +78,28 @@ class Button(Action):
         super().__init__(name=name, text=text, type="button")
         self.value = value
         self.confirm = confirm
-        style = self.get_raw_value(style)
-        self.style = style
+        self.style = self.get_raw_value(style)
 
     def get_json(self) -> dict:
         if self.style is not None and not ButtonStyle.contains(self.style):
-            raise SlackObjectFormationError("Invalid button style")
+            raise SlackObjectFormationError(
+                "style attribute must be one of the following values: "
+                f"{ButtonStyle.pretty_print()}"
+            )
         json = super().get_json()
-        json["value"] = self.value
+        json.update(self.get_non_null_keys({"value", "style"}))
         if self.confirm:
             json["confirm"] = self.confirm.get_json()
-        if self.style is not None:
-            json["style"] = self.style
         return json
 
 
 class LinkButton(Action):
     def __init__(self, text: str, url: str):
+        """
+        A simple interactive button that simply opens a URL
+        :param text: text to display on the button, eg 'Click Me!"
+        :param url: the URL to open
+        """
         super().__init__(text=text, url=url, type="button")
 
 
@@ -168,7 +173,10 @@ class DynamicMessageDropdown(MessageDropdown):
 
     def get_json(self) -> dict:
         if not DynamicTypes.contains(self._source):
-            raise SlackObjectFormationError("Invalid dropdown type")
+            raise SlackObjectFormationError(
+                "source attribute must be one of the following values: "
+                f"{DynamicTypes.pretty_print()}"
+            )
         json = super().get_json()
         return json
 

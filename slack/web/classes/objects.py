@@ -74,7 +74,6 @@ class Link(BaseObject):
         self.icon = icon
         self.formats = {
             "slack": self.slack_flavored_markdown,
-            "github": self.github_flavored_markdown,
             "plain": self.plain_text,
         }
 
@@ -87,9 +86,6 @@ class Link(BaseObject):
     def slack_flavored_markdown(self) -> str:
         icon = f":{self.icon}: " if self.icon is not None else ""
         return f"<{self.url}{'|' if self.text else ''}{icon}{self.text}>"
-
-    def github_flavored_markdown(self) -> str:
-        return f"[{self.text}]({self.url})"
 
     def plain_text(self) -> str:
         return self.text
