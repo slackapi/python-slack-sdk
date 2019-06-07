@@ -2,6 +2,7 @@ from typing import List, Union
 
 from .elements import BlockElement, InteractiveElements
 from .objects import JsonObject, MarkdownTextObject, PlainTextObject, TextObject
+from ...errors import SlackObjectFormationError
 
 
 class Block(JsonObject):
@@ -18,12 +19,16 @@ class Block(JsonObject):
         self.color = None
 
     def get_json(self) -> dict:
+        if self.block_id is not None and len(self.block_id) > 255:
+            raise SlackObjectFormationError(
+                "Block ID must not exceed 255 characters if specified"
+            )
         return self.get_non_null_keys(self.attributes)
 
 
 class DividerBlock(Block):
     def __init__(self):
-        super().__init__("divider")
+        super().__init__(type="divider")
 
 
 class SectionBlock(Block):
@@ -40,13 +45,17 @@ class SectionBlock(Block):
         accessory: BlockElement = None,
     ):
         super().__init__(type="section", block_id=block_id)
-        assert text is not None or fields is not None
-        assert fields is None or len(fields) <= 10
         self.text = text
         self.fields = fields or []
         self.accessory = accessory
 
     def get_json(self) -> dict:
+        if self.text is None and self.fields is None:
+            raise SlackObjectFormationError(
+                "SectionBlock must have either text or fields attribute populated"
+            )
+        if self.fields is not None and len(self.fields) > 10:
+            raise SlackObjectFormationError("Cannot have more than ten fields")
         json = super().get_json()
         if self.text is not None:
             if isinstance(self.text, TextObject):
@@ -82,6 +91,14 @@ class ImageBlock(Block):
         self.title = title
 
     def get_json(self) -> dict:
+        if len(self.image_url) > 3000:
+            raise SlackObjectFormationError(
+                "image_url attribute cannot exceed 3000 characters"
+            )
+        if len(self.alt_text) > 2000:
+            raise SlackObjectFormationError(
+                "alt_text attribute cannot exceed 3000 characters"
+            )
         json = super().get_json()
         json["image_url"] = self.image_url
         json["alt_text"] = self.alt_text
@@ -98,10 +115,13 @@ class ActionsBlock(Block):
 
     def __init__(self, elements: List[InteractiveElements], block_id: str = None):
         super().__init__(type="actions", block_id=block_id)
-        assert 0 < len(elements) <= 5
         self.elements = elements
 
     def get_json(self) -> dict:
+        if len(self.elements) > 5:
+            raise SlackObjectFormationError(
+                "ActionsBlock cannot contain more than 5 elements"
+            )
         json = super().get_json()
         json["elements"] = [element.get_json() for element in self.elements]
         return json
@@ -120,6 +140,10 @@ class ContextBlock(Block):
         self.elements = elements
 
     def get_json(self) -> dict:
+        if len(self.elements) > 10:
+            raise SlackObjectFormationError(
+                "ContextBlock cannot contain more than 10 elements"
+            )
         json = super().get_json()
         json["elements"] = [element.get_json() for element in self.elements]
         return json

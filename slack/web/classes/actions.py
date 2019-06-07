@@ -9,6 +9,7 @@ from .objects import (
     OptionGroup,
     OptionType,
 )
+from ...errors import SlackObjectFormationError
 
 
 class Action(JsonObject):
@@ -19,13 +20,16 @@ class Action(JsonObject):
     attributes = {"name", "text", "type", "url"}
 
     def __init__(self, text: str, type: str, name: str = None, url: str = None):
-        assert name is not None or url is not None, "Action must have a name"
         self.name = name
         self.url = url
         self.text = text
         self.type = type
 
     def get_json(self) -> dict:
+        if self.name is None and self.url is None:
+            # If URL is populated but not name, this is a LinkButton, so name is not
+            # needed
+            raise SlackObjectFormationError("Action must have a name")
         return self.get_non_null_keys(self.attributes)
 
 
@@ -63,14 +67,23 @@ class Button(Action):
         confirm: ActionConfirmation = None,
         style: Union[ButtonStyle, str] = None,
     ):
+        """
+        Simple button for use inside attachments
+        :param name: name of the element, important for interactive buttons
+        :param text: text to display on the button
+        :param value: the internal value to send on interaction
+        :param confirm: an ActionConfirmation object
+        :param style: "primary" or "danger" to represent important buttons
+        """
         super().__init__(name=name, text=text, type="button")
         self.value = value
         self.confirm = confirm
-        style = self.get_raw_value(style, ButtonStyle)
-        assert style is None or ButtonStyle.contains(style), "Invalid button style"
+        style = self.get_raw_value(style)
         self.style = style
 
-    def get_json(self):
+    def get_json(self) -> dict:
+        if self.style is not None and not ButtonStyle.contains(self.style):
+            raise SlackObjectFormationError("Invalid button style")
         json = super().get_json()
         json["value"] = self.value
         if self.confirm:
@@ -108,7 +121,6 @@ class MessageDropdown(Action, metaclass=ABCMeta):
         super().__init__(text=text, name=name, type="select")
         if self.data_source != "static":
             self.options = list(options)
-            assert 0 < len(self.options) <= 100, "Invalid number of options"
         else:
             self.options = None
         self.selected_option = selected_option
@@ -116,6 +128,8 @@ class MessageDropdown(Action, metaclass=ABCMeta):
     def get_json(self) -> dict:
         json = self.get_non_null_keys(self.attributes)
         if self.data_source != "static":
+            if not 0 < len(self.options) <= 100:
+                raise SlackObjectFormationError("Invalid number of options")
             json[self.property_key] = [
                 o.get_json(OptionType.DIALOG) for o in self.options
             ]
@@ -146,15 +160,15 @@ class DynamicMessageDropdown(MessageDropdown):
         self, name: str, text: str, source: Union[DynamicTypes, str], **kwargs
     ):
         super().__init__(name=name, text=text, **kwargs)
-        source = self.get_raw_value(source, DynamicTypes)
-        assert DynamicTypes.contains(source), "Invalid dropdown type"
-        self._source = source
+        self._source = self.get_raw_value(source)
 
     @property
     def data_source(self) -> str:
         return self._source
 
     def get_json(self) -> dict:
+        if not DynamicTypes.contains(self._source):
+            raise SlackObjectFormationError("Invalid dropdown type")
         json = super().get_json()
         return json
 

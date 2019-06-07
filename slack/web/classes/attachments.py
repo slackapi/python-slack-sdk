@@ -3,6 +3,7 @@ from typing import Iterable, List
 from .actions import Action
 from .blocks import Block
 from .objects import JsonObject
+from ...errors import SlackObjectFormationError
 
 
 class Field(JsonObject):
@@ -24,12 +25,18 @@ class Author(JsonObject):
         self, author_name: str, author_link: str = None, author_icon: str = None
     ):
         self.author_name = author_name
-        assert author_link is None or author_name is not None
         self.author_link = author_link
-        assert author_icon is None or author_name is not None
         self.author_icon = author_icon
 
     def get_json(self) -> dict:
+        if not (self.author_link is None or self.author_name is not None):
+            raise SlackObjectFormationError(
+                "Author name is required if author link is populated"
+            )
+        if not (self.author_icon is None or self.author_name is not None):
+            raise SlackObjectFormationError(
+                "Author name is required if author icon is populated"
+            )
         return self.get_non_null_keys(self.attributes)
 
 
@@ -79,16 +86,20 @@ class Attachment(JsonObject):
         self.author = author
         self.image_url = image_url
         self.thumb_url = thumb_url
-        assert footer is None or len(footer) <= 300
         self.footer = footer
-        assert footer_icon is None or footer is not None
         self.footer_icon = footer_icon
-        assert ts is None or footer is not None
         self.ts = ts
-
         self.fields = fields or []
 
     def get_json(self) -> dict:
+        if self.footer is not None and len(self.footer) <= 300:
+            raise SlackObjectFormationError(
+                "Footer length cannot exceed 300 characters"
+            )
+        if self.ts is not None and self.footer is None:
+            raise SlackObjectFormationError(
+                "ts attribute cannot be specified if footer is not specified"
+            )
         json = self.get_non_null_keys(self.attributes)
         json.update(
             {
@@ -109,15 +120,9 @@ class BlockAttachment(Attachment):
     def __init__(self, blocks: Iterable[Block]):
         super().__init__(text="")
         self.blocks = list(blocks)
-        self.color = next(
-            filter(lambda c: c is not None, (block.color for block in self.blocks)),
-            None,
-        )
 
     def get_json(self) -> dict:
-        json = {"blocks": [block.get_json() for block in self.blocks]}
-        json.update(self.get_non_null_keys({"color"}))
-        return json
+        return {"blocks": [block.get_json() for block in self.blocks]}
 
 
 class InteractiveAttachment(Attachment):

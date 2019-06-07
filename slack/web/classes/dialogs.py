@@ -11,6 +11,7 @@ from .objects import (
     OptionGroup,
     OptionType,
 )
+from ...errors import SlackObjectFormationError
 
 
 class DialogSubTypes(ContainerEnum):
@@ -54,34 +55,61 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         max_length: int = None,
         subtype: Union[DialogSubTypes, str] = None,
     ):
-        assert len(name) <= 300, "Name exceeds max length"
         self.name = name
-        assert len(label) <= 48, "Label exceeds max length"
         self.label = label
         self.optional = optional
-        assert (
-            placeholder is None or len(placeholder) <= 150
-        ), "Placeholder exceeds max length"
         self.placeholder = placeholder
-        assert hint is None or len(hint) <= 150, "Hint exceeds max length"
         self.hint = hint
-        assert (
-            value is None or len(value) <= self.max_value_length
-        ), "Value exceeds max length"
         self.value = value
-        assert (
-            min_length is None or 0 <= min_length < self.max_value_length
-        ), "Invalid min length"
         self.min_length = min_length
-        assert (
-            max_length is None or 0 < max_length <= self.max_value_length
-        ), "Invalid max length"
         self.max_length = max_length or self.max_value_length
-        subtype = self.get_raw_value(subtype, DialogSubTypes)
-        assert subtype is None or DialogSubTypes.contains(subtype), "Invalid subtype"
+        subtype = self.get_raw_value(subtype)
         self.subtype = subtype
 
     def get_json(self) -> dict:
+        if len(self.name) > 300:
+            raise SlackObjectFormationError(
+                "name attribute cannot exceed 300 characters"
+            )
+        if len(self.label) > 48:
+            raise SlackObjectFormationError(
+                "label attribute cannot exceed 48 characters"
+            )
+        if self.placeholder is not None and len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if self.hint is not None and len(self.hint) > 150:
+            raise SlackObjectFormationError(
+                "hint attribute cannot exceed 150 characters"
+            )
+        if self.value is not None and len(self.value) > self.max_value_length:
+            raise SlackObjectFormationError(
+                f"value attribute cannot exceed {self.max_value_length} characters"
+            )
+        if self.min_length is not None:
+            if 0 > self.min_length:
+                raise SlackObjectFormationError(
+                    "min_length attribute must be greater than 0"
+                )
+            elif self.min_length > self.max_value_length:
+                raise SlackObjectFormationError(
+                    f"min_length attribute must be less than {self.max_value_length}"
+                )
+        if self.max_length is not None:
+            if 0 > self.max_length:
+                raise SlackObjectFormationError(
+                    "max_length attribute must be greater than 0"
+                )
+            elif self.max_length > self.max_value_length:
+                raise SlackObjectFormationError(
+                    f"max_length attribute must be less than {self.max_value_length}"
+                )
+        if not DialogSubTypes.contains(self.subtype):
+            raise SlackObjectFormationError(
+                "subtype attribute must be one of the following values: "
+                f"{DialogSubTypes.pretty_print()}"
+            )
         json = self.get_non_null_keys(self.attributes)
         json["type"] = self.element_type
         if self.subtype is not None:
@@ -126,7 +154,6 @@ class DialogDropdown(JsonObject, metaclass=ABCMeta):
         self.type = "select"
         if self.data_source == "static":
             self.options = list(options)
-            assert 0 < len(self.options) <= 100
         else:
             self.options = None
         self.optional = optional
@@ -136,6 +163,10 @@ class DialogDropdown(JsonObject, metaclass=ABCMeta):
     def get_json(self) -> dict:
         json = self.get_non_null_keys(self.attributes)
         if self.data_source == "static":
+            if self.options > 100:
+                raise SlackObjectFormationError(
+                    "options attribute cannot exceed 100 items"
+                )
             json[self.property_key] = [
                 o.get_json(OptionType.DIALOG) for o in self.options
             ]
@@ -165,8 +196,7 @@ class DynamicDialogDropdown(DialogDropdown):
     def __init__(
         self, name: str, label: str, source: Union[DynamicTypes, str], **kwargs
     ):
-        source = self.get_raw_value(source, DynamicTypes)
-        assert DynamicTypes.contains(source), "Invalid dynamic dropdown source"
+        source = self.get_raw_value(source)
         self.source = source
         super().__init__(name=name, label=label, **kwargs)
 
@@ -175,6 +205,11 @@ class DynamicDialogDropdown(DialogDropdown):
         return self.source
 
     def get_json(self) -> dict:
+        if not DynamicTypes.contains(self.source):
+            raise SlackObjectFormationError(
+                "source attribute must be one of the following values: "
+                f"{DynamicTypes.pretty_print()}"
+            )
         json = super().get_json()
         return json
 
@@ -189,7 +224,7 @@ class ExternalDialogDropdown(DialogDropdown):
         label: str,
         selected_option: Option = None,
         min_query_length: int = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(name, label, **kwargs)
         self.selected_option = selected_option
@@ -206,7 +241,6 @@ class ExternalDialogDropdown(DialogDropdown):
 
 class DialogBuilder(BaseObject):
     _callback_id: Optional[str]
-    _trigger_id: Optional[str]
     _elements: List[Union[DialogTextComponent, DialogDropdown]]
     _submit_label: Optional[str]
     _notify_on_cancel: bool
@@ -215,7 +249,6 @@ class DialogBuilder(BaseObject):
     def __init__(self):
         self._title = None
         self._callback_id = None
-        self._trigger_id = None
         self._elements = []
         self._submit_label = None
         self._notify_on_cancel = False
@@ -232,10 +265,6 @@ class DialogBuilder(BaseObject):
 
     def callback_id(self, callback_id: str):
         self._callback_id = callback_id
-        return self
-
-    def trigger_id(self, trigger_id: str):
-        self._trigger_id = trigger_id
         return self
 
     def submit_label(self, label: str):
@@ -261,7 +290,7 @@ class DialogBuilder(BaseObject):
         name: str,
         label: str,
         options: Iterable[Union[Option, OptionGroup]],
-        **kwargs
+        **kwargs,
     ):
         assert len(self._elements) < 10
         self._elements.append(DialogDropdown(name, label, options, **kwargs))
@@ -274,14 +303,12 @@ class DialogBuilder(BaseObject):
         self._elements.append(DynamicDialogDropdown(name, label, auto_type, **kwargs))
         return self
 
-    def build(self) -> (str, dict):
+    def build(self) -> dict:
         assert self._title is not None
         assert self._callback_id is not None
-        assert self._trigger_id is not None
         assert 0 < len(self._elements) <= 10
         json = {
             "title": self._title,
-            "trigger_id": self._trigger_id,
             "callback_id": self._callback_id,
             "elements": [elem.get_json() for elem in self._elements],
             "notify_on_cancel": self._notify_on_cancel,
@@ -289,4 +316,4 @@ class DialogBuilder(BaseObject):
         if self.submit_label is not None:
             json["submit_label"] = self._submit_label
         json["state"] = dumps(self._state)
-        return self._trigger_id, json
+        return json

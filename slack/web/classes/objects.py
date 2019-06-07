@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
-from typing import Any, Iterable, List, NamedTuple, Optional, Type, Union
+from typing import Any, Iterable, List, NamedTuple, Optional, Union
+
+from ...errors import SlackObjectFormationError
 
 
 class BaseObject:
@@ -20,21 +22,19 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         Return this object's Slack-valid JSON representation
         :param args: Any specific formatting args (rare; generally ignored)
         :return: a Python dict - (will be encoded later)
+        :raises SlackObjectFormationError if the object was not valid
         """
-        return self.get_non_null_keys(self.__dict__.keys())
+        pass
 
     @staticmethod
-    def get_raw_value(
-        possible_enum_value: Union[str, Enum], enum_to_check: Type[Enum]
-    ) -> Optional[str]:
+    def get_raw_value(possible_enum_value: Union[str, Enum]) -> Optional[str]:
         """
         Collapse an incoming value (which should be an enum, per type annotations) to a
         raw value
         :param possible_enum_value: incoming value
-        :param enum_to_check: the enum that it should be an instance of
         :return: the primitive (string) value
         """
-        if isinstance(possible_enum_value, enum_to_check):
+        if isinstance(possible_enum_value, Enum):
             return possible_enum_value.value
         else:
             return possible_enum_value
@@ -179,16 +179,28 @@ class ConfirmObject(JsonObject):
         interactive element. This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
         """
-        assert len(title) <= 100
-        assert len(text) <= 300
-        assert len(confirm) <= 30
-        assert len(deny) <= 30
         self.title = title
         self.text = text
         self.confirm = confirm
         self.deny = deny
 
     def get_json(self) -> dict:
+        if len(self.title) > 100:
+            raise SlackObjectFormationError(
+                "title attribute cannot exceed 100 characters"
+            )
+        if len(self.text) > 300:
+            raise SlackObjectFormationError(
+                "text attribute cannot exceed 300 characters"
+            )
+        if len(self.confirm) > 30:
+            raise SlackObjectFormationError(
+                "confirm attribute cannot exceed 30 characters"
+            )
+        if len(self.deny) > 30:
+            raise SlackObjectFormationError(
+                "deny attribute cannot exceed 30 characters"
+            )
         return {
             "title": PlainTextObject(self.title).get_json(),
             "text": MarkdownTextObject(self.text).get_json(),
@@ -206,6 +218,10 @@ class ContainerEnum(Enum):
     @classmethod
     def contains(cls, item: Any) -> bool:
         return any(item == member.value for member in cls)
+
+    @classmethod
+    def pretty_print(cls):
+        return ", ".join(f'"{t.value}"' for t in cls)
 
 
 class ButtonStyle(ContainerEnum):
@@ -243,13 +259,19 @@ class Option(JsonObject):
     """
 
     def __init__(self, label: str, value: str):
-        assert len(label) <= 75
-        assert len(value) <= 75
         self.label = label
         self.value = value
 
     def get_json(self, option_type: Union[OptionType, str]):
-        option = self.get_raw_value(option_type, OptionType)
+        if len(self.label) > 75:
+            raise SlackObjectFormationError(
+                "label attribute cannot exceed 75 characters"
+            )
+        if len(self.value) > 75:
+            raise SlackObjectFormationError(
+                "value attribute cannot exceed 75 characters"
+            )
+        option = self.get_raw_value(option_type)
         if option == OptionType.BLOCK.value:
             return {"text": PlainTextObject(self.label).get_json(), "value": self.value}
         else:
@@ -272,13 +294,19 @@ class OptionGroup(JsonObject):
     """
 
     def __init__(self, label: str, options: List[Option]):
-        assert len(label) <= 75
-        assert len(options) <= 100
         self.label = label
         self.options = options
 
     def get_json(self, option_type: Union[OptionType, str]) -> dict:
-        option = self.get_raw_value(option_type, OptionType)
+        if len(self.label) > 75:
+            raise SlackObjectFormationError(
+                "label attribute cannot exceed 75 characters"
+            )
+        if len(self.options) > 100:
+            raise SlackObjectFormationError(
+                "options attribute cannot exceed 100 items"
+            )
+        option = self.get_raw_value(option_type)
         if option == OptionType.BLOCK.value:
             return {
                 "label": PlainTextObject(self.label).get_json(),

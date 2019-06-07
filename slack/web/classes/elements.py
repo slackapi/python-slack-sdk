@@ -11,6 +11,7 @@ from .objects import (
     OptionType,
     PlainTextObject,
 )
+from ...errors import SlackObjectFormationError
 
 
 class BlockElement(JsonObject):
@@ -44,18 +45,30 @@ class ButtonElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="button")
-        assert len(text) <= 75, "Invalid text"
-        assert len(action_id) <= 255, "Invalid action ID"
-        assert len(value) <= 75, "Invalid value"
         self.text = text
         self.action_id = action_id
         self.value = value
-        style = self.get_raw_value(style, ButtonStyle)
-        assert style is None or ButtonStyle.contains(style), "Invalid style"
-        self.style = style
+        self.style = self.get_raw_value(style)
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.text) > 75:
+            raise SlackObjectFormationError(
+                "text attribute cannot exceed 75 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
+        if len(self.value) > 75:
+            raise SlackObjectFormationError(
+                "value attribute cannot exceed 75 characters"
+            )
+        if not ButtonStyle.contains(self.style):
+            raise SlackObjectFormationError(
+                "style attribute must be one of the following values: "
+                f"{ButtonStyle.pretty_print()}"
+            )
         json = super().get_json()
         json["text"] = PlainTextObject(self.text).get_json()
         json["action_id"] = self.action_id
@@ -75,6 +88,10 @@ class LinkButtonElement(ButtonElement):
         self.url = url
 
     def get_json(self) -> dict:
+        if len(self.url) >= 3000:
+            raise SlackObjectFormationError(
+                "url attribute cannot exceed 3000 characters"
+            )
         json = super().get_json()
         json["url"] = self.url
         return json
@@ -90,9 +107,6 @@ class DropdownElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="static_select")
-        assert len(placeholder) <= 150, "Invalid placeholder"
-        assert len(action_id) <= 255, "Invalid action_id"
-        assert len(options) <= 100, "Invalid options list"
         self.placeholder = placeholder
         self.action_id = action_id
         self.options = options
@@ -100,6 +114,18 @@ class DropdownElement(BlockElement):
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
+        if len(self.options) > 100:
+            raise SlackObjectFormationError(
+                "options attribute cannot exceed 100 elements"
+            )
         json = super().get_json()
         json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         json["action_id"] = self.action_id
@@ -133,14 +159,20 @@ class UserDropdownElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="users_select")
-        assert len(placeholder) <= 150, "Invalid placeholder"
-        assert len(action_id) <= 255, "Invalid action_id"
         self.placeholder = placeholder
         self.action_id = action_id
         self.initial_user = initial_user
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
         json = super().get_json()
         json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         json["action_id"] = self.action_id
@@ -160,14 +192,20 @@ class ConversationDropdownElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="conversations_select")
-        assert len(placeholder) <= 150
-        assert len(action_id) <= 255
         self.placeholder = placeholder
         self.action_id = action_id
         self.initial_conversation = initial_conversation
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
         json = super().get_json()
         json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         json["action_id"] = self.action_id
@@ -187,14 +225,20 @@ class ChannelDropdownElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="channels_select")
-        assert len(placeholder) <= 150
-        assert len(action_id) <= 255
         self.placeholder = placeholder
         self.action_id = action_id
         self.initial_channel = initial_channel
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
         json = super().get_json()
         json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         json["action_id"] = self.action_id
@@ -210,13 +254,19 @@ class OverflowElement(BlockElement):
         self, options: List[Option], action_id: str, confirm: ConfirmObject = None
     ):
         super().__init__(type="overflow")
-        assert 2 <= len(options) <= 5, "Invalid number of options for overflow"
-        assert len(action_id) <= 255, "Invalid action_id"
         self.options = options
         self.action_id = action_id
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.options) < 2 or len(self.options) > 5:
+            raise SlackObjectFormationError(
+                "options attribute must have between 2 and 5 items"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
         json = super().get_json()
         json["options"] = [option.get_json(OptionType.BLOCK) for option in self.options]
         json["action_id"] = self.action_id
@@ -234,14 +284,20 @@ class DatePickerElement(BlockElement):
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="datepicker")
-        assert len(placeholder) <= 150
-        assert len(action_id) <= 255
         self.placeholder = placeholder
         self.action_id = action_id
         self.initial_date = initial_date
         self.confirm = confirm
 
     def get_json(self) -> dict:
+        if len(self.placeholder) > 150:
+            raise SlackObjectFormationError(
+                "placeholder attribute cannot exceed 150 characters"
+            )
+        if len(self.action_id) > 255:
+            raise SlackObjectFormationError(
+                "action_id attribute cannot exceed 255 characters"
+            )
         json = super().get_json()
         json["action_id"] = self.action_id
         if self.placeholder is not None:

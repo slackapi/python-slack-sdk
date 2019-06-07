@@ -108,4 +108,3 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
             return dict(text=message, response_type="ephemeral")
         else:
             return dict(text=message, response_type="in_channel")
-

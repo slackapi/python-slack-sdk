@@ -33,3 +33,8 @@ class SlackClientNotConnectedError(SlackClientError):
     """Error raised when attempting to send messages over the websocket when the connection is closed."""
 
     pass
+
+
+class SlackObjectFormationError(SlackClientError):
+    """Error raised when a constructed object is not valid/malformed"""
+
