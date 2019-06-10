@@ -66,7 +66,7 @@ class Button(Action):
         super().__init__(name=name, text=text, type="button")
         self.value = value
         self.confirm = confirm
-        self.style = self.get_raw_value(style)
+        self.style = style
 
     def get_json(self) -> dict:
         if self.style is not None and self.style not in ButtonStyles:

@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from enum import Enum
-from typing import Any, Iterable, List, NamedTuple, Optional, Union
+from typing import Iterable, List, NamedTuple, Union
 
 from ...errors import SlackObjectFormationError
 
@@ -8,6 +7,10 @@ from ...errors import SlackObjectFormationError
 class BaseObject:
     def __str__(self):
         return f"<slack.{self.__class__.__name__}>"
+
+
+ButtonStyles = {"primary", "danger"}
+DynamicDropdownTypes = {"users", "channels", "conversations"}
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
@@ -25,19 +28,6 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         :raises SlackObjectFormationError if the object was not valid
         """
         pass
-
-    @staticmethod
-    def get_raw_value(possible_enum_value: Union[str, Enum]) -> Optional[str]:
-        """
-        Collapse an incoming value (which should be an enum, per type annotations) to a
-        raw value
-        :param possible_enum_value: incoming value
-        :return: the primitive (string) value
-        """
-        if isinstance(possible_enum_value, Enum):
-            return possible_enum_value.value
-        else:
-            return possible_enum_value
 
     def get_non_null_keys(self, keys: Iterable[str]) -> dict:
         """
@@ -68,10 +58,9 @@ class Link(BaseObject):
     syntax
     """
 
-    def __init__(self, url: str, text: str, icon: str = None):
+    def __init__(self, url: str, text: str):
         self.url = url
         self.text = text
-        self.icon = icon
         self.formats = {
             "slack": self.slack_flavored_markdown,
             "plain": self.plain_text,
@@ -84,8 +73,7 @@ class Link(BaseObject):
         return self.formats.get(format_spec, self.slack_flavored_markdown)()
 
     def slack_flavored_markdown(self) -> str:
-        icon = f":{self.icon}: " if self.icon is not None else ""
-        return f"<{self.url}{'|' if self.text else ''}{icon}{self.text}>"
+        return f"<{self.url}{'|' if self.text else ''}{self.text}>"
 
     def plain_text(self) -> str:
         return self.text
@@ -204,26 +192,6 @@ class ConfirmObject(JsonObject):
             "deny": PlainTextObject(self.deny).get_json(),
         }
 
-
-class ContainerEnum(Enum):
-    """
-    Enum class extended with a type-agnostic contains method - *not* a replacement
-    for the __contains__ magic method - don't try to use the in operator
-    """
-
-    @classmethod
-    def contains(cls, item: Any) -> bool:
-        return any(item == member.value for member in cls)
-
-    @classmethod
-    def pretty_print(cls):
-        return ", ".join(f'"{t.value}"' for t in cls)
-
-
-ButtonStyles = {"primary", "danger"}
-DynamicDropdownTypes = {"users", "channels", "conversations"}
-
-
 class Option(JsonObject):
     """
     Option object used in dialogs, legacy message actions, and blocks
@@ -245,8 +213,7 @@ class Option(JsonObject):
             raise SlackObjectFormationError(
                 "value attribute cannot exceed 75 characters"
             )
-        option = self.get_raw_value(option_type)
-        if option == "text":
+        if option_type == "text":
             return {"text": PlainTextObject(self.label).get_json(), "value": self.value}
         else:
             return {"label": self.label, "value": self.value}
@@ -280,8 +247,7 @@ class OptionGroup(JsonObject):
             raise SlackObjectFormationError(
                 "options attribute cannot exceed 100 items"
             )
-        option = self.get_raw_value(option_type)
-        if option == "text":
+        if option_type == "text":
             return {
                 "label": PlainTextObject(self.label).get_json(),
                 "options": [option.get_json(option_type) for option in self.options],
