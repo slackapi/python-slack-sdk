@@ -3,14 +3,8 @@ from random import random
 from typing import List, Union
 
 from .objects import (
-    ButtonStyle,
-    ConfirmObject,
-    JsonObject,
-    Option,
-    OptionGroup,
-    OptionType,
-    PlainTextObject,
-)
+    ButtonStyles, ConfirmObject, JsonObject, Option, OptionGroup, OptionTypes,
+    PlainTextObject)
 from ...errors import SlackObjectFormationError
 
 
@@ -23,7 +17,7 @@ class BlockElement(JsonObject):
 
 
 class ImageElement(BlockElement):
-    def __init__(self, image_url: str, alt_text: str):
+    def __init__(self, *, image_url: str, alt_text: str):
         super().__init__(type="image")
         self.image_url = image_url
         self.alt_text = alt_text
@@ -38,17 +32,18 @@ class ImageElement(BlockElement):
 class ButtonElement(BlockElement):
     def __init__(
         self,
+        *,
         text: str,
         action_id: str,
         value: str,
-        style: Union[ButtonStyle, str] = None,
+        style: str = None,
         confirm: ConfirmObject = None,
     ):
         super().__init__(type="button")
         self.text = text
         self.action_id = action_id
         self.value = value
-        self.style = self.get_raw_value(style)
+        self.style = style
         self.confirm = confirm
 
     def get_json(self) -> dict:
@@ -64,10 +59,10 @@ class ButtonElement(BlockElement):
             raise SlackObjectFormationError(
                 "value attribute cannot exceed 75 characters"
             )
-        if not ButtonStyle.contains(self.style):
+        if self.style not in ButtonStyles:
             raise SlackObjectFormationError(
                 "style attribute must be one of the following values: "
-                f"{ButtonStyle.pretty_print()}"
+                f"{', '.join(ButtonStyles)}"
             )
         json = super().get_json()
         json["text"] = PlainTextObject(self.text).get_json()
@@ -81,10 +76,9 @@ class ButtonElement(BlockElement):
 
 
 class LinkButtonElement(ButtonElement):
-    def __init__(self, text: str, url: str, style: str = None):
+    def __init__(self, *, text: str, url: str, style: str = None):
         random_id = "".join(random.choice(string.ascii_uppercase) for _ in range(16))
         super().__init__(text=text, action_id=random_id, value="", style=style)
-        assert len(self.url) < 3000
         self.url = url
 
     def get_json(self) -> dict:
@@ -100,6 +94,7 @@ class LinkButtonElement(ButtonElement):
 class DropdownElement(BlockElement):
     def __init__(
         self,
+        *,
         placeholder: str,
         action_id: str,
         options: List[Union[Option, OptionGroup]],
@@ -131,20 +126,27 @@ class DropdownElement(BlockElement):
         json["action_id"] = self.action_id
         if isinstance(self.options[0], Option):
             json["options"] = [
-                option.get_json(OptionType.BLOCK) for option in self.options
+                option.get_json("text") if isinstance(option, OptionTypes) else option
+                for option in self.options
             ]
         else:
             json["option_groups"] = [
-                option.get_json(OptionType.BLOCK) for option in self.options
+                option.get_json("text") if isinstance(option, OptionTypes) else option
+                for option in self.options
             ]
-        if self.initial_option is not None:
-            json["initial_option"] = self.initial_option.get_json(OptionType.BLOCK)
-        if self.confirm is not None:
+        if isinstance(self.initial_option, OptionTypes):
+            json["initial_option"] = self.initial_option.get_json("text")
+        elif self.initial_option is not None:
+            json["initial_option"] = self.initial_option
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 
 class ExternalDropdownElement(BlockElement):
+    # TODO: Implement this class
     def __init__(self):
         super().__init__(type="external_select")
         raise NotImplementedError("Stub")
@@ -153,6 +155,7 @@ class ExternalDropdownElement(BlockElement):
 class UserDropdownElement(BlockElement):
     def __init__(
         self,
+        *,
         placeholder: str,
         action_id: str,
         initial_user: str = None,
@@ -178,14 +181,17 @@ class UserDropdownElement(BlockElement):
         json["action_id"] = self.action_id
         if self.initial_user is not None:
             json["initial_user"] = self.initial_user
-        if self.confirm is not None:
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 
 class ConversationDropdownElement(BlockElement):
     def __init__(
         self,
+        *,
         placeholder: str,
         action_id: str,
         initial_conversation: str = None,
@@ -211,14 +217,17 @@ class ConversationDropdownElement(BlockElement):
         json["action_id"] = self.action_id
         if self.initial_conversation is not None:
             json["initial_conversation"] = self.initial_conversation
-        if self.confirm is not None:
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 
 class ChannelDropdownElement(BlockElement):
     def __init__(
         self,
+        *,
         placeholder: str,
         action_id: str,
         initial_channel: str = None,
@@ -240,18 +249,23 @@ class ChannelDropdownElement(BlockElement):
                 "action_id attribute cannot exceed 255 characters"
             )
         json = super().get_json()
-        json["placeholder"] = PlainTextObject(self.placeholder).get_json()
+        if isinstance(self.placeholder, PlainTextObject):
+            json["placeholder"] = self.placeholder.get_json()
+        elif self.placeholder is not None:
+            json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         json["action_id"] = self.action_id
         if self.initial_channel is not None:
             json["initial_channel"] = self.initial_channel
-        if self.confirm is not None:
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 
 class OverflowElement(BlockElement):
     def __init__(
-        self, options: List[Option], action_id: str, confirm: ConfirmObject = None
+        self, *, options: List[Option], action_id: str, confirm: ConfirmObject = None
     ):
         super().__init__(type="overflow")
         self.options = options
@@ -259,7 +273,7 @@ class OverflowElement(BlockElement):
         self.confirm = confirm
 
     def get_json(self) -> dict:
-        if len(self.options) < 2 or len(self.options) > 5:
+        if not 2 < len(self.options) <= 5:
             raise SlackObjectFormationError(
                 "options attribute must have between 2 and 5 items"
             )
@@ -268,16 +282,22 @@ class OverflowElement(BlockElement):
                 "action_id attribute cannot exceed 255 characters"
             )
         json = super().get_json()
-        json["options"] = [option.get_json(OptionType.BLOCK) for option in self.options]
+        json["options"] = [
+            option.get_json("text") if isinstance(option, Option) else option
+            for option in self.options
+        ]
         json["action_id"] = self.action_id
-        if self.confirm is not None:
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 
 class DatePickerElement(BlockElement):
     def __init__(
         self,
+        *,
         placeholder: str,
         action_id: str,
         initial_date: str,
@@ -300,12 +320,16 @@ class DatePickerElement(BlockElement):
             )
         json = super().get_json()
         json["action_id"] = self.action_id
-        if self.placeholder is not None:
+        if isinstance(self.placeholder, PlainTextObject):
+            json["placeholder"] = self.placeholder.get_json()
+        elif self.placeholder is not None:
             json["placeholder"] = PlainTextObject(self.placeholder).get_json()
         if self.initial_date is not None:
             json["initial_date"] = self.initial_date
-        if self.confirm is not None:
+        if isinstance(self.confirm, ConfirmObject):
             json["confirm"] = self.confirm.get_json()
+        elif self.confirm is not None:
+            json["confirm"] = self.confirm
         return json
 
 

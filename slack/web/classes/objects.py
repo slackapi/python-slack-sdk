@@ -220,30 +220,8 @@ class ContainerEnum(Enum):
         return ", ".join(f'"{t.value}"' for t in cls)
 
 
-class ButtonStyle(ContainerEnum):
-    """
-    Supply a particular button style
-    """
-
-    PRIMARY = "primary"
-    DANGER = "danger"
-
-
-class OptionType(ContainerEnum):
-    """
-    How this option should return itself as JSON; dialogs and legacy interactive
-    messages use a different json key than blocks
-    """
-
-    INTERACTIVE_MESSAGE = "label"
-    DIALOG = "label"
-    BLOCK = "text"
-
-
-class DynamicTypes(ContainerEnum):
-    USERS = "users"
-    CHANNELS = "channels"
-    CONVERSATIONS = "conversations"
+ButtonStyles = {"primary", "danger"}
+DynamicDropdownTypes = {"users", "channels", "conversations"}
 
 
 class Option(JsonObject):
@@ -258,7 +236,7 @@ class Option(JsonObject):
         self.label = label
         self.value = value
 
-    def get_json(self, option_type: Union[OptionType, str]):
+    def get_json(self, option_type: str):
         if len(self.label) > 75:
             raise SlackObjectFormationError(
                 "label attribute cannot exceed 75 characters"
@@ -268,7 +246,7 @@ class Option(JsonObject):
                 "value attribute cannot exceed 75 characters"
             )
         option = self.get_raw_value(option_type)
-        if option == OptionType.BLOCK.value:
+        if option == "text":
             return {"text": PlainTextObject(self.label).get_json(), "value": self.value}
         else:
             return {"label": self.label, "value": self.value}
@@ -293,7 +271,7 @@ class OptionGroup(JsonObject):
         self.label = label
         self.options = options
 
-    def get_json(self, option_type: Union[OptionType, str]) -> dict:
+    def get_json(self, option_type: str) -> dict:
         if len(self.label) > 75:
             raise SlackObjectFormationError(
                 "label attribute cannot exceed 75 characters"
@@ -303,7 +281,7 @@ class OptionGroup(JsonObject):
                 "options attribute cannot exceed 100 items"
             )
         option = self.get_raw_value(option_type)
-        if option == OptionType.BLOCK.value:
+        if option == "text":
             return {
                 "label": PlainTextObject(self.label).get_json(),
                 "options": [option.get_json(option_type) for option in self.options],
@@ -313,3 +291,6 @@ class OptionGroup(JsonObject):
                 "label": self.label,
                 "options": [option.get_json(option_type) for option in self.options],
             }
+
+
+OptionTypes = Union[Option, OptionGroup]

@@ -12,6 +12,7 @@ class Message(JsonObject):
 
     def __init__(
         self,
+        *,
         text: str,
         attachments: List[Attachment] = None,
         blocks: List[Block] = None,
@@ -23,7 +24,7 @@ class Message(JsonObject):
     def get_json(self):
         if self.text and self.blocks:
             #  Slack doesn't render the text property if there are blocks, so:
-            self.blocks.insert(0, SectionBlock(self.text))
+            self.blocks.insert(0, SectionBlock(text=self.text))
         json = {
             "text": self.text,
             "attachments": [

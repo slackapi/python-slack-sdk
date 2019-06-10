@@ -2,23 +2,10 @@ from abc import ABCMeta, abstractmethod
 from json import dumps
 from typing import Iterable, List, Optional, Union
 
-from .objects import (
-    BaseObject,
-    ContainerEnum,
-    DynamicTypes,
-    JsonObject,
-    Option,
-    OptionGroup,
-    OptionType,
-)
+from .objects import BaseObject, DynamicDropdownTypes, JsonObject, Option, OptionGroup
 from ...errors import SlackObjectFormationError
 
-
-class DialogSubTypes(ContainerEnum):
-    EMAIL = "email"
-    NUMBER = "number"
-    TELEPHONE = "tel"
-    URL = "url"
+DialogSubTypes = {"email", "number", "tel", "url"}
 
 
 class DialogTextComponent(JsonObject, metaclass=ABCMeta):
@@ -53,7 +40,7 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         value: str = None,
         min_length: int = 0,
         max_length: int = None,
-        subtype: Union[DialogSubTypes, str] = None,
+        subtype: str = None,
     ):
         self.name = name
         self.label = label
@@ -63,7 +50,6 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         self.value = value
         self.min_length = min_length
         self.max_length = max_length or self.max_value_length
-        subtype = self.get_raw_value(subtype)
         self.subtype = subtype
 
     def get_json(self) -> dict:
@@ -105,10 +91,10 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
                 raise SlackObjectFormationError(
                     f"max_length attribute must be less than {self.max_value_length}"
                 )
-        if not DialogSubTypes.contains(self.subtype):
+        if self.subtype not in DialogSubTypes:
             raise SlackObjectFormationError(
                 "subtype attribute must be one of the following values: "
-                f"{DialogSubTypes.pretty_print()}"
+                f"{', '.join(DialogSubTypes)}"
             )
         json = self.get_non_null_keys(self.attributes)
         json["type"] = self.element_type
@@ -167,9 +153,7 @@ class DialogDropdown(JsonObject, metaclass=ABCMeta):
                 raise SlackObjectFormationError(
                     "options attribute cannot exceed 100 items"
                 )
-            json[self.property_key] = [
-                o.get_json(OptionType.DIALOG) for o in self.options
-            ]
+            json[self.property_key] = [o.get_json("label") for o in self.options]
         json["data_source"] = self.data_source
         return json
 
@@ -193,10 +177,7 @@ class GroupedDialogDropdown(DialogDropdown):
 class DynamicDialogDropdown(DialogDropdown):
     property_key = "options"
 
-    def __init__(
-        self, name: str, label: str, source: Union[DynamicTypes, str], **kwargs
-    ):
-        source = self.get_raw_value(source)
+    def __init__(self, name: str, label: str, source: str, **kwargs):
         self.source = source
         super().__init__(name=name, label=label, **kwargs)
 
@@ -205,10 +186,10 @@ class DynamicDialogDropdown(DialogDropdown):
         return self.source
 
     def get_json(self) -> dict:
-        if not DynamicTypes.contains(self.source):
+        if self.source not in DynamicDropdownTypes:
             raise SlackObjectFormationError(
                 "source attribute must be one of the following values: "
-                f"{DynamicTypes.pretty_print()}"
+                f"{', '.join(DynamicDropdownTypes)}"
             )
         json = super().get_json()
         return json
@@ -235,7 +216,7 @@ class ExternalDialogDropdown(DialogDropdown):
         if self.min_query_length is not None:
             json["min_query_length"] = self.min_query_length
         if self.selected_option is not None:
-            json["selected_option"] = [self.selected_option.get_json(OptionType.DIALOG)]
+            json["selected_option"] = [self.selected_option.get_json("label")]
         return json
 
 
@@ -254,63 +235,146 @@ class DialogBuilder(BaseObject):
         self._notify_on_cancel = False
         self._state = {}
 
-    def title(self, title: str):
-        assert len(title) <= 24
+    def title(self, title: str) -> "DialogBuilder":
         self._title = title
         return self
 
-    def state(self, state: dict):
+    def state(self, state: dict) -> "DialogBuilder":
         self._state = state
         return self
 
-    def callback_id(self, callback_id: str):
+    def callback_id(self, callback_id: str) -> "DialogBuilder":
         self._callback_id = callback_id
         return self
 
-    def submit_label(self, label: str):
+    def submit_label(self, label: str) -> "DialogBuilder":
         self._submit_label = label
         return self
 
-    def notify_on_cancel(self, notify: bool):
+    def notify_on_cancel(self, notify: bool) -> "DialogBuilder":
         self._notify_on_cancel = notify
         return self
 
-    def text_field(self, name: str, label: str, **kwargs):
-        assert len(self._elements) < 10
-        self._elements.append(DialogTextFieldComponent(name, label, **kwargs))
+    def text_field(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        placeholder: str = None,
+        hint: str = None,
+        value: str = None,
+        min_length: int = 0,
+        max_length: int = None,
+        subtype: str = None,
+    ) -> "DialogBuilder":
+        self._elements.append(
+            DialogTextFieldComponent(
+                name=name,
+                label=label,
+                optional=optional,
+                placeholder=placeholder,
+                hint=hint,
+                value=value,
+                min_length=min_length,
+                max_length=max_length,
+                subtype=subtype,
+            )
+        )
         return self
 
-    def text_area(self, name: str, label: str, **kwargs):
-        assert len(self._elements) < 10
-        self._elements.append(DialogTextAreaComponent(name, label, **kwargs))
+    def text_area(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        placeholder: str = None,
+        hint: str = None,
+        value: str = None,
+        min_length: int = 0,
+        max_length: int = None,
+        subtype: str = None,
+    ) -> "DialogBuilder":
+        self._elements.append(
+            DialogTextAreaComponent(
+                name=name,
+                label=label,
+                optional=optional,
+                placeholder=placeholder,
+                hint=hint,
+                value=value,
+                min_length=min_length,
+                max_length=max_length,
+                subtype=subtype,
+            )
+        )
         return self
 
     def dropdown(
         self,
+        *,
         name: str,
         label: str,
         options: Iterable[Union[Option, OptionGroup]],
-        **kwargs,
-    ):
-        assert len(self._elements) < 10
-        self._elements.append(DialogDropdown(name, label, options, **kwargs))
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ) -> "DialogBuilder":
+        self._elements.append(
+            DialogDropdown(
+                name=name,
+                label=label,
+                options=options,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
         return self
 
     def auto_dropdown(
-        self, name: str, label: str, auto_type: Union[DynamicTypes, str], **kwargs
-    ):
-        assert len(self._elements) < 10
-        self._elements.append(DynamicDialogDropdown(name, label, auto_type, **kwargs))
+        self,
+        *,
+        name: str,
+        label: str,
+        source: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ) -> "DialogBuilder":
+        self._elements.append(
+            DynamicDialogDropdown(
+                name=name,
+                label=label,
+                source=source,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
         return self
 
     def build(self) -> dict:
-        assert self._title is not None
-        assert self._callback_id is not None
-        assert 0 < len(self._elements) <= 10
+        if self._title is None:
+            raise SlackObjectFormationError("title attribute is required")
+        if len(self._title) > 24:
+            raise SlackObjectFormationError(
+                "title attribute cannot exceed 24 characters"
+            )
+        if self._callback_id is None:
+            raise SlackObjectFormationError("callback_id attribute is required")
+        if not 0 < len(self._elements) <= 10:
+            raise SlackObjectFormationError(
+                "dialogs must contain between 1 and 10 elements"
+            )
         json = {
             "title": self._title,
             "callback_id": self._callback_id,
-            "elements": [elem.get_json() for elem in self._elements],
+            "elements": [
+                elem.get_json() if isinstance(elem, JsonObject) else elem
+                for elem in self._elements
+            ],
             "notify_on_cancel": self._notify_on_cancel,
         }
         if self.submit_label is not None:

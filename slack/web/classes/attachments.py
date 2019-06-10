@@ -122,7 +122,12 @@ class BlockAttachment(Attachment):
         self.blocks = list(blocks)
 
     def get_json(self) -> dict:
-        return {"blocks": [block.get_json() for block in self.blocks]}
+        return {
+            "blocks": [
+                block.get_json() if isinstance(block, Block) else block
+                for block in self.blocks
+            ]
+        }
 
 
 class InteractiveAttachment(Attachment):
@@ -142,5 +147,8 @@ class InteractiveAttachment(Attachment):
     def get_json(self) -> dict:
         json = super().get_json()
         json["callback_id"] = self.callback_id
-        json["actions"] = [action.get_json() for action in self.actions]
+        json["actions"] = [
+            action.get_json() if isinstance(action, Action) else action
+            for action in self.actions
+        ]
         return json

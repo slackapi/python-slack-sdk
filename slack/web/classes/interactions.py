@@ -12,7 +12,7 @@ class InteractiveEvent(BaseObject):
 
     raw_event: dict
 
-    def __init__(self, event):
+    def __init__(self, event: dict):
         self.raw_event = event
         self.response_url = event["response_url"]
 
@@ -25,7 +25,11 @@ class MessageInteractiveEvent(InteractiveEvent):
     block_id: str
     message: dict
 
-    def __init__(self, event):
+    def __init__(self, event: dict):
+        """
+        Convenience class to parse an interactive message payload from the events API
+        :param event: the raw event dictionary
+        """
         super().__init__(event)
         self.user = IDNamePair(event["user"]["id"], event["user"]["username"])
         self.team: IDNamePair = IDNamePair(event["team"]["id"], event["team"]["domain"])
@@ -50,7 +54,11 @@ class DialogInteractiveEvent(InteractiveEvent):
     submission: dict
     state: dict
 
-    def __init__(self, event):
+    def __init__(self, event: dict):
+        """
+        Convenience class to parse a dialog interaction payload from the events API
+        :param event: the raw event dictionary
+        """
         super().__init__(event)
         self.user = IDNamePair(event["user"]["id"], event["user"]["name"])
         self.team = IDNamePair(event["team"]["id"], event["team"]["domain"])
@@ -75,8 +83,8 @@ class DialogInteractiveEvent(InteractiveEvent):
         else:
             errors = []
             for key in self.submission:
-                error_text = f"At least one value is required"
-                errors.append(dict(name=key, error=error_text))
+                error_text = "At least one value is required"
+                errors.append({'name': key, 'error': error_text})
             return {"errors": errors}
 
 
@@ -85,7 +93,11 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
     command: str
     text: str
 
-    def __init__(self, event):
+    def __init__(self, event: dict):
+        """
+        Convenience class to parse a slash command payload from the events API
+        :param event: the raw event dictionary
+        """
         super().__init__(event)
         self.user = IDNamePair(event["user_id"], event["user_name"])
         self.channel = IDNamePair(event["channel_id"], event["channel_name"])
@@ -100,11 +112,12 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
         Create a reply suitable to send directly back to the invoking HTTP request
 
         :param message: Text to send
+
         :param ephemeral: Whether the response should be limited to a single user, or to
          broadcast the reply (_and_ the user's original invocation) to the channel
          publicly
         """
         if ephemeral:
-            return dict(text=message, response_type="ephemeral")
+            return {'text': message, 'response_type': "ephemeral"}
         else:
-            return dict(text=message, response_type="in_channel")
+            return {'text': message, 'response_type': "in_channel"}

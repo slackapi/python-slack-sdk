@@ -1,14 +1,19 @@
 from typing import List, Union
 
 from .elements import BlockElement, InteractiveElements
-from .objects import JsonObject, MarkdownTextObject, PlainTextObject, TextObject
+from .objects import (
+    JsonObject,
+    MarkdownTextObject,
+    PlainTextObject,
+    TextObject,
+)
 from ...errors import SlackObjectFormationError
 
 
 class Block(JsonObject):
     attributes = {"type", "block_id"}
 
-    def __init__(self, type: str, block_id: str = None):
+    def __init__(self, *, type: str, block_id: str = None):
         self.type = type
         self.block_id = block_id
         self.color = None
@@ -33,6 +38,7 @@ class DividerBlock(Block):
 class SectionBlock(Block):
     def __init__(
         self,
+        *,
         text: Union[str, TextObject] = None,
         fields: List[str] = None,
         block_id: str = None,
@@ -83,11 +89,7 @@ class SectionBlock(Block):
 
 class ImageBlock(Block):
     def __init__(
-        self,
-        image_url: str,
-        alt_text: str,
-        title: str = None,
-        block_id: str = None,
+        self, *, image_url: str, alt_text: str, title: str = None, block_id: str = None
     ):
         """
         A simple image block, designed to make those cat photos really pop.
@@ -130,7 +132,7 @@ class ImageBlock(Block):
 
 
 class ActionsBlock(Block):
-    def __init__(self, elements: List[InteractiveElements], block_id: str = None):
+    def __init__(self, *, elements: List[InteractiveElements], block_id: str = None):
         """
         A block that is used to hold interactive elements.
         https://api.slack.com/reference/messaging/blocks#actions
@@ -149,13 +151,16 @@ class ActionsBlock(Block):
                 "elements attribute cannot exceed 5 elements"
             )
         json = super().get_json()
-        json["elements"] = [element.get_json() for element in self.elements]
+        json["elements"] = [
+            element.get_json() if isinstance(element, BlockElement) else element
+            for element in self.elements
+        ]
         return json
 
 
 class ContextBlock(Block):
     def __init__(
-        self, elements: List[Union[ImageBlock, TextObject]], block_id: str = None
+        self, *, elements: List[Union[ImageBlock, TextObject]], block_id: str = None
     ):
         """
         Displays message context, which can include both images and text.
@@ -175,5 +180,8 @@ class ContextBlock(Block):
                 "elements attribute cannot exceed 10 elements"
             )
         json = super().get_json()
-        json["elements"] = [element.get_json() for element in self.elements]
+        json["elements"] = [
+            element.get_json() if isinstance(element, BlockElement) else element
+            for element in self.elements
+        ]
         return json
