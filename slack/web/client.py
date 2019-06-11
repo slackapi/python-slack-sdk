@@ -306,7 +306,7 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel})
         return self.api_call("chat.postMessage", json=kwargs)
 
-    def chat_ScheduleMessage(
+    def chat_scheduleMessage(
         self, *, channel: str, post_at: str, text: str, **kwargs
     ) -> SlackResponse:
         """Schedules a message.
@@ -317,7 +317,7 @@ class WebClient(BaseClient):
             text (str): The message you'd like to send. e.g. 'Hello world'
         """
         kwargs.update({"channel": channel, "post_at": post_at, "text": text})
-        return self.api_call("chat.ScheduleMessage", json=kwargs)
+        return self.api_call("chat.scheduleMessage", json=kwargs)
 
     def chat_unfurl(
         self, *, channel: str, ts: str, unfurls: dict, **kwargs
@@ -349,9 +349,9 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "ts": ts})
         return self.api_call("chat.update", json=kwargs)
 
-    def chat_ScheduledMessages_list(self, **kwargs) -> SlackResponse:
+    def chat_scheduledMessages_list(self, **kwargs) -> SlackResponse:
         """Lists all scheduled messages."""
-        return self.api_call("chat.ScheduledMessages.list", json=kwargs)
+        return self.api_call("chat.scheduledMessages.list", json=kwargs)
 
     def conversations_archive(self, *, channel: str, **kwargs) -> SlackResponse:
         """Archives a conversation.
