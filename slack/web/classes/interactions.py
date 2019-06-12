@@ -1,10 +1,10 @@
 import json
 from typing import List
 
-from .objects import BaseObject, IDNamePair
+from .objects import IDNamePair, JsonObject
 
 
-class InteractiveEvent(BaseObject):
+class InteractiveEvent(JsonObject):
     response_url: str
     user: IDNamePair
     team: IDNamePair

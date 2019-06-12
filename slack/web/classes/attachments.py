@@ -1,43 +1,36 @@
-from typing import Iterable, List
+from typing import Iterable, List, Set
 
 from .actions import Action
 from .blocks import Block
-from .objects import JsonObject
-from ...errors import SlackObjectFormationError
+from .objects import JsonObject, JsonValidator, extract_json
 
 
 class Field(JsonObject):
     attributes = {"short", "value", "title"}
 
-    def __init__(self, title: str = None, value: str = None, short: bool = True):
+    def __init__(self, *, title: str = None, value: str = None, short: bool = True):
         self.title = title
         self.value = value
         self.short = short
-
-    def get_json(self) -> dict:
-        return self.get_non_null_keys(self.attributes)
 
 
 class Author(JsonObject):
     attributes = {"author_name", "author_icon", "author_link"}
 
     def __init__(
-        self, author_name: str, author_link: str = None, author_icon: str = None
+        self, *, author_name: str, author_link: str = None, author_icon: str = None
     ):
         self.author_name = author_name
         self.author_link = author_link
         self.author_icon = author_icon
 
-    def get_json(self) -> dict:
-        if not (self.author_link is None or self.author_name is not None):
-            raise SlackObjectFormationError(
-                "Author name is required if author link is populated"
-            )
-        if not (self.author_icon is None or self.author_name is not None):
-            raise SlackObjectFormationError(
-                "Author name is required if author icon is populated"
-            )
-        return self.get_non_null_keys(self.attributes)
+    @JsonValidator("author_name must be present if author_link is present")
+    def author_link_without_author_name(self):
+        return self.author_link is None or self.author_name is not None
+
+    @JsonValidator("author_icon must be present if author_link is present")
+    def author_link_without_author_icon(self):
+        return self.author_link is None or self.author_icon is not None
 
 
 class Attachment(JsonObject):
@@ -63,6 +56,7 @@ class Attachment(JsonObject):
 
     def __init__(
         self,
+        *,
         text: str,
         title: str = None,
         fallback: str = None,
@@ -91,21 +85,18 @@ class Attachment(JsonObject):
         self.ts = ts
         self.fields = fields or []
 
+    @JsonValidator("footer attribute cannot exceed 300 characters")
+    def footer_length(self):
+        return self.footer is None or len(self.footer) <= 300
+
+    @JsonValidator("ts attribute cannot be present if footer attribute is absent")
+    def ts_without_footer(self):
+        return self.ts is None or self.footer is not None
+
     def get_json(self) -> dict:
-        if self.footer is not None and len(self.footer) <= 300:
-            raise SlackObjectFormationError(
-                "Footer length cannot exceed 300 characters"
-            )
-        if self.ts is not None and self.footer is None:
-            raise SlackObjectFormationError(
-                "ts attribute cannot be specified if footer is not specified"
-            )
-        json = self.get_non_null_keys(self.attributes)
+        json = super().get_json()
         json.update(
-            {
-                "mrkdwn_in": ["fields"],
-                "fields": [field.get_json() for field in self.fields],
-            }
+            {"mrkdwn_in": ["fields"], "fields": extract_json(self.fields, Field)}
         )
         return json
 
@@ -117,17 +108,12 @@ class BlockAttachment(Attachment):
 
     blocks: List[Block]
 
-    def __init__(self, blocks: Iterable[Block]):
+    def __init__(self, *, blocks: Iterable[Block]):
         super().__init__(text="")
         self.blocks = list(blocks)
 
     def get_json(self) -> dict:
-        return {
-            "blocks": [
-                block.get_json() if isinstance(block, Block) else block
-                for block in self.blocks
-            ]
-        }
+        return {"blocks": extract_json(self.blocks, Block)}
 
 
 class InteractiveAttachment(Attachment):
@@ -137,8 +123,12 @@ class InteractiveAttachment(Attachment):
 
     actions: List[Action]
 
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"callback_id"})
+
     def __init__(
-        self, callback_id: str, actions: Iterable[Action] = None, text="", **kwargs
+        self, *, callback_id: str, actions: Iterable[Action] = None, text="", **kwargs
     ):
         super().__init__(text=text, **kwargs)
         self.callback_id = callback_id
@@ -146,9 +136,5 @@ class InteractiveAttachment(Attachment):
 
     def get_json(self) -> dict:
         json = super().get_json()
-        json["callback_id"] = self.callback_id
-        json["actions"] = [
-            action.get_json() if isinstance(action, Action) else action
-            for action in self.actions
-        ]
+        json["actions"] = extract_json(self.actions, Action)
         return json

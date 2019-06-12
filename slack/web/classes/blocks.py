@@ -1,13 +1,14 @@
-from typing import List, Union
+from typing import List, Set, Union
 
-from .elements import BlockElement, InteractiveElements
+from .elements import BlockElement, InteractiveElement
 from .objects import (
     JsonObject,
+    JsonValidator,
     MarkdownTextObject,
     PlainTextObject,
     TextObject,
+    extract_json,
 )
-from ...errors import SlackObjectFormationError
 
 
 class Block(JsonObject):
@@ -18,12 +19,9 @@ class Block(JsonObject):
         self.block_id = block_id
         self.color = None
 
-    def get_json(self) -> dict:
-        if self.block_id is not None and len(self.block_id) > 255:
-            raise SlackObjectFormationError(
-                "Block ID must not exceed 255 characters if specified"
-            )
-        return self.get_non_null_keys(self.attributes)
+    @JsonValidator("block_id cannot exceed 255 characters")
+    def block_id_length(self):
+        return self.block_id is None or len(self.block_id) <= 255
 
 
 class DividerBlock(Block):
@@ -65,29 +63,35 @@ class SectionBlock(Block):
         self.fields = fields or []
         self.accessory = accessory
 
+    @JsonValidator("text or fields attribute must be specified")
+    def text_or_fields_populated(self):
+        return self.text is not None or self.fields is not None
+
+    @JsonValidator("fields attribute cannot exceed 10 items")
+    def fields_length(self):
+        return self.fields is None or len(self.fields) <= 10
+
     def get_json(self) -> dict:
-        if self.text is None and self.fields is None:
-            raise SlackObjectFormationError(
-                "text or fields attribute must be populated"
-            )
-        if self.fields is not None and len(self.fields) > 10:
-            raise SlackObjectFormationError("fields attribute cannot exceed 10 items")
         json = super().get_json()
         if self.text is not None:
             if isinstance(self.text, TextObject):
                 json["text"] = self.text.get_json()
             else:
-                json["text"] = MarkdownTextObject(self.text).get_json()
+                json["text"] = MarkdownTextObject(text=self.text).get_json()
         if self.fields:
             json["fields"] = [
-                MarkdownTextObject(field).get_json() for field in self.fields
+                MarkdownTextObject(text=field).get_json() for field in self.fields
             ]
         if self.accessory is not None:
-            json["accessory"] = self.accessory.get_json()
+            json["accessory"] = extract_json(self.accessory, BlockElement)
         return json
 
 
 class ImageBlock(Block):
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"image_url", "alt_text"})
+
     def __init__(
         self, *, image_url: str, alt_text: str, title: str = None, block_id: str = None
     ):
@@ -111,28 +115,27 @@ class ImageBlock(Block):
         self.alt_text = alt_text
         self.title = title
 
+    @JsonValidator("image_url attribute cannot exceed 3000 characters")
+    def image_url_length(self):
+        return len(self.image_url) <= 3000
+
+    @JsonValidator("alt_text attribute cannot exceed 3000 characters")
+    def alt_text_length(self):
+        return len(self.alt_text) <= 2000
+
+    @JsonValidator("title attribute cannot exceed 2000 characters")
+    def title_length(self):
+        return self.title is None or len(self.title) <= 2000
+
     def get_json(self) -> dict:
-        if len(self.image_url) > 3000:
-            raise SlackObjectFormationError(
-                "image_url attribute cannot exceed 3000 characters"
-            )
-        if len(self.alt_text) > 2000:
-            raise SlackObjectFormationError(
-                "alt_text attribute cannot exceed 2000 characters"
-            )
-        if self.title is not None and len(self.title) > 2000:
-            raise SlackObjectFormationError(
-                "title attribute cannot exceed 2000 characters"
-            )
         json = super().get_json()
-        json.update(self.get_non_null_keys({"image_url", "alt_text"}))
         if self.title is not None:
-            json["title"] = PlainTextObject(self.title).get_json()
+            json["title"] = PlainTextObject(text=self.title).get_json()
         return json
 
 
 class ActionsBlock(Block):
-    def __init__(self, *, elements: List[InteractiveElements], block_id: str = None):
+    def __init__(self, *, elements: List[InteractiveElement], block_id: str = None):
         """
         A block that is used to hold interactive elements.
         https://api.slack.com/reference/messaging/blocks#actions
@@ -145,16 +148,13 @@ class ActionsBlock(Block):
         super().__init__(type="actions", block_id=block_id)
         self.elements = elements
 
+    @JsonValidator("elements attribute cannot exceed 5 elements")
+    def elements_length(self):
+        return len(self.elements) <= 5
+
     def get_json(self) -> dict:
-        if len(self.elements) > 5:
-            raise SlackObjectFormationError(
-                "elements attribute cannot exceed 5 elements"
-            )
         json = super().get_json()
-        json["elements"] = [
-            element.get_json() if isinstance(element, BlockElement) else element
-            for element in self.elements
-        ]
+        json["elements"] = extract_json(self.elements, BlockElement)
         return json
 
 
@@ -174,14 +174,11 @@ class ContextBlock(Block):
         super().__init__(type="context", block_id=block_id)
         self.elements = elements
 
+    @JsonValidator("elements attribute cannot exceed 10 elements")
+    def elements_length(self):
+        return len(self.elements) <= 10
+
     def get_json(self) -> dict:
-        if len(self.elements) > 10:
-            raise SlackObjectFormationError(
-                "elements attribute cannot exceed 10 elements"
-            )
         json = super().get_json()
-        json["elements"] = [
-            element.get_json() if isinstance(element, BlockElement) else element
-            for element in self.elements
-        ]
+        json["elements"] = extract_json(self.elements, BlockElement)
         return json

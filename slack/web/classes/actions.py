@@ -1,25 +1,30 @@
 from abc import ABCMeta, abstractmethod
-from typing import Iterable, Union
+from typing import Iterable, Set, Union
 
-from .objects import ButtonStyles, DynamicDropdownTypes, JsonObject, Option, OptionGroup
-from ...errors import SlackObjectFormationError
+from .objects import (
+    ButtonStyles,
+    DynamicDropdownTypes,
+    EnumValidator,
+    JsonObject,
+    JsonValidator,
+    Option,
+    OptionGroup,
+    extract_json,
+)
 
 
 class Action(JsonObject):
     attributes = {"name", "text", "type", "url"}
 
-    def __init__(self, text: str, type: str, name: str = None, url: str = None):
+    def __init__(self, *, text: str, type: str, name: str = None, url: str = None):
         self.name = name
         self.url = url
         self.text = text
         self.type = type
 
-    def get_json(self) -> dict:
-        if self.name is None and self.url is None:
-            # If URL is populated but not name, this is a LinkButton, so name is not
-            # needed, otherwise:
-            raise SlackObjectFormationError("name attribute is required")
-        return self.get_non_null_keys(self.attributes)
+    @JsonValidator("name attribute is required")
+    def name_or_url_present(self):
+        return self.name is not None or self.url is not None
 
 
 class ActionConfirmation(JsonObject):
@@ -27,6 +32,7 @@ class ActionConfirmation(JsonObject):
 
     def __init__(
         self,
+        *,
         text: str,
         title: str = None,
         ok_text: str = "Okay",
@@ -37,13 +43,15 @@ class ActionConfirmation(JsonObject):
         self.ok_text = ok_text
         self.dismiss_text = dismiss_text
 
-    def get_json(self) -> dict:
-        return self.get_non_null_keys(self.attributes)
-
 
 class Button(Action):
+    @property
+    def attributes(self):
+        return super().attributes.union({"value", "style"})
+
     def __init__(
         self,
+        *,
         name: str,
         text: str,
         value: str,
@@ -68,25 +76,19 @@ class Button(Action):
         self.confirm = confirm
         self.style = style
 
+    @EnumValidator("style", ButtonStyles)
+    def style_valid(self):
+        return self.style is None or self.style in ButtonStyles
+
     def get_json(self) -> dict:
-        if self.style is not None and self.style not in ButtonStyles:
-            raise SlackObjectFormationError(
-                "style attribute must be one of the following values: "
-                f"{', '.join(ButtonStyles)}"
-            )
         json = super().get_json()
-        json.update(self.get_non_null_keys({"value", "style"}))
         if self.confirm is not None:
-            json["confirm"] = (
-                self.confirm.get_json()
-                if isinstance(self.confirm, ActionConfirmation)
-                else self.confirm
-            )
+            json["confirm"] = extract_json(self.confirm, ActionConfirmation)
         return json
 
 
 class LinkButton(Action):
-    def __init__(self, text: str, url: str):
+    def __init__(self, *, text: str, url: str):
         """
         A simple interactive button that just opens a URL
 
@@ -98,7 +100,11 @@ class LinkButton(Action):
 
 
 class MessageDropdown(Action, metaclass=ABCMeta):
-    attributes = {"name", "text", "value", "type"}
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {"name", "text", "value", "type", "data_source"}
+        )
 
     @property
     @abstractmethod
@@ -112,6 +118,7 @@ class MessageDropdown(Action, metaclass=ABCMeta):
 
     def __init__(
         self,
+        *,
         name: str,
         text: str,
         options: Iterable[Union[Option, OptionGroup]] = None,
@@ -124,20 +131,14 @@ class MessageDropdown(Action, metaclass=ABCMeta):
             self.options = None
         self.selected_option = selected_option
 
+    @JsonValidator("options attribute cannot exceed 100 items")
+    def options_length(self):
+        return self.data_source != "static" or len(self.options) < 100
+
     def get_json(self) -> dict:
-        json = self.get_non_null_keys(self.attributes)
+        json = super().get_json()
         if self.data_source != "static":
-            if not 0 < len(self.options) <= 100:
-                raise SlackObjectFormationError(
-                    "options attribute must have between 1 and 100 elements"
-                )
-            json[self.property_key] = [
-                o.get_json("label")
-                if (isinstance(o, Option) or isinstance(o, OptionGroup))
-                else o
-                for o in self.options
-            ]
-        json["data_source"] = self.data_source
+            json[self.property_key] = extract_json(self.options, OptionGroup, "label")
         return json
 
 
@@ -145,7 +146,7 @@ class OptionsMessageDropdown(MessageDropdown):
     data_source = "static"
     property_key = "options"
 
-    def __init__(self, name: str, text: str, options: Iterable[Option], **kwargs):
+    def __init__(self, *, name: str, text: str, options: Iterable[Option], **kwargs):
         super().__init__(name=name, text=text, options=options, **kwargs)
 
 
@@ -153,14 +154,16 @@ class OptionGroupMessageDropdown(MessageDropdown):
     data_source = "static"
     property_key = "options_group"
 
-    def __init__(self, name: str, text: str, options: Iterable[OptionGroup], **kwargs):
+    def __init__(
+        self, *, name: str, text: str, options: Iterable[OptionGroup], **kwargs
+    ):
         super().__init__(name=name, text=text, options=options, **kwargs)
 
 
 class DynamicMessageDropdown(MessageDropdown):
     property_key = "options"
 
-    def __init__(self, name: str, text: str, source: str, **kwargs):
+    def __init__(self, *, name: str, text: str, source: str, **kwargs):
         super().__init__(name=name, text=text, **kwargs)
         self._source = source
 
@@ -168,35 +171,37 @@ class DynamicMessageDropdown(MessageDropdown):
     def data_source(self) -> str:
         return self._source
 
-    def get_json(self) -> dict:
-        if self._source not in DynamicDropdownTypes:
-            raise SlackObjectFormationError(
-                "source attribute must be one of the following values: "
-                f"{', '.join(DynamicDropdownTypes)}"
-            )
-        json = super().get_json()
-        return json
+    @EnumValidator("source", DynamicDropdownTypes)
+    def source_valid(self):
+        return self._source in DynamicDropdownTypes
 
 
 class ExternalMessageDropdown(MessageDropdown):
     data_source = "external"
     property_key = "options"
 
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"min_query_length"})
+
     def __init__(
         self,
+        *,
         name: str,
         label: str,
         selected_option: Option = None,
         min_query_length: int = None,
         **kwargs,
     ):
-        super().__init__(name, label, **kwargs)
+        super().__init__(name=name, text=label, **kwargs)
         self.selected_option = selected_option
         self.min_query_length = min_query_length
 
     def get_json(self) -> dict:
         json = super().get_json()
-        json.update(self.get_non_null_keys({"min_query_length"}))
         if self.selected_option is not None:
-            json["selected_option"] = [self.selected_option.get_json("label")]
+            # selected_option JSON must be a list, even though it will only be one item
+            json["selected_option"] = extract_json(
+                [self.selected_option], Option, "label"
+            )
         return json
