@@ -153,8 +153,11 @@ class PlainTextObject(TextObject):
         self.emoji = emoji
 
     @staticmethod
-    def from_string(string: str) -> dict:
-        return PlainTextObject(text=string).get_json()
+    def from_string(text: str) -> dict:
+        """
+        Transforms a string into the required object shape to act as a PlainTextObject
+        """
+        return PlainTextObject(text=text).get_json()
 
 
 class MarkdownTextObject(TextObject):
@@ -172,8 +175,12 @@ class MarkdownTextObject(TextObject):
         self.verbatim = verbatim
 
     @staticmethod
-    def from_string(string: str) -> dict:
-        return MarkdownTextObject(text=string).get_json()
+    def from_string(text: str) -> dict:
+        """
+        Transforms a string into the required object shape to act as a
+        MarkdownTextObject
+        """
+        return MarkdownTextObject(text=text).get_json()
 
 
 class LinkTextObject(MarkdownTextObject):
@@ -224,10 +231,10 @@ class ConfirmObject(JsonObject):
     def get_json(self) -> dict:
         self.validate_json()
         return {
-            "title": PlainTextObject(text=self.title).get_json(),
-            "text": MarkdownTextObject(text=self.text).get_json(),
-            "confirm": PlainTextObject(text=self.confirm).get_json(),
-            "deny": PlainTextObject(text=self.deny).get_json(),
+            "title": PlainTextObject.from_string(self.title),
+            "text": MarkdownTextObject.from_string(self.text),
+            "confirm": PlainTextObject.from_string(self.confirm),
+            "deny": PlainTextObject.from_string(self.deny),
         }
 
 
@@ -255,7 +262,7 @@ class Option(JsonObject):
         self.validate_json()
         if option_type == "text":
             return {
-                "text": PlainTextObject(text=self.label).get_json(),
+                "text": PlainTextObject.from_string(self.label),
                 "value": self.value,
             }
         else:
@@ -292,7 +299,7 @@ class OptionGroup(JsonObject):
     def get_json(self, option_type: str) -> dict:
         if option_type == "text":
             return {
-                "label": PlainTextObject(text=self.label).get_json(),
+                "label": PlainTextObject.from_string(self.label),
                 "options": extract_json(self.options, Option, option_type),
             }
         else:

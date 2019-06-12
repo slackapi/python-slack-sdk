@@ -86,7 +86,7 @@ class ButtonElement(InteractiveElement):
 
     def get_json(self) -> dict:
         json = super().get_json()
-        json["text"] = PlainTextObject(text=self.text).get_json()
+        json["text"] = PlainTextObject.from_string(self.text)
         if self.confirm is not None:
             json["confirm"] = extract_json(self.confirm, ConfirmObject)
         return json

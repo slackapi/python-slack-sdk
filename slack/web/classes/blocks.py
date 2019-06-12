@@ -77,10 +77,10 @@ class SectionBlock(Block):
             if isinstance(self.text, TextObject):
                 json["text"] = self.text.get_json()
             else:
-                json["text"] = MarkdownTextObject(text=self.text).get_json()
+                json["text"] = MarkdownTextObject.from_string(self.text)
         if self.fields:
             json["fields"] = [
-                MarkdownTextObject(text=field).get_json() for field in self.fields
+                MarkdownTextObject.from_string(field) for field in self.fields
             ]
         if self.accessory is not None:
             json["accessory"] = extract_json(self.accessory, BlockElement)
@@ -130,7 +130,7 @@ class ImageBlock(Block):
     def get_json(self) -> dict:
         json = super().get_json()
         if self.title is not None:
-            json["title"] = PlainTextObject(text=self.title).get_json()
+            json["title"] = PlainTextObject.from_string(self.title)
         return json
 
 
