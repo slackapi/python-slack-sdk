@@ -1,3 +1,5 @@
+from typing import Any, Mapping
+
 STRING_51_CHARS = "SFOTYFUZTMDSOULXMKVFDOBQWNBAVGANMVLXQQZZQZQHBLJRZNY"
 STRING_301_CHARS = (
     "ZFOMVKXETILJKBZPVKOYAUPNYWWWUICNEVXVPWNAMGCNHDBRMATGPMUHUZHUJKFWWLXBQXVDNCGJHAPKEK"
@@ -44,3 +46,20 @@ STRING_3001_CHARS = (
     "KLDZDWDYAPXCKLZMEFIAOFYGFLBMURWVBFJDDEFXNIQOORYRMNROGVCOESSHSNIBNFRHPSWVAUQQVDMAHX"
     "STDOVZMZEFRRFCKOLDOOFVOBCPRRLGYFJNXVPPUZONOSALUUI"
 )
+
+
+def compare_json_structure(
+    clazz: type, kwargs: Mapping[str, Any], attributes: Mapping[str, Any] = None
+) -> bool:
+    """
+    Pass a class, kwargs to send to the constructor, and any implied attributes
+
+    :return: True if the object matched expected values, false if not.
+    """
+    test_instance = clazz(**kwargs)
+    tests = {**kwargs, **attributes}
+    for attr, value in tests.items():
+        if not getattr(test_instance, attr) == value:
+            return False
+    else:
+        return True

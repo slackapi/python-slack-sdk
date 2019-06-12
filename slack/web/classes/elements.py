@@ -1,7 +1,7 @@
+import random
 import re
 import string
 from abc import ABCMeta, abstractmethod
-from random import random
 from typing import List, Set, Union
 
 from .objects import (
@@ -40,16 +40,22 @@ class InteractiveElement(BlockElement):
 
 
 class ImageElement(BlockElement):
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"image_url", "alt_text"})
+
     def __init__(self, *, image_url: str, alt_text: str):
         super().__init__(type="image")
         self.image_url = image_url
         self.alt_text = alt_text
 
-    def get_json(self) -> dict:
-        json = super().get_json()
-        json["image_url"] = self.image_url
-        json["alt_text"] = self.alt_text
-        return json
+    @JsonValidator("image_url attribute cannot exceed 3000 characters")
+    def image_url_length(self):
+        return len(self.image_url) <= 3000
+
+    @JsonValidator("alt_text attribute cannot exceed 2000 characters")
+    def alt_text_length(self):
+        return len(self.alt_text) <= 2000
 
 
 class ButtonElement(InteractiveElement):
@@ -229,15 +235,15 @@ class AbstractDynamicDropdown(AbstractSelector, metaclass=ABCMeta):
         return json
 
 
-class UserDropdownElement(InteractiveElement):
+class UserDropdownElement(AbstractDynamicDropdown):
     initial_object_type = "user"
 
 
-class ConversationDropdownElement(BlockElement):
+class ConversationDropdownElement(AbstractDynamicDropdown):
     initial_object_type = "conversation"
 
 
-class ChannelDropdownElement(BlockElement):
+class ChannelDropdownElement(AbstractDynamicDropdown):
     initial_object_type = "channel"
 
 
