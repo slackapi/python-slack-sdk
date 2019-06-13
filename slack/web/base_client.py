@@ -6,6 +6,7 @@ import platform
 import sys
 import logging
 import asyncio
+from typing import Optional
 import inspect
 
 # ThirdParty Imports
@@ -25,7 +26,7 @@ class BaseClient:
         token,
         base_url=BASE_URL,
         timeout=30,
-        loop=None,
+        loop: Optional[asyncio.AbstractEventLoop] = None,
         ssl=None,
         proxy=None,
         run_async=False,
@@ -42,6 +43,11 @@ class BaseClient:
         self._event_loop = loop
 
     def _set_event_loop(self):
+        """Sets the Event loop.
+
+        # TODO: Document why it's neccessary to create a new_event_loop.
+        # During testing I found that get_event_loop doesn't work from new Threads.
+        """
         if self.run_async:
             self._event_loop = asyncio.get_event_loop()
         else:
@@ -102,12 +108,14 @@ class BaseClient:
             form_data = aiohttp.FormData()
             for k, v in files.items():
                 if isinstance(v, str):
+                    # TODO: This should be opened with a context manager.
                     form_data.add_field(k, open(v, "rb"))
                 else:
                     form_data.add_field(k, v)
 
             if data is not None:
                 for k, v in data.items():
+                    # TODO: We should not be casting this to a string. Test why this is here.
                     form_data.add_field(k, str(v))
 
             data = form_data
@@ -195,7 +203,6 @@ class BaseClient:
         """
         if self.session and not self.session.closed:
             async with self.session.request(http_verb, api_url, **req_args) as res:
-                self._logger.debug("Ran the request with existing session.")
                 return {
                     "data": await res.json(),
                     "headers": res.headers,
@@ -205,7 +212,6 @@ class BaseClient:
             loop=self._event_loop, timeout=aiohttp.ClientTimeout(total=self.timeout)
         ) as session:
             async with session.request(http_verb, api_url, **req_args) as res:
-                self._logger.debug("Ran the request with a new session.")
                 return {
                     "data": await res.json(),
                     "headers": res.headers,

@@ -656,10 +656,9 @@ class WebClient(BaseClient):
 
         if file:
             return self.api_call("files.upload", files={"file": file}, data=kwargs)
-        elif content:
-            data = kwargs.copy()
-            data.update({"content": content})
-            return self.api_call("files.upload", data=data)
+        data = kwargs.copy()
+        data.update({"content": content})
+        return self.api_call("files.upload", data=data)
 
     def groups_archive(self, *, channel: str, **kwargs) -> SlackResponse:
         """Archives a private channel.
