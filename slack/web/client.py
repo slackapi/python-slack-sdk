@@ -573,8 +573,12 @@ class WebClient(BaseClient):
         kwargs.update({"num_minutes": num_minutes})
         return self.api_call("dnd.setSnooze", http_verb="GET", params=kwargs)
 
-    def dnd_teamInfo(self, **kwargs) -> SlackResponse:
-        """Retrieves the Do Not Disturb status for users on a team."""
+    def dnd_teamInfo(self, *, users: str,**kwargs) -> SlackResponse:
+        """Retrieves the Do Not Disturb status for users on a team.
+        Args:
+            users (str): Comma-seperated list of users to fetch Status for. e.g. 'U1234,W4567'
+        """
+        kwargs.update({"users": users})
         return self.api_call("dnd.teamInfo", http_verb="GET", params=kwargs)
 
     def emoji_list(self, **kwargs) -> SlackResponse:
