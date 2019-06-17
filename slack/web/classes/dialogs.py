@@ -1,19 +1,19 @@
 from abc import ABCMeta, abstractmethod
 from json import dumps
-from typing import Iterable, List, Optional, Set, Union
+from typing import List, Optional, Set, Union
 
 from .objects import (
-    DynamicDropdownTypes,
+    DynamicSelectElementTypes,
     EnumValidator,
     JsonObject,
     JsonValidator,
-    Option,
-    OptionGroup,
+    OptionGroupObject,
+    OptionObject,
     OptionTypes,
     extract_json,
 )
 
-DialogSubTypes = {"email", "number", "tel", "url"}
+TextElementSubtypes = {"email", "number", "tel", "url"}
 
 
 class DialogTextComponent(JsonObject, metaclass=ABCMeta):
@@ -27,11 +27,12 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         "min_length",
         "label",
         "subtype",
+        "type",
     }
 
     @property
     @abstractmethod
-    def element_type(self):
+    def type(self):
         pass
 
     @property
@@ -102,41 +103,40 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def max_length_length(self):
         return self.max_length is None or self.max_length <= self.max_value_length
 
-    @EnumValidator("subtype", DialogSubTypes)
+    @EnumValidator("subtype", TextElementSubtypes)
     def subtype_valid(self):
-        return self.subtype is None or self.subtype in DialogSubTypes
-
-    def get_json(self) -> dict:
-        json = super().get_json()
-        json["type"] = self.element_type
-        return json
+        return self.subtype is None or self.subtype in TextElementSubtypes
 
 
-class DialogTextFieldComponent(DialogTextComponent):
-    element_type = "text"
+class DialogTextField(DialogTextComponent):
+    """
+    Text elements are single-line plain text fields.
+
+    https://api.slack.com/dialogs#text_elements
+    """
+
+    type = "text"
     max_value_length = 150
 
 
-class DialogTextAreaComponent(DialogTextComponent):
-    element_type = "textarea"
+class DialogTextArea(DialogTextComponent):
+    """
+    A textarea is a multi-line plain text editing control. You've likely encountered
+    these on the world wide web. Use this element if you want a relatively long
+    answer from users. The element UI provides a remaining character count to the
+    max_length you have set or the default, 3000.
+
+    https://api.slack.com/dialogs#textarea_elements
+    """
+
+    type = "textarea"
     max_value_length = 3000
 
 
-class DialogDropdown(JsonObject, metaclass=ABCMeta):
-    attributes = {
-        "name",
-        "value",
-        "label",
-        "optional",
-        "placeholder",
-        "type",
-        "data_source",
-    }
+class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
+    DataSourceTypes = DynamicSelectElementTypes.union({"external", "static"})
 
-    @property
-    @abstractmethod
-    def property_key(self) -> str:
-        pass
+    attributes = {"name", "label", "optional", "placeholder", "type", "data_source"}
 
     @property
     @abstractmethod
@@ -148,70 +148,248 @@ class DialogDropdown(JsonObject, metaclass=ABCMeta):
         *,
         name: str,
         label: str,
-        options: Iterable[Union[Option, OptionGroup]] = None,
         optional: bool = False,
-        value: str = None,
+        value: Union[OptionObject, str] = None,
         placeholder: str = None,
     ):
         self.name = name
         self.label = label
-        self.type = "select"
-        if self.data_source == "static":
-            self.options = list(options)
-        else:
-            self.options = None
         self.optional = optional
         self.value = value
         self.placeholder = placeholder
+        self.type = "select"
 
-    @JsonValidator("options attribute cannot exceed 100 items")
-    def options_length(self):
-        return self.data_source != "static" or len(self.options) < 100
+    @JsonValidator("name attribute cannot exceed 300 characters")
+    def name_length(self):
+        return len(self.name) <= 300
 
-    def get_json(self) -> dict:
+    @JsonValidator("label attribute cannot exceed 48 characters")
+    def label_length(self):
+        return len(self.label) <= 48
+
+    @JsonValidator("placeholder attribute cannot exceed 150 characters")
+    def placeholder_length(self):
+        return self.placeholder is None or len(self.placeholder) <= 150
+
+    @EnumValidator("data_source", DataSourceTypes)
+    def data_source_valid(self):
+        return self.data_source in self.DataSourceTypes
+
+    def get_json(self, *args) -> dict:
         json = super().get_json()
-        if self.data_source == "static":
-            json[self.property_key] = extract_json(self.options, OptionTypes, "label")
+        if self.data_source == "external":
+            if isinstance(self.value, OptionObject):
+                json["selected_options"] = extract_json(
+                    [self.value], OptionTypes, "dialog"
+                )
+            elif self.value is not None:
+                json["selected_options"] = OptionObject.from_single_value(self.value)
+        else:
+            if isinstance(self.value, OptionObject):
+                json["value"] = self.value.value
+            elif self.value is not None:
+                json["value"] = self.value
         return json
 
 
-class StaticDialogDropdown(DialogDropdown):
+class DialogStaticSelector(AbstractDialogSelector):
+    """
+    Use the select element for multiple choice selections allowing users to pick a
+    single item from a list. True to web roots, this selection is displayed as a
+    dropdown menu.
+
+    https://api.slack.com/dialogs#select_elements
+    """
+
     data_source = "static"
-    property_key = "options"
-
-    def __init__(self, *, name: str, label: str, options: Iterable[Option], **kwargs):
-        super().__init__(name=name, label=label, options=options, **kwargs)
-
-
-class GroupedDialogDropdown(DialogDropdown):
-    data_source = "static"
-    property_key = "options_group"
 
     def __init__(
-        self, *, name: str, label: str, options: Iterable[OptionGroup], **kwargs
+        self,
+        *,
+        name: str,
+        label: str,
+        options: Union[List[OptionObject], List[OptionGroupObject]],
+        optional: bool = False,
+        value: Union[OptionObject, str] = None,
+        placeholder: str = None,
     ):
-        super().__init__(name=name, label=label, options=options, **kwargs)
+        """
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A select element may contain up to 100 selections, provided as a list of
+        Option or OptionGroup objects
+
+        https://api.slack.com/dialogs#attributes_select_elements
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param options: A list of up to 100 Option or OptionGroup objects. Object
+            types cannot be mixed.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+        self.options = options
+
+    @JsonValidator("options attribute cannot exceed 100 items")
+    def options_length(self):
+        return len(self.options) < 100
+
+    @JsonValidator(
+        "options attribute cannot contain mixed OptionGroup and Option items"
+    )
+    def options_valid(self):
+        return all(isinstance(o, OptionObject) for o in self.options) or all(
+            isinstance(o, OptionGroupObject) for o in self.options
+        )
+
+    def get_json(self) -> dict:
+        json = super().get_json()
+        if isinstance(self.options[0], OptionObject):
+            json["options"] = extract_json(self.options, OptionTypes, "dialog")
+        else:
+            json["option_groups"] = extract_json(self.options, OptionTypes, "dialog")
+        return json
 
 
-class DynamicDialogDropdown(DialogDropdown):
-    property_key = "options"
+class DialogUserSelector(AbstractDialogSelector):
+    data_source = "users"
 
-    def __init__(self, *, name: str, label: str, source: str, **kwargs):
-        self.source = source
-        super().__init__(name=name, label=label, **kwargs)
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ):
+        """
+        Now you can easily populate a select menu with a list of users. For example,
+        when you are creating a bug tracking app, you want to include a field for an
+        assignee. Slack pre-populates the user list in client-side, so your app
+        doesn't need access to a related OAuth scope.
 
-    @property
-    def data_source(self) -> str:
-        return self.source
+        https://api.slack.com/dialogs#dynamic_select_elements_users
 
-    @EnumValidator("source", DynamicDropdownTypes)
-    def source__valid(self):
-        return self.source in DynamicDropdownTypes
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
 
 
-class ExternalDialogDropdown(DialogDropdown):
+class DialogChannelSelector(AbstractDialogSelector):
+    data_source = "channels"
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ):
+        """
+        You can also provide a select menu with a list of channels. Specify your
+        data_source as channels to limit only to public channels
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+
+
+class DialogConversationSelector(AbstractDialogSelector):
+    data_source = "conversations"
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ):
+        """
+        You can also provide a select menu with a list of conversations - including
+        private channels, direct messages, MPIMs, and whatever else we consider a
+        conversation-like thing.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+
+
+class DialogExternalSelector(AbstractDialogSelector):
     data_source = "external"
-    property_key = "options"
 
     @property
     def attributes(self) -> Set[str]:
@@ -222,32 +400,60 @@ class ExternalDialogDropdown(DialogDropdown):
         *,
         name: str,
         label: str,
-        selected_option: Option = None,
+        value: OptionObject = None,
         min_query_length: int = None,
-        **kwargs,
+        optional: bool = False,
+        placeholder: str = None,
     ):
-        super().__init__(name=name, label=label, **kwargs)
-        self.selected_option = selected_option
-        self.min_query_length = min_query_length
+        """
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
 
-    def get_json(self) -> dict:
-        json = super().get_json()
-        if self.selected_option is not None:
-            # selected_option JSON must be a list, even though it will only be one item
-            json["selected_option"] = extract_json(
-                [self.selected_option], Option, "label"
-            )
-        return json
+        A list of options can be loaded from an external URL and used in your dialog
+        menus.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_external
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param min_query_length: Specify the number of characters that must be typed
+            by a user into a dynamic select menu before dispatching to the app.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value. This should be a single
+            Option or OptionGroup that exactly matches one that will be returned from
+            your external endpoint.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        super().__init__(
+            name=name,
+            label=label,
+            value=value,
+            optional=optional,
+            placeholder=placeholder,
+        )
+        self.min_query_length = min_query_length
 
 
 class DialogBuilder(JsonObject):
     _callback_id: Optional[str]
-    _elements: List[Union[DialogTextComponent, DialogDropdown]]
+    _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]
     _submit_label: Optional[str]
     _notify_on_cancel: bool
     _state: Optional[str]
 
     def __init__(self):
+        """
+        Create a DialogBuilder to more easily construct the JSON required to submit a
+        dialog to Slack
+        """
         self._title = None
         self._callback_id = None
         self._elements = []
@@ -270,7 +476,7 @@ class DialogBuilder(JsonObject):
         JSON
 
         :param state: Extra state information that you need to pass from this dialog
-        back to your application on submission
+            back to your application on submission
         """
         if isinstance(state, dict):
             self._state = dumps(state)
@@ -294,7 +500,7 @@ class DialogBuilder(JsonObject):
         if not specified.
 
         :param label: must not exceed 24 characters, and must be a single word (no
-        spaces)
+            spaces)
         """
         self._submit_label = label
         return self
@@ -305,7 +511,7 @@ class DialogBuilder(JsonObject):
         user cancels their interaction. Defaults to False.
 
         :param notify: Set to True to indicate that your application should receive a
-        request even if the user cancels interaction with the dialog.
+            request even if the user cancels interaction with the dialog.
         """
         self._notify_on_cancel = notify
         return self
@@ -320,11 +526,40 @@ class DialogBuilder(JsonObject):
         hint: str = None,
         value: str = None,
         min_length: int = 0,
-        max_length: int = None,
+        max_length: int = 150,
         subtype: str = None,
     ) -> "DialogBuilder":
+        """
+        Text elements are single-line plain text fields.
+
+        https://api.slack.com/dialogs#attributes_text_elements
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. 48 character maximum.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+
+        :param hint: Helpful text provided to assist users in answering a question.
+            Up to 150 characters.
+
+        :param value: A default value for this field. Up to 150 characters.
+
+        :param min_length: Minimum input length allowed for element. Up to 150
+            characters. Defaults to 0.
+
+        :param max_length: Maximum input length allowed for element. Up to 150
+            characters. Defaults to 150.
+
+        :param subtype: A subtype for this text input. Accepts email, number, tel,
+            or url. In some form factors, optimized input is provided for this subtype.
+        """
         self._elements.append(
-            DialogTextFieldComponent(
+            DialogTextField(
                 name=name,
                 label=label,
                 optional=optional,
@@ -348,11 +583,44 @@ class DialogBuilder(JsonObject):
         hint: str = None,
         value: str = None,
         min_length: int = 0,
-        max_length: int = None,
+        max_length: int = 3000,
         subtype: str = None,
     ) -> "DialogBuilder":
+        """
+        A textarea is a multi-line plain text editing control. You've likely
+        encountered these on the world wide web. Use this element if you want a
+        relatively long answer from users. The element UI provides a remaining
+        character count to the max_length you have set or the default,
+        3000.
+
+        https://api.slack.com/dialogs#attributes_textarea_elements
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. 48 character maximum.
+
+        :param optional: Provide true when the form element is not required. By
+        default, form elements are required.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+
+        :param hint: Helpful text provided to assist users in answering a question.
+            Up to 150 characters.
+
+        :param value: A default value for this field. Up to 3000 characters.
+
+        :param min_length: Minimum input length allowed for element. 1-3000
+            characters. Defaults to 0.
+
+        :param max_length: Maximum input length allowed for element. 0-3000
+            characters. Defaults to 3000.
+
+        :param subtype: A subtype for this text input. Accepts email, number, tel,
+            or url. In some form factors, optimized input is provided for this subtype.
+        """
         self._elements.append(
-            DialogTextAreaComponent(
+            DialogTextArea(
                 name=name,
                 label=label,
                 optional=optional,
@@ -366,18 +634,43 @@ class DialogBuilder(JsonObject):
         )
         return self
 
-    def dropdown(
+    def static_selector(
         self,
         *,
         name: str,
         label: str,
-        options: Iterable[Union[Option, OptionGroup]],
+        options: Union[List[OptionObject], List[OptionGroupObject]],
         optional: bool = False,
         value: str = None,
         placeholder: str = None,
     ) -> "DialogBuilder":
+        """
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A select element may contain up to 100 selections, provided as a list of
+        Option or OptionGroup objects
+
+        https://api.slack.com/dialogs#attributes_select_elements
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param options: A list of up to 100 Option or OptionGroup objects. Object
+            types cannot be mixed.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
         self._elements.append(
-            DialogDropdown(
+            DialogStaticSelector(
                 name=name,
                 label=label,
                 options=options,
@@ -388,21 +681,165 @@ class DialogBuilder(JsonObject):
         )
         return self
 
-    def auto_dropdown(
+    def external_selector(
         self,
         *,
         name: str,
         label: str,
-        source: str,
+        optional: bool = False,
+        value: OptionObject = None,
+        placeholder: str = None,
+        min_query_length: int = None,
+    ) -> "DialogBuilder":
+        """
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A list of options can be loaded from an external URL and used in your dialog
+        menus.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_external
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param min_query_length:  	Specify the number of characters that must be
+            typed by a user into a dynamic select menu before dispatching to the app.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value. This should be a single
+            Option or OptionGroup that exactly matches one that will be returned from
+            your external endpoint.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        self._elements.append(
+            DialogExternalSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+                min_query_length=min_query_length,
+            )
+        )
+        return self
+
+    def user_selector(
+        self,
+        *,
+        name: str,
+        label: str,
         optional: bool = False,
         value: str = None,
         placeholder: str = None,
     ) -> "DialogBuilder":
+        """
+        Now you can easily populate a select menu with a list of users. For example,
+        when you are creating a bug tracking app, you want to include a field for an
+        assignee. Slack pre-populates the user list in client-side, so your app
+        doesn't need access to a related OAuth scope.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_users
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
         self._elements.append(
-            DynamicDialogDropdown(
+            DialogUserSelector(
                 name=name,
                 label=label,
-                source=source,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    def channel_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ) -> "DialogBuilder":
+        """
+        You can also provide a select menu with a list of channels. Specify your
+        data_source as channels to limit only to public channels
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        self._elements.append(
+            DialogChannelSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    def conversation_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: str = None,
+        placeholder: str = None,
+    ) -> "DialogBuilder":
+        """
+        You can also provide a select menu with a list of conversations - including
+        private channels, direct messages, MPIMs, and whatever else we consider a
+        conversation-like thing.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        :param name: Name of form element. Required. No more than 300 characters.
+
+        :param label: Label displayed to user. Required. No more than 48 characters.
+
+        :param optional: Provide true when the form element is not required. By
+            default, form elements are required.
+
+        :param value: Provide a default selected value.
+
+        :param placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        """
+        self._elements.append(
+            DialogConversationSelector(
+                name=name,
+                label=label,
                 optional=optional,
                 value=value,
                 placeholder=placeholder,
@@ -438,7 +875,7 @@ class DialogBuilder(JsonObject):
     def state_length(self):
         return not self._state or len(self._state) <= 3000
 
-    def build(self) -> dict:
+    def get_json(self, *args) -> dict:
         self.validate_json()
         json = {
             "title": self._title,

@@ -1,11 +1,14 @@
+import re
 from typing import Iterable, List, Set
 
 from .actions import Action
 from .blocks import Block
-from .objects import JsonObject, JsonValidator, extract_json
+from .objects import EnumValidator, JsonObject, JsonValidator, extract_json
+
+SeededColors = {"good", "warning", "danger"}
 
 
-class Field(JsonObject):
+class AttachmentField(JsonObject):
     attributes = {"short", "value", "title"}
 
     def __init__(self, *, title: str = None, value: str = None, short: bool = True):
@@ -14,29 +17,9 @@ class Field(JsonObject):
         self.short = short
 
 
-class Author(JsonObject):
-    attributes = {"author_name", "author_icon", "author_link"}
-
-    def __init__(
-        self, *, author_name: str, author_link: str = None, author_icon: str = None
-    ):
-        self.author_name = author_name
-        self.author_link = author_link
-        self.author_icon = author_icon
-
-    @JsonValidator("author_name must be present if author_link is present")
-    def author_link_without_author_name(self):
-        return self.author_link is None or self.author_name is not None
-
-    @JsonValidator("author_icon must be present if author_link is present")
-    def author_link_without_author_icon(self):
-        return self.author_link is None or self.author_icon is not None
-
-
 class Attachment(JsonObject):
     attributes = {
         "title",
-        "author",
         "pretext",
         "color",
         "text",
@@ -45,45 +28,124 @@ class Attachment(JsonObject):
         "footer",
         "thumb_url",
         "footer_icon",
+        "author_icon",
+        "author_name",
+        "author_link",
         "fields",
         "title_link",
         "image_url",
     }
 
-    author: Author
-    fields: List[Field]
+    fields: List[AttachmentField]
     actions: List[Action]
+
+    MarkdownFields = {"pretext", "text", "fields"}
 
     def __init__(
         self,
         *,
         text: str,
-        title: str = None,
         fallback: str = None,
-        pretext: str = None,
-        title_link: str = None,
-        fields: Iterable[Field] = None,
+        fields: Iterable[AttachmentField] = None,
         color: str = None,
-        author: Author = None,
+        markdown_in: List[str] = None,
+        title: str = None,
+        title_link: str = None,
+        pretext: str = None,
+        author_name: str = None,
+        author_link: str = None,
+        author_icon: str = None,
         image_url: str = None,
         thumb_url: str = None,
         footer: str = None,
         footer_icon: str = None,
         ts: int = None,
     ):
+        """
+        A supplemental object that will display after the rest of the message.
+        Considered legacy - recommended replacement is to use message blocks instead.
+
+        https://api.slack.com/reference/messaging/attachments#fields
+
+        :param text: The main body text of the attachment. It can be formatted as
+            plain text, or with markdown by including it in the markdown_in parameter.
+            The content will automatically collapse if it contains 700+ characters or 5+
+            linebreaks, and will display a "Show more..." link to expand the content.
+
+        :param fallback: A plain text summary of the attachment used in clients that
+            don't show formatted text (eg. IRC, mobile notifications).
+
+        :param fields: An array of AttachmentField objects that get displayed in a
+            table-like way. For best results, include no more than 2-3 field objects.
+
+        :param color:  	Changes the color of the border on the left side of this
+            attachment from the default gray. Can either be one of good (green), warning
+            (yellow), danger (red), or any hex color code (eg. #439FE0)
+
+        :param markdown_in: An array of field names that should be formatted by
+            markdown syntax - allowed values: "pretext", "text", "fields"
+
+        :param title: Large title text near the top of the attachment.
+
+        :param title_link: A valid URL that turns the title text into a hyperlink.
+
+        :param pretext: Text that appears above the message attachment block. It can
+            be formatted as plain text, or with markdown by including it in the
+            markdown_in parameter.
+
+        :param author_name: Small text used to display the author's name.
+
+        :param author_link: A valid URL that will hyperlink the author_name text.
+            Will only work if author_name is present.
+
+        :param author_icon: A valid URL that displays a small 16px by 16px image to
+            the left of the author_name text. Will only work if author_name is present.
+
+        :param image_url: A valid URL to an image file that will be displayed at the
+            bottom of the attachment. We support GIF, JPEG, PNG, and BMP formats. Large
+            images will be resized to a maximum width of 360px or a maximum height of
+            500px, while still maintaining the original aspect ratio. Cannot be used
+            with thumb_url.
+
+        :param thumb_url: A valid URL to an image file that will be displayed as a
+            thumbnail on the right side of a message attachment. We currently support
+            the following formats: GIF, JPEG, PNG, and BMP. The thumbnail's longest
+            dimension will be scaled down to 75px while maintaining the aspect ratio of
+            the image. The filesize of the image must also be less than 500 KB. For best
+            results, please use images that are already 75px by 75px.
+
+        :param footer: Some brief text to help contextualize and identify an
+            attachment. Limited to 300 characters, and may be truncated further when
+            displayed to users in environments with limited screen real estate.
+
+        :param footer_icon: A valid URL to an image file that will be displayed
+            beside the footer text. Will only work if footer is present. We'll
+            render what you provide at 16px by 16px. It's best to use an image that is
+            similarly sized.
+
+        :param ts: An integer Unix timestamp that is used to related your attachment
+            to a specific time. The attachment will display the additional timestamp
+            value as part of the attachment's footer. Your message's timestamp will be
+            displayed in varying ways, depending on how far in the past or future it is,
+            relative to the present. Form factors, like mobile versus desktop may also
+            transform its rendered appearance.
+        """
         self.text = text
         self.title = title
         self.fallback = fallback
         self.pretext = pretext
         self.title_link = title_link
         self.color = color
-        self.author = author
+        self.author_name = author_name
+        self.author_link = author_link
+        self.author_icon = author_icon
         self.image_url = image_url
         self.thumb_url = thumb_url
         self.footer = footer
         self.footer_icon = footer_icon
         self.ts = ts
         self.fields = fields or []
+        self.markdown_in = markdown_in or []
 
     @JsonValidator("footer attribute cannot exceed 300 characters")
     def footer_length(self):
@@ -93,46 +155,194 @@ class Attachment(JsonObject):
     def ts_without_footer(self):
         return self.ts is None or self.footer is not None
 
+    @EnumValidator("markdown_in", MarkdownFields)
+    def markdown_in_valid(self):
+        return not self.markdown_in or all(
+            e in self.MarkdownFields for e in self.markdown_in
+        )
+
+    @JsonValidator(
+        "color attribute must be 'good', 'warning', 'danger', or a hex color code"
+    )
+    def color_valid(self):
+        return (
+            self.color is None
+            or self.color in SeededColors
+            or re.match("^#(?:[0-9A-F]{2}){3}$", self.color, re.IGNORECASE)
+        )
+
+    @JsonValidator("image_url attribute cannot be present if thumb_url is populated")
+    def image_url_and_thumb_url_populated(self):
+        return self.image_url is None or self.thumb_url is None
+
+    @JsonValidator("name must be present if link is present")
+    def author_link_without_author_name(self):
+        return self.author_link is None or self.author_name is not None
+
+    @JsonValidator("icon must be present if link is present")
+    def author_link_without_author_icon(self):
+        return self.author_link is None or self.author_icon is not None
+
     def get_json(self) -> dict:
         json = super().get_json()
-        json.update(
-            {"mrkdwn_in": ["fields"], "fields": extract_json(self.fields, Field)}
-        )
+        if self.fields is not None:
+            json["fields"] = extract_json(self.fields, AttachmentField)
+        if self.markdown_in:
+            json["mrkdwn_in"] = self.markdown_in
         return json
 
 
 class BlockAttachment(Attachment):
-    """
-    Attachment created directly from blocks
-    """
-
+    attributes = {"color"}
     blocks: List[Block]
 
-    def __init__(self, *, blocks: Iterable[Block]):
-        super().__init__(text="")
+    def __init__(self, *, blocks: Iterable[Block], color: str = None):
+        """
+        A bridge between legacy attachments and blockkit formatting - pass a list of
+        Block objects directly to this attachment.
+
+        https://api.slack.com/reference/messaging/attachments#fields
+
+        :param blocks: a sequence of Block objects
+
+        :param color: Changes the color of the border on the left side of this
+            attachment from the default gray. Can either be one of good (green), warning
+            (yellow), danger (red), or any hex color code (eg. #439FE0)
+        """
+        super().__init__(text="", color=color)
         self.blocks = list(blocks)
 
     def get_json(self) -> dict:
-        return {"blocks": extract_json(self.blocks, Block)}
+        json = super().get_json()
+        json.update({"blocks": extract_json(self.blocks, Block)})
+        return json
 
 
 class InteractiveAttachment(Attachment):
-    """
-    An attachment built to allow interactive message handling/callbacks
-    """
-
-    actions: List[Action]
-
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union({"callback_id"})
 
     def __init__(
-        self, *, callback_id: str, actions: Iterable[Action] = None, text="", **kwargs
+        self,
+        *,
+        actions: List[Action],
+        callback_id: str,
+        text: str,
+        fallback: str = None,
+        fields: Iterable[AttachmentField] = None,
+        color: str = None,
+        markdown_in: List[str] = None,
+        title: str = None,
+        title_link: str = None,
+        pretext: str = None,
+        author_name: str = None,
+        author_link: str = None,
+        author_icon: str = None,
+        image_url: str = None,
+        thumb_url: str = None,
+        footer: str = None,
+        footer_icon: str = None,
+        ts: int = None,
     ):
-        super().__init__(text=text, **kwargs)
+        """
+        An Attachment, but designed to contain interactive Actions
+        Considered legacy - recommended replacement is to use message blocks instead.
+
+        https://api.slack.com/docs/interactive-message-field-guide#attachment_fields
+
+        https://api.slack.com/reference/messaging/attachments#fields
+
+        :param actions: A collection of Action objects to include in the attachment.
+            Cannot exceed 5 elements.
+
+        :param text: The main body text of the attachment. It can be formatted as
+            plain text, or with markdown by including it in the markdown_in parameter.
+            The content will automatically collapse if it contains 700+ characters or 5+
+            linebreaks, and will display a "Show more..." link to expand the content.
+
+        :param fallback: A plain text summary of the attachment used in clients that
+            don't show formatted text (eg. IRC, mobile notifications).
+
+        :param fields: An array of Field objects that get displayed in a table-like
+            way. For best results, include no more than 2-3 field objects.
+
+        :param color:  	Changes the color of the border on the left side of this
+            attachment from the default gray. Can either be one of good (green), warning
+            (yellow), danger (red), or any hex color code (eg. #439FE0)
+
+        :param markdown_in: An array of field names that should be formatted by
+            markdown syntax - allowed values: "pretext", "text", "fields"
+
+        :param title: Large title text near the top of the attachment.
+
+        :param title_link: A valid URL that turns the title text into a hyperlink.
+
+        :param pretext: Text that appears above the message attachment block. It can
+            be formatted as plain text, or with markdown by including it in the
+            markdown_in parameter.
+
+        :param author_name: Small text used to display the author's name.
+
+        :param author_link: A valid URL that will hyperlink the author_name text.
+            Will only work if author_name is present.
+
+        :param author_icon: A valid URL that displays a small 16px by 16px image to
+            the left of the author_name text. Will only work if author_name is present.
+
+        :param image_url: A valid URL to an image file that will be displayed at the
+            bottom of the attachment. We support GIF, JPEG, PNG, and BMP formats. Large
+            images will be resized to a maximum width of 360px or a maximum height of
+            500px, while still maintaining the original aspect ratio. Cannot be used
+            with thumb_url.
+
+        :param thumb_url: A valid URL to an image file that will be displayed as a
+            thumbnail on the right side of a message attachment. We currently support
+            the following formats: GIF, JPEG, PNG, and BMP. The thumbnail's longest
+            dimension will be scaled down to 75px while maintaining the aspect ratio of
+            the image. The filesize of the image must also be less than 500 KB. For best
+            results, please use images that are already 75px by 75px.
+
+        :param footer: Some brief text to help contextualize and identify an
+            attachment. Limited to 300 characters, and may be truncated further when
+            displayed to users in environments with limited screen real estate.
+
+        :param footer_icon: A valid URL to an image file that will be displayed
+            beside the footer text. Will only work if footer is present. We'll
+            render what you provide at 16px by 16px. It's best to use an image that is
+            similarly sized.
+
+        :param ts: An integer Unix timestamp that is used to related your attachment
+            to a specific time. The attachment will display the additional timestamp
+            value as part of the attachment's footer. Your message's timestamp will be
+            displayed in varying ways, depending on how far in the past or future it is,
+            relative to the present. Form factors, like mobile versus desktop may also
+            transform its rendered appearance.
+        """
+        super().__init__(
+            text=text,
+            title=title,
+            fallback=fallback,
+            fields=fields,
+            pretext=pretext,
+            title_link=title_link,
+            color=color,
+            author_name=author_name,
+            author_link=author_link,
+            author_icon=author_icon,
+            image_url=image_url,
+            thumb_url=thumb_url,
+            footer=footer,
+            footer_icon=footer_icon,
+            ts=ts,
+            markdown_in=markdown_in,
+        )
         self.callback_id = callback_id
         self.actions = actions or []
+
+    @JsonValidator("actions attribute cannot exceed 5 elements")
+    def actions_length(self):
+        return len(self.actions) <= 5
 
     def get_json(self) -> dict:
         json = super().get_json()

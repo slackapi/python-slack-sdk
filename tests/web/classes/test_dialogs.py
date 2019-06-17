@@ -4,173 +4,242 @@ from copy import copy
 from slack.errors import SlackObjectFormationError
 from slack.web.classes.dialogs import (
     DialogBuilder,
-    DialogTextAreaComponent,
-    DialogTextFieldComponent,
-    StaticDialogDropdown,
+    DialogChannelSelector,
+    DialogConversationSelector,
+    DialogExternalSelector,
+    DialogStaticSelector,
+    DialogTextArea,
+    DialogTextField,
+    DialogUserSelector,
 )
-from slack.web.classes.objects import SimpleOption
+from slack.web.classes.objects import OptionObject
 from . import STRING_3001_CHARS, STRING_301_CHARS, STRING_51_CHARS
 
+TextComponents = {DialogTextField, DialogTextArea}
 
-class TextComponentTests(unittest.TestCase):
-    def test_common_validation(self):
-        for component in {DialogTextFieldComponent, DialogTextAreaComponent}:
-            with self.assertRaises(SlackObjectFormationError):
-                with self.subTest("Long name", component=component):
+
+class CommonTextComponentTests(unittest.TestCase):
+    def test_json_validators(self):
+        for component in TextComponents:
+            with self.subTest(f"Component: {component}"):
+                with self.assertRaises(SlackObjectFormationError, msg="name length"):
                     component(name=STRING_301_CHARS, label="label ").get_json()
 
-                with self.subTest("Long label", component=component):
+                with self.assertRaises(SlackObjectFormationError, msg="label length"):
                     component(name="dialog", label=STRING_51_CHARS).get_json()
 
-                with self.subTest("Long placeholder", component=component):
+                with self.assertRaises(
+                    SlackObjectFormationError, msg="placeholder length"
+                ):
                     component(
                         name="dialog", label="Dialog", placeholder=STRING_301_CHARS
                     ).get_json()
 
-                with self.subTest("Long hint", component=component):
+                with self.assertRaises(SlackObjectFormationError, msg="hint length"):
                     component(
                         name="dialog", label="Dialog", hint=STRING_301_CHARS
                     ).get_json()
 
-                with self.subTest("Long value", component=component):
+                with self.assertRaises(SlackObjectFormationError, msg="value length"):
                     component(
                         name="dialog", label="Dialog", value=STRING_3001_CHARS
                     ).get_json()
 
-    def test_length_assertions(self):
-        for component in {DialogTextFieldComponent, DialogTextAreaComponent}:
-            with self.subTest(component=component):
                 with self.assertRaises(
-                    SlackObjectFormationError, msg="Excessive min length"
+                    SlackObjectFormationError, msg="min_length out of bounds"
                 ):
                     component(
                         name="dialog",
                         label="Dialog",
                         min_length=component.max_value_length + 1,
                     ).get_json()
+
                 with self.assertRaises(
-                    SlackObjectFormationError, msg="Excessive max length"
+                    SlackObjectFormationError, msg="max_length out of bounds"
                 ):
                     component(
                         name="dialog",
                         label="Dialog",
                         max_length=component.max_value_length + 1,
                     ).get_json()
+
                 with self.assertRaises(
-                    SlackObjectFormationError, msg="Min > max length"
+                    SlackObjectFormationError, msg="min_length > max length"
                 ):
                     component(
                         name="dialog", label="Dialog", min_length=100, max_length=50
                     ).get_json()
 
-    def test_subtypes(self):
-        for component in {DialogTextFieldComponent, DialogTextAreaComponent}:
-            with self.assertRaises(SlackObjectFormationError):
-                with self.subTest(component=component):
+                with self.assertRaises(
+                    SlackObjectFormationError, msg="subtype invalid"
+                ):
                     component(
                         name="dialog", label="Dialog", subtype="abcdefg"
                     ).get_json()
 
 
 class TextFieldComponentTests(unittest.TestCase):
-    def test_basic_json_formation(self):
-        tf = DialogTextFieldComponent(name="dialog", label="Dialog")
-
-        e = {
-            "min_length": 0,
-            "max_length": 150,
-            "name": "dialog",
-            "optional": False,
-            "label": "Dialog",
-            "type": "text",
-        }
-
-        self.assertDictEqual(tf.get_json(), e)
-
-    def test_complex_json_formation(self):
-        ta = DialogTextFieldComponent(
-            name="dialog",
-            label="Dialog",
-            optional=True,
-            hint="Some hint",
-            max_length=100,
-            min_length=20,
+    def test_json(self):
+        self.assertDictEqual(
+            DialogTextField(name="dialog", label="Dialog").get_json(),
+            {
+                "name": "dialog",
+                "label": "Dialog",
+                "min_length": 0,
+                "max_length": 150,
+                "optional": False,
+                "type": "text",
+            },
         )
 
-        e = {
-            "min_length": 20,
-            "max_length": 100,
-            "name": "dialog",
-            "optional": True,
-            "label": "Dialog",
-            "type": "text",
-            "hint": "Some hint",
-        }
-
-        self.assertDictEqual(ta.get_json(), e)
+    def test_basic_json(self):
+        self.assertDictEqual(
+            DialogTextField(
+                name="dialog",
+                label="Dialog",
+                optional=True,
+                hint="Some hint",
+                max_length=100,
+                min_length=20,
+            ).get_json(),
+            {
+                "min_length": 20,
+                "max_length": 100,
+                "name": "dialog",
+                "optional": True,
+                "label": "Dialog",
+                "type": "text",
+                "hint": "Some hint",
+            },
+        )
 
 
 class TextAreaComponentTests(unittest.TestCase):
     def test_basic_json_formation(self):
-        ta = DialogTextAreaComponent(name="dialog", label="Dialog")
-
-        e = {
-            "min_length": 0,
-            "max_length": 3000,
-            "name": "dialog",
-            "optional": False,
-            "label": "Dialog",
-            "type": "textarea",
-        }
-
-        self.assertDictEqual(ta.get_json(), e)
-
-    def test_complex_json_formation(self):
-        ta = DialogTextAreaComponent(
-            name="dialog",
-            label="Dialog",
-            optional=True,
-            hint="Some hint",
-            max_length=500,
-            min_length=100,
+        self.assertDictEqual(
+            DialogTextArea(name="dialog", label="Dialog").get_json(),
+            {
+                "min_length": 0,
+                "max_length": 3000,
+                "name": "dialog",
+                "optional": False,
+                "label": "Dialog",
+                "type": "textarea",
+            },
         )
 
-        e = {
-            "min_length": 100,
-            "max_length": 500,
-            "name": "dialog",
-            "optional": True,
-            "label": "Dialog",
-            "type": "textarea",
-            "hint": "Some hint",
-        }
-
-        self.assertDictEqual(ta.get_json(), e)
+    def test_complex_json_formation(self):
+        self.assertDictEqual(
+            DialogTextArea(
+                name="dialog",
+                label="Dialog",
+                optional=True,
+                hint="Some hint",
+                max_length=500,
+                min_length=100,
+            ).get_json(),
+            {
+                "min_length": 100,
+                "max_length": 500,
+                "name": "dialog",
+                "optional": True,
+                "label": "Dialog",
+                "type": "textarea",
+                "hint": "Some hint",
+            },
+        )
 
 
 class StaticDropdownTests(unittest.TestCase):
     def test_basic_json_formation(self):
         options = [
-            SimpleOption(label="one"),
-            SimpleOption(label="two"),
-            SimpleOption(label="three"),
+            OptionObject.from_single_value("one"),
+            OptionObject.from_single_value("two"),
+            OptionObject.from_single_value("three"),
         ]
-        dd = StaticDialogDropdown(name="dialog", label="Dialog", options=options)
+        self.assertDictEqual(
+            DialogStaticSelector(
+                name="dialog", label="Dialog", options=options
+            ).get_json(),
+            {
+                "optional": False,
+                "label": "Dialog",
+                "type": "select",
+                "name": "dialog",
+                "options": [
+                    {"label": "one", "value": "one"},
+                    {"label": "two", "value": "two"},
+                    {"label": "three", "value": "three"},
+                ],
+                "data_source": "static",
+            },
+        )
 
-        e = {
-            "optional": False,
-            "label": "Dialog",
-            "type": "select",
-            "name": "dialog",
-            "options": [
-                {"label": "one", "value": "one"},
-                {"label": "two", "value": "two"},
-                {"label": "three", "value": "three"},
-            ],
-            "data_source": "static",
-        }
 
-        self.assertDictEqual(dd.get_json(), e)
+class DynamicSelectorTests(unittest.TestCase):
+    selectors = {DialogUserSelector, DialogChannelSelector, DialogConversationSelector}
+
+    def setUp(self) -> None:
+        self.selected_opt = OptionObject.from_single_value("U12345")
+
+    def test_json(self):
+        self.maxDiff = None
+        for component in self.selectors:
+            with self.subTest(msg=f"{component} json formation test"):
+                self.assertDictEqual(
+                    component(name="select_1", label="selector_1").get_json(),
+                    {
+                        "name": "select_1",
+                        "label": "selector_1",
+                        "type": "select",
+                        "optional": False,
+                        "data_source": component.data_source,
+                    },
+                )
+
+                passing_obj = component(
+                    name="select_1", label="selector_1", value=self.selected_opt
+                ).get_json()
+
+                passing_str = component(
+                    name="select_1", label="selector_1", value="U12345"
+                ).get_json()
+
+                expected = {
+                    "name": "select_1",
+                    "label": "selector_1",
+                    "type": "select",
+                    "optional": False,
+                    "data_source": component.data_source,
+                    "value": "U12345",
+                }
+                self.assertDictEqual(passing_obj, expected)
+                self.assertDictEqual(passing_str, expected)
+
+
+class ExternalSelectorTests(unittest.TestCase):
+    def test_basic_json_formation(self):
+        o = OptionObject.from_single_value("one")
+        self.assertDictEqual(
+            DialogExternalSelector(
+                name="dialog",
+                label="Dialog",
+                value=o,
+                min_query_length=3,
+                optional=True,
+                placeholder="something",
+            ).get_json(),
+            {
+                "optional": True,
+                "label": "Dialog",
+                "type": "select",
+                "name": "dialog",
+                "min_query_length": 3,
+                "placeholder": "something",
+                "selected_options": [o.get_json("dialog")],
+                "data_source": "external",
+            },
+        )
 
 
 class DialogBuilderTests(unittest.TestCase):
@@ -190,7 +259,7 @@ class DialogBuilderTests(unittest.TestCase):
             .text_area(
                 name="message", label="Message", hint="Enter message to broadcast"
             )
-            .auto_dropdown(name="target", label="Choose Target", source="conversations")
+            .conversation_selector(name="target", label="Choose Target")
         )
 
     def test_basic_methods(self):
@@ -202,13 +271,13 @@ class DialogBuilderTests(unittest.TestCase):
     def test_element_appending(self):
         text_field, text_area, dropdown = self.builder._elements
 
-        self.assertEqual(text_field.element_type, "text")
+        self.assertEqual(text_field.type, "text")
         self.assertEqual(text_field.name, "signature")
         self.assertEqual(text_field.label, "Signature")
         self.assertTrue(text_field.optional)
         self.assertEqual(text_field.hint, "Enter your signature")
 
-        self.assertEqual(text_area.element_type, "textarea")
+        self.assertEqual(text_area.type, "textarea")
         self.assertEqual(text_area.name, "message")
         self.assertEqual(text_area.label, "Message")
         self.assertEqual(text_area.hint, "Enter message to broadcast")
@@ -216,7 +285,7 @@ class DialogBuilderTests(unittest.TestCase):
         self.assertEqual(dropdown.type, "select")
         self.assertEqual(dropdown.name, "target")
         self.assertEqual(dropdown.label, "Choose Target")
-        self.assertEqual(dropdown.source, "conversations")
+        self.assertEqual(dropdown.data_source, "conversations")
 
     def test_build_without_errors(self):
         valid = {
@@ -253,31 +322,33 @@ class DialogBuilderTests(unittest.TestCase):
             "submit_label": "SubmitDialog",
         }
 
-        self.assertDictEqual(self.builder.build(), valid)
+        self.assertDictEqual(self.builder.get_json(), valid)
 
     def test_build_validation(self):
         empty_title = copy(self.builder)
+        # noinspection PyTypeChecker
         empty_title.title(None)
         with self.assertRaises(SlackObjectFormationError):
-            empty_title.build()
+            empty_title.get_json()
 
         too_long_title = copy(self.builder)
         too_long_title.title(STRING_51_CHARS)
         with self.assertRaises(SlackObjectFormationError):
-            too_long_title.build()
+            too_long_title.get_json()
 
         empty_callback = copy(self.builder)
+        # noinspection PyTypeChecker
         empty_callback.callback_id(None)
         with self.assertRaises(SlackObjectFormationError):
-            empty_callback.build()
+            empty_callback.get_json()
 
         empty_dialog = copy(self.builder)
         empty_dialog._elements = []
         with self.assertRaises(SlackObjectFormationError):
-            empty_dialog.build()
+            empty_dialog.get_json()
 
         overfull_dialog = copy(self.builder)
         for i in range(8):
             overfull_dialog.text_field(name=f"element {i}", label="overflow")
         with self.assertRaises(SlackObjectFormationError):
-            overfull_dialog.build()
+            overfull_dialog.get_json()

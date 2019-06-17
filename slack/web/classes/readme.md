@@ -38,12 +38,12 @@ builder = (
         .title("My Cool Dialog")
         .callback_id("myCoolDialog")
         .state({'value': 123, 'key': "something"})
+        .conversation_selector(name="target", label="Choose Target")
+        .text_area(name="message", label="Message", hint="Enter a message", max_length=500)
+        .text_field(name="signature", label="Signature", optional=True, max_length=50)
 )
-builder.auto_dropdown(name="target", label="Choose Target", source="conversations")
-builder.text_area(name="message", label="Message", hint="Enter a message", max_length=500)
-builder.text_field(name="signature", label="Signature", optional=True, max_length=50)
 
 client = WebClient(token="abc")
 
-client.dialog_open(dialog=builder.build(), trigger_id="123458.12355")
+client.dialog_open(dialog=builder.get_json(), trigger_id="123458.12355")
 ```

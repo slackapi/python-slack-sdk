@@ -2,10 +2,16 @@ import unittest
 
 from slack.errors import SlackObjectFormationError
 from slack.web.classes.elements import (
-    ButtonElement, ChannelDropdownElement, ConversationDropdownElement, DropdownElement,
-    ExternalDropdownElement, ImageElement, LinkButtonElement, UserDropdownElement)
-from slack.web.classes.objects import ConfirmObject, SimpleOption
-from tests.web.classes import compare_json_structure
+    ButtonElement,
+    ChannelSelectElement,
+    ConversationSelectElement,
+    ExternalDataSelectElement,
+    ImageElement,
+    LinkButtonElement,
+    SelectElement,
+    UserSelectElement,
+)
+from slack.web.classes.objects import ConfirmObject, OptionObject
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
 
@@ -19,33 +25,35 @@ class InteractiveElementTests(unittest.TestCase):
 
 class ButtonElementTests(unittest.TestCase):
     def test_json(self):
-        self.assertTrue(
-            compare_json_structure(
-                clazz=ButtonElement,
-                kwargs={
-                    "text": "button text",
-                    "action_id": "some_button",
-                    "value": "button_123",
-                    "style": None,
-                    "confirm": None,
-                },
-                attributes={"type": "button"},
-            )
+        self.assertDictEqual(
+            ButtonElement(
+                text="button text", action_id="some_button", value="button_123"
+            ).get_json(),
+            {
+                "text": {"emoji": True, "text": "button text", "type": "plain_text"},
+                "action_id": "some_button",
+                "value": "button_123",
+                "type": "button",
+            },
         )
-        self.assertTrue(
-            compare_json_structure(
-                clazz=ButtonElement,
-                kwargs={
-                    "text": "button text",
-                    "action_id": "some_button",
-                    "value": "button_123",
-                    "style": "primary",
-                    "confirm": ConfirmObject(
-                        title="confirm_title", text="confirm_text"
-                    ),
-                },
-                attributes={"type": "button"},
-            )
+        confirm = ConfirmObject(title="really?", text="are you sure?")
+
+        self.assertDictEqual(
+            ButtonElement(
+                text="button text",
+                action_id="some_button",
+                value="button_123",
+                style="primary",
+                confirm=confirm,
+            ).get_json(),
+            {
+                "text": {"emoji": True, "text": "button text", "type": "plain_text"},
+                "action_id": "some_button",
+                "value": "button_123",
+                "type": "button",
+                "style": "primary",
+                "confirm": confirm.get_json(),
+            },
         )
 
     def test_text_length(self):
@@ -69,12 +77,16 @@ class ButtonElementTests(unittest.TestCase):
 
 class LinkButtonElementTests(unittest.TestCase):
     def test_json(self):
-        self.assertTrue(
-            compare_json_structure(
-                clazz=LinkButtonElement,
-                kwargs={"text": "button text", "url": "http://google.com"},
-                attributes={"type": "button"},
-            )
+        button = LinkButtonElement(text="button text", url="http://google.com")
+        self.assertDictEqual(
+            button.get_json(),
+            {
+                "text": {"emoji": True, "text": "button text", "type": "plain_text"},
+                "url": "http://google.com",
+                "type": "button",
+                "value": "",
+                "action_id": button.action_id,
+            },
         )
 
     def test_url_length(self):
@@ -84,15 +96,15 @@ class LinkButtonElementTests(unittest.TestCase):
 
 class ImageElementTests(unittest.TestCase):
     def test_json(self):
-        self.assertTrue(
-            compare_json_structure(
-                clazz=ImageElement,
-                kwargs={
-                    "image_url": "http://google.com",
-                    "alt_text": "not really an image",
-                },
-                attributes={"type": "image"},
-            )
+        self.assertDictEqual(
+            ImageElement(
+                image_url="http://google.com", alt_text="not really an image"
+            ).get_json(),
+            {
+                "image_url": "http://google.com",
+                "alt_text": "not really an image",
+                "type": "image",
+            },
         )
 
     def test_image_url_length(self):
@@ -106,41 +118,56 @@ class ImageElementTests(unittest.TestCase):
             ).get_json()
 
 
-class DropdownElementTests(unittest.TestCase):
-    option_one = SimpleOption(label="one")
-    option_two = SimpleOption(label="two")
-    options = [option_one, option_two, SimpleOption(label="three")]
+class SelectElementTests(unittest.TestCase):
+    option_one = OptionObject.from_single_value("one")
+    option_two = OptionObject.from_single_value("two")
+    options = [option_one, option_two, OptionObject.from_single_value("three")]
 
     def test_json(self):
-        self.assertTrue(
-            compare_json_structure(
-                clazz=DropdownElement,
-                kwargs={
-                    "placeholder": "selectedValue",
-                    "action_id": "dropdown",
-                    "options": self.options,
-                    "initial_option": self.option_two,
+        self.maxDiff = None
+        self.assertDictEqual(
+            SelectElement(
+                placeholder="selectedValue",
+                action_id="dropdown",
+                options=self.options,
+                initial_option=self.option_two,
+            ).get_json(),
+            {
+                "placeholder": {
+                    "emoji": True,
+                    "text": "selectedValue",
+                    "type": "plain_text",
                 },
-                attributes={"type": "static_select"},
-            )
+                "action_id": "dropdown",
+                "options": [o.get_json("block") for o in self.options],
+                "initial_option": self.option_two.get_json(),
+                "type": "static_select",
+            },
         )
 
-        self.assertTrue(
-            compare_json_structure(
-                clazz=DropdownElement,
-                kwargs={
-                    "placeholder": "selectedValue",
-                    "action_id": "dropdown",
-                    "options": self.options,
-                    "confirm": ConfirmObject(title="title", text="text"),
+        self.assertDictEqual(
+            SelectElement(
+                placeholder="selectedValue",
+                action_id="dropdown",
+                options=self.options,
+                confirm=ConfirmObject(title="title", text="text"),
+            ).get_json(),
+            {
+                "placeholder": {
+                    "emoji": True,
+                    "text": "selectedValue",
+                    "type": "plain_text",
                 },
-                attributes={"type": "static_select"},
-            )
+                "action_id": "dropdown",
+                "options": [o.get_json("block") for o in self.options],
+                "confirm": ConfirmObject(title="title", text="text").get_json("block"),
+                "type": "static_select",
+            },
         )
 
     def test_options_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            DropdownElement(
+            SelectElement(
                 placeholder="select",
                 action_id="selector",
                 options=[self.option_one] * 101,
@@ -149,51 +176,59 @@ class DropdownElementTests(unittest.TestCase):
 
 class ExternalDropdownElementTests(unittest.TestCase):
     def test_json(self):
-        self.assertTrue(
-            compare_json_structure(
-                clazz=ExternalDropdownElement,
-                kwargs={
-                    "placeholder": "selectedValue",
-                    "action_id": "dropdown",
-                    "min_query_length": 5,
+        self.assertDictEqual(
+            ExternalDataSelectElement(
+                placeholder="selectedValue", action_id="dropdown", min_query_length=5
+            ).get_json(),
+            {
+                "placeholder": {
+                    "emoji": True,
+                    "text": "selectedValue",
+                    "type": "plain_text",
                 },
-                attributes={"type": "external_select"},
-            )
+                "action_id": "dropdown",
+                "min_query_length": 5,
+                "type": "external_select",
+            },
         )
 
-        self.assertTrue(
-            compare_json_structure(
-                clazz=ExternalDropdownElement,
-                kwargs={
-                    "placeholder": "selectedValue",
-                    "action_id": "dropdown",
-                    "confirm": ConfirmObject(title="title", text="text"),
+        self.assertDictEqual(
+            ExternalDataSelectElement(
+                placeholder="selectedValue",
+                action_id="dropdown",
+                confirm=ConfirmObject(title="title", text="text"),
+            ).get_json(),
+            {
+                "placeholder": {
+                    "emoji": True,
+                    "text": "selectedValue",
+                    "type": "plain_text",
                 },
-                attributes={"type": "external_select"},
-            )
+                "action_id": "dropdown",
+                "confirm": ConfirmObject(title="title", text="text").get_json("block"),
+                "type": "external_select",
+            },
         )
 
 
 class DynamicDropdownTests(unittest.TestCase):
-    dynamic_types = {
-        UserDropdownElement,
-        ConversationDropdownElement,
-        ChannelDropdownElement,
-    }
+    dynamic_types = {UserSelectElement, ConversationSelectElement, ChannelSelectElement}
 
     def test_json(self):
         for dropdown_type in self.dynamic_types:
             with self.subTest(dropdown_type=dropdown_type):
-                self.assertTrue(
-                    compare_json_structure(
-                        clazz=dropdown_type,
-                        kwargs={
-                            "placeholder": "abc",
-                            "action_id": "dropdown",
-                            "initial_value": "def",
+                self.assertDictEqual(
+                    dropdown_type(
+                        placeholder="abc", action_id="dropdown", initial_value="def"
+                    ).get_json(),
+                    {
+                        "placeholder": {
+                            "emoji": True,
+                            "text": "abc",
+                            "type": "plain_text",
                         },
-                        attributes={
-                            "type": f"{dropdown_type.initial_object_type}s_select"
-                        },
-                    )
+                        "action_id": "dropdown",
+                        f"initial_{dropdown_type.initial_object_type}": "def",
+                        "type": f"{dropdown_type.initial_object_type}s_select",
+                    },
                 )

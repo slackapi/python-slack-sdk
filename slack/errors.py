@@ -24,17 +24,17 @@ class SlackApiError(SlackClientError):
     """Error raised when Slack does not send the expected response."""
 
     def __init__(self, message, response):
-        msg = ("{m}\nThe server responded with: {r}").format(m=message, r=response)
+        msg = f"{message}\nThe server responded with: {response}"
         self.response = response
         super(SlackApiError, self).__init__(msg)
 
 
 class SlackClientNotConnectedError(SlackClientError):
-    """Error raised when attempting to send messages over the websocket when the connection is closed."""
+    """Error raised when attempting to send messages over the websocket when the
+    connection is closed. """
 
     pass
 
 
 class SlackObjectFormationError(SlackClientError):
     """Error raised when a constructed object is not valid/malformed"""
-
