@@ -430,8 +430,8 @@ class ChannelSelectElement(AbstractDynamicSelector):
         confirm: ConfirmObject = None,
     ):
         """
-        This select menu will populate its options with a list of public channels visible
-        to the current user in the active workspace.
+        This select menu will populate its options with a list of public channels
+        visible to the current user in the active workspace.
 
         https://api.slack.com/reference/messaging/block-elements#channel-select
 
@@ -457,7 +457,8 @@ class ChannelSelectElement(AbstractDynamicSelector):
 class OverflowMenuOption(OptionObject):
     def __init__(self, label: str, value: str, url: str = None):
         """
-        An extension of a standard option, but with an optional 'url' attribute, which will simply directly navigate to a given URL.
+        An extension of a standard option, but with an optional 'url' attribute,
+        which will simply directly navigate to a given URL.
 
         https://api.slack.com/reference/messaging/composition-objects#option
 

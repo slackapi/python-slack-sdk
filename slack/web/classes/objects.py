@@ -458,7 +458,7 @@ class OptionGroupObject(JsonObject):
         :param label: Text to display at the top of this group of options.
 
         :param options: A list of no more than 100 Option objects.
-        """
+        """  # noqa prevent flake8 blowing up on the long URL
         self.label = label
         self.options = options
 
