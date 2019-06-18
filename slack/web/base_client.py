@@ -6,11 +6,12 @@ import platform
 import sys
 import logging
 import asyncio
-from typing import Optional
+from typing import Optional, Union
 import inspect
 
 # ThirdParty Imports
 import aiohttp
+from aiohttp import FormData
 
 # Internal Imports
 from slack.web.slack_response import SlackResponse
@@ -49,11 +50,11 @@ class BaseClient:
         # During testing I found that get_event_loop doesn't work from new Threads.
         """
         if self.run_async:
-            self._event_loop = asyncio.get_event_loop()
+            return asyncio.get_event_loop()
         else:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            self._event_loop = loop
+            return loop
 
     def api_call(
         self,
@@ -61,7 +62,7 @@ class BaseClient:
         *,
         http_verb: str = "POST",
         files: dict = None,
-        data: dict = None,
+        data: Union[dict, FormData] = None,
         params: dict = None,
         json: dict = None,
     ):
@@ -105,14 +106,14 @@ class BaseClient:
             "Authorization": "Bearer {}".format(self.token),
         }
         if files is not None:
-            form_data = aiohttp.FormData()
+            form_data = FormData()
             for k, v in files.items():
                 if isinstance(v, str):
                     form_data.add_field(k, open(v, "rb"))
                 else:
                     form_data.add_field(k, v)
 
-            if data is not None:
+            if isinstance(data, dict):
                 for k, v in data.items():
                     form_data.add_field(k, str(v))
 
@@ -128,7 +129,7 @@ class BaseClient:
         }
 
         if self._event_loop is None:
-            self._set_event_loop()
+            self._event_loop = self._set_event_loop()
 
         future = asyncio.ensure_future(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
