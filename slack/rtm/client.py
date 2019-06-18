@@ -5,7 +5,6 @@ import os
 import logging
 import random
 import collections
-import functools
 import inspect
 import signal
 from typing import Optional, Callable, DefaultDict
@@ -139,11 +138,7 @@ class RTMClient(object):
         """A decorator to store and link a callback to an event."""
 
         def decorator(callback):
-            @functools.wraps(callback)
-            def decorator_wrapper():
-                RTMClient.on(event=event, callback=callback)
-
-            return decorator_wrapper()
+            RTMClient.on(event=event, callback=callback)
 
         return decorator
 
@@ -193,30 +188,11 @@ class RTMClient(object):
                 self._event_loop.add_signal_handler(s, self.stop)
 
         if self.run_async:
-            return asyncio.ensure_future(self._run(), loop=self._event_loop)
-
-        return self._event_loop.run_until_complete(self._run())
-
-    async def _run(self):
-        # schedule the consumer
-        event_consumer = asyncio.ensure_future(self._consume_events())
-        # run the producer and wait for completion
-        await self._connect_and_read()
-        # wait until the consumer has processed all items
-        await self._event_queue.join()
-        # the consumer is still awaiting for an item, cancel it
-        event_consumer.cancel()
-
-    async def _consume_events(self):
-        while True:
-            # wait for an item from the producer
-            event_payload = await self._event_queue.get()
-            # process the item
-            await self._dispatch_event(
-                event=event_payload["type"], data=event_payload["data"]
+            return asyncio.ensure_future(
+                self._connect_and_read(), loop=self._event_loop
             )
-            # Notify the queue that the item has been processed
-            self._event_queue.task_done()
+
+        return self._event_loop.run_until_complete(self._connect_and_read())
 
     def stop(self):
         """Closes the websocket connection and ensures it won't reconnect."""
@@ -357,7 +333,7 @@ class RTMClient(object):
                     ) as websocket:
                         self._logger.debug("The Websocket connection has been opened.")
                         self._websocket = websocket
-                        await self._event_queue.put({"type": "open", "data": data})
+                        await self._dispatch_event(event="open", data=data)
                         await self._read_messages()
             except (
                 client_err.SlackClientNotConnectedError,
@@ -365,7 +341,7 @@ class RTMClient(object):
                 # TODO: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 self._logger.debug(str(exception))
-                await self._event_queue.put({"type": "error", "data": exception})
+                await self._dispatch_event(event="error", data=exception)
                 if self.auto_reconnect and not self._stopped:
                     await self._wait_exponentially(exception)
                     continue
@@ -385,7 +361,7 @@ class RTMClient(object):
                 if message.type == aiohttp.WSMsgType.TEXT:
                     payload = message.json()
                     event = payload.pop("type", "Unknown")
-                    await self._event_queue.put({"type": event, "data": payload})
+                    await self._dispatch_event(event, data=payload)
                 elif message.type == aiohttp.WSMsgType.ERROR:
                     break
 
@@ -414,7 +390,16 @@ class RTMClient(object):
                 event,
             )
             try:
-                await callback(rtm_client=self, web_client=self._web_client, data=data)
+                if self._stopped and event not in ["close", "error"]:
+                    # Don't run callbacks if client was stopped unless they're close/error callbacks.
+                    break
+
+                if inspect.iscoroutinefunction(callback):
+                    await callback(
+                        rtm_client=self, web_client=self._web_client, data=data
+                    )
+                else:
+                    callback(rtm_client=self, web_client=self._web_client, data=data)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
@@ -489,4 +474,6 @@ class RTMClient(object):
         if callable(close_method):
             asyncio.ensure_future(close_method(), loop=self._event_loop)
         self._websocket = None
-        self._event_queue.put({"type": "close", "data": None})
+        asyncio.ensure_future(
+            self._dispatch_event(event="close"), loop=self._event_loop
+        )
