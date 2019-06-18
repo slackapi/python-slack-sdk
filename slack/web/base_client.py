@@ -126,7 +126,6 @@ class BaseClient:
 
         future = asyncio.ensure_future(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
-            loop=self._event_loop,
         )
 
         if self.run_async:
@@ -202,7 +201,7 @@ class BaseClient:
                     "status_code": res.status,
                 }
         async with aiohttp.ClientSession(
-            loop=self._event_loop, timeout=aiohttp.ClientTimeout(total=self.timeout)
+            timeout=aiohttp.ClientTimeout(total=self.timeout)
         ) as session:
             async with session.request(http_verb, api_url, **req_args) as res:
                 self._logger.debug("Ran the request with a new session.")
