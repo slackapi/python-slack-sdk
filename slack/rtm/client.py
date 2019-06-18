@@ -131,7 +131,6 @@ class RTMClient(object):
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
-        self._event_queue = asyncio.Queue(loop=self._event_loop)
 
     @staticmethod
     def run_on(*, event: str):
@@ -187,12 +186,12 @@ class RTMClient(object):
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
 
-        if self.run_async:
-            return asyncio.ensure_future(
-                self._connect_and_read(), loop=self._event_loop
-            )
+        future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
-        return self._event_loop.run_until_complete(self._connect_and_read())
+        if self.run_async:
+            return future
+
+        return self._event_loop.run_until_complete(future)
 
     def stop(self):
         """Closes the websocket connection and ensures it won't reconnect."""

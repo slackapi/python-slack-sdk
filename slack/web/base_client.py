@@ -108,14 +108,12 @@ class BaseClient:
             form_data = aiohttp.FormData()
             for k, v in files.items():
                 if isinstance(v, str):
-                    # TODO: This should be opened with a context manager.
                     form_data.add_field(k, open(v, "rb"))
                 else:
                     form_data.add_field(k, v)
 
             if data is not None:
                 for k, v in data.items():
-                    # TODO: We should not be casting this to a string. Test why this is here.
                     form_data.add_field(k, str(v))
 
             data = form_data
