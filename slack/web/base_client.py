@@ -44,11 +44,6 @@ class BaseClient:
         self._event_loop = loop
 
     def _set_event_loop(self):
-        """Sets the Event loop.
-
-        # TODO: Document why it's neccessary to create a new_event_loop.
-        # During testing I found that get_event_loop doesn't work from new Threads.
-        """
         if self.run_async:
             return asyncio.get_event_loop()
         else:
