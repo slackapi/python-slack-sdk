@@ -300,7 +300,7 @@ Here's a very basic example of how one might deal with rate limited requests.
   import time
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
+  client = slack.WebClient(token=slack_token)
 
   # Simple wrapper for sending a Slack message
   def send_slack_message(channel, message):

@@ -50,8 +50,8 @@ To configure your app for OAuth, you'll need a client ID, a client secret, and a
 .. code-block:: python
 
   import os
+  import slack
   from flask import Flask, request
-  from slackclient import SlackClient
 
   client_id = os.environ["SLACK_CLIENT_ID"]
   client_secret = os.environ["SLACK_CLIENT_SECRET"]
@@ -109,6 +109,6 @@ If your Slack app includes a `bot user <https://api.slack.com/docs/bots>`_, the 
 
 Once your user has completed the OAuth flow, you'll be able to use the provided tokens to call any of Slack's API methods that require an access token.
 
-See the :ref:`Web API usage <web-api-examples>` section of this documentation for usage examples.
+See the :ref:`Web API usage <basic_usage>` section of this documentation for usage examples.
 
 .. include:: metadata.rst

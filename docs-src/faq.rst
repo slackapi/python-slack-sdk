@@ -10,14 +10,14 @@ That's great! Thank you. Let us know on the `Issue Tracker`_. If you're feeling 
 There's a feature missing!
 *******************************
 
-There's always something more that could be added! You can let us know in the `Issue Tracker`_ to start a discussion around the proposed feature, that's a good start. If you're feeling particularly ambitious, why not write the feature yourself, and submit a `pull request`_! We love feedback and we love help and we don't bite. Much.
+There's always something more that could be added! You can let us know in the `Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ to start a discussion around the proposed feature, that's a good start. If you're feeling particularly ambitious, why not write the feature yourself, and submit a `pull request <https://github.com/slackapi/python-slackclient/pulls>`_! We love feedback and we love help and we don't bite. Much.
 
 How do I contribute?
 *********************************
 
-What an excellent question. First of all, please have a look at our general `contributing guidelines`_.
+What an excellent question. First of all, please have a look at our general `contributing guidelines <https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md>`_.
 
-All done? Great! While we're super excited to incorporate your new feature into |product_name|, there are a couple of things we want to make sure you've given thought to.
+All done? Great! While we're super excited to incorporate your new feature, there are a couple of things we want to make sure you've given thought to.
 
 - Please write unit tests for your new code. But don't **just** aim to increase the test coverage, rather, we expect you
   to have written **thoughtful** tests that ensure your new feature will continue to work as expected, and to help future
