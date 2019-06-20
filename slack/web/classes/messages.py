@@ -7,6 +7,8 @@ from .objects import JsonObject, JsonValidator, extract_json
 
 
 class Message(JsonObject):
+    attachments_max_length = 100
+
     def __init__(
         self,
         *,
@@ -20,29 +22,32 @@ class Message(JsonObject):
 
         https://api.slack.com/messaging/composing#message-structure
 
-        :param text: Plain or Slack Markdown-like text to display in the message.
-
-        :param attachments: A list of Attachment objects to display after the rest of
-            the message's content. More than 20 is not recommended, but the actual limit
-            is 100
-
-        :param blocks: A list of Block objects to attach to this message. If
-            specified, the 'text' property is ignored (more specifically, it's used as a
-            fallback on clients that can't render blocks)
-
-        :param markdown: Whether to parse markdown into formatting such as
-            bold/italics, or leave text completely unmodified.
+        Args:
+            text: Plain or Slack Markdown-like text to display in the message.
+            attachments: A list of Attachment objects to display after the rest of
+                the message's content. More than 20 is not recommended, but the actual
+                limit is 100
+            blocks: A list of Block objects to attach to this message. If
+                specified, the 'text' property is ignored (more specifically, it's used
+                as a fallback on clients that can't render blocks)
+            markdown: Whether to parse markdown into formatting such as
+                bold/italics, or leave text completely unmodified.
         """
         self.text = text
         self.attachments = attachments or []
         self.blocks = blocks or []
         self.markdown = markdown
 
-    @JsonValidator("attachments attribute cannot exceed 100 items")
+    @JsonValidator(
+        f"attachments attribute cannot exceed {attachments_max_length} items"
+    )
     def attachments_length(self):
-        return self.attachments is None or len(self.attachments) <= 100
+        return (
+            self.attachments is None
+            or len(self.attachments) <= self.attachments_max_length
+        )
 
-    def get_json(self):
+    def get_json(self) -> dict:
         self.validate_json()
         if len(self.text) > 40000:
             logging.getLogger(__name__).error(
@@ -52,11 +57,12 @@ class Message(JsonObject):
             #  Slack doesn't render the text property if there are blocks, so:
             logging.getLogger(__name__).info(
                 "text attribute is treated as fallback text if blocks are attached to "
-                "a message - insert text as a new SectionBlock for it to be displayed"
+                "a message - insert text as a new SectionBlock if you want it to be "
+                "displayed "
             )
         return {
             "text": self.text,
-            "attachments": extract_json(self.attachments, Attachment),
-            "blocks": extract_json(self.blocks, Block),
+            "attachments": extract_json(self.attachments),
+            "blocks": extract_json(self.blocks),
             "mrkdwn": self.markdown,
         }

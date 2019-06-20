@@ -12,13 +12,14 @@ class JsonObject:
     @property
     def attributes(self) -> Set[str]:
         """
-        Provide a set of attributes of this object that are part of its JSON structure
+        Provide a set of attributes of this object that make up its JSON structure
         """
         return set()
 
     def validate_json(self) -> None:
         """
-        :raises SlackObjectFormationError if the object was not valid
+        Raises:
+          SlackObjectFormationError if the object was not valid
         """
         for attribute in (func for func in dir(self) if not func.startswith("__")):
             method = getattr(self, attribute)
@@ -39,11 +40,11 @@ class JsonObject:
         """
         Return this object's Slack-valid JSON representation
 
-        :param args: Any specific formatting args (rare; generally ignored)
+        Args:
+          *args: Any specific formatting args (rare; generally not required)
 
-        :return: a Python dict - (will be encoded later)
-
-        :raises SlackObjectFormationError if the object was not valid
+        Raises:
+          SlackObjectFormationError if the object was not valid
         """
         self.validate_json()
         return self.get_non_null_keys()
@@ -63,9 +64,10 @@ class JsonValidator:
     def __init__(self, message: str):
         """
         Decorate a method on a class to mark it as a JSON validator. Validation
-        functions should return true if valid, false if not.
+            functions should return true if valid, false if not.
 
-        :param message: Message to be attached to the thrown SlackObjectFormationError
+        Args:
+            message: Message to be attached to the thrown SlackObjectFormationError
         """
         self.message = message
 
@@ -88,9 +90,7 @@ class EnumValidator(JsonValidator):
 
 
 class IDNamePair(NamedTuple):
-    """
-    Simple type used to help with unpacking event data
-    """
+    """Simple type used to help with unpacking event data"""
 
     id: str
     name: str
@@ -103,6 +103,10 @@ class Link(JsonObject):
         syntax
 
         https://api.slack.com/docs/message-formatting#linking_to_urls
+
+        Args:
+            url: The URL (or other special text, see subclasses) to link to
+            text: Text to display on the link. Often only a fallback.
         """
         self.url = url
         self.text = text
@@ -133,16 +137,14 @@ class DateLink(Link):
 
         https://api.slack.com/docs/message-formatting#formatting_dates
 
-        :param date: A Unix timestamp (as int) or datetime.datetime object
-
-        :param date_format: Describe your date and time as a string, using any
-            combination of the following tokens and plain text: {date_num}, {date},
-            {date_short}, {date_long}, {date_pretty}, {date_short_pretty},
-            {date_long_pretty}, {time}, {time_secs}
-
-        :param fallback: text to display on clients that don't support date rendering
-
-        :param link: an optional URL to hyperlink to with this date
+        Args:
+            date: A Unix timestamp (as int) or datetime.datetime object
+            date_format: Describe your date and time as a string, using any
+                combination of the following tokens and plain text: {date_num}, {date},
+                {date_short}, {date_long}, {date_pretty}, {date_short_pretty},
+                {date_long_pretty}, {time}, {time_secs}
+            fallback: text to display on clients that don't support date rendering
+            link: an optional URL to hyperlink to with this date
         """
         if isinstance(date, datetime):
             epoch = int(date.timestamp())
@@ -171,11 +173,11 @@ class ObjectLink(Link):
 
         https://api.slack.com/docs/message-formatting#linking_to_channels_and_users
 
-        :param object_id: An ID to create a link to, eg 'U12345' for a user,
-            or 'C6789' for a channel
-
-        :param text: Optional text to attach to the link - may or may not be
-            displayed by Slack client
+        Args:
+            object_id: An ID to create a link to, eg 'U12345' for a user,
+                or 'C6789' for a channel
+            text: Optional text to attach to the link - may or may not be
+                displayed by Slack client
         """
         prefix = self.prefix_mapping.get(object_id[0].upper(), "@")
         super().__init__(url=f"{prefix}{object_id}", text=text)
@@ -234,7 +236,8 @@ class PlainTextObject(TextObject):
 
         https://api.slack.com/reference/messaging/composition-objects#text
 
-        :param emoji: Whether to escape emoji in text into Slack's :emoji: format
+        Args:
+            emoji: Whether to escape emoji in text into Slack's :emoji: format
         """
         super().__init__(text=text, type="plain_text")
         self.emoji = emoji
@@ -259,9 +262,10 @@ class MarkdownTextObject(TextObject):
 
         https://api.slack.com/reference/messaging/composition-objects#text
 
-        :param verbatim: When set to false (as is default) URLs will be
-            auto-converted into links, conversation names will be link-ified, and
-            certain mentions will be automatically parsed.
+        Args:
+            verbatim: When set to false (as is default) URLs will be
+                auto-converted into links, conversation names will be link-ified, and
+                certain mentions will be automatically parsed.
         """
         super().__init__(text=text, type="mrkdwn")
         self.verbatim = verbatim
@@ -286,6 +290,11 @@ class MarkdownTextObject(TextObject):
 
 
 class ConfirmObject(JsonObject):
+    title_max_length = 100
+    text_max_length = 300
+    confirm_max_length = 30
+    deny_max_length = 30
+
     def __init__(
         self,
         *,
@@ -301,41 +310,39 @@ class ConfirmObject(JsonObject):
 
         https://api.slack.com/reference/messaging/composition-objects#confirm
 
-        :param title: A string that defines the dialog's title. Cannot exceed 100
-            characters.
-
-        :param text: A string or TextObject that defines the explanatory text
-            that appears in the confirm dialog. Cannot exceed 300 characters.
-
-        :param confirm: A string to define the text on the button that confirms the
-            action. Cannot exceed 30 characters.
-
-        :param deny: A string to define the text on the button that cancels the
-            action. Cannot exceed 30 characters.
+        Args:
+            title: A string that defines the dialog's title. Cannot exceed 100
+                characters.
+            text: A string or TextObject that defines the explanatory text
+                that appears in the confirm dialog. Cannot exceed 300 characters.
+            confirm: A string to define the text on the button that confirms the
+                action. Cannot exceed 30 characters.
+            deny: A string to define the text on the button that cancels the
+                action. Cannot exceed 30 characters.
         """
         self.title = title
         self.text = text
         self.confirm = confirm
         self.deny = deny
 
-    @JsonValidator("title attribute cannot exceed 100 characters")
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
     def title_length(self):
-        return len(self.title) <= 100
+        return len(self.title) <= self.title_max_length
 
-    @JsonValidator("text attribute cannot exceed 300 characters")
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def text_length(self):
         if isinstance(self.text, TextObject):
-            return len(self.text.text) <= 300
+            return len(self.text.text) <= self.text_max_length
         else:
-            return len(self.text) <= 300
+            return len(self.text) <= self.text_max_length
 
-    @JsonValidator("confirm attribute cannot exceed 30 characters")
+    @JsonValidator(f"confirm attribute cannot exceed {confirm_max_length} characters")
     def confirm_length(self):
-        return len(self.confirm) <= 30
+        return len(self.confirm) <= self.confirm_max_length
 
-    @JsonValidator("deny attribute cannot exceed 30 characters")
+    @JsonValidator(f"deny attribute cannot exceed {deny_max_length} characters")
     def deny_length(self):
-        return len(self.deny) <= 30
+        return len(self.deny) <= self.deny_max_length
 
     def get_json(self, option_type: str = "block") -> dict:
         if option_type == "action":
@@ -361,13 +368,16 @@ class ConfirmObject(JsonObject):
             return json
 
 
-class OptionObject(JsonObject):
+class Option(JsonObject):
     """
     Option object used in dialogs, legacy message actions, and blocks
-
+    
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
+
+    label_max_length = 75
+    value_max_length = 75
 
     def __init__(self, *, label: str, value: str, description: str = None):
         """
@@ -384,28 +394,27 @@ class OptionObject(JsonObject):
         Legacy interactive attachments:
         https://api.slack.com/docs/interactive-message-field-guide#option_fields
 
-        :param label: A short, user-facing string to label this option to users.
-            Cannot exceed 75 characters.
-
-        :param value: A short string that identifies this particular option to your
-            application. It will be part of the payload when this option is selected.
-            Cannot exceed 75 characters.
-
-        :param description: A user-facing string that provides more details about
-            this option. Only supported in legacy message actions, not in blocks or
-            dialogs.
+        Args:
+            label: A short, user-facing string to label this option to users.
+                Cannot exceed 75 characters.
+            value: A short string that identifies this particular option to your
+                application. It will be part of the payload when this option is selected
+                . Cannot exceed 75 characters.
+            description: A user-facing string that provides more details about
+                this option. Only supported in legacy message actions, not in blocks or
+                dialogs.
         """
         self.label = label
         self.value = value
         self.description = description
 
-    @JsonValidator("label attribute cannot exceed 75 characters")
+    @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
     def label_length(self):
-        return len(self.label) <= 75
+        return len(self.label) <= self.label_max_length
 
-    @JsonValidator("value attribute cannot exceed 75 characters")
+    @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
     def value_length(self):
-        return len(self.value) <= 75
+        return len(self.value) <= self.value_max_length
 
     def get_json(self, option_type: str = "block") -> dict:
         """
@@ -432,16 +441,19 @@ class OptionObject(JsonObject):
         """
         Creates a simple Option instance with the same value and label
         """
-        return OptionObject(value=value_and_label, label=value_and_label)
+        return Option(value=value_and_label, label=value_and_label)
 
 
-class OptionGroupObject(JsonObject):
+class OptionGroup(JsonObject):
     """
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
 
-    def __init__(self, *, label: str, options: List[OptionObject]):
+    label_max_length = 75
+    options_max_length = 100
+
+    def __init__(self, *, label: str, options: List[Option]):
         """
         Create a group of Option objects - pass in a label (that will be part of the
         UI) and a list of Option objects.
@@ -455,68 +467,64 @@ class OptionGroupObject(JsonObject):
         Legacy interactive attachments:
         https://api.slack.com/docs/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions
 
-        :param label: Text to display at the top of this group of options.
-
-        :param options: A list of no more than 100 Option objects.
+        Args:
+            label: Text to display at the top of this group of options.
+            options: A list of no more than 100 Option objects.
         """  # noqa prevent flake8 blowing up on the long URL
         self.label = label
         self.options = options
 
-    @JsonValidator("label attribute cannot exceed 75 characters")
+    @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
     def label_length(self):
-        return len(self.label) <= 75
+        return len(self.label) <= self.label_max_length
 
-    @JsonValidator("options attribute cannot exceed 100 elements")
+    @JsonValidator(f"options attribute cannot exceed {options_max_length} elements")
     def options_length(self):
-        return len(self.options) <= 100
+        return len(self.options) <= self.options_max_length
 
     def get_json(self, option_type: str = "block") -> dict:
         self.validate_json()
         if option_type == "dialog":
             return {
                 "label": self.label,
-                "options": extract_json(self.options, OptionObject, option_type),
+                "options": extract_json(self.options, option_type),
             }
         elif option_type == "action":
             return {
                 "text": self.label,
-                "options": extract_json(self.options, OptionObject, option_type),
+                "options": extract_json(self.options, option_type),
             }
         else:  # if option_type == "block"; this should be the most common case
             return {
                 "label": PlainTextObject.from_string(self.label),
-                "options": extract_json(self.options, OptionObject, option_type),
+                "options": extract_json(self.options, option_type),
             }
 
 
-OptionTypes = (OptionObject, OptionGroupObject)
+OptionTypes = (Option, OptionGroup)
 
 
 def extract_json(
-    item_or_items: Union[JsonObject, List[JsonObject], str],
-    expected_object: type(JsonObject),
-    *format_args,
+    item_or_items: Union[JsonObject, List[JsonObject], str], *format_args
 ) -> Union[dict, List[dict], str]:
     """
     Given a sequence (or single item), attempt to call the get_json() method on each
     item and return a plain list. If item is not the expected type, return it
     unmodified, in case it's already a plain dict or some other user created class.
 
-    :param item_or_items: item(s) to go through
-
-    :param expected_object: a subclass of JsonObject that's expected in this attribute
-
-    :param format_args: Any formatting specifiers to pass into the object's get_json
-    method
+    Args:
+      item_or_items: item(s) to go through
+      format_args: Any formatting specifiers to pass into the object's get_json
+            method
     """
     try:
         return [
-            elem.get_json(*format_args) if isinstance(elem, expected_object) else elem
+            elem.get_json(*format_args) if isinstance(elem, JsonObject) else elem
             for elem in item_or_items
         ]
     except TypeError:  # not iterable, so try returning it as a single item
         return (
             item_or_items.get_json(*format_args)
-            if isinstance(item_or_items, expected_object)
+            if isinstance(item_or_items, JsonObject)
             else item_or_items
         )

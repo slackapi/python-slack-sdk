@@ -28,7 +28,9 @@ class MessageInteractiveEvent(InteractiveEvent):
     def __init__(self, event: dict):
         """
         Convenience class to parse an interactive message payload from the events API
-        :param event: the raw event dictionary
+
+        Args:
+            event: the raw event dictionary
         """
         super().__init__(event)
         self.user = IDNamePair(event["user"]["id"], event["user"]["username"])
@@ -39,6 +41,8 @@ class MessageInteractiveEvent(InteractiveEvent):
         self.event_type = event["type"]
         self.message_ts = event["message"]["ts"]
         self.trigger_id = event["trigger_id"]
+        # actions payload is an array, but will only have one item (the action
+        # actually interacted with)
         action = event["actions"][0]
         self.action_id = action["action_id"]
         self.block_id = action["block_id"]
@@ -57,7 +61,9 @@ class DialogInteractiveEvent(InteractiveEvent):
     def __init__(self, event: dict):
         """
         Convenience class to parse a dialog interaction payload from the events API
-        :param event: the raw event dictionary
+
+        Args:
+            event: the raw event dictionary
         """
         super().__init__(event)
         self.user = IDNamePair(event["user"]["id"], event["user"]["name"])
@@ -76,7 +82,8 @@ class DialogInteractiveEvent(InteractiveEvent):
         Convenience method to construct the 'errors' response to send directly back to
         the invoking HTTP request
 
-        :param requirements: List of required dialog components, by name
+        Args:
+          requirements: List of required dialog components, by name
         """
         if any(self.submission.get(requirement, "") for requirement in requirements):
             return {}
@@ -96,7 +103,9 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
     def __init__(self, event: dict):
         """
         Convenience class to parse a slash command payload from the events API
-        :param event: the raw event dictionary
+
+        Args:
+            event: the raw event dictionary
         """
         super().__init__(event)
         self.user = IDNamePair(event["user_id"], event["user_name"])
@@ -111,11 +120,11 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
         """
         Create a reply suitable to send directly back to the invoking HTTP request
 
-        :param message: Text to send
-
-        :param ephemeral: Whether the response should be limited to a single user, or to
-         broadcast the reply (_and_ the user's original invocation) to the channel
-         publicly
+        Args:
+          message: Text to send
+          ephemeral: Whether the response should be limited to a single user, or to
+                broadcast the reply (_and_ the user's original invocation) to the
+                channel publicly
         """
         if ephemeral:
             return {'text': message, 'response_type': "ephemeral"}

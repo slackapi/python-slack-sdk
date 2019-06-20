@@ -8,9 +8,8 @@ from .objects import (
     EnumValidator,
     JsonObject,
     JsonValidator,
-    OptionGroupObject,
-    OptionObject,
-    OptionTypes,
+    Option,
+    OptionGroup,
     extract_json,
 )
 
@@ -18,7 +17,7 @@ from .objects import (
 class Action(JsonObject):
     """
     https://api.slack.com/docs/message-attachments#action_fields
-
+    
     https://api.slack.com/docs/interactive-message-field-guide#message_action_fields
     """
 
@@ -30,7 +29,7 @@ class Action(JsonObject):
         self.text = text
         self.type = type
 
-    @JsonValidator("name attribute is required")
+    @JsonValidator("name or url attribute is required")
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
@@ -39,6 +38,8 @@ class ActionButton(Action):
     @property
     def attributes(self):
         return super().attributes.union({"value", "style"})
+
+    value_max_length = 2000
 
     def __init__(
         self,
@@ -54,32 +55,30 @@ class ActionButton(Action):
 
         https://api.slack.com/docs/message-buttons
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param value: Provide a string identifying this specific action. It will be
-            sent to your Action URL along with the name and attachment's callback_id. If
-            providing multiple actions with the same name, value can be strategically
-            used to differentiate intent. Cannot exceed 2000 characters.
-
-        :param confirm: a ConfirmObject that will appear in a dialog to confirm
-            user's choice.
-
-        :param style: Leave blank to indicate that this is an ordinary button. Use
-            "primary" or "danger" to mark important buttons.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            value: Provide a string identifying this specific action. It will be
+                sent to your Action URL along with the name and attachment's
+                callback_id . If providing multiple actions with the same name, value
+                can be strategically used to differentiate intent. Cannot exceed 2000
+                characters.
+            confirm: a ConfirmObject that will appear in a dialog to confirm
+                user's choice.
+            style: Leave blank to indicate that this is an ordinary button. Use
+                "primary" or "danger" to mark important buttons.
         """
         super().__init__(name=name, text=text, type="button")
         self.value = value
         self.confirm = confirm
         self.style = style
 
-    @JsonValidator("value attribute cannot exceed 2000 characters")
+    @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
     def value_length(self):
-        return len(self.value) <= 2000
+        return len(self.value) <= self.value_max_length
 
     @EnumValidator("style", ButtonStyles)
     def style_valid(self):
@@ -88,7 +87,7 @@ class ActionButton(Action):
     def get_json(self) -> dict:
         json = super().get_json()
         if self.confirm is not None:
-            json["confirm"] = extract_json(self.confirm, ConfirmObject, "action")
+            json["confirm"] = extract_json(self.confirm, "action")
         return json
 
 
@@ -99,9 +98,9 @@ class ActionLinkButton(Action):
 
         https://api.slack.com/docs/message-attachments#link_buttons
 
-        :param text: text to display on the button, eg 'Click Me!"
-
-        :param url: the URL to open
+        Args:
+          text: text to display on the button, eg 'Click Me!"
+          url: the URL to open
         """
         super().__init__(text=text, url=url, type="button")
 
@@ -116,7 +115,7 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
     def data_source(self) -> str:
         pass
 
-    def __init__(self, *, name: str, text: str, selected_option: OptionObject = None):
+    def __init__(self, *, name: str, text: str, selected_option: Option = None):
         super().__init__(text=text, name=name, type="select")
         self.selected_option = selected_option
 
@@ -129,9 +128,7 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
         if self.selected_option is not None:
             # this is a special case for ExternalActionSelectElement - in that case,
             # you pass the initial value of the selector as a selected_options array
-            json["selected_options"] = extract_json(
-                [self.selected_option], OptionTypes, "action"
-            )
+            json["selected_options"] = extract_json([self.selected_option], "action")
         return json
 
 
@@ -140,19 +137,21 @@ class ActionStaticSelector(AbstractActionSelector):
     Use the select element for multiple choice selections allowing users to pick a
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
-
+    
     https://api.slack.com/dialogs#select_elements
     """
 
     data_source = "static"
+
+    options_max_length = 100
 
     def __init__(
         self,
         *,
         name: str,
         text: str,
-        options: List[Union[OptionObject, OptionGroupObject]],
-        selected_option: OptionObject = None,
+        options: List[Union[Option, OptionGroup]],
+        selected_option: Option = None,
     ):
         """
         Help users make clear, concise decisions by providing a menu of options
@@ -160,108 +159,95 @@ class ActionStaticSelector(AbstractActionSelector):
 
         https://api.slack.com/docs/message-menus
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param options: A list of no mre than 100 Option or OptionGroup objects
-
-        :param selected_option: An OptionObject object to pre-select as the default
-            value.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            options: A list of no mre than 100 Option or OptionGroup objects
+            selected_option: An Option object to pre-select as the default
+                value.
         """
         super().__init__(name=name, text=text, selected_option=selected_option)
         self.options = options
 
-    @JsonValidator("options attribute cannot exceed 100 items")
+    @JsonValidator(f"options attribute cannot exceed {options_max_length} items")
     def options_length(self):
-        return len(self.options) < 100
-
-    @JsonValidator(
-        "options attribute cannot contain mixed OptionGroup and Option items"
-    )
-    def options_valid(self):
-        return all(isinstance(o, OptionObject) for o in self.options) or all(
-            isinstance(o, OptionGroupObject) for o in self.options
-        )
+        return len(self.options) < self.options_max_length
 
     def get_json(self) -> dict:
         json = super().get_json()
-        if isinstance(self.options[0], OptionObject):
-            json["options"] = extract_json(self.options, OptionTypes, "action")
+        if isinstance(self.options[0], OptionGroup):
+            json["option_groups"] = extract_json(self.options, "action")
         else:
-            json["option_groups"] = extract_json(self.options, OptionTypes, "action")
+            json["options"] = extract_json(self.options, "action")
         return json
 
 
 class ActionUserSelector(AbstractActionSelector):
     data_source = "users"
 
-    def __init__(self, name: str, text: str, selected_option: OptionObject = None):
+    def __init__(self, name: str, text: str, selected_user: Option = None):
         """
         Automatically populate the selector with a list of users in the workspace.
 
         https://api.slack.com/docs/message-menus#allow_users_to_select_from_a_list_of_members
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param selected_option: An OptionObject object to pre-select as the default
-            value.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            selected_user: An Option object to pre-select as the default
+                value.
         """
-        super().__init__(name=name, text=text, selected_option=selected_option)
+        super().__init__(name=name, text=text, selected_option=selected_user)
 
 
 class ActionChannelSelector(AbstractActionSelector):
     data_source = "channels"
 
-    def __init__(self, name: str, text: str, selected_option: OptionObject = None):
+    def __init__(self, name: str, text: str, selected_channel: Option = None):
         """
         Automatically populate the selector with a list of public channels in the
         workspace.
 
         https://api.slack.com/docs/message-menus#let_users_choose_one_of_their_workspace_s_channels
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param selected_option: An OptionObject object to pre-select as the default
-            value.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            selected_channel: An Option object to pre-select as the default
+                value.
         """
-        super().__init__(name=name, text=text, selected_option=selected_option)
+        super().__init__(name=name, text=text, selected_option=selected_channel)
 
 
 class ActionConversationSelector(AbstractActionSelector):
     data_source = "conversations"
 
-    def __init__(self, name: str, text: str, selected_option: OptionObject = None):
+    def __init__(self, name: str, text: str, selected_conversation: Option = None):
         """
         Automatically populate the selector with a list of conversations they have in
         the workspace.
 
         https://api.slack.com/docs/message-menus#let_users_choose_one_of_their_conversations
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param selected_option: An OptionObject object to pre-select as the default
-            value.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            selected_conversation: An Option object to pre-select as the default
+                value.
         """
-        super().__init__(name=name, text=text, selected_option=selected_option)
+        super().__init__(name=name, text=text, selected_option=selected_conversation)
 
 
 class ActionExternalSelector(AbstractActionSelector):
@@ -276,7 +262,7 @@ class ActionExternalSelector(AbstractActionSelector):
         *,
         name: str,
         text: str,
-        selected_option: OptionObject = None,
+        selected_option: Option = None,
         min_query_length: int = None,
     ):
         """
@@ -284,18 +270,16 @@ class ActionExternalSelector(AbstractActionSelector):
 
         https://api.slack.com/docs/message-menus#populate_message_menus_dynamically
 
-        :param name: Name this specific action. The name will be returned to your
-            Action URL along with the message's callback_id when this action is invoked.
-            Use it to identify this particular response path.
-
-        :param text: The user-facing label for the message button or menu
-            representing this action. Cannot contain markup.
-
-        :param selected_option: An OptionObject object to pre-select as the default
-            value.
-
-        :param min_query_length: Specify the number of characters that must be typed
-            by a user into a dynamic select menu before dispatching to the app.
+        Args:
+            name: Name this specific action. The name will be returned to your
+                Action URL along with the message's callback_id when this action is
+                invoked. Use it to identify this particular response path.
+            text: The user-facing label for the message button or menu
+                representing this action. Cannot contain markup.
+            selected_option: An Option object to pre-select as the default
+                value.
+            min_query_length: Specify the number of characters that must be typed
+                by a user into a dynamic select menu before dispatching to the app.
         """
         super().__init__(name=name, text=text, selected_option=selected_option)
         self.min_query_length = min_query_length

@@ -10,7 +10,7 @@ from slack.web.classes.actions import (
     ActionStaticSelector,
     ActionUserSelector,
 )
-from slack.web.classes.objects import ConfirmObject, OptionGroupObject, OptionObject
+from slack.web.classes.objects import ConfirmObject, Option, OptionGroup
 from tests.web.classes import STRING_3001_CHARS
 
 
@@ -72,12 +72,12 @@ class LinkButtonTests(unittest.TestCase):
 class StaticActionSelectorTests(unittest.TestCase):
     def setUp(self) -> None:
         self.options = [
-            OptionObject.from_single_value("one"),
-            OptionObject.from_single_value("two"),
-            OptionObject.from_single_value("three"),
+            Option.from_single_value("one"),
+            Option.from_single_value("two"),
+            Option.from_single_value("three"),
         ]
 
-        self.option_group = [OptionGroupObject(label="group_1", options=self.options)]
+        self.option_group = [OptionGroup(label="group_1", options=self.options)]
 
     def test_json(self):
         self.assertDictEqual(
@@ -112,20 +112,12 @@ class StaticActionSelectorTests(unittest.TestCase):
                 name="select_1", text="selector_1", options=self.options * 34
             ).get_json()
 
-    def test_mixed_options(self):
-        with self.assertRaises(SlackObjectFormationError):
-            ActionStaticSelector(
-                name="select_1",
-                text="selector_1",
-                options=self.options + self.option_group,
-            ).get_json()
-
 
 class DynamicActionSelectorTests(unittest.TestCase):
     selectors = {ActionUserSelector, ActionChannelSelector, ActionConversationSelector}
 
     def setUp(self) -> None:
-        self.selected_opt = OptionObject.from_single_value("U12345")
+        self.selected_opt = Option.from_single_value("U12345")
 
     def test_json(self):
         for component in self.selectors:
@@ -144,7 +136,9 @@ class DynamicActionSelectorTests(unittest.TestCase):
                     component(
                         name="select_1",
                         text="selector_1",
-                        selected_option=self.selected_opt,
+                        # next line is a little silly, but so is writing the test
+                        # three times
+                        **{f"selected_{component.data_source[:-1]}": self.selected_opt},
                     ).get_json(),
                     {
                         "name": "select_1",
@@ -158,7 +152,7 @@ class DynamicActionSelectorTests(unittest.TestCase):
 
 class ExternalActionSelectorTests(unittest.TestCase):
     def test_json(self):
-        option = OptionObject.from_single_value("one")
+        option = Option.from_single_value("one")
 
         self.assertDictEqual(
             ActionExternalSelector(

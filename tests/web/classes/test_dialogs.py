@@ -12,7 +12,7 @@ from slack.web.classes.dialogs import (
     DialogTextField,
     DialogUserSelector,
 )
-from slack.web.classes.objects import OptionObject
+from slack.web.classes.objects import Option
 from . import STRING_3001_CHARS, STRING_301_CHARS, STRING_51_CHARS
 
 TextComponents = {DialogTextField, DialogTextArea}
@@ -153,9 +153,9 @@ class TextAreaComponentTests(unittest.TestCase):
 class StaticDropdownTests(unittest.TestCase):
     def test_basic_json_formation(self):
         options = [
-            OptionObject.from_single_value("one"),
-            OptionObject.from_single_value("two"),
-            OptionObject.from_single_value("three"),
+            Option.from_single_value("one"),
+            Option.from_single_value("two"),
+            Option.from_single_value("three"),
         ]
         self.assertDictEqual(
             DialogStaticSelector(
@@ -180,7 +180,7 @@ class DynamicSelectorTests(unittest.TestCase):
     selectors = {DialogUserSelector, DialogChannelSelector, DialogConversationSelector}
 
     def setUp(self) -> None:
-        self.selected_opt = OptionObject.from_single_value("U12345")
+        self.selected_opt = Option.from_single_value("U12345")
 
     def test_json(self):
         self.maxDiff = None
@@ -219,7 +219,7 @@ class DynamicSelectorTests(unittest.TestCase):
 
 class ExternalSelectorTests(unittest.TestCase):
     def test_basic_json_formation(self):
-        o = OptionObject.from_single_value("one")
+        o = Option.from_single_value("one")
         self.assertDictEqual(
             DialogExternalSelector(
                 name="dialog",

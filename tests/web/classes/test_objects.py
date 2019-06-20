@@ -2,20 +2,9 @@ import unittest
 
 from slack.errors import SlackObjectFormationError
 from slack.web.classes.objects import (
-    ChannelLink,
-    ConfirmObject,
-    DateLink,
-    EveryoneLink,
-    HereLink,
-    JsonObject,
-    JsonValidator,
-    Link,
-    MarkdownTextObject,
-    ObjectLink,
-    OptionGroupObject,
-    OptionObject,
-    PlainTextObject,
-)
+    ChannelLink, ConfirmObject, DateLink, EveryoneLink, HereLink, JsonObject,
+    JsonValidator, Link, MarkdownTextObject, ObjectLink, Option, OptionGroup,
+    PlainTextObject)
 from . import STRING_301_CHARS, STRING_51_CHARS
 
 
@@ -282,7 +271,7 @@ class ConfirmObjectTests(unittest.TestCase):
 
 class OptionTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.common = OptionObject(label="an option", value="option_1")
+        self.common = Option(label="an option", value="option_1")
 
     def test_block_style_json(self):
         expected = {
@@ -301,29 +290,29 @@ class OptionTests(unittest.TestCase):
         self.assertDictEqual(self.common.get_json("action"), expected)
 
     def test_from_single_value(self):
-        o = OptionObject(label="option_1", value="option_1")
+        o = Option(label="option_1", value="option_1")
         self.assertDictEqual(
             o.get_json("text"), o.from_single_value("option_1").get_json("text")
         )
 
     def test_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionObject(label=STRING_301_CHARS, value="option_1").get_json("text")
+            Option(label=STRING_301_CHARS, value="option_1").get_json("text")
 
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionObject(label="option_1", value=STRING_301_CHARS).get_json("text")
+            Option(label="option_1", value=STRING_301_CHARS).get_json("text")
 
 
 class OptionGroupTests(unittest.TestCase):
     def setUp(self) -> None:
         self.common_options = [
-            OptionObject.from_single_value("one"),
-            OptionObject.from_single_value("two"),
-            OptionObject.from_single_value("three"),
+            Option.from_single_value("one"),
+            Option.from_single_value("two"),
+            Option.from_single_value("three"),
         ]
 
-        self.common = OptionGroupObject(label="an option", options=self.common_options)
+        self.common = OptionGroup(label="an option", options=self.common_options)
 
     def test_block_style_json(self):
         expected = {
@@ -374,12 +363,12 @@ class OptionGroupTests(unittest.TestCase):
 
     def test_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionGroupObject(
+            OptionGroup(
                 label=STRING_301_CHARS, options=self.common_options
             ).get_json("text")
 
     def test_options_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionGroupObject(
+            OptionGroup(
                 label="option_group", options=self.common_options * 34
             ).get_json("text")

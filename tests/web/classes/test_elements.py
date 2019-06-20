@@ -11,7 +11,7 @@ from slack.web.classes.elements import (
     SelectElement,
     UserSelectElement,
 )
-from slack.web.classes.objects import ConfirmObject, OptionObject
+from slack.web.classes.objects import ConfirmObject, Option
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
 
@@ -119,9 +119,9 @@ class ImageElementTests(unittest.TestCase):
 
 
 class SelectElementTests(unittest.TestCase):
-    option_one = OptionObject.from_single_value("one")
-    option_two = OptionObject.from_single_value("two")
-    options = [option_one, option_two, OptionObject.from_single_value("three")]
+    option_one = Option.from_single_value("one")
+    option_two = Option.from_single_value("two")
+    options = [option_one, option_two, Option.from_single_value("three")]
 
     def test_json(self):
         self.maxDiff = None
@@ -219,7 +219,10 @@ class DynamicDropdownTests(unittest.TestCase):
             with self.subTest(dropdown_type=dropdown_type):
                 self.assertDictEqual(
                     dropdown_type(
-                        placeholder="abc", action_id="dropdown", initial_value="def"
+                        placeholder="abc",
+                        action_id="dropdown",
+                        # somewhat silly abuse of kwargs ahead:
+                        **{f"initial_{dropdown_type.initial_object_type}": "def"},
                     ).get_json(),
                     {
                         "placeholder": {
