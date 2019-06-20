@@ -2,27 +2,20 @@ import random
 import re
 import string
 from abc import ABCMeta, abstractmethod
-from typing import List, Set, Union
+from typing import List, Optional, Set, Union
 
-from .objects import (
-    ButtonStyles,
-    ConfirmObject,
-    EnumValidator,
-    JsonObject,
-    JsonValidator,
-    Option,
-    OptionGroup,
-    OptionTypes,
-    PlainTextObject,
-    extract_json,
-)
+from . import EnumValidator, JsonObject, JsonValidator, extract_json
+from .objects import ButtonStyles, ConfirmObject, Option, OptionGroup, PlainTextObject
 
 
 class BlockElement(JsonObject):
-    attributes = {"type"}
+    def __init__(self, *, subtype: str):
+        self.subtype = subtype
 
-    def __init__(self, *, type: str):
-        self.type = type
+    def get_json(self, *args) -> dict:
+        json = super().get_json()
+        json["type"] = self.subtype
+        return json
 
 
 class InteractiveElement(BlockElement):
@@ -32,8 +25,8 @@ class InteractiveElement(BlockElement):
 
     action_id_max_length = 255
 
-    def __init__(self, *, action_id: str, type: str):
-        super().__init__(type=type)
+    def __init__(self, *, action_id: str, subtype: str):
+        super().__init__(subtype=subtype)
         self.action_id = action_id
 
     @JsonValidator(
@@ -64,7 +57,7 @@ class ImageElement(BlockElement):
                 characters.
             alt_text: Plain text summary of image. Cannot exceed 2000 characters.
         """
-        super().__init__(type="image")
+        super().__init__(subtype="image")
         self.image_url = image_url
         self.alt_text = alt_text
 
@@ -93,8 +86,8 @@ class ButtonElement(InteractiveElement):
         text: str,
         action_id: str,
         value: str,
-        style: str = None,
-        confirm: ConfirmObject = None,
+        style: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         An interactive element that inserts a button. The button can be a trigger for
@@ -112,7 +105,7 @@ class ButtonElement(InteractiveElement):
             confirm: A ConfirmObject that defines an optional confirmation dialog
                 after this element is interacted with.
         """
-        super().__init__(action_id=action_id, type="button")
+        super().__init__(action_id=action_id, subtype="button")
         self.text = text
         self.value = value
         self.style = style
@@ -145,7 +138,7 @@ class LinkButtonElement(ButtonElement):
 
     url_max_length = 3000
 
-    def __init__(self, *, text: str, url: str, style: str = None):
+    def __init__(self, *, text: str, url: str, style: Optional[str] = None):
         """
         A simple button that simply opens a given URL. You will still receive an
         interaction payload and will need to send an acknowledgement response.
@@ -175,10 +168,10 @@ class AbstractSelector(InteractiveElement, metaclass=ABCMeta):
         *,
         placeholder: str,
         action_id: str,
-        type: str,
-        confirm: ConfirmObject = None,
+        subtype: str,
+        confirm: Optional[ConfirmObject] = None,
     ):
-        super().__init__(action_id=action_id, type=type)
+        super().__init__(action_id=action_id, subtype=subtype)
         self.placeholder = placeholder
         self.confirm = confirm
 
@@ -205,8 +198,8 @@ class SelectElement(AbstractSelector):
         placeholder: str,
         action_id: str,
         options: List[Union[Option, OptionGroup]],
-        initial_option: Option = None,
-        confirm: ConfirmObject = None,
+        initial_option: Optional[Option] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This is the simplest form of select menu, with a static list of options
@@ -230,7 +223,7 @@ class SelectElement(AbstractSelector):
         super().__init__(
             placeholder=placeholder,
             action_id=action_id,
-            type="static_select",
+            subtype="static_select",
             confirm=confirm,
         )
         self.options = options
@@ -261,9 +254,9 @@ class ExternalDataSelectElement(AbstractSelector):
         *,
         placeholder: str,
         action_id: str,
-        initial_option: OptionTypes = None,
-        min_query_length: int = None,
-        confirm: ConfirmObject = None,
+        initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
+        min_query_length: Optional[int] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This select menu will load its options from an external data source, allowing
@@ -288,7 +281,7 @@ class ExternalDataSelectElement(AbstractSelector):
         """
         super().__init__(
             action_id=action_id,
-            type="external_select",
+            subtype="external_select",
             placeholder=placeholder,
             confirm=confirm,
         )
@@ -313,12 +306,12 @@ class AbstractDynamicSelector(AbstractSelector, metaclass=ABCMeta):
         *,
         placeholder: str,
         action_id: str,
-        initial_value: str = None,
-        confirm: ConfirmObject = None,
+        initial_value: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         super().__init__(
             action_id=action_id,
-            type=f"{self.initial_object_type}s_select",
+            subtype=f"{self.initial_object_type}s_select",
             confirm=confirm,
             placeholder=placeholder,
         )
@@ -339,8 +332,8 @@ class UserSelectElement(AbstractDynamicSelector):
         *,
         placeholder: str,
         action_id: str,
-        initial_user: str = None,
-        confirm: ConfirmObject = None,
+        initial_user: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This select menu will populate its options with a list of Slack users visible to
@@ -373,8 +366,8 @@ class ConversationSelectElement(AbstractDynamicSelector):
         *,
         placeholder: str,
         action_id: str,
-        initial_conversation: str = None,
-        confirm: ConfirmObject = None,
+        initial_conversation: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This select menu will populate its options with a list of public and private
@@ -407,8 +400,8 @@ class ChannelSelectElement(AbstractDynamicSelector):
         *,
         placeholder: str,
         action_id: str,
-        initial_channel: str = None,
-        confirm: ConfirmObject = None,
+        initial_channel: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This select menu will populate its options with a list of public channels
@@ -434,7 +427,7 @@ class ChannelSelectElement(AbstractDynamicSelector):
 
 
 class OverflowMenuOption(Option):
-    def __init__(self, label: str, value: str, url: str = None):
+    def __init__(self, label: str, value: str, url: Optional[str] = None):
         """
         An extension of a standard option, but with an optional 'url' attribute,
         which will simply directly navigate to a given URL. Only valid in
@@ -472,7 +465,7 @@ class OverflowMenuElement(InteractiveElement):
         *,
         options: List[Union[Option, OverflowMenuOption]],
         action_id: str,
-        confirm: ConfirmObject = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         This is like a cross between a button and a select menu - when a user clicks
@@ -495,12 +488,13 @@ class OverflowMenuElement(InteractiveElement):
             confirm: A ConfirmObject that defines an optional confirmation dialog
                 after this element is interacted with.
         """
-        super().__init__(action_id=action_id, type="overflow")
+        super().__init__(action_id=action_id, subtype="overflow")
         self.options = options
         self.confirm = confirm
 
     @JsonValidator(
-        f"options attribute must have between {options_min_length} and {options_max_length} items"
+        f"options attribute must have between {options_min_length} "
+        f"and {options_max_length} items"
     )
     def options_length(self):
         return self.options_min_length < len(self.options) <= self.options_max_length
@@ -522,9 +516,9 @@ class DatePickerElement(AbstractSelector):
         self,
         *,
         action_id: str,
-        placeholder: str = None,
-        initial_date: str = None,
-        confirm: ConfirmObject = None,
+        placeholder: Optional[str] = None,
+        initial_date: Optional[str] = None,
+        confirm: Optional[ConfirmObject] = None,
     ):
         """
         An element which lets users easily select a date from a calendar style UI.
@@ -544,7 +538,7 @@ class DatePickerElement(AbstractSelector):
         """
         super().__init__(
             action_id=action_id,
-            type="datepicker",
+            subtype="datepicker",
             placeholder=placeholder,
             confirm=confirm,
         )

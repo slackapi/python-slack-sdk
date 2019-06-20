@@ -1,7 +1,8 @@
 import json
 from typing import List
 
-from .objects import IDNamePair, JsonObject
+from . import JsonObject
+from .objects import IDNamePair
 
 
 class InteractiveEvent(JsonObject):
@@ -91,7 +92,7 @@ class DialogInteractiveEvent(InteractiveEvent):
             errors = []
             for key in self.submission:
                 error_text = "At least one value is required"
-                errors.append({'name': key, 'error': error_text})
+                errors.append({"name": key, "error": error_text})
             return {"errors": errors}
 
 
@@ -127,6 +128,6 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
                 channel publicly
         """
         if ephemeral:
-            return {'text': message, 'response_type': "ephemeral"}
+            return {"text": message, "response_type": "ephemeral"}
         else:
-            return {'text': message, 'response_type': "in_channel"}
+            return {"text": message, "response_type": "in_channel"}

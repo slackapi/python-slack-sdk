@@ -1,9 +1,11 @@
 import logging
-from typing import List
+from typing import List, Optional
 
+from . import JsonObject, JsonValidator, extract_json
 from .attachments import Attachment
 from .blocks import Block
-from .objects import JsonObject, JsonValidator, extract_json
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Message(JsonObject):
@@ -13,8 +15,8 @@ class Message(JsonObject):
         self,
         *,
         text: str,
-        attachments: List[Attachment] = None,
-        blocks: List[Block] = None,
+        attachments: Optional[List[Attachment]] = None,
+        blocks: Optional[List[Block]] = None,
         markdown: bool = True,
     ):
         """
@@ -50,12 +52,12 @@ class Message(JsonObject):
     def get_json(self) -> dict:
         self.validate_json()
         if len(self.text) > 40000:
-            logging.getLogger(__name__).error(
+            LOGGER.error(
                 "Messages over 40,000 characters are automatically truncated by Slack"
             )
         if self.text and self.blocks:
             #  Slack doesn't render the text property if there are blocks, so:
-            logging.getLogger(__name__).info(
+            LOGGER.info(
                 "text attribute is treated as fallback text if blocks are attached to "
                 "a message - insert text as a new SectionBlock if you want it to be "
                 "displayed "

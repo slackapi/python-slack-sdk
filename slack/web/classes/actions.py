@@ -1,16 +1,13 @@
 from abc import ABCMeta, abstractmethod
-from typing import List, Set, Union
+from typing import List, Optional, Set, Union
 
+from . import EnumValidator, JsonObject, JsonValidator, extract_json
 from .objects import (
     ButtonStyles,
     ConfirmObject,
     DynamicSelectElementTypes,
-    EnumValidator,
-    JsonObject,
-    JsonValidator,
     Option,
     OptionGroup,
-    extract_json,
 )
 
 
@@ -21,17 +18,29 @@ class Action(JsonObject):
     https://api.slack.com/docs/interactive-message-field-guide#message_action_fields
     """
 
-    attributes = {"name", "text", "type", "url"}
+    attributes = {"name", "text", "url"}
 
-    def __init__(self, *, text: str, type: str, name: str = None, url: str = None):
+    def __init__(
+        self,
+        *,
+        text: str,
+        subtype: str,
+        name: Optional[str] = None,
+        url: Optional[str] = None,
+    ):
         self.name = name
         self.url = url
         self.text = text
-        self.type = type
+        self.subtype = subtype
 
     @JsonValidator("name or url attribute is required")
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
+
+    def get_json(self, *args) -> dict:
+        json = super().get_json()
+        json["type"] = self.subtype
+        return json
 
 
 class ActionButton(Action):
@@ -47,8 +56,8 @@ class ActionButton(Action):
         name: str,
         text: str,
         value: str,
-        confirm: ConfirmObject = None,
-        style: str = None,
+        confirm: Optional[ConfirmObject] = None,
+        style: Optional[str] = None,
     ):
         """
         Simple button for use inside attachments
@@ -71,7 +80,7 @@ class ActionButton(Action):
             style: Leave blank to indicate that this is an ordinary button. Use
                 "primary" or "danger" to mark important buttons.
         """
-        super().__init__(name=name, text=text, type="button")
+        super().__init__(name=name, text=text, subtype="button")
         self.value = value
         self.confirm = confirm
         self.style = style
@@ -102,7 +111,7 @@ class ActionLinkButton(Action):
           text: text to display on the button, eg 'Click Me!"
           url: the URL to open
         """
-        super().__init__(text=text, url=url, type="button")
+        super().__init__(text=text, url=url, subtype="button")
 
 
 class AbstractActionSelector(Action, metaclass=ABCMeta):
@@ -115,8 +124,10 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
     def data_source(self) -> str:
         pass
 
-    def __init__(self, *, name: str, text: str, selected_option: Option = None):
-        super().__init__(text=text, name=name, type="select")
+    def __init__(
+        self, *, name: str, text: str, selected_option: Optional[Option] = None
+    ):
+        super().__init__(text=text, name=name, subtype="select")
         self.selected_option = selected_option
 
     @EnumValidator("data_source", DataSourceTypes)
@@ -151,7 +162,7 @@ class ActionStaticSelector(AbstractActionSelector):
         name: str,
         text: str,
         options: List[Union[Option, OptionGroup]],
-        selected_option: Option = None,
+        selected_option: Optional[Option] = None,
     ):
         """
         Help users make clear, concise decisions by providing a menu of options
@@ -188,7 +199,7 @@ class ActionStaticSelector(AbstractActionSelector):
 class ActionUserSelector(AbstractActionSelector):
     data_source = "users"
 
-    def __init__(self, name: str, text: str, selected_user: Option = None):
+    def __init__(self, name: str, text: str, selected_user: Optional[Option] = None):
         """
         Automatically populate the selector with a list of users in the workspace.
 
@@ -209,7 +220,7 @@ class ActionUserSelector(AbstractActionSelector):
 class ActionChannelSelector(AbstractActionSelector):
     data_source = "channels"
 
-    def __init__(self, name: str, text: str, selected_channel: Option = None):
+    def __init__(self, name: str, text: str, selected_channel: Optional[Option] = None):
         """
         Automatically populate the selector with a list of public channels in the
         workspace.
@@ -231,7 +242,9 @@ class ActionChannelSelector(AbstractActionSelector):
 class ActionConversationSelector(AbstractActionSelector):
     data_source = "conversations"
 
-    def __init__(self, name: str, text: str, selected_conversation: Option = None):
+    def __init__(
+        self, name: str, text: str, selected_conversation: Optional[Option] = None
+    ):
         """
         Automatically populate the selector with a list of conversations they have in
         the workspace.
@@ -262,8 +275,8 @@ class ActionExternalSelector(AbstractActionSelector):
         *,
         name: str,
         text: str,
-        selected_option: Option = None,
-        min_query_length: int = None,
+        selected_option: Optional[Option] = None,
+        min_query_length: Optional[int] = None,
     ):
         """
         Populate a message select menu from your own application dynamically.

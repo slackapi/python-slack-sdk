@@ -1,14 +1,13 @@
 import unittest
 
 from slack.errors import SlackObjectFormationError
+from slack.web.classes import JsonObject, JsonValidator
 from slack.web.classes.objects import (
     ChannelLink,
     ConfirmObject,
     DateLink,
     EveryoneLink,
     HereLink,
-    JsonObject,
-    JsonValidator,
     Link,
     MarkdownTextObject,
     ObjectLink,

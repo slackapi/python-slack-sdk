@@ -1,9 +1,9 @@
 import re
-from typing import List, Set
+from typing import List, Optional, Set
 
+from . import EnumValidator, JsonObject, JsonValidator, extract_json
 from .actions import Action
 from .blocks import Block
-from .objects import EnumValidator, JsonObject, JsonValidator, extract_json
 
 SeededColors = {"good", "warning", "danger"}
 
@@ -11,7 +11,13 @@ SeededColors = {"good", "warning", "danger"}
 class AttachmentField(JsonObject):
     attributes = {"short", "value", "title"}
 
-    def __init__(self, *, title: str = None, value: str = None, short: bool = True):
+    def __init__(
+        self,
+        *,
+        title: Optional[str] = None,
+        value: Optional[str] = None,
+        short: bool = True,
+    ):
         self.title = title
         self.value = value
         self.short = short
@@ -47,21 +53,21 @@ class Attachment(JsonObject):
         self,
         *,
         text: str,
-        fallback: str = None,
-        fields: List[AttachmentField] = None,
-        color: str = None,
-        markdown_in: List[str] = None,
-        title: str = None,
-        title_link: str = None,
-        pretext: str = None,
-        author_name: str = None,
-        author_link: str = None,
-        author_icon: str = None,
-        image_url: str = None,
-        thumb_url: str = None,
-        footer: str = None,
-        footer_icon: str = None,
-        ts: int = None,
+        fallback: Optional[str] = None,
+        fields: Optional[List[AttachmentField]] = None,
+        color: Optional[str] = None,
+        markdown_in: Optional[List[str]] = None,
+        title: Optional[str] = None,
+        title_link: Optional[str] = None,
+        pretext: Optional[str] = None,
+        author_name: Optional[str] = None,
+        author_link: Optional[str] = None,
+        author_icon: Optional[str] = None,
+        image_url: Optional[str] = None,
+        thumb_url: Optional[str] = None,
+        footer: Optional[str] = None,
+        footer_icon: Optional[str] = None,
+        ts: Optional[int] = None,
     ):
         """
         A supplemental object that will display after the rest of the message.
@@ -188,7 +194,7 @@ class BlockAttachment(Attachment):
     attributes = {"color"}
     blocks: List[Block]
 
-    def __init__(self, *, blocks: List[Block], color: str = None):
+    def __init__(self, *, blocks: List[Block], color: Optional[str] = None):
         """
         A bridge between legacy attachments and blockkit formatting - pass a list of
         Block objects directly to this attachment.
@@ -224,21 +230,21 @@ class InteractiveAttachment(Attachment):
         actions: List[Action],
         callback_id: str,
         text: str,
-        fallback: str = None,
-        fields: List[AttachmentField] = None,
-        color: str = None,
-        markdown_in: List[str] = None,
-        title: str = None,
-        title_link: str = None,
-        pretext: str = None,
-        author_name: str = None,
-        author_link: str = None,
-        author_icon: str = None,
-        image_url: str = None,
-        thumb_url: str = None,
-        footer: str = None,
-        footer_icon: str = None,
-        ts: int = None,
+        fallback: Optional[str] = None,
+        fields: Optional[List[AttachmentField]] = None,
+        color: Optional[str] = None,
+        markdown_in: Optional[List[str]] = None,
+        title: Optional[str] = None,
+        title_link: Optional[str] = None,
+        pretext: Optional[str] = None,
+        author_name: Optional[str] = None,
+        author_link: Optional[str] = None,
+        author_icon: Optional[str] = None,
+        image_url: Optional[str] = None,
+        thumb_url: Optional[str] = None,
+        footer: Optional[str] = None,
+        footer_icon: Optional[str] = None,
+        ts: Optional[int] = None,
     ):
         """
         An Attachment, but designed to contain interactive Actions
