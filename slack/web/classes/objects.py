@@ -371,7 +371,7 @@ class ConfirmObject(JsonObject):
 class Option(JsonObject):
     """
     Option object used in dialogs, legacy message actions, and blocks
-    
+
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """

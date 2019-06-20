@@ -2,9 +2,20 @@ import unittest
 
 from slack.errors import SlackObjectFormationError
 from slack.web.classes.objects import (
-    ChannelLink, ConfirmObject, DateLink, EveryoneLink, HereLink, JsonObject,
-    JsonValidator, Link, MarkdownTextObject, ObjectLink, Option, OptionGroup,
-    PlainTextObject)
+    ChannelLink,
+    ConfirmObject,
+    DateLink,
+    EveryoneLink,
+    HereLink,
+    JsonObject,
+    JsonValidator,
+    Link,
+    MarkdownTextObject,
+    ObjectLink,
+    Option,
+    OptionGroup,
+    PlainTextObject,
+)
 from . import STRING_301_CHARS, STRING_51_CHARS
 
 
@@ -68,17 +79,18 @@ class JsonValidatorTests(unittest.TestCase):
                 self.assertTrue(attr.validator)
             else:
                 with self.assertRaises(AttributeError):
-                    v = attr.validator
+                    # noinspection PyStatementEffect
+                    attr.validator
 
 
 class LinkTests(unittest.TestCase):
     def test_without_text(self):
-        l = Link(url="http://google.com", text="")
-        self.assertEqual(f"{l}", "<http://google.com>")
+        link = Link(url="http://google.com", text="")
+        self.assertEqual(f"{link}", "<http://google.com>")
 
     def test_with_text(self):
-        l = Link(url="http://google.com", text="google")
-        self.assertEqual(f"{l}", "<http://google.com|google>")
+        link = Link(url="http://google.com", text="google")
+        self.assertEqual(f"{link}", "<http://google.com|google>")
 
 
 class DateLinkTests(unittest.TestCase):
@@ -86,43 +98,44 @@ class DateLinkTests(unittest.TestCase):
         self.epoch = 1234567890
 
     def test_simple_formation(self):
-        l = DateLink(
+        datelink = DateLink(
             date=self.epoch, date_format="{date_long}", fallback=f"{self.epoch}"
         )
-        self.assertEqual(f"{l}", f"<{self.epoch}^{{date_long}}|{self.epoch}>")
+        self.assertEqual(f"{datelink}", f"<{self.epoch}^{{date_long}}|{self.epoch}>")
 
     def test_with_url(self):
-        l = DateLink(
+        datelink = DateLink(
             date=self.epoch,
             date_format="{date_long}",
             link="http://google.com",
             fallback=f"{self.epoch}",
         )
         self.assertEqual(
-            f"{l}", f"<{self.epoch}^{{date_long}}^http://google.com|{self.epoch}>"
+            f"{datelink}",
+            f"<{self.epoch}^{{date_long}}^http://google.com|{self.epoch}>",
         )
 
 
 class ObjectLinkTests(unittest.TestCase):
     def test_channel(self):
-        l = ObjectLink(object_id="C12345")
-        self.assertEqual(f"{l}", "<#C12345>")
+        objlink = ObjectLink(object_id="C12345")
+        self.assertEqual(f"{objlink}", "<#C12345>")
 
     def test_group_message(self):
-        l = ObjectLink(object_id="G12345")
-        self.assertEqual(f"{l}", "<#G12345>")
+        objlink = ObjectLink(object_id="G12345")
+        self.assertEqual(f"{objlink}", "<#G12345>")
 
     def test_subteam_message(self):
-        l = ObjectLink(object_id="S12345")
-        self.assertEqual(f"{l}", "<!subteam^S12345>")
+        objlink = ObjectLink(object_id="S12345")
+        self.assertEqual(f"{objlink}", "<!subteam^S12345>")
 
     def test_with_label(self):
-        l = ObjectLink(object_id="C12345", text="abc")
-        self.assertEqual(f"{l}", "<#C12345|abc>")
+        objlink = ObjectLink(object_id="C12345", text="abc")
+        self.assertEqual(f"{objlink}", "<#C12345|abc>")
 
     def test_unknown_prefix(self):
-        l = ObjectLink(object_id="Z12345")
-        self.assertEqual(f"{l}", "<@Z12345>")
+        objlink = ObjectLink(object_id="Z12345")
+        self.assertEqual(f"{objlink}", "<@Z12345>")
 
 
 class SpecialLinkTests(unittest.TestCase):
@@ -149,8 +162,10 @@ class PlainTextObjectTests(unittest.TestCase):
         )
 
     def test_from_string(self):
-        o = PlainTextObject(text="some text")
-        self.assertDictEqual(o.get_json(), PlainTextObject.from_string("some text"))
+        plaintext = PlainTextObject(text="some text")
+        self.assertDictEqual(
+            plaintext.get_json(), PlainTextObject.from_string("some text")
+        )
 
 
 class MarkdownTextObjectTests(unittest.TestCase):
@@ -166,8 +181,10 @@ class MarkdownTextObjectTests(unittest.TestCase):
         )
 
     def test_from_string(self):
-        o = MarkdownTextObject(text="some text")
-        self.assertDictEqual(o.get_json(), MarkdownTextObject.from_string("some text"))
+        markdown = MarkdownTextObject(text="some text")
+        self.assertDictEqual(
+            markdown.get_json(), MarkdownTextObject.from_string("some text")
+        )
 
 
 class ConfirmObjectTests(unittest.TestCase):
@@ -290,9 +307,10 @@ class OptionTests(unittest.TestCase):
         self.assertDictEqual(self.common.get_json("action"), expected)
 
     def test_from_single_value(self):
-        o = Option(label="option_1", value="option_1")
+        option = Option(label="option_1", value="option_1")
         self.assertDictEqual(
-            o.get_json("text"), o.from_single_value("option_1").get_json("text")
+            option.get_json("text"),
+            option.from_single_value("option_1").get_json("text"),
         )
 
     def test_label_length(self):
@@ -363,9 +381,9 @@ class OptionGroupTests(unittest.TestCase):
 
     def test_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionGroup(
-                label=STRING_301_CHARS, options=self.common_options
-            ).get_json("text")
+            OptionGroup(label=STRING_301_CHARS, options=self.common_options).get_json(
+                "text"
+            )
 
     def test_options_length(self):
         with self.assertRaises(SlackObjectFormationError):

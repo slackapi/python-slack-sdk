@@ -120,7 +120,7 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
 class DialogTextField(DialogTextComponent):
     """
     Text elements are single-line plain text fields.
-    
+
     https://api.slack.com/dialogs#text_elements
     """
 
@@ -134,7 +134,7 @@ class DialogTextArea(DialogTextComponent):
     these on the world wide web. Use this element if you want a relatively long
     answer from users. The element UI provides a remaining character count to the
     max_length you have set or the default, 3000.
-    
+
     https://api.slack.com/dialogs#textarea_elements
     """
 
@@ -213,7 +213,7 @@ class DialogStaticSelector(AbstractDialogSelector):
     Use the select element for multiple choice selections allowing users to pick a
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
-    
+
     https://api.slack.com/dialogs#select_elements
     """
 
@@ -534,7 +534,7 @@ class DialogBuilder(JsonObject):
     ) -> "DialogBuilder":
         """
         Text elements are single-line plain text fields.
-        
+
         https://api.slack.com/dialogs#attributes_text_elements
 
         Args:
@@ -589,7 +589,7 @@ class DialogBuilder(JsonObject):
         relatively long answer from users. The element UI provides a remaining
         character count to the max_length you have set or the default,
         3000.
-        
+
         https://api.slack.com/dialogs#attributes_textarea_elements
 
         Args:
@@ -639,10 +639,10 @@ class DialogBuilder(JsonObject):
         Use the select element for multiple choice selections allowing users to pick
         a single item from a list. True to web roots, this selection is displayed as
         a dropdown menu.
-        
+
         A select element may contain up to 100 selections, provided as a list of
         Option or OptionGroup objects
-        
+
         https://api.slack.com/dialogs#attributes_select_elements
 
         Args:
@@ -682,10 +682,10 @@ class DialogBuilder(JsonObject):
         Use the select element for multiple choice selections allowing users to pick
         a single item from a list. True to web roots, this selection is displayed as
         a dropdown menu.
-        
+
         A list of options can be loaded from an external URL and used in your dialog
         menus.
-        
+
         https://api.slack.com/dialogs#dynamic_select_elements_external
 
         Args:
@@ -728,7 +728,7 @@ class DialogBuilder(JsonObject):
         when you are creating a bug tracking app, you want to include a field for an
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn't need access to a related OAuth scope.
-        
+
         https://api.slack.com/dialogs#dynamic_select_elements_users
 
         Args:
@@ -763,7 +763,7 @@ class DialogBuilder(JsonObject):
         """
         You can also provide a select menu with a list of channels. Specify your
         data_source as channels to limit only to public channels
-        
+
         https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
 
         Args:
@@ -799,7 +799,7 @@ class DialogBuilder(JsonObject):
         You can also provide a select menu with a list of conversations - including
         private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
-        
+
         https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
 
         Args:

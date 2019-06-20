@@ -17,7 +17,7 @@ from .objects import (
 class Action(JsonObject):
     """
     https://api.slack.com/docs/message-attachments#action_fields
-    
+
     https://api.slack.com/docs/interactive-message-field-guide#message_action_fields
     """
 
@@ -137,7 +137,7 @@ class ActionStaticSelector(AbstractActionSelector):
     Use the select element for multiple choice selections allowing users to pick a
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
-    
+
     https://api.slack.com/dialogs#select_elements
     """
 
