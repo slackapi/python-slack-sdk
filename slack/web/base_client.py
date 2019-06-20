@@ -102,7 +102,8 @@ class BaseClient:
             form_data = aiohttp.FormData()
             for k, v in files.items():
                 if isinstance(v, str):
-                    form_data.add_field(k, open(v, "rb"))
+                    with open(v, "rb") as fd:
+                        form_data.add_field(k, fd)
                 else:
                     form_data.add_field(k, v)
 
