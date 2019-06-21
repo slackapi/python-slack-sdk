@@ -1,20 +1,22 @@
 """A Python module for iteracting with Slack's Web API."""
 
-# Standard Imports
-from urllib.parse import urljoin
+import asyncio
+import hashlib
+import hmac
+import inspect
+import logging
 import platform
 import sys
-import logging
-import asyncio
-import inspect
+# Standard Imports
+from urllib.parse import urljoin
 
 # ThirdParty Imports
 import aiohttp
 
+import slack.errors as err
+import slack.version as ver
 # Internal Imports
 from slack.web.slack_response import SlackResponse
-import slack.version as ver
-import slack.errors as err
 
 
 class BaseClient:
@@ -230,3 +232,12 @@ class BaseClient:
         system_info = "{0}/{1}".format(platform.system(), platform.release())
         user_agent_string = " ".join([python_version, client, system_info])
         return user_agent_string
+
+    @staticmethod
+    def validate_slack_signature(
+        *, signing_secret: str, data: str, timestamp: str, signature: str
+    ) -> bool:
+        format_req = str.encode(f"v0:{timestamp}:{data}")
+        encoded_secret = str.encode(signing_secret)
+        request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
+        return hmac.compare_digest(f"v0={request_hash}", signature)
