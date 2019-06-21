@@ -334,6 +334,14 @@ class RTMClient(object):
                         self._websocket = websocket
                         await self._dispatch_event(event="open", data=data)
                         await self._read_messages()
+                        # The websocket has been disconnected, or self._stopped is True
+                        if not self._stopped and not self.auto_reconnect:
+                            self._logger.warning(
+                                "Not reconnecting the Websocket because auto_reconnect is False"
+                            )
+                            return
+                        # No need to wait exponentially here, since the connection was
+                        # established OK, but timed out, or was closed remotely
             except (
                 client_err.SlackClientNotConnectedError,
                 client_err.SlackApiError,
@@ -351,18 +359,44 @@ class RTMClient(object):
                 raise
 
     async def _read_messages(self):
-        """Process messages received on the WebSocket connection.
-
-        Iteration terminates when the client is stopped or it disconnects.
-        """
+        """Process messages received on the WebSocket connection."""
         while not self._stopped and self._websocket is not None:
-            async for message in self._websocket:
-                if message.type == aiohttp.WSMsgType.TEXT:
-                    payload = message.json()
-                    event = payload.pop("type", "Unknown")
-                    await self._dispatch_event(event, data=payload)
-                elif message.type == aiohttp.WSMsgType.ERROR:
-                    break
+            try:
+                # Wait for a message to be recieved, but timeout after a second so that
+                # we can check if the socket has been closed, or if self._stopped is
+                # True
+                message = await self._websocket.receive(timeout=1)
+            except asyncio.TimeoutError:
+                if not self._websocket.closed:
+                    # We didn't receive a message within the timeout interval, but
+                    # aiohttp hasn't closed the socket, so ping responses must still be
+                    # returning
+                    continue
+                self._logger.warning(
+                    "Websocket was closed (%s).", self._websocket.close_code
+                )
+                await self._dispatch_event(
+                    event="error", data=self._websocket.exception()
+                )
+                self._websocket = None
+                await self._dispatch_event(event="close")
+                return
+            if message.type == aiohttp.WSMsgType.TEXT:
+                payload = message.json()
+                event = payload.pop("type", "Unknown")
+                await self._dispatch_event(event, data=payload)
+            elif message.type == aiohttp.WSMsgType.ERROR:
+                self._logger.error("Received an error on the websocket: %r", message)
+            elif message.type in (
+                aiohttp.WSMsgType.CLOSE,
+                aiohttp.WSMsgType.CLOSING,
+                aiohttp.WSMsgType.CLOSED,
+            ):
+                self._logger.warning("Websocket was closed.")
+                self._websocket = None
+                await self._dispatch_event(event="close")
+            else:
+                self._logger.debug("Received unhandled message type: %r", message)
 
     async def _dispatch_event(self, event, data=None):
         """Dispatches the event and executes any associated callbacks.
@@ -390,7 +424,8 @@ class RTMClient(object):
             )
             try:
                 if self._stopped and event not in ["close", "error"]:
-                    # Don't run callbacks if client was stopped unless they're close/error callbacks.
+                    # Don't run callbacks if client was stopped unless they're
+                    # close/error callbacks.
                     break
 
                 if inspect.iscoroutinefunction(callback):
