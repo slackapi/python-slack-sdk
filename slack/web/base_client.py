@@ -1,22 +1,22 @@
 """A Python module for iteracting with Slack's Web API."""
 
-import asyncio
-import hashlib
-import hmac
-import inspect
-import logging
-import platform
-import sys
 # Standard Imports
 from urllib.parse import urljoin
+import platform
+import sys
+import logging
+import asyncio
+import inspect
+import hashlib
+import hmac
 
 # ThirdParty Imports
 import aiohttp
 
-import slack.errors as err
-import slack.version as ver
 # Internal Imports
 from slack.web.slack_response import SlackResponse
+import slack.version as ver
+import slack.errors as err
 
 
 class BaseClient:
