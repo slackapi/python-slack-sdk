@@ -29,6 +29,9 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
     * [Sending a message to Slack](#sending-a-message-to-slack)
     * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
+* [Async Usage](#async-usage)
+    * [Slackclient as a script](slackclient-as-a-script)
+    * [Slackclient in a framework](slackclient-in-a-framework)
 * [Advanced Options](#advanced-options)
 * [Migrating from v1.x](#migrating-from-v1)
 * [Support](#support)
@@ -145,6 +148,58 @@ In our example below, we watch for a [message event][message-event] that contain
     slack_token = os.environ["SLACK_API_TOKEN"]
     rtm_client = slack.RTMClient(token=slack_token)
     rtm_client.start()
+```
+
+### Async usage
+
+slackclient v2 and higher uses aiohttp and asyncio to enable async functionality.
+
+Normal usage of the library does not run it in async, hence a kwarg of run_async=True is needed.
+
+When in async mode its important to remember to await or run/run_until_complete the call.
+
+#### Slackclient as a script
+```python 
+import os
+import slack
+import asyncio
+
+loop = asyncio.get_event_loop()
+
+client = slack.WebClient(
+    token=os.environ['SLACK_API_TOKEN'],
+    run_async=True
+    )
+
+response = loop.run_until_complete(client.chat_postMessage(
+        channel='#random',
+        text="Hello world!"
+        )
+        )
+assert response["ok"]
+assert response["message"]["text"] == "Hello world!"
+```
+
+#### Slackclient in a framework
+If you are using a framework invoking the asyncio event loop like : sanic/jupyter notebook/etc.
+```python
+import os
+import slack
+
+
+client = slack.WebClient(
+    token=os.environ['SLACK_API_TOKEN'],
+    run_async=True
+    )
+
+async def send_async_message(channel='#random', text='')
+    response = await client.chat_postMessage(
+            channel=channel,
+            text=text
+            )
+    assert response["ok"]
+    assert response["message"]["text"] == "Hello world!"
+    
 ```
 
 ### Advanced Options
