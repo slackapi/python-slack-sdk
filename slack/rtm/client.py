@@ -497,7 +497,7 @@ class RTMClient(object):
         if Slack returned how long to wait use that.
         """
         wait_time = min(
-            (2 ** self._connection_attempts) + random.random(), max_wait_time
+            (2 ** self._connection_attempts) + random.random(), max_wait_time  # nosec
         )
         try:
             wait_time = exception.response["headers"]["Retry-After"]

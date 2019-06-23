@@ -15,7 +15,7 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
-tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black"]
+tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black", "bandit"]
 
 
 class BaseCommand(Command):
@@ -85,6 +85,7 @@ class ValidateCommand(BaseCommand):
         )
         self._run("Running black…", [sys.executable, "-m", "black", f"{here}/slack"])
         self._run("Running flake8…", [sys.executable, "-m", "flake8", f"{here}/slack"])
+        self._run("Running bandit…", [sys.executable, "-m", "bandit", "-r", f"{here}/slack"])
         self._run(
             "Running pytest…",
             [

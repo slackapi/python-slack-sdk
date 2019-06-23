@@ -5,6 +5,7 @@ docs/_sources/
 docs/.doctrees
 *.egg-info/
 *.egg
+.eggs/
 *.py[cod]
 __pycache__/
 *.so
@@ -25,3 +26,6 @@ coverage.xml
 .pytest_cache/
 .python-version
 pip
+
+# pycharm
+.idea/
