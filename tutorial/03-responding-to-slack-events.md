@@ -190,6 +190,6 @@ if __name__ == "__main__":
 
 **Next section: [04 - Running the app](/tutorial/04-running-the-app.md).**
 
-**Previous section: [02 - Building a message](/tutorial/01-building-a-message.md).**
+**Previous section: [02 - Building a message](/tutorial/02-building-a-message.md).**
 
 **Back to the [Table of contents](/tutorial/#table-of-contents).**
