@@ -3,8 +3,8 @@ from typing import List, Optional, Set, Union
 
 from . import BaseObject, JsonObject, JsonValidator, extract_json
 
-ButtonStyles = {"primary", "danger"}
-DynamicSelectElementTypes = {"users", "channels", "conversations"}
+ButtonStyles = {"danger", "primary"}
+DynamicSelectElementTypes = {"channels", "conversations", "users"}
 
 
 class Link(BaseObject):

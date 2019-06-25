@@ -93,7 +93,7 @@ class SectionBlock(Block):
 class ImageBlock(Block):
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"image_url", "alt_text"})
+        return super().attributes.union({"alt_text", "image_url"})
 
     image_url_max_length = 3000
     alt_text_max_length = 2000

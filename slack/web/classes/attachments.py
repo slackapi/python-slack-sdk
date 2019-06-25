@@ -5,11 +5,11 @@ from . import EnumValidator, JsonObject, JsonValidator, extract_json
 from .actions import Action
 from .blocks import Block
 
-SeededColors = {"good", "warning", "danger"}
+SeededColors = {"danger", "good", "warning"}
 
 
 class AttachmentField(JsonObject):
-    attributes = {"short", "value", "title"}
+    attributes = {"short", "title", "value"}
 
     def __init__(
         self,
@@ -25,27 +25,27 @@ class AttachmentField(JsonObject):
 
 class Attachment(JsonObject):
     attributes = {
-        "title",
-        "pretext",
-        "color",
-        "text",
-        "ts",
-        "fallback",
-        "footer",
-        "thumb_url",
-        "footer_icon",
         "author_icon",
-        "author_name",
         "author_link",
+        "author_name",
+        "color",
+        "fallback",
         "fields",
-        "title_link",
+        "footer",
+        "footer_icon",
         "image_url",
+        "pretext",
+        "text",
+        "thumb_url",
+        "title",
+        "title_link",
+        "ts",
     }
 
     fields: List[AttachmentField]
     actions: List[Action]
 
-    MarkdownFields = {"pretext", "text", "fields"}
+    MarkdownFields = {"fields", "pretext", "text"}
 
     footer_max_length = 300
 

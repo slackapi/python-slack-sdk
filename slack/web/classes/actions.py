@@ -46,7 +46,7 @@ class Action(JsonObject):
 class ActionButton(Action):
     @property
     def attributes(self):
-        return super().attributes.union({"value", "style"})
+        return super().attributes.union({"style", "value"})
 
     value_max_length = 2000
 
@@ -117,7 +117,7 @@ class ActionLinkButton(Action):
 class AbstractActionSelector(Action, metaclass=ABCMeta):
     DataSourceTypes = DynamicSelectElementTypes.union({"external", "static"})
 
-    attributes = {"name", "text", "type", "data_source"}
+    attributes = {"data_source", "name", "text", "type"}
 
     @property
     @abstractmethod

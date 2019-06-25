@@ -9,16 +9,16 @@ TextElementSubtypes = {"email", "number", "tel", "url"}
 
 class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     attributes = {
-        "optional",
-        "name",
         "hint",
-        "max_length",
-        "value",
-        "placeholder",
-        "min_length",
         "label",
+        "max_length",
+        "min_length",
+        "name",
+        "optional",
+        "placeholder",
         "subtype",
         "type",
+        "value",
     }
 
     name_max_length = 300
@@ -137,7 +137,7 @@ class DialogTextArea(DialogTextComponent):
 class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     DataSourceTypes = DynamicSelectElementTypes.union({"external", "static"})
 
-    attributes = {"name", "label", "optional", "placeholder", "type", "data_source"}
+    attributes = {"data_source", "label", "name", "optional", "placeholder", "type"}
 
     name_max_length = 300
     label_max_length = 48

@@ -39,7 +39,7 @@ class InteractiveElement(BlockElement):
 class ImageElement(BlockElement):
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"image_url", "alt_text"})
+        return super().attributes.union({"alt_text", "image_url"})
 
     image_url_max_length = 3000
     alt_text_max_length = 2000
@@ -75,7 +75,7 @@ class ImageElement(BlockElement):
 class ButtonElement(InteractiveElement):
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"value", "style"})
+        return super().attributes.union({"style", "value"})
 
     text_max_length = 75
     value_max_length = 75
@@ -181,7 +181,7 @@ class AbstractSelector(InteractiveElement, metaclass=ABCMeta):
     def placeholder_length(self):
         return len(self.placeholder) <= self.placeholder_max_length
 
-    def to_dict(self, ) -> dict:
+    def to_dict(self,) -> dict:
         json = super().to_dict()
         json["placeholder"] = PlainTextObject.direct_from_string(self.placeholder)
         if self.confirm is not None:
