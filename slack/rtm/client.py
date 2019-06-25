@@ -4,13 +4,10 @@
 import os
 import logging
 import random
-import json
 import collections
-import functools
 import inspect
 import signal
-import concurrent.futures
-from typing import Optional, Callable
+from typing import Optional, Callable, DefaultDict
 from ssl import SSLContext
 
 # ThirdParty Imports
@@ -69,13 +66,12 @@ class RTMClient(object):
     Example:
     ```python
     import os
-    import slack
+    from slack import RTMClient
 
-    @slack.RTMClient.run_on(event='message')
+    @RTMClient.run_on(event="message")
     def say_hello(**payload):
         data = payload['data']
         web_client = payload['web_client']
-        rtm_client = payload['rtm_client']
         if 'Hello' in data['text']:
             channel_id = data['channel']
             thread_ts = data['ts']
@@ -88,7 +84,7 @@ class RTMClient(object):
             )
 
     slack_token = os.environ["SLACK_API_TOKEN"]
-    rtm_client = slack.RTMClient(token=slack_token)
+    rtm_client = RTMClient(token=slack_token)
     rtm_client.start()
     ```
 
@@ -102,7 +98,7 @@ class RTMClient(object):
         removed at anytime.
     """
 
-    _callbacks = collections.defaultdict(list)
+    _callbacks: DefaultDict = collections.defaultdict(list)
 
     def __init__(
         self,
@@ -141,11 +137,7 @@ class RTMClient(object):
         """A decorator to store and link a callback to an event."""
 
         def decorator(callback):
-            @functools.wraps(callback)
-            def decorator_wrapper():
-                RTMClient.on(event=event, callback=callback)
-
-            return decorator_wrapper()
+            RTMClient.on(event=event, callback=callback)
 
         return decorator
 
@@ -196,7 +188,7 @@ class RTMClient(object):
 
         future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
-        if self.run_async or self._event_loop.is_running():
+        if self.run_async:
             return future
 
         return self._event_loop.run_until_complete(future)
@@ -231,17 +223,19 @@ class RTMClient(object):
         Raises:
             SlackClientNotConnectedError: Websocket connection is closed.
         """
+        return asyncio.ensure_future(self._send_json(payload))
+
+    async def _send_json(self, payload):
         if self._websocket is None or self._event_loop is None:
             raise client_err.SlackClientNotConnectedError(
                 "Websocket connection is closed."
             )
         if "id" not in payload:
             payload["id"] = self._next_msg_id()
-        asyncio.ensure_future(
-            self._websocket.send_str(json.dumps(payload)), loop=self._event_loop
-        )
 
-    def ping(self):
+        return await self._websocket.send_json(payload)
+
+    async def ping(self):
         """Sends a ping message over the websocket to Slack.
 
         Not all web browsers support the WebSocket ping spec,
@@ -251,9 +245,9 @@ class RTMClient(object):
             SlackClientNotConnectedError: Websocket connection is closed.
         """
         payload = {"id": self._next_msg_id(), "type": "ping"}
-        self.send_over_websocket(payload=payload)
+        await self._send_json(payload=payload)
 
-    def typing(self, *, channel: str):
+    async def typing(self, *, channel: str):
         """Sends a typing indicator to the specified channel.
 
         This indicates that this app is currently
@@ -266,7 +260,7 @@ class RTMClient(object):
             SlackClientNotConnectedError: Websocket connection is closed.
         """
         payload = {"id": self._next_msg_id(), "type": "typing", "channel": channel}
-        self.send_over_websocket(payload=payload)
+        await self._send_json(payload=payload)
 
     @staticmethod
     def _validate_callback(callback):
@@ -307,9 +301,9 @@ class RTMClient(object):
         return self._last_message_id
 
     async def _connect_and_read(self):
-        """Retreives and connects to Slack's RTM API.
+        """Retreives the WS url and connects to Slack's RTM API.
 
-        Makes an authenticated call to Slack's RTM API to retrieve
+        Makes an authenticated call to Slack's Web API to retrieve
         a websocket URL. Then connects to the message server and
         reads event messages as they come in.
 
@@ -338,7 +332,7 @@ class RTMClient(object):
                     ) as websocket:
                         self._logger.debug("The Websocket connection has been opened.")
                         self._websocket = websocket
-                        self._dispatch_event(event="open", data=data)
+                        await self._dispatch_event(event="open", data=data)
                         await self._read_messages()
             except (
                 client_err.SlackClientNotConnectedError,
@@ -346,7 +340,7 @@ class RTMClient(object):
                 # TODO: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 self._logger.debug(str(exception))
-                self._dispatch_event(event="error", data=exception)
+                await self._dispatch_event(event="error", data=exception)
                 if self.auto_reconnect and not self._stopped:
                     await self._wait_exponentially(exception)
                     continue
@@ -366,11 +360,11 @@ class RTMClient(object):
                 if message.type == aiohttp.WSMsgType.TEXT:
                     payload = message.json()
                     event = payload.pop("type", "Unknown")
-                    self._dispatch_event(event, data=payload)
+                    await self._dispatch_event(event, data=payload)
                 elif message.type == aiohttp.WSMsgType.ERROR:
                     break
 
-    def _dispatch_event(self, event, data=None):
+    async def _dispatch_event(self, event, data=None):
         """Dispatches the event and executes any associated callbacks.
 
         Note: To prevent the app from crashing due to callback errors. We
@@ -399,51 +393,18 @@ class RTMClient(object):
                     # Don't run callbacks if client was stopped unless they're close/error callbacks.
                     break
 
-                if self.run_async:
-                    self._execute_callback_async(callback, data)
+                if inspect.iscoroutinefunction(callback):
+                    await callback(
+                        rtm_client=self, web_client=self._web_client, data=data
+                    )
                 else:
-                    self._execute_callback(callback, data)
+                    callback(rtm_client=self, web_client=self._web_client, data=data)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
                 msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
                 self._logger.error(msg)
                 raise
-
-    def _execute_callback_async(self, callback, data):
-        """Execute the callback asynchronously.
-
-        If the callback is not a coroutine, convert it.
-
-        Note: The WebClient passed into the callback is running in "async" mode.
-        This means all responses will be futures.
-        """
-        if asyncio.iscoroutine(callback):
-            asyncio.ensure_future(
-                callback(rtm_client=self, web_client=self._web_client, data=data)
-            )
-        else:
-            asyncio.ensure_future(
-                asyncio.coroutine(callback)(
-                    rtm_client=self, web_client=self._web_client, data=data
-                )
-            )
-
-    def _execute_callback(self, callback, data):
-        """Execute the callback in another thread. Wait for and return the results."""
-        web_client = WebClient(
-            token=self.token, base_url=self.base_url, ssl=self.ssl, proxy=self.proxy
-        )
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            # Execute the callback on a separate thread,
-            future = executor.submit(
-                callback, rtm_client=self, web_client=web_client, data=data
-            )
-
-            while future.running():
-                pass
-
-            future.result()
 
     async def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.
@@ -491,7 +452,7 @@ class RTMClient(object):
         """Wait exponentially longer for each connection attempt.
 
         Calculate the number of seconds to wait and then add
-        a random number of milliseconds to avoid coincendental
+        a random number of milliseconds to avoid coincidental
         synchronized client retries. Wait up to the maximium amount
         of wait time specified via 'max_wait_time'. However,
         if Slack returned how long to wait use that.
@@ -512,4 +473,6 @@ class RTMClient(object):
         if callable(close_method):
             asyncio.ensure_future(close_method(), loop=self._event_loop)
         self._websocket = None
-        self._dispatch_event(event="close")
+        asyncio.ensure_future(
+            self._dispatch_event(event="close"), loop=self._event_loop
+        )

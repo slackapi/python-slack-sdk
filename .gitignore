@@ -25,3 +25,4 @@ coverage.xml
 .pytest_cache/
 .python-version
 pip
+.mypy_cache/
