@@ -21,7 +21,6 @@ import slack.errors as err
 
 class BaseClient:
     BASE_URL = "https://www.slack.com/api/"
-    SIGNATURE_VERSION = "v0"
 
     def __init__(
         self,
@@ -260,8 +259,8 @@ class BaseClient:
         Returns:
             True if signatures matches
         """
-        format_req = str.encode(f"{BaseClient.SIGNATURE_VERSION}:{timestamp}:{data}")
+        format_req = str.encode(f"v0:{timestamp}:{data}")
         encoded_secret = str.encode(signing_secret)
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
-        calculated_signature = f"{BaseClient.SIGNATURE_VERSION}={request_hash}"
+        calculated_signature = f"v0={request_hash}"
         return hmac.compare_digest(calculated_signature, signature)
