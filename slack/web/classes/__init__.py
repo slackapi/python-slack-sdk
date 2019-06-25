@@ -11,8 +11,8 @@ class BaseObject:
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
-    @abstractmethod
     @property
+    @abstractmethod
     def attributes(self) -> Set[str]:
         """
         Provide a set of attributes of this object that will make up its JSON structure
