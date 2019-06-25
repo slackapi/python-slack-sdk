@@ -17,7 +17,7 @@ from tests.web.classes import STRING_3001_CHARS
 class ButtonTests(unittest.TestCase):
     def test_json(self):
         self.assertDictEqual(
-            ActionButton(name="button_1", text="Click me!", value="btn_1").get_json(),
+            ActionButton(name="button_1", text="Click me!", value="btn_1").to_dict(),
             {
                 "name": "button_1",
                 "text": "Click me!",
@@ -34,13 +34,13 @@ class ButtonTests(unittest.TestCase):
                 value="btn_1",
                 confirm=confirm,
                 style="danger",
-            ).get_json(),
+            ).to_dict(),
             {
                 "name": "button_1",
                 "text": "Click me!",
                 "value": "btn_1",
                 "type": "button",
-                "confirm": confirm.get_json("action"),
+                "confirm": confirm.to_dict("action"),
                 "style": "danger",
             },
         )
@@ -49,22 +49,22 @@ class ButtonTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ActionButton(
                 name="button_1", text="Click me!", value=STRING_3001_CHARS
-            ).get_json()
+            ).to_dict()
 
     def test_style_validator(self):
         b = ActionButton(name="button_1", text="Click me!", value="btn_1")
         with self.assertRaises(SlackObjectFormationError):
             b.style = "abcdefg"
-            b.get_json()
+            b.to_dict()
 
         b.style = "primary"
-        b.get_json()
+        b.to_dict()
 
 
 class LinkButtonTests(unittest.TestCase):
     def test_json(self):
         self.assertDictEqual(
-            ActionLinkButton(text="Click me!", url="http://google.com").get_json(),
+            ActionLinkButton(text="Click me!", url="http://google.com").to_dict(),
             {"url": "http://google.com", "text": "Click me!", "type": "button"},
         )
 
@@ -83,11 +83,11 @@ class StaticActionSelectorTests(unittest.TestCase):
         self.assertDictEqual(
             ActionStaticSelector(
                 name="select_1", text="selector_1", options=self.options
-            ).get_json(),
+            ).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
-                "options": [o.get_json("action") for o in self.options],
+                "options": [o.to_dict("action") for o in self.options],
                 "type": "select",
                 "data_source": "static",
             },
@@ -96,11 +96,11 @@ class StaticActionSelectorTests(unittest.TestCase):
         self.assertDictEqual(
             ActionStaticSelector(
                 name="select_1", text="selector_1", options=self.option_group
-            ).get_json(),
+            ).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
-                "option_groups": [o.get_json("action") for o in self.option_group],
+                "option_groups": [o.to_dict("action") for o in self.option_group],
                 "type": "select",
                 "data_source": "static",
             },
@@ -110,7 +110,7 @@ class StaticActionSelectorTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ActionStaticSelector(
                 name="select_1", text="selector_1", options=self.options * 34
-            ).get_json()
+            ).to_dict()
 
 
 class DynamicActionSelectorTests(unittest.TestCase):
@@ -123,7 +123,7 @@ class DynamicActionSelectorTests(unittest.TestCase):
         for component in self.selectors:
             with self.subTest(msg=f"{component} json formation test"):
                 self.assertDictEqual(
-                    component(name="select_1", text="selector_1").get_json(),
+                    component(name="select_1", text="selector_1").to_dict(),
                     {
                         "name": "select_1",
                         "text": "selector_1",
@@ -139,13 +139,13 @@ class DynamicActionSelectorTests(unittest.TestCase):
                         # next line is a little silly, but so is writing the test
                         # three times
                         **{f"selected_{component.data_source[:-1]}": self.selected_opt},
-                    ).get_json(),
+                    ).to_dict(),
                     {
                         "name": "select_1",
                         "text": "selector_1",
                         "type": "select",
                         "data_source": component.data_source,
-                        "selected_options": [self.selected_opt.get_json("action")],
+                        "selected_options": [self.selected_opt.to_dict("action")],
                     },
                 )
 
@@ -157,7 +157,7 @@ class ExternalActionSelectorTests(unittest.TestCase):
         self.assertDictEqual(
             ActionExternalSelector(
                 name="select_1", text="selector_1", min_query_length=3
-            ).get_json(),
+            ).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
@@ -170,11 +170,11 @@ class ExternalActionSelectorTests(unittest.TestCase):
         self.assertDictEqual(
             ActionExternalSelector(
                 name="select_1", text="selector_1", selected_option=option
-            ).get_json(),
+            ).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
-                "selected_options": [option.get_json("action")],
+                "selected_options": [option.to_dict("action")],
                 "type": "select",
                 "data_source": "external",
             },

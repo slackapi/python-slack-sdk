@@ -37,8 +37,8 @@ class Action(JsonObject):
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["type"] = self.subtype
         return json
 
@@ -93,8 +93,8 @@ class ActionButton(Action):
     def style_valid(self):
         return self.style is None or self.style in ButtonStyles
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.confirm is not None:
             json["confirm"] = extract_json(self.confirm, "action")
         return json
@@ -134,8 +134,8 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
     def data_source_valid(self):
         return self.data_source in self.DataSourceTypes
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.selected_option is not None:
             # this is a special case for ExternalActionSelectElement - in that case,
             # you pass the initial value of the selector as a selected_options array
@@ -187,8 +187,8 @@ class ActionStaticSelector(AbstractActionSelector):
     def options_length(self):
         return len(self.options) < self.options_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if isinstance(self.options[0], OptionGroup):
             json["option_groups"] = extract_json(self.options, "action")
         else:

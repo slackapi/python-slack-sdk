@@ -185,8 +185,8 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     def data_source_valid(self):
         return self.data_source in self.DataSourceTypes
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.data_source == "external":
             if isinstance(self.value, Option):
                 json["selected_options"] = extract_json([self.value], "dialog")
@@ -257,8 +257,8 @@ class DialogStaticSelector(AbstractDialogSelector):
     def options_length(self):
         return len(self.options) < self.options_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if isinstance(self.options[0], OptionGroup):
             json["option_groups"] = extract_json(self.options, "dialog")
         else:

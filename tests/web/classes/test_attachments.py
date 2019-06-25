@@ -13,7 +13,7 @@ from tests.web.classes import STRING_301_CHARS
 class FieldTests(unittest.TestCase):
     def test_basic_json(self):
         self.assertDictEqual(
-            AttachmentField(title="field", value="something", short=False).get_json(),
+            AttachmentField(title="field", value="something", short=False).to_dict(),
             {"title": "field", "value": "something", "short": False},
         )
 
@@ -24,7 +24,7 @@ class AttachmentTests(unittest.TestCase):
 
     def test_basic_json(self):
         self.assertDictEqual(
-            Attachment(text="some text").get_json(), {"text": "some text", "fields": []}
+            Attachment(text="some text").to_dict(), {"text": "some text", "fields": []}
         )
 
         self.assertDictEqual(
@@ -47,7 +47,7 @@ class AttachmentTests(unittest.TestCase):
                 footer_icon="link to footer icon",
                 ts=123456789,
                 markdown_in=["fields"],
-            ).get_json(),
+            ).to_dict(),
             {
                 "text": "attachment text",
                 "author_name": "John Doe",
@@ -76,57 +76,57 @@ class AttachmentTests(unittest.TestCase):
     def test_footer_length(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.footer = STRING_301_CHARS
-            self.simple.get_json()
+            self.simple.to_dict()
 
     def test_ts_without_footer(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.ts = 123456789
-            self.simple.get_json()
+            self.simple.to_dict()
 
     def test_markdown_in_invalid(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.markdown_in = ["nothing"]
-            self.simple.get_json()
+            self.simple.to_dict()
 
     def test_color_valid(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.color = "red"
-            self.simple.get_json()
+            self.simple.to_dict()
 
         with self.assertRaises(SlackObjectFormationError):
             self.simple.color = "#ZZZZZZ"
-            self.simple.get_json()
+            self.simple.to_dict()
 
         self.simple.color = "#bada55"
-        self.assertEqual(self.simple.get_json()["color"], "#bada55")
+        self.assertEqual(self.simple.to_dict()["color"], "#bada55")
 
         self.simple.color = "good"
-        self.assertEqual(self.simple.get_json()["color"], "good")
+        self.assertEqual(self.simple.to_dict()["color"], "good")
 
     def test_image_url_and_thumb_url(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.thumb_url = "some URL"
             self.simple.image_url = "some URL"
-            self.simple.get_json()
+            self.simple.to_dict()
 
         self.simple.image_url = None
-        self.simple.get_json()
+        self.simple.to_dict()
 
     def author_name_without_author_link(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.author_name = "http://google.com"
-            self.simple.get_json()
+            self.simple.to_dict()
 
         self.simple.author_name = None
-        self.simple.get_json()
+        self.simple.to_dict()
 
     def author_icon_without_author_name(self):
         with self.assertRaises(SlackObjectFormationError):
             self.simple.author_icon = "http://google.com/images.jpg"
-            self.simple.get_json()
+            self.simple.to_dict()
 
         self.simple.author_icon = None
-        self.simple.get_json()
+        self.simple.to_dict()
 
 
 class InteractiveAttachmentTests(unittest.TestCase):
@@ -138,12 +138,12 @@ class InteractiveAttachmentTests(unittest.TestCase):
         self.assertDictEqual(
             InteractiveAttachment(
                 text="some text", callback_id="abc123", actions=actions
-            ).get_json(),
+            ).to_dict(),
             {
                 "text": "some text",
                 "fields": [],
                 "callback_id": "abc123",
-                "actions": [a.get_json() for a in actions],
+                "actions": [a.to_dict() for a in actions],
             },
         )
 
@@ -169,11 +169,11 @@ class InteractiveAttachmentTests(unittest.TestCase):
                 footer_icon="link to footer icon",
                 ts=123456789,
                 markdown_in=["fields"],
-            ).get_json(),
+            ).to_dict(),
             {
                 "text": "attachment text",
                 "callback_id": "cb_123",
-                "actions": [a.get_json() for a in actions],
+                "actions": [a.to_dict() for a in actions],
                 "author_name": "John Doe",
                 "author_link": "http://johndoeisthebest.com",
                 "author_icon": "http://johndoeisthebest.com/avatar.jpg",
@@ -205,4 +205,4 @@ class InteractiveAttachmentTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             InteractiveAttachment(
                 text="some text", callback_id="abc123", actions=actions
-            ).get_json(),
+            ).to_dict(),

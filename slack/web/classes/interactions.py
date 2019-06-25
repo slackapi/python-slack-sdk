@@ -1,11 +1,17 @@
 import json
-from typing import List
+from typing import List, NamedTuple
 
-from . import JsonObject
-from .objects import IDNamePair
+from . import BaseObject
 
 
-class InteractiveEvent(JsonObject):
+class IDNamePair(NamedTuple):
+    """Simple type used to help with unpacking event data"""
+
+    id: str
+    name: str
+
+
+class InteractiveEvent(BaseObject):
     response_url: str
     user: IDNamePair
     team: IDNamePair

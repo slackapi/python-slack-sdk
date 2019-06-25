@@ -9,6 +9,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Message(JsonObject):
+    attributes = {"text"}
+
     attachments_max_length = 100
 
     def __init__(
@@ -49,8 +51,8 @@ class Message(JsonObject):
             or len(self.attachments) <= self.attachments_max_length
         )
 
-    def get_json(self) -> dict:
-        self.validate_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if len(self.text) > 40000:
             LOGGER.error(
                 "Messages over 40,000 characters are automatically truncated by Slack"
@@ -62,9 +64,7 @@ class Message(JsonObject):
                 "a message - insert text as a new SectionBlock if you want it to be "
                 "displayed "
             )
-        return {
-            "text": self.text,
-            "attachments": extract_json(self.attachments),
-            "blocks": extract_json(self.blocks),
-            "mrkdwn": self.markdown,
-        }
+        json["attachments"] = extract_json(self.attachments)
+        json["blocks"] = extract_json(self.blocks)
+        json["mrkdwn"] = self.markdown
+        return json

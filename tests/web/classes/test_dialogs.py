@@ -19,27 +19,27 @@ class CommonTextComponentTests(unittest.TestCase):
         for component in TextComponents:
             with self.subTest(f"Component: {component}"):
                 with self.assertRaises(SlackObjectFormationError, msg="name length"):
-                    component(name=STRING_301_CHARS, label="label ").get_json()
+                    component(name=STRING_301_CHARS, label="label ").to_dict()
 
                 with self.assertRaises(SlackObjectFormationError, msg="label length"):
-                    component(name="dialog", label=STRING_51_CHARS).get_json()
+                    component(name="dialog", label=STRING_51_CHARS).to_dict()
 
                 with self.assertRaises(
                     SlackObjectFormationError, msg="placeholder length"
                 ):
                     component(
                         name="dialog", label="Dialog", placeholder=STRING_301_CHARS
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(SlackObjectFormationError, msg="hint length"):
                     component(
                         name="dialog", label="Dialog", hint=STRING_301_CHARS
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(SlackObjectFormationError, msg="value length"):
                     component(
                         name="dialog", label="Dialog", value=STRING_3001_CHARS
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(
                     SlackObjectFormationError, msg="min_length out of bounds"
@@ -48,7 +48,7 @@ class CommonTextComponentTests(unittest.TestCase):
                         name="dialog",
                         label="Dialog",
                         min_length=component.max_value_length + 1,
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(
                     SlackObjectFormationError, msg="max_length out of bounds"
@@ -57,27 +57,27 @@ class CommonTextComponentTests(unittest.TestCase):
                         name="dialog",
                         label="Dialog",
                         max_length=component.max_value_length + 1,
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(
                     SlackObjectFormationError, msg="min_length > max length"
                 ):
                     component(
                         name="dialog", label="Dialog", min_length=100, max_length=50
-                    ).get_json()
+                    ).to_dict()
 
                 with self.assertRaises(
                     SlackObjectFormationError, msg="subtype invalid"
                 ):
                     component(
                         name="dialog", label="Dialog", subtype="abcdefg"
-                    ).get_json()
+                    ).to_dict()
 
 
 class TextFieldComponentTests(unittest.TestCase):
     def test_json(self):
         self.assertDictEqual(
-            DialogTextField(name="dialog", label="Dialog").get_json(),
+            DialogTextField(name="dialog", label="Dialog").to_dict(),
             {
                 "name": "dialog",
                 "label": "Dialog",
@@ -97,7 +97,7 @@ class TextFieldComponentTests(unittest.TestCase):
                 hint="Some hint",
                 max_length=100,
                 min_length=20,
-            ).get_json(),
+            ).to_dict(),
             {
                 "min_length": 20,
                 "max_length": 100,
@@ -113,7 +113,7 @@ class TextFieldComponentTests(unittest.TestCase):
 class TextAreaComponentTests(unittest.TestCase):
     def test_basic_json_formation(self):
         self.assertDictEqual(
-            DialogTextArea(name="dialog", label="Dialog").get_json(),
+            DialogTextArea(name="dialog", label="Dialog").to_dict(),
             {
                 "min_length": 0,
                 "max_length": 3000,
@@ -133,7 +133,7 @@ class TextAreaComponentTests(unittest.TestCase):
                 hint="Some hint",
                 max_length=500,
                 min_length=100,
-            ).get_json(),
+            ).to_dict(),
             {
                 "min_length": 100,
                 "max_length": 500,
@@ -156,7 +156,7 @@ class StaticDropdownTests(unittest.TestCase):
         self.assertDictEqual(
             DialogStaticSelector(
                 name="dialog", label="Dialog", options=options
-            ).get_json(),
+            ).to_dict(),
             {
                 "optional": False,
                 "label": "Dialog",
@@ -183,7 +183,7 @@ class DynamicSelectorTests(unittest.TestCase):
         for component in self.selectors:
             with self.subTest(msg=f"{component} json formation test"):
                 self.assertDictEqual(
-                    component(name="select_1", label="selector_1").get_json(),
+                    component(name="select_1", label="selector_1").to_dict(),
                     {
                         "name": "select_1",
                         "label": "selector_1",
@@ -195,11 +195,11 @@ class DynamicSelectorTests(unittest.TestCase):
 
                 passing_obj = component(
                     name="select_1", label="selector_1", value=self.selected_opt
-                ).get_json()
+                ).to_dict()
 
                 passing_str = component(
                     name="select_1", label="selector_1", value="U12345"
-                ).get_json()
+                ).to_dict()
 
                 expected = {
                     "name": "select_1",
@@ -224,7 +224,7 @@ class ExternalSelectorTests(unittest.TestCase):
                 min_query_length=3,
                 optional=True,
                 placeholder="something",
-            ).get_json(),
+            ).to_dict(),
             {
                 "optional": True,
                 "label": "Dialog",
@@ -232,7 +232,7 @@ class ExternalSelectorTests(unittest.TestCase):
                 "name": "dialog",
                 "min_query_length": 3,
                 "placeholder": "something",
-                "selected_options": [o.get_json("dialog")],
+                "selected_options": [o.to_dict("dialog")],
                 "data_source": "external",
             },
         )
@@ -318,33 +318,33 @@ class DialogBuilderTests(unittest.TestCase):
             "submit_label": "SubmitDialog",
         }
 
-        self.assertDictEqual(self.builder.get_json(), valid)
+        self.assertDictEqual(self.builder.to_dict(), valid)
 
     def test_build_validation(self):
         empty_title = copy(self.builder)
         # noinspection PyTypeChecker
         empty_title.title(None)
         with self.assertRaises(SlackObjectFormationError):
-            empty_title.get_json()
+            empty_title.to_dict()
 
         too_long_title = copy(self.builder)
         too_long_title.title(STRING_51_CHARS)
         with self.assertRaises(SlackObjectFormationError):
-            too_long_title.get_json()
+            too_long_title.to_dict()
 
         empty_callback = copy(self.builder)
         # noinspection PyTypeChecker
         empty_callback.callback_id(None)
         with self.assertRaises(SlackObjectFormationError):
-            empty_callback.get_json()
+            empty_callback.to_dict()
 
         empty_dialog = copy(self.builder)
         empty_dialog._elements = []
         with self.assertRaises(SlackObjectFormationError):
-            empty_dialog.get_json()
+            empty_dialog.to_dict()
 
         overfull_dialog = copy(self.builder)
         for i in range(8):
             overfull_dialog.text_field(name=f"element {i}", label="overflow")
         with self.assertRaises(SlackObjectFormationError):
-            overfull_dialog.get_json()
+            overfull_dialog.to_dict()

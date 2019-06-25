@@ -1,20 +1,13 @@
 from datetime import datetime
-from typing import List, NamedTuple, Optional, Set, Union
+from typing import List, Optional, Set, Union
 
-from . import JsonObject, JsonValidator, extract_json
+from . import BaseObject, JsonObject, JsonValidator, extract_json
 
 ButtonStyles = {"primary", "danger"}
 DynamicSelectElementTypes = {"users", "channels", "conversations"}
 
 
-class IDNamePair(NamedTuple):
-    """Simple type used to help with unpacking event data"""
-
-    id: str
-    name: str
-
-
-class Link(JsonObject):
+class Link(BaseObject):
     def __init__(self, *, url: str, text: str):
         """
         Base class used to generate links in Slack's not-quite Markdown, not quite HTML
@@ -141,8 +134,8 @@ class TextObject(JsonObject):
         self.text = text
         self.subtype = subtype
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["type"] = self.subtype
         return json
 
@@ -166,11 +159,11 @@ class PlainTextObject(TextObject):
         self.emoji = emoji
 
     @staticmethod
-    def from_string(text: str) -> dict:
+    def direct_from_string(text: str) -> dict:
         """
         Transforms a string into the required object shape to act as a PlainTextObject
         """
-        return PlainTextObject(text=text).get_json()
+        return PlainTextObject(text=text).to_dict()
 
 
 class MarkdownTextObject(TextObject):
@@ -194,25 +187,27 @@ class MarkdownTextObject(TextObject):
         self.verbatim = verbatim
 
     @staticmethod
-    def from_string(text: str) -> dict:
+    def direct_from_string(text: str) -> dict:
         """
         Transforms a string into the required object shape to act as a
         MarkdownTextObject
         """
-        return MarkdownTextObject(text=text).get_json()
+        return MarkdownTextObject(text=text).to_dict()
 
     @staticmethod
-    def from_link(link: Link, title: str = "") -> dict:
+    def direct_from_link(link: Link, title: str = "") -> dict:
         """
         Transform a Link object directly into the required object shape to act as a
         MarkdownTextObject
         """
         if title:
             title = f": {title}"
-        return MarkdownTextObject(text=f"{link}{title}").get_json()
+        return MarkdownTextObject(text=f"{link}{title}").to_dict()
 
 
 class ConfirmObject(JsonObject):
+    attributes = {}  # no attributes because to_dict has unique implementations
+
     title_max_length = 100
     text_max_length = 300
     confirm_max_length = 30
@@ -267,7 +262,7 @@ class ConfirmObject(JsonObject):
     def deny_length(self):
         return len(self.deny) <= self.deny_max_length
 
-    def get_json(self, option_type: str = "block") -> dict:
+    def to_dict(self, option_type: str = "block") -> dict:
         if option_type == "action":
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
@@ -280,14 +275,14 @@ class ConfirmObject(JsonObject):
         else:
             self.validate_json()
             json = {
-                "title": PlainTextObject.from_string(self.title),
-                "confirm": PlainTextObject.from_string(self.confirm),
-                "deny": PlainTextObject.from_string(self.deny),
+                "title": PlainTextObject.direct_from_string(self.title),
+                "confirm": PlainTextObject.direct_from_string(self.confirm),
+                "deny": PlainTextObject.direct_from_string(self.deny),
             }
             if isinstance(self.text, TextObject):
-                json["text"] = self.text.get_json()
+                json["text"] = self.text.to_dict()
             else:
-                json["text"] = MarkdownTextObject.from_string(self.text)
+                json["text"] = MarkdownTextObject.direct_from_string(self.text)
             return json
 
 
@@ -298,6 +293,8 @@ class Option(JsonObject):
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
+
+    attributes = {}  # no attributes because to_dict has unique implementations
 
     label_max_length = 75
     value_max_length = 75
@@ -339,7 +336,7 @@ class Option(JsonObject):
     def value_length(self):
         return len(self.value) <= self.value_max_length
 
-    def get_json(self, option_type: str = "block") -> dict:
+    def to_dict(self, option_type: str = "block") -> dict:
         """
         Different parent classes must call this with a valid value from OptionTypes -
         either "dialog", "action", or "block", so that JSON is returned in the
@@ -355,7 +352,7 @@ class Option(JsonObject):
             return json
         else:  # if option_type == "block"; this should be the most common case
             return {
-                "text": PlainTextObject.from_string(self.label),
+                "text": PlainTextObject.direct_from_string(self.label),
                 "value": self.value,
             }
 
@@ -372,6 +369,8 @@ class OptionGroup(JsonObject):
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
+
+    attributes = {}  # no attributes because to_dict has unique implementations
 
     label_max_length = 75
     options_max_length = 100
@@ -405,7 +404,7 @@ class OptionGroup(JsonObject):
     def options_length(self):
         return len(self.options) <= self.options_max_length
 
-    def get_json(self, option_type: str = "block") -> dict:
+    def to_dict(self, option_type: str = "block") -> dict:
         self.validate_json()
         if option_type == "dialog":
             return {
@@ -419,6 +418,6 @@ class OptionGroup(JsonObject):
             }
         else:  # if option_type == "block"; this should be the most common case
             return {
-                "label": PlainTextObject.from_string(self.label),
+                "label": PlainTextObject.direct_from_string(self.label),
                 "options": extract_json(self.options, option_type),
             }

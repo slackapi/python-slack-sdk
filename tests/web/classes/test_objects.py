@@ -42,9 +42,9 @@ class JsonObjectTests(unittest.TestCase):
         obj.test = STRING_51_CHARS
         self.bad_test_object = obj
 
-    def test_get_json(self):
+    def test_json_formation(self):
         self.assertDictEqual(
-            self.good_test_object.get_json(),
+            self.good_test_object.to_dict(),
             {"some": "this is", "test": "a test", "keys": "object"},
         )
 
@@ -52,9 +52,9 @@ class JsonObjectTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             self.bad_test_object.validate_json()
 
-    def test_get_json_runs_validate(self):
+    def test_to_dict_performs_validation(self):
         with self.assertRaises(SlackObjectFormationError):
-            self.bad_test_object.get_json()
+            self.bad_test_object.to_dict()
 
 
 class JsonValidatorTests(unittest.TestCase):
@@ -151,38 +151,38 @@ class SpecialLinkTests(unittest.TestCase):
 class PlainTextObjectTests(unittest.TestCase):
     def test_basic_json(self):
         self.assertDictEqual(
-            PlainTextObject(text="some text").get_json(),
+            PlainTextObject(text="some text").to_dict(),
             {"text": "some text", "type": "plain_text", "emoji": True},
         )
 
         self.assertDictEqual(
-            PlainTextObject(text="some text", emoji=False).get_json(),
+            PlainTextObject(text="some text", emoji=False).to_dict(),
             {"text": "some text", "emoji": False, "type": "plain_text"},
         )
 
     def test_from_string(self):
         plaintext = PlainTextObject(text="some text")
         self.assertDictEqual(
-            plaintext.get_json(), PlainTextObject.from_string("some text")
+            plaintext.to_dict(), PlainTextObject.direct_from_string("some text")
         )
 
 
 class MarkdownTextObjectTests(unittest.TestCase):
     def test_basic_json(self):
         self.assertDictEqual(
-            MarkdownTextObject(text="some text").get_json(),
+            MarkdownTextObject(text="some text").to_dict(),
             {"text": "some text", "type": "mrkdwn", "verbatim": False},
         )
 
         self.assertDictEqual(
-            MarkdownTextObject(text="some text", verbatim=True).get_json(),
+            MarkdownTextObject(text="some text", verbatim=True).to_dict(),
             {"text": "some text", "verbatim": True, "type": "mrkdwn"},
         )
 
     def test_from_string(self):
         markdown = MarkdownTextObject(text="some text")
         self.assertDictEqual(
-            markdown.get_json(), MarkdownTextObject.from_string("some text")
+            markdown.to_dict(), MarkdownTextObject.direct_from_string("some text")
         )
 
 
@@ -195,10 +195,10 @@ class ConfirmObjectTests(unittest.TestCase):
             "title": {"emoji": True, "text": "some title", "type": "plain_text"},
         }
         simple_object = ConfirmObject(title="some title", text="are you sure?")
-        self.assertDictEqual(simple_object.get_json(), expected)
-        self.assertDictEqual(simple_object.get_json("block"), expected)
+        self.assertDictEqual(simple_object.to_dict(), expected)
+        self.assertDictEqual(simple_object.to_dict("block"), expected)
         self.assertDictEqual(
-            simple_object.get_json("action"),
+            simple_object.to_dict("action"),
             {
                 "text": "are you sure?",
                 "title": "some title",
@@ -220,10 +220,10 @@ class ConfirmObjectTests(unittest.TestCase):
             "text": {"text": "are you sure?", "type": "mrkdwn", "verbatim": False},
             "title": {"emoji": True, "text": "some title", "type": "plain_text"},
         }
-        self.assertDictEqual(confirm.get_json(), expected)
-        self.assertDictEqual(confirm.get_json("block"), expected)
+        self.assertDictEqual(confirm.to_dict(), expected)
+        self.assertDictEqual(confirm.to_dict("block"), expected)
         self.assertDictEqual(
-            confirm.get_json("action"),
+            confirm.to_dict("action"),
             {
                 "text": "are you sure?",
                 "title": "some title",
@@ -239,14 +239,14 @@ class ConfirmObjectTests(unittest.TestCase):
 
         preconstructed = ConfirmObject(title="title", text=mrkdwn)
 
-        self.assertDictEqual(direct_construction.get_json(), preconstructed.get_json())
+        self.assertDictEqual(direct_construction.to_dict(), preconstructed.to_dict())
 
         plaintext = PlainTextObject(text="Are you sure?", emoji=False)
 
         passed_plaintext = ConfirmObject(title="title", text=plaintext)
 
         self.assertDictEqual(
-            passed_plaintext.get_json(),
+            passed_plaintext.to_dict(),
             {
                 "confirm": {"emoji": True, "text": "Yes", "type": "plain_text"},
                 "deny": {"emoji": True, "text": "No", "type": "plain_text"},
@@ -257,32 +257,32 @@ class ConfirmObjectTests(unittest.TestCase):
 
     def test_title_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ConfirmObject(title=STRING_301_CHARS, text="Are you sure?").get_json()
+            ConfirmObject(title=STRING_301_CHARS, text="Are you sure?").to_dict()
 
     def test_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ConfirmObject(title="title", text=STRING_301_CHARS).get_json()
+            ConfirmObject(title="title", text=STRING_301_CHARS).to_dict()
 
     def test_text_length_with_object(self):
         with self.assertRaises(SlackObjectFormationError):
             plaintext = PlainTextObject(text=STRING_301_CHARS)
-            ConfirmObject(title="title", text=plaintext).get_json()
+            ConfirmObject(title="title", text=plaintext).to_dict()
 
         with self.assertRaises(SlackObjectFormationError):
             markdown = MarkdownTextObject(text=STRING_301_CHARS)
-            ConfirmObject(title="title", text=markdown).get_json()
+            ConfirmObject(title="title", text=markdown).to_dict()
 
     def test_confirm_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ConfirmObject(
                 title="title", text="Are you sure?", confirm=STRING_51_CHARS
-            ).get_json()
+            ).to_dict()
 
     def test_deny_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ConfirmObject(
                 title="title", text="Are you sure?", deny=STRING_51_CHARS
-            ).get_json()
+            ).to_dict()
 
 
 class OptionTests(unittest.TestCase):
@@ -294,31 +294,31 @@ class OptionTests(unittest.TestCase):
             "text": {"type": "plain_text", "text": "an option", "emoji": True},
             "value": "option_1",
         }
-        self.assertDictEqual(self.common.get_json("block"), expected)
-        self.assertDictEqual(self.common.get_json(), expected)
+        self.assertDictEqual(self.common.to_dict("block"), expected)
+        self.assertDictEqual(self.common.to_dict(), expected)
 
     def test_dialog_style_json(self):
         expected = {"label": "an option", "value": "option_1"}
-        self.assertDictEqual(self.common.get_json("dialog"), expected)
+        self.assertDictEqual(self.common.to_dict("dialog"), expected)
 
     def test_action_style_json(self):
         expected = {"text": "an option", "value": "option_1"}
-        self.assertDictEqual(self.common.get_json("action"), expected)
+        self.assertDictEqual(self.common.to_dict("action"), expected)
 
     def test_from_single_value(self):
         option = Option(label="option_1", value="option_1")
         self.assertDictEqual(
-            option.get_json("text"),
-            option.from_single_value("option_1").get_json("text"),
+            option.to_dict("text"),
+            option.from_single_value("option_1").to_dict("text"),
         )
 
     def test_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            Option(label=STRING_301_CHARS, value="option_1").get_json("text")
+            Option(label=STRING_301_CHARS, value="option_1").to_dict("text")
 
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            Option(label="option_1", value=STRING_301_CHARS).get_json("text")
+            Option(label="option_1", value=STRING_301_CHARS).to_dict("text")
 
 
 class OptionGroupTests(unittest.TestCase):
@@ -349,12 +349,12 @@ class OptionGroupTests(unittest.TestCase):
                 },
             ],
         }
-        self.assertDictEqual(self.common.get_json("block"), expected)
-        self.assertDictEqual(self.common.get_json(), expected)
+        self.assertDictEqual(self.common.to_dict("block"), expected)
+        self.assertDictEqual(self.common.to_dict(), expected)
 
     def test_dialog_style_json(self):
         self.assertDictEqual(
-            self.common.get_json("dialog"),
+            self.common.to_dict("dialog"),
             {
                 "label": "an option",
                 "options": [
@@ -367,7 +367,7 @@ class OptionGroupTests(unittest.TestCase):
 
     def test_action_style_json(self):
         self.assertDictEqual(
-            self.common.get_json("action"),
+            self.common.to_dict("action"),
             {
                 "text": "an option",
                 "options": [
@@ -380,7 +380,7 @@ class OptionGroupTests(unittest.TestCase):
 
     def test_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionGroup(label=STRING_301_CHARS, options=self.common_options).get_json(
+            OptionGroup(label=STRING_301_CHARS, options=self.common_options).to_dict(
                 "text"
             )
 
@@ -388,4 +388,4 @@ class OptionGroupTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             OptionGroup(
                 label="option_group", options=self.common_options * 34
-            ).get_json("text")
+            ).to_dict("text")

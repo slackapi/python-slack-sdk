@@ -181,8 +181,8 @@ class Attachment(JsonObject):
     def author_link_without_author_icon(self):
         return self.author_link is None or self.author_icon is not None
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.fields is not None:
             json["fields"] = extract_json(self.fields)
         if self.markdown_in:
@@ -211,8 +211,8 @@ class BlockAttachment(Attachment):
         super().__init__(text="", color=color)
         self.blocks = list(blocks)
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json.update({"blocks": extract_json(self.blocks)})
         return json
 
@@ -336,7 +336,7 @@ class InteractiveAttachment(Attachment):
     def actions_length(self):
         return len(self.actions) <= self.actions_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["actions"] = extract_json(self.actions)
         return json

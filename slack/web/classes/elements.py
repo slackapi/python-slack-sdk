@@ -8,12 +8,12 @@ from . import EnumValidator, JsonObject, JsonValidator, extract_json
 from .objects import ButtonStyles, ConfirmObject, Option, OptionGroup, PlainTextObject
 
 
-class BlockElement(JsonObject):
+class BlockElement(JsonObject, metaclass=ABCMeta):
     def __init__(self, *, subtype: str):
         self.subtype = subtype
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["type"] = self.subtype
         return json
 
@@ -123,9 +123,9 @@ class ButtonElement(InteractiveElement):
     def style_valid(self):
         return self.style is None or self.style in ButtonStyles
 
-    def get_json(self) -> dict:
-        json = super().get_json()
-        json["text"] = PlainTextObject.from_string(self.text)
+    def to_dict(self) -> dict:
+        json = super().to_dict()
+        json["text"] = PlainTextObject.direct_from_string(self.text)
         if self.confirm is not None:
             json["confirm"] = extract_json(self.confirm)
         return json
@@ -181,9 +181,9 @@ class AbstractSelector(InteractiveElement, metaclass=ABCMeta):
     def placeholder_length(self):
         return len(self.placeholder) <= self.placeholder_max_length
 
-    def get_json(self,) -> dict:
-        json = super().get_json()
-        json["placeholder"] = PlainTextObject.from_string(self.placeholder)
+    def to_dict(self, ) -> dict:
+        json = super().to_dict()
+        json["placeholder"] = PlainTextObject.direct_from_string(self.placeholder)
         if self.confirm is not None:
             json["confirm"] = extract_json(self.confirm)
         return json
@@ -233,8 +233,8 @@ class SelectElement(AbstractSelector):
     def options_length(self):
         return len(self.options) <= self.options_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if isinstance(self.options[0], OptionGroup):
             json["option_groups"] = extract_json(self.options, "block")
         else:
@@ -288,8 +288,8 @@ class ExternalDataSelectElement(AbstractSelector):
         self.initial_option = initial_option
         self.min_query_length = min_query_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.initial_option is not None:
             json["initial_option"] = extract_json(self.initial_option, "block")
         return json
@@ -317,8 +317,8 @@ class AbstractDynamicSelector(AbstractSelector, metaclass=ABCMeta):
         )
         self.initial_value = initial_value
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.initial_value is not None:
             json[f"initial_{self.initial_object_type}"] = self.initial_value
         return json
@@ -449,8 +449,8 @@ class OverflowMenuOption(Option):
         super().__init__(label=label, value=value)
         self.url = url
 
-    def get_json(self, option_type: str = "block") -> dict:
-        json = super().get_json(option_type)
+    def to_dict(self, option_type: str = "block") -> dict:
+        json = super().to_dict(option_type)
         if self.url is not None:
             json["url"] = self.url
         return json
@@ -499,8 +499,8 @@ class OverflowMenuElement(InteractiveElement):
     def options_length(self):
         return self.options_min_length < len(self.options) <= self.options_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["options"] = extract_json(self.options, "block")
         if self.confirm is not None:
             json["confirm"] = extract_json(self.confirm)

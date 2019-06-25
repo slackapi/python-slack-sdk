@@ -19,8 +19,8 @@ class Block(JsonObject):
     def block_id_length(self):
         return self.block_id is None or len(self.block_id) <= self.block_id_max_length
 
-    def get_json(self, *args) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["type"] = self.subtype
         return json
 
@@ -74,16 +74,16 @@ class SectionBlock(Block):
     def fields_length(self):
         return self.fields is None or len(self.fields) <= self.fields_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.text is not None:
             if isinstance(self.text, TextObject):
-                json["text"] = self.text.get_json()
+                json["text"] = self.text.to_dict()
             else:
-                json["text"] = MarkdownTextObject.from_string(self.text)
+                json["text"] = MarkdownTextObject.direct_from_string(self.text)
         if self.fields:
             json["fields"] = [
-                MarkdownTextObject.from_string(field) for field in self.fields
+                MarkdownTextObject.direct_from_string(field) for field in self.fields
             ]
         if self.accessory is not None:
             json["accessory"] = extract_json(self.accessory)
@@ -140,10 +140,10 @@ class ImageBlock(Block):
     def title_length(self):
         return self.title is None or len(self.title) <= self.title_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         if self.title is not None:
-            json["title"] = PlainTextObject.from_string(self.title)
+            json["title"] = PlainTextObject.direct_from_string(self.title)
         return json
 
 
@@ -170,8 +170,8 @@ class ActionsBlock(Block):
     def elements_length(self):
         return len(self.elements) <= self.elements_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["elements"] = extract_json(self.elements)
         return json
 
@@ -202,7 +202,7 @@ class ContextBlock(Block):
     def elements_length(self):
         return len(self.elements) <= self.elements_max_length
 
-    def get_json(self) -> dict:
-        json = super().get_json()
+    def to_dict(self) -> dict:
+        json = super().to_dict()
         json["elements"] = extract_json(self.elements)
         return json

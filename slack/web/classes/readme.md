@@ -23,7 +23,7 @@ actions = blocks.ActionsBlock(elements=buttons)
 
 work_order_message = messages.Message(text="You have a new request", blocks=[fields, actions])
 
-client.chat_postMessage(channel="C12345", **work_order_message.get_json())
+client.chat_postMessage(channel="C12345", **work_order_message.to_dict())
 ```
 
 ## Composing Dialogs
@@ -45,5 +45,5 @@ builder = (
 
 client = WebClient(token="abc")
 
-client.dialog_open(dialog=builder.get_json(), trigger_id="123458.12355")
+client.dialog_open(dialog=builder.to_dict(), trigger_id="123458.12355")
 ```

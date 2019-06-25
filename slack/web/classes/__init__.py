@@ -1,14 +1,21 @@
+from abc import ABCMeta, abstractmethod
 from functools import wraps
 from typing import Callable, Iterable, List, Set, Union
 
 from ...errors import SlackObjectFormationError
 
 
-class JsonObject:
+class BaseObject:
+    def __str__(self):
+        return f"<slack.{self.__class__.__name__}>"
+
+
+class JsonObject(BaseObject, metaclass=ABCMeta):
+    @abstractmethod
     @property
     def attributes(self) -> Set[str]:
         """
-        Provide a set of attributes of this object that make up its JSON structure
+        Provide a set of attributes of this object that will make up its JSON structure
         """
         return set()
 
@@ -22,9 +29,10 @@ class JsonObject:
             if callable(method) and hasattr(method, "validator"):
                 method()
 
-    def get_non_null_keys(self) -> dict:
+    def get_non_null_attributes(self) -> dict:
         """
-        Construct a dictionary out of non-null keys present on this object
+        Construct a dictionary out of non-null keys (from attributes property)
+        present on this object
         """
         return {
             key: getattr(self, key, None)
@@ -32,9 +40,9 @@ class JsonObject:
             if getattr(self, key, None) is not None
         }
 
-    def get_json(self, *args) -> dict:
+    def to_dict(self, *args) -> dict:
         """
-        Return this object's Slack-valid JSON representation
+        Extract this object as a JSON-compatible, Slack-API-valid dictionary
 
         Args:
           *args: Any specific formatting args (rare; generally not required)
@@ -43,15 +51,12 @@ class JsonObject:
           SlackObjectFormationError if the object was not valid
         """
         self.validate_json()
-        return self.get_non_null_keys()
-
-    def __str__(self):
-        return f"<slack.{self.__class__.__name__}>"
+        return self.get_non_null_attributes()
 
     def __repr__(self):
-        json = self.get_json()
+        json = self.to_dict()
         if json:
-            return f"{json}"
+            return f"<slack.{self.__class__.__name__}: {json}>"
         else:
             return self.__str__()
 
@@ -89,23 +94,23 @@ def extract_json(
     item_or_items: Union[JsonObject, List[JsonObject], str], *format_args
 ) -> Union[dict, List[dict], str]:
     """
-    Given a sequence (or single item), attempt to call the get_json() method on each
+    Given a sequence (or single item), attempt to call the to_dict() method on each
     item and return a plain list. If item is not the expected type, return it
     unmodified, in case it's already a plain dict or some other user created class.
 
     Args:
       item_or_items: item(s) to go through
-      format_args: Any formatting specifiers to pass into the object's get_json
+      format_args: Any formatting specifiers to pass into the object's to_dict
             method
     """
     try:
         return [
-            elem.get_json(*format_args) if isinstance(elem, JsonObject) else elem
+            elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem
             for elem in item_or_items
         ]
     except TypeError:  # not iterable, so try returning it as a single item
         return (
-            item_or_items.get_json(*format_args)
+            item_or_items.to_dict(*format_args)
             if isinstance(item_or_items, JsonObject)
             else item_or_items
         )

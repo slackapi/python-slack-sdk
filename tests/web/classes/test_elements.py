@@ -20,7 +20,7 @@ class InteractiveElementTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
                 text="click me!", action_id=STRING_301_CHARS, value="clickable button"
-            ).get_json()
+            ).to_dict()
 
 
 class ButtonElementTests(unittest.TestCase):
@@ -28,7 +28,7 @@ class ButtonElementTests(unittest.TestCase):
         self.assertDictEqual(
             ButtonElement(
                 text="button text", action_id="some_button", value="button_123"
-            ).get_json(),
+            ).to_dict(),
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
                 "action_id": "some_button",
@@ -45,14 +45,14 @@ class ButtonElementTests(unittest.TestCase):
                 value="button_123",
                 style="primary",
                 confirm=confirm,
-            ).get_json(),
+            ).to_dict(),
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
                 "action_id": "some_button",
                 "value": "button_123",
                 "type": "button",
                 "style": "primary",
-                "confirm": confirm.get_json(),
+                "confirm": confirm.to_dict(),
             },
         )
 
@@ -60,26 +60,26 @@ class ButtonElementTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
                 text=STRING_301_CHARS, action_id="button", value="click_me"
-            ).get_json()
+            ).to_dict()
 
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
                 text="Button", action_id="button", value=STRING_301_CHARS
-            ).get_json()
+            ).to_dict()
 
     def test_invalid_style(self):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
                 text="Button", action_id="button", value="button", style="invalid"
-            ).get_json()
+            ).to_dict()
 
 
 class LinkButtonElementTests(unittest.TestCase):
     def test_json(self):
         button = LinkButtonElement(text="button text", url="http://google.com")
         self.assertDictEqual(
-            button.get_json(),
+            button.to_dict(),
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
                 "url": "http://google.com",
@@ -91,7 +91,7 @@ class LinkButtonElementTests(unittest.TestCase):
 
     def test_url_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            LinkButtonElement(text="Button", url=STRING_3001_CHARS).get_json()
+            LinkButtonElement(text="Button", url=STRING_3001_CHARS).to_dict()
 
 
 class ImageElementTests(unittest.TestCase):
@@ -99,7 +99,7 @@ class ImageElementTests(unittest.TestCase):
         self.assertDictEqual(
             ImageElement(
                 image_url="http://google.com", alt_text="not really an image"
-            ).get_json(),
+            ).to_dict(),
             {
                 "image_url": "http://google.com",
                 "alt_text": "not really an image",
@@ -109,13 +109,13 @@ class ImageElementTests(unittest.TestCase):
 
     def test_image_url_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageElement(image_url=STRING_3001_CHARS, alt_text="text").get_json()
+            ImageElement(image_url=STRING_3001_CHARS, alt_text="text").to_dict()
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ImageElement(
                 image_url="http://google.com", alt_text=STRING_3001_CHARS
-            ).get_json()
+            ).to_dict()
 
 
 class SelectElementTests(unittest.TestCase):
@@ -131,7 +131,7 @@ class SelectElementTests(unittest.TestCase):
                 action_id="dropdown",
                 options=self.options,
                 initial_option=self.option_two,
-            ).get_json(),
+            ).to_dict(),
             {
                 "placeholder": {
                     "emoji": True,
@@ -139,8 +139,8 @@ class SelectElementTests(unittest.TestCase):
                     "type": "plain_text",
                 },
                 "action_id": "dropdown",
-                "options": [o.get_json("block") for o in self.options],
-                "initial_option": self.option_two.get_json(),
+                "options": [o.to_dict("block") for o in self.options],
+                "initial_option": self.option_two.to_dict(),
                 "type": "static_select",
             },
         )
@@ -151,7 +151,7 @@ class SelectElementTests(unittest.TestCase):
                 action_id="dropdown",
                 options=self.options,
                 confirm=ConfirmObject(title="title", text="text"),
-            ).get_json(),
+            ).to_dict(),
             {
                 "placeholder": {
                     "emoji": True,
@@ -159,8 +159,8 @@ class SelectElementTests(unittest.TestCase):
                     "type": "plain_text",
                 },
                 "action_id": "dropdown",
-                "options": [o.get_json("block") for o in self.options],
-                "confirm": ConfirmObject(title="title", text="text").get_json("block"),
+                "options": [o.to_dict("block") for o in self.options],
+                "confirm": ConfirmObject(title="title", text="text").to_dict("block"),
                 "type": "static_select",
             },
         )
@@ -171,7 +171,7 @@ class SelectElementTests(unittest.TestCase):
                 placeholder="select",
                 action_id="selector",
                 options=[self.option_one] * 101,
-            ).get_json()
+            ).to_dict()
 
 
 class ExternalDropdownElementTests(unittest.TestCase):
@@ -179,7 +179,7 @@ class ExternalDropdownElementTests(unittest.TestCase):
         self.assertDictEqual(
             ExternalDataSelectElement(
                 placeholder="selectedValue", action_id="dropdown", min_query_length=5
-            ).get_json(),
+            ).to_dict(),
             {
                 "placeholder": {
                     "emoji": True,
@@ -197,7 +197,7 @@ class ExternalDropdownElementTests(unittest.TestCase):
                 placeholder="selectedValue",
                 action_id="dropdown",
                 confirm=ConfirmObject(title="title", text="text"),
-            ).get_json(),
+            ).to_dict(),
             {
                 "placeholder": {
                     "emoji": True,
@@ -205,7 +205,7 @@ class ExternalDropdownElementTests(unittest.TestCase):
                     "type": "plain_text",
                 },
                 "action_id": "dropdown",
-                "confirm": ConfirmObject(title="title", text="text").get_json("block"),
+                "confirm": ConfirmObject(title="title", text="text").to_dict("block"),
                 "type": "external_select",
             },
         )
@@ -223,7 +223,7 @@ class DynamicDropdownTests(unittest.TestCase):
                         action_id="dropdown",
                         # somewhat silly abuse of kwargs ahead:
                         **{f"initial_{dropdown_type.initial_object_type}": "def"},
-                    ).get_json(),
+                    ).to_dict(),
                     {
                         "placeholder": {
                             "emoji": True,

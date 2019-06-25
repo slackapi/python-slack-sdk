@@ -434,7 +434,7 @@ class DialogBuilder(JsonObject):
     def state_length(self):
         return not self._state or len(self._state) <= self.state_max_length
 
-    def get_json(self, *args) -> dict:
+    def to_dict(self) -> dict:
         self.validate_json()
         json = {
             "title": self._title,
