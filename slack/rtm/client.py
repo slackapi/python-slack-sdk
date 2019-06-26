@@ -387,6 +387,7 @@ class RTMClient(object):
                 await self._dispatch_event(event, data=payload)
             elif message.type == aiohttp.WSMsgType.ERROR:
                 self._logger.error("Received an error on the websocket: %r", message)
+                await self._dispatch_event(event="error", data=message)
             elif message.type in (
                 aiohttp.WSMsgType.CLOSE,
                 aiohttp.WSMsgType.CLOSING,
