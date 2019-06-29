@@ -34,7 +34,7 @@ class BaseClient:
         proxy=None,
         run_async=False,
         session=None,
-        headers: Optional[dict] = {},
+        headers: Optional[dict] = None,
     ):
         self.token = token
         self.base_url = base_url
@@ -43,7 +43,7 @@ class BaseClient:
         self.proxy = proxy
         self.run_async = run_async
         self.session = session
-        self.headers = headers
+        self.headers = headers or {}
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
