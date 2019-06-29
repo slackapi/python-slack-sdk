@@ -129,29 +129,13 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackApiError):
             self.client.api_test()
 
-    @mock.patch("aiohttp.FormData.add_field")
-    def test_the_api_call_files_argument_creates_the_expected_data(
-        self, mock_add_field, mock_request
-    ):
+    def test_the_api_call_files_argument_creates_the_expected_data(self, mock_request):
         self.client.token = "xoxa-123"
         with mock.patch("builtins.open", mock.mock_open(read_data="fake")):
             self.client.users_setPhoto(image="/fake/path")
 
-        mock_add_field.assert_called_once_with("image", mock.ANY)
         mock_request.assert_called_once_with(
             http_verb="POST",
             api_url="https://www.slack.com/api/users.setPhoto",
             req_args=fake_req_args(),
-        )
-
-    @mock.patch("aiohttp.FormData.add_field")
-    def test_the_api_call_files_argument_combines_with_additional_data(
-        self, mock_add_field, mock_request
-    ):
-        self.client.token = "xoxa-123"
-        with mock.patch("builtins.open", mock.mock_open(read_data="fake")) as mock_file:
-            self.client.users_setPhoto(image=mock_file(), name="photo")
-
-        mock_add_field.assert_has_calls(
-            [mock.call("image", mock.ANY), mock.call("name", "photo")]
         )
