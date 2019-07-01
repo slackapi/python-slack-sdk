@@ -103,6 +103,7 @@ setup(
     version=__version__,
     description="Slack API clients for Web API and RTM API",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/slackapi/python-slackclient",
     author="Slack Technologies, Inc.",
     author_email="opensource@slack.com",
