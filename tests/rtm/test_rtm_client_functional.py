@@ -11,7 +11,7 @@ import json
 # Internal Imports
 import slack
 import slack.errors as e
-from tests.helpers import fake_req_args, mock_rtm_response
+from tests.helpers import fake_send_req_args, mock_rtm_response
 
 
 @mock.patch("slack.WebClient._send", new_callable=mock_rtm_response)
@@ -124,7 +124,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.connect",
-            req_args=fake_req_args(),
+            req_args=fake_send_req_args(),
         )
 
     def test_start_calls_rtm_start_when_specified(self, mock_rtm_response):
@@ -139,7 +139,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.start",
-            req_args=fake_req_args(),
+            req_args=fake_send_req_args(),
         )
 
     def test_send_over_websocket_sends_expected_message(self, mock_rtm_response):

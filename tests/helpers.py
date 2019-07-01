@@ -20,6 +20,19 @@ def fake_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
     return req_args
 
 
+def fake_send_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
+    req_args = {
+        "headers": headers,
+        "data": data,
+        "params": params,
+        "json": json,
+        "ssl": ANY,
+        "proxy": ANY,
+        "files": ANY,
+    }
+    return req_args
+
+
 def mock_rtm_response():
     coro = Mock(name="RTMResponse")
     data = {

@@ -5,6 +5,7 @@ import os
 import logging
 import random
 import collections
+import concurrent
 import inspect
 import signal
 from typing import Optional, Callable, DefaultDict
@@ -113,6 +114,7 @@ class RTMClient(object):
         connect_method: Optional[str] = None,
         ping_interval: Optional[int] = 30,
         loop: Optional[asyncio.AbstractEventLoop] = None,
+        headers: Optional[dict] = {},
     ):
         self.token = token
         self.run_async = run_async
@@ -123,6 +125,7 @@ class RTMClient(object):
         self.base_url = base_url
         self.connect_method = connect_method
         self.ping_interval = ping_interval
+        self.headers = headers
         self._event_loop = loop or asyncio.get_event_loop()
         self._web_client = None
         self._websocket = None
@@ -223,7 +226,7 @@ class RTMClient(object):
         Raises:
             SlackClientNotConnectedError: Websocket connection is closed.
         """
-        return asyncio.ensure_future(self._send_json(payload))
+        return asyncio.ensure_future(self._send_json(payload), loop=self._event_loop)
 
     async def _send_json(self, payload):
         if self._websocket is None or self._event_loop is None:
@@ -434,13 +437,32 @@ class RTMClient(object):
                         rtm_client=self, web_client=self._web_client, data=data
                     )
                 else:
-                    callback(rtm_client=self, web_client=self._web_client, data=data)
+                    self._execute_in_thread(callback, data)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
                 msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
                 self._logger.error(msg)
                 raise
+
+    def _execute_in_thread(self, callback, data):
+        """Execute the callback in another thread. Wait for and return the results."""
+        web_client = WebClient(
+            token=self.token,
+            base_url=self.base_url,
+            ssl=self.ssl,
+            proxy=self.proxy,
+            headers=self.headers,
+        )
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(
+                callback, rtm_client=self, web_client=web_client, data=data
+            )
+
+            while future.running():
+                pass
+
+            future.result()
 
     async def _retreive_websocket_info(self):
         """Retreives the WebSocket info from Slack.
@@ -472,6 +494,7 @@ class RTMClient(object):
                 run_async=True,
                 loop=self._event_loop,
                 session=self._session,
+                headers=self.headers,
             )
         self._logger.debug("Retrieving websocket info.")
         if self.connect_method in ["rtm.start", "rtm_start"]:

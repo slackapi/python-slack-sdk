@@ -67,6 +67,9 @@ def update_emoji(**payload):
     channel_id = data["item"]["channel"]
     user_id = data["user"]
 
+    if channel_id not in onboarding_tutorials_sent:
+        return
+
     # Get the original tutorial sent.
     onboarding_tutorial = onboarding_tutorials_sent[channel_id][user_id]
 

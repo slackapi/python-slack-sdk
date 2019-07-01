@@ -34,6 +34,7 @@ class BaseClient:
         proxy=None,
         run_async=False,
         session=None,
+        headers: Optional[dict] = None,
     ):
         self.token = token
         self.base_url = base_url
@@ -42,16 +43,44 @@ class BaseClient:
         self.proxy = proxy
         self.run_async = run_async
         self.session = session
+        self.headers = headers or {}
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
-    def _set_event_loop(self):
-        if self.run_async:
+    def _get_event_loop(self):
+        """Retrieves the event loop or creates a new one."""
+        try:
             return asyncio.get_event_loop()
-        else:
+        except RuntimeError:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             return loop
+
+    def _get_headers(self, has_json, has_files):
+        """Contructs the headers need for a request.
+        Args:
+            has_json (bool): Whether or not the request has json.
+        Returns:
+            The headers dictionary.
+                e.g. {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Bearer xoxb-1234-1243',
+                    'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
+                }
+        """
+        headers = {
+            "User-Agent": self._get_user_agent(),
+            "Authorization": "Bearer {}".format(self.token),
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        }
+        if has_json:
+            headers.update({"Content-Type": "application/json;charset=utf-8"})
+
+        if has_files:
+            # These are set automatically by the aiohttp library.
+            headers.pop("Content-Type", None)
+
+        return headers
 
     def api_call(
         self,
@@ -62,7 +91,7 @@ class BaseClient:
         data: Union[dict, FormData] = None,
         params: dict = None,
         json: dict = None,
-    ):
+    ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
 
         Args:
@@ -93,33 +122,18 @@ class BaseClient:
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-        if json is not None and http_verb != "POST":
+        has_json = json is not None
+        has_files = files is not None
+        if has_json and http_verb != "POST":
             msg = "Json data can only be submitted as POST requests. GET requests should use the 'params' argument."
             raise err.SlackRequestError(msg)
 
         api_url = self._get_url(api_method)
-        headers = {
-            "User-Agent": self._get_user_agent(),
-            "Authorization": "Bearer {}".format(self.token),
-        }
-        if files is not None:
-            form_data = FormData()
-            for k, v in files.items():
-                if isinstance(v, str):
-                    with open(v, "rb") as fd:
-                        form_data.add_field(k, fd)
-                else:
-                    form_data.add_field(k, v)
-
-            if isinstance(data, dict):
-                for k, v in data.items():
-                    form_data.add_field(k, str(v))
-
-            data = form_data
 
         req_args = {
-            "headers": headers,
+            "headers": self._get_headers(has_json, has_files),
             "data": data,
+            "files": files,
             "params": params,
             "json": json,
             "ssl": self.ssl,
@@ -127,7 +141,7 @@ class BaseClient:
         }
 
         if self._event_loop is None:
-            self._event_loop = self._set_event_loop()
+            self._event_loop = self._get_event_loop()
 
         future = asyncio.ensure_future(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
@@ -182,9 +196,24 @@ class BaseClient:
         Returns:
             The response parsed into a SlackResponse object.
         """
+        open_files = []
+        files = req_args.pop("files", None)
+        if files is not None:
+            for k, v in files.items():
+                if isinstance(v, str):
+                    f = open(v.encode("ascii", "ignore"), "rb")
+                    open_files.append(f)
+                    req_args["data"].update({k: f})
+                else:
+                    req_args["data"].update({k: v})
+
         res = await self._request(
             http_verb=http_verb, api_url=api_url, req_args=req_args
         )
+
+        for f in open_files:
+            f.close()
+
         data = {
             "client": self,
             "http_verb": http_verb,

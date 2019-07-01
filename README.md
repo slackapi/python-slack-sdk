@@ -57,7 +57,7 @@ We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
 
 ```bash
-pip3 install slackclient==2.0.0
+$ pip3 install slackclient
 ```
 
 ### Getting started tutorial
@@ -204,7 +204,14 @@ async def send_async_message(channel='#random', text='')
 
 ### Advanced Options
 
-The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) support. You can pass these options directly into both the RTM and the Web client.
+The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood.
+
+Looking for a performance boost? Installing the optional dependencies (aiodns) may help speed up DNS resolving by the client. We've included it as an extra called "optional":
+```bash
+$ pip3 install slackclient[optional]
+```
+
+Interested in SSL or Proxy support? Simply use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) arguments. You can pass these options directly into both the RTM and the Web client.
 
 ```python
 import os
