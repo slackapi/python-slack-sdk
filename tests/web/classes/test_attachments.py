@@ -2,8 +2,10 @@ import unittest
 
 from slack.errors import SlackObjectFormationError
 from slack.web.classes.actions import ActionButton, ActionLinkButton
+from slack.web.classes.blocks import SectionBlock, ImageBlock
 from slack.web.classes.attachments import (
     Attachment,
+    BlockAttachment,
     AttachmentField,
     InteractiveAttachment,
 )
@@ -206,3 +208,16 @@ class InteractiveAttachmentTests(unittest.TestCase):
             InteractiveAttachment(
                 text="some text", callback_id="abc123", actions=actions
             ).to_dict(),
+
+
+class BlockAttachmentTests(unittest.TestCase):
+    def test_basic_json(self):
+        blocks = [
+            SectionBlock(text="Some text"),
+            ImageBlock(image_url="image.jpg", alt_text="an image")
+        ]
+
+        self.assertDictEqual(
+            BlockAttachment(blocks=blocks).to_dict(), {"blocks": [b.to_dict() for b in blocks]}
+        )
+
