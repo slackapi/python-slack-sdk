@@ -84,13 +84,13 @@ Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the
 
 RTM Events
 -------------
-.. code-block:: python
+.. code-block:: json
 
   {
-    u'type': u'message',
-    u'ts': u'1358878749.000002',
-    u'user': u'U023BECGF',
-    u'text': u'Hello'
+    'type': 'message',
+    'ts': '1358878749.000002',
+    'user': 'U023BECGF',
+    'text': 'Hello'
   }
 
 See `RTM Events <https://api.slack.com/rtm#events>`_ for a complete list of events.
