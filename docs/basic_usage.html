@@ -138,19 +138,18 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-a-direct-message-or-multi-person-direct-message">Creating a direct message or multi-person direct message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-a-public-or-private-channel">Creating a public or private channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-information-about-a-conversation">Getting information about a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-a-list-of-conversations">Getting a list of conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversations.html#direct-messages">Direct messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-channels">Creating channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-more-information">Getting more information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversations.html#listing-conversations">Listing conversations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversations.html#leaving-a-conversation">Leaving a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#get-conversation-members">Get conversation members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-members">Getting members</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">Real Time Messaging (RTM)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#connecting-to-the-rtm-api">Connecting to the RTM API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#sending-messages-via-the-rtm-api">Sending messages via the RTM API</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
@@ -449,7 +448,7 @@ joined one by accident. This is how you leave a channel.</p>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
 
 <span class="c1"># Simple wrapper for sending a Slack message</span>
 <span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>

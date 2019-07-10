@@ -20,7 +20,8 @@ In our example below, we watch for a [message event][message-event] that contain
 
 Connecting to the RTM API
 ------------------------------------------
-::
+.. code-block:: python
+
   import os
   from slack import RTMClient
     
@@ -50,7 +51,9 @@ rtm.start vs rtm.connect
 By default, the RTM client uses `rtm.connect` to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url. 
 If you'd rather use `rtm.start` to establish the connection, which provides more information about the conversations and users on the team, you can set the 
 `connect_method` option to `rtm.start` when instantiating the RTM Client. Note that on larger teams, use of `rtm.start` can be slow and unreliable.
-::
+
+.. code-block:: python
+
   import os
   from slack import RTMClient
 
@@ -81,7 +84,7 @@ Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the
 
 RTM Events
 -------------
-::
+.. code-block:: python
 
   {
     u'type': u'message',
