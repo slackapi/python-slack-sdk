@@ -365,7 +365,7 @@ class RTMClient(object):
         """Process messages received on the WebSocket connection."""
         while not self._stopped and self._websocket is not None:
             try:
-                # Wait for a message to be recieved, but timeout after a second so that
+                # Wait for a message to be received, but timeout after a second so that
                 # we can check if the socket has been closed, or if self._stopped is
                 # True
                 message = await self._websocket.receive(timeout=1)

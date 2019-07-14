@@ -59,7 +59,7 @@ def onboarding_message(**payload):
 # Here we'll link the update_emoji callback to the 'reaction_added' event.
 @slack.RTMClient.run_on(event="reaction_added")
 def update_emoji(**payload):
-    """Update the onboarding welcome message after recieving a "reaction_added"
+    """Update the onboarding welcome message after receiving a "reaction_added"
     event from Slack. Update timestamp for welcome message as well.
     """
     data = payload["data"]
@@ -91,7 +91,7 @@ def update_emoji(**payload):
 # Here we'll link the update_pin callback to the 'reaction_added' event.
 @slack.RTMClient.run_on(event="pin_added")
 def update_pin(**payload):
-    """Update the onboarding welcome message after recieving a "pin_added"
+    """Update the onboarding welcome message after receiving a "pin_added"
     event from Slack. Update timestamp for welcome message as well.
     """
     data = payload["data"]

@@ -123,7 +123,7 @@ link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message event][message-event] that contains "Hello" and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
+In our example below, we watch for a [message event][message-event] that contains "Hello" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
 ```python
     import os
