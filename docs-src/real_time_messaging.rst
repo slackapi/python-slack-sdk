@@ -5,9 +5,9 @@ Real Time Messaging (RTM)
 ==============================================
 The `Real Time Messaging (RTM) API`_ is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
 
-If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API][https://api.slack.com/events-api] instead. 
-The Events API contains some events that aren't supported in the RTM API (like [`app_home_opened`](https://api.slack.com/events/app_home_opened)), 
-and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor][https://github.com/slackapi/python-slack-events-api].
+If you prefer events to be pushed to your app, we recommend using the HTTP-based `Events API <https://api.slack.com/events-api>`_ instead. 
+The Events API contains some events that aren't supported in the RTM API (like `the app_home_opened event <https://api.slack.com/events/app_home_opened>`_), 
+and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the `Python Slack Events Adaptor <https://github.com/slackapi/python-slack-events-api>`_.
 
 The RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
@@ -16,7 +16,7 @@ link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message event][message-event] that contains "Hello" and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
+In our example below, we watch for a `message event <https://api.slack.com/events/message>`_ that contains "Hello" and if its recieved, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
 Connecting to the RTM API
 ------------------------------------------

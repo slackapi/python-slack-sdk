@@ -214,15 +214,15 @@
   <div class="section" id="real-time-messaging-rtm">
 <span id="real-time-messaging"></span><h1>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging (RTM) API</a> is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.</p>
-<p>If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API][<a class="reference external" href="https://api.slack.com/events-api">https://api.slack.com/events-api</a>] instead.
-The Events API contains some events that aren’t supported in the RTM API (like [<cite>app_home_opened</cite>](<a class="reference external" href="https://api.slack.com/events/app_home_opened">https://api.slack.com/events/app_home_opened</a>)),
-and it supports most of the event types in the RTM API. If you’d like to use the Events API, you can use the [Python Slack Events Adaptor][<a class="reference external" href="https://github.com/slackapi/python-slack-events-api">https://github.com/slackapi/python-slack-events-api</a>].</p>
+<p>If you prefer events to be pushed to your app, we recommend using the HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
+The Events API contains some events that aren’t supported in the RTM API (like <a class="reference external" href="https://api.slack.com/events/app_home_opened">the app_home_opened event</a>),
+and it supports most of the event types in the RTM API. If you’d like to use the Events API, you can use the <a class="reference external" href="https://github.com/slackapi/python-slack-events-api">Python Slack Events Adaptor</a>.</p>
 <p>The RTMClient allows apps to communicate with the Slack Platform’s RTM API.</p>
 <p>The event-driven architecture of this client allows you to simply
 link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives. We also give you the ability to call our web client from inside your callbacks.</p>
-<p>In our example below, we watch for a [message event][message-event] that contains “Hello” and if its recieved, we call the <cite>say_hello()</cite> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
+<p>In our example below, we watch for a <a class="reference external" href="https://api.slack.com/events/message">message event</a> that contains “Hello” and if its recieved, we call the <cite>say_hello()</cite> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
 <div class="section" id="connecting-to-the-rtm-api">
 <h2>Connecting to the RTM API<a class="headerlink" href="#connecting-to-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
