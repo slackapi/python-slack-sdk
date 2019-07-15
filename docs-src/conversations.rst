@@ -3,82 +3,70 @@
 ==============================================
 Conversations API
 ==============================================
-The Slack Conversations API provides your app with a unified interface to work with all the
-channel-like things encountered in Slack; public channels, private channels, direct messages, group
-direct messages, and our newest channel type, Shared Channels.
+The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack; public channels, private channels, direct messages, group direct messages, and our newest channel type, Shared Channels.
 
 
 See `Conversations API <https://api.slack.com/docs/conversations-api>`_ docs for more info.
 
 --------
 
-Creating a direct message or multi-person direct message
+Direct messages
 ---------------------------------------------------------
-This Conversations API method opens a multi-person direct message or just a 1:1 direct message.
+The ``conversations_open`` method opens either a 1:1 direct message with a single user or a a multi-person direct message, depending on the number of users supplied to the ``users`` parameter.
 
-*Use conversations.create for public or private channels.*
+*For public or private channels, use the  ``conversations_create`` method.*
 
-Provide 1 to 8 user IDs in the ``user`` parameter to open or resume a conversation. Providing only
-1 ID will create a direct message. Providing more will create an ``mpim``.
+Provide a ``users`` parameter as an array with 1 to 8 user IDs to open or resume a conversation. Providing only 1 ID will create a direct message. Providing more will create a new multi-party DM or resume an existing conversation.
 
-If there are no conversations already in progress including that exact set of members, a new
-multi-person direct message conversation begins.
-
-Subsequent calls to ``conversations.open`` with the same set of users will return the already
-existing conversation.
-
+Subsequent calls to ``conversations_open`` with the same set of users will return the already existing conversation.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call(
-    "conversations.open",
-    users=["W1234567890","U2345678901","U3456789012"]
-  )
+  client.conversations_open(users=["W123456789", "U987654321"])
 
 See `conversations.open <https://api.slack.com/methods/conversations.open>`_ additional info.
 
 --------
 
-Creating a public or private channel
+Creating channels
 -------------------------------------
-Initiates a public or private channel-based conversation
+Creates a new channel, either public or private. The ``name`` parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 21 characters. To make the channel private, set the option ``is_private`` parameter to ``True``.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call(
-    "conversations.create",
-    name="myprivatechannel",
-    is_private=True
+  client.conversations_create(
+    name="my-private-channel",
+    is_private = True
   )
 
 See `conversations.create <https://api.slack.com/methods/conversations.create>`_ additional info.
 
 --------
 
-Getting information about a conversation
+Getting more information
 -----------------------------------------
-This Conversations API method returns information about a workspace conversation.
+To retrieve a set of metadata about a channel (public, private, DM, or multi-party DM), use ``conversations_info``. The ``channel`` parameter is required and must be a valid channel ID. The optional ``include_locale`` boolean parameter will return locale data, which may be useful if you wish to return localized responses. The ``include_num_members`` boolean parameter will return the number of people in a channel.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call(
-    "conversations.info",
-    channel="C0XXXXXX",
+  client.conversations_info(
+    channel="C031415926"
+    include_num_members = True
   )
 
 See `conversations.info <https://api.slack.com/methods/conversations.info>`_ for more info.
@@ -86,38 +74,31 @@ See `conversations.info <https://api.slack.com/methods/conversations.info>`_ for
 
 --------
 
-Getting a list of conversations
+Listing conversations
 --------------------------------
-This Conversations API method returns a list of all channel-like conversations in a workspace.
-The "channels" returned depend on what the calling token has access to and the directives placed
-in the ``types`` parameter.
+To get a list of all the conversations in a workspace, use ``conversations_list``. By default, only public conversations are returned; use the ``types`` parameter specify which types of conversations you're interested in (Note: ``types`` is a string of comma-separated values)
 
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call("conversations.list")
+  client.conversations_list()
 
-Only public conversations are included by default. You may include additional conversations types
-by passing ``types`` (as a string) into your list request. Additional conversation types include
-``public_channel`` and ``private_channel``.
-
+Use the ``types`` parameter to request additional channels, including ``public_channel``, ``private_channel``, ``mpim``, and ``im``. This parameter is a string of comma-separated values.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  # Note that `types` is a string
-  sc.api_call(
-    "conversations.list",
-    types="public_channel, private_channel"
+  client.conversations_list(
+    types="public_channels, private_channels"
   )
 
 See `conversations.list <https://api.slack.com/methods/conversations.list>`_ for more info.
@@ -127,40 +108,34 @@ See `conversations.list <https://api.slack.com/methods/conversations.list>`_ for
 
 Leaving a conversation
 -----------------------
-Maybe you've finished up all the business you had in a conversation, or maybe you
-joined one by accident. This is how you leave a conversation.
+To leave a conversation, use ``conversations_leave`` with the required ``channel`` param containing the ID of the channel to leave.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call(
-    "conversations.leave",
-    channel="C0XXXXXXX"
-  )
+  client.conversations_leave(channel="C27182818")
 
 See `conversations.leave <https://api.slack.com/methods/conversations.leave>`_ for more info.
 
 --------
 
-Get conversation members
+Getting members
 ------------------------------
-Get a list fo the members of a conversation
+To get a list of the members of a conversation, use ``conversations_members`` with the required ``channel`` parameter.
 
 .. code-block:: python
 
-  from slackclient import SlackClient
+  import slack
 
   slack_token = os.environ["SLACK_API_TOKEN"]
-  sc = SlackClient(slack_token)
+  client = slack.WebClient(slack_token)
 
-  sc.api_call("conversations.members",
-    channel="C0XXXXXXX"
-  )
+  client.conversations_members(channel="C16180339")
 
-See `users.list <https://api.slack.com/methods/conversations.members>`_ for more info.
+See `conversations.members <https://api.slack.com/methods/conversations.members>`_ for more info.
 
 .. include:: metadata.rst

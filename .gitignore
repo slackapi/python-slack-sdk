@@ -3,6 +3,7 @@ build/
 dist/
 docs/_sources/
 docs/.doctrees
+.eggs/
 *.egg-info/
 *.egg
 *.py[cod]
