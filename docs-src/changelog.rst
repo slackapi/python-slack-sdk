@@ -2,6 +2,24 @@
 Changelog
 ==============================================
 
+v2.1.0 (2019-07-01)
+-------------------
+**New Features**
+1. Type-hinted helper classes for building messages in v2 #400 (Thanks @paul-griffith)
+
+**Breaking Changes**
+1. [RTMClient] Converted the `RTMClient#typing()` function to async #446
+
+**Updates**
+1. [RTMClient] Handle case in which aiohttp closes the websocket due to lack of ping responses. #453 (Thanks @flyte)
+2. Modify package identifier in user agent to match v1.x identifier #418 (Thanks @aoberoi)
+3. [WebClient] Fixed typo in Scheduled message #428 & #435 (Thanks @splinterific)
+4. Transform install_requires of 'aiodns' into extras_require. #440 (Thanks @staticdev)
+
+**Thank you!!**
+To everyone who's opened, commented or reacted to an issue; this project is better because of you!
+Thank you for helping the Slack community!
+
 v2.0.0 (2019-04-29)
 -------------------
 [Original RFC](https://github.com/slackapi/python-slackclient/issues/384)

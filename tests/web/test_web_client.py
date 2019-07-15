@@ -2,6 +2,7 @@
 import unittest
 from unittest import mock
 import asyncio
+import re
 
 
 # Internal Imports
@@ -18,10 +19,33 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
+    pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
+    pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
+
     def test_api_calls_return_a_response_when_run_in_sync_mode(self, mock_request):
         resp = self.client.api_test()
         self.assertFalse(asyncio.isfuture(resp))
         self.assertTrue(resp["ok"])
+
+    def test_api_calls_include_user_agent(self, mock_request):
+        self.client.api_test()
+        mock_call_kwargs = mock_request.call_args[1]
+        self.assertIn("req_args", mock_call_kwargs)
+        mock_call_req_args = mock_call_kwargs["req_args"]
+        self.assertIn("headers", mock_call_req_args)
+        mock_call_headers = mock_call_req_args["headers"]
+        self.assertIn("User-Agent", mock_call_headers)
+        mock_call_user_agent = mock_call_headers["User-Agent"]
+        self.assertRegex(
+            mock_call_user_agent,
+            self.pattern_for_package_identifier,
+            "User Agent contains slackclient and version",
+        )
+        self.assertRegex(
+            mock_call_user_agent,
+            self.pattern_for_language,
+            "User Agent contains Python and version",
+        )
 
     @async_test
     async def test_api_calls_return_a_future_when_run_in_async_mode(self, mock_request):
@@ -105,29 +129,13 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackApiError):
             self.client.api_test()
 
-    @mock.patch("aiohttp.FormData.add_field")
-    def test_the_api_call_files_argument_creates_the_expected_data(
-        self, mock_add_field, mock_request
-    ):
+    def test_the_api_call_files_argument_creates_the_expected_data(self, mock_request):
         self.client.token = "xoxa-123"
         with mock.patch("builtins.open", mock.mock_open(read_data="fake")):
             self.client.users_setPhoto(image="/fake/path")
 
-        mock_add_field.assert_called_once_with("image", mock.ANY)
         mock_request.assert_called_once_with(
             http_verb="POST",
             api_url="https://www.slack.com/api/users.setPhoto",
             req_args=fake_req_args(),
-        )
-
-    @mock.patch("aiohttp.FormData.add_field")
-    def test_the_api_call_files_argument_combines_with_additional_data(
-        self, mock_add_field, mock_request
-    ):
-        self.client.token = "xoxa-123"
-        with mock.patch("builtins.open", mock.mock_open(read_data="fake")) as mock_file:
-            self.client.users_setPhoto(image=mock_file(), name="photo")
-
-        mock_add_field.assert_has_calls(
-            [mock.call("image", mock.ANY), mock.call("name", "photo")]
         )

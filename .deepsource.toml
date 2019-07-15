@@ -1,0 +1,20 @@
+version = 1
+
+test_patterns = [
+  'tests/*.py',
+  'tests/**/*.py'
+]
+
+exclude_patterns = [
+  'setup.py',
+  'docs-src/**/*.py',
+  'tutorial/**/*.py'
+]
+
+[[analyzers]]
+name = 'python'
+enabled = true
+runtime_version = '3.x.x'
+
+  [analyzers.meta]
+  max_line_length = 125

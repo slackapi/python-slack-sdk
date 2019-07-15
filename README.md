@@ -24,16 +24,19 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][https:
 
 ## Table of contents
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Getting started tutorial](#getting-started-tutorial)
-- [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
-  - [Sending a message to Slack](#sending-a-message-to-slack)
-  - [Uploading files to Slack](#uploading-files-to-slack)
-- [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
-- [Advanced Options](#advanced-options)
-- [Migrating from v1.x](#migrating-from-v1)
-- [Support](#support)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Getting started tutorial](#getting-started-tutorial)
+* [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
+    * [Sending a message to Slack](#sending-a-message-to-slack)
+    * [Uploading files to Slack](#uploading-files-to-slack)
+* [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
+* [Async Usage](#async-usage)
+    * [Slackclient as a script](#slackclient-as-a-script)
+    * [Slackclient in a framework](#slackclient-in-a-framework)
+* [Advanced Options](#advanced-options)
+* [Migrating from v1.x](#migrating-from-v1)
+* [Support](#support)
 
 ### Requirements
 
@@ -56,7 +59,7 @@ python3 --version
 We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
 ```bash
-pip3 install slackclient==2.0.0
+$ pip3 install slackclient
 ```
 
 ### Getting started tutorial
@@ -150,9 +153,68 @@ In our example below, we watch for a [message event][message-event] that contain
     rtm_client.start()
 ```
 
+### Async usage
+
+slackclient v2 and higher uses aiohttp and asyncio to enable async functionality.
+
+Normal usage of the library does not run it in async, hence a kwarg of run_async=True is needed.
+
+When in async mode its important to remember to await or run/run_until_complete the call.
+
+#### Slackclient as a script
+```python 
+import os
+import slack
+import asyncio
+
+loop = asyncio.get_event_loop()
+
+client = slack.WebClient(
+    token=os.environ['SLACK_API_TOKEN'],
+    run_async=True
+    )
+
+response = loop.run_until_complete(client.chat_postMessage(
+        channel='#random',
+        text="Hello world!"
+        )
+        )
+assert response["ok"]
+assert response["message"]["text"] == "Hello world!"
+```
+
+#### Slackclient in a framework
+If you are using a framework invoking the asyncio event loop like : sanic/jupyter notebook/etc.
+```python
+import os
+import slack
+
+
+client = slack.WebClient(
+    token=os.environ['SLACK_API_TOKEN'],
+    run_async=True
+    )
+
+async def send_async_message(channel='#random', text='')
+    response = await client.chat_postMessage(
+            channel=channel,
+            text=text
+            )
+    assert response["ok"]
+    assert response["message"]["text"] == "Hello world!"
+    
+```
+
 ### Advanced Options
 
-The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood so it allows us to use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) support. You can pass these options directly into both the RTM and the Web client.
+The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood.
+
+Looking for a performance boost? Installing the optional dependencies (aiodns) may help speed up DNS resolving by the client. We've included it as an extra called "optional":
+```bash
+$ pip3 install slackclient[optional]
+```
+
+Interested in SSL or Proxy support? Simply use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) arguments. You can pass these options directly into both the RTM and the Web client.
 
 ```python
 import os

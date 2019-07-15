@@ -89,7 +89,7 @@ def onboarding_message(**payload):
     web_client = payload["web_client"]
 
     # Open a DM with the new user.
-    response = web_client.im_open(user_id)
+    response = web_client.im_open(user=user_id)
     channel = response["channel"]["id"]
 
     # Post the onboarding message.
@@ -190,6 +190,6 @@ if __name__ == "__main__":
 
 **Next section: [04 - Running the app](/tutorial/04-running-the-app.md).**
 
-**Previous section: [02 - Building a message](/tutorial/01-building-a-message.md).**
+**Previous section: [02 - Building a message](/tutorial/02-building-a-message.md).**
 
 **Back to the [Table of contents](/tutorial/#table-of-contents).**

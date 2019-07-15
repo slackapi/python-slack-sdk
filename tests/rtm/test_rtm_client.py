@@ -2,6 +2,7 @@
 import collections
 import unittest
 from unittest import mock
+import asyncio
 
 # Internal Imports
 import slack
@@ -65,7 +66,8 @@ class TestRTMClient(unittest.TestCase):
 
     def test_send_over_websocket_raises_when_not_connected(self):
         with self.assertRaises(e.SlackClientError) as context:
-            self.client.send_over_websocket(payload={})
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(self.client.send_over_websocket(payload={}))
 
         expected_error = "Websocket connection is closed."
         error = str(context.exception)

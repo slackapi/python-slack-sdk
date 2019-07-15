@@ -11,7 +11,7 @@ import json
 # Internal Imports
 import slack
 import slack.errors as e
-from tests.helpers import fake_req_args, mock_rtm_response
+from tests.helpers import fake_send_req_args, mock_rtm_response
 
 
 @mock.patch("slack.WebClient._send", new_callable=mock_rtm_response)
@@ -41,7 +41,7 @@ class TestRTMClientFunctional(unittest.TestCase):
             async for msg in ws:
                 await ws.send_json({"type": "message", "message_sent": msg.json()})
         finally:
-            request.app["websockets"].discard(ws)
+            request.app["websockets"].remove(ws)
         return ws
 
     async def on_shutdown(self, app):
@@ -124,7 +124,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.connect",
-            req_args=fake_req_args(),
+            req_args=fake_send_req_args(),
         )
 
     def test_start_calls_rtm_start_when_specified(self, mock_rtm_response):
@@ -139,7 +139,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         mock_rtm_response.assert_called_once_with(
             http_verb="GET",
             api_url="https://www.slack.com/api/rtm.start",
-            req_args=fake_req_args(),
+            req_args=fake_send_req_args(),
         )
 
     def test_send_over_websocket_sends_expected_message(self, mock_rtm_response):
@@ -170,9 +170,9 @@ class TestRTMClientFunctional(unittest.TestCase):
 
     def test_ping_sends_expected_message(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
-        def ping_message(**payload):
+        async def ping_message(**payload):
             rtm_client = payload["rtm_client"]
-            rtm_client.ping()
+            await rtm_client.ping()
 
         @slack.RTMClient.run_on(event="message")
         def check_message(**payload):
@@ -185,9 +185,9 @@ class TestRTMClientFunctional(unittest.TestCase):
 
     def test_typing_sends_expected_message(self, mock_rtm_response):
         @slack.RTMClient.run_on(event="open")
-        def typing_message(**payload):
+        async def typing_message(**payload):
             rtm_client = payload["rtm_client"]
-            rtm_client.typing(channel="C01234567")
+            await rtm_client.typing(channel="C01234567")
 
         @slack.RTMClient.run_on(event="message")
         def check_message(**payload):
