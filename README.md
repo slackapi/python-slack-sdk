@@ -1,5 +1,8 @@
 # Python slackclient
+
 The Python slackclient is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
+
+**Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slackclient/](https://slack.dev/python-slackclient/)**
 
 [![pypi package][pypi-image]][pypi-url]
 [![Build Status][travis-image]][travis-url]
@@ -7,7 +10,6 @@ The Python slackclient is a developer kit for interfacing with the Slack Web API
 [![Python Version][python-version]][pypi-url]
 [![codecov][codecov-image]][codecov-url]
 [![contact][contact-image]][contact-url]
-
 
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
@@ -18,7 +20,7 @@ The **Python slackclient** allows interaction with:
 
 If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
 
-Details on the Tokens and Authentication can be found in our [Auth Guide][auth-guide].
+Details on the Tokens and Authentication can be found in our [Auth Guide][https://slack.dev/python-slackclient/auth.html].
 
 ## Table of contents
 
@@ -30,18 +32,19 @@ Details on the Tokens and Authentication can be found in our [Auth Guide][auth-g
     * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
 * [Async Usage](#async-usage)
-    * [Slackclient as a script](slackclient-as-a-script)
-    * [Slackclient in a framework](slackclient-in-a-framework)
+    * [Slackclient as a script](#slackclient-as-a-script)
+    * [Slackclient in a framework](#slackclient-in-a-framework)
 * [Advanced Options](#advanced-options)
 * [Migrating from v1.x](#migrating-from-v1)
 * [Support](#support)
 
 ### Requirements
+
 ---
+
 This library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.x][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
 
 > **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
-
 
 ```bash
 python --version
@@ -55,12 +58,12 @@ python3 --version
 
 We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
-
 ```bash
 $ pip3 install slackclient
 ```
 
 ### Getting started tutorial
+
 ---
 
 We've created this [tutorial](/tutorial) to build a basic Slack app in less than 10 minutes. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
@@ -68,10 +71,10 @@ We've created this [tutorial](/tutorial) to build a basic Slack app in less than
 **[Read the tutorial to get started!](/tutorial)**
 
 ### Basic Usage of the Web Client
+
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage][basic-usage] guide
-
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage][https://slack.dev/python-slackclient/basic_usage.html] guide
 
 #### Sending a message to Slack
 
@@ -92,7 +95,6 @@ One of the most common use-cases is sending a message to Slack. If you want to s
 
 Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
 
-
 #### Uploading files to Slack
 
 We've changed the process for uploading files to Slack to be much easier and straight forward. You can now just include a path to the file directly in the API call and upload it that way. You can find the details on this api call [here][files.upload]
@@ -110,6 +112,7 @@ We've changed the process for uploading files to Slack to be much easier and str
 ```
 
 ### Basic Usage of the RTM Client
+
 ---
 
 The [Real Time Messaging (RTM) API][rtm-docs] is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
@@ -216,7 +219,7 @@ Interested in SSL or Proxy support? Simply use their built-in [SSL](https://docs
 ```python
 import os
 import slack
-    
+
 client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy=proxyinfo)
 
 ```
@@ -224,12 +227,15 @@ client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy
 We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
 
 ### Migrating from v1
+
 ---
-If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating. 
+
+If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.
 
 **[Check out the Migration Guide here!](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)**
 
 ### Support
+
 ---
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
@@ -237,15 +243,15 @@ If you get stuck, we’re here to help. The following are the best ways to get a
 Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
 Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
-
 <!-- Markdown links -->
+
 [pypi-image]: https://badge.fury.io/py/slackclient.svg
 [pypi-url]: https://pypi.python.org/pypi/slackclient
 [windows-build-status]: https://ci.appveyor.com/api/projects/status/rif04t60ptslj32x/branch/master?svg=true
 [windows-build-url]: https://ci.appveyor.com/project/slackapi/python-slackclient
 [travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
 [travis-url]: https://travis-ci.org/slackapi/python-slackclient
-[python-version]:  https://img.shields.io/pypi/pyversions/slackclient.svg
+[python-version]: https://img.shields.io/pypi/pyversions/slackclient.svg
 [codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
