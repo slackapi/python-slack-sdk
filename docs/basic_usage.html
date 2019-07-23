@@ -160,6 +160,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-0-2018-09-11">v1.3.0 (2018-09-11)</a></li>
@@ -251,7 +252,7 @@ as sending a regular message, but with an additional <code class="docutils liter
 <hr class="docutils" />
 <div class="section" id="formatting-with-block-kit">
 <h2>Formatting with Block Kit<a class="headerlink" href="#formatting-with-block-kit" title="Permalink to this headline">¶</a></h2>
-<p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/docs/block-kit">blocks</a>.</p>
+<p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/block-kit">blocks</a>.</p>
 <p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.</p>
 <p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
