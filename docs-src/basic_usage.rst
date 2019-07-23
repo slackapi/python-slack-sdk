@@ -50,7 +50,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 
 Formatting with Block Kit
 ------------------------------
-Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of `blocks <https://api.slack.com/docs/block-kit>`_.
+Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of `blocks <https://api.slack.com/block-kit>`_.
 
 The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.
 

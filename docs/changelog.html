@@ -160,6 +160,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-3-0-2018-09-11">v1.3.0 (2018-09-11)</a></li>
@@ -213,6 +214,21 @@
           <div class="card">
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v2-1-0-2019-07-01">
+<h2>v2.1.0 (2019-07-01)<a class="headerlink" href="#v2-1-0-2019-07-01" title="Permalink to this headline">¶</a></h2>
+<p><strong>New Features</strong>
+1. Type-hinted helper classes for building messages in v2 #400 (Thanks &#64;paul-griffith)</p>
+<p><strong>Breaking Changes</strong>
+1. [RTMClient] Converted the <cite>RTMClient#typing()</cite> function to async #446</p>
+<p><strong>Updates</strong>
+1. [RTMClient] Handle case in which aiohttp closes the websocket due to lack of ping responses. #453 (Thanks &#64;flyte)
+2. Modify package identifier in user agent to match v1.x identifier #418 (Thanks &#64;aoberoi)
+3. [WebClient] Fixed typo in Scheduled message #428 &amp; #435 (Thanks &#64;splinterific)
+4. Transform install_requires of ‘aiodns’ into extras_require. #440 (Thanks &#64;staticdev)</p>
+<p><strong>Thank you!!</strong>
+To everyone who’s opened, commented or reacted to an issue; this project is better because of you!
+Thank you for helping the Slack community!</p>
+</div>
 <div class="section" id="v2-0-0-2019-04-29">
 <h2>v2.0.0 (2019-04-29)<a class="headerlink" href="#v2-0-0-2019-04-29" title="Permalink to this headline">¶</a></h2>
 <p>[Original RFC](<a class="reference external" href="https://github.com/slackapi/python-slackclient/issues/384">https://github.com/slackapi/python-slackclient/issues/384</a>)
