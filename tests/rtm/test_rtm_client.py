@@ -19,11 +19,11 @@ class TestRTMClient(unittest.TestCase):
 
     def test_run_on_returns_callback(self):
         @slack.RTMClient.run_on(event="message")
-        def fn_used_elsewhere(**payload):
+        def fn_used_elsewhere(**_unusedPayload):
             pass
         
-        self.assertTrue(fn_used_elsewhere != None)
-        self.assertTrue(fn_used_elsewhere.__name__ == "fn_used_elsewhere")
+        self.assertIsNotNone(fn_used_elsewhere)
+        self.assertEqual(fn_used_elsewhere.__name__, "fn_used_elsewhere")
 
     def test_run_on_annotation_sets_callbacks(self):
         @slack.RTMClient.run_on(event="message")
