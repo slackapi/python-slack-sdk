@@ -66,9 +66,32 @@ class WebClient(BaseClient):
         removed at anytime.
     """
 
-    def admin_apps_approve(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Approve an app for installation on a workspace."""
+    def admin_apps_approve(
+        self, *, app_id: str = None, request_id: str = None, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Approve an app for installation on a workspace.
+
+        Either app_id or request_id is required.
+        These IDs can be obtained either directly via the app_requested event,
+        or by the admin.apps.requests.list method.
+
+        Args:
+            app_id (str): The id of the app to approve. e.g. 'A12345'
+            request_id (str): The id of the request to approve. e.g. 'Ar12345'
+        Raises:
+            SlackRequestError: If niether or both the `app_id` and `request_id` args are specified.
+        """
         self._validate_xoxp_token()
+
+        if app_id:
+            kwargs.update({"app_id": app_id})
+        elif request_id:
+            kwargs.update({"request_id": request_id})
+        else:
+            raise e.SlackRequestError(
+                "The app_id or request_id argument must be specified."
+            )
+
         return self.api_call("admin.apps.approve", json=kwargs)
 
     def admin_apps_requests_list(self, **kwargs) -> Union[Future, SlackResponse]:
