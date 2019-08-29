@@ -211,9 +211,14 @@ class BlockAttachment(Attachment):
         super().__init__(text="", color=color)
         self.blocks = list(blocks)
 
+    @JsonValidator("fields attribute cannot be populated on BlockAttachment")
+    def fields_attribute_absent(self):
+        return not self.fields
+
     def to_dict(self) -> dict:
         json = super().to_dict()
         json.update({"blocks": extract_json(self.blocks)})
+        del json["fields"]  # cannot supply fields and blocks at the same time
         return json
 
 
