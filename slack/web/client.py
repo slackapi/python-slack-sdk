@@ -66,6 +66,56 @@ class WebClient(BaseClient):
         removed at anytime.
     """
 
+    def admin_apps_approve(
+        self, *, app_id: str = None, request_id: str = None, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Approve an app for installation on a workspace.
+
+        Either app_id or request_id is required.
+        These IDs can be obtained either directly via the app_requested event,
+        or by the admin.apps.requests.list method.
+
+        Args:
+            app_id (str): The id of the app to approve. e.g. 'A12345'
+            request_id (str): The id of the request to approve. e.g. 'Ar12345'
+        Raises:
+            SlackRequestError: If niether or both the `app_id` and `request_id` args are specified.
+        """
+        self._validate_xoxp_token()
+
+        if app_id:
+            kwargs.update({"app_id": app_id})
+        elif request_id:
+            kwargs.update({"request_id": request_id})
+        else:
+            raise e.SlackRequestError(
+                "The app_id or request_id argument must be specified."
+            )
+
+        return self.api_call("admin.apps.approve", json=kwargs)
+
+    def admin_apps_requests_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List app requests for a team/workspace."""
+        self._validate_xoxp_token()
+        return self.api_call("admin.apps.requests.list", http_verb="GET", params=kwargs)
+
+    def admin_apps_restrict(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Restrict an app for installation on a workspace."""
+        self._validate_xoxp_token()
+        return self.api_call("admin.apps.restrict", json=kwargs)
+
+    def admin_users_session_reset(
+        self, *, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Wipes all valid sessions on all devices for a given user.
+
+        Args:
+            user_id (str): The ID of the user to wipe sessions for. e.g. 'W12345678'
+        """
+        self._validate_xoxp_token()
+        kwargs.update({"user_id": user_id})
+        return self.api_call("admin.users.session.reset", json=kwargs)
+
     def api_test(self, **kwargs) -> Union[Future, SlackResponse]:
         """Checks API calling code."""
         return self.api_call("api.test", json=kwargs)
@@ -666,6 +716,49 @@ class WebClient(BaseClient):
         """Lists & filters team files."""
         self._validate_xoxp_token()
         return self.api_call("files.list", http_verb="GET", params=kwargs)
+
+    def files_remote_info(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Retrieve information about a remote file added to Slack."""
+        return self.api_call("files.remote.info", http_verb="GET", params=kwargs)
+
+    def files_remote_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Retrieve information about a remote file added to Slack."""
+        return self.api_call("files.remote.list", http_verb="GET", params=kwargs)
+
+    def files_remote_add(
+        self, *, external_id: str, external_url: str, title: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Adds a file from a remote service.
+
+        Args:
+            external_id (str): Creator defined GUID for the file. e.g. '123456'
+            external_url (str): URL of the remote file. e.g. 'http://example.com/my_cloud_service_file/abc123'
+            title (str): Title of the file being shared. e.g. 'Danger, High Voltage!'
+        """
+        kwargs.update(
+            {"external_id": external_id, "external_url": external_url, "title": title}
+        )
+        return self.api_call("files.remote.add", http_verb="GET", params=kwargs)
+
+    def files_remote_update(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Updates an existing remote file."""
+        return self.api_call("files.remote.update", http_verb="GET", params=kwargs)
+
+    def files_remote_remove(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Remove a remote file."""
+        return self.api_call("files.remote.remove", http_verb="GET", params=kwargs)
+
+    def files_remote_share(
+        self, *, channels: Union[str, List[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Share a remote file into a channel.
+
+        Args:
+            channels (list): Comma-separated list of channel IDs where the file will be shared.
+                e.g. ['C1234567890', 'C2345678901']
+        """
+        kwargs.update({"channels": channels})
+        return self.api_call("files.remote.share", http_verb="GET", params=kwargs)
 
     def files_revokePublicURL(
         self, *, file: str, **kwargs
