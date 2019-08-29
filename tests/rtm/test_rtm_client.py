@@ -17,6 +17,14 @@ class TestRTMClient(unittest.TestCase):
     def tearDown(self):
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
+    def test_run_on_returns_callback(self):
+        @slack.RTMClient.run_on(event="message")
+        def fn_used_elsewhere(**_unused_payload):
+            pass
+        
+        self.assertIsNotNone(fn_used_elsewhere)
+        self.assertEqual(fn_used_elsewhere.__name__, "fn_used_elsewhere")
+
     def test_run_on_annotation_sets_callbacks(self):
         @slack.RTMClient.run_on(event="message")
         def say_run_on(**payload):
