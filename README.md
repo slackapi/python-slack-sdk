@@ -20,7 +20,7 @@ The **Python slackclient** allows interaction with:
 
 If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
 
-Details on the Tokens and Authentication can be found in our [Auth Guide][https://slack.dev/python-slackclient/auth.html].
+Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slackclient/auth.html).
 
 ## Table of contents
 
