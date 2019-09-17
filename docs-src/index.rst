@@ -15,9 +15,9 @@
 ==============================================
 Slack's APIs allow anyone to build full featured integrations that extend
 and expand the capabilites of your Slack workspace. These APIs allow you
-to build applications that interact with Slack just the people on your
+to build applications that interact with Slack just like the people on your
 team -- they can post messages, respond to events that happen -- as well
-as build compex UIs for getting work done.
+as build complex UIs for getting work done.
 
 To make it easier for Python programmers to build Slack applications, we've
 provided this open source SDK. |product_name| will let you get started building
