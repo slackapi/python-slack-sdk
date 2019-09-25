@@ -2,6 +2,25 @@
 Changelog
 ==============================================
 
+v2.2.0 (2019-09-25)
+-------------------
+**New Features**
+1. [WebClient] Adding new admin and remote files API methods. #501
+2. [WebClient] Adding new view API methods. #517
+
+**Updates**
+1. [Message Builders] Update BlockAttachment to not send invalid JSON due to fields attribute #473 (Thanks @paul-griffith)
+2. [Docs] Add RTM section for docs v2 #477 (Thanks @shanedewael)
+3. [Docs] Fix typo; recieved -> received #478 (Thanks @joakimnordling)
+4. [Docs] Fix block kit link & update docs #484 (Thanks @clavin)
+5. [RTMClient] Return callback from `RTMClient.run_on` #490 (Thanks @clavin)
+6. [Docs] Fix link to Auth Guide in readme #498 (Thanks @asherf)
+7. [Docs] Fix missing word and typo #512 (Thanks @marks)
+8. [Message Builders] bugfix for value length in button elements #514 (Thanks @avanderm)
+9. [Docs] Fixes formatting #515 (Thanks @vpetersson)
+10. [Docs] Improve a code snippet on README #516 (Thanks @seratch)
+11. [WebClient] Fixed an OAuth Headers bug and made the `token` param optional. #517
+
 v2.1.0 (2019-07-01)
 -------------------
 **New Features**
