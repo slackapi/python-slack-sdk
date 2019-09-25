@@ -163,6 +163,76 @@ See `chat.delete <https://api.slack.com/methods/chat.delete>`_ for more info.
 
 --------
 
+Opening a modal
+----------------------------------
+Modals allow you to collect data from users and display dynamic information in a focused surface.
+
+Modals use the same blocks that compose messages with the addition of an `input` block.
+
+.. code-block:: python
+
+  client.views_open(
+    trigger_id="3213746830.000023",
+    view={
+      type: "modal",
+      callback_id: "view_identifier",
+      title: {
+        type: "plain_text",
+        text: "Modal title"
+      },
+      blocks: [
+        {
+          type: "input",
+          label: {
+            type: "plain_text",
+            text: "Input label"
+          },
+          element: {
+            type: "plain_text_input",
+            action_id: "value_indentifier"
+          }
+        }
+      ]
+    }
+  )
+
+See `views.open <https://api.slack.com/methods/views.open>`_ more details and additional parameters.
+
+--------
+
+Updating and pushing modals
+-------------------
+You can dynamically update a view inside of a modal by calling `views.update` and passing the view ID returned in the previous `views.open` call.
+
+.. code-block:: python
+
+  client.views_update(
+    view_id="V123401"
+    view={
+      type: "modal",
+      callback_id: "view_identifier",
+      title: {
+        type: "plain_text",
+        text: "Modal title"
+      },
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "plain_text",
+            text: "An updated modal, indeed"
+          }
+        }
+      ]
+    }
+  )
+
+See `views.update <https://api.slack.com/methods/views.update>`_ for more info.
+
+If you want to push a new view onto the modal instead of updating an existing view, reference the `views.push <https://api.slack.com/methods/views.push>`_ documentation.
+
+--------
+
 Emoji reactions
 ---------------------------------------
 You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.
