@@ -1523,7 +1523,6 @@ class WebClient(BaseClient):
                 e.g. '12345.98765.abcd2358fdea'
             view (dict): The view payload.
         """
-        self._validate_xoxp_token()
         kwargs.update({"trigger_id": trigger_id, "view": view})
         return self.api_call("views.open", json=kwargs)
 
@@ -1544,7 +1543,6 @@ class WebClient(BaseClient):
                 e.g. '12345.98765.abcd2358fdea'
             view (dict): The view payload.
         """
-        self._validate_xoxp_token()
         kwargs.update({"trigger_id": trigger_id, "view": view})
         return self.api_call("views.push", json=kwargs)
 
@@ -1567,8 +1565,6 @@ class WebClient(BaseClient):
         Raises:
             SlackRequestError: Either view_id or external_id is required.
         """
-        self._validate_xoxp_token()
-
         if external_id:
             kwargs.update({"external_id": external_id})
         elif view_id:
