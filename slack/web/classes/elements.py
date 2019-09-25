@@ -78,7 +78,7 @@ class ButtonElement(InteractiveElement):
         return super().attributes.union({"style", "value"})
 
     text_max_length = 75
-    value_max_length = 75
+    value_max_length = 2000
 
     def __init__(
         self,

@@ -65,7 +65,7 @@ class ButtonElementTests(unittest.TestCase):
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
-                text="Button", action_id="button", value=STRING_301_CHARS
+                text="Button", action_id="button", value=STRING_3001_CHARS
             ).to_dict()
 
     def test_invalid_style(self):
