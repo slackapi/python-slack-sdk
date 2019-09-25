@@ -137,7 +137,7 @@ In our example below, we watch for a [message event][message-event] that contain
         data = payload['data']
         web_client = payload['web_client']
         rtm_client = payload['rtm_client']
-        if 'Hello' in data['text']:
+        if 'Hello' in data.get('text', []):
             channel_id = data['channel']
             thread_ts = data['ts']
             user = data['user']
