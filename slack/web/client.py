@@ -1124,10 +1124,8 @@ class WebClient(BaseClient):
             client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
             code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
         """
-        kwargs.update(
-            {"client_id": client_id, "client_secret": client_secret, "code": code}
-        )
-        return self.api_call("oauth.access", data=kwargs)
+        headers = {"client_id": client_id, "client_secret": client_secret, "code": code}
+        return self.api_call("oauth.access", data=kwargs, headers=headers)
 
     def pins_add(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
         """Pins an item to a channel.
@@ -1508,3 +1506,70 @@ class WebClient(BaseClient):
         """Set the profile information for a user."""
         self._validate_xoxp_token()
         return self.api_call("users.profile.set", json=kwargs)
+
+    def views_open(
+        self, *, trigger_id: str, view: dict, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Open a view for a user.​
+
+        Open a modal with a user by exchanging a trigger_id received
+        from another interaction.
+​
+        See the modals (https://api.slack.com/block-kit/surfaces/modals)
+        documentation to learn how to obtain triggers from interactive components.
+
+        Args:
+            trigger_id (str): Exchange a trigger to post to the user.
+                e.g. '12345.98765.abcd2358fdea'
+            view (dict): The view payload.
+        """
+        kwargs.update({"trigger_id": trigger_id, "view": view})
+        return self.api_call("views.open", json=kwargs)
+
+    def views_push(
+        self, *, trigger_id: str, view: dict, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Push a view onto the stack of a root view.
+
+        Push a new view onto the existing view stack by passing a view
+        payload and a valid trigger_id generated from an interaction
+        within the existing modal.
+
+        Read the modals documentation (https://api.slack.com/block-kit/surfaces/modals)
+        to learn more about the lifecycle and intricacies of views.
+
+        Args:
+            trigger_id (str): Exchange a trigger to post to the user.
+                e.g. '12345.98765.abcd2358fdea'
+            view (dict): The view payload.
+        """
+        kwargs.update({"trigger_id": trigger_id, "view": view})
+        return self.api_call("views.push", json=kwargs)
+
+    def views_update(
+        self, *, external_id: str = None, view_id: str = None, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Update an existing view.
+
+        Update a view by passing a new view definition along with the
+        view_id returned in views.open or the external_id.
+
+        See the modals documentation (https://api.slack.com/block-kit/surfaces/modals#updating_views)
+        to learn more about updating views and avoiding race conditions with the hash argument.
+
+        Args:
+            external_id (str): A unique identifier of the view set by the developer.
+                e.g. 'bmarley_view2'
+            view_id (str): A unique identifier of the view to be updated.
+                e.g. 'VMM512F2U'
+        Raises:
+            SlackRequestError: Either view_id or external_id is required.
+        """
+        if external_id:
+            kwargs.update({"external_id": external_id})
+        elif view_id:
+            kwargs.update({"view_id": view_id})
+        else:
+            raise e.SlackRequestError("Either view_id or external_id is required.")
+
+        return self.api_call("views.update", json=kwargs)

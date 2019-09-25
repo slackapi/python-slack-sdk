@@ -26,7 +26,7 @@ class BaseClient:
 
     def __init__(
         self,
-        token,
+        token=None,
         base_url=BASE_URL,
         timeout=30,
         loop: Optional[asyncio.AbstractEventLoop] = None,
@@ -56,10 +56,13 @@ class BaseClient:
             asyncio.set_event_loop(loop)
             return loop
 
-    def _get_headers(self, has_json, has_files):
+    def _get_headers(self, has_json, has_files, request_specific_headers):
         """Contructs the headers need for a request.
         Args:
             has_json (bool): Whether or not the request has json.
+            has_files (bool): Whether or not the request has files.
+            request_specific_headers (dict): Additional headers specified by the user for a specific request.
+
         Returns:
             The headers dictionary.
                 e.g. {
@@ -68,19 +71,28 @@ class BaseClient:
                     'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
                 }
         """
-        headers = {
+        final_headers = {
             "User-Agent": self._get_user_agent(),
-            "Authorization": "Bearer {}".format(self.token),
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         }
+
+        if self.token:
+            final_headers.update({"Authorization": "Bearer {}".format(self.token)})
+
+        # Merge headers specified at client initialization.
+        final_headers.update(self.headers)
+
+        # Merge headers specified for a specific request. i.e. oauth.access
+        final_headers.update(request_specific_headers)
+
         if has_json:
-            headers.update({"Content-Type": "application/json;charset=utf-8"})
+            final_headers.update({"Content-Type": "application/json;charset=utf-8"})
 
         if has_files:
             # These are set automatically by the aiohttp library.
-            headers.pop("Content-Type", None)
+            final_headers.pop("Content-Type", None)
 
-        return headers
+        return final_headers
 
     def api_call(
         self,
@@ -91,6 +103,7 @@ class BaseClient:
         data: Union[dict, FormData] = None,
         params: dict = None,
         json: dict = None,
+        headers: dict = {},
     ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
 
@@ -131,7 +144,7 @@ class BaseClient:
         api_url = self._get_url(api_method)
 
         req_args = {
-            "headers": self._get_headers(has_json, has_files),
+            "headers": self._get_headers(has_json, has_files, headers),
             "data": data,
             "files": files,
             "params": params,

@@ -127,6 +127,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#threading-messages">Threading Messages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-a-message">Updating a message</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-a-message">Deleting a message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#opening-a-modal">Opening a modal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-and-pushing-modals">Updating and pushing modals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#emoji-reactions">Emoji reactions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#listing-channels">Listing channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-a-channel-s-info">Getting a channel’s info</a></li>
@@ -345,6 +347,68 @@ article for more information.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.delete">chat.delete</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="opening-a-modal">
+<h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
+<p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
+<p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+  <span class="n">trigger_id</span><span class="o">=</span><span class="s2">&quot;3213746830.000023&quot;</span><span class="p">,</span>
+  <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+    <span class="n">callback_id</span><span class="p">:</span> <span class="s2">&quot;view_identifier&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+      <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Modal title&quot;</span>
+    <span class="p">},</span>
+    <span class="n">blocks</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+          <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span>
+        <span class="p">},</span>
+        <span class="n">element</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
+          <span class="n">action_id</span><span class="p">:</span> <span class="s2">&quot;value_indentifier&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/views.open">views.open</a> more details and additional parameters.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="updating-and-pushing-modals">
+<h2>Updating and pushing modals<a class="headerlink" href="#updating-and-pushing-modals" title="Permalink to this headline">¶</a></h2>
+<p>You can dynamically update a view inside of a modal by calling <cite>views.update</cite> and passing the view ID returned in the previous <cite>views.open</cite> call.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
+  <span class="n">view_id</span><span class="o">=</span><span class="s2">&quot;V123401&quot;</span>
+  <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+    <span class="n">callback_id</span><span class="p">:</span> <span class="s2">&quot;view_identifier&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+      <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Modal title&quot;</span>
+    <span class="p">},</span>
+    <span class="n">blocks</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+          <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;An updated modal, indeed&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/views.update">views.update</a> for more info.</p>
+<p>If you want to push a new view onto the modal instead of updating an existing view, reference the <a class="reference external" href="https://api.slack.com/methods/views.push">views.push</a> documentation.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="emoji-reactions">
