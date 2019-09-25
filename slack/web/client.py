@@ -1124,10 +1124,8 @@ class WebClient(BaseClient):
             client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
             code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
         """
-        kwargs.update(
-            {"client_id": client_id, "client_secret": client_secret, "code": code}
-        )
-        return self.api_call("oauth.access", data=kwargs)
+        headers = {"client_id": client_id, "client_secret": client_secret, "code": code}
+        return self.api_call("oauth.access", data=kwargs, headers=headers)
 
     def pins_add(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
         """Pins an item to a channel.
@@ -1509,7 +1507,9 @@ class WebClient(BaseClient):
         self._validate_xoxp_token()
         return self.api_call("users.profile.set", json=kwargs)
 
-    def views_open(self, *, trigger_id: str, view: dict, **kwargs) -> Union[Future, SlackResponse]:
+    def views_open(
+        self, *, trigger_id: str, view: dict, **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Open a view for a user.​
 
         Open a modal with a user by exchanging a trigger_id received
@@ -1527,7 +1527,9 @@ class WebClient(BaseClient):
         kwargs.update({"trigger_id": trigger_id, "view": view})
         return self.api_call("views.open", json=kwargs)
 
-    def views_push(self, *, trigger_id: str, view: dict, **kwargs) -> Union[Future, SlackResponse]:
+    def views_push(
+        self, *, trigger_id: str, view: dict, **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Push a view onto the stack of a root view.
 
         Push a new view onto the existing view stack by passing a view
@@ -1546,7 +1548,9 @@ class WebClient(BaseClient):
         kwargs.update({"trigger_id": trigger_id, "view": view})
         return self.api_call("views.push", json=kwargs)
 
-    def views_update(self, *, external_id: str = None, view_id: str = None, **kwargs) -> Union[Future, SlackResponse]:
+    def views_update(
+        self, *, external_id: str = None, view_id: str = None, **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Update an existing view.
 
         Update a view by passing a new view definition along with the
@@ -1570,8 +1574,6 @@ class WebClient(BaseClient):
         elif view_id:
             kwargs.update({"view_id": view_id})
         else:
-            raise e.SlackRequestError(
-                "Either view_id or external_id is required."
-            )
+            raise e.SlackRequestError("Either view_id or external_id is required.")
 
         return self.api_call("views.update", json=kwargs)
