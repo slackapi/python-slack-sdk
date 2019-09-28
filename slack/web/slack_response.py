@@ -70,6 +70,7 @@ class SlackResponse(object):
         self.data = data
         self.headers = headers
         self.status_code = status_code
+        self._initial_data = data
         self._client = client
         self._logger = logging.getLogger(__name__)
 
@@ -101,6 +102,7 @@ class SlackResponse(object):
             (SlackResponse) self
         """
         self._iteration = 0
+        self.data = self._initial_data
         return self
 
     def __next__(self):
