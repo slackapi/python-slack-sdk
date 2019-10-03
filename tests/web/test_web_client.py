@@ -86,6 +86,47 @@ class TestWebClient(unittest.TestCase):
             users = users + page["members"]
         self.assertTrue(len(users) == 4)
 
+    def test_response_can_be_paginated_multiple_times(self, mock_request):
+        # This test suite verifies the changes in #521 work as expected
+        page1 = {
+            "data": {
+                "ok": True,
+                "channels": [{"id": "C1"}],
+                "response_metadata": {"next_cursor": "has_page2"},
+            },
+            "status_code": 200,
+            "headers": {},
+        }
+        page2 = {
+            "data": {
+                "ok": True,
+                "channels": [{"id": "C2"}],
+                "response_metadata": {"next_cursor": "has_page3"},
+            },
+            "status_code": 200,
+            "headers": {},
+        }
+        page3 = {
+            "data": {"ok": True, "channels": [{"id": "C3"}]},
+            "status_code": 200,
+            "headers": {},
+        }
+        # The initial pagination
+        mock_request.response.side_effect = [page1, page2, page3]
+        response = self.client.channels_list(limit=1)
+        ids = []
+        for page in response:
+            ids.append(page["channels"][0]["id"])
+        self.assertEqual(ids, ["C1", "C2", "C3"])
+
+        # The second iteration starting with page 2
+        # (page1 is already cached in `response`)
+        mock_request.response.side_effect = [page2, page3]
+        ids = []
+        for page in response:
+            ids.append(page["channels"][0]["id"])
+        self.assertEqual(ids, ["C1", "C2", "C3"])
+
     def test_request_pagination_stops_when_next_cursor_is_missing(self, mock_request):
         mock_request.response.side_effect = [
             {
