@@ -119,7 +119,7 @@ class TestWebClient(unittest.TestCase):
             ids.append(page["channels"][0]["id"])
         self.assertEqual(ids, ["C1", "C2", "C3"])
 
-        # The second interation starting with page 2
+        # The second iteration starting with page 2
         # (page1 is already cached in `response`)
         mock_request.response.side_effect = [page2, page3]
         ids = []
