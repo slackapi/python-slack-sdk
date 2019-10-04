@@ -81,16 +81,16 @@ Slack provide a Web API that gives you the ability to build applications that in
 One of the most common use-cases is sending a message to Slack. If you want to send a message as your app, or as a user, this method can do both. In our examples, we specify the channel name, however it is recommended to use the `channel_id` where possible.
 
 ```python
-    import os
-    import slack
+import os
+import slack
 
-    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
 
-    response = client.chat_postMessage(
-        channel='#random',
-        text="Hello world!")
-    assert response["ok"]
-    assert response["message"]["text"] == "Hello world!"
+response = client.chat_postMessage(
+    channel='#random',
+    text="Hello world!")
+assert response["ok"]
+assert response["message"]["text"] == "Hello world!"
 ```
 
 Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
@@ -100,15 +100,15 @@ Here we also ensure that the response back from Slack is a successful one and th
 We've changed the process for uploading files to Slack to be much easier and straight forward. You can now just include a path to the file directly in the API call and upload it that way. You can find the details on this api call [here][files.upload]
 
 ```python
-    import os
-    import slack
+import os
+import slack
 
-    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
 
-    response = client.files_upload(
-        channels='#random',
-        file="my_file.pdf")
-    assert response["ok"]
+response = client.files_upload(
+    channels='#random',
+    file="my_file.pdf")
+assert response["ok"]
 ```
 
 ### Basic Usage of the RTM Client
@@ -129,28 +129,28 @@ information it receives. We also give you the ability to call our web client fro
 In our example below, we watch for a [message event][message-event] that contains "Hello" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
 ```python
-    import os
-    import slack
+import os
+import slack
 
-    @slack.RTMClient.run_on(event='message')
-    def say_hello(**payload):
-        data = payload['data']
-        web_client = payload['web_client']
-        rtm_client = payload['rtm_client']
-        if 'Hello' in data.get('text', []):
-            channel_id = data['channel']
-            thread_ts = data['ts']
-            user = data['user']
+@slack.RTMClient.run_on(event='message')
+def say_hello(**payload):
+    data = payload['data']
+    web_client = payload['web_client']
+    rtm_client = payload['rtm_client']
+    if 'Hello' in data.get('text', []):
+        channel_id = data['channel']
+        thread_ts = data['ts']
+        user = data['user']
 
-            web_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Hi <@{user}>!",
-                thread_ts=thread_ts
-            )
+        web_client.chat_postMessage(
+            channel=channel_id,
+            text=f"Hi <@{user}>!",
+            thread_ts=thread_ts
+        )
 
-    slack_token = os.environ["SLACK_API_TOKEN"]
-    rtm_client = slack.RTMClient(token=slack_token)
-    rtm_client.start()
+slack_token = os.environ["SLACK_API_TOKEN"]
+rtm_client = slack.RTMClient(token=slack_token)
+rtm_client.start()
 ```
 
 ### Async usage
