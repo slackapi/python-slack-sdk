@@ -16,6 +16,7 @@ def fake_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
         "json": json,
         "ssl": ANY,
         "proxy": ANY,
+        "auth": ANY,
     }
     return req_args
 
@@ -29,6 +30,7 @@ def fake_send_req_args(headers=ANY, data=ANY, params=ANY, json=ANY):
         "ssl": ANY,
         "proxy": ANY,
         "files": ANY,
+        "auth": ANY,
     }
     return req_args
 

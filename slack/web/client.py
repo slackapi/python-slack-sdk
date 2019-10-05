@@ -1124,8 +1124,12 @@ class WebClient(BaseClient):
             client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
             code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
         """
-        headers = {"client_id": client_id, "client_secret": client_secret, "code": code}
-        return self.api_call("oauth.access", data=kwargs, headers=headers)
+        kwargs.update({"code": code})
+        return self.api_call(
+            "oauth.access",
+            data=kwargs,
+            auth={"client_id": client_id, "client_secret": client_secret},
+        )
 
     def pins_add(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
         """Pins an item to a channel.
