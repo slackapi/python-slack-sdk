@@ -4,11 +4,22 @@ Changelog
 
 v2.2.0 (2019-09-25)
 -------------------
+**Updates**
+
+1. [Docs] Fix Indentation of Code Snippets in README.md #525 (Thanks @abhishekjiitr)
+2. [WebClient] Fix Web Client custom iterator #521 (Thanks @smaeda-ks)
+3. [WebClient] Oauth previously failed to pass along credentials properly. This is fixed now. #527
+4. [WebClient] When a SlackApiError occurs we're now passing the entire SlackResponse into the exception. #527
+
+v2.2.0 (2019-09-25)
+-------------------
 **New Features**
+
 1. [WebClient] Adding new admin and remote files API methods. #501
 2. [WebClient] Adding new view API methods. #517
 
 **Updates**
+
 1. [Message Builders] Update BlockAttachment to not send invalid JSON due to fields attribute #473 (Thanks @paul-griffith)
 2. [Docs] Add RTM section for docs v2 #477 (Thanks @shanedewael)
 3. [Docs] Fix typo; recieved -> received #478 (Thanks @joakimnordling)
@@ -24,12 +35,15 @@ v2.2.0 (2019-09-25)
 v2.1.0 (2019-07-01)
 -------------------
 **New Features**
+
 1. Type-hinted helper classes for building messages in v2 #400 (Thanks @paul-griffith)
 
 **Breaking Changes**
+
 1. [RTMClient] Converted the `RTMClient#typing()` function to async #446
 
 **Updates**
+
 1. [RTMClient] Handle case in which aiohttp closes the websocket due to lack of ping responses. #453 (Thanks @flyte)
 2. Modify package identifier in user agent to match v1.x identifier #418 (Thanks @aoberoi)
 3. [WebClient] Fixed typo in Scheduled message #428 & #435 (Thanks @splinterific)
@@ -41,10 +55,12 @@ Thank you for helping the Slack community!
 
 v2.0.0 (2019-04-29)
 -------------------
-[Original RFC](https://github.com/slackapi/python-slackclient/issues/384)
-[v2 PR](https://github.com/slackapi/python-slackclient/pull/394)
+`Original RFC <https://github.com/slackapi/python-slackclient/issues/384>`_
+
+`v2 PR <https://github.com/slackapi/python-slackclient/pull/394>`_
 
 **New Features**
+
 1. Client Decomposition: We’ve split the client into two.
 
   a. WebClient: A HTTP client focused on Slack's Web API.
@@ -61,7 +77,7 @@ v2.0.0 (2019-04-29)
 **Breaking Changes:**
 If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.
 
-[Check out the Migration Guide here!](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)
+`Check out the Migration Guide here! <https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x>`_
 
 **Thank you!**
 This release would not have been possible without the support of our community. Thank you to everyone who’s contributed to this release.

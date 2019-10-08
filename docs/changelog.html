@@ -163,6 +163,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#v2-2-0-2019-09-25">v2.2.0 (2019-09-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">v2.2.0 (2019-09-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
@@ -219,43 +220,65 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="v2-2-0-2019-09-25">
 <h2>v2.2.0 (2019-09-25)<a class="headerlink" href="#v2-2-0-2019-09-25" title="Permalink to this headline">¶</a></h2>
-<p><strong>New Features</strong>
-1. [WebClient] Adding new admin and remote files API methods. #501
-2. [WebClient] Adding new view API methods. #517</p>
-<p><strong>Updates</strong>
-1. [Message Builders] Update BlockAttachment to not send invalid JSON due to fields attribute #473 (Thanks &#64;paul-griffith)
-2. [Docs] Add RTM section for docs v2 #477 (Thanks &#64;shanedewael)
-3. [Docs] Fix typo; recieved -&gt; received #478 (Thanks &#64;joakimnordling)
-4. [Docs] Fix block kit link &amp; update docs #484 (Thanks &#64;clavin)
-5. [RTMClient] Return callback from <cite>RTMClient.run_on</cite> #490 (Thanks &#64;clavin)
-6. [Docs] Fix link to Auth Guide in readme #498 (Thanks &#64;asherf)
-7. [Docs] Fix missing word and typo #512 (Thanks &#64;marks)
-8. [Message Builders] bugfix for value length in button elements #514 (Thanks &#64;avanderm)
-9. [Docs] Fixes formatting #515 (Thanks &#64;vpetersson)
-10. [Docs] Improve a code snippet on README #516 (Thanks &#64;seratch)
-11. [WebClient] Fixed an OAuth Headers bug and made the <cite>token</cite> param optional. #517</p>
+<p><strong>Updates</strong></p>
+<ol class="arabic simple">
+<li><p>[Docs] Fix Indentation of Code Snippets in README.md #525 (Thanks &#64;abhishekjiitr)</p></li>
+<li><p>[WebClient] Fix Web Client custom iterator #521 (Thanks &#64;smaeda-ks)</p></li>
+<li><p>[WebClient] Oauth previously failed to pass along credentials properly. This is fixed now. #527</p></li>
+<li><p>[WebClient] When a SlackApiError occurs we’re now passing the entire SlackResponse into the exception. #527</p></li>
+</ol>
+</div>
+<div class="section" id="id1">
+<h2>v2.2.0 (2019-09-25)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>New Features</strong></p>
+<ol class="arabic simple">
+<li><p>[WebClient] Adding new admin and remote files API methods. #501</p></li>
+<li><p>[WebClient] Adding new view API methods. #517</p></li>
+</ol>
+<p><strong>Updates</strong></p>
+<ol class="arabic simple">
+<li><p>[Message Builders] Update BlockAttachment to not send invalid JSON due to fields attribute #473 (Thanks &#64;paul-griffith)</p></li>
+<li><p>[Docs] Add RTM section for docs v2 #477 (Thanks &#64;shanedewael)</p></li>
+<li><p>[Docs] Fix typo; recieved -&gt; received #478 (Thanks &#64;joakimnordling)</p></li>
+<li><p>[Docs] Fix block kit link &amp; update docs #484 (Thanks &#64;clavin)</p></li>
+<li><p>[RTMClient] Return callback from <cite>RTMClient.run_on</cite> #490 (Thanks &#64;clavin)</p></li>
+<li><p>[Docs] Fix link to Auth Guide in readme #498 (Thanks &#64;asherf)</p></li>
+<li><p>[Docs] Fix missing word and typo #512 (Thanks &#64;marks)</p></li>
+<li><p>[Message Builders] bugfix for value length in button elements #514 (Thanks &#64;avanderm)</p></li>
+<li><p>[Docs] Fixes formatting #515 (Thanks &#64;vpetersson)</p></li>
+<li><p>[Docs] Improve a code snippet on README #516 (Thanks &#64;seratch)</p></li>
+<li><p>[WebClient] Fixed an OAuth Headers bug and made the <cite>token</cite> param optional. #517</p></li>
+</ol>
 </div>
 <div class="section" id="v2-1-0-2019-07-01">
 <h2>v2.1.0 (2019-07-01)<a class="headerlink" href="#v2-1-0-2019-07-01" title="Permalink to this headline">¶</a></h2>
-<p><strong>New Features</strong>
-1. Type-hinted helper classes for building messages in v2 #400 (Thanks &#64;paul-griffith)</p>
-<p><strong>Breaking Changes</strong>
-1. [RTMClient] Converted the <cite>RTMClient#typing()</cite> function to async #446</p>
-<p><strong>Updates</strong>
-1. [RTMClient] Handle case in which aiohttp closes the websocket due to lack of ping responses. #453 (Thanks &#64;flyte)
-2. Modify package identifier in user agent to match v1.x identifier #418 (Thanks &#64;aoberoi)
-3. [WebClient] Fixed typo in Scheduled message #428 &amp; #435 (Thanks &#64;splinterific)
-4. Transform install_requires of ‘aiodns’ into extras_require. #440 (Thanks &#64;staticdev)</p>
+<p><strong>New Features</strong></p>
+<ol class="arabic simple">
+<li><p>Type-hinted helper classes for building messages in v2 #400 (Thanks &#64;paul-griffith)</p></li>
+</ol>
+<p><strong>Breaking Changes</strong></p>
+<ol class="arabic simple">
+<li><p>[RTMClient] Converted the <cite>RTMClient#typing()</cite> function to async #446</p></li>
+</ol>
+<p><strong>Updates</strong></p>
+<ol class="arabic simple">
+<li><p>[RTMClient] Handle case in which aiohttp closes the websocket due to lack of ping responses. #453 (Thanks &#64;flyte)</p></li>
+<li><p>Modify package identifier in user agent to match v1.x identifier #418 (Thanks &#64;aoberoi)</p></li>
+<li><p>[WebClient] Fixed typo in Scheduled message #428 &amp; #435 (Thanks &#64;splinterific)</p></li>
+<li><p>Transform install_requires of ‘aiodns’ into extras_require. #440 (Thanks &#64;staticdev)</p></li>
+</ol>
 <p><strong>Thank you!!</strong>
 To everyone who’s opened, commented or reacted to an issue; this project is better because of you!
 Thank you for helping the Slack community!</p>
 </div>
 <div class="section" id="v2-0-0-2019-04-29">
 <h2>v2.0.0 (2019-04-29)<a class="headerlink" href="#v2-0-0-2019-04-29" title="Permalink to this headline">¶</a></h2>
-<p>[Original RFC](<a class="reference external" href="https://github.com/slackapi/python-slackclient/issues/384">https://github.com/slackapi/python-slackclient/issues/384</a>)
-[v2 PR](<a class="reference external" href="https://github.com/slackapi/python-slackclient/pull/394">https://github.com/slackapi/python-slackclient/pull/394</a>)</p>
-<p><strong>New Features</strong>
-1. Client Decomposition: We’ve split the client into two.</p>
+<p><a class="reference external" href="https://github.com/slackapi/python-slackclient/issues/384">Original RFC</a></p>
+<p><a class="reference external" href="https://github.com/slackapi/python-slackclient/pull/394">v2 PR</a></p>
+<p><strong>New Features</strong></p>
+<ol class="arabic simple">
+<li><p>Client Decomposition: We’ve split the client into two.</p></li>
+</ol>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li><p>WebClient: A HTTP client focused on Slack’s Web API.</p></li>
@@ -276,7 +299,7 @@ Thank you for helping the Slack community!</p>
 </div></blockquote>
 <p><strong>Breaking Changes:</strong>
 If you’re migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.</p>
-<p>[Check out the Migration Guide here!](<a class="reference external" href="https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x">https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x</a>)</p>
+<p><a class="reference external" href="https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x">Check out the Migration Guide here!</a></p>
 <p><strong>Thank you!</strong>
 This release would not have been possible without the support of our community. Thank you to everyone who’s contributed to this release.</p>
 </div>
