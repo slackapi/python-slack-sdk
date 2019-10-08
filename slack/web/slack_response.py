@@ -173,7 +173,7 @@ class SlackResponse(object):
             self._logger.debug("Received the following response: %s", self.data)
             return self
         msg = "The request to the Slack API failed."
-        raise e.SlackApiError(message=msg, response=self.data)
+        raise e.SlackApiError(message=msg, response=self)
 
     @staticmethod
     def _next_cursor_is_present(data):

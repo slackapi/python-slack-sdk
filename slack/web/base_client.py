@@ -13,7 +13,7 @@ import hmac
 
 # ThirdParty Imports
 import aiohttp
-from aiohttp import FormData
+from aiohttp import FormData, BasicAuth
 
 # Internal Imports
 from slack.web.slack_response import SlackResponse
@@ -104,6 +104,7 @@ class BaseClient:
         params: dict = None,
         json: dict = None,
         headers: dict = {},
+        auth: dict = None,
     ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
 
@@ -143,6 +144,9 @@ class BaseClient:
 
         api_url = self._get_url(api_method)
 
+        if auth:
+            auth = BasicAuth(auth["client_id"], auth["client_secret"])
+
         req_args = {
             "headers": self._get_headers(has_json, has_files, headers),
             "data": data,
@@ -151,6 +155,7 @@ class BaseClient:
             "json": json,
             "ssl": self.ssl,
             "proxy": self.proxy,
+            "auth": auth,
         }
 
         if self._event_loop is None:
@@ -248,7 +253,9 @@ class BaseClient:
                     "status_code": res.status,
                 }
         async with aiohttp.ClientSession(
-            loop=self._event_loop, timeout=aiohttp.ClientTimeout(total=self.timeout)
+            loop=self._event_loop,
+            timeout=aiohttp.ClientTimeout(total=self.timeout),
+            auth=req_args.pop("auth"),
         ) as session:
             async with session.request(http_verb, api_url, **req_args) as res:
                 return {

@@ -170,6 +170,17 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackApiError):
             self.client.api_test()
 
+    def test_slack_api_rate_limiting_exception_returns_retry_after(self, mock_request):
+        mock_request.response.side_effect = [
+            {"data": {"ok": False}, "status_code": 429, "headers": {"Retry-After": 30}}
+        ]
+        with self.assertRaises(err.SlackApiError) as context:
+            self.client.api_test()
+        slack_api_error = context.exception
+        self.assertFalse(slack_api_error.response["ok"])
+        self.assertEqual(429, slack_api_error.response.status_code)
+        self.assertEqual(30, slack_api_error.response.headers["Retry-After"])
+
     def test_the_api_call_files_argument_creates_the_expected_data(self, mock_request):
         self.client.token = "xoxa-123"
         with mock.patch("builtins.open", mock.mock_open(read_data="fake")):
