@@ -137,9 +137,8 @@ class RTMClient(object):
         self._connection_attempts = 0
         self._stopped = False
         if self.event_handler is not None:
-            if len(self._callbacks) != 0:
-                raise ValueError("Setting an event handler implementation is incompatible with class-method based callback definitions, please use one or the other")
-
+            if self._callbacks:
+                raise ValueError("Setting an event_handler is incompatible with using RTMClient.on or run_on")
 
     @staticmethod
     def run_on(*, event: str):
@@ -429,12 +428,12 @@ class RTMClient(object):
         """
         if self.event_handler:
             try:
-                callback_list = [ getattr(self.event_handler, f"event_handler_{event}") ]
-            except AttributeError as e:
+                callback_list = [getattr(self.event_handler, f"event_handler_{event}")]
+            except AttributeError:
                 callback_list = []
         else:
             callback_list = self._callbacks[event]
-        if len(callback_list) == 0:
+        if not callback_list:
             self._logger.debug(f"no implementation for event: {event}")
         for callback in callback_list:
             self._logger.debug(
