@@ -115,6 +115,7 @@ class RTMClient(object):
         ping_interval: Optional[int] = 30,
         loop: Optional[asyncio.AbstractEventLoop] = None,
         headers: Optional[dict] = {},
+        event_handler: Optional[object] = None,
     ):
         self.token = token
         self.run_async = run_async
@@ -126,6 +127,7 @@ class RTMClient(object):
         self.connect_method = connect_method
         self.ping_interval = ping_interval
         self.headers = headers
+        self.event_handler = event_handler
         self._event_loop = loop or asyncio.get_event_loop()
         self._web_client = None
         self._websocket = None
@@ -134,6 +136,10 @@ class RTMClient(object):
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
+        if self.event_handler is not None:
+            if len(self._callbacks) != 0:
+                raise ValueError("Setting an event handler implementation is incompatible with class-method based callback definitions, please use one or the other")
+
 
     @staticmethod
     def run_on(*, event: str):
@@ -421,10 +427,19 @@ class RTMClient(object):
                 }
             }
         """
-        for callback in self._callbacks[event]:
+        if self.event_handler:
+            try:
+                callback_list = [ getattr(self.event_handler, f"event_handler_{event}") ]
+            except AttributeError as e:
+                callback_list = []
+        else:
+            callback_list = self._callbacks[event]
+        if len(callback_list) == 0:
+            self._logger.debug(f"no implementation for event: {event}")
+        for callback in callback_list:
             self._logger.debug(
                 "Running %s callbacks for event: '%s'",
-                len(self._callbacks[event]),
+                len(callback_list),
                 event,
             )
             try:
