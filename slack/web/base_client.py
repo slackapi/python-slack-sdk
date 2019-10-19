@@ -245,24 +245,29 @@ class BaseClient:
         Returns:
             A dictionary of the response data.
         """
+        session = None
         if self.session and not self.session.closed:
-            async with self.session.request(http_verb, api_url, **req_args) as res:
-                return {
-                    "data": await res.json(),
-                    "headers": res.headers,
-                    "status_code": res.status,
-                }
-        async with aiohttp.ClientSession(
-            loop=self._event_loop,
-            timeout=aiohttp.ClientTimeout(total=self.timeout),
-            auth=req_args.pop("auth"),
-        ) as session:
-            async with session.request(http_verb, api_url, **req_args) as res:
-                return {
-                    "data": await res.json(),
-                    "headers": res.headers,
-                    "status_code": res.status,
-                }
+            session = self.session
+        else:
+            session = aiohttp.ClientSession(
+                loop=self._event_loop,
+                timeout=aiohttp.ClientTimeout(total=self.timeout),
+                auth=req_args.pop("auth", None),
+            )
+
+        response = None
+        async with session.request(http_verb, api_url, **req_args) as res:
+            data = {}
+            try:
+                data = await res.json()
+            except aiohttp.ContentTypeError:
+                self._logger.debug(
+                    f"No response data returned from the following API call: {api_url}."
+                )
+            response = {"data": data, "headers": res.headers, "status_code": res.status}
+
+        await session.close()
+        return response
 
     @staticmethod
     def _get_user_agent():
