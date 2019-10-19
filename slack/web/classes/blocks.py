@@ -12,6 +12,7 @@ class Block(JsonObject):
 
     def __init__(self, *, subtype: str, block_id: Optional[str] = None):
         self.subtype = subtype
+        # subtype is actually the "type" parameter, but was renamed due to name already being used in Python Builtins.
         self.block_id = block_id
         self.color = None
 
@@ -206,3 +207,11 @@ class ContextBlock(Block):
         json = super().to_dict()
         json["elements"] = extract_json(self.elements)
         return json
+
+
+# TODO: Add the following blocks...
+# InputBlock
+# https://api.slack.com/reference/block-kit/blocks#input
+
+# FileBlock
+# https://api.slack.com/reference/block-kit/blocks#file
