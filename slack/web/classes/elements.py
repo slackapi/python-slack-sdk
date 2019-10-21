@@ -259,17 +259,20 @@ class StaticSelectElement(AbstractSelector):
 
     @JsonValidator(f"options attribute cannot exceed {options_max_length} elements")
     def options_length(self):
-        return len(self.options) <= self.options_max_length
+        return self.options is None or len(self.options) <= self.options_max_length
 
     @JsonValidator(
         f"option_groups attribute cannot exceed {option_groups_max_length} elements"
     )
     def option_groups_length(self):
-        return len(self.option_groups) <= self.option_groups_max_length
+        return (
+            self.option_groups is None
+            or len(self.option_groups) <= self.option_groups_max_length
+        )
 
     @JsonValidator(f"options and option_groups cannot both be specified")
     def options_and_option_groups_both_specified(self):
-        return self.options is not None and self.option_groups is not None
+        return not (self.options is not None and self.option_groups is not None)
 
     @JsonValidator(f"options or option_groups must be specified")
     def neither_options_or_option_groups_is_specified(self):
@@ -279,7 +282,7 @@ class StaticSelectElement(AbstractSelector):
         json = super().to_dict()
         if self.option_groups:
             json["option_groups"] = extract_json(self.option_groups, "block")
-        else:
+        elif self.options:
             json["options"] = extract_json(self.options, "block")
         if self.initial_option is not None:
             json["initial_option"] = extract_json(self.initial_option, "block")

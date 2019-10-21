@@ -52,7 +52,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         return self.get_non_null_attributes()
 
     def __repr__(self):
-        json = self.to_dict()
+        json = self.get_non_null_attributes()
         if json:
             return f"<slack.{self.__class__.__name__}: {json}>"
         return self.__str__()
