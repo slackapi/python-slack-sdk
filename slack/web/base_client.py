@@ -250,7 +250,6 @@ class BaseClient:
             session = self.session
         else:
             session = aiohttp.ClientSession(
-                loop=self._event_loop,
                 timeout=aiohttp.ClientTimeout(total=self.timeout),
                 auth=req_args.pop("auth", None),
             )
