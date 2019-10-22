@@ -323,7 +323,6 @@ class RTMClient(object):
             try:
                 self._connection_attempts += 1
                 async with aiohttp.ClientSession(
-                    loop=self._event_loop,
                     timeout=aiohttp.ClientTimeout(total=self.timeout),
                 ) as session:
                     self._session = session

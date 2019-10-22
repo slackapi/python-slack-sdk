@@ -1577,3 +1577,18 @@ class WebClient(BaseClient):
             raise e.SlackRequestError("Either view_id or external_id is required.")
 
         return self.api_call("views.update", json=kwargs)
+
+    def views_publish(
+        self, *, user_id: str, view: dict, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Publish a static view for a User.
+        Create or update the view that comprises an
+        app's Home tab (https://api.slack.com/surfaces/tabs)
+        for a specific user.
+        Args:
+            user_id (str): id of the user you want publish a view to.
+                e.g. 'U0BPQUNTA'
+            view (dict): The view payload.
+        """
+        kwargs.update({"user_id": user_id, "view": view})
+        return self.api_call("views.publish", json=kwargs)
