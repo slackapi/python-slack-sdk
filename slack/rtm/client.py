@@ -323,7 +323,7 @@ class RTMClient(object):
             try:
                 self._connection_attempts += 1
                 async with aiohttp.ClientSession(
-                    timeout=aiohttp.ClientTimeout(total=self.timeout),
+                    timeout=aiohttp.ClientTimeout(total=self.timeout)
                 ) as session:
                     self._session = session
                     url, data = await self._retreive_websocket_info()

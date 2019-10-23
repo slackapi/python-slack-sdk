@@ -2,6 +2,17 @@
 Changelog
 ==============================================
 
+v2.3.0 (2019-10-22)
+-------------------
+**New Features**
+
+1. [WebClient] Adding new views.publish Web API method. #540
+
+**Updates**
+
+1. [WebClient] Some server responses don't return json. Correcting initial assumption. #540
+2. [Maintenance] Add `py.typed` to mark the library to support type hinting #524s
+
 v2.2.1 (2019-10-08)
 -------------------
 **Updates**
