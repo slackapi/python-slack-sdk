@@ -246,7 +246,8 @@ class BaseClient:
             A dictionary of the response data.
         """
         session = None
-        if self.session and not self.session.closed:
+        use_running_session = self.session and not self.session.closed
+        if use_running_session:
             session = self.session
         else:
             session = aiohttp.ClientSession(
@@ -265,7 +266,8 @@ class BaseClient:
                 )
             response = {"data": data, "headers": res.headers, "status_code": res.status}
 
-        await session.close()
+        if not use_running_session:
+            await session.close()
         return response
 
     @staticmethod
