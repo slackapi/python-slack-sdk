@@ -1551,7 +1551,7 @@ class WebClient(BaseClient):
         return self.api_call("views.push", json=kwargs)
 
     def views_update(
-        self, *, external_id: str = None, view_id: str = None, **kwargs
+        self, *, view: dict, external_id: str = None, view_id: str = None, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Update an existing view.
 
@@ -1562,6 +1562,7 @@ class WebClient(BaseClient):
         to learn more about updating views and avoiding race conditions with the hash argument.
 
         Args:
+            view (dict): The view payload.
             external_id (str): A unique identifier of the view set by the developer.
                 e.g. 'bmarley_view2'
             view_id (str): A unique identifier of the view to be updated.
@@ -1569,6 +1570,7 @@ class WebClient(BaseClient):
         Raises:
             SlackRequestError: Either view_id or external_id is required.
         """
+        kwargs.update({"view": view})
         if external_id:
             kwargs.update({"external_id": external_id})
         elif view_id:
