@@ -2,6 +2,13 @@
 Changelog
 ==============================================
 
+v2.3.1 (2019-10-29)
+-------------------
+**Updates**
+
+1. [WebClient] Fixing a regression that causes the client to close sessions prematurely. #544 (Thanks @fatih-acar!) 
+2. [WebClient] Adding required missing `view` param to views.publish Web API method. #542
+
 v2.3.0 (2019-10-22)
 -------------------
 **New Features**
