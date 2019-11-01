@@ -241,7 +241,7 @@ If you're migrating from v1.x of slackclient to v2.x, Please follow our migratio
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
 Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
-Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+Visit the [Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
 <!-- Markdown links -->
 
@@ -267,7 +267,7 @@ Visit the [Bot Developer Hangout][bd-hangout] for getting help using Slack Devel
 [pypi]: https://pypi.python.org/pypi
 [pipenv]: https://pypi.org/project/pipenv/
 [gh-issues]: https://github.com/slackapi/python-slackclient/issues
-[bd-hangout]: http://community.botkit.ai/
+[slack-community]: http://slackcommunity.com/
 [dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
 [migration-guide]: documentation_v2/Migration.md
 [files.upload]: https://api.slack.com/methods/files.upload
