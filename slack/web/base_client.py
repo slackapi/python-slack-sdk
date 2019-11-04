@@ -56,7 +56,9 @@ class BaseClient:
             asyncio.set_event_loop(loop)
             return loop
 
-    def _get_headers(self, has_json, has_files, request_specific_headers):
+    def _get_headers(
+        self, has_json: bool, has_files: bool, request_specific_headers: Optional[dict]
+    ):
         """Contructs the headers need for a request.
         Args:
             has_json (bool): Whether or not the request has json.
@@ -82,8 +84,9 @@ class BaseClient:
         # Merge headers specified at client initialization.
         final_headers.update(self.headers)
 
-        # Merge headers specified for a specific request. i.e. oauth.access
-        final_headers.update(request_specific_headers)
+        # Merge headers specified for a specific request. e.g. oauth.access
+        if request_specific_headers:
+            final_headers.update(request_specific_headers)
 
         if has_json:
             final_headers.update({"Content-Type": "application/json;charset=utf-8"})
@@ -103,7 +106,7 @@ class BaseClient:
         data: Union[dict, FormData] = None,
         params: dict = None,
         json: dict = None,
-        headers: dict = {},
+        headers: dict = None,
         auth: dict = None,
     ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
