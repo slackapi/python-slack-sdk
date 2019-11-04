@@ -16,7 +16,7 @@ $ python3 app.py
 -> The Websocket connection has been opened.
 ```
 
-### 🎉 That's it. Congradulations! You've just built a Slack app. 🤖
+### 🎉 That's it. Congratulations! You've just built a Slack app. 🤖
 
 To demo the app, simply send the bot a message that says "start".
 
