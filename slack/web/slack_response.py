@@ -1,4 +1,4 @@
-"""A Python module for iteracting and consuming responses from Slack."""
+"""A Python module for interacting and consuming responses from Slack."""
 
 # Standard Imports
 import logging

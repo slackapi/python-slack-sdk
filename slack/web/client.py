@@ -1,4 +1,4 @@
-"""A Python module for iteracting with Slack's Web API."""
+"""A Python module for interacting with Slack's Web API."""
 
 # Standard Imports
 from typing import Union, List
