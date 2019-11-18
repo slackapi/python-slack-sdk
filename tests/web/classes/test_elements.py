@@ -84,7 +84,7 @@ class LinkButtonElementTests(unittest.TestCase):
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
                 "url": "http://google.com",
                 "type": "button",
-                "value": "",
+                "value": button.value,
                 "action_id": button.action_id,
             },
         )
