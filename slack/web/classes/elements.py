@@ -152,7 +152,12 @@ class LinkButtonElement(ButtonElement):
             style: "primary" or "danger" to add specific styling to this button.
         """
         random_id = "".join(random.choice(string.ascii_uppercase) for _ in range(16))
-        super().__init__(text=text, action_id=random_id, value="", style=style)
+        super().__init__(
+            text=text, 
+            action_id=random_id, 
+            value=random_id, 
+            style=style
+        )
         self.url = url
 
     @JsonValidator(f"url attribute cannot exceed {url_max_length} characters")
