@@ -7,7 +7,6 @@ import sys
 import logging
 import asyncio
 from typing import Optional, Union
-import inspect
 import hashlib
 import hmac
 
@@ -170,20 +169,6 @@ class BaseClient:
             return future
 
         return self._event_loop.run_until_complete(future)
-
-    def _validate_xoxp_token(self):
-        """Ensures that an xoxp token is used when the specified method is called.
-
-        Raises:
-            BotUserAccessError: If the API method is called with a Bot User OAuth Access Token.
-        """
-
-        if self.token.startswith("xoxb"):
-            method_name = inspect.stack()[1][3]
-            msg = "The method '{}' cannot be called with a Bot Token.".format(
-                method_name
-            )
-            raise err.BotUserAccessError(msg)
 
     def _get_url(self, api_method):
         """Joins the base Slack URL and an API method to form an absolute URL.
