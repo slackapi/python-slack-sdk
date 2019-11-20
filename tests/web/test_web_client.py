@@ -151,11 +151,6 @@ class TestWebClient(unittest.TestCase):
             req_args=fake_req_args(params={"limit": 2}),
         )
 
-    def test_xoxb_token_validation(self, mock_request):
-        with self.assertRaises(err.BotUserAccessError):
-            # Channels can only be created with xoxa tokens.
-            self.client.channels_create(name="test")
-
     def test_json_can_only_be_sent_with_post_requests(self, mock_request):
         with self.assertRaises(err.SlackRequestError):
             self.client.api_call("fake.method", http_verb="GET", json={})
