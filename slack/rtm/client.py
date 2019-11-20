@@ -1,4 +1,4 @@
-"""A Python module for iteracting with Slack's RTM API."""
+"""A Python module for interacting with Slack's RTM API."""
 
 # Standard Imports
 import os
