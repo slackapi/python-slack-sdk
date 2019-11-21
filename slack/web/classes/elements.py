@@ -159,6 +159,13 @@ class LinkButtonElement(ButtonElement):
     def url_length(self):
         return len(self.url) <= self.url_max_length
 
+    def to_dict(self) -> dict:
+        json = super().to_dict()
+        # LinkButtonElements don't use the value property so we can just remove it
+        if "value" in json:
+            del json["value"]
+        return json
+
 
 class AbstractSelector(InteractiveElement, metaclass=ABCMeta):
     placeholder_max_length = 150
