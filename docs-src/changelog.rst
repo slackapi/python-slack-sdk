@@ -2,6 +2,18 @@
 Changelog
 ==============================================
 
+v2.4.0 (2019-11-27)
+-------------------
+**New Features**
+
+1. [WebClient] Adding new admin.* Web API methods. #571
+
+**Updates**
+1. [WebClient] We're no longer validating token types for Web API methods. Improves compatibility with granular bot permisisons. #568 (Thanks @Smotko)
+2. [WebClient] Correcting typos in descriptions #554 (Thanks @phamk)
+3. [WebClient] Fixed 'iteracting' typo in library file headers #564 (Thanks @acabey)
+4. [Message Builders] Remove value from LinkButtonElement #563 (Thanks @pedroma)
+
 v2.3.1 (2019-10-29)
 -------------------
 **Updates**
