@@ -111,6 +111,196 @@ class WebClient(BaseClient):
         kwargs.update({"user_id": user_id})
         return self.api_call("admin.users.session.reset", json=kwargs)
 
+    def admin_inviteRequests_approve(
+        self, *, invite_request_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Approve a workspace invite request.
+
+        team_id is required if your Enterprise Grid org contains more than one workspace.
+
+        Args:
+            invite_request_id (str): ID of the request to invite. e.g. 'Ir1234'
+        """
+        kwargs.update({"invite_request_id": invite_request_id})
+        return self.api_call("admin.inviteRequests.approve", json=kwargs)
+
+    def admin_inviteRequests_approved_list(
+        self, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List all approved workspace invite requests."""
+        return self.api_call("admin.inviteRequests.approved.list", json=kwargs)
+
+    def admin_inviteRequests_denied_list(
+        self, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List all denied workspace invite requests."""
+        return self.api_call("admin.inviteRequests.denied.list", json=kwargs)
+
+    def admin_inviteRequests_deny(
+        self, *, invite_request_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Deny a workspace invite request.
+
+        Args:
+            invite_request_id (str): ID of the request to invite. e.g. 'Ir1234'
+        """
+        kwargs.update({"invite_request_id": invite_request_id})
+        return self.api_call("admin.inviteRequests.deny", json=kwargs)
+
+    def admin_inviteRequests_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List all pending workspace invite requests."""
+        return self.api_call("admin.inviteRequests.list", json=kwargs)
+
+    def admin_teams_admins_list(
+        self, *, team_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List all of the admins on a given workspace.
+
+        Args:
+            team_id (str): ID of the team.
+        """
+        kwargs.update({"team_id": team_id})
+        return self.api_call("admin.teams.admins.list", http_verb="GET", params=kwargs)
+
+    def admin_teams_create(
+        self, *, team_domain: str, team_name: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Create an Enterprise team.
+
+        Args:
+            team_domain (str): Team domain. e.g. 'slacksoftballteam'
+            team_name (str): Team name. e.g. 'Slack Softball Team'
+        """
+        kwargs.update({"team_domain": team_domain, "team_name": team_name})
+        return self.api_call("admin.teams.create", json=kwargs)
+
+    def admin_teams_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List all teams on an Enterprise organization."""
+        return self.api_call("admin.teams.list", json=kwargs)
+
+    def admin_teams_owners_list(
+        self, *, team_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List all of the admins on a given workspace.
+
+        Args:
+            team_id (str): ID of the team.
+        """
+        kwargs.update({"team_id": team_id})
+        return self.api_call("admin.teams.owners.list", http_verb="GET", params=kwargs)
+
+    def admin_teams_settings_setDescription(
+        self, *, team_id: str, description: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set the description of a given workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            description (str): Description of the team.
+        """
+        kwargs.update({"team_id": team_id, "description": description})
+        return self.api_call("admin.teams.settings.setDescription", json=kwargs)
+
+    def admin_teams_settings_setIcon(
+        self, *, team_id: str, image_url: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Sets the icon of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            image_url (str): Url of the icon.
+        """
+        kwargs.update({"team_id": team_id, "image_url": image_url})
+        return self.api_call(
+            "admin.teams.settings.setIcon", http_verb="GET", params=kwargs
+        )
+
+    def admin_teams_settings_setName(
+        self, *, team_id: str, name: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Sets the icon of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            name (str): Name of the team.
+        """
+        kwargs.update({"team_id": team_id, "name": name})
+        return self.api_call("admin.teams.settings.setName", json=kwargs)
+
+    def admin_users_assign(
+        self, *, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Add an Enterprise user to a workspace.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): ID of the user to add to the workspace.
+        """
+        kwargs.update({"team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.assign", json=kwargs)
+
+    def admin_users_invite(
+        self, *, team_id: str, email: str, channel_ids: List[str], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Invite a user to a workspace.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            email (str): The email address of the person to invite. e.g. 'joe@email.com'
+            channel_ids (list): A list of channel_ids for this user to join.
+                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
+        """
+        kwargs.update({"team_id": team_id, "email": email, "channel_ids": channel_ids})
+        return self.api_call("admin.users.invite", json=kwargs)
+
+    def admin_users_remove(
+        self, *, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Remove a user from a workspace.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        """
+        kwargs.update({"team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.remove", json=kwargs)
+
+    def admin_users_setAdmin(
+        self, *, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set an existing guest, regular user, or owner to be an admin user.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        """
+        kwargs.update({"team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.setAdmin", json=kwargs)
+
+    def admin_users_setOwner(
+        self, *, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set an existing guest, regular user, or admin user to be a workspace owner.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        """
+        kwargs.update({"team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.setOwner", json=kwargs)
+
+    def admin_users_setRegular(
+        self, *, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set an existing guest user, admin user, or owner to be a regular user.
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        """
+        kwargs.update({"team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.setRegular", json=kwargs)
+
     def api_test(self, **kwargs) -> Union[Future, SlackResponse]:
         """Checks API calling code."""
         return self.api_call("api.test", json=kwargs)
