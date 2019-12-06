@@ -1267,6 +1267,23 @@ class WebClient(BaseClient):
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("mpim.replies", http_verb="GET", params=kwargs)
 
+    def oauth_v2_access(
+        self, *, client_id: str, client_secret: str, code: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Exchanges a temporary OAuth verifier code for an access token.
+
+        Args:
+            client_id (str): Issued when you created your application. e.g. '4b39e9-752c4'
+            client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
+            code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
+        """
+        kwargs.update({"code": code})
+        return self.api_call(
+            "oauth.v2.access",
+            data=kwargs,
+            auth={"client_id": client_id, "client_secret": client_secret},
+        )
+
     def oauth_access(
         self, *, client_id: str, client_secret: str, code: str, **kwargs
     ) -> Union[Future, SlackResponse]:
