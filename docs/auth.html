@@ -162,6 +162,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-0-2019-10-22">v2.3.0 (2019-10-22)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-1-2019-10-08">v2.2.1 (2019-10-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-0-2019-09-25">v2.2.0 (2019-09-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
@@ -244,7 +250,7 @@ your workspace for changes to take effect.</p>
 </div>
 <div class="section" id="multiple-workspace-install">
 <h2>Multiple Workspace Install<a class="headerlink" href="#multiple-workspace-install" title="Permalink to this headline">¶</a></h2>
-<p>If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about <a class="reference external" href="https://api.slack.com/docs/oauth">how Slack handles Oauth</a>.</p>
+<p>If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocoal. You can read more about <a class="reference external" href="https://api.slack.com/docs/oauth">how Slack handles Oauth</a>.</p>
 <p>(The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we’ll use <a class="reference external" href="http://flask.pocoo.org/">Flask</a>.)</p>
 <p>To configure your app for OAuth, you’ll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from your <a class="reference external" href="https://api.slack.com/apps">app’s configuration page</a>. The scopes are determined by the functionality of the app – every method you wish to access has a corresponding scope and your app will need to request that scope in order to be able to access the method. Review Slack’s <a class="reference external" href="https://api.slack.com/docs/oauth-scopes">full list of OAuth scopes</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -261,14 +267,14 @@ your workspace for changes to take effect.</p>
 <p><strong>The OAuth initiation link</strong></p>
 <p>To begin the OAuth flow that will install your app on a workspace, you’ll need to provide the user with a link to Slack’s OAuth page. This can be a simple link to <a class="reference external" href="https://slack.com/oauth/authorize">https://slack.com/oauth/authorize</a> with <code class="docutils literal notranslate"><span class="pre">scope</span></code> and <code class="docutils literal notranslate"><span class="pre">client_id</span></code> query parameters, or you can use our pre-built <a class="reference external" href="https://api.slack.com/docs/slack-button">Add to Slack button</a> to do all the work for you.</p>
 <p>This link directs the user to Slack’s OAuth acceptance page, where the user will review and accept or refuse the permissions your app is requesting as defined by the scope(s).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/begin_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">pre_install</span><span class="p">():</span>
-  <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;&lt;a href=&quot;https://slack.com/oauth/authorize?scope={ oauth_scope }&amp;client_id={ client_id }&quot;&gt;Add to Slack&lt;/a&gt;&#39;</span>
+  <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;https://slack.com/oauth/authorize?scope={ oauth_scope }&amp;client_id={ client_id }&quot;&gt;Add to Slack&lt;/a&gt;&#39;</span>
 </pre></div>
 </div>
 <p><strong>The OAuth completion page</strong></p>
 <p>Once the user has agreed to the permissions you’ve requested, Slack will redirect the user to your auth completion page, which includes a <code class="docutils literal notranslate"><span class="pre">code</span></code> query string param. You’ll use the <code class="docutils literal notranslate"><span class="pre">code</span></code> param to call the <code class="docutils literal notranslate"><span class="pre">oauth.access</span></code> <a class="reference external" href="https://api.slack.com/methods/oauth.access">endpoint</a> that will finally grant you the token.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">post_install</span><span class="p">():</span>
   <span class="c1"># Retrieve the auth code from the request params</span>
     <span class="n">auth_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>

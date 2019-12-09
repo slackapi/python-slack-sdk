@@ -2,6 +2,12 @@
 Changelog
 ==============================================
 
+v2.5.0 (2019-12-09)
+-------------------
+**New Features**
+
+1. [WebClient] Adding new oauth.v2.access Web API method. #577
+
 v2.4.0 (2019-11-27)
 -------------------
 **New Features**
