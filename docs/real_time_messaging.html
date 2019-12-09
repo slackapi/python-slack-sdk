@@ -162,6 +162,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-0-2019-10-22">v2.3.0 (2019-10-22)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-1-2019-10-08">v2.2.1 (2019-10-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-0-2019-09-25">v2.2.0 (2019-09-25)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
@@ -231,7 +237,7 @@ information it receives. We also give you the ability to call our web client fro
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">RTMClient</span>
 
-<span class="nd">@RTMClient.run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+<span class="nd">@RTMClient</span><span class="o">.</span><span class="n">run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">):</span>
   <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
   <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
@@ -243,7 +249,7 @@ information it receives. We also give you the ability to call our web client fro
 
     <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
       <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
-      <span class="n">text</span><span class="o">=</span><span class="n">f</span><span class="s2">&quot;Hi &lt;@{user}&gt;!&quot;</span><span class="p">,</span>
+      <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{user}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
       <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
     <span class="p">)</span>
 
@@ -261,7 +267,7 @@ If you’d rather use <cite>rtm.start</cite> to establish the connection, which 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">RTMClient</span>
 
-<span class="nd">@RTMClient.run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+<span class="nd">@RTMClient</span><span class="o">.</span><span class="n">run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">):</span>
   <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
   <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
@@ -272,7 +278,7 @@ If you’d rather use <cite>rtm.start</cite> to establish the connection, which 
 
     <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
       <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
-      <span class="n">text</span><span class="o">=</span><span class="n">f</span><span class="s2">&quot;Hi &lt;@{user}&gt;!&quot;</span><span class="p">,</span>
+      <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{user}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
       <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
     <span class="p">)</span>
 
