@@ -98,7 +98,7 @@ Use the ``types`` parameter to request additional channels, including ``public_c
   client = slack.WebClient(slack_token)
 
   client.conversations_list(
-    types="public_channels, private_channels"
+    types="public_channel, private_channel"
   )
 
 See `conversations.list <https://api.slack.com/methods/conversations.list>`_ for more info.
