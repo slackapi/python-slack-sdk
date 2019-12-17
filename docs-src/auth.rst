@@ -41,7 +41,7 @@ For additional information, see the `Installing Apps <https://api.slack.com/slac
 
 Multiple Workspace Install
 ---------------------------------------------------
-If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocoal. You can read more about `how Slack handles Oauth <https://api.slack.com/docs/oauth>`_.
+If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about `how Slack handles Oauth <https://api.slack.com/docs/oauth>`_.
 
 (The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we'll use `Flask <http://flask.pocoo.org/>`_.)
 
