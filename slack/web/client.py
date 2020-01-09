@@ -92,6 +92,10 @@ class WebClient(BaseClient):
 
         return self.api_call("admin.apps.approve", json=kwargs)
 
+    def admin_apps_approved_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List approved apps for an org or workspace."""
+        return self.api_call("admin.apps.approved.list", http_verb="GET", params=kwargs)
+
     def admin_apps_requests_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List app requests for a team/workspace."""
         return self.api_call("admin.apps.requests.list", http_verb="GET", params=kwargs)
@@ -99,6 +103,10 @@ class WebClient(BaseClient):
     def admin_apps_restrict(self, **kwargs) -> Union[Future, SlackResponse]:
         """Restrict an app for installation on a workspace."""
         return self.api_call("admin.apps.restrict", json=kwargs)
+
+    def admin_apps_restricted_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List restricted apps for an org or workspace."""
+        return self.api_call("admin.apps.restricted.list", http_verb="GET", params=kwargs)
 
     def admin_users_session_reset(
         self, *, user_id: str, **kwargs
