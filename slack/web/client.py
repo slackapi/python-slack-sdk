@@ -261,6 +261,17 @@ class WebClient(BaseClient):
         kwargs.update({"team_id": team_id, "email": email, "channel_ids": channel_ids})
         return self.api_call("admin.users.invite", json=kwargs)
 
+    def admin_users_list(
+        self, *, team_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List users on a workspace
+
+        Args:
+            team_id (str): ID of the team. e.g. 'T1234'
+        """
+        kwargs.update({"team_id": team_id})
+        return self.api_call("admin.users.list", json=kwargs)
+
     def admin_users_remove(
         self, *, team_id: str, user_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -284,6 +295,19 @@ class WebClient(BaseClient):
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return self.api_call("admin.users.setAdmin", json=kwargs)
+
+    def admin_users_setExpiration(
+        self, *, expiration_ts: int, team_id: str, user_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set an expiration for a guest user.
+
+        Args:
+            expiration_ts (int): Timestamp when guest account should be disabled. e.g. '1234567890'
+            team_id (str): ID of the team. e.g. 'T1234'
+            user_id (str): The ID of the user to set an expiration for. e.g. 'W12345678'
+        """
+        kwargs.update({"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id})
+        return self.api_call("admin.users.setExpiration", json=kwargs)
 
     def admin_users_setOwner(
         self, *, team_id: str, user_id: str, **kwargs
