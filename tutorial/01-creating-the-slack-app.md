@@ -13,7 +13,7 @@
 
 - Navigate to **OAuth & Permissions** on the sidebar to add scopes to your app
 
-![OAuth and Permissions](assets/oauth-permissions.png)
+<img width="191" alt="OAuth and Permissions" src="assets/oauth-permissions.png">
 
 - Scroll down to the **Bot Token Scopes** section and click **Add an OAuth Scope**.
 
