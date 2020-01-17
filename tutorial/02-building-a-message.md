@@ -1,7 +1,8 @@
 # Building a message
+
 The code for this step is available [here](/tutorial/PythOnBoardingBot/onboarding_tutorial.py).
 
-> 💡 **[Block Kit](https://api.slack.com/block-kit)** is a new UI framework that offers you more control and flexibility when building messages for Slack. Comprised of "blocks," stackable bits of message UI, you can customize the order and appearance of information delivered by your app in Slack. Using the **[Block Kit Builder](https://api.slack.com/tools/block-kit-builder)** you can shuffle and stack blocks to quickly prototype app messages on Slack. When you're ready, we'll provide the message payload so all you have to do is copy and paste it into your app's code.
+> 💡 **[Block Kit](https://api.slack.com/block-kit)** is a UI framework for Slack apps that offers a balance of control and flexibility when building experiences in messages and other surfaces. Customize the order and appearance of information and guide users through your app's capabilities by composing, updating, sequencing, and stacking blocks — reusable components that work almost everywhere in Slack. You can experiment and prototype with Block Kit using the [Block Kit Builder](https://api.slack.com/tools/block-kit-builder).
 
 We're going to be using Block Kit to build our onboarding tutorial messages.
 
@@ -9,6 +10,7 @@ With Block Kit, we can create a message in Slack that looks like this:
 <img width="787" alt="Onboarding Message" src="https://user-images.githubusercontent.com/3329665/56854465-b84a6f80-68eb-11e9-9625-f45ac2d2fe18.png">
 
 By sending the following json payload:
+
 ```Python
 {
     "channel": "D0123456",
@@ -61,8 +63,10 @@ By sending the following json payload:
 ```
 
 To make this simpler, more pleasant and more productive we'll create a class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
+
 - Create a file called `onboarding_tutorial.py`
 - 🏁Add the following code into it:
+
 ```Python
 class OnboardingTutorial:
     """Constructs the onboarding message and stores the state of which tasks were completed."""
