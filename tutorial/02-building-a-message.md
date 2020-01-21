@@ -9,6 +9,7 @@ With Block Kit, we can create a message in Slack that looks like this:
 <img width="787" alt="Onboarding Message" src="https://user-images.githubusercontent.com/3329665/56854465-b84a6f80-68eb-11e9-9625-f45ac2d2fe18.png">
 
 By sending the following json payload:
+
 ```Python
 {
     "channel": "D0123456",
@@ -61,8 +62,10 @@ By sending the following json payload:
 ```
 
 To make this simpler, more pleasant and more productive we'll create a class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
+
 - Create a file called `onboarding_tutorial.py`.
 - 🏁Add the following code into it:
+
 ```Python
 class OnboardingTutorial:
     """Constructs the onboarding message and stores the state of which tasks were completed."""

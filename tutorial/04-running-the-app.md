@@ -6,11 +6,13 @@ Before you can run your app you need to put your bot token into the environment.
 <img width="786" alt="Copy the Bot token" src="https://user-images.githubusercontent.com/3329665/56845230-ec357e80-6872-11e9-83d4-5f953aee20b5.png">
 
 - Add this token to your environment variables:
+
 ```
 $ export SLACK_BOT_TOKEN='xoxb-XXXXXXXXXXXX-xxxxxxxxxxxx-XXXXXXXXXXXXXXXXXXXXXXXX'
 ```
 
 - 🏁Run your app
+
 ```
 $ python3 app.py
 -> The Websocket connection has been opened.

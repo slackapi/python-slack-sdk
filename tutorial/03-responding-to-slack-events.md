@@ -6,6 +6,7 @@ The code for this step is available [here](PythOnBoardingBot).
 
 - In the root directory create a "requirements.txt" file.
 - Add the following contents to that file and save the file.
+
 ```
 slackclient>=2.0.0
 certifi
@@ -13,6 +14,7 @@ certifi
 > 💡 **[Certifi](https://github.com/certifi/python-certifi)** is a carefully curated collection of Root Certificates for validating the trustworthiness of SSL certificates while verifying the identity of TLS hosts. It has been extracted from the Requests project.
 
 - Next you can install those dependencies by running the following command from your terminal:
+
 ```
 $ pip3 install -r requirements.txt
 -> Successfully installed slackclient-2.0.0
@@ -23,7 +25,9 @@ $ pip3 install -r requirements.txt
 - Create an `app.py` file to run the app.
 
 The first thing we'll need to do is import the code our app needs to run.
+
 - In `app.py` add the following code:
+
 ```Python
 import os
 import logging
@@ -34,13 +38,17 @@ from onboarding_tutorial import OnboardingTutorial
 ```
 
 Next we'll need our app to store some data. For simplicity we'll store our app data in-memory with the following data structure: `{"channel": {"user_id": OnboardingTutorial}}`.
+
 - Add the the following line to `app.py`:
+
 ```Python
 onboarding_tutorials_sent = {}
 ```
 
 Let's add a function that's responsible for creating and sending the onboarding welcome message to new users. We'll also save the time stamp of the message when it's posted so we can update this message in the future.
+
 - Add the following lines of code to `app.py`:
+
 ```Python
 def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
     # Create a new onboarding tutorial.
@@ -62,6 +70,7 @@ def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
         onboarding_tutorials_sent[channel] = {}
     onboarding_tutorials_sent[channel][user_id] = onboarding_tutorial
 ```
+
 **Note:** We're using the `WebClient` to send messages into Slack.
 > 💡 **[WebClient](/slack/web/client.py)** A WebClient allows apps to communicate with the Slack Platform's Web API. This client handles constructing and sending HTTP requests to Slack as well as parsing any responses received into a `SlackResponse` dictionary-like object.
 
@@ -74,6 +83,7 @@ In this tutorial we'll be using the RTM API via the `RTMClient`. If you're inter
 
 Back to our application, it's time to link our onboarding functionality to Slack events.
 - Add the following lines of code to `app.py`:
+
 ```Python
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
@@ -175,6 +185,7 @@ def message(**payload):
 
 Finally, we need to make our app runnable.
 - 🏁 Add the following lines of code to the end of `app.py`.
+
 ```Python
 if __name__ == "__main__":
     ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
@@ -182,6 +193,7 @@ if __name__ == "__main__":
     rtm_client = slack.RTMClient(token=slack_token, ssl=ssl_context)
     rtm_client.start()
 ```
+
 **Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
 
 **Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](PythOnBoardingBot/async_app.py).
