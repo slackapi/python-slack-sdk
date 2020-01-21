@@ -1,5 +1,5 @@
 # Building a message
-The code for this step is available [here](/tutorial/PythOnBoardingBot/onboarding_tutorial.py).
+The code for this step is available [here](PythOnBoardingBot/onboarding_tutorial.py).
 
 > 💡 **[Block Kit](https://api.slack.com/block-kit)** is a new UI framework that offers you more control and flexibility when building messages for Slack. Comprised of "blocks," stackable bits of message UI, you can customize the order and appearance of information delivered by your app in Slack. Using the **[Block Kit Builder](https://api.slack.com/tools/block-kit-builder)** you can shuffle and stack blocks to quickly prototype app messages on Slack. When you're ready, we'll provide the message payload so all you have to do is copy and paste it into your app's code.
 
@@ -144,8 +144,8 @@ class OnboardingTutorial:
 
 ---
 
-**Next section: [03 - Responding to Slack events](/tutorial/03-responding-to-slack-events.md).**
+**Next section: [03 - Responding to Slack events](03-responding-to-slack-events.md).**
 
-**Previous section: [01 - Creating the Slack app](/tutorial/01-creating-the-slack-app.md).**
+**Previous section: [01 - Creating the Slack app](01-creating-the-slack-app.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**

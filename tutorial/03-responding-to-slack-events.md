@@ -1,5 +1,5 @@
 # Responding to Slack events
-The code for this step is available [here](/tutorial/PythOnBoardingBot).
+The code for this step is available [here](PythOnBoardingBot).
 
 ## Install the dependencies
 > 💡 **[“Requirements files”](https://pip.pypa.io/en/stable/user_guide/#id12)** are files containing a list of items to be installed using pip install. Details on the format of the files are here: [Requirements File Format](https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format).
@@ -184,12 +184,12 @@ if __name__ == "__main__":
 ```
 **Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
 
-**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](/tutorial/PythOnBoardingBot/async_app.py).
+**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](PythOnBoardingBot/async_app.py).
 
 ---
 
-**Next section: [04 - Running the app](/tutorial/04-running-the-app.md).**
+**Next section: [04 - Running the app](04-running-the-app.md).**
 
-**Previous section: [02 - Building a message](/tutorial/02-building-a-message.md).**
+**Previous section: [02 - Building a message](02-building-a-message.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**

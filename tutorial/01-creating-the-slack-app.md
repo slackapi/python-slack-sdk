@@ -42,4 +42,4 @@ Next you'll need to authorize the app for the Bot User permissions.
 
 **Next section: [02 - Building a message](02-building-a-message.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**
