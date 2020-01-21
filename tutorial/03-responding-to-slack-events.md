@@ -34,13 +34,13 @@ from onboarding_tutorial import OnboardingTutorial
 ```
 
 Next we'll need our app to store some data. For simplicity we'll store our app data in-memory with the following data structure: `{"channel": {"user_id": OnboardingTutorial}}`.
-- Add the the following line to `app.py`.
+- Add the the following line to `app.py`:
 ```Python
 onboarding_tutorials_sent = {}
 ```
 
 Let's add a function that's responsible for creating and sending the onboarding welcome message to new users. We'll also save the time stamp of the message when it's posted so we can update this message in the future.
-- Add the following lines of code to `app.py`.
+- Add the following lines of code to `app.py`:
 ```Python
 def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
     # Create a new onboarding tutorial.
@@ -73,7 +73,7 @@ In this tutorial we'll be using the RTM API via the `RTMClient`. If you're inter
 > 💡 **[RTMClient](/slack/rtm/client.py)** An RTMClient allows apps to communicate with the Slack Platform's RTM API. The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives.
 
 Back to our application, it's time to link our onboarding functionality to Slack events.
-- Add the following lines of code to `app.py`.
+- Add the following lines of code to `app.py`:
 ```Python
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
