@@ -61,7 +61,7 @@ By sending the following json payload:
 ```
 
 To make this simpler, more pleasant and more productive we'll create a class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
-- Create a file called `onboarding_tutorial.py`
+- Create a file called `onboarding_tutorial.py`.
 - 🏁Add the following code into it:
 ```Python
 class OnboardingTutorial:
