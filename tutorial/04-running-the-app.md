@@ -23,6 +23,6 @@ To demo the app, simply send the bot a message that says "start".
 ![Onboarding](https://user-images.githubusercontent.com/3329665/56870674-ab02b300-69c7-11e9-9101-eb823235f3c2.gif)
 ---
 
-**Previous section: - [03 - Responding to Slack events](03-responding-to-slack-events.md).**
+**Previous section: [03 - Responding to Slack events](03-responding-to-slack-events.md).**
 
 **Back to the [Table of contents](README.md#table-of-contents).**
