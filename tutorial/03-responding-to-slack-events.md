@@ -11,6 +11,8 @@ The code for this step is available [here](/tutorial/PythOnBoardingBot).
 
 ```
 slackclient>=2.0.0
+slackeventsapi>=2.1.0
+Flask>=1.1.1
 certifi
 ```
 
