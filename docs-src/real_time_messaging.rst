@@ -11,6 +11,10 @@ and it supports most of the event types in the RTM API. If you'd like to use the
 
 The RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
+Events using the RTM API **must** use a classic Slack app (with a plain `bot` scope). If you already have a classic Slack app, you can use those credentials. 
+If you don't and need to use the RTM API, you can `create a classic Slack app <https://api.slack.com/apps?new_classic_app=1>`_. You can learn more in the 
+`API documentation <https://api.slack.com/authentication/basics#soon>`_.
+
 The event-driven architecture of this client allows you to simply
 link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
