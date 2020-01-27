@@ -13,6 +13,11 @@
 
 /* -- page layout ----------------------------------------------------------- */
 
+html {
+    /* CSS hack for macOS's scrollbar (see #1125) */
+    background-color: #FFFFFF;
+}
+
 body {
     font-family: sans-serif;
     font-size: 100%;
@@ -233,7 +238,7 @@ code {
     font-size: 0.95em;
 }
 
-th {
+th, dl.field-list > dt {
     background-color: #ede;
 }
 
