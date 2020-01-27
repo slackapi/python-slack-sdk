@@ -10,6 +10,7 @@ import inspect
 import signal
 from typing import Optional, Callable, DefaultDict
 from ssl import SSLContext
+from threading import current_thread, main_thread
 
 # ThirdParty Imports
 import asyncio
@@ -185,7 +186,7 @@ class RTMClient(object):
             SlackApiError: Unable to retreive RTM URL from Slack.
         """
         # TODO: Add Windows support for graceful shutdowns.
-        if os.name != "nt":
+        if os.name != "nt" and current_thread() == main_thread():
             signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
