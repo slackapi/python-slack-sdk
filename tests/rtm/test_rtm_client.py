@@ -94,5 +94,5 @@ class TestRTMClient(unittest.TestCase):
         with self.assertRaises(e.SlackApiError) as context:
             slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
-        expected_error = "Unable to retreive RTM URL from Slack"
+        expected_error = "Unable to retrieve RTM URL from Slack"
         self.assertIn(expected_error, str(context.exception))

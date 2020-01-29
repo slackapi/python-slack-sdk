@@ -79,7 +79,7 @@ class SlackResponse(object):
         return f"{self.data}"
 
     def __getitem__(self, key):
-        """Retreives any key from the data store.
+        """Retrieves any key from the data store.
 
         Note:
             This is implemented so users can reference the
@@ -106,7 +106,7 @@ class SlackResponse(object):
         return self
 
     def __next__(self):
-        """Retreives the next portion of results, if 'next_cursor' is present.
+        """Retrieves the next portion of results, if 'next_cursor' is present.
 
         Note:
             Some responses return collections of information
@@ -147,7 +147,7 @@ class SlackResponse(object):
             raise StopIteration
 
     def get(self, key, default=None):
-        """Retreives any key from the response data.
+        """Retrieves any key from the response data.
 
         Note:
             This is implemented so users can reference the
