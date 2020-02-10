@@ -54,30 +54,25 @@ class TestRTMClientFunctional(unittest.TestCase):
         app.router.add_get("/", self.websocket_handler)
         app.on_shutdown.append(self.on_shutdown)
         runner = web.AppRunner(app)
-        await
-        runner.setup()
+        await runner.setup()
         self.site = web.TCPSite(runner, "localhost", 8765)
-        await
-        self.site.start()
+        await self.site.start()
 
     async def websocket_handler(self, request):
         ws = web.WebSocketResponse()
-        await
-        ws.prepare(request)
+        await ws.prepare(request)
 
         request.app["websockets"].append(ws)
         try:
             async for msg in ws:
-                await
-                ws.send_json({"type": "message", "message_sent": msg.json()})
+                await ws.send_json({"type": "message", "message_sent": msg.json()})
         finally:
             request.app["websockets"].remove(ws)
         return ws
 
     async def on_shutdown(self, app):
         for ws in set(app["websockets"]):
-            await
-            ws.close(code=WSCloseCode.GOING_AWAY, message="Server shutdown")
+            await ws.close(code=WSCloseCode.GOING_AWAY, message="Server shutdown")
 
     # -------------------------------------------
 
@@ -181,8 +176,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         @slack.RTMClient.run_on(event="open")
         async def ping_message(**payload):
             rtm_client = payload["rtm_client"]
-            await
-            rtm_client.ping()
+            await rtm_client.ping()
 
         @slack.RTMClient.run_on(event="message")
         def check_message(**payload):
@@ -197,8 +191,7 @@ class TestRTMClientFunctional(unittest.TestCase):
         @slack.RTMClient.run_on(event="open")
         async def typing_message(**payload):
             rtm_client = payload["rtm_client"]
-            await
-            rtm_client.typing(channel="C01234567")
+            await rtm_client.typing(channel="C01234567")
 
         @slack.RTMClient.run_on(event="message")
         def check_message(**payload):
