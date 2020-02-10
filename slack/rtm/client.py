@@ -54,6 +54,9 @@ class RTMClient(object):
         loop (AbstractEventLoop): An event loop provided by asyncio.
             If None is specified we attempt to use the current loop
             with `get_event_loop`. Default is None.
+        disable_signals (bool): If True, slack client won't add signal handlers
+            to catch shutdown signals.  Useful if you want to create a custom shutdown
+            function.  Default is False.
 
     Methods:
         ping: Sends a ping message over the websocket to Slack.
@@ -114,6 +117,7 @@ class RTMClient(object):
         ping_interval: Optional[int] = 30,
         loop: Optional[asyncio.AbstractEventLoop] = None,
         headers: Optional[dict] = {},
+        disable_signals: Optional[bool] = False,
     ):
         self.token = token.strip()
         self.run_async = run_async
