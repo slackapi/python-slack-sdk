@@ -24,7 +24,7 @@ class TestRTMClient(unittest.TestCase):
         @slack.RTMClient.run_on(event="message")
         def fn_used_elsewhere(**_unused_payload):
             pass
-
+        
         self.assertIsNotNone(fn_used_elsewhere)
         self.assertEqual(fn_used_elsewhere.__name__, "fn_used_elsewhere")
 
