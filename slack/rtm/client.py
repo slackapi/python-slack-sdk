@@ -116,7 +116,7 @@ class RTMClient(object):
         loop: Optional[asyncio.AbstractEventLoop] = None,
         headers: Optional[dict] = {},
     ):
-        self.token = token
+        self.token = token.strip()
         self.run_async = run_async
         self.auto_reconnect = auto_reconnect
         self.ssl = ssl
