@@ -97,9 +97,8 @@ class TestRTMClientFunctional(unittest.TestCase):
 
             if rtm_client._connection_attempts == 1:
                 raise e.SlackApiError("Test Error", {"headers": {"Retry-After": 0.001}})
-            else:
-                self.assertEqual(rtm_client._connection_attempts, 2)
-                rtm_client.stop()
+            self.assertEqual(rtm_client._connection_attempts, 2)
+            rtm_client.stop()
 
         self.client.auto_reconnect = True
         self.client.start()
