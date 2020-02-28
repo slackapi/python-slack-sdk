@@ -74,6 +74,15 @@ class SlackResponse(object):
         self._client = client
         self._logger = logging.getLogger(__name__)
 
+    def _get_event_loop(self):
+        """Retrieves the event loop or creates a new one."""
+        try:
+            return asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            return loop
+
     def __str__(self):
         """Return the Response data if object is converted to a string."""
         return f"{self.data}"
@@ -132,7 +141,7 @@ class SlackResponse(object):
                 {"cursor": self.data["response_metadata"]["next_cursor"]}
             )
 
-            response = asyncio.get_event_loop().run_until_complete(
+            response = self._get_event_loop().run_until_complete(
                 self._client._request(
                     http_verb=self.http_verb,
                     api_url=self.api_url,
@@ -170,7 +179,7 @@ class SlackResponse(object):
             SlackApiError: The request to the Slack API failed.
         """
         if self.status_code == 200 and self.data.get("ok", False):
-            self._logger.debug("Received the following response: %s", self.data)
+            self._logger.debug(u"Received the following response: %s", self.data)
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
