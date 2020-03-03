@@ -35,7 +35,7 @@ class BaseClient:
         session=None,
         headers: Optional[dict] = None,
     ):
-        self.token = token
+        self.token = token.strip()
         self.base_url = base_url
         self.timeout = timeout
         self.ssl = ssl

@@ -41,11 +41,11 @@ For additional information, see the `Installing Apps <https://api.slack.com/slac
 
 Multiple Workspace Install
 ---------------------------------------------------
-If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about `how Slack handles Oauth <https://api.slack.com/docs/oauth>`_.
+If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about `how Slack handles Oauth <https://api.slack.com/authentication/oauth-v2>`_.
 
 (The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we'll use `Flask <http://flask.pocoo.org/>`_.)
 
-To configure your app for OAuth, you'll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from your `app's configuration page <https://api.slack.com/apps>`_. The scopes are determined by the functionality of the app -- every method you wish to access has a corresponding scope and your app will need to request that scope in order to be able to access the method. Review Slack's `full list of OAuth scopes <https://api.slack.com/docs/oauth-scopes>`_.
+To configure your app for OAuth, you'll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from your `app's configuration page <https://api.slack.com/apps>`_. The scopes are determined by the functionality of the app -- every method you wish to access has a corresponding scope and your app will need to request that scope in order to be able to access the method. Review Slack's `full list of OAuth scopes <https://api.slack.com/scopes>`_.
 
 .. code-block:: python
 
@@ -69,11 +69,11 @@ This link directs the user to Slack's OAuth acceptance page, where the user will
 
   @app.route("/begin_auth", methods=["GET"])
   def pre_install():
-    return f'<a href="https://slack.com/oauth/authorize?scope={ oauth_scope }&client_id={ client_id }">Add to Slack</a>'
+    return f'<a href="https://slack.com/oauth/v2/authorize?scope={ oauth_scope }&client_id={ client_id }">Add to Slack</a>'
 
 **The OAuth completion page**
 
-Once the user has agreed to the permissions you've requested, Slack will redirect the user to your auth completion page, which includes a ``code`` query string param. You'll use the ``code`` param to call the ``oauth.access`` `endpoint <https://api.slack.com/methods/oauth.access>`_ that will finally grant you the token.
+Once the user has agreed to the permissions you've requested, Slack will redirect the user to your auth completion page, which includes a ``code`` query string param. You'll use the ``code`` param to call the ``oauth.v2.access`` `endpoint <https://api.slack.com/methods/oauth.v2.access>`_ that will finally grant you the token.
 
 .. code-block:: python
 
@@ -86,23 +86,20 @@ Once the user has agreed to the permissions you've requested, Slack will redirec
       client = slack.WebClient(token="")
 
     # Request the auth tokens from Slack
-      response = client.oauth_access(
+      response = client.oauth_v2_access(
           client_id=client_id,
           client_secret=client_secret,
           code=auth_code
       )
 
-A successful request to ``oauth.access`` will yield a JSON payload with at least one token, a user token that begins with ``xoxp``. This ``user`` token is used to make requests on behalf of the user who installed the app.
-
-If your Slack app includes a `bot user <https://api.slack.com/docs/bots>`_, the JSON response will contain an additional node containing an ``xoxb`` token to be used for on behalf of the bot user. When you intend to act on behalf of the bot user, be sure to use this token instead of the user (``xoxp``) token.
+A successful request to ``oauth.v2.access`` will yield a JSON payload with at least one token, a bot token that begins with ``xoxb``.
 
 .. code-block:: python
 
 
   # Save the bot token to an environmental variable or to your data store
   # for later use
-  os.environ["SLACK_USER_TOKEN"] = response['access_token']
-  os.environ["SLACK_BOT_TOKEN"] = response['bot']['bot_access_token']
+  os.environ["SLACK_BOT_TOKEN"] = response['access_token']
 
   # Don't forget to let the user know that auth has succeeded!
   return "Auth complete!"

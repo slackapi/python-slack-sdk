@@ -116,7 +116,7 @@ class RTMClient(object):
         loop: Optional[asyncio.AbstractEventLoop] = None,
         headers: Optional[dict] = {},
     ):
-        self.token = token
+        self.token = token.strip()
         self.run_async = run_async
         self.auto_reconnect = auto_reconnect
         self.ssl = ssl
@@ -182,7 +182,7 @@ class RTMClient(object):
         is lost unintentionally or an exception is thrown.
 
         Raises:
-            SlackApiError: Unable to retreive RTM URL from Slack.
+            SlackApiError: Unable to retrieve RTM URL from Slack.
         """
         # TODO: Add Windows support for graceful shutdowns.
         if os.name != "nt":
@@ -305,7 +305,7 @@ class RTMClient(object):
         return self._last_message_id
 
     async def _connect_and_read(self):
-        """Retreives the WS url and connects to Slack's RTM API.
+        """Retrieves the WS url and connects to Slack's RTM API.
 
         Makes an authenticated call to Slack's Web API to retrieve
         a websocket URL. Then connects to the message server and
@@ -316,7 +316,7 @@ class RTMClient(object):
         is lost unintentionally or an exception is thrown.
 
         Raises:
-            SlackApiError: Unable to retreive RTM URL from Slack.
+            SlackApiError: Unable to retrieve RTM URL from Slack.
             websockets.exceptions: Errors thrown by the 'websockets' library.
         """
         while not self._stopped:
@@ -326,7 +326,7 @@ class RTMClient(object):
                     timeout=aiohttp.ClientTimeout(total=self.timeout)
                 ) as session:
                     self._session = session
-                    url, data = await self._retreive_websocket_info()
+                    url, data = await self._retrieve_websocket_info()
                     async with session.ws_connect(
                         url,
                         heartbeat=self.ping_interval,
@@ -464,8 +464,8 @@ class RTMClient(object):
 
             future.result()
 
-    async def _retreive_websocket_info(self):
-        """Retreives the WebSocket info from Slack.
+    async def _retrieve_websocket_info(self):
+        """Retrieves the WebSocket info from Slack.
 
         Returns:
             A tuple of websocket information.
@@ -483,7 +483,7 @@ class RTMClient(object):
             )
 
         Raises:
-            SlackApiError: Unable to retreive RTM URL from Slack.
+            SlackApiError: Unable to retrieve RTM URL from Slack.
         """
         if self._web_client is None:
             self._web_client = WebClient(
@@ -503,7 +503,7 @@ class RTMClient(object):
             resp = await self._web_client.rtm_connect()
         url = resp.get("url")
         if url is None:
-            msg = "Unable to retreive RTM URL from Slack."
+            msg = "Unable to retrieve RTM URL from Slack."
             raise client_err.SlackApiError(message=msg, response=resp)
         return url, resp.data
 
