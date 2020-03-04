@@ -75,7 +75,7 @@ class SlackResponse(object):
         self._logger = logging.getLogger(__name__)
 
     @staticmethod
-    def _get_event_loop(cls):
+    def _get_event_loop():
         """Retrieves the event loop or creates a new one."""
         try:
             return asyncio.get_event_loop()
