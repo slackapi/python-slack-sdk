@@ -1,6 +1,6 @@
 # Responding to Slack events
 
-The code for this step is available [here](/tutorial/PythOnBoardingBot).
+The code for this step is available [here](PythOnBoardingBot).
 
 ## Install the dependencies
 
@@ -65,7 +65,7 @@ onboarding_tutorials_sent = {}
 
 Let's add a function that's responsible for creating and sending the onboarding welcome message to new users. We'll also save the time stamp of the message when it's posted so we can update this message in the future.
 
-- Add the following lines of code to `app.py`.
+- Add the following lines of code to `app.py`:
 
 ```Python
 def start_onboarding(user_id: str, channel: str):
@@ -103,7 +103,7 @@ In this tutorial we'll be using the Events API and the [SlackEventAdapter](https
 
 Back to our application, it's time to link our onboarding functionality to Slack events.
 
-- Add the following lines of code to `app.py`.
+- Add the following lines of code to `app.py`:
 
 ```Python
 # ================ Team Join Event =============== #
@@ -223,12 +223,12 @@ if __name__ == "__main__":
 
 **Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
 
-**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](/tutorial/PythOnBoardingBot/async_app.py).
+**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](PythOnBoardingBot/async_app.py).
 
 ---
 
-**Next section: [04 - Running the app](/tutorial/04-running-the-app.md).**
+**Next section: [04 - Running the app](04-running-the-app.md).**
 
-**Previous section: [02 - Building a message](/tutorial/02-building-a-message.md).**
+**Previous section: [02 - Building a message](02-building-a-message.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**

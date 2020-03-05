@@ -1,6 +1,6 @@
 # Building a message
 
-The code for this step is available [here](/tutorial/PythOnBoardingBot/onboarding_tutorial.py).
+The code for this step is available [here](PythOnBoardingBot/onboarding_tutorial.py).
 
 > 💡 **[Block Kit](https://api.slack.com/block-kit)** is a UI framework for Slack apps that offers a balance of control and flexibility when building experiences in messages and other surfaces. Customize the order and appearance of information and guide users through your app's capabilities by composing, updating, sequencing, and stacking blocks — reusable components that work almost everywhere in Slack. You can experiment and prototype with Block Kit using the [Block Kit Builder](https://api.slack.com/tools/block-kit-builder).
 
@@ -64,7 +64,7 @@ By sending the following json payload:
 
 To make this simpler, more pleasant and more productive we'll create a class that's responsible for building it. We'll also store the state of which tasks were completed so that it's easy to update existing messages.
 
-- Create a file called `onboarding_tutorial.py`
+- Create a file called `onboarding_tutorial.py`.
 - 🏁Add the following code into it:
 
 ```Python
@@ -148,8 +148,8 @@ class OnboardingTutorial:
 
 ---
 
-**Next section: [03 - Responding to Slack events](/tutorial/03-responding-to-slack-events.md).**
+**Next section: [03 - Responding to Slack events](03-responding-to-slack-events.md).**
 
-**Previous section: [01 - Creating the Slack app](/tutorial/01-creating-the-slack-app.md).**
+**Previous section: [01 - Creating the Slack app](01-creating-the-slack-app.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**

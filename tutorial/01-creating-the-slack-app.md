@@ -3,7 +3,7 @@
 > 💡 Build useful apps, internal tools, simplified workflows, or brillant bots for just your team or Slack's millions of users.
 
 - To get started, create a new Slack App on [api.slack.com](https://api.slack.com/apps?new_granular_bot_app=1).
-  1. Type in your app name
+  1. Type in your app name.
   2. Select the workspace you'd like to build your app on. We recommend using a workspace where you won't disrupt real work getting done — [you can create one for free](https://slack.com/get-started#create).
      <img width="570" alt="Create-A-Slack-App" src="https://user-images.githubusercontent.com/3329665/56550657-13224680-653b-11e9-8f91-15c17e6977b7.png">
 
@@ -44,4 +44,4 @@ Next you'll need to authorize the app for the Bot User permissions.
 
 **Next section: [02 - Building a message](02-building-a-message.md).**
 
-**Back to the [Table of contents](/tutorial/#table-of-contents).**
+**Back to the [Table of contents](README.md#table-of-contents).**
