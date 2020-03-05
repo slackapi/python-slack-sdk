@@ -234,7 +234,7 @@ If you don’t and need to use the RTM API, you can <a class="reference external
 link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives. We also give you the ability to call our web client from inside your callbacks.</p>
-<p>In our example below, we watch for a <a class="reference external" href="https://api.slack.com/events/message">message event</a> that contains “Hello” and if its recieved, we call the <cite>say_hello()</cite> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
+<p>In our example below, we watch for a <a class="reference external" href="https://api.slack.com/events/message">message event</a> that contains “Hello” and if its received, we call the <cite>say_hello()</cite> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
 <div class="section" id="connecting-to-the-rtm-api">
 <h2>Connecting to the RTM API<a class="headerlink" href="#connecting-to-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>

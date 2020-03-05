@@ -1,6 +1,6 @@
 # Create a Slack app
 
-> 💡 Build useful apps, internal tools, simplified workflows, or brillant bots for just your team or Slack's millions of users.
+> 💡 Build useful apps, internal tools, simplified workflows, or brilliant bots for just your team or Slack's millions of users.
 
 - To get started, create a new Slack App on [api.slack.com](https://api.slack.com/apps?new_granular_bot_app=1).
   1. Type in your app name.
@@ -27,7 +27,7 @@ _If you want to change your bot user's name, click on **Bot User** in the left s
 
 ### Install the app in your workspace
 
-- Scoll up to the top of the **OAuth & Permissions** pages and click the green "Install App to Workspace" button.
+- Scroll up to the top of the **OAuth & Permissions** pages and click the green "Install App to Workspace" button.
 
 ![Install Slack app to workspace](assets/oauth-installation.png)
 

@@ -14,7 +14,7 @@
 |product_name|
 ==============================================
 Slack's APIs allow anyone to build full featured integrations that extend
-and expand the capabilites of your Slack workspace. These APIs allow you
+and expand the capabilities of your Slack workspace. These APIs allow you
 to build applications that interact with Slack just like the people on your
 team -- they can post messages, respond to events that happen -- as well
 as build complex UIs for getting work done.
