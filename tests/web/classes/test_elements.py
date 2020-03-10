@@ -5,6 +5,7 @@ from slack.web.classes.elements import (
     ButtonElement,
     ChannelSelectElement,
     ConversationSelectElement,
+    DatePickerElement,
     ExternalDataSelectElement,
     ImageElement,
     LinkButtonElement,
@@ -232,5 +233,29 @@ class DynamicDropdownTests(unittest.TestCase):
                         "action_id": "dropdown",
                         f"initial_{dropdown_type.initial_object_type}": "def",
                         "type": f"{dropdown_type.initial_object_type}s_select",
+                    },
+                )
+
+
+class DatePickerElementTests(unittest.TestCase):
+    def test_json(self):
+        for month in range(1 - 12):
+            for day in range(1 - 31):
+                date = f"2020-{month:02}-{day:02}"
+                self.assertDictEqual(
+                    DatePickerElement(
+                        action_id="datepicker-action",
+                        placeholder="Select a date",
+                        initial_date=date,
+                    ).to_dict(),
+                    {
+                        "action_id": "datepicker-action",
+                        "initial_date": date,
+                        "placeholder": {
+                            "emoji": True,
+                            "text": "Select a date",
+                            "type": "plain_text",
+                        },
+                        "type": "datepicker",
                     },
                 )
