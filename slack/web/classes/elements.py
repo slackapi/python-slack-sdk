@@ -554,5 +554,5 @@ class DatePickerElement(AbstractSelector):
     @JsonValidator("initial_date attribute must be in format 'YYYY-MM-DD'")
     def initial_date_valid(self):
         return self.initial_date is None or re.match(
-            r"\d{4}-[01][12]-[0123]\d", self.initial_date
+            r"\d{4}-(0[1-9]|1[0-2])-([0-2][1-9]|3[01])", self.initial_date
         )
