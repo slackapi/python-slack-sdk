@@ -106,7 +106,33 @@ class WebClient(BaseClient):
 
     def admin_apps_restricted_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List restricted apps for an org or workspace."""
-        return self.api_call("admin.apps.restricted.list", http_verb="GET", params=kwargs)
+        return self.api_call(
+            "admin.apps.restricted.list", http_verb="GET", params=kwargs
+        )
+
+    def admin_conversations_setTeams(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Set the workspaces in an Enterprise grid org that connect to a channel."""
+        return self.api_call("admin.conversations.setTeams", json=kwargs)
+
+    def admin_emoji_add(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Add an emoji."""
+        return self.api_call("admin.emoji.add", http_verb="GET", params=kwargs)
+
+    def admin_emoji_addAlias(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Add an emoji alias."""
+        return self.api_call("admin.emoji.addAlias", http_verb="GET", params=kwargs)
+
+    def admin_emoji_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List emoji for an Enterprise Grid organization."""
+        return self.api_call("admin.emoji.list", http_verb="GET", params=kwargs)
+
+    def admin_emoji_remove(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Remove an emoji across an Enterprise Grid organization."""
+        return self.api_call("admin.emoji.remove", http_verb="GET", params=kwargs)
+
+    def admin_emoji_rename(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Rename an emoji."""
+        return self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
 
     def admin_users_session_reset(
         self, *, user_id: str, **kwargs
@@ -197,6 +223,32 @@ class WebClient(BaseClient):
         kwargs.update({"team_id": team_id})
         return self.api_call("admin.teams.owners.list", http_verb="GET", params=kwargs)
 
+    def admin_teams_settings_info(
+        self, team_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Fetch information about settings in a workspace
+
+        Args:
+            team_id (str): ID of the team.
+        """
+        kwargs.update({"team_id": team_id})
+        return self.api_call("admin.teams.settings.info", json=kwargs)
+
+    def admin_teams_settings_setDefaultChannels(
+        self, *, team_id: str, channel_ids: List[str], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set the default channels of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            channel_ids (list): A list of channel_ids.
+                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
+        """
+        kwargs.update({"team_id": team_id, "channel_ids": ",".join(channel_ids)})
+        return self.api_call(
+            "admin.teams.settings.setDefaultChannels", http_verb="GET", params=kwargs
+        )
+
     def admin_teams_settings_setDescription(
         self, *, team_id: str, description: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -208,6 +260,19 @@ class WebClient(BaseClient):
         """
         kwargs.update({"team_id": team_id, "description": description})
         return self.api_call("admin.teams.settings.setDescription", json=kwargs)
+
+    def admin_teams_settings_setDiscoverability(
+        self, *, team_id: str, discoverability: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Sets the icon of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            discoverability (str): This workspace's discovery setting.
+                It must be set to one of open, invite_only, closed, or unlisted.
+        """
+        kwargs.update({"team_id": team_id, "discoverability": discoverability})
+        return self.api_call("admin.teams.settings.setDiscoverability", json=kwargs)
 
     def admin_teams_settings_setIcon(
         self, *, team_id: str, image_url: str, **kwargs
@@ -306,7 +371,9 @@ class WebClient(BaseClient):
             team_id (str): ID of the team. e.g. 'T1234'
             user_id (str): The ID of the user to set an expiration for. e.g. 'W12345678'
         """
-        kwargs.update({"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id})
+        kwargs.update(
+            {"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id}
+        )
         return self.api_call("admin.users.setExpiration", json=kwargs)
 
     def admin_users_setOwner(
