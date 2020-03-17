@@ -126,7 +126,7 @@ setup(
     packages=find_packages(
         exclude=["docs", "docs-src", "tests", "tests.*", "tutorial"]
     ),
-    install_requires=["aiohttp>3.5.2"],
+    install_requires=["aiohttp>3.5.2,<4.0.0"],
     extras_require={"optional": ["aiodns>1.0"]},
     setup_requires=["pytest-runner"],
     test_suite="tests",
