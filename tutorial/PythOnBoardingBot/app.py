@@ -51,7 +51,7 @@ def onboarding_message(payload):
     event = payload.get("event", {})
 
     # Get the id of the Slack user associated with the incoming event
-    user_id = event.get("user", {})
+    user_id = event.get("user", {}).get("id")
 
     # Open a DM with the new user.
     response = slack_web_client.im_open(user=user_id)
