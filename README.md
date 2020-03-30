@@ -195,7 +195,7 @@ client = slack.WebClient(
     run_async=True
     )
 
-async def send_async_message(channel='#random', text='')
+async def send_async_message(channel='#random', text=''):
     response = await client.chat_postMessage(
             channel=channel,
             text=text
