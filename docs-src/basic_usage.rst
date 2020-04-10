@@ -368,6 +368,8 @@ Here's a very basic example of how one might deal with rate limited requests.
 
   import slack
   import time
+  from slack import WebClient
+  from slack.errors import SlackApiError
 
   slack_token = os.environ["SLACK_API_TOKEN"]
   client = slack.WebClient(token=slack_token)
@@ -380,19 +382,24 @@ Here's a very basic example of how one might deal with rate limited requests.
     )
 
   # Make the API call and save results to `response`
-  response = send_slack_message("C0XXXXXX", "Hello, from Python!")
-
-  # Check to see if the message sent successfully.
-  # If the message succeeded, `response["ok"]`` will be `True`
-  if response["ok"]:
-    print(f"Message posted successfully: {response["message"]["ts"]}")
-    # If the message failed, check for rate limit headers in the response
-  elif response["ok"] is False and response["headers"]["Retry-After"]:
+  try:
+    response = send_slack_message("C0XXXXXX", "Hello, from Python!")
+    # Check to see if the message sent successfully.
+    # If the message succeeded, `response["ok"]`` will be `True`
+    if response["ok"]:
+      print(f"Message posted successfully: {response["message"]["ts"]}")
+      # If the message failed, check for rate limit headers in the response
+    elif response["ok"] is False
+      # Consult the API document to know the error code means
+      # https://api.slack.com/methods/chat.postMessage#errors
+      error_code = response["error"]
+  except SlackApiError as e:
     # The `Retry-After` header will tell you how long to wait before retrying
-    delay = int(response["headers"]["Retry-After"])
-    print("Rate limited. Retrying in " + str(delay) + " seconds")
+    delay = int(e.response.headers['Retry-After'])
+    print(f"Rate limited. Retrying in {delay} seconds")
     time.sleep(delay)
     send_slack_message(message, channel)
+
 
 See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
 
