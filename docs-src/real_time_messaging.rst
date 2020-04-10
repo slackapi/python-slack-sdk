@@ -65,7 +65,7 @@ If you'd rather use `rtm.start` to establish the connection, which provides more
   def say_hello(**payload):
     data = payload['data']
     web_client = payload['web_client']
-    if 'Hello' in data['text']:
+    if 'text' in data and 'Hello' in data['text']:
       channel_id = data['channel']
       thread_ts = data['ts']
       user = data['user']
