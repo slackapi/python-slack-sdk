@@ -27,3 +27,6 @@ coverage.xml
 .python-version
 pip
 .mypy_cache/
+
+# JetBrains PyCharm settings
+.idea/

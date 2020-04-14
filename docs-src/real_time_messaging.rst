@@ -37,7 +37,7 @@ Connecting to the RTM API
     if 'Hello' in data['text']:
       channel_id = data['channel']
       thread_ts = data['ts']
-      user = data['user']
+      user = data['user'] # This is not username but user ID (the format is either U*** or W***)
       
       web_client.chat_postMessage(
         channel=channel_id,
@@ -68,7 +68,7 @@ If you'd rather use `rtm.start` to establish the connection, which provides more
     if 'text' in data and 'Hello' in data['text']:
       channel_id = data['channel']
       thread_ts = data['ts']
-      user = data['user']
+      user = data['user'] # This is not username but user ID (the format is either U*** or W***)
 
       web_client.chat_postMessage(
         channel=channel_id,
