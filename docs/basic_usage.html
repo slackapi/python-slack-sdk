@@ -569,13 +569,12 @@ joined one by accident. This is how you leave a channel.</p>
 <p>When posting messages to a channel, Slack allows applications to send no more than one message per channel per second. We allow bursts over that limit for short periods. However, if your app continues to exceed the limit over a longer period of time it will be rate limited. Different API methods have other rate limits – be sure to <a class="reference external" href="https://api.slack.com/docs/rate-limits">check the limits</a> and test that your application has a graceful fallback if it should hit those limits.</p>
 <p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error, a JSON object containing the number of calls you have been making, and a Retry-After header containing the number of seconds until you can retry.</p>
 <p>Here’s a very basic example of how one might deal with rate limited requests.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 <span class="kn">from</span> <span class="nn">slack.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
 
 <span class="c1"># Simple wrapper for sending a Slack message</span>
 <span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
@@ -585,23 +584,22 @@ joined one by accident. This is how you leave a channel.</p>
   <span class="p">)</span>
 
 <span class="c1"># Make the API call and save results to `response`</span>
-<span class="k">try</span><span class="p">:</span>
-  <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello, from Python!&quot;</span><span class="p">)</span>
-  <span class="c1"># Check to see if the message sent successfully.</span>
-  <span class="c1"># If the message succeeded, `response[&quot;ok&quot;]`` will be `True`</span>
-  <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message posted successfully: </span><span class="si">{response[&quot;message&quot;][&quot;ts&quot;]}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="c1"># If the message failed, check for rate limit headers in the response</span>
-  <span class="k">elif</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
-    <span class="c1"># Consult the API document to know the error code means</span>
-    <span class="c1"># https://api.slack.com/methods/chat.postMessage#errors</span>
-    <span class="n">error_code</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
-<span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-  <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
-  <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Retry-After&#39;</span><span class="p">])</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{delay}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
-  <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
-  <span class="n">send_slack_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">channel</span><span class="p">)</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;#random&quot;</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Hello, from Python!&quot;</span>
+<span class="c1"># Do until being rate limited</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+  <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ratelimited&quot;</span><span class="p">:</span>
+      <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
+      <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Retry-After&#39;</span><span class="p">])</span>
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{delay}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+      <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+      <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="c1"># other errors</span>
+      <span class="k">raise</span> <span class="n">e</span>
 </pre></div>
 </div>
 <p>See the documentation on <a class="reference external" href="https://api.slack.com/docs/rate-limits">Rate Limiting</a> for more info.</p>
