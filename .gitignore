@@ -30,3 +30,6 @@ pip
 
 # JetBrains PyCharm settings
 .idea/
+
+tmp.txt
+.DS_Store
