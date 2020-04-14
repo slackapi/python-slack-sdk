@@ -236,12 +236,12 @@ Modals use the same blocks that compose messages with the addition of an `input`
         return make_response(f"Failed to open a modal due to {code}", 200)
 
     elif "payload" in request.form:
-        payload = json.loads(request.form["payload"])
-        if payload["type"] == "view_submission" \
-          and payload["view"]["callback_id"] == "modal-id":
-          submitted_data = payload["view"]["state"]["values"]
-          print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
-          return make_response("", 200)
+      payload = json.loads(request.form["payload"])
+      if payload["type"] == "view_submission" \
+        and payload["view"]["callback_id"] == "modal-id":
+        submitted_data = payload["view"]["state"]["values"]
+        print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+        return make_response("", 200)
 
     return make_response("", 404)
 
