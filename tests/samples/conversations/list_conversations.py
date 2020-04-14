@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 import os
 from slack import WebClient
-from time import time
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 
