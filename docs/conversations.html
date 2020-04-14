@@ -130,7 +130,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#opening-a-modal">Opening a modal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-and-pushing-modals">Updating and pushing modals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#emoji-reactions">Emoji reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-channels">Listing channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-public-channels">Listing public channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
@@ -231,12 +231,11 @@
 <p><em>For public or private channels, use the  ``conversations_create`` method.</em></p>
 <p>Provide a <code class="docutils literal notranslate"><span class="pre">users</span></code> parameter as an array with 1 to 8 user IDs to open or resume a conversation. Providing only 1 ID will create a direct message. Providing more will create a new multi-party DM or resume an existing conversation.</p>
 <p>Subsequent calls to <code class="docutils literal notranslate"><span class="pre">conversations_open</span></code> with the same set of users will return the already existing conversation.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_open</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;W123456789&quot;</span><span class="p">,</span> <span class="s2">&quot;U987654321&quot;</span><span class="p">])</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_open</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;W123456789&quot;</span><span class="p">,</span> <span class="s2">&quot;U987654321&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.open">conversations.open</a> additional info.</p>
@@ -245,15 +244,18 @@
 <div class="section" id="creating-channels">
 <h2>Creating channels<a class="headerlink" href="#creating-channels" title="Permalink to this headline">¶</a></h2>
 <p>Creates a new channel, either public or private. The <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 21 characters. To make the channel private, set the option <code class="docutils literal notranslate"><span class="pre">is_private</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_create</span><span class="p">(</span>
-  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-private-channel&quot;</span><span class="p">,</span>
-  <span class="n">is_private</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">channel_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;my-private-channel-{round(time())}&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_create</span><span class="p">(</span>
+  <span class="n">name</span><span class="o">=</span><span class="n">channel_name</span><span class="p">,</span>
+  <span class="n">is_private</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
+<span class="n">channel_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;channel&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_archive</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.create">conversations.create</a> additional info.</p>
@@ -262,14 +264,13 @@
 <div class="section" id="getting-more-information">
 <h2>Getting more information<a class="headerlink" href="#getting-more-information" title="Permalink to this headline">¶</a></h2>
 <p>To retrieve a set of metadata about a channel (public, private, DM, or multi-party DM), use <code class="docutils literal notranslate"><span class="pre">conversations_info</span></code>. The <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter is required and must be a valid channel ID. The optional <code class="docutils literal notranslate"><span class="pre">include_locale</span></code> boolean parameter will return locale data, which may be useful if you wish to return localized responses. The <code class="docutils literal notranslate"><span class="pre">include_num_members</span></code> boolean parameter will return the number of people in a channel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_info</span><span class="p">(</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C031415926&quot;</span>
-  <span class="n">include_num_members</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_info</span><span class="p">(</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C031415926&quot;</span><span class="p">,</span>
+  <span class="n">include_num_members</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -279,21 +280,20 @@
 <div class="section" id="listing-conversations">
 <h2>Listing conversations<a class="headerlink" href="#listing-conversations" title="Permalink to this headline">¶</a></h2>
 <p>To get a list of all the conversations in a workspace, use <code class="docutils literal notranslate"><span class="pre">conversations_list</span></code>. By default, only public conversations are returned; use the <code class="docutils literal notranslate"><span class="pre">types</span></code> parameter specify which types of conversations you’re interested in (Note: <code class="docutils literal notranslate"><span class="pre">types</span></code> is a string of comma-separated values)</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">()</span>
+<span class="n">conversations</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">types</span></code> parameter to request additional channels, including <code class="docutils literal notranslate"><span class="pre">public_channel</span></code>, <code class="docutils literal notranslate"><span class="pre">private_channel</span></code>, <code class="docutils literal notranslate"><span class="pre">mpim</span></code>, and <code class="docutils literal notranslate"><span class="pre">im</span></code>. This parameter is a string of comma-separated values.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span>
   <span class="n">types</span><span class="o">=</span><span class="s2">&quot;public_channel, private_channel&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -304,12 +304,11 @@
 <div class="section" id="leaving-a-conversation">
 <h2>Leaving a conversation<a class="headerlink" href="#leaving-a-conversation" title="Permalink to this headline">¶</a></h2>
 <p>To leave a conversation, use <code class="docutils literal notranslate"><span class="pre">conversations_leave</span></code> with the required <code class="docutils literal notranslate"><span class="pre">channel</span></code> param containing the ID of the channel to leave.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_leave</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C27182818&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_leave</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C27182818&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.leave">conversations.leave</a> for more info.</p>
@@ -318,12 +317,12 @@
 <div class="section" id="getting-members">
 <h2>Getting members<a class="headerlink" href="#getting-members" title="Permalink to this headline">¶</a></h2>
 <p>To get a list of the members of a conversation, use <code class="docutils literal notranslate"><span class="pre">conversations_members</span></code> with the required <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">conversations_members</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C16180339&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_members</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C16180339&quot;</span><span class="p">)</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.members">conversations.members</a> for more info.</p>
