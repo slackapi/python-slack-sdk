@@ -274,7 +274,7 @@ If you’d rather use <cite>rtm.start</cite> to establish the connection, which 
 <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">):</span>
   <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
   <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
-  <span class="k">if</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
+  <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
     <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
     <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
