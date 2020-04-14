@@ -82,15 +82,21 @@ One of the most common use-cases is sending a message to Slack. If you want to s
 
 ```python
 import os
-import slack
+from slack import WebClient
+from slack.errors import SlackApiError
 
-client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
-response = client.chat_postMessage(
-    channel='#random',
-    text="Hello world!")
-assert response["ok"]
-assert response["message"]["text"] == "Hello world!"
+try:
+    response = client.chat_postMessage(
+        channel='#random',
+        text="Hello world!")
+    assert response["message"]["text"] == "Hello world!"
+except SlackApiError as e:
+    # You will get a SlackApiError if "ok" is False
+    assert e.response["ok"] is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+    print(f"Got an error: {e.response['error']}")
 ```
 
 Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
@@ -101,14 +107,22 @@ We've changed the process for uploading files to Slack to be much easier and str
 
 ```python
 import os
-import slack
+from slack import WebClient
+from slack.errors import SlackApiError
 
-client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
-response = client.files_upload(
-    channels='#random',
-    file="my_file.pdf")
-assert response["ok"]
+try:
+    filepath="./tmp.txt"
+    response = client.files_upload(
+        channels='#random',
+        file=filepath)
+    assert response["file"]  # the uploaded file
+except SlackApiError as e:
+    # You will get a SlackApiError if "ok" is False
+    assert e.response["ok"] is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+    print(f"Got an error: {e.response['error']}")
 ```
 
 ### Basic Usage of the RTM Client
@@ -130,26 +144,32 @@ In our example below, we watch for a [message event][message-event] that contain
 
 ```python
 import os
-import slack
+from slack import RTMClient
+from slack.errors import SlackApiError
 
-@slack.RTMClient.run_on(event='message')
+@RTMClient.run_on(event='message')
 def say_hello(**payload):
     data = payload['data']
     web_client = payload['web_client']
     rtm_client = payload['rtm_client']
-    if 'Hello' in data.get('text', []):
+    if 'text' in data and 'Hello' in data.get('text', []):
         channel_id = data['channel']
         thread_ts = data['ts']
         user = data['user']
 
-        web_client.chat_postMessage(
-            channel=channel_id,
-            text=f"Hi <@{user}>!",
-            thread_ts=thread_ts
-        )
+        try:
+            response = web_client.chat_postMessage(
+                channel=channel_id,
+                text=f"Hi <@{user}>!",
+                thread_ts=thread_ts
+            )
+        except SlackApiError as e:
+            # You will get a SlackApiError if "ok" is False
+            assert e.response["ok"] is False
+            assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+            print(f"Got an error: {e.response['error']}")
 
-slack_token = os.environ["SLACK_API_TOKEN"]
-rtm_client = slack.RTMClient(token=slack_token)
+rtm_client = RTMClient(token=os.environ["SLACK_API_TOKEN"])
 rtm_client.start()
 ```
 
@@ -162,47 +182,81 @@ Normal usage of the library does not run it in async, hence a kwarg of run_async
 When in async mode its important to remember to await or run/run_until_complete the call.
 
 #### Slackclient as a script
+
 ```python 
-import os
-import slack
 import asyncio
+import os
+from slack import WebClient
+from slack.errors import SlackApiError
 
-loop = asyncio.get_event_loop()
-
-client = slack.WebClient(
+client = WebClient(
     token=os.environ['SLACK_API_TOKEN'],
     run_async=True
-    )
+)
+future = client.chat_postMessage(
+    channel='#random',
+    text="Hello world!"
+)
 
-response = loop.run_until_complete(client.chat_postMessage(
-        channel='#random',
-        text="Hello world!"
-        )
-        )
-assert response["ok"]
-assert response["message"]["text"] == "Hello world!"
+loop = asyncio.get_event_loop()
+try:
+    # run_until_complete returns the Future's result, or raise its exception.
+    response = loop.run_until_complete(future)
+    assert response["message"]["text"] == "Hello world!"
+except SlackApiError as e:
+    assert e.response["ok"] is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+    print(f"Got an error: {e.response['error']}")
+finally:
+    loop.close()
 ```
 
 #### Slackclient in a framework
+
 If you are using a framework invoking the asyncio event loop like : sanic/jupyter notebook/etc.
+
 ```python
 import os
-import slack
+from slack import WebClient
+from slack.errors import SlackApiError
 
-
-client = slack.WebClient(
+client = WebClient(
     token=os.environ['SLACK_API_TOKEN'],
-    run_async=True
-    )
-
-async def send_async_message(channel='#random', text=''):
-    response = await client.chat_postMessage(
+    run_async=True # turn async mode on
+)
+# Define this as an async function
+async def send_to_slack(channel, text):
+    try:
+        # Don't forget to have await as the client returns asyncio.Future
+        response = await client.chat_postMessage(
             channel=channel,
             text=text
-            )
-    assert response["ok"]
-    assert response["message"]["text"] == "Hello world!"
-    
+        )
+        assert response["message"]["text"] == text
+    except SlackApiError as e:
+        assert e.response["ok"] is False
+        assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+        raise e
+
+# https://sanicframework.org/
+from sanic import Sanic
+from sanic.response import json
+
+app = Sanic()
+# e.g., http://localhost:3000/?text=foo&text=bar
+@app.route('/')
+async def test(request):
+    text = 'Hello World!'
+    if 'text' in request.args:
+        text = "\t".join(request.args['text'])
+    try:
+        await send_to_slack(channel="#random", text=text)
+        return json({'message': 'Done!'})
+    except SlackApiError as e:
+        return json({'message': f"Failed due to {e.response['error']}"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000)
 ```
 
 ### Advanced Options
@@ -218,10 +272,23 @@ Interested in SSL or Proxy support? Simply use their built-in [SSL](https://docs
 
 ```python
 import os
-import slack
+from slack import WebClient
+from ssl import SSLContext
 
-client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'], ssl=sslcert, proxy=proxyinfo)
+sslcert = SSLContext()
+# pip3 install proxy.py
+# proxy --port 9000 --log-level d
+proxyinfo = "http://localhost:9000"
 
+client = WebClient(
+    token=os.environ['SLACK_API_TOKEN'],
+    ssl=sslcert,
+    proxy=proxyinfo
+)
+response = client.chat_postMessage(
+    channel="#random",
+    text="Hello World!")
+print(response)
 ```
 
 We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].

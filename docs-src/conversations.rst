@@ -22,12 +22,11 @@ Subsequent calls to ``conversations_open`` with the same set of users will retur
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_open(users=["W123456789", "U987654321"])
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_open(users=["W123456789", "U987654321"])
 
 See `conversations.open <https://api.slack.com/methods/conversations.open>`_ additional info.
 
@@ -39,15 +38,18 @@ Creates a new channel, either public or private. The ``name`` parameter is requi
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
+  from time import time
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_create(
-    name="my-private-channel",
-    is_private = True
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  channel_name = f"my-private-channel-{round(time())}"
+  response = client.conversations_create(
+    name=channel_name,
+    is_private=True
   )
+  channel_id = response["channel"]["id"]
+  response = client.conversations_archive(channel=channel_id)
 
 See `conversations.create <https://api.slack.com/methods/conversations.create>`_ additional info.
 
@@ -59,14 +61,13 @@ To retrieve a set of metadata about a channel (public, private, DM, or multi-par
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_info(
-    channel="C031415926"
-    include_num_members = True
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_info(
+    channel="C031415926",
+    include_num_members=1
   )
 
 See `conversations.info <https://api.slack.com/methods/conversations.info>`_ for more info.
@@ -81,23 +82,22 @@ To get a list of all the conversations in a workspace, use ``conversations_list`
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_list()
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_list()
+  conversations = response["channels"]
 
 Use the ``types`` parameter to request additional channels, including ``public_channel``, ``private_channel``, ``mpim``, and ``im``. This parameter is a string of comma-separated values.
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_list(
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_list(
     types="public_channel, private_channel"
   )
 
@@ -112,12 +112,11 @@ To leave a conversation, use ``conversations_leave`` with the required ``channel
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_leave(channel="C27182818")
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_leave(channel="C27182818")
 
 See `conversations.leave <https://api.slack.com/methods/conversations.leave>`_ for more info.
 
@@ -129,12 +128,12 @@ To get a list of the members of a conversation, use ``conversations_members`` wi
 
 .. code-block:: python
 
-  import slack
+  import os
+  from slack import WebClient
 
-  slack_token = os.environ["SLACK_API_TOKEN"]
-  client = slack.WebClient(slack_token)
-
-  client.conversations_members(channel="C16180339")
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  response = client.conversations_members(channel="C16180339")
+  user_ids = response["members"]
 
 See `conversations.members <https://api.slack.com/methods/conversations.members>`_ for more info.
 

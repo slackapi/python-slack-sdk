@@ -130,7 +130,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#opening-a-modal">Opening a modal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-and-pushing-modals">Updating and pushing modals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#emoji-reactions">Emoji reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-channels">Listing channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-public-channels">Listing public channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
@@ -248,7 +248,7 @@ information it receives. We also give you the ability to call our web client fro
   <span class="k">if</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
     <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
     <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
 
     <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
       <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
@@ -277,7 +277,7 @@ If you’d rather use <cite>rtm.start</cite> to establish the connection, which 
   <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
     <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
     <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
 
     <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
       <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>

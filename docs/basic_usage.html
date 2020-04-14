@@ -130,7 +130,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#opening-a-modal">Opening a modal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-and-pushing-modals">Updating and pushing modals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#emoji-reactions">Emoji reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#listing-channels">Listing channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#listing-public-channels">Listing public channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-a-channel-s-info">Getting a channel’s info</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#joining-a-channel">Joining a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#leaving-a-channel">Leaving a channel</a></li>
@@ -228,33 +228,28 @@
 <div class="section" id="sending-a-message">
 <h2>Sending a message<a class="headerlink" href="#sending-a-message" title="Permalink to this headline">¶</a></h2>
 <p>One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">slack</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">slack.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
 
-<span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
-<span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
+  <span class="p">)</span>
+<span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="c1"># You will get a SlackApiError if &quot;ok&quot; is False</span>
+  <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>  <span class="c1"># str like &#39;invalid_auth&#39;, &#39;channel_not_found&#39;</span>
 </pre></div>
 </div>
 <p>Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
 as sending a regular message, but with an additional <code class="docutils literal notranslate"><span class="pre">user</span></code> parameter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">slack</span>
-
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
-
-<span class="n">client</span><span class="o">.</span><span class="n">chat_postEphemeral</span><span class="p">(</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello silently from your app! :tada:&quot;</span><span class="p">,</span>
-  <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
-<span class="p">)</span>
-</pre></div>
-</div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
 </div>
 <hr class="docutils" />
@@ -267,33 +262,33 @@ as sending a regular message, but with an additional <code class="docutils liter
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Danny Torrence left the following review for your property:&quot;</span>
-        <span class="p">}</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Danny Torrence left the following review for your property:&quot;</span>
+      <span class="p">}</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;https://example.com|Overlook Hotel&gt; </span><span class="se">\n</span><span class="s2"> :star: </span><span class="se">\n</span><span class="s2"> Doors had too many axe holes, guest in room &quot;</span> <span class="o">+</span>
-            <span class="s2">&quot;237 was far too rowdy, whole place felt stuck in the 1920s.&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;accessory&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;alt_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Haunted hotel image&quot;</span>
-        <span class="p">}</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;https://example.com|Overlook Hotel&gt; </span><span class="se">\n</span><span class="s2"> :star: </span><span class="se">\n</span><span class="s2"> Doors had too many axe holes, guest in room &quot;</span> <span class="o">+</span>
+          <span class="s2">&quot;237 was far too rowdy, whole place felt stuck in the 1920s.&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;accessory&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alt_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Haunted hotel image&quot;</span>
+      <span class="p">}</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;*Average Rating*</span><span class="se">\n</span><span class="s2">1.0&quot;</span>
-            <span class="p">}</span>
-        <span class="p">]</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;*Average Rating*</span><span class="se">\n</span><span class="s2">1.0&quot;</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
     <span class="p">}</span>
   <span class="p">]</span>
 <span class="p">)</span>
@@ -306,18 +301,18 @@ as sending a regular message, but with an additional <code class="docutils liter
 <h2>Threading Messages<a class="headerlink" href="#threading-messages" title="Permalink to this headline">¶</a></h2>
 <p>Threaded messages are a way of grouping messages together to provide greater context. You can reply to a thread or start a new threaded conversation by simply passing the original message’s <code class="docutils literal notranslate"><span class="pre">ts</span></code> ID in the <code class="docutils literal notranslate"><span class="pre">thread_ts</span></code> attribute when posting a message. If you’re replying to a threaded message, you’ll pass the <cite>thread_ts</cite> ID of the message you’re replying to.</p>
 <p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps. When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
-    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
-    <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+  <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>By default, <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>. To indicate your reply is germane to all members of a channel, and therefore a notification of the reply should be posted in-channel, set the <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
-  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
   <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
   <span class="n">reply_broadcast</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 </pre></div>
@@ -333,9 +328,9 @@ article for more information.</p>
 <div class="section" id="updating-a-message">
 <h2>Updating a message<a class="headerlink" href="#updating-a-message" title="Permalink to this headline">¶</a></h2>
 <p>Let’s say you have a bot which posts the status of a request. When that request changes, you’ll want to update the message to reflect it’s state.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_update</span><span class="p">(</span>
-  <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_update</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+  <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
   <span class="n">text</span><span class="o">=</span><span class="s2">&quot;updates from your app! :tada:&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -346,7 +341,7 @@ article for more information.</p>
 <div class="section" id="deleting-a-message">
 <h2>Deleting a message<a class="headerlink" href="#deleting-a-message" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes you need to delete things.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_delete</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_delete</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
   <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476745373.000002&quot;</span>
 <span class="p">)</span>
@@ -359,30 +354,79 @@ article for more information.</p>
 <h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
 <p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
-  <span class="n">trigger_id</span><span class="o">=</span><span class="s2">&quot;3213746830.000023&quot;</span><span class="p">,</span>
-  <span class="n">view</span><span class="o">=</span><span class="p">{</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-    <span class="n">callback_id</span><span class="p">:</span> <span class="s2">&quot;view_identifier&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-      <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Modal title&quot;</span>
-    <span class="p">},</span>
-    <span class="n">blocks</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-          <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span>
-        <span class="p">},</span>
-        <span class="n">element</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
-          <span class="n">action_id</span><span class="p">:</span> <span class="s2">&quot;value_indentifier&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">signing_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">]</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">slack_app</span><span class="p">():</span>
+  <span class="c1"># Refer to https://github.com/slackapi/python-slack-events-api</span>
+  <span class="c1"># (The Slack Team is going to provide a new package soon)</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_request</span><span class="p">(</span>
+    <span class="n">signing_secret</span><span class="o">=</span><span class="n">signing_secret</span><span class="p">,</span>
+    <span class="n">request_body</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span>
+    <span class="n">timestamp</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Request-Timestamp&quot;</span><span class="p">),</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Signature&quot;</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;invalid request&quot;</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="s2">&quot;command&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span> \
+    <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/open-modal&quot;</span><span class="p">:</span>
+    <span class="n">trigger_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+        <span class="n">trigger_id</span><span class="o">=</span><span class="n">trigger_id</span><span class="p">,</span>
+        <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Cancel&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
         <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">]</span>
-  <span class="p">}</span>
-<span class="p">)</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+      <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+  <span class="k">elif</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+      <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span> \
+        <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">:</span>
+        <span class="n">submitted_data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">submitted_data</span><span class="p">)</span>  <span class="c1"># {&#39;b-id&#39;: {&#39;a-id&#39;: {&#39;type&#39;: &#39;plain_text_input&#39;, &#39;value&#39;: &#39;your input&#39;}}}</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+  <span class="c1"># export SLACK_SIGNING_SECRET=***</span>
+  <span class="c1"># export SLACK_API_TOKEN=xoxb-***</span>
+  <span class="c1"># export FLASK_ENV=development</span>
+  <span class="c1"># python3 app.py</span>
+  <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/views.open">views.open</a> more details and additional parameters.</p>
@@ -391,21 +435,37 @@ article for more information.</p>
 <div class="section" id="updating-and-pushing-modals">
 <h2>Updating and pushing modals<a class="headerlink" href="#updating-and-pushing-modals" title="Permalink to this headline">¶</a></h2>
 <p>You can dynamically update a view inside of a modal by calling <cite>views.update</cite> and passing the view ID returned in the previous <cite>views.open</cite> call.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
-  <span class="n">view_id</span><span class="o">=</span><span class="s2">&quot;V123401&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">private_metadata</span> <span class="o">=</span> <span class="s2">&quot;any str data you want to store&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
+  <span class="n">view_id</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+  <span class="nb">hash</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;hash&quot;</span><span class="p">],</span>
   <span class="n">view</span><span class="o">=</span><span class="p">{</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-    <span class="n">callback_id</span><span class="p">:</span> <span class="s2">&quot;view_identifier&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-      <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;Modal title&quot;</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;private_metadata&quot;</span><span class="p">:</span> <span class="n">private_metadata</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
     <span class="p">},</span>
-    <span class="n">blocks</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Cancel&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
       <span class="p">{</span>
-        <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
-        <span class="n">text</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-          <span class="n">text</span><span class="p">:</span> <span class="s2">&quot;An updated modal, indeed&quot;</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">]</span>
@@ -421,7 +481,7 @@ article for more information.</p>
 <h2>Emoji reactions<a class="headerlink" href="#emoji-reactions" title="Permalink to this headline">¶</a></h2>
 <p>You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.</p>
 <p>This method adds a reaction (emoji) to an item (<code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">comment</span></code>, <code class="docutils literal notranslate"><span class="pre">channel</span> <span class="pre">message</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">message</span></code>, or <code class="docutils literal notranslate"><span class="pre">direct</span> <span class="pre">message</span></code>). One of file, file_comment, or the combination of channel and timestamp must be specified.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">reactions_add</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reactions_add</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
   <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
   <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
@@ -429,7 +489,7 @@ article for more information.</p>
 </pre></div>
 </div>
 <p>Removing an emoji reaction is basically the same format, but you’ll use <code class="docutils literal notranslate"><span class="pre">reactions.remove</span></code> instead of <code class="docutils literal notranslate"><span class="pre">reactions.add</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">reactions_remove</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reactions_remove</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
   <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
   <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
@@ -439,60 +499,54 @@ article for more information.</p>
 <p>See <a class="reference external" href="https://api.slack.com/methods/reactions.add">reactions.add</a> and <a class="reference external" href="https://api.slack.com/methods/reactions.remove">reactions.remove</a> for more info.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="listing-channels">
-<h2>Listing channels<a class="headerlink" href="#listing-channels" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="listing-public-channels">
+<h2>Listing public channels<a class="headerlink" href="#listing-public-channels" title="Permalink to this headline">¶</a></h2>
 <p>At some point, you’ll want to find out what channels are available to your app. This is how you get that list.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_list</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="s2">&quot;public_channel&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Archived channels are included by default. You can exclude them by passing <code class="docutils literal notranslate"><span class="pre">exclude_archived=1</span></code> to your request.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_list</span><span class="p">(</span>
-  <span class="n">exclude_archived</span><span class="o">=</span><span class="mi">1</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span><span class="n">exclude_archived</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/methods/channels.list">channels.list</a> for more info.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.list">conversations.list</a> for more info.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="getting-a-channel-s-info">
 <h2>Getting a channel’s info<a class="headerlink" href="#getting-a-channel-s-info" title="Permalink to this headline">¶</a></h2>
 <p>Once you have the ID for a specific channel, you can fetch information about that channel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_info</span><span class="p">(,</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_info</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/methods/channels.info">channels.info</a> for more info.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.info">conversations.info</a> for more info.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="joining-a-channel">
 <h2>Joining a channel<a class="headerlink" href="#joining-a-channel" title="Permalink to this headline">¶</a></h2>
 <p>Channels are the social hub of most Slack teams. Here’s how you hop into one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_join</span><span class="p">(</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXY&quot;</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_join</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXY&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you are already in the channel, the response is slightly different.
 <code class="docutils literal notranslate"><span class="pre">already_in_channel</span></code> will be true, and a limited <code class="docutils literal notranslate"><span class="pre">channel</span></code> object will be returned. Bot users cannot join a channel on their own, they need to be invited by another user.</p>
-<p>See <a class="reference external" href="https://api.slack.com/methods/channels.join">channels.join</a> for more info.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.join">conversations.join</a> for more info.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="leaving-a-channel">
 <h2>Leaving a channel<a class="headerlink" href="#leaving-a-channel" title="Permalink to this headline">¶</a></h2>
 <p>Maybe you’ve finished up all the business you had in a channel, or maybe you
 joined one by accident. This is how you leave a channel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">channels_leave</span><span class="p">(</span>
-  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_leave</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/methods/channels.leave">channels.leave</a> for more info.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.leave">conversations.leave</a> for more info.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="listing-team-members">
 <h2>Listing team members<a class="headerlink" href="#listing-team-members" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">users_list</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">users_list</span><span class="p">()</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">users</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/users.list">users.list</a> for more info.</p>
@@ -500,7 +554,7 @@ joined one by accident. This is how you leave a channel.</p>
 <hr class="docutils" />
 <div class="section" id="uploading-files">
 <h2>Uploading files<a class="headerlink" href="#uploading-files" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
   <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
   <span class="n">file</span><span class="o">=</span><span class="s2">&quot;files.pdf&quot;</span><span class="p">,</span>
   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
@@ -517,6 +571,8 @@ joined one by accident. This is how you leave a channel.</p>
 <p>Here’s a very basic example of how one might deal with rate limited requests.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">slack</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">slack.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
@@ -529,17 +585,21 @@ joined one by accident. This is how you leave a channel.</p>
   <span class="p">)</span>
 
 <span class="c1"># Make the API call and save results to `response`</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello, from Python!&quot;</span><span class="p">)</span>
-
-<span class="c1"># Check to see if the message sent successfully.</span>
-<span class="c1"># If the message succeeded, `response[&quot;ok&quot;]`` will be `True`</span>
-<span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]:</span>
-  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message posted successfully: </span><span class="si">{response[&quot;message&quot;][&quot;ts&quot;]}</span><span class="s2">&quot;</span><span class="p">)</span>
-  <span class="c1"># If the message failed, check for rate limit headers in the response</span>
-<span class="k">elif</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">][</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">]:</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello, from Python!&quot;</span><span class="p">)</span>
+  <span class="c1"># Check to see if the message sent successfully.</span>
+  <span class="c1"># If the message succeeded, `response[&quot;ok&quot;]`` will be `True`</span>
+  <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message posted successfully: </span><span class="si">{response[&quot;message&quot;][&quot;ts&quot;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># If the message failed, check for rate limit headers in the response</span>
+  <span class="k">elif</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+    <span class="c1"># Consult the API document to know the error code means</span>
+    <span class="c1"># https://api.slack.com/methods/chat.postMessage#errors</span>
+    <span class="n">error_code</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+<span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
   <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
-  <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">][</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">])</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate limited. Retrying in &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; seconds&quot;</span><span class="p">)</span>
+  <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Retry-After&#39;</span><span class="p">])</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{delay}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
   <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
   <span class="n">send_slack_message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">channel</span><span class="p">)</span>
 </pre></div>
