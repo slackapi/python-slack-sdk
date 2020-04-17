@@ -1367,7 +1367,7 @@ class WebClient(BaseClient):
         return self.api_call("mpim.replies", http_verb="GET", params=kwargs)
 
     def oauth_v2_access(
-        self, *, client_id: str, client_secret: str, code: str, **kwargs
+        self, *, client_id: str, client_secret: str, code: str, redirect_uri: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
 
@@ -1375,8 +1375,9 @@ class WebClient(BaseClient):
             client_id (str): Issued when you created your application. e.g. '4b39e9-752c4'
             client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
             code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
+            redirect_uri (str): Must match the originally submitted URI (if one was sent). e.g. 'https://example.com'
         """
-        kwargs.update({"code": code})
+        kwargs.update({"code": code, "redirect_uri": redirect_uri})
         return self.api_call(
             "oauth.v2.access",
             data=kwargs,
