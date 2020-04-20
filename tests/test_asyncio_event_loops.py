@@ -2,6 +2,8 @@ import logging
 import unittest
 import asyncio
 
+import pytest
+
 from slack import WebClient, RTMClient
 
 
@@ -17,6 +19,7 @@ class TestAsyncioEventLoops(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @pytest.mark.skip("The result of this test depends on the environment")
     def test_the_cost_of_event_loop_creation(self):
         # create 100 event loops
         loops = []
