@@ -48,6 +48,10 @@ class UploadCommand(BaseCommand):
     description = "Build and publish the package."
 
     def run(self):
+        self._run(
+            "Installing upload dependencies…",
+            [sys.executable, "-m", "pip", "install", "wheel"],
+        )
         try:
             self.status("Removing previous builds…")
             rmtree(os.path.join(here, "dist"))
