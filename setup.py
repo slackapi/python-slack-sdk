@@ -83,8 +83,8 @@ class ValidateCommand(BaseCommand):
     description = "Run Python static code analyzer (flake8), formatter (black) and unit tests (pytest)."
 
     user_options = [
-            ('test-target=', 'i', 'tests/{test-target}')
-        ]
+        ('test-target=', 'i', 'tests/{test-target}')
+    ]
 
     def initialize_options(self):
         self.test_target = ""
@@ -115,8 +115,8 @@ class RunAllTestsCommand(ValidateCommand):
     description = ValidateCommand.description + "\nRun integration tests (pytest)."
 
     user_options = [
-            ('test-target=', 'i', 'integration_tests/{test-target}')
-        ]
+        ('test-target=', 'i', 'integration_tests/{test-target}')
+    ]
 
     def initialize_options(self):
         self.test_target = ""
