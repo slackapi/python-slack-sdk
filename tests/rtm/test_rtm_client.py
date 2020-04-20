@@ -12,7 +12,7 @@ from tests.helpers import mock_rtm_response
 
 class TestRTMClient(unittest.TestCase):
     def setUp(self):
-        self.client = slack.RTMClient(token="xoxp-1234", auto_reconnect=False)
+        self.client = slack.RTMClient(token="xoxp-1234", auto_reconnect=False, loop=asyncio.get_event_loop())
 
     def tearDown(self):
         slack.RTMClient._callbacks = collections.defaultdict(list)

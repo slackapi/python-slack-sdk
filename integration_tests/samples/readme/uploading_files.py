@@ -1,13 +1,16 @@
+# ------------------
+# Only for running this script here
+from os.path import dirname
 import sys
 import logging
 
-sys.path.insert(1, f"{__file__}/../../..")
+sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# ------------------
 
 # export SLACK_API_TOKEN=xoxb-***
 # echo 'Hello world!' > tmp.txt
-# python3 tests/samples/readme/uploading_files.py
+# python3 integration_tests/samples/readme/uploading_files.py
 
 import os
 from slack import WebClient
@@ -16,7 +19,7 @@ from slack.errors import SlackApiError
 client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
 try:
-    filepath="./tmp.txt"
+    filepath = "./tmp.txt"
     response = client.files_upload(
         channels='#random',
         file=filepath)

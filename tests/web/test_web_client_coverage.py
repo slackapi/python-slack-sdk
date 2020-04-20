@@ -39,6 +39,8 @@ class TestWebClientCoverage(unittest.TestCase):
 
     def tearDown(self):
         self.loop.run_until_complete(self.site.stop())
+        if not self.loop.is_closed():
+            self.loop.close()
 
     async def mock_server(self):
         app = web.Application()

@@ -33,3 +33,4 @@ pip
 
 tmp.txt
 .DS_Store
+logs/

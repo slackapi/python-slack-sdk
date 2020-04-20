@@ -15,7 +15,7 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
-tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black"]
+tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black", "psutil"]
 
 
 class BaseCommand(Command):
@@ -78,6 +78,13 @@ class ValidateCommand(BaseCommand):
 
     description = "Run Python static code analyzer (flake8), formatter (black) and unit tests (pytest)."
 
+    user_options = [
+            ('test-target=', 'i', 'tests/{test-target}')
+        ]
+
+    def initialize_options(self):
+        self.test_target = ""
+
     def run(self):
         self._run(
             "Installing test dependencies…",
@@ -93,7 +100,34 @@ class ValidateCommand(BaseCommand):
                 "pytest",
                 "--cov-report=xml",
                 f"--cov={here}/slack",
-                "tests/",
+                f"tests/{self.test_target}",
+            ],
+        )
+
+
+class RunAllTestsCommand(ValidateCommand):
+    """Support setup.py integration_test."""
+
+    description = ValidateCommand.description + "\nRun integration tests (pytest)."
+
+    user_options = [
+            ('test-target=', 'i', 'integration_tests/{test-target}')
+        ]
+
+    def initialize_options(self):
+        self.test_target = ""
+
+    def run(self):
+        ValidateCommand.run(self)
+        self._run(
+            "Running pytest…",
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--cov-report=xml",
+                f"--cov={here}/slack",
+                f"integration_tests/{self.test_target}",
             ],
         )
 
@@ -111,7 +145,7 @@ setup(
     include_package_data=True,
     license="MIT",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Communications :: Chat",
         "Topic :: System :: Networking",
@@ -124,12 +158,16 @@ setup(
     ],
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
     packages=find_packages(
-        exclude=["docs", "docs-src", "tests", "tests.*", "tutorial"]
+        exclude=["docs", "docs-src", "integration_tests", "tests", "tests.*", "tutorial"]
     ),
     install_requires=["aiohttp>3.5.2,<4.0.0"],
     extras_require={"optional": ["aiodns>1.0"]},
     setup_requires=["pytest-runner"],
     test_suite="tests",
     tests_require=tests_require,
-    cmdclass={"upload": UploadCommand, "validate": ValidateCommand},
+    cmdclass={
+        "upload": UploadCommand,
+        "validate": ValidateCommand,
+        "run_all_tests": RunAllTestsCommand
+    },
 )

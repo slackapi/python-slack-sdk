@@ -1,12 +1,15 @@
+# ------------------
+# Only for running this script here
+from os.path import dirname
 import sys
 import logging
 
-sys.path.insert(1, f"{__file__}/../../..")
+sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# ------------------
 
 # export SLACK_API_TOKEN=xoxb-***
-# python3 tests/samples/basic_usage/sending_a_message.py
+# python3 integration_tests/samples/basic_usage/sending_a_message.py
 
 import os
 from slack import WebClient
