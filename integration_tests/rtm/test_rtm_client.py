@@ -44,7 +44,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
         # Stop the Client
-        if not self.rtm_client._stopped:
+        if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
     def test_basic_operations(self):
@@ -211,11 +211,10 @@ class TestRTMClient(unittest.TestCase):
         self.success = None
         self.text = "This message was sent to verify issue #631"
 
-        self.loop = asyncio.get_event_loop()
         self.rtm_client = RTMClient(
             token=self.bot_token,
             run_async=False, # even though run_async=False, handlers for RTM events can be a coroutine
-            loop=self.loop,
+            loop=asyncio.new_event_loop(), # TODO: remove this
         )
 
         # @RTMClient.run_on(event="message")
@@ -249,7 +248,6 @@ class TestRTMClient(unittest.TestCase):
             self.logger.debug(payload)
             data = payload['data']
             web_client = payload['web_client']
-            web_client._event_loop = self.loop
 
             try:
                 if "text" in data and self.text in data["text"]:
@@ -293,21 +291,18 @@ class TestRTMClient(unittest.TestCase):
     @pytest.mark.skip("this is just for your reference")
     @async_test
     async def test_issue_631_sharing_event_loop_async(self):
-        self.loop = asyncio.get_event_loop()
         self.success = None
         self.text = "This message was sent to verify issue #631"
 
-        self.rtm_client = RTMClient(
-            token=self.bot_token,
-            run_async=True, # To turn this on, the test method needs to be an async function + @async_test decorator
-        )
+        # To make run_async=True, the test method needs to be an async function + @async_test decorator
+        self.rtm_client = RTMClient(token=self.bot_token, run_async=True)
+        self.web_client = WebClient(token=self.bot_token, run_async=True)
 
         @RTMClient.run_on(event="message")
         async def send_reply(**payload):
             self.logger.debug(payload)
             data = payload['data']
             web_client = payload['web_client']
-            web_client._event_loop = self.loop
 
             try:
                 if "text" in data and self.text in data["text"]:
