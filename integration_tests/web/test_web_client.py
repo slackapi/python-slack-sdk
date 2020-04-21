@@ -160,6 +160,52 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(message_deletion)
 
     # -------------------------
+    # file operations
+
+    def test_uploading_text_files(self):
+        client = self.sync_client
+        file, filename = __file__, os.path.basename(__file__)
+        upload = client.files_upload(channels=self.channel_id, filename=filename, file=file)
+        self.assertIsNotNone(upload)
+
+        deletion = client.files_delete(file=upload["file"]["id"])
+        self.assertIsNotNone(deletion)
+
+    @async_test
+    async def test_uploading_text_files_async(self):
+        client = self.async_client
+        file, filename = __file__, os.path.basename(__file__)
+        upload = await client.files_upload(
+            channels=self.channel_id, title="Good Old Slack Logo", filename=filename, file=file)
+        self.assertIsNotNone(upload)
+
+        deletion = await client.files_delete(file=upload["file"]["id"])
+        self.assertIsNotNone(deletion)
+
+    def test_uploading_binary_files(self):
+        client = self.sync_client
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        upload = client.files_upload(
+            channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
+        self.assertIsNotNone(upload)
+
+        deletion = client.files_delete(file=upload["file"]["id"])
+        self.assertIsNotNone(deletion)
+
+    @async_test
+    async def test_uploading_binary_files_async(self):
+        client = self.async_client
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        upload = await client.files_upload(
+            channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
+        self.assertIsNotNone(upload)
+
+        deletion = client.files_delete(file=upload["file"]["id"])
+        self.assertIsNotNone(deletion)
+
+    # -------------------------
     # pagination
 
     def test_pagination_with_iterator(self):
