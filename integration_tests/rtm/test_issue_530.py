@@ -1,7 +1,6 @@
 import asyncio
 import collections
 import logging
-import os
 import unittest
 
 import pytest
