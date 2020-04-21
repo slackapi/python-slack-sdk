@@ -27,11 +27,11 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skip()
+    @pytest.mark.skip() # TODO: fix this
     @async_test
     async def test_issue_558(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
-        text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_issue_611)"
+        text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_issue_558)"
 
         self.message_count, self.reaction_count = 0, 0
 

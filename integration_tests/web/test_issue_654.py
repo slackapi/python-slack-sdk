@@ -4,19 +4,25 @@ import logging
 import os
 import unittest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN, SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
-from slack import WebClient
+from integration_tests.env_variable_names import \
+    SLACK_SDK_TEST_BOT_TOKEN, \
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
+from slack import WebClient
 
 
 class TestIssue654(unittest.TestCase):
-    """Runs integration tests with real Slack API"""
+    """Runs integration tests with real Slack API
+
+    https://github.com/slackapi/python-slackclient/issues/654
+    """
 
     def setUp(self):
         if not hasattr(self, "logger"):
             self.logger = logging.getLogger(__name__)
             self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-            self.sync_client: WebClient = WebClient(token=self.bot_token, run_async=False, loop=asyncio.new_event_loop())
+            self.sync_client: WebClient = WebClient(token=self.bot_token, run_async=False,
+                                                    loop=asyncio.new_event_loop())
             self.async_client: WebClient = WebClient(token=self.bot_token, run_async=True)
             self.channel_id = os.environ[SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID]
 

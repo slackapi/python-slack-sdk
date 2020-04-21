@@ -5,11 +5,8 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
-    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
-from slack import RTMClient, WebClient
+from slack import RTMClient
 
 
 class TestRTMClient(unittest.TestCase):

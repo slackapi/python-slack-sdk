@@ -5,9 +5,11 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN, SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
-from slack import WebClient
+from integration_tests.env_variable_names import \
+    SLACK_SDK_TEST_BOT_TOKEN, \
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
+from slack import WebClient
 from slack.web.slack_response import SlackResponse
 
 

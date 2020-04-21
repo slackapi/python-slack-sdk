@@ -6,9 +6,8 @@ import threading
 import time
 import unittest
 
-import psutil
-
-from integration_tests.env_variable_names import SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
+from integration_tests.env_variable_names import \
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
 from slack import RTMClient, WebClient
@@ -22,21 +21,6 @@ class TestRTMClient(unittest.TestCase):
             self.logger = logging.getLogger(__name__)
             self.channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
             self.bot_token = os.environ[SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN]
-
-        if not hasattr(self, "cpu_monitor") or not TestRTMClient.cpu_monitor.is_alive():
-            def run_cpu_monitor(self):
-                self.logger.debug("Starting CPU monitor in another thread...")
-                TestRTMClient.cpu_usage = 0
-                while True:
-                    p = psutil.Process(os.getpid())
-                    current_cpu_usage: float = p.cpu_percent(interval=0.5)
-                    self.logger.debug(current_cpu_usage)
-                    if current_cpu_usage > TestRTMClient.cpu_usage:
-                        TestRTMClient.cpu_usage = current_cpu_usage
-
-            TestRTMClient.cpu_monitor = threading.Thread(target=run_cpu_monitor, args=[self])
-            TestRTMClient.cpu_monitor.setDaemon(True)
-            TestRTMClient.cpu_monitor.start()
 
     def tearDown(self):
         # Reset the decorators by @RTMClient.run_on
@@ -102,10 +86,7 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(5)
 
         text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_basic_operations_async)"
-        new_message = await self.async_web_client.chat_postMessage(
-            channel="CHE2DUW5V",
-            text=text
-        )
+        new_message = await self.async_web_client.chat_postMessage(channel=self.channel_id, text=text)
         self.assertFalse("error" in new_message)
         await asyncio.sleep(5)
         self.assertEqual(self.sent_text, text)

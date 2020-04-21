@@ -6,13 +6,14 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
+from integration_tests.env_variable_names import \
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
 from slack import RTMClient, WebClient
 
 
-class TestRTMClient_Issue_611(unittest.TestCase):
+class TestRTMClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
     https://github.com/slackapi/python-slackclient/issues/611
@@ -26,7 +27,7 @@ class TestRTMClient_Issue_611(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skip() # TODO: Fix this
+    @pytest.mark.skip()  # TODO: Fix this
     @async_test
     async def test_issue_611(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
@@ -40,7 +41,7 @@ class TestRTMClient_Issue_611(unittest.TestCase):
                 return  # skip
 
             self.message_count += 1
-            raise Exception # This causes the termination of the process
+            raise Exception  # This causes the termination of the process
 
         def process_reactions(**payload):
             self.logger.info(payload)

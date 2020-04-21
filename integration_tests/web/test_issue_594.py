@@ -14,7 +14,10 @@ from slack import WebClient
 
 
 class TestWebClient(unittest.TestCase):
-    """Runs integration tests with real Slack API"""
+    """Runs integration tests with real Slack API
+
+    https://github.com/slackapi/python-slackclient/issues/594
+    """
 
     def setUp(self):
         self.logger = logging.getLogger(__name__)
@@ -27,7 +30,7 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @pytest.mark.skip() # TODO: fix this
+    @pytest.mark.skip()  # TODO: fix this
     def test_issue_594(self):
         client, logger = self.sync_client, self.logger
         external_url = "https://www.example.com/good-old-slack-logo"

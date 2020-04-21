@@ -1,8 +1,8 @@
 # ------------------
 # Only for running this script here
-from os.path import dirname
-import sys
 import logging
+import sys
+from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)

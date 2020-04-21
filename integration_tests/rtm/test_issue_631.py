@@ -9,14 +9,18 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
+from integration_tests.env_variable_names import \
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
 from slack import RTMClient, WebClient
 
 
-class TestRTMClient_Issue_631(unittest.TestCase):
-    """Runs integration tests with real Slack API"""
+class TestRTMClient(unittest.TestCase):
+    """Runs integration tests with real Slack API
+
+    https://github.com/slackapi/python-slackclient/issues/631
+    """
 
     def setUp(self):
         if not hasattr(self, "logger"):
@@ -30,11 +34,6 @@ class TestRTMClient_Issue_631(unittest.TestCase):
         # Stop the Client
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
-
-    # -----------------------
-    # Issue #631
-    # https://github.com/slackapi/python-slackclient/issues/631
-    # -----------------------
 
     @pytest.mark.skip()  # TODO: this issue needs to be fixed
     def test_issue_631_sharing_event_loop(self):
