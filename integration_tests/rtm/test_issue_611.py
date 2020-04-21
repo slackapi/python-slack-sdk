@@ -77,5 +77,5 @@ class TestRTMClient_Issue_611(unittest.TestCase):
             self.assertEqual(self.message_count, 1)
             self.assertEqual(self.reaction_count, 2)  # TODO: fix this
         finally:
-            if rtm._stopped:
+            if not rtm._stopped:
                 rtm.stop()
