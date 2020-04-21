@@ -1001,7 +1001,18 @@ class WebClient(BaseClient):
         kwargs.update(
             {"external_id": external_id, "external_url": external_url, "title": title}
         )
-        return self.api_call("files.remote.add", http_verb="GET", params=kwargs)
+        files = None
+        # preview_image (file): Preview of the document via multipart/form-data.
+        if "preview_image" in kwargs:
+            files = {"preview_image": kwargs.pop("preview_image")}
+
+        return self.api_call(
+            # Intentionally using "POST" method over "GET" here
+            "files.remote.add",
+            http_verb="POST",
+            data=kwargs,
+            files=files,
+        )
 
     def files_remote_update(self, **kwargs) -> Union[Future, SlackResponse]:
         """Updates an existing remote file."""
