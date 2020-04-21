@@ -20,6 +20,7 @@
 For now, we'll only use one scope.
 
 - Add the [`chat:write` scope](https://api.slack.com/scopes/chat:write) to grant your app the permission to post messages in channels it's a member of.
+- Add the [`im:write` scope](https://api.slack.com/scopes/im:write) to grant your app the permission to post messages in DMs.
 
 🎉 You should briefly see a success banner.
 
