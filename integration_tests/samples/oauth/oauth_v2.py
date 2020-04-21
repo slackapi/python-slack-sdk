@@ -82,6 +82,7 @@ def oauth_start():
     state = state_service.generate()
     return f'<a href="https://slack.com/oauth/v2/authorize?' \
            f'scope={scopes}&' \
+           f'user_scope={user_scopes}&' \
            f'client_id={client_id}&' \
            f'redirect_uri={redirect_uri}&' \
            f'state={state}' \
