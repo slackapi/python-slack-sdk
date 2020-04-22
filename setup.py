@@ -15,7 +15,7 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
-tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black"]
+tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black", "psutil"]
 
 
 class BaseCommand(Command):
@@ -48,6 +48,10 @@ class UploadCommand(BaseCommand):
     description = "Build and publish the package."
 
     def run(self):
+        self._run(
+            "Installing upload dependencies…",
+            [sys.executable, "-m", "pip", "install", "wheel"],
+        )
         try:
             self.status("Removing previous builds…")
             rmtree(os.path.join(here, "dist"))
@@ -78,6 +82,15 @@ class ValidateCommand(BaseCommand):
 
     description = "Run Python static code analyzer (flake8), formatter (black) and unit tests (pytest)."
 
+    user_options = [
+        ('unit-test-target=', 'i', 'tests/{unit-test-target}'),
+        ('test-target=', 'i', 'tests/{test-target}')
+    ]
+
+    def initialize_options(self):
+        self.unit_test_target = ""
+        self.test_target = ""
+
     def run(self):
         self._run(
             "Installing test dependencies…",
@@ -85,6 +98,8 @@ class ValidateCommand(BaseCommand):
         )
         self._run("Running black…", [sys.executable, "-m", "black", f"{here}/slack"])
         self._run("Running flake8…", [sys.executable, "-m", "flake8", f"{here}/slack"])
+
+        target = self.unit_test_target or self.test_target
         self._run(
             "Running pytest…",
             [
@@ -93,7 +108,39 @@ class ValidateCommand(BaseCommand):
                 "pytest",
                 "--cov-report=xml",
                 f"--cov={here}/slack",
-                "tests/",
+                f"tests/{target}",
+            ],
+        )
+
+
+class RunAllTestsCommand(ValidateCommand):
+    """Support setup.py integration_test."""
+
+    description = ValidateCommand.description + "\nRun integration tests (pytest)."
+
+    user_options = [
+        ('unit-test-target=', 'i', 'tests/{unit-test-target}'),
+        ('integration-test-target=', 'i', 'integration_tests/{integration-test-target}'),
+        ('test-target=', 'i', 'integration_tests/{test-target}')
+    ]
+
+    def initialize_options(self):
+        self.unit_test_target = ""
+        self.integration_test_target = ""
+        self.test_target = ""
+
+    def run(self):
+        ValidateCommand.run(self)
+        target = self.integration_test_target or self.test_target
+        self._run(
+            "Running pytest…",
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "--cov-report=xml",
+                f"--cov={here}/slack",
+                f"integration_tests/{target}",
             ],
         )
 
@@ -111,7 +158,7 @@ setup(
     include_package_data=True,
     license="MIT",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Communications :: Chat",
         "Topic :: System :: Networking",
@@ -124,12 +171,16 @@ setup(
     ],
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
     packages=find_packages(
-        exclude=["docs", "docs-src", "tests", "tests.*", "tutorial"]
+        exclude=["docs", "docs-src", "integration_tests", "tests", "tests.*", "tutorial"]
     ),
     install_requires=["aiohttp>3.5.2,<4.0.0"],
     extras_require={"optional": ["aiodns>1.0"]},
     setup_requires=["pytest-runner"],
     test_suite="tests",
     tests_require=tests_require,
-    cmdclass={"upload": UploadCommand, "validate": ValidateCommand},
+    cmdclass={
+        "upload": UploadCommand,
+        "validate": ValidateCommand,
+        "run_all_tests": RunAllTestsCommand
+    },
 )

@@ -1,9 +1,13 @@
+# ------------------
+# Only for running this script here
 import json
-import sys
 import logging
+import sys
+from os.path import dirname
 
-sys.path.insert(1, f"{__file__}/../../..")
+sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
+# ------------------
 
 # ---------------------
 # Slack Request Verification
@@ -138,7 +142,7 @@ if __name__ == "__main__":
     # export SLACK_SIGNING_SECRET=***
     # export SLACK_API_TOKEN=xoxb-***
     # export FLASK_ENV=development
-    # python3 tests/samples/basic_usage/views.py
+    # python3 integration_tests/samples/basic_usage/views.py
     app.run("localhost", 3000)
 
 # ngrok http 3000

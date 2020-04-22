@@ -1,12 +1,16 @@
-import sys
+# ------------------
+# Only for running this script here
 import logging
+import sys
+from os.path import dirname
 
-sys.path.insert(1, f"{__file__}/../../..")
+sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# ------------------
 
 # export SLACK_API_TOKEN=xoxb-***
-# python3 tests/samples/readme/sending_messages.py
+# echo 'Hello world!' > tmp.txt
+# python3 integration_tests/samples/readme/uploading_files.py
 
 import os
 from slack import WebClient
@@ -15,10 +19,11 @@ from slack.errors import SlackApiError
 client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
 try:
-    response = client.chat_postMessage(
-        channel='#random',
-        text="Hello world!")
-    assert response["message"]["text"] == "Hello world!"
+    filepath = "./tmp.txt"
+    response = client.files_upload(
+        channels='#random',
+        file=filepath)
+    assert response["file"]  # the uploaded file
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
     assert e.response["ok"] is False

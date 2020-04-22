@@ -1,12 +1,15 @@
-import sys
+# ------------------
+# Only for running this script here
 import logging
+import sys
+from os.path import dirname
 
-sys.path.insert(1, f"{__file__}/../../..")
+sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# ------------------
 
 # export SLACK_API_TOKEN=xoxb-***
-# python3 tests/samples/conversations/create_private_channel.py
+# python3 integration_tests/samples/conversations/create_private_channel.py
 
 import os
 from slack import WebClient

@@ -74,7 +74,7 @@ class TestRTMClientFunctional(unittest.TestCase):
                 self.assertEqual(rtm_client._connection_attempts, 2)
                 rtm_client.stop()
 
-        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True)
+        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True, loop=self.loop)
         client.start()
 
     def test_client_auto_reconnects_if_an_error_is_thrown(self, mock_rtm_response):
@@ -88,7 +88,7 @@ class TestRTMClientFunctional(unittest.TestCase):
                 self.assertEqual(rtm_client._connection_attempts, 2)
                 rtm_client.stop()
 
-        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True)
+        client = slack.RTMClient(token="xoxa-1234", auto_reconnect=True, loop=self.loop)
         client.start()
 
     def test_open_event_receives_expected_arguments(self, mock_rtm_response):
