@@ -8,7 +8,7 @@ import pytest
 from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
-from integration_tests.helpers import async_test
+from integration_tests.helpers import async_test, is_not_specified
 from slack import WebClient
 from slack.web.slack_response import SlackResponse
 
@@ -221,8 +221,7 @@ class TestWebClient(unittest.TestCase):
 
         self.assertGreater(fetched_count, 1)
 
-    # TODO: Fix this issue
-    @pytest.mark.skip
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_pagination_with_iterator_async(self):
         client = self.async_client

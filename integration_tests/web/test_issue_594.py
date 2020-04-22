@@ -10,6 +10,7 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID, \
     SLACK_SDK_TEST_WEB_TEST_USER_ID
+from integration_tests.helpers import is_not_specified
 from slack import WebClient
 
 
@@ -30,7 +31,7 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @pytest.mark.skip()  # TODO: fix this
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     def test_issue_594(self):
         client, logger = self.sync_client, self.logger
         external_url = "https://www.example.com/good-old-slack-logo"

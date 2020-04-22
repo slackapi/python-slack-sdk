@@ -9,7 +9,7 @@ import pytest
 from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
-from integration_tests.helpers import async_test
+from integration_tests.helpers import async_test, is_not_specified
 from slack import RTMClient, WebClient
 
 
@@ -27,7 +27,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skip()  # TODO: Fix this
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_issue_611(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]

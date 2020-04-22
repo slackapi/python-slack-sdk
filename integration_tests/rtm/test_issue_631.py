@@ -12,7 +12,7 @@ import pytest
 from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
-from integration_tests.helpers import async_test
+from integration_tests.helpers import async_test, is_not_specified
 from slack import RTMClient, WebClient
 
 
@@ -35,7 +35,7 @@ class TestRTMClient(unittest.TestCase):
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
-    @pytest.mark.skip()  # TODO: this issue needs to be fixed
+    @pytest.mark.skipif(condition=is_not_specified(), reason="this is just for reference")
     def test_issue_631_sharing_event_loop(self):
         self.success = None
         self.text = "This message was sent to verify issue #631"
@@ -117,7 +117,7 @@ class TestRTMClient(unittest.TestCase):
             t.join(.3)
 
     # Solution (2) for #631
-    @pytest.mark.skip("this is just for your reference")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="this is just for reference")
     @async_test
     async def test_issue_631_sharing_event_loop_async(self):
         self.success = None

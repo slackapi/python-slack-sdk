@@ -6,7 +6,7 @@ import unittest
 import pytest
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN
-from integration_tests.helpers import async_test
+from integration_tests.helpers import async_test, is_not_specified
 from slack import WebClient
 
 
@@ -33,13 +33,13 @@ class TestWebClient(unittest.TestCase):
         response = client.conversations_list(exclude_archived="true")
         self.assertIsNotNone(response)
 
-    @pytest.mark.skip()  # TODO: fix this
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     def test_issue_560_failure(self):
         client = self.sync_client
         response = client.conversations_list(exclude_archived=True)
         self.assertIsNotNone(response)
 
-    @pytest.mark.skip()  # TODO: fix this
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_issue_560_failure_async(self):
         client = self.async_client

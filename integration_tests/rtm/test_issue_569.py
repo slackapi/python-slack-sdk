@@ -12,7 +12,7 @@ import pytest
 from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
-from integration_tests.helpers import async_test
+from integration_tests.helpers import async_test, is_not_specified
 from slack import RTMClient, WebClient
 
 
@@ -50,7 +50,7 @@ class TestRTMClient(unittest.TestCase):
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
-    @pytest.mark.skip()  # TODO: Fix this issue
+    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     def test_cpu_usage(self):
         self.rtm_client = RTMClient(
             token=self.bot_token,
