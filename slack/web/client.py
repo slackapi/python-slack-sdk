@@ -1844,23 +1844,6 @@ class WebClient(BaseClient):
         kwargs.update({"trigger_id": trigger_id, "view": view})
         return self.api_call("views.push", json=kwargs)
 
-    def views_publish(
-        self, *, user_id: str, view: dict, **kwargs
-    ) -> Union[Future, SlackResponse]:
-        """Publish a static view for a User.
-
-        Create or update the view that comprises an
-        app's Home tab (https://api.slack.com/surfaces/tabs)
-        for a specific user.
-
-        Args:
-            user_id (str): id of the user you want publish a view to.
-                e.g. 'U0BPQUNTA'
-            view (dict): The view payload.
-        """
-        kwargs.update({"user_id": user_id, "view": view})
-        return self.api_call("views.push", json=kwargs)
-
     def views_update(
         self, *, view: dict, external_id: str = None, view_id: str = None, **kwargs
     ) -> Union[Future, SlackResponse]:
