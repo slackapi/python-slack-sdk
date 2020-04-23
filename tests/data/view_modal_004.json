@@ -1,0 +1,70 @@
+{
+  "type": "modal",
+  "title": {
+    "type": "plain_text",
+    "text": "Notification settings",
+    "emoji": true
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "close": {
+    "type": "plain_text",
+    "text": "Cancel",
+    "emoji": true
+  },
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.toUrl.com|PR Strategy 2019> posts into <fakelink.toChannel.com|#public-relations>*\n\nSelect which notifications to send:"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "checkboxes",
+          "options": [
+            {
+              "text": {
+                "type": "plain_text",
+                "text": "New tasks"
+              },
+              "value": "tasks",
+              "description": {
+                "type": "plain_text",
+                "text": "When new tasks are added to project"
+              }
+            },
+            {
+              "text": {
+                "type": "plain_text",
+                "text": "New comments"
+              },
+              "value": "comments",
+              "description": {
+                "type": "plain_text",
+                "text": "When new comments are added"
+              }
+            },
+            {
+              "text": {
+                "type": "plain_text",
+                "text": "Project updates"
+              },
+              "value": "updates",
+              "description": {
+                "type": "plain_text",
+                "text": "When project is updated"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

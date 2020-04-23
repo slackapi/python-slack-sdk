@@ -1,0 +1,424 @@
+{
+  "type": "modal",
+  "title": {
+    "type": "plain_text",
+    "text": "Ticket app",
+    "emoji": true
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "close": {
+    "type": "plain_text",
+    "text": "Cancel",
+    "emoji": true
+  },
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Pick a ticket list from the dropdown"
+      },
+      "accessory": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "All Tickets",
+              "emoji": true
+            },
+            "value": "all_tickets"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Assigned To Me",
+              "emoji": true
+            },
+            "value": "assigned_to_me"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Issued By Me",
+              "emoji": true
+            },
+            "value": "issued_by_me"
+          }
+        ],
+        "initial_option": {
+          "text": {
+            "type": "plain_text",
+            "text": "Assigned To Me",
+            "emoji": true
+          },
+          "value": "assigned_to_me"
+        }
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/highpriority.png",
+          "alt_text": "High Priority"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*High Priority*"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.com|WEB-1098 Adjust borders on homepage graphic>*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":white_check_mark: Mark as done",
+              "emoji": true
+            },
+            "value": "done"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":pencil: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Awaiting Release"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+          "alt_text": "Task Icon"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "Task"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/profile_1.png",
+          "alt_text": "Michael Scott"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<fakelink.toUser.com|Michael Scott>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.com|MOB-2011 Deep-link from web search results to product page>*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":white_check_mark: Mark as done",
+              "emoji": true
+            },
+            "value": "done"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":pencil: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Open"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/newfeature.png",
+          "alt_text": "New Feature Icon"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "New Feature"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/profile_2.png",
+          "alt_text": "Pam Beasely"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<fakelink.toUser.com|Pam Beasely>"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/mediumpriority.png",
+          "alt_text": "palm tree"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Medium Priority*"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.com|WEB-1098 Adjust borders on homepage graphic>*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":white_check_mark: Mark as done",
+              "emoji": true
+            },
+            "value": "done"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":pencil: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Awaiting Release"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+          "alt_text": "Task Icon"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "Task"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/profile_1.png",
+          "alt_text": "Michael Scott"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<fakelink.toUser.com|Michael Scott>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.com|MOB-2011 Deep-link from web search results to product page>*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":white_check_mark: Mark as done",
+              "emoji": true
+            },
+            "value": "done"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":pencil: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Open"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/newfeature.png",
+          "alt_text": "New Feature Icon"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "New Feature"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/profile_2.png",
+          "alt_text": "Pam Beasely"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<fakelink.toUser.com|Pam Beasely>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*<fakelink.com|WEB-1098 Adjust borders on homepage graphic>*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":white_check_mark: Mark as done",
+              "emoji": true
+            },
+            "value": "done"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":pencil: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Awaiting Release"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/task-icon.png",
+          "alt_text": "Task Icon"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "Task"
+        },
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/profile_1.png",
+          "alt_text": "Michael Scott"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<fakelink.toUser.com|Michael Scott>"
+        }
+      ]
+    }
+  ]
+}
