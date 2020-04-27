@@ -34,7 +34,7 @@ singleton_async_client = WebClient(
 )
 
 
-# This doesn't work
+# Fixed in 2.6.0: This doesn't work
 @app.route("/sync/singleton", methods=["GET"])
 def singleton():
     try:
