@@ -4,6 +4,11 @@ import unittest
 
 import slack
 import slack.errors as err
+<<<<<<< HEAD
+=======
+from build.lib.slack.web.urllib_client import UrllibWebClient
+from slack.web.urllib_client import UrllibWebClient
+>>>>>>> Revise WebClient/RTMClient internals for run_async=False
 from tests.helpers import async_test
 from tests.web.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
@@ -14,6 +19,11 @@ class TestWebClient(unittest.TestCase):
         setup_mock_web_api_server(self)
         self.client = slack.WebClient(
             token="xoxp-1234",
+            base_url="http://localhost:8888",
+        )
+        self.async_client = slack.WebClient(
+            token="xoxp-1234",
+            run_async=True,
             base_url="http://localhost:8888",
         )
 

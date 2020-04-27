@@ -23,13 +23,11 @@ class TestRTMClientFunctional(unittest.TestCase):
             base_url="http://localhost:8765",
             auto_reconnect=False,
             run_async=False,
-            loop=asyncio.new_event_loop(),
         )
         self.client._web_client = slack.WebClient(
             token="xoxb-valid",
             base_url="http://localhost:8888",
             run_async=False,
-            loop=asyncio.new_event_loop(),
         )
 
     def tearDown(self):

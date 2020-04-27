@@ -1,25 +1,23 @@
 """A Python module for interacting with Slack's RTM API."""
 
-# Standard Imports
-import os
-import logging
-import random
+import asyncio
 import collections
-import concurrent
 import inspect
+import logging
+import os
+import random
 import signal
 from asyncio import Future
-from typing import Optional, Callable, DefaultDict, List
+from concurrent.futures.thread import ThreadPoolExecutor
 from ssl import SSLContext
 from threading import current_thread, main_thread
+from typing import List
+from typing import Optional, Callable, DefaultDict
 
-# ThirdParty Imports
-import asyncio
 import aiohttp
 
-# Internal Imports
-from slack.web.client import WebClient
 import slack.errors as client_err
+from slack.web.client import WebClient
 
 
 class RTMClient(object):
@@ -108,6 +106,8 @@ class RTMClient(object):
         *,
         token: str,
         run_async: Optional[bool] = False,
+        # will be used only when run_async=False
+        run_sync_thread_pool_size: int = 3,
         auto_reconnect: Optional[bool] = True,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
@@ -120,6 +120,9 @@ class RTMClient(object):
     ):
         self.token = token.strip()
         self.run_async = run_async
+        self.thread_pool_executor = ThreadPoolExecutor(
+            max_workers=run_sync_thread_pool_size
+        )
         self.auto_reconnect = auto_reconnect
         self.ssl = ssl
         self.proxy = proxy
@@ -136,6 +139,16 @@ class RTMClient(object):
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
+        self._web_client = WebClient(
+            token=self.token,
+            base_url=self.base_url,
+            ssl=self.ssl,
+            proxy=self.proxy,
+            run_async=self.run_async,
+            loop=self._event_loop,
+            session=self._session,
+            headers=self.headers,
+        )
 
     @staticmethod
     def run_on(*, event: str):
@@ -196,7 +209,6 @@ class RTMClient(object):
 
         if self.run_async:
             return future
-
         return self._event_loop.run_until_complete(future)
 
     def stop(self):
@@ -352,7 +364,6 @@ class RTMClient(object):
                 client_err.SlackApiError,
                 # TODO: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
-                self._logger.debug(str(exception))
                 await self._dispatch_event(event="error", data=exception)
                 if self.auto_reconnect and not self._stopped:
                     await self._wait_exponentially(exception)
@@ -462,12 +473,14 @@ class RTMClient(object):
                     # close/error callbacks.
                     break
 
-                if inspect.iscoroutinefunction(callback):
+                if self.run_async or inspect.iscoroutinefunction(callback):
                     await callback(
                         rtm_client=self, web_client=self._web_client, data=data
                     )
                 else:
-                    self._execute_in_thread(callback, data)
+                    await self._execute_in_thread(
+                        callback=callback, web_client=self._web_client, data=data
+                    )
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
@@ -475,24 +488,12 @@ class RTMClient(object):
                 self._logger.error(msg)
                 raise
 
-    def _execute_in_thread(self, callback, data):
+    async def _execute_in_thread(self, callback, web_client, data):
         """Execute the callback in another thread. Wait for and return the results."""
-        web_client = WebClient(
-            token=self.token,
-            base_url=self.base_url,
-            ssl=self.ssl,
-            proxy=self.proxy,
-            headers=self.headers,
+        future = self.thread_pool_executor.submit(
+            callback, rtm_client=self, web_client=web_client, data=data
         )
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(
-                callback, rtm_client=self, web_client=web_client, data=data
-            )
-
-            while future.running():
-                pass
-
-            future.result()
+        return future.result()
 
     async def _retrieve_websocket_info(self):
         """Retrieves the WebSocket info from Slack.
@@ -527,10 +528,18 @@ class RTMClient(object):
                 headers=self.headers,
             )
         self._logger.debug("Retrieving websocket info.")
-        if self.connect_method in ["rtm.start", "rtm_start"]:
-            resp = await self._web_client.rtm_start()
+        use_rtm_start = self.connect_method in ["rtm.start", "rtm_start"]
+        if self.run_async:
+            if use_rtm_start:
+                resp = await self._web_client.rtm_start()
+            else:
+                resp = await self._web_client.rtm_connect()
         else:
-            resp = await self._web_client.rtm_connect()
+            if use_rtm_start:
+                resp = self._web_client.rtm_start()
+            else:
+                resp = self._web_client.rtm_connect()
+
         url = resp.get("url")
         if url is None:
             msg = "Unable to retrieve RTM URL from Slack."
@@ -542,7 +551,7 @@ class RTMClient(object):
 
         Calculate the number of seconds to wait and then add
         a random number of milliseconds to avoid coincidental
-        synchronized client retries. Wait up to the maximium amount
+        synchronized client retries. Wait up to the maximum amount
         of wait time specified via 'max_wait_time'. However,
         if Slack returned how long to wait use that.
         """
@@ -550,7 +559,16 @@ class RTMClient(object):
             (2 ** self._connection_attempts) + random.random(), max_wait_time
         )
         try:
-            wait_time = exception.response["headers"]["Retry-After"]
+            headers = (
+                exception.response["headers"]
+                if "headers" in exception.response
+                else None
+            )
+            if headers and "Retry-After" in headers:
+                wait_time = headers["Retry-After"]
+            else:
+                # an error returned due to other unrecoverable reasons
+                raise exception
         except (KeyError, AttributeError):
             pass
         self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)

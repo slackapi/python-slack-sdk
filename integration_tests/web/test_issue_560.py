@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 import unittest
@@ -17,7 +16,7 @@ class TestWebClient(unittest.TestCase):
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-        self.sync_client: WebClient = WebClient(token=self.bot_token, run_async=False, loop=asyncio.new_event_loop())
+        self.sync_client: WebClient = WebClient(token=self.bot_token, run_async=False)
         self.async_client: WebClient = WebClient(token=self.bot_token, run_async=True)
 
     def tearDown(self):
@@ -37,7 +36,7 @@ class TestWebClient(unittest.TestCase):
         response = await client.conversations_list(exclude_archived=1)
         self.assertIsNotNone(response)
 
-        response = client.conversations_list(exclude_archived="true")
+        response = await client.conversations_list(exclude_archived="true")
         self.assertIsNotNone(response)
 
     def test_issue_560_failure(self):

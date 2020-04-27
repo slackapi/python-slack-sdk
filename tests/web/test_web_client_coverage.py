@@ -17,7 +17,7 @@ class TestWebClientCoverage(unittest.TestCase):
 
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = slack.WebClient(token="xoxb-coverage", base_url=f"http://localhost:8888")
+        self.client = slack.WebClient(token="xoxb-coverage", base_url="http://localhost:8888")
         for api_method in self.all_api_methods:
             if api_method.startswith("apps.") or api_method in [
                 "oauth.access",

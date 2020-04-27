@@ -25,9 +25,8 @@ class MockHandler(SimpleHTTPRequestHandler):
     def is_valid_token(self):
         if self.path.startswith("oauth"):
             return True
-        else:
-            return "Authorization" in self.headers \
-                   and str(self.headers["Authorization"]).startswith("Bearer xoxb-")
+        return "Authorization" in self.headers \
+               and str(self.headers["Authorization"]).startswith("Bearer xoxb-")
 
     def set_common_headers(self):
         self.send_header("content-type", "application/json;charset=utf-8")

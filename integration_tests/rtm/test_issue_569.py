@@ -43,6 +43,9 @@ class TestRTMClient(unittest.TestCase):
             TestRTMClient.cpu_monitor.setDaemon(True)
             TestRTMClient.cpu_monitor.start()
 
+        self.rtm_client = None
+        self.web_client = None
+
     def tearDown(self):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)

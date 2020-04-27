@@ -62,4 +62,3 @@ class TestWebClient(unittest.TestCase):
             self.assertIsNotNone(response)
         after = threading.active_count()
         self.assertEqual(0, after - before)
-
