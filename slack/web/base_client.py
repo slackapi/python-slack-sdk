@@ -1,9 +1,8 @@
 """A Python module for interacting with Slack's Web API."""
 
 # Standard Imports
+import json
 from urllib.parse import urljoin
-import platform
-import sys
 import logging
 import asyncio
 from typing import Optional, Union
@@ -15,9 +14,10 @@ import aiohttp
 from aiohttp import FormData, BasicAuth
 
 # Internal Imports
+from slack.web import get_user_agent
 from slack.web.slack_response import SlackResponse
-import slack.version as ver
 import slack.errors as err
+from slack.web.urllib_client import UrllibWebClient
 
 
 class BaseClient:
@@ -32,6 +32,7 @@ class BaseClient:
         ssl=None,
         proxy=None,
         run_async=False,
+        use_sync_aiohttp=False,
         session=None,
         headers: Optional[dict] = None,
     ):
@@ -41,10 +42,15 @@ class BaseClient:
         self.ssl = ssl
         self.proxy = proxy
         self.run_async = run_async
+        self.use_sync_aiohttp = use_sync_aiohttp
         self.session = session
         self.headers = headers or {}
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
+
+        self.urllib_client = UrllibWebClient(
+            token=self.token, default_headers=self.headers, web_client=self,
+        )
 
     def _get_event_loop(self):
         """Retrieves the event loop or creates a new one."""
@@ -58,7 +64,7 @@ class BaseClient:
     def _get_headers(
         self, has_json: bool, has_files: bool, request_specific_headers: Optional[dict]
     ):
-        """Contructs the headers need for a request.
+        """Constructs the headers need for a request.
         Args:
             has_json (bool): Whether or not the request has json.
             has_files (bool): Whether or not the request has files.
@@ -73,7 +79,7 @@ class BaseClient:
                 }
         """
         final_headers = {
-            "User-Agent": self._get_user_agent(),
+            "User-Agent": get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         }
 
@@ -115,7 +121,7 @@ class BaseClient:
                 e.g. 'chat.postMessage'
             http_verb (str): HTTP Verb. e.g. 'POST'
             files (dict): Files to multipart upload.
-                e.g. {imageORfile: file_objectORfile_path}
+                e.g. {image OR file: file_object OR file_path}
             data: The body to attach to the request. If a dictionary is
                 provided, form-encoding will take place.
                 e.g. {'key1': 'value1', 'key2': 'value2'}
@@ -160,18 +166,21 @@ class BaseClient:
             "auth": auth,
         }
 
-        if self._event_loop is None:
-            self._event_loop = self._get_event_loop()
+        if self.run_async or self.use_sync_aiohttp:
+            if self._event_loop is None:
+                self._event_loop = self._get_event_loop()
 
-        future = asyncio.ensure_future(
-            self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
-            loop=self._event_loop,
-        )
-
-        if self.run_async:
-            return future
-
-        return self._event_loop.run_until_complete(future)
+            future = asyncio.ensure_future(
+                self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
+                loop=self._event_loop,
+            )
+            if self.run_async:
+                return future
+            elif self.use_sync_aiohttp:
+                # Using this is no longer recommended - just keep this for backward-compatibility
+                return self._event_loop.run_until_complete(future)
+        else:
+            return self._sync_send(api_url=api_url, req_args=req_args)
 
     def _get_url(self, api_method):
         """Joins the base Slack URL and an API method to form an absolute URL.
@@ -225,6 +234,7 @@ class BaseClient:
             "http_verb": http_verb,
             "api_url": api_url,
             "req_args": req_args,
+            "use_sync_aiohttp": self.use_sync_aiohttp,
         }
         return SlackResponse(**{**data, **res}).validate()
 
@@ -258,23 +268,38 @@ class BaseClient:
             await session.close()
         return response
 
-    @staticmethod
-    def _get_user_agent():
-        """Construct the user-agent header with the package info,
-        Python version and OS version.
+    def _sync_send(self, api_url, req_args):
+        params = req_args["params"] if "params" in req_args else None
+        data = req_args["data"] if "data" in req_args else None
+        files = req_args["files"] if "files" in req_args else None
+        json = req_args["json"] if "files" in req_args else None
+        headers = req_args["headers"] if "headers" in req_args else None
+        token = params.get("token") if params and "token" in params else None
+        body_params = {}
+        if params:
+            body_params.update(params)
+        if data:
+            body_params.update(data)
 
-        Returns:
-            The user agent string.
-            e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
-        """
-        # __name__ returns all classes, we only want the client
-        client = "{0}/{1}".format("slackclient", ver.__version__)
-        python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(
-            v=sys.version_info
+        return self.urllib_client.api_call(
+            token=token,
+            url=api_url,
+            query_params={},
+            body_params=body_params,
+            files=files,
+            json_body=json,
+            additional_headers=headers,
         )
-        system_info = "{0}/{1}".format(platform.system(), platform.release())
-        user_agent_string = " ".join([python_version, client, system_info])
-        return user_agent_string
+
+    def _sync_request(self, api_url, req_args):
+        response, response_body = self.urllib_client._perform_http_request(
+            url=api_url, args=req_args,
+        )
+        return {
+            "status_code": int(response.status),
+            "headers": dict(response.headers),
+            "data": json.loads(response_body),
+        }
 
     @staticmethod
     def validate_slack_signature(
