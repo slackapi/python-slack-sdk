@@ -3,9 +3,7 @@ import collections
 import logging
 import unittest
 
-import pytest
-
-from integration_tests.helpers import async_test, is_not_specified
+from integration_tests.helpers import async_test
 from slack import RTMClient
 
 
@@ -22,19 +20,19 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     def test_issue_530(self):
         try:
             rtm_client = RTMClient(token="I am not a token", run_async=False, loop=asyncio.new_event_loop())
             rtm_client.start()
             self.fail("Raising an error here was expected")
         except Exception as e:
-            self.assertEqual(str(e), "The server responded with: {'ok': False, 'error': 'invalid_auth'}")
+            self.assertEqual(
+                "The request to the Slack API failed.\n"
+                "The server responded with: {'ok': False, 'error': 'invalid_auth'}", str(e))
         finally:
             if not rtm_client._stopped:
                 rtm_client.stop()
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_issue_530_async(self):
         try:
@@ -42,7 +40,9 @@ class TestRTMClient(unittest.TestCase):
             await rtm_client.start()
             self.fail("Raising an error here was expected")
         except Exception as e:
-            self.assertEqual(str(e), "The server responded with: {'ok': False, 'error': 'invalid_auth'}")
+            self.assertEqual(
+                "The request to the Slack API failed.\n"
+                "The server responded with: {'ok': False, 'error': 'invalid_auth'}", str(e))
         finally:
             if not rtm_client._stopped:
                 rtm_client.stop()
