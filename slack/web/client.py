@@ -79,7 +79,7 @@ class WebClient(BaseClient):
             app_id (str): The id of the app to approve. e.g. 'A12345'
             request_id (str): The id of the request to approve. e.g. 'Ar12345'
         Raises:
-            SlackRequestError: If niether or both the `app_id` and `request_id` args are specified.
+            SlackRequestError: If neither or both the `app_id` and `request_id` args are specified.
         """
         if app_id:
             kwargs.update({"app_id": app_id})
@@ -323,7 +323,7 @@ class WebClient(BaseClient):
             channel_ids (list): A list of channel_ids for this user to join.
                 At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
         """
-        kwargs.update({"team_id": team_id, "email": email, "channel_ids": channel_ids})
+        kwargs.update({"team_id": team_id, "email": email, "channel_ids": ",".join(channel_ids)})
         return self.api_call("admin.users.invite", json=kwargs)
 
     def admin_users_list(
