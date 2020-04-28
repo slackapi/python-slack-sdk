@@ -14,7 +14,7 @@ import aiohttp
 from aiohttp import FormData, BasicAuth
 
 # Internal Imports
-from slack.web import get_user_agent
+from slack.web import get_user_agent, show_2020_01_deprecation
 from slack.web.slack_response import SlackResponse
 import slack.errors as err
 from slack.web.urllib_client import UrllibWebClient
@@ -167,6 +167,9 @@ class BaseClient:
         }
 
         if self.run_async or self.use_sync_aiohttp:
+            # NOTE: For sync mode client, show_2020_01_deprecation(str) is called inside UrllibClient
+            show_2020_01_deprecation(api_method)
+
             if self._event_loop is None:
                 self._event_loop = self._get_event_loop()
 

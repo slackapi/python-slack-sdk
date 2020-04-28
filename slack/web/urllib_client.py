@@ -10,7 +10,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from slack.web import get_user_agent
+from slack.web import get_user_agent, show_2020_01_deprecation
 from slack.web.slack_response import SlackResponse
 
 
@@ -63,6 +63,9 @@ class UrllibWebClient:
         :param additional_headers: request headers to append
         :return: API response
         """
+
+        show_2020_01_deprecation(self._to_api_method(url))
+
         files_to_close: List[BinaryIO] = []
         try:
             if self.logger.level <= logging.DEBUG:
@@ -243,3 +246,10 @@ class UrllibWebClient:
             # will be set afterwards
             headers.pop("Content-Type", None)
         return headers
+
+    def _to_api_method(self, url: str):
+        if url:
+            elements = url.split("/")
+            if elements and len(elements) > 0:
+                return elements[len(elements) - 1].split("?", 1)[0]
+        return None
