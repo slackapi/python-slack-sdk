@@ -33,35 +33,22 @@ class TestWebClient(unittest.TestCase):
         response = client.conversations_list(exclude_archived="true")
         self.assertIsNotNone(response)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
+    @async_test
+    async def test_issue_560_success_async(self):
+        client = self.sync_client
+        response = client.conversations_list(exclude_archived=1)
+        self.assertIsNotNone(response)
+
+        response = client.conversations_list(exclude_archived="true")
+        self.assertIsNotNone(response)
+
     def test_issue_560_failure(self):
         client = self.sync_client
         response = client.conversations_list(exclude_archived=True)
         self.assertIsNotNone(response)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_issue_560_failure_async(self):
         client = self.async_client
         response = await client.conversations_list(exclude_archived=True)
         self.assertIsNotNone(response)
-
-    # _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-    #
-    # v = True
-    #
-    #     @staticmethod
-    #     def _query_var(v):
-    #         if isinstance(v, str):
-    #             return v
-    #         if type(v) is int:  # no subclasses like bool
-    #             return str(v)
-    # >       raise TypeError(
-    #             "Invalid variable type: value "
-    #             "should be str or int, got {!r} "
-    #             "of type {}".format(v, type(v))
-    #         )
-    # E       TypeError: Invalid variable type: value should be str or int, got True of type <class 'bool'>
-    #
-    # path-to-python/site-packages/yarl/__init__.py:824: TypeError
-    # -------------------------------------------------------------------------------------------------- Captured log call --------------------------------------------------------------------------------------------------

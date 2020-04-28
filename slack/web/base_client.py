@@ -14,7 +14,7 @@ import aiohttp
 from aiohttp import FormData, BasicAuth
 
 # Internal Imports
-from slack.web import get_user_agent, show_2020_01_deprecation
+from slack.web import get_user_agent, show_2020_01_deprecation, convert_bool_to_0_or_1
 from slack.web.slack_response import SlackResponse
 import slack.errors as err
 from slack.web.urllib_client import UrllibWebClient
@@ -224,6 +224,10 @@ class BaseClient:
                     req_args["data"].update({k: f})
                 else:
                     req_args["data"].update({k: v})
+
+        if "params" in req_args:
+            # True/False -> "1"/"0"
+            req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
         res = await self._request(
             http_verb=http_verb, api_url=api_url, req_args=req_args

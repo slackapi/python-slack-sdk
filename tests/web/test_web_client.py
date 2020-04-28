@@ -16,6 +16,11 @@ class TestWebClient(unittest.TestCase):
             token="xoxp-1234",
             base_url="http://localhost:8888",
         )
+        self.async_client = slack.WebClient(
+            token="xoxp-1234",
+            run_async=True,
+            base_url="http://localhost:8888",
+        )
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
@@ -106,3 +111,16 @@ class TestWebClient(unittest.TestCase):
         self.client.token = "xoxb-users_setPhoto"
         resp = self.client.users_setPhoto(image="tests/data/slack_logo.png")
         self.assertEqual(200, resp.status_code)
+
+    def test_issue_560_bool_in_params_sync(self):
+        self.client.token = "xoxb-conversations_list"
+        self.client.conversations_list(exclude_archived=1)  # ok
+        self.client.conversations_list(exclude_archived="true")  # ok
+        self.client.conversations_list(exclude_archived=True)  # ok
+
+    @async_test
+    async def test_issue_560_bool_in_params_async(self):
+        self.async_client.token = "xoxb-conversations_list"
+        await self.async_client.conversations_list(exclude_archived=1)  # ok
+        await self.async_client.conversations_list(exclude_archived="true")  # ok
+        await self.async_client.conversations_list(exclude_archived=True)  # TypeError

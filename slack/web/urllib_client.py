@@ -10,7 +10,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from slack.web import get_user_agent, show_2020_01_deprecation
+from slack.web import get_user_agent, show_2020_01_deprecation, convert_bool_to_0_or_1
 from slack.web.slack_response import SlackResponse
 
 
@@ -68,6 +68,10 @@ class UrllibWebClient:
 
         files_to_close: List[BinaryIO] = []
         try:
+            # True/False -> "1"/"0"
+            query_params = convert_bool_to_0_or_1(query_params)
+            body_params = convert_bool_to_0_or_1(body_params)
+
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(
                     f"Slack API Request - url: {url}, "
