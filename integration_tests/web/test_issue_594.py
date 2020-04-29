@@ -48,7 +48,7 @@ class TestWebClient(unittest.TestCase):
 
         message = client.chat_postEphemeral(
             channel=self.channel_id,
-            user="U03E94MK0",
+            user=self.user_id,
             blocks=[
                 {
                     "type": "section",
@@ -83,7 +83,7 @@ class TestWebClient(unittest.TestCase):
 
         message = client.chat_postEphemeral(
             channel=self.channel_id,
-            user="U03E94MK0",
+            user=self.user_id,
             blocks=[
                 {
                     "type": "section",

@@ -1,3 +1,4 @@
+import os
 import platform
 import sys
 import warnings
@@ -58,6 +59,9 @@ deprecated_method_prefixes_2020_01 = ["channels.", "groups.", "im.", "mpim."]
 
 
 def show_2020_01_deprecation(method_name: str):
+    skip_deprecation = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION") # for unit tests etc.
+    if skip_deprecation:
+        return
     if not method_name:
         return
 

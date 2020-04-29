@@ -1,3 +1,4 @@
+import os
 import unittest
 
 import slack
@@ -12,6 +13,7 @@ class TestWebClientCoverage(unittest.TestCase):
     )
 
     api_methods_to_call = []
+    os.environ.setdefault("SLACKCLIENT_SKIP_DEPRECATION", "1")
 
     def setUp(self):
         setup_mock_web_api_server(self)
