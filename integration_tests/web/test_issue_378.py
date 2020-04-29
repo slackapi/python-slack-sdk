@@ -28,7 +28,7 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(response)
 
     @async_test
-    async def test_issue_378(self):
-        client = self.sync_client
-        response = client.users_setPhoto(image="tests/data/slack_logo_new.png")
+    async def test_issue_378_async(self):
+        client = self.async_client
+        response = await client.users_setPhoto(image="tests/data/slack_logo_new.png")
         self.assertIsNotNone(response)
