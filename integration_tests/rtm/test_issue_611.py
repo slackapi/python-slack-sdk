@@ -27,7 +27,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate limited errors")
     @async_test
     async def test_issue_611(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
@@ -35,15 +35,15 @@ class TestRTMClient(unittest.TestCase):
 
         self.message_count, self.reaction_count = 0, 0
 
-        def process_messages(**payload):
+        async def process_messages(**payload):
             self.logger.info(payload)
             if "subtype" in payload["data"] and payload["data"]["subtype"] == "message_replied":
                 return  # skip
 
             self.message_count += 1
-            raise Exception  # This causes the termination of the process
+            raise Exception("something is wrong!")  # This causes the termination of the process
 
-        def process_reactions(**payload):
+        async def process_reactions(**payload):
             self.logger.info(payload)
             self.reaction_count += 1
 
@@ -76,7 +76,7 @@ class TestRTMClient(unittest.TestCase):
             await asyncio.sleep(2)
 
             self.assertEqual(self.message_count, 1)
-            self.assertEqual(self.reaction_count, 2)  # TODO: fix this
+            self.assertEqual(self.reaction_count, 2)
         finally:
             if not rtm._stopped:
                 rtm.stop()
