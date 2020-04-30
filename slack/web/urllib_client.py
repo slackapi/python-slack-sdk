@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from slack.errors import SlackRequestError
 from slack.web import get_user_agent, show_2020_01_deprecation, convert_bool_to_0_or_1
 from slack.web.slack_response import SlackResponse
 
@@ -25,7 +26,7 @@ class UrllibWebClient:
         self,
         *,
         token: str = None,
-        default_headers: Dict[str, str] = dict(),
+        default_headers: Dict[str, str] = {},
         # Not type here to avoid ImportError: cannot import name 'WebClient' from partially initialized module
         # 'slack.web.client' (most likely due to a circular import
         web_client=None,
@@ -45,11 +46,11 @@ class UrllibWebClient:
         *,
         token: str = None,
         url: str,
-        query_params: Dict[str, str] = dict(),
-        json_body: Dict = dict(),
-        body_params: Dict[str, str] = dict(),
-        files: Dict[str, io.BytesIO] = dict(),
-        additional_headers: Dict[str, str] = dict(),
+        query_params: Dict[str, str] = {},
+        json_body: Dict = {},
+        body_params: Dict[str, str] = {},
+        files: Dict[str, io.BytesIO] = {},
+        additional_headers: Dict[str, str] = {},
     ) -> SlackResponse:
         """Performs a Slack API request and returns the result.
 
@@ -207,10 +208,16 @@ class UrllibWebClient:
         if isinstance(body, str):
             body = body.encode("utf-8")
 
+        # NOTE: Intentionally ignore the `http_verb` here
+        # Slack APIs accepts any API method requests with POST methods
         try:
-            # NOTE: Intentionally ignore the `http_verb` here
-            # Slack APIs accepts any API method requests with POST methods
-            req = Request(method="POST", url=url, data=body, headers=headers)
+            # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
+            # With this it might be possible to open local files on the executing machine
+            # which might be a security risk if the URL to open can be manipulated by an external user.
+            if url.lower().startswith("http"):
+                req = Request(method="POST", url=url, data=body, headers=headers)
+            else:
+                raise SlackRequestError(f"Invalid URL detected: {url}")
             resp: HTTPResponse = urlopen(req)
             charset = resp.headers.get_content_charset()
             body: str = resp.read().decode(charset)  # read the response body here

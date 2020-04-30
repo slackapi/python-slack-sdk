@@ -4,6 +4,7 @@ import unittest
 
 import slack
 import slack.errors as err
+from slack.web.urllib_client import UrllibWebClient
 from tests.helpers import async_test
 from tests.web.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
@@ -124,3 +125,8 @@ class TestWebClient(unittest.TestCase):
         await self.async_client.conversations_list(exclude_archived=1)  # ok
         await self.async_client.conversations_list(exclude_archived="true")  # ok
         await self.async_client.conversations_list(exclude_archived=True)  # TypeError
+
+    def test_urlib_client_invalid_url(self):
+        client = UrllibWebClient(token = "xoxb-xxxx")
+        with self.assertRaises(err.SlackRequestError):
+            client.api_call(url="file:///Users/alice/.bash_profile")
