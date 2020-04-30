@@ -401,8 +401,22 @@ class RTMClient(object):
             if message.type == aiohttp.WSMsgType.TEXT:
                 payload = message.json()
                 event = payload.pop("type", "Unknown")
+
+                async def run_dispatch_event():
+                    try:
+                        await self._dispatch_event(event, data=payload)
+                    except Exception as err:
+                        data = message.data if message else message
+                        self._logger.info(
+                            f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})"
+                        )
+                        # Raised exceptions here happen in users' code and were just unhandled.
+                        # As they're not intended for closing current WebSocket connection,
+                        # this exception should not be propagated to higher level (#_connect_and_read()).
+                        return
+
                 # Asynchronously run callbacks to handle simultaneous incoming messages from Slack
-                f = asyncio.ensure_future(self._dispatch_event(event, data=payload))
+                f = asyncio.ensure_future(run_dispatch_event())
                 text_message_callback_executions.append(f)
             elif message.type == aiohttp.WSMsgType.ERROR:
                 self._logger.error("Received an error on the websocket: %r", message)
