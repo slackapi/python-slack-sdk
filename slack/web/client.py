@@ -323,7 +323,9 @@ class WebClient(BaseClient):
             channel_ids (list): A list of channel_ids for this user to join.
                 At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
         """
-        kwargs.update({"team_id": team_id, "email": email, "channel_ids": ",".join(channel_ids)})
+        kwargs.update(
+            {"team_id": team_id, "email": email, "channel_ids": ",".join(channel_ids)}
+        )
         return self.api_call("admin.users.invite", json=kwargs)
 
     def admin_users_list(
