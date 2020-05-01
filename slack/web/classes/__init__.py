@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Callable, Iterable, List, Set, Union
+from typing import Callable, Iterable, List, Set, Union, Dict, Any
 
 from ...errors import SlackObjectFormationError
 
@@ -91,8 +91,8 @@ class EnumValidator(JsonValidator):
 
 
 def extract_json(
-    item_or_items: Union[JsonObject, List[JsonObject], str], *format_args
-) -> Union[dict, List[dict], str]:
+    item_or_items: Union[JsonObject, List[JsonObject]], *format_args
+) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:
     """
     Given a sequence (or single item), attempt to call the to_dict() method on each
     item and return a plain list. If item is not the expected type, return it
