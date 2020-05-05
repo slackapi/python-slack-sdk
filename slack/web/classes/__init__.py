@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Callable, Iterable, List, Set, Union
+from typing import Callable, Iterable, List, Set, Union, Dict, Any
 
 from ...errors import SlackObjectFormationError
 
@@ -14,9 +14,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
     @property
     @abstractmethod
     def attributes(self) -> Set[str]:
-        """
-        Provide a set of attributes of this object that will make up its JSON structure
-        """
+        """Provide a set of attributes of this object that will make up its JSON structure"""
         return set()
 
     def validate_json(self) -> None:
@@ -25,7 +23,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
           SlackObjectFormationError if the object was not valid
         """
         for attribute in (func for func in dir(self) if not func.startswith("__")):
-            method = getattr(self, attribute)
+            method = getattr(self, attribute, None)
             if callable(method) and hasattr(method, "validator"):
                 method()
 
@@ -57,8 +55,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         json = self.to_dict()
         if json:
             return f"<slack.{self.__class__.__name__}: {json}>"
-        else:
-            return self.__str__()
+        return self.__str__()
 
 
 class JsonValidator:
@@ -91,8 +88,8 @@ class EnumValidator(JsonValidator):
 
 
 def extract_json(
-    item_or_items: Union[JsonObject, List[JsonObject], str], *format_args
-) -> Union[dict, List[dict], str]:
+    item_or_items: Union[JsonObject, List[JsonObject]], *format_args
+) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:
     """
     Given a sequence (or single item), attempt to call the to_dict() method on each
     item and return a plain list. If item is not the expected type, return it
