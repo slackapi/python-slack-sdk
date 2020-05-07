@@ -149,6 +149,13 @@ class BaseClient:
         if auth:
             auth = BasicAuth(auth["client_id"], auth["client_secret"])
 
+        if data:
+            data = {k: v for k, v in data.items() if v is not None}
+        if files:
+            files = {k: v for k, v in files.items() if v is not None}
+        if params:
+            params = {k: v for k, v in params.items() if v is not None}
+
         req_args = {
             "headers": self._get_headers(has_json, has_files, headers),
             "data": data,
