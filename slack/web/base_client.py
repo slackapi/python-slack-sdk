@@ -207,7 +207,7 @@ class BaseClient:
         if files is not None:
             for k, v in files.items():
                 if isinstance(v, str):
-                    f = open(v.encode("ascii", "ignore"), "rb")
+                    f = open(v.encode("utf-8", "ignore"), "rb")
                     open_files.append(f)
                     req_args["data"].update({k: f})
                 else:
