@@ -65,7 +65,7 @@ class DateLink(Link):
             link = f"^{link}"
         else:
             link = ""
-        super().__init__(url=f"{epoch}^{date_format}{link}", text=fallback)
+        super().__init__(url=f"!date^{epoch}^{date_format}{link}", text=fallback)
 
 
 class ObjectLink(Link):
