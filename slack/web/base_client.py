@@ -15,6 +15,7 @@ import aiohttp
 from aiohttp import FormData, BasicAuth
 
 # Internal Imports
+from slack.web import show_2020_01_deprecation
 from slack.web.slack_response import SlackResponse
 import slack.version as ver
 import slack.errors as err
@@ -170,6 +171,7 @@ class BaseClient:
         if self._event_loop is None:
             self._event_loop = self._get_event_loop()
 
+        show_2020_01_deprecation(api_method)
         future = asyncio.ensure_future(
             self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
             loop=self._event_loop,
