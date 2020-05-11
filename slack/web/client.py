@@ -1,6 +1,7 @@
 """A Python module for interacting with Slack's Web API."""
 
 # Standard Imports
+import os
 from typing import Union, List
 from io import IOBase
 from asyncio import Future
@@ -1079,6 +1080,9 @@ class WebClient(BaseClient):
             )
 
         if file:
+            if "filename" not in kwargs:
+                # use the local filename if filename is missing
+                kwargs["filename"] = file.split(os.path.sep)[-1]
             return self.api_call("files.upload", files={"file": file}, data=kwargs)
         data = kwargs.copy()
         data.update({"content": content})
