@@ -100,7 +100,9 @@ class DateLinkTests(unittest.TestCase):
         datelink = DateLink(
             date=self.epoch, date_format="{date_long}", fallback=f"{self.epoch}"
         )
-        self.assertEqual(f"{datelink}", f"<{self.epoch}^{{date_long}}|{self.epoch}>")
+        self.assertEqual(
+            f"{datelink}", f"<!date^{self.epoch}^{{date_long}}|{self.epoch}>"
+        )
 
     def test_with_url(self):
         datelink = DateLink(
@@ -111,7 +113,7 @@ class DateLinkTests(unittest.TestCase):
         )
         self.assertEqual(
             f"{datelink}",
-            f"<{self.epoch}^{{date_long}}^http://google.com|{self.epoch}>",
+            f"<!date^{self.epoch}^{{date_long}}^http://google.com|{self.epoch}>",
         )
 
 
@@ -386,6 +388,7 @@ class OptionGroupTests(unittest.TestCase):
 
     def test_options_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            OptionGroup(
-                label="option_group", options=self.common_options * 34
-            ).to_dict("text")
+            OptionGroup(label="option_group", options=self.common_options * 34).to_dict(
+                "text"
+            )
+
