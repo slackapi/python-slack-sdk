@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import unittest
@@ -16,7 +17,7 @@ class TestWebClient(unittest.TestCase):
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.user_token = os.environ[SLACK_SDK_TEST_USER_TOKEN]
-        self.sync_client: WebClient = WebClient(token=self.user_token, run_async=False)
+        self.sync_client: WebClient = WebClient(token=self.user_token, run_async=False, loop=asyncio.new_event_loop())
         self.async_client: WebClient = WebClient(token=self.user_token, run_async=True)
 
     def tearDown(self):
@@ -29,6 +30,6 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_issue_378(self):
-        client = self.sync_client
-        response = client.users_setPhoto(image="tests/data/slack_logo_new.png")
+        client = self.async_client
+        response = await client.users_setPhoto(image="tests/data/slack_logo_new.png")
         self.assertIsNotNone(response)

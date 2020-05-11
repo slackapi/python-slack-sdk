@@ -84,11 +84,13 @@ class ValidateCommand(BaseCommand):
 
     user_options = [
         ('unit-test-target=', 'i', 'tests/{unit-test-target}'),
+        ('utt=', 'i', 'tests/{utt}'),
         ('test-target=', 'i', 'tests/{test-target}')
     ]
 
     def initialize_options(self):
         self.unit_test_target = ""
+        self.utt = ""
         self.test_target = ""
 
     def run(self):
@@ -99,7 +101,7 @@ class ValidateCommand(BaseCommand):
         self._run("Running black…", [sys.executable, "-m", "black", f"{here}/slack"])
         self._run("Running flake8…", [sys.executable, "-m", "flake8", f"{here}/slack"])
 
-        target = self.unit_test_target or self.test_target
+        target = (self.utt or self.unit_test_target or self.test_target).replace("tests/", "")
         self._run(
             "Running pytest…",
             [
@@ -120,18 +122,22 @@ class RunAllTestsCommand(ValidateCommand):
 
     user_options = [
         ('unit-test-target=', 'i', 'tests/{unit-test-target}'),
+        ('utt=', 'i', 'tests/{utt}'),
         ('integration-test-target=', 'i', 'integration_tests/{integration-test-target}'),
+        ('itt=', 'i', 'integration_tests/{itt}'),
         ('test-target=', 'i', 'integration_tests/{test-target}')
     ]
 
     def initialize_options(self):
         self.unit_test_target = ""
+        self.utt = ""
         self.integration_test_target = ""
+        self.itt = ""
         self.test_target = ""
 
     def run(self):
         ValidateCommand.run(self)
-        target = self.integration_test_target or self.test_target
+        target = (self.itt or self.integration_test_target or self.test_target).replace("integration_tests/", "")
         self._run(
             "Running pytest…",
             [
