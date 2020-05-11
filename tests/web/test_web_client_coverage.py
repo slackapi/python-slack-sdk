@@ -1,12 +1,12 @@
-# Standard Imports
-import os
-import unittest
-
-# ThirdParty Imports
 import asyncio
+import json
+import os
+import re
+import unittest
+from urllib.parse import parse_qsl
+
 from aiohttp import web
 
-# Internal Imports
 import slack
 
 
@@ -54,6 +54,22 @@ class TestWebClientCoverage(unittest.TestCase):
         self.site = web.TCPSite(runner, "localhost", 8765)
         await self.site.start()
 
+    @staticmethod
+    def parse_payload(body: str, content_type: str) -> dict:
+        if not body:
+            return {}
+        if content_type == "application/json" or body.startswith("{"):
+            return json.loads(body)
+        if content_type == "application/x-www-form-urlencoded":
+            if "payload" in body:
+                params = dict(parse_qsl(body))
+                if "payload" in params:
+                    return json.loads(params.get("payload"))
+                return {}
+            return dict(parse_qsl(body))
+
+        return {}
+
     async def handler(self, request):
         content_type = request.content_type
         assert content_type in [
@@ -62,7 +78,18 @@ class TestWebClientCoverage(unittest.TestCase):
             "multipart/form-data",
         ]
         # This `api_method` is done
-        self.api_methods_to_call.remove(request.path.replace("/", ""))
+        method = request.path.replace("/", "")
+        if method in self.api_methods_to_call:
+            self.api_methods_to_call.remove(method)
+
+        body = (await request.read()).decode("utf-8")
+        body = self.parse_payload(body, content_type)
+        ids = ["channels", "users", "channel_ids"]
+        for k, v in body.items():
+            if k in ids:
+                self.assertTrue(
+                    re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(v),
+                    f"The parameter {k} is not a comma-separated string value: {v}")
         return web.json_response({"ok": True})
 
     def test_coverage(self):
@@ -90,6 +117,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(team_id="T123")
                 elif method_name == "admin_teams_settings_setDefaultChannels":
                     method(team_id="T123", channel_ids=["C123", "C234"])
+                    method(team_id="T123", channel_ids="C123")
                 elif method_name == "admin_teams_settings_setDescription":
                     method(team_id="T123", description="Workspace for an awesome team")
                 elif method_name == "admin_teams_settings_setDiscoverability":
@@ -108,6 +136,11 @@ class TestWebClientCoverage(unittest.TestCase):
                         team_id="T123",
                         email="test@example.com",
                         channel_ids=["C1A2B3C4D", "C26Z25Y24"],
+                    )
+                    method(
+                        team_id="T123",
+                        email="test@example.com",
+                        channel_ids="C1A2B3C4D,C26Z25Y24",
                     )
                 elif method_name == "admin_users_list":
                     method(team_id="T123")
@@ -159,6 +192,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(channel="C123")
                 elif method_name == "conversations_invite":
                     method(channel="C123", users=["U2345678901", "U3456789012"])
+                    method(channel="C123", users="U2345678901,U3456789012")
                 elif method_name == "conversations_join":
                     method(channel="C123")
                 elif method_name == "conversations_kick":
@@ -181,6 +215,9 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(dialog={}, trigger_id="123")
                 elif method_name == "dnd_setSnooze":
                     method(num_minutes=120)
+                elif method_name == "dnd_teamInfo":
+                    method(users=["123", "U234"])
+                    method(users="U123,U234")
                 elif method_name == "files_comments_delete":
                     method(file="F123", id="FC123")
                 elif method_name == "files_delete":
@@ -200,8 +237,13 @@ class TestWebClientCoverage(unittest.TestCase):
                         title="File title",
                     )
                 elif method_name == "files_remote_share":
+                    method(channels=["C123", "G123"])
                     method(channels="C123,G123")
                 elif method_name == "migration_exchange":
+                    method(users=["U123", "U234"])
+                    method(users="U123,U234")
+                elif method_name == "mpim_open":
+                    method(users=["U123", "U234"])
                     method(users="U123,U234")
                 elif method_name == "oauth_access":
                     method = getattr(self.no_token_client, method_name, None)
@@ -245,6 +287,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(usergroup="UG123")
                 elif method_name == "usergroups_users_update":
                     method(usergroup="UG123", users=["U123", "U234"])
+                    method(usergroup="UG123", users="U123,U234")
                 elif method_name == "users_getPresence":
                     method(user="U123")
                 elif method_name == "users_info":
@@ -339,6 +382,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(channel="D123", ts="123.123")
                 elif method_name == "mpim_open":
                     method(users=["U123", "U234"])
+                    method(users="U123,U234")
                 elif method_name == "mpim_replies":
                     method(channel="D123", thread_ts="123.123")
                 else:
