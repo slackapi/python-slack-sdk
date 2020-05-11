@@ -8,7 +8,8 @@ import collections
 import concurrent
 import inspect
 import signal
-from typing import Optional, Callable, DefaultDict
+from asyncio import Future
+from typing import Optional, Callable, DefaultDict, List
 from ssl import SSLContext
 from threading import current_thread, main_thread
 
@@ -364,7 +365,12 @@ class RTMClient(object):
 
     async def _read_messages(self):
         """Process messages received on the WebSocket connection."""
+        text_message_callback_executions: List[Future] = []
         while not self._stopped and self._websocket is not None:
+            for future in text_message_callback_executions:
+                if future.done():
+                    text_message_callback_executions.remove(future)
+
             try:
                 # Wait for a message to be received, but timeout after a second so that
                 # we can check if the socket has been closed, or if self._stopped is
@@ -384,11 +390,20 @@ class RTMClient(object):
                 )
                 self._websocket = None
                 await self._dispatch_event(event="close")
+                num_of_running_callbacks = len(text_message_callback_executions)
+                if num_of_running_callbacks > 0:
+                    self._logger.info(
+                        "WebSocket connection has been closed "
+                        f"though {num_of_running_callbacks} callback executions were still in progress"
+                    )
                 return
+
             if message.type == aiohttp.WSMsgType.TEXT:
                 payload = message.json()
                 event = payload.pop("type", "Unknown")
-                await self._dispatch_event(event, data=payload)
+                # Asynchronously run callbacks to handle simultaneous incoming messages from Slack
+                f = asyncio.ensure_future(self._dispatch_event(event, data=payload))
+                text_message_callback_executions.append(f)
             elif message.type == aiohttp.WSMsgType.ERROR:
                 self._logger.error("Received an error on the websocket: %r", message)
                 await self._dispatch_event(event="error", data=message)

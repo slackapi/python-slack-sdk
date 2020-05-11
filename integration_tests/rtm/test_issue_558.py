@@ -27,7 +27,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate limited errors")
     @async_test
     async def test_issue_558(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
@@ -38,7 +38,7 @@ class TestRTMClient(unittest.TestCase):
         async def process_messages(**payload):
             self.logger.debug(payload)
             self.message_count += 1
-            await asyncio.sleep(10)  # this blocks all handlers
+            await asyncio.sleep(10)  # this used to block all other handlers
 
         async def process_reactions(**payload):
             self.logger.debug(payload)
@@ -65,7 +65,7 @@ class TestRTMClient(unittest.TestCase):
 
             message = await web_client.chat_postMessage(channel=channel_id, text=text)
             self.assertFalse("error" in message)
-            # start blocking here
+            # used to start blocking here
 
             # This reaction_add event won't be handled due to a bug
             second_reaction = await web_client.reactions_add(channel=channel_id, timestamp=ts, name="tada")
@@ -73,7 +73,7 @@ class TestRTMClient(unittest.TestCase):
             await asyncio.sleep(2)
 
             self.assertEqual(self.message_count, 1)
-            self.assertEqual(self.reaction_count, 2)  # fails
+            self.assertEqual(self.reaction_count, 2)  # used to fail
         finally:
             if not rtm._stopped:
                 rtm.stop()
