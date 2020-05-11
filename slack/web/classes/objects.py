@@ -46,7 +46,7 @@ class DateLink(Link):
         link a date using a standard URL. A <!date> must include some fallback text
         for older Slack clients (in case the conversion fails).
 
-        https://api.slack.com/docs/message-formatting#formatting_dates
+        https://api.slack.com/reference/surfaces/formatting#date-formatting
 
         Args:
             date: A Unix timestamp (as int) or datetime.datetime object
