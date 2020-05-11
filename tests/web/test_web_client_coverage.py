@@ -1,4 +1,5 @@
 # Standard Imports
+import os
 import unittest
 
 # ThirdParty Imports
@@ -17,6 +18,7 @@ class TestWebClientCoverage(unittest.TestCase):
     )
 
     api_methods_to_call = []
+    os.environ.setdefault("SLACKCLIENT_SKIP_DEPRECATION", "1")
 
     def setUp(self):
         self.loop = asyncio.new_event_loop()
