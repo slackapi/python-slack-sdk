@@ -6,6 +6,8 @@ import re
 
 
 # Internal Imports
+import pytest
+
 import slack
 from tests.helpers import async_test, fake_req_args, mock_request
 import slack.errors as err
@@ -186,3 +188,18 @@ class TestWebClient(unittest.TestCase):
             api_url="https://www.slack.com/api/users.setPhoto",
             req_args=fake_req_args(),
         )
+
+    @pytest.mark.skip(reason="hold off until #662")
+    def test_issue_560_bool_in_params_sync(self):
+        self.client.token = "xoxb-conversations_list"
+        self.client.conversations_list(exclude_archived=1)  # ok
+        self.client.conversations_list(exclude_archived="true")  # ok
+        self.client.conversations_list(exclude_archived=True)  # ok
+
+    @pytest.mark.skip(reason="hold off until #662")
+    @async_test
+    async def test_issue_560_bool_in_params_async(self):
+        self.async_client.token = "xoxb-conversations_list"
+        await self.async_client.conversations_list(exclude_archived=1)  # ok
+        await self.async_client.conversations_list(exclude_archived="true")  # ok
+        await self.async_client.conversations_list(exclude_archived=True)  # TypeError
