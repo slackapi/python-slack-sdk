@@ -10,8 +10,7 @@ from typing import Dict
 def _to_0_or_1_if_bool(v: any) -> str:
     if isinstance(v, bool):
         return "1" if v else "0"
-    else:
-        return v
+    return v
 
 
 def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:
@@ -24,8 +23,7 @@ def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:
     """
     if params:
         return {k: _to_0_or_1_if_bool(v) for k, v in params.items()}
-    else:
-        return None
+    return None
 
 
 # ---------------------------------------
