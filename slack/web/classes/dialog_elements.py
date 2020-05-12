@@ -80,7 +80,7 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def hint_length(self):
         return self.hint is None or len(self.hint) < self.hint_max_length
 
-    @JsonValidator(f"value attribute exceeded bounds")
+    @JsonValidator("value attribute exceeded bounds")
     def value_length(self):
         return self.value is None or len(self.value) < self.max_value_length
 
@@ -88,11 +88,11 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def min_length_above_zero(self):
         return self.min_length is None or self.min_length >= 0
 
-    @JsonValidator(f"min_length attribute exceed bounds")
+    @JsonValidator("min_length attribute exceed bounds")
     def min_length_length(self):
         return self.min_length is None or self.min_length <= self.max_value_length
 
-    @JsonValidator(f"min_length attribute must be less than max value attribute")
+    @JsonValidator("min_length attribute must be less than max value attribute")
     def min_length_below_max_length(self):
         return self.min_length is None or self.min_length < self.max_length
 
@@ -100,7 +100,7 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def max_length_above_zero(self):
         return self.max_length is None or self.max_length > 0
 
-    @JsonValidator(f"max_length attribute exceeded bounds")
+    @JsonValidator("max_length attribute exceeded bounds")
     def max_length_length(self):
         return self.max_length is None or self.max_length <= self.max_value_length
 
