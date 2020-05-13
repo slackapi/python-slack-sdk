@@ -8,7 +8,6 @@ import os
 import random
 import signal
 from asyncio import Future
-from concurrent.futures.thread import ThreadPoolExecutor
 from ssl import SSLContext
 from threading import current_thread, main_thread
 from typing import List
@@ -106,8 +105,6 @@ class RTMClient(object):
         *,
         token: str,
         run_async: Optional[bool] = False,
-        # will be used only when run_async=False
-        run_sync_thread_pool_size: int = 3,
         auto_reconnect: Optional[bool] = True,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
@@ -120,9 +117,6 @@ class RTMClient(object):
     ):
         self.token = token.strip()
         self.run_async = run_async
-        self.thread_pool_executor = ThreadPoolExecutor(
-            max_workers=run_sync_thread_pool_size
-        )
         self.auto_reconnect = auto_reconnect
         self.ssl = ssl
         self.proxy = proxy
@@ -212,10 +206,25 @@ class RTMClient(object):
         return self._event_loop.run_until_complete(future)
 
     def stop(self):
-        """Closes the websocket connection and ensures it won't reconnect."""
+        """Closes the websocket connection and ensures it won't reconnect.
+
+        If your application outputs the following errors,
+        call #async_stop() instead and await for the completion on your application side.
+
+        asyncio/base_events.py:641: RuntimeWarning:
+          coroutine 'ClientWebSocketResponse.close' was never awaited self._ready.clear()
+        """
         self._logger.debug("The Slack RTMClient is shutting down.")
         self._stopped = True
         self._close_websocket()
+
+    async def async_stop(self):
+        """Closes the websocket connection and ensures it won't reconnect."""
+        self._logger.debug("The Slack RTMClient is shutting down.")
+        remaining_futures = self._close_websocket()
+        for future in remaining_futures:
+            await future
+        self._stopped = True
 
     def send_over_websocket(self, *, payload: dict):
         """Sends a message to Slack over the WebSocket connection.
@@ -473,27 +482,23 @@ class RTMClient(object):
                     # close/error callbacks.
                     break
 
-                if self.run_async or inspect.iscoroutinefunction(callback):
+                if inspect.iscoroutinefunction(callback):
                     await callback(
                         rtm_client=self, web_client=self._web_client, data=data
                     )
                 else:
-                    await self._execute_in_thread(
-                        callback=callback, web_client=self._web_client, data=data
-                    )
+                    payload = {
+                        "rtm_client": self,
+                        "web_client": self._web_client,
+                        "data": data,
+                    }
+                    callback(**payload)
             except Exception as err:
                 name = callback.__name__
                 module = callback.__module__
                 msg = f"When calling '#{name}()' in the '{module}' module the following error was raised: {err}"
                 self._logger.error(msg)
                 raise
-
-    async def _execute_in_thread(self, callback, web_client, data):
-        """Execute the callback in another thread. Wait for and return the results."""
-        future = self.thread_pool_executor.submit(
-            callback, rtm_client=self, web_client=web_client, data=data
-        )
-        return future.result()
 
     async def _retrieve_websocket_info(self):
         """Retrieves the WebSocket info from Slack.
@@ -555,31 +560,23 @@ class RTMClient(object):
         of wait time specified via 'max_wait_time'. However,
         if Slack returned how long to wait use that.
         """
-        wait_time = min(
-            (2 ** self._connection_attempts) + random.random(), max_wait_time
+        wait_time = exception.response.get("headers", {}).get(
+            "Retry-After",
+            min((2 ** self._connection_attempts) + random.random(), max_wait_time),
         )
-        try:
-            headers = (
-                exception.response["headers"]
-                if "headers" in exception.response
-                else None
-            )
-            if headers and "Retry-After" in headers:
-                wait_time = headers["Retry-After"]
-            else:
-                # an error returned due to other unrecoverable reasons
-                raise exception
-        except (KeyError, AttributeError):
-            pass
         self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
         await asyncio.sleep(float(wait_time))
 
-    def _close_websocket(self):
+    def _close_websocket(self) -> List[Future]:
         """Closes the websocket connection."""
+        futures = []
         close_method = getattr(self._websocket, "close", None)
         if callable(close_method):
-            asyncio.ensure_future(close_method(), loop=self._event_loop)
+            future = asyncio.ensure_future(close_method(), loop=self._event_loop)
+            futures.append(future)
         self._websocket = None
-        asyncio.ensure_future(
+        event_f = asyncio.ensure_future(
             self._dispatch_event(event="close"), loop=self._event_loop
         )
+        futures.append(event_f)
+        return futures

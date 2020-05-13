@@ -34,7 +34,15 @@ class TestRTMClientFunctional(unittest.TestCase):
         self.loop.run_until_complete(self.site.stop())
         cleanup_mock_web_api_server(self)
         if self.client:
-            self.client.stop()
+            # self.client.stop()
+
+            # If you see the following errors with #stop() method calls,  call `RTMClient#async_stop()` instead
+            #
+            # /python3.8/asyncio/base_events.py:641:
+            #   RuntimeWarning: coroutine 'ClientWebSocketResponse.close' was never awaited self._ready.clear()
+            #
+            self.client._event_loop.run_until_complete(self.client.async_stop())
+
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
     # -------------------------------------------
