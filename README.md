@@ -24,19 +24,21 @@ Details on the Tokens and Authentication can be found in our [Auth Guide](https:
 
 ## Table of contents
 
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Getting started tutorial](#getting-started-tutorial)
-* [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
-    * [Sending a message to Slack](#sending-a-message-to-slack)
-    * [Uploading files to Slack](#uploading-files-to-slack)
-* [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
-* [Async Usage](#async-usage)
-    * [Slackclient as a script](#slackclient-as-a-script)
-    * [Slackclient in a framework](#slackclient-in-a-framework)
-* [Advanced Options](#advanced-options)
-* [Migrating from v1.x](#migrating-from-v1)
-* [Support](#support)
+- [Python slackclient](#python-slackclient)
+  - [Table of contents](#table-of-contents)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Getting started tutorial](#getting-started-tutorial)
+    - [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
+      - [Sending a message to Slack](#sending-a-message-to-slack)
+      - [Uploading files to Slack](#uploading-files-to-slack)
+    - [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
+    - [Async usage](#async-usage)
+      - [Slackclient as a script](#slackclient-as-a-script)
+      - [Slackclient in a framework](#slackclient-in-a-framework)
+    - [Advanced Options](#advanced-options)
+    - [Migrating from v1](#migrating-from-v1)
+    - [Support](#support)
 
 ### Requirements
 
@@ -74,11 +76,12 @@ We've created this [tutorial](/tutorial) to build a basic Slack app in less than
 
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage](https://slack.dev/python-slackclient/basic_usage.html) guide
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage](https://slack.dev/python-slackclient/basic_usage.html) guide.
+Before using the example shown below, bot users need to be invited to channels. If you say @yourbotusername you will get a dialog to invite him/her/it.
 
 #### Sending a message to Slack
 
-One of the most common use-cases is sending a message to Slack. If you want to send a message as your app, or as a user, this method can do both. In our examples, we specify the channel name, however it is recommended to use the `channel_id` where possible.
+One of the most common use-cases is sending a message to Slack. If you want to send a message as your app, or as a user, this method can do both. In our examples, we specify the channel name, however it is recommended to use the `channel_id` where possible. 
 
 ```python
 import os
