@@ -221,6 +221,22 @@ class TestWebClient(unittest.TestCase):
 
         self.assertGreater(fetched_count, 1)
 
+    def test_pagination_with_iterator_use_sync_aiohttp(self):
+        client: WebClient = WebClient(
+            token=self.bot_token,
+            run_async=False,
+            use_sync_aiohttp=True,
+            loop=asyncio.new_event_loop(),
+        )
+        fetched_count = 0
+        # SlackResponse is an iterator that fetches next if next_cursor is not ""
+        for response in client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):
+            fetched_count += len(response["channels"])
+            if fetched_count > 1:
+                break
+
+        self.assertGreater(fetched_count, 1)
+
     @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
     @async_test
     async def test_pagination_with_iterator_async(self):

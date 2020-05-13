@@ -86,6 +86,29 @@ class TestWebClient(unittest.TestCase):
             users = users + page["members"]
         self.assertTrue(len(users) == 2)
 
+    def test_response_can_be_paginated_multiple_times_use_sync_aiohttp(self):
+        self.client = WebClient(
+            token="xoxp-1234",
+            base_url="http://localhost:8888",
+            run_async=False,
+            use_sync_aiohttp=True,
+        )
+        self.client.token = "xoxb-channels_list_pagination"
+        # This test suite verifies the changes in #521 work as expected
+        response = self.client.channels_list(limit=1)
+        ids = []
+        for page in response:
+            ids.append(page["channels"][0]["id"])
+        self.assertEqual(ids, ["C1", "C2", "C3"])
+
+        # The second iteration starting with page 2
+        # (page1 is already cached in `response`)
+        self.client.token = "xoxb-channels_list_pagination2"
+        ids = []
+        for page in response:
+            ids.append(page["channels"][0]["id"])
+        self.assertEqual(ids, ["C1", "C2", "C3"])
+
     def test_json_can_only_be_sent_with_post_requests(self):
         with self.assertRaises(err.SlackRequestError):
             self.client.api_call("fake.method", http_verb="GET", json={})
