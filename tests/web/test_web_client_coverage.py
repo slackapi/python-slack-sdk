@@ -71,11 +71,11 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "admin_teams_settings_setName":
                     self.api_methods_to_call.remove(method(team_id="T123", name="Awesome Engineering Team")["method"])
                 elif method_name == "admin_usergroups_addChannels":
-                    method(
+                    self.api_methods_to_call.remove(method(
                         team_id="T123",
                         usergroup_id="S123",
                         channel_ids=["C1A2B3C4D", "C26Z25Y24"],
-                    )
+                    )["method"])
                     method(
                         team_id="T123",
                         usergroup_id="S123",

@@ -1,20 +1,35 @@
 """A Python module for interacting with Slack's Web API."""
 
 import asyncio
+import copy
 import hashlib
 import hmac
+import io
+import json
 import json as json_module
 import logging
-from typing import Optional, Union
+import mimetypes
+import os
+import platform
+import sys
+import uuid
+import warnings
+from http.client import HTTPResponse
+from typing import BinaryIO, Dict, List, Union
+from typing import Optional
+from urllib.error import HTTPError
+from urllib.parse import urlencode
 from urllib.parse import urljoin
+from urllib.request import Request, urlopen
 
 import aiohttp
 from aiohttp import FormData, BasicAuth
 
 import slack.errors as err
-from slack.web import get_user_agent, show_2020_01_deprecation, convert_bool_to_0_or_1
+import slack.version as slack_version
+from slack.errors import SlackRequestError
+from slack.web import convert_bool_to_0_or_1
 from slack.web.slack_response import SlackResponse
-from slack.web.urllib_client import UrllibWebClient
 
 
 class BaseClient:
@@ -45,10 +60,6 @@ class BaseClient:
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
-        self.urllib_client = UrllibWebClient(
-            token=self.token, default_headers=self.headers, web_client=self,
-        )
-
     def _get_event_loop(self):
         """Retrieves the event loop or creates a new one."""
         try:
@@ -76,7 +87,7 @@ class BaseClient:
                 }
         """
         final_headers = {
-            "User-Agent": get_user_agent(),
+            "User-Agent": self._get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         }
 
@@ -152,11 +163,11 @@ class BaseClient:
         if auth:
             auth = BasicAuth(auth["client_id"], auth["client_secret"])
 
-        if data:
+        if data is not None and isinstance(data, dict):
             data = {k: v for k, v in data.items() if v is not None}
-        if files:
+        if files is not None and isinstance(files, dict):
             files = {k: v for k, v in files.items() if v is not None}
-        if params:
+        if params is not None and isinstance(params, dict):
             params = {k: v for k, v in params.items() if v is not None}
 
         req_args = {
@@ -170,9 +181,9 @@ class BaseClient:
             "auth": auth,
         }
 
+        show_2020_01_deprecation(api_method)
+
         if self.run_async or self.use_sync_aiohttp:
-            # NOTE: For sync mode client, show_2020_01_deprecation(str) is called inside UrllibClient
-            show_2020_01_deprecation(api_method)
 
             if self._event_loop is None:
                 self._event_loop = self._get_event_loop()
@@ -200,6 +211,10 @@ class BaseClient:
                 e.g. 'https://www.slack.com/api/chat.postMessage'
         """
         return urljoin(self.base_url, api_method)
+
+    # =================================================================
+    # aiohttp based async WebClient
+    # =================================================================
 
     async def _send(self, http_verb, api_url, req_args):
         """Sends the request out for transmission.
@@ -279,11 +294,15 @@ class BaseClient:
             await session.close()
         return response
 
+    # =================================================================
+    # urllib based WebClient
+    # =================================================================
+
     def _sync_send(self, api_url, req_args):
         params = req_args["params"] if "params" in req_args else None
         data = req_args["data"] if "data" in req_args else None
         files = req_args["files"] if "files" in req_args else None
-        _json = req_args["json"] if "files" in req_args else None
+        _json = req_args["json"] if "json" in req_args else None
         headers = req_args["headers"] if "headers" in req_args else None
         token = params.get("token") if params and "token" in params else None
         body_params = {}
@@ -292,7 +311,7 @@ class BaseClient:
         if data:
             body_params.update(data)
 
-        return self.urllib_client.api_call(
+        return self._urllib_api_call(
             token=token,
             url=api_url,
             query_params={},
@@ -302,15 +321,257 @@ class BaseClient:
             additional_headers=headers,
         )
 
-    def _sync_request(self, api_url, req_args):
-        response, response_body = self.urllib_client._perform_http_request(
-            url=api_url, args=req_args,
-        )
+    def _request_for_pagination(self, api_url, req_args) -> Dict[str, any]:
+        """This method is supposed to be used only for SlackResponse pagination
+
+        You can paginate using Python's for iterator as below:
+
+          for response in client.conversations_list(limit=100):
+              # do something with each response here
+        """
+        response = self._perform_urllib_http_request(url=api_url, args=req_args)
         return {
-            "status_code": int(response.status),
-            "headers": dict(response.headers),
-            "data": json_module.loads(response_body),
+            "status_code": int(response["status"]),
+            "headers": dict(response["headers"]),
+            "data": json_module.loads(response["body"]),
         }
+
+    def _urllib_api_call(
+        self,
+        *,
+        token: str = None,
+        url: str,
+        query_params: Dict[str, str] = {},
+        json_body: Dict = {},
+        body_params: Dict[str, str] = {},
+        files: Dict[str, io.BytesIO] = {},
+        additional_headers: Dict[str, str] = {},
+    ) -> SlackResponse:
+        """Performs a Slack API request and returns the result.
+
+        :param token: Slack API Token (either bot token or user token)
+        :param url: a complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+        :param query_params: query string
+        :param json_body: json data structure (it's still a dict at this point),
+            if you give this argument, body_params and files will be skipped
+        :param body_params: form params
+        :param files: files to upload
+        :param additional_headers: request headers to append
+        :return: API response
+        """
+
+        files_to_close: List[BinaryIO] = []
+        try:
+            # True/False -> "1"/"0"
+            query_params = convert_bool_to_0_or_1(query_params)
+            body_params = convert_bool_to_0_or_1(body_params)
+
+            if self._logger.level <= logging.DEBUG:
+                self._logger.debug(
+                    f"Slack API Request - url: {url}, "
+                    f"query_params: {query_params}, "
+                    f"json_body: {json_body}, "
+                    f"body_params: {body_params}, "
+                    f"files: {files}, "
+                    f"additional_headers: {additional_headers}"
+                )
+
+            request_data = {}
+            if files is not None and isinstance(files, dict) and len(files) > 0:
+                if body_params:
+                    for k, v in body_params.items():
+                        request_data.update({k: v})
+
+                for k, v in files.items():
+                    if isinstance(v, str):
+                        f: BinaryIO = open(v.encode("utf-8", "ignore"), "rb")
+                        files_to_close.append(f)
+                        request_data.update({k: f})
+                    else:
+                        request_data.update({k: v})
+
+            request_headers = self._build_urllib_request_headers(
+                token=token or self.token,
+                has_json=json is not None,
+                has_files=files is not None,
+                additional_headers=additional_headers,
+            )
+            request_args = {
+                "headers": request_headers,
+                "data": request_data,
+                "params": body_params,
+                "files": files,
+                "json": json_body,
+            }
+            if query_params:
+                q = urlencode(query_params)
+                url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
+
+            response = self._perform_urllib_http_request(url=url, args=request_args)
+            if response.get("body", None):
+                response_body_data: dict = json.loads(response["body"])
+            else:
+                response_body_data: dict = None
+
+            if query_params:
+                all_params = copy.copy(body_params)
+                all_params.update(query_params)
+            else:
+                all_params = body_params
+            request_args["params"] = all_params  # for backward-compatibility
+            return SlackResponse(
+                client=self,
+                http_verb="POST",  # you can use POST method for all the Web APIs
+                api_url=url,
+                req_args=request_args,
+                data=response_body_data,
+                headers=dict(response["headers"]),
+                status_code=response["status"],
+                use_sync_aiohttp=False,
+            ).validate()
+        finally:
+            for f in files_to_close:
+                if not f.closed:
+                    f.close()
+
+    def _perform_urllib_http_request(
+        self, *, url: str, args: Dict[str, Dict[str, any]]
+    ) -> Dict[str, any]:
+        """Performs an HTTP request and parses the response.
+
+        :param url: a complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+        :param args: args has "headers", "data", "params", and "json"
+            "headers": Dict[str, str]
+            "data": Dict[str, any]
+            "params": Dict[str, str],
+            "json": Dict[str, any],
+        :return: dict {status: int, headers: Headers, body: str}
+        """
+        headers = args["headers"]
+        if args["json"]:
+            body = json.dumps(args["json"])
+            headers["Content-Type"] = "application/json;charset=utf-8"
+        elif args["data"]:
+            boundary = f"--------------{uuid.uuid4()}"
+            sep_boundary = b"\r\n--" + boundary.encode("ascii")
+            end_boundary = sep_boundary + b"--\r\n"
+            body = io.BytesIO()
+            data = args["data"]
+            for key, value in data.items():
+                readable = getattr(value, "readable", None)
+                if readable and value.readable():
+                    filename = "Uploaded file"
+                    name_attr = getattr(value, "name", None)
+                    if name_attr:
+                        filename = (
+                            name_attr.decode("utf-8")
+                            if isinstance(name_attr, bytes)
+                            else name_attr
+                        )
+                    if "filename" in data:
+                        filename = data["filename"]
+                    mimetype = (
+                        mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                    )
+                    title = (
+                        f'\r\nContent-Disposition: form-data; name="{key}"; filename="{filename}"\r\n'
+                        + f"Content-Type: {mimetype}\r\n"
+                    )
+                    value = value.read()
+                else:
+                    title = f'\r\nContent-Disposition: form-data; name="{key}"\r\n'
+                    value = str(value).encode("utf-8")
+                body.write(sep_boundary)
+                body.write(title.encode("utf-8"))
+                body.write(b"\r\n")
+                body.write(value)
+
+            body.write(end_boundary)
+            body = body.getvalue()
+            headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
+            headers["Content-Length"] = len(body)
+        elif args["params"]:
+            body = urlencode(args["params"])
+            headers["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8"
+        else:
+            body = None
+
+        if isinstance(body, str):
+            body = body.encode("utf-8")
+
+        # NOTE: Intentionally ignore the `http_verb` here
+        # Slack APIs accepts any API method requests with POST methods
+        try:
+            # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
+            # With this it might be possible to open local files on the executing machine
+            # which might be a security risk if the URL to open can be manipulated by an external user.
+            if url.lower().startswith("http"):
+                req = Request(method="POST", url=url, data=body, headers=headers)
+                resp: HTTPResponse = urlopen(req)
+                charset = resp.headers.get_content_charset()
+                body: str = resp.read().decode(charset)  # read the response body here
+                return {
+                    "status": resp.code,
+                    "headers": resp.headers,
+                    "body": body,
+                }
+            raise SlackRequestError(f"Invalid URL detected: {url}")
+        except HTTPError as e:
+            resp = {
+                "status": e.code,
+                "headers": e.headers,
+            }
+            if e.code == 429:
+                # for compatibility with aiohttp
+                resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
+
+            charset = e.headers.get_content_charset()
+            body: str = e.read().decode(charset)  # read the response body here
+            resp["body"] = body
+            return resp
+
+        except Exception as err:
+            self._logger.error(f"Failed to send a request to Slack API server: {err}")
+            raise err
+
+    def _build_urllib_request_headers(
+        self, token: str, has_json: bool, has_files: bool, additional_headers: dict,
+    ):
+        headers = {
+            "User-Agent": self._get_user_agent(),
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        }
+        headers.update(self.headers)
+        if token:
+            headers.update({"Authorization": "Bearer {}".format(token)})
+        if additional_headers:
+            headers.update(additional_headers)
+        if has_json:
+            headers.update({"Content-Type": "application/json;charset=utf-8"})
+        if has_files:
+            # will be set afterwards
+            headers.pop("Content-Type", None)
+        return headers
+
+    # =================================================================
+
+    @staticmethod
+    def _get_user_agent():
+        """Construct the user-agent header with the package info,
+        Python version and OS version.
+
+        Returns:
+            The user agent string.
+            e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
+        """
+        # __name__ returns all classes, we only want the client
+        client = "{0}/{1}".format("slackclient", slack_version.__version__)
+        python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(
+            v=sys.version_info
+        )
+        system_info = "{0}/{1}".format(platform.system(), platform.release())
+        user_agent_string = " ".join([python_version, client, system_info])
+        return user_agent_string
 
     @staticmethod
     def validate_slack_signature(
@@ -343,3 +604,30 @@ class BaseClient:
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
         calculated_signature = f"v0={request_hash}"
         return hmac.compare_digest(calculated_signature, signature)
+
+
+# https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+deprecated_method_prefixes_2020_01 = ["channels.", "groups.", "im.", "mpim."]
+
+
+def show_2020_01_deprecation(method_name: str):
+    skip_deprecation = os.environ.get(
+        "SLACKCLIENT_SKIP_DEPRECATION"
+    )  # for unit tests etc.
+    if skip_deprecation:
+        return
+    if not method_name:
+        return
+
+    matched_prefixes = [
+        prefix
+        for prefix in deprecated_method_prefixes_2020_01
+        if method_name.startswith(prefix)
+    ]
+    if len(matched_prefixes) > 0:
+        message = (
+            f"{method_name} is deprecated. Please use the Conversations API instead. "
+            "For more info, go to "
+            "https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api"
+        )
+        warnings.warn(message)

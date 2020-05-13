@@ -145,14 +145,8 @@ class SlackResponse(object):
                     )
                 )
             else:
-                if self._client is None:
-                    # NOTE: It's not possible to support this due to circular import issues.
-                    msg = (
-                        "Directly using UrllibWebClient doesn't support response pagination as iteration. "
-                        "Use WebClient with run_async=False and use_sync_aiohttp=False."
-                    )
-                    raise e.SlackRequestError(msg)
-                response = self._client._sync_request(
+                # This method sends a request in a synchronous way
+                response = self._client._request_for_pagination(
                     api_url=self.api_url, req_args=self.req_args
                 )
 
