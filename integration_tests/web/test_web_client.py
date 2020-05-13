@@ -195,6 +195,19 @@ class TestWebClient(unittest.TestCase):
         deletion = client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
+    def test_uploading_binary_files_as_content(self):
+        client = self.sync_client
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        with open(file, 'rb') as f:
+            content = f.read()
+            upload = client.files_upload(
+                channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", content=content)
+            self.assertIsNotNone(upload)
+
+            deletion = client.files_delete(file=upload["file"]["id"])
+            self.assertIsNotNone(deletion)
+
     @async_test
     async def test_uploading_binary_files_async(self):
         client = self.async_client

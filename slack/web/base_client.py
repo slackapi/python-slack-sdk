@@ -367,13 +367,25 @@ class BaseClient:
             body_params = convert_bool_to_0_or_1(body_params)
 
             if self._logger.level <= logging.DEBUG:
+                def convert_params(values: dict) -> dict:
+                    if not values or not isinstance(values, dict):
+                        return {}
+                    return {
+                        k: ("(bytes)" if isinstance(v, bytes) else v)
+                        for k, v in values.items()
+                    }
+
+                headers = {
+                    k: "(redacted)" if k.lower() == "authorization" else v
+                    for k, v in additional_headers.items()
+                }
                 self._logger.debug(
-                    f"Slack API Request - url: {url}, "
-                    f"query_params: {query_params}, "
+                    f"Sending a request - url: {url}, "
+                    f"query_params: {convert_params(query_params)}, "
+                    f"body_params: {convert_params(body_params)}, "
+                    f"files: {convert_params(files)}, "
                     f"json_body: {json_body}, "
-                    f"body_params: {body_params}, "
-                    f"files: {files}, "
-                    f"additional_headers: {additional_headers}"
+                    f"headers: {headers}"
                 )
 
             request_data = {}
@@ -419,6 +431,7 @@ class BaseClient:
             else:
                 all_params = body_params
             request_args["params"] = all_params  # for backward-compatibility
+
             return SlackResponse(
                 client=self,
                 http_verb="POST",  # you can use POST method for all the Web APIs

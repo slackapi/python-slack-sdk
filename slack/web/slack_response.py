@@ -180,8 +180,14 @@ class SlackResponse(object):
         Raises:
             SlackApiError: The request to the Slack API failed.
         """
+        if self._logger.level <= logging.DEBUG:
+            self._logger.debug(
+                "Received the following response - "
+                f"status: {self.status_code}, "
+                f"headers: {dict(self.headers)}, "
+                f"body: {self.data}"
+            )
         if self.status_code == 200 and self.data and self.data.get("ok", False):
-            self._logger.debug("Received the following response: %s", self.data)
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
