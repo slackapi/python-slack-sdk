@@ -374,7 +374,16 @@ class RTMClient(object):
                 # TODO: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 await self._dispatch_event(event="error", data=exception)
-                if self.auto_reconnect and not self._stopped:
+                error_code = (
+                    exception.response.get("error", None)
+                    if hasattr(exception, "response")
+                    else None
+                )
+                if (
+                    self.auto_reconnect
+                    and not self._stopped
+                    and error_code != "invalid_auth"  # "invalid_auth" is unrecoverable
+                ):
                     await self._wait_exponentially(exception)
                     continue
                 self._logger.exception(
