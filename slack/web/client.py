@@ -303,6 +303,55 @@ class WebClient(BaseClient):
         kwargs.update({"team_id": team_id, "name": name})
         return self.api_call("admin.teams.settings.setName", json=kwargs)
 
+    def admin_usergroups_addChannels(
+        self,
+        *,
+        team_id: str,
+        usergroup_id: str,
+        channel_ids: Union[str, List[str]],
+        **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Add one or more default channels to an IDP group.
+
+        Args:
+            team_id (str): The workspace to add default channels in. e.g. 'T1234'
+            usergroup_id (str): ID of the IDP group to add default channels for. e.g. 'S1234'
+            channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
+        """
+        kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
+        if isinstance(channel_ids, list):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call("admin.usergroups.addChannels", json=kwargs)
+
+    def admin_usergroups_listChannels(
+        self, *, usergroup_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Add one or more default channels to an IDP group.
+
+        Args:
+            usergroup_id (str): ID of the IDP group to list default channels for. e.g. 'S1234'
+        """
+        kwargs.update({"usergroup_id": usergroup_id})
+        return self.api_call("admin.usergroups.listChannels", json=kwargs)
+
+    def admin_usergroups_removeChannels(
+        self, *, usergroup_id: str, channel_ids: Union[str, List[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Add one or more default channels to an IDP group.
+
+        Args:
+            usergroup_id (str): ID of the IDP group. e.g. 'S1234'
+            channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
+        """
+        kwargs.update({"usergroup_id": usergroup_id})
+        if isinstance(channel_ids, list):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call("admin.usergroups.removeChannels", json=kwargs)
+
     def admin_users_assign(
         self, *, team_id: str, user_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
