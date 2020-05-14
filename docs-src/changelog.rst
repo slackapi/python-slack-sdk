@@ -2,6 +2,29 @@
 Changelog
 ==============================================
 
+v2.6.0rc1 (2020-05-14)
+-------------------
+
+Refer to [v2.6.0 milestone](https://github.com/slackapi/python-slackclient/milestone/5) to know the complete list of the issues resolved by this release.
+
+**New Features**
+
+1. [Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676) - Thanks @seratch @diurnalist @ruberVulpes @jeremyschulman @e271828- @RodneyU215
+2. [Signature] #686 Add slack.signature.SignatureVerifier for request verification - Thanks @seratch
+3. [WebClient] #682 Add missing Grid admin APIs (`admin.usergroups.*`, `admin.users.*`, `admin.apps.*`) - Thanks @stevengill @seratch
+
+**Updates**
+
+1. [WebClient][RTMClient] Fixed a bunch of the currency issues this SDK had (#429 #463 #492 #497 #530 #558 #569 #605 #613 #619 #626 #630 #631 #633 #669) - Thanks @seratch @aaguilartablada @aoberoi @stevengill
+2. [WebClient] #681 #560 Enable using bool values for request parameters - Thanks @roman-kachanovsky @seratch
+3. [WebClient] #661 #678 Improve handling of required "ids" parameters (e.g., channel_ids, users) - Thanks @seratch
+4. [WebClient] #680 Add non-conversation API deprecation warnings - Thanks @seratch
+5. [WebClient] #671 #670 Enable passing None values for request parameters (they used to result in errors) - Thanks @seratch
+6. [WebClient] #673 Fix #672 files.upload fails with a filepath containing multi byte chars - Thanks @yuji38kwmt @seratch
+7. [WebClient] #656 Fix #594 preview_image for files.remote.add API method is not properly supported - Thanks @seratch
+8. [Maintenance] #618 Add py.typed file to package distribution - Thanks @JKillian
+9. [WebClient] #599 Strip token string parameters of whitespace - Thanks @TheFrozenFire
+
 v2.5.0 (2019-12-09)
 -------------------
 **New Features**
