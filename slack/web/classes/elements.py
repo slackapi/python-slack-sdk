@@ -469,11 +469,11 @@ class StaticSelectElement(InputInteractiveElement):
             or len(self.option_groups) <= self.option_groups_max_length
         )
 
-    @JsonValidator(f"options and option_groups cannot both be specified")
+    @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self):
         return not (self.options is not None and self.option_groups is not None)
 
-    @JsonValidator(f"options or option_groups must be specified")
+    @JsonValidator("options or option_groups must be specified")
     def _validate_neither_options_or_option_groups_is_specified(self):
         return self.options is not None or self.option_groups is not None
 
@@ -531,11 +531,11 @@ class StaticMultiSelectElement(InputInteractiveElement):
             or len(self.option_groups) <= self.option_groups_max_length
         )
 
-    @JsonValidator(f"options and option_groups cannot both be specified")
+    @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self):
         return self.options is None or self.option_groups is None
 
-    @JsonValidator(f"options or option_groups must be specified")
+    @JsonValidator("options or option_groups must be specified")
     def _validate_neither_options_or_option_groups_is_specified(self):
         return self.options is not None or self.option_groups is not None
 
@@ -589,11 +589,11 @@ class SelectElement(InputInteractiveElement):
             or len(self.option_groups) <= self.option_groups_max_length
         )
 
-    @JsonValidator(f"options and option_groups cannot both be specified")
+    @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self):
         return not (self.options is not None and self.option_groups is not None)
 
-    @JsonValidator(f"options or option_groups must be specified")
+    @JsonValidator("options or option_groups must be specified")
     def _validate_neither_options_or_option_groups_is_specified(self):
         return self.options is not None or self.option_groups is not None
 
