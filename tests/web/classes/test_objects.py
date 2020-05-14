@@ -1,4 +1,6 @@
+import copy
 import unittest
+from typing import Optional, List, Union
 
 from slack.errors import SlackObjectFormationError
 from slack.web.classes import JsonObject, JsonValidator
@@ -35,6 +37,35 @@ class SimpleJsonObject(JsonObject):
         return True
 
 
+class KeyValueObject(JsonObject):
+    attributes = {"name", "value"}
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+    ):
+        self.name = name
+        self.value = value
+
+
+class NestedObject(JsonObject):
+    attributes = {"initial", "options"}
+
+    def __init__(
+        self,
+        *,
+        initial: Union[dict, KeyValueObject],
+        options: List[Union[dict, KeyValueObject]],
+    ):
+        self.initial = KeyValueObject(**initial) if isinstance(initial, dict) else initial
+        self.options = [
+            KeyValueObject(**o) if isinstance(o, dict) else o
+            for o in options
+        ]
+
+
 class JsonObjectTests(unittest.TestCase):
     def setUp(self) -> None:
         self.good_test_object = SimpleJsonObject()
@@ -55,6 +86,55 @@ class JsonObjectTests(unittest.TestCase):
     def test_to_dict_performs_validation(self):
         with self.assertRaises(SlackObjectFormationError):
             self.bad_test_object.to_dict()
+
+    def test_get_non_null_attributes(self):
+        expected = {"name": "something"}
+        obj = KeyValueObject(name="something", value=None)
+        obj2 = copy.deepcopy(obj)
+        self.assertDictEqual(expected, obj.get_non_null_attributes())
+        self.assertEqual(str(obj2), str(obj))
+
+    def test_get_non_null_attributes_nested(self):
+        expected = {
+            "initial": {"name": "something"},
+            "options": [{"name": "something"}, {"name": "message", "value": "That's great!"}]
+        }
+        obj1 = KeyValueObject(name="something", value=None)
+        obj2 = KeyValueObject(name="message", value="That's great!")
+        options = [obj1, obj2]
+        nested = NestedObject(initial=obj1, options=options)
+
+        self.assertEqual(type(obj1), KeyValueObject)
+        self.assertTrue(hasattr(obj1, "value"))
+        self.assertEqual(type(nested.initial), KeyValueObject)
+
+        self.assertEqual(type(options[0]), KeyValueObject)
+        self.assertTrue(hasattr(options[0], "value"))
+        self.assertEqual(type(nested.options[0]), KeyValueObject)
+        self.assertTrue(hasattr(nested.options[0], "value"))
+
+        dict_value = nested.get_non_null_attributes()
+        self.assertDictEqual(expected, dict_value)
+
+        self.assertEqual(type(obj1), KeyValueObject)
+        self.assertTrue(hasattr(obj1, "value"))
+        self.assertEqual(type(nested.initial), KeyValueObject)
+
+        self.assertEqual(type(options[0]), KeyValueObject)
+        self.assertTrue(hasattr(options[0], "value"))
+        self.assertEqual(type(nested.options[0]), KeyValueObject)
+        self.assertTrue(hasattr(nested.options[0], "value"))
+
+    def test_get_non_null_attributes_nested_2(self):
+        expected = {
+            "initial": {"name": "something"},
+            "options": [{"name": "something"}, {"name": "message", "value": "That's great!"}]
+        }
+        nested = NestedObject(
+            initial={"name": "something"},
+            options=[{"name": "something"}, {"name": "message", "value": "That's great!"}]
+        )
+        self.assertDictEqual(expected, nested.get_non_null_attributes())
 
 
 class JsonValidatorTests(unittest.TestCase):
@@ -153,38 +233,40 @@ class SpecialLinkTests(unittest.TestCase):
 class PlainTextObjectTests(unittest.TestCase):
     def test_basic_json(self):
         self.assertDictEqual(
+            {"text": "some text", "type": "plain_text"},
             PlainTextObject(text="some text").to_dict(),
-            {"text": "some text", "type": "plain_text", "emoji": True},
         )
 
         self.assertDictEqual(
-            PlainTextObject(text="some text", emoji=False).to_dict(),
             {"text": "some text", "emoji": False, "type": "plain_text"},
+            PlainTextObject(text="some text", emoji=False).to_dict(),
         )
 
     def test_from_string(self):
-        plaintext = PlainTextObject(text="some text")
+        plaintext = PlainTextObject(text="some text", emoji=True)
         self.assertDictEqual(
-            plaintext.to_dict(), PlainTextObject.direct_from_string("some text")
+            plaintext.to_dict(),
+            PlainTextObject.direct_from_string("some text")
         )
 
 
 class MarkdownTextObjectTests(unittest.TestCase):
     def test_basic_json(self):
         self.assertDictEqual(
+            {"text": "some text", "type": "mrkdwn"},
             MarkdownTextObject(text="some text").to_dict(),
-            {"text": "some text", "type": "mrkdwn", "verbatim": False},
         )
 
         self.assertDictEqual(
-            MarkdownTextObject(text="some text", verbatim=True).to_dict(),
             {"text": "some text", "verbatim": True, "type": "mrkdwn"},
+            MarkdownTextObject(text="some text", verbatim=True).to_dict(),
         )
 
     def test_from_string(self):
         markdown = MarkdownTextObject(text="some text")
         self.assertDictEqual(
-            markdown.to_dict(), MarkdownTextObject.direct_from_string("some text")
+            markdown.to_dict(),
+            MarkdownTextObject.direct_from_string("some text")
         )
 
 
@@ -193,20 +275,20 @@ class ConfirmObjectTests(unittest.TestCase):
         expected = {
             "confirm": {"emoji": True, "text": "Yes", "type": "plain_text"},
             "deny": {"emoji": True, "text": "No", "type": "plain_text"},
-            "text": {"text": "are you sure?", "type": "mrkdwn", "verbatim": False},
+            "text": {"text": "are you sure?", "type": "mrkdwn"},
             "title": {"emoji": True, "text": "some title", "type": "plain_text"},
         }
         simple_object = ConfirmObject(title="some title", text="are you sure?")
-        self.assertDictEqual(simple_object.to_dict(), expected)
-        self.assertDictEqual(simple_object.to_dict("block"), expected)
+        self.assertDictEqual(expected, simple_object.to_dict())
+        self.assertDictEqual(expected, simple_object.to_dict("block"))
         self.assertDictEqual(
-            simple_object.to_dict("action"),
             {
                 "text": "are you sure?",
                 "title": "some title",
                 "ok_text": "Okay",
                 "dismiss_text": "Cancel",
             },
+            simple_object.to_dict("action"),
         )
 
     def test_confirm_overrides(self):
@@ -217,21 +299,21 @@ class ConfirmObjectTests(unittest.TestCase):
             deny="Nevermind",
         )
         expected = {
-            "confirm": {"emoji": True, "text": "I'm really sure", "type": "plain_text"},
-            "deny": {"emoji": True, "text": "Nevermind", "type": "plain_text"},
-            "text": {"text": "are you sure?", "type": "mrkdwn", "verbatim": False},
-            "title": {"emoji": True, "text": "some title", "type": "plain_text"},
+            "confirm": {"text": "I'm really sure", "type": "plain_text", "emoji": True},
+            "deny": {"text": "Nevermind", "type": "plain_text", "emoji": True},
+            "text": {"text": "are you sure?", "type": "mrkdwn"},
+            "title": {"text": "some title", "type": "plain_text", "emoji": True},
         }
-        self.assertDictEqual(confirm.to_dict(), expected)
-        self.assertDictEqual(confirm.to_dict("block"), expected)
+        self.assertDictEqual(expected, confirm.to_dict())
+        self.assertDictEqual(expected, confirm.to_dict("block"))
         self.assertDictEqual(
-            confirm.to_dict("action"),
             {
                 "text": "are you sure?",
                 "title": "some title",
                 "ok_text": "I'm really sure",
                 "dismiss_text": "Nevermind",
             },
+            confirm.to_dict("action"),
         )
 
     def test_passing_text_objects(self):
@@ -248,13 +330,13 @@ class ConfirmObjectTests(unittest.TestCase):
         passed_plaintext = ConfirmObject(title="title", text=plaintext)
 
         self.assertDictEqual(
-            passed_plaintext.to_dict(),
             {
                 "confirm": {"emoji": True, "text": "Yes", "type": "plain_text"},
                 "deny": {"emoji": True, "text": "No", "type": "plain_text"},
                 "text": {"emoji": False, "text": "Are you sure?", "type": "plain_text"},
                 "title": {"emoji": True, "text": "title", "type": "plain_text"},
             },
+            passed_plaintext.to_dict(),
         )
 
     def test_title_length(self):
@@ -296,16 +378,16 @@ class OptionTests(unittest.TestCase):
             "text": {"type": "plain_text", "text": "an option", "emoji": True},
             "value": "option_1",
         }
-        self.assertDictEqual(self.common.to_dict("block"), expected)
-        self.assertDictEqual(self.common.to_dict(), expected)
+        self.assertDictEqual(expected, self.common.to_dict("block"))
+        self.assertDictEqual(expected, self.common.to_dict())
 
     def test_dialog_style_json(self):
         expected = {"label": "an option", "value": "option_1"}
-        self.assertDictEqual(self.common.to_dict("dialog"), expected)
+        self.assertDictEqual(expected, self.common.to_dict("dialog"))
 
     def test_action_style_json(self):
         expected = {"text": "an option", "value": "option_1"}
-        self.assertDictEqual(self.common.to_dict("action"), expected)
+        self.assertDictEqual(expected, self.common.to_dict("action"))
 
     def test_from_single_value(self):
         option = Option(label="option_1", value="option_1")
@@ -324,6 +406,8 @@ class OptionTests(unittest.TestCase):
 
 
 class OptionGroupTests(unittest.TestCase):
+    maxDiff = None
+
     def setUp(self) -> None:
         self.common_options = [
             Option.from_single_value("one"),
@@ -351,12 +435,11 @@ class OptionGroupTests(unittest.TestCase):
                 },
             ],
         }
-        self.assertDictEqual(self.common.to_dict("block"), expected)
-        self.assertDictEqual(self.common.to_dict(), expected)
+        self.assertDictEqual(expected, self.common.to_dict("block"))
+        self.assertDictEqual(expected, self.common.to_dict())
 
     def test_dialog_style_json(self):
         self.assertDictEqual(
-            self.common.to_dict("dialog"),
             {
                 "label": "an option",
                 "options": [
@@ -365,11 +448,11 @@ class OptionGroupTests(unittest.TestCase):
                     {"label": "three", "value": "three"},
                 ],
             },
+            self.common.to_dict("dialog"),
         )
 
     def test_action_style_json(self):
         self.assertDictEqual(
-            self.common.to_dict("action"),
             {
                 "text": "an option",
                 "options": [
@@ -378,6 +461,7 @@ class OptionGroupTests(unittest.TestCase):
                     {"text": "three", "value": "three"},
                 ],
             },
+            self.common.to_dict("action"),
         )
 
     def test_label_length(self):

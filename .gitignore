@@ -16,7 +16,7 @@ env*/
 venv/
 
 # codecov / coverage
-.coverage
+.coverage*
 cov_*
 coverage.xml
 
