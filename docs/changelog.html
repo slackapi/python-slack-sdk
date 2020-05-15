@@ -162,6 +162,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v2-6-0rc1-2020-05-14">v2.6.0rc1 (2020-05-14)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -222,6 +223,28 @@
           <div class="card">
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v2-6-0rc1-2020-05-14">
+<h2>v2.6.0rc1 (2020-05-14)<a class="headerlink" href="#v2-6-0rc1-2020-05-14" title="Permalink to this headline">¶</a></h2>
+<p>Refer to [v2.6.0 milestone](<a class="reference external" href="https://github.com/slackapi/python-slackclient/milestone/5">https://github.com/slackapi/python-slackclient/milestone/5</a>) to know the complete list of the issues resolved by this release.</p>
+<p><strong>New Features</strong></p>
+<ol class="arabic simple">
+<li><p>[Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676) - Thanks &#64;seratch &#64;diurnalist &#64;ruberVulpes &#64;jeremyschulman &#64;e271828- &#64;RodneyU215</p></li>
+<li><p>[Signature] #686 Add slack.signature.SignatureVerifier for request verification - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #682 Add missing Grid admin APIs (<cite>admin.usergroups.*</cite>, <cite>admin.users.*</cite>, <cite>admin.apps.*</cite>) - Thanks &#64;stevengill &#64;seratch</p></li>
+</ol>
+<p><strong>Updates</strong></p>
+<ol class="arabic simple">
+<li><p>[WebClient][RTMClient] Fixed a bunch of the currency issues this SDK had (#429 #463 #492 #497 #530 #558 #569 #605 #613 #619 #626 #630 #631 #633 #669) - Thanks &#64;seratch &#64;aaguilartablada &#64;aoberoi &#64;stevengill</p></li>
+<li><p>[WebClient] #681 #560 Enable using bool values for request parameters - Thanks &#64;roman-kachanovsky &#64;seratch</p></li>
+<li><p>[WebClient] #661 #678 Improve handling of required “ids” parameters (e.g., channel_ids, users) - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #680 Add non-conversation API deprecation warnings - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #671 #670 Enable passing None values for request parameters (they used to result in errors) - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #673 Fix #672 files.upload fails with a filepath containing multi byte chars - Thanks &#64;yuji38kwmt &#64;seratch</p></li>
+<li><p>[WebClient] #656 Fix #594 preview_image for files.remote.add API method is not properly supported - Thanks &#64;seratch</p></li>
+<li><p>[Maintenance] #618 Add py.typed file to package distribution - Thanks &#64;JKillian</p></li>
+<li><p>[WebClient] #599 Strip token string parameters of whitespace - Thanks &#64;TheFrozenFire</p></li>
+</ol>
+</div>
 <div class="section" id="v2-5-0-2019-12-09">
 <h2>v2.5.0 (2019-12-09)<a class="headerlink" href="#v2-5-0-2019-12-09" title="Permalink to this headline">¶</a></h2>
 <p><strong>New Features</strong></p>

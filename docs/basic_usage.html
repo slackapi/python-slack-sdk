@@ -162,6 +162,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0rc1-2020-05-14">v2.6.0rc1 (2020-05-14)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -354,19 +355,16 @@ article for more information.</p>
 <h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
 <p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6.0rc1</span>
+<span class="kn">from</span> <span class="nn">slack.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
+<span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">signing_secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">]</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">slack_app</span><span class="p">():</span>
-  <span class="c1"># Refer to https://github.com/slackapi/python-slack-events-api</span>
-  <span class="c1"># (The Slack Team is going to provide a new package soon)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_request</span><span class="p">(</span>
-    <span class="n">signing_secret</span><span class="o">=</span><span class="n">signing_secret</span><span class="p">,</span>
-    <span class="n">request_body</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span>
-    <span class="n">timestamp</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Request-Timestamp&quot;</span><span class="p">),</span>
-    <span class="n">signature</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Signature&quot;</span><span class="p">)):</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">signature_verifier</span><span class="o">.</span><span class="n">is_valid_request</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;invalid request&quot;</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
 
   <span class="k">if</span> <span class="s2">&quot;command&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span> \
