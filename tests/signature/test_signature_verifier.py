@@ -29,9 +29,13 @@ class TestSignatureVerifier(unittest.TestCase):
     }
 
     def test_generate_signature(self):
-        verifier = SignatureVerifier("8f742231b10e8888abcd99yyyzzz85a5")
-        timestamp = "1531420618"
-        signature = verifier.generate_signature(timestamp=timestamp, body=self.body)
+        verifier = SignatureVerifier(self.signing_secret)
+        signature = verifier.generate_signature(timestamp=self.timestamp, body=self.body)
+        self.assertEqual(self.valid_signature, signature)
+
+    def test_generate_signature_body_as_bytes(self):
+        verifier = SignatureVerifier(self.signing_secret)
+        signature = verifier.generate_signature(timestamp=self.timestamp, body=self.body.encode("utf-8"))
         self.assertEqual(self.valid_signature, signature)
 
     def test_is_valid_request(self):
@@ -41,6 +45,13 @@ class TestSignatureVerifier(unittest.TestCase):
         )
         self.assertTrue(verifier.is_valid_request(self.body, self.headers))
 
+    def test_is_valid_request_body_as_bytes(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock()
+        )
+        self.assertTrue(verifier.is_valid_request(self.body.encode("utf-8"), self.headers))
+
     def test_is_valid_request_invalid_body(self):
         verifier = SignatureVerifier(
             signing_secret=self.signing_secret,
@@ -48,6 +59,14 @@ class TestSignatureVerifier(unittest.TestCase):
         )
         modified_body = self.body + "------"
         self.assertFalse(verifier.is_valid_request(modified_body, self.headers))
+
+    def test_is_valid_request_invalid_body_as_bytes(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        modified_body = self.body + "------"
+        self.assertFalse(verifier.is_valid_request(modified_body.encode("utf-8"), self.headers))
 
     def test_is_valid_request_expiration(self):
         verifier = SignatureVerifier(

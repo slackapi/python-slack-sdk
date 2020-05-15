@@ -178,19 +178,16 @@ Modals use the same blocks that compose messages with the addition of an `input`
 
 .. code-block:: python
 
+  # This module is available since v2.6.0rc1
+  from slack.signature import SignatureVerifier
+  signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
+
   from flask import Flask, request, make_response
   app = Flask(__name__)
-  signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 
   @app.route("/slack/events", methods=["POST"])
   def slack_app():
-    # Refer to https://github.com/slackapi/python-slack-events-api
-    # (The Slack Team is going to provide a new package soon)
-    if not verify_request(
-      signing_secret=signing_secret,
-      request_body=request.get_data(),
-      timestamp=request.headers.get("X-Slack-Request-Timestamp"),
-      signature=request.headers.get("X-Slack-Signature")):
+    if not signature_verifier.is_valid_request(request.get_data(), request.headers):
       return make_response("invalid request", 403)
 
     if "command" in request.form \
