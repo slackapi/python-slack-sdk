@@ -5,7 +5,7 @@ Changelog
 v2.6.0rc1 (2020-05-14)
 -------------------
 
-Refer to [v2.6.0 milestone](https://github.com/slackapi/python-slackclient/milestone/5) to know the complete list of the issues resolved by this release.
+Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/milestone/5>`_ to know the complete list of the issues resolved by this release.
 
 **New Features**
 
