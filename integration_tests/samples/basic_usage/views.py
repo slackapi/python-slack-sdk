@@ -7,52 +7,6 @@ from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
 logging.basicConfig(level=logging.DEBUG)
-# ------------------
-
-# ---------------------
-# Slack Request Verification
-# https://github.com/slackapi/python-slack-events-api
-# ---------------------
-
-import hmac
-import hashlib
-from time import time
-
-
-def verify_request(
-    signing_secret: str,
-    request_body: str,
-    timestamp: str,
-    signature: str) -> bool:
-    if abs(time() - int(timestamp)) > 60 * 5:
-        return False
-
-    if hasattr(hmac, "compare_digest"):
-        req = str.encode('v0:' + str(timestamp) + ':') + request_body
-        request_hash = 'v0=' + hmac.new(
-            str.encode(signing_secret),
-            req, hashlib.sha256
-        ).hexdigest()
-        return hmac.compare_digest(request_hash, signature)
-    else:
-        # So, we'll compare the signatures explicitly
-        req = str.encode('v0:' + str(timestamp) + ':') + request_body
-        request_hash = 'v0=' + hmac.new(
-            str.encode(signing_secret),
-            req, hashlib.sha256
-        ).hexdigest()
-
-        if len(request_hash) != len(signature):
-            return False
-        result = 0
-        if isinstance(request_hash, bytes) and isinstance(signature, bytes):
-            for x, y in zip(request_hash, signature):
-                result |= x ^ y
-        else:
-            for x, y in zip(request_hash, signature):
-                result |= ord(x) ^ ord(y)
-        return result == 0
-
 
 # ---------------------
 # Slack WebClient
@@ -62,8 +16,10 @@ import os
 
 from slack import WebClient
 from slack.errors import SlackApiError
+from slack.signature import SignatureVerifier
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
 # ---------------------
 # Flask App
@@ -73,16 +29,11 @@ client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 from flask import Flask, request, make_response
 
 app = Flask(__name__)
-signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 
 
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
-    if not verify_request(
-        signing_secret=signing_secret,
-        request_body=request.get_data(),
-        timestamp=request.headers.get("X-Slack-Request-Timestamp"),
-        signature=request.headers.get("X-Slack-Signature")):
+    if not signature_verifier.is_valid_request(request.get_data(), request.headers):
         return make_response("invalid request", 403)
 
     if "command" in request.form \

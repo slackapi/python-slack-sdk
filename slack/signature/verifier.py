@@ -1,7 +1,7 @@
 import hashlib
 import hmac
 from time import time
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 
 class Clock:
@@ -21,7 +21,9 @@ class SignatureVerifier:
         self.signing_secret = signing_secret
         self.clock = clock
 
-    def is_valid_request(self, body: str, headers: Dict[str, str],) -> bool:
+    def is_valid_request(
+        self, body: Union[str, bytes], headers: Dict[str, str],
+    ) -> bool:
         """Verifies if the given signature is valid"""
         if headers is None:
             return False
@@ -32,7 +34,9 @@ class SignatureVerifier:
             signature=normalized_headers.get("x-slack-signature", None),
         )
 
-    def is_valid(self, body: str, timestamp: str, signature: str,) -> bool:
+    def is_valid(
+        self, body: Union[str, bytes], timestamp: str, signature: str,
+    ) -> bool:
         """Verifies if the given signature is valid"""
         if timestamp is None or signature is None:
             return False
@@ -40,18 +44,21 @@ class SignatureVerifier:
         if abs(self.clock.now() - int(timestamp)) > 60 * 5:
             return False
 
-        if body is None:
-            body = ""
-
         calculated_signature = self.generate_signature(timestamp=timestamp, body=body)
         if calculated_signature is None:
             return False
         return hmac.compare_digest(calculated_signature, signature)
 
-    def generate_signature(self, *, timestamp: str, body: str) -> Optional[str]:
+    def generate_signature(
+        self, *, timestamp: str, body: Union[str, bytes]
+    ) -> Optional[str]:
         """Generates a signature"""
         if timestamp is None:
             return None
+        if body is None:
+            body = ""
+        if isinstance(body, bytes):
+            body = body.decode("utf-8")
 
         format_req = str.encode(f"v0:{timestamp}:{body}")
         encoded_secret = str.encode(self.signing_secret)
