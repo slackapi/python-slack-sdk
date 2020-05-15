@@ -496,6 +496,13 @@ class RTMClient(object):
                         rtm_client=self, web_client=self._web_client, data=data
                     )
                 else:
+                    if self.run_async is True:
+                        raise client_err.SlackRequestError(
+                            f'The callback "{callback.__name__}" is NOT a coroutine. '
+                            "Running such with run_async=True is unsupported. "
+                            "Consider adding async/await to the method "
+                            "or going with run_async=False if your app is not really non-blocking."
+                        )
                     payload = {
                         "rtm_client": self,
                         "web_client": self._web_client,

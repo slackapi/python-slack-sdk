@@ -6,6 +6,7 @@ from aiohttp import web, WSCloseCode
 
 import slack
 import slack.errors as e
+from tests.helpers import async_test
 from tests.rtm.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
@@ -240,3 +241,47 @@ class TestRTMClientFunctional(unittest.TestCase):
 
         self.client.start()
         self.assertTrue(self.called)
+
+    @async_test
+    async def test_run_async_valid(self):
+        client = slack.RTMClient(
+            token="xoxb-valid",
+            base_url="http://localhost:8765",
+            run_async=True,
+        )
+        client._web_client = slack.WebClient(
+            token="xoxb-valid",
+            base_url="http://localhost:8888",
+            run_async=True,
+        )
+        self.called = False
+
+        @slack.RTMClient.run_on(event="open")
+        async def handle_open_event(**payload):
+            self.called = True
+
+        client.start()  # intentionally no await here
+        await asyncio.sleep(3)
+        self.assertTrue(self.called)
+
+    @async_test
+    async def test_run_async_invalid(self):
+        client = slack.RTMClient(
+            token="xoxb-valid",
+            base_url="http://localhost:8765",
+            run_async=True,
+        )
+        client._web_client = slack.WebClient(
+            token="xoxb-valid",
+            base_url="http://localhost:8888",
+            run_async=True,
+        )
+        self.called = False
+
+        @slack.RTMClient.run_on(event="open")
+        def handle_open_event(**payload):
+            self.called = True
+
+        client.start()  # intentionally no await here
+        await asyncio.sleep(3)
+        self.assertFalse(self.called)
