@@ -43,6 +43,9 @@ class TestRTMClient(unittest.TestCase):
             TestRTMClient.cpu_monitor.setDaemon(True)
             TestRTMClient.cpu_monitor.start()
 
+        self.rtm_client = None
+        self.web_client = None
+
     def tearDown(self):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
@@ -50,16 +53,10 @@ class TestRTMClient(unittest.TestCase):
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="still unfixed")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate_limited errors")
     def test_cpu_usage(self):
-        self.rtm_client = RTMClient(
-            token=self.bot_token,
-            run_async=False,
-            loop=asyncio.new_event_loop())
-        self.web_client = WebClient(
-            token=self.bot_token,
-            run_async=False,
-            loop=asyncio.new_event_loop())
+        self.rtm_client = RTMClient(token=self.bot_token, run_async=False, loop=asyncio.new_event_loop())
+        self.web_client = WebClient(token=self.bot_token, run_async=False)
 
         self.call_count = 0
         TestRTMClient.cpu_usage = 0

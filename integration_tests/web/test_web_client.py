@@ -195,6 +195,19 @@ class TestWebClient(unittest.TestCase):
         deletion = client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
+    def test_uploading_binary_files_as_content(self):
+        client = self.sync_client
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        with open(file, 'rb') as f:
+            content = f.read()
+            upload = client.files_upload(
+                channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", content=content)
+            self.assertIsNotNone(upload)
+
+            deletion = client.files_delete(file=upload["file"]["id"])
+            self.assertIsNotNone(deletion)
+
     @async_test
     async def test_uploading_binary_files_async(self):
         client = self.async_client
@@ -212,6 +225,22 @@ class TestWebClient(unittest.TestCase):
 
     def test_pagination_with_iterator(self):
         client = self.sync_client
+        fetched_count = 0
+        # SlackResponse is an iterator that fetches next if next_cursor is not ""
+        for response in client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):
+            fetched_count += len(response["channels"])
+            if fetched_count > 1:
+                break
+
+        self.assertGreater(fetched_count, 1)
+
+    def test_pagination_with_iterator_use_sync_aiohttp(self):
+        client: WebClient = WebClient(
+            token=self.bot_token,
+            run_async=False,
+            use_sync_aiohttp=True,
+            loop=asyncio.new_event_loop(),
+        )
         fetched_count = 0
         # SlackResponse is an iterator that fetches next if next_cursor is not ""
         for response in client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):

@@ -35,15 +35,15 @@ class TestRTMClient(unittest.TestCase):
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="this is just for reference")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="to avoid rate_limited errors")
     def test_issue_631_sharing_event_loop(self):
         self.success = None
         self.text = "This message was sent to verify issue #631"
 
         self.rtm_client = RTMClient(
             token=self.bot_token,
-            run_async=False,  # even though run_async=False, handlers for RTM events can be a coroutine
-            loop=asyncio.new_event_loop(),  # TODO: remove this
+            run_async=False,
+            loop=asyncio.new_event_loop(),  # TODO: this doesn't work without this
         )
 
         # @RTMClient.run_on(event="message")
@@ -72,8 +72,7 @@ class TestRTMClient(unittest.TestCase):
 
         # Solution (1) for #631
         @RTMClient.run_on(event="message")
-        # even though run_async=False, handlers for RTM events can be a coroutine
-        async def send_reply(**payload):
+        def send_reply(**payload):
             self.logger.debug(payload)
             data = payload['data']
             web_client = payload['web_client']
@@ -82,7 +81,7 @@ class TestRTMClient(unittest.TestCase):
                 if "text" in data and self.text in data["text"]:
                     channel_id = data['channel']
                     thread_ts = data['ts']
-                    self.success = await web_client.chat_postMessage(
+                    self.success = web_client.chat_postMessage(
                         channel=channel_id,
                         text="Thanks!",
                         thread_ts=thread_ts
@@ -106,7 +105,6 @@ class TestRTMClient(unittest.TestCase):
             self.web_client = WebClient(
                 token=self.bot_token,
                 run_async=False,
-                loop=asyncio.new_event_loop(),  # TODO: this doesn't work without this
             )
             new_message = self.web_client.chat_postMessage(channel=self.channel_id, text=self.text)
             self.assertFalse("error" in new_message)

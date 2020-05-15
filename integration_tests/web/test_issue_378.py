@@ -29,7 +29,7 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(response)
 
     @async_test
-    async def test_issue_378(self):
+    async def test_issue_378_async(self):
         client = self.async_client
         response = await client.users_setPhoto(image="tests/data/slack_logo_new.png")
         self.assertIsNotNone(response)
