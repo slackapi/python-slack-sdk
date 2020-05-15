@@ -6,7 +6,6 @@ import hashlib
 import hmac
 import io
 import json
-import json as json_module
 import logging
 import mimetypes
 import os
@@ -15,8 +14,8 @@ import sys
 import uuid
 import warnings
 from http.client import HTTPResponse
-from typing import BinaryIO, Dict, List, Union
-from typing import Optional
+from typing import BinaryIO, Dict, List
+from typing import Optional, Union
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.parse import urljoin
@@ -333,7 +332,7 @@ class BaseClient:
         return {
             "status_code": int(response["status"]),
             "headers": dict(response["headers"]),
-            "data": json_module.loads(response["body"]),
+            "data": json.loads(response["body"]),
         }
 
     def _urllib_api_call(
@@ -613,6 +612,11 @@ class BaseClient:
         Returns:
             True if signatures matches
         """
+        warnings.warn(
+            "As this method is deprecated since slackclient 2.6.0, "
+            "use `from slack.signature import SignatureVerifier` instead",
+            DeprecationWarning,
+        )
         format_req = str.encode(f"v0:{timestamp}:{data}")
         encoded_secret = str.encode(signing_secret)
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
