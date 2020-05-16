@@ -1,7 +1,15 @@
+import copy
+import logging
+import warnings
 from datetime import datetime
 from typing import List, Optional, Set, Union
 
-from . import BaseObject, JsonObject, JsonValidator, extract_json
+from . import (
+    BaseObject,
+    JsonObject,
+    JsonValidator,
+    show_unknown_key_warning,
+)
 
 ButtonStyles = {"danger", "primary"}
 DynamicSelectElementTypes = {"channels", "conversations", "users"}
@@ -9,15 +17,8 @@ DynamicSelectElementTypes = {"channels", "conversations", "users"}
 
 class Link(BaseObject):
     def __init__(self, *, url: str, text: str):
-        """
-        Base class used to generate links in Slack's not-quite Markdown, not quite HTML
-        syntax
-
+        """Base class used to generate links in Slack's not-quite Markdown, not quite HTML syntax
         https://api.slack.com/docs/message-formatting#linking_to_urls
-
-        Args:
-            url: The URL (or other special text, see subclasses) to link to
-            text: Text to display on the link. Often only a fallback.
         """
         self.url = url
         self.text = text
@@ -39,23 +40,8 @@ class DateLink(Link):
         fallback: str,
         link: Optional[str] = None,
     ):
-        """
-        Messages containing a date or time should be displayed in the local timezone
-        of the person seeing the message. The <!date> command will format a Unix
-        timestamp using tokens within a string that you set. You may also optionally
-        link a date using a standard URL. A <!date> must include some fallback text
-        for older Slack clients (in case the conversion fails).
-
-        https://api.slack.com/docs/message-formatting#formatting_dates
-
-        Args:
-            date: A Unix timestamp (as int) or datetime.datetime object
-            date_format: Describe your date and time as a string, using any
-                combination of the following tokens and plain text: {date_num}, {date},
-                {date_short}, {date_long}, {date_pretty}, {date_short_pretty},
-                {date_long_pretty}, {time}, {time_secs}
-            fallback: text to display on clients that don't support date rendering
-            link: an optional URL to hyperlink to with this date
+        """Text containing a date or time should display that date in the local timezone of the person seeing the text.
+        https://api.slack.com/reference/surfaces/formatting#date-formatting
         """
         if isinstance(date, datetime):
             epoch = int(date.timestamp())
@@ -65,7 +51,7 @@ class DateLink(Link):
             link = f"^{link}"
         else:
             link = ""
-        super().__init__(url=f"{epoch}^{date_format}{link}", text=fallback)
+        super().__init__(url=f"!date^{epoch}^{date_format}{link}", text=fallback)
 
 
 class ObjectLink(Link):
@@ -79,16 +65,8 @@ class ObjectLink(Link):
     }
 
     def __init__(self, *, object_id: str, text: str = ""):
-        """
-        Convenience class to create links to specific object types
-
-        https://api.slack.com/docs/message-formatting#linking_to_channels_and_users
-
-        Args:
-            object_id: An ID to create a link to, eg 'U12345' for a user,
-                or 'C6789' for a channel
-            text: Optional text to attach to the link - may or may not be
-                displayed by Slack client
+        """Convenience class to create links to specific object types
+        https://api.slack.com/reference/surfaces/formatting#linking-channels
         """
         prefix = self.prefix_mapping.get(object_id[0].upper(), "@")
         super().__init__(url=f"{prefix}{object_id}", text=text)
@@ -96,113 +74,154 @@ class ObjectLink(Link):
 
 class ChannelLink(Link):
     def __init__(self):
-        """
-        Represents an @channel link, which notifies everyone present in this channel.
-
-        https://api.slack.com/docs/message-formatting#variables
+        """Represents an @channel link, which notifies everyone present in this channel.
+        https://api.slack.com/reference/surfaces/formatting
         """
         super().__init__(url="!channel", text="channel")
 
 
 class HereLink(Link):
     def __init__(self):
-        """
-        Represents an @here link, which notifies all online users of this channel.
-
-        https://api.slack.com/docs/message-formatting#variables
+        """Represents an @here link, which notifies all online users of this channel.
+        https://api.slack.com/reference/surfaces/formatting
         """
         super().__init__(url="!here", text="here")
 
 
 class EveryoneLink(Link):
     def __init__(self):
-        """
-        Represents an @everyone link, which notifies all users of this workspace.
-
-        https://api.slack.com/docs/message-formatting#variables
+        """Represents an @everyone link, which notifies all users of this workspace.
+        https://api.slack.com/reference/surfaces/formatting
         """
         super().__init__(url="!everyone", text="everyone")
 
 
 class TextObject(JsonObject):
-    attributes = {"text", "type"}
+    attributes = {"text", "type", "emoji"}
+    logger = logging.getLogger(__name__)
 
-    def __init__(self, *, text: str, subtype: str):
+    def _subtype_warning(self):
+        warnings.warn(
+            "subtype is deprecated since slackclient 2.6.0, use type instead",
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -> Optional[str]:
+        return self.type
+
+    @classmethod
+    def parse(
+        cls, text: Union[str, dict, "TextObject"], default_type: str = "mrkdwn"
+    ) -> Optional["TextObject"]:
+        if not text:
+            return None
+        elif isinstance(text, str):
+            if default_type == PlainTextObject.type:
+                return PlainTextObject.from_str(text)
+            else:
+                return MarkdownTextObject.from_str(text)
+        elif isinstance(text, dict):
+            d = copy.copy(text)
+            t = d.pop("type")
+            if t == PlainTextObject.type:
+                return PlainTextObject(**d)
+            else:
+                return MarkdownTextObject(**d)
+        elif isinstance(text, TextObject):
+            return text
+        else:
+            cls.logger.warning(
+                f"Unknown type ({type(text)}) detected when parsing a TextObject"
+            )
+            return None
+
+    def __init__(
+        self,
+        text: str,
+        type: Optional[str] = None,
+        subtype: Optional[str] = None,
+        emoji: Optional[bool] = None,
+        **kwargs,
+    ):
         """
         Super class for new text "objects" used in Block kit
         """
-        self.text = text
-        self.subtype = subtype
+        if subtype:
+            self._subtype_warning()
 
-    def to_dict(self) -> dict:
-        json = super().to_dict()
-        json["type"] = self.subtype
-        return json
+        self.text = text
+        self.type = type if type else subtype
+        self.emoji = emoji
 
 
 class PlainTextObject(TextObject):
+    type = "plain_text"
+
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union({"emoji"})
 
-    def __init__(self, *, text: str, emoji: bool = True):
-        """
-        A plain text object, meaning markdown characters will not be parsed as
+    def __init__(self, *, text: str, emoji: Optional[bool] = None):
+        """A plain text object, meaning markdown characters will not be parsed as
         formatting information.
-
-        https://api.slack.com/reference/messaging/composition-objects#text
-
-        Args:
-            emoji: Whether to escape emoji in text into Slack's :emoji: format
+        https://api.slack.com/reference/block-kit/composition-objects#text
         """
-        super().__init__(text=text, subtype="plain_text")
+        super().__init__(text=text, type=self.type)
         self.emoji = emoji
+
+    @staticmethod
+    def from_str(text: str) -> "PlainTextObject":
+        return PlainTextObject(text=text, emoji=True)
 
     @staticmethod
     def direct_from_string(text: str) -> dict:
         """
         Transforms a string into the required object shape to act as a PlainTextObject
         """
-        return PlainTextObject(text=text).to_dict()
+        return PlainTextObject.from_str(text).to_dict()
 
 
 class MarkdownTextObject(TextObject):
+    type = "mrkdwn"
+
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union({"verbatim"})
 
-    def __init__(self, *, text: str, verbatim: bool = False):
-        """
-        A Markdown text object, meaning markdown characters will be parsed as
+    def __init__(self, *, text: str, verbatim: Optional[bool] = None):
+        """A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
-
-        https://api.slack.com/reference/messaging/composition-objects#text
-
-        Args:
-            verbatim: When set to false (as is default) URLs will be
-                auto-converted into links, conversation names will be link-ified, and
-                certain mentions will be automatically parsed.
+        https://api.slack.com/reference/block-kit/composition-objects#text
         """
-        super().__init__(text=text, subtype="mrkdwn")
+        super().__init__(text=text, type=self.type)
         self.verbatim = verbatim
 
     @staticmethod
-    def direct_from_string(text: str) -> dict:
+    def from_str(text: str) -> "MarkdownTextObject":
+        """Transforms a string into the required object shape to act as a MarkdownTextObject
         """
-        Transforms a string into the required object shape to act as a
-        MarkdownTextObject
-        """
-        return MarkdownTextObject(text=text).to_dict()
+        return MarkdownTextObject(text=text)
 
     @staticmethod
-    def direct_from_link(link: Link, title: str = "") -> dict:
+    def direct_from_string(text: str) -> dict:
+        """Transforms a string into the required object shape to act as a MarkdownTextObject
         """
-        Transform a Link object directly into the required object shape to act as a
-        MarkdownTextObject
+        return MarkdownTextObject.from_str(text).to_dict()
+
+    @staticmethod
+    def from_link(link: Link, title: str = "") -> "MarkdownTextObject":
+        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject
         """
         if title:
             title = f": {title}"
-        return MarkdownTextObject(text=f"{link}{title}").to_dict()
+        return MarkdownTextObject(text=f"{link}{title}")
+
+    @staticmethod
+    def direct_from_link(link: Link, title: str = "") -> dict:
+        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject
+        """
+        return MarkdownTextObject.from_link(link, title).to_dict()
 
 
 class ConfirmObject(JsonObject):
@@ -213,93 +232,114 @@ class ConfirmObject(JsonObject):
     confirm_max_length = 30
     deny_max_length = 30
 
+    @classmethod
+    def parse(cls, confirm: Union["ConfirmObject", dict]):
+        if confirm:
+            if isinstance(confirm, ConfirmObject):
+                return confirm
+            elif isinstance(confirm, dict):
+                return ConfirmObject(**confirm)
+            else:
+                # TODO: warning
+                return None
+
     def __init__(
         self,
         *,
-        title: str,
-        text: Union[TextObject, str],
-        confirm: str = "Yes",
-        deny: str = "No",
+        title: Union[str, dict, PlainTextObject],
+        text: Union[str, dict, TextObject],
+        confirm: Union[str, dict, PlainTextObject] = "Yes",
+        deny: Union[str, dict, PlainTextObject] = "No",
     ):
         """
         An object that defines a dialog that provides a confirmation step to any
         interactive element. This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
-
-        https://api.slack.com/reference/messaging/composition-objects#confirm
-
-        Args:
-            title: A string that defines the dialog's title. Cannot exceed 100
-                characters.
-            text: A string or TextObject that defines the explanatory text
-                that appears in the confirm dialog. Cannot exceed 300 characters.
-            confirm: A string to define the text on the button that confirms the
-                action. Cannot exceed 30 characters.
-            deny: A string to define the text on the button that cancels the
-                action. Cannot exceed 30 characters.
+        https://api.slack.com/reference/block-kit/composition-objects#confirm
         """
-        self.title = title
-        self.text = text
-        self.confirm = confirm
-        self.deny = deny
+        self._title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self._text = TextObject.parse(text, default_type=MarkdownTextObject.type)
+        self._confirm = TextObject.parse(confirm, default_type=PlainTextObject.type)
+        self._deny = TextObject.parse(deny, default_type=PlainTextObject.type)
+
+        # for backward-compatibility with version 2.0-2.5, the following fields return str values
+        self.title = self._title.text if self._title else None
+        self.text = self._text.text if self._text else None
+        self.confirm = self._confirm.text if self._confirm else None
+        self.deny = self._deny.text if self._deny else None
 
     @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
     def title_length(self):
-        return len(self.title) <= self.title_max_length
+        return self._title is None or len(self._title.text) <= self.title_max_length
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def text_length(self):
-        if isinstance(self.text, TextObject):
-            return len(self.text.text) <= self.text_max_length
-        else:
-            return len(self.text) <= self.text_max_length
+        return self._text is None or len(self._text.text) <= self.text_max_length
 
     @JsonValidator(f"confirm attribute cannot exceed {confirm_max_length} characters")
     def confirm_length(self):
-        return len(self.confirm) <= self.confirm_max_length
+        return (
+            self._confirm is None or len(self._confirm.text) <= self.confirm_max_length
+        )
 
     @JsonValidator(f"deny attribute cannot exceed {deny_max_length} characters")
     def deny_length(self):
-        return len(self.deny) <= self.deny_max_length
+        return self._deny is None or len(self._deny.text) <= self.deny_max_length
 
     def to_dict(self, option_type: str = "block") -> dict:
         if option_type == "action":
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
-            return {
-                "text": self.text,
-                "title": self.title,
-                "ok_text": self.confirm if self.confirm != "Yes" else "Okay",
-                "dismiss_text": self.deny if self.deny != "No" else "Cancel",
+            json = {
+                "ok_text": self._confirm.text
+                if self._confirm and self._confirm.text != "Yes"
+                else "Okay",
+                "dismiss_text": self._deny.text
+                if self._deny and self._deny.text != "No"
+                else "Cancel",
             }
+            if self._title:
+                json["title"] = self._title.text
+            if self._text:
+                json["text"] = self._text.text
+            return json
+
         else:
             self.validate_json()
-            json = {
-                "title": PlainTextObject.direct_from_string(self.title),
-                "confirm": PlainTextObject.direct_from_string(self.confirm),
-                "deny": PlainTextObject.direct_from_string(self.deny),
-            }
-            if isinstance(self.text, TextObject):
-                json["text"] = self.text.to_dict()
-            else:
-                json["text"] = MarkdownTextObject.direct_from_string(self.text)
+            json = {}
+            if self._title:
+                json["title"] = self._title.to_dict()
+            if self._text:
+                json["text"] = self._text.to_dict()
+            if self._confirm:
+                json["confirm"] = self._confirm.to_dict()
+            if self._deny:
+                json["deny"] = self._deny.to_dict()
             return json
 
 
 class Option(JsonObject):
-    """
-    Option object used in dialogs, legacy message actions, and blocks
-
+    """Option object used in dialogs, legacy message actions, and blocks
     JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
 
     attributes = {}  # no attributes because to_dict has unique implementations
+    logger = logging.getLogger(__name__)
 
     label_max_length = 75
     value_max_length = 75
 
-    def __init__(self, *, label: str, value: str, description: Optional[str] = None):
+    def __init__(
+        self,
+        *,
+        value: str,
+        label: Optional[str] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
+        description: Optional[str] = None,
+        url: Optional[str] = None,
+        **others: dict,
+    ):
         """
         An object that represents a single selectable item in a block element (
         SelectElement, OverflowMenuElement) or dialog element
@@ -324,17 +364,59 @@ class Option(JsonObject):
                 this option. Only supported in legacy message actions, not in blocks or
                 dialogs.
         """
-        self.label = label
-        self.value = value
-        self.description = description
+        if text:
+            self._text: Optional[TextObject] = TextObject.parse(text)
+            self._label: Optional[str] = None
+        else:
+            self._text: Optional[TextObject] = None
+            self._label: Optional[str] = label
+
+        # for backward-compatibility with version 2.0-2.5, the following fields return str values
+        self.text: Optional[str] = self._text.text if self._text else None
+        self.label: Optional[str] = self._label
+
+        self.value: str = value
+        self.description: Optional[str] = description
+        # A URL to load in the user's browser when the option is clicked.
+        # The url attribute is only available in overflow menus.
+        # Maximum length for this field is 3000 characters.
+        # If you're using url, you'll still receive an interaction payload
+        # and will need to send an acknowledgement response.
+        self.url: Optional[str] = url
+        show_unknown_key_warning(self, others)
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
-    def label_length(self):
-        return len(self.label) <= self.label_max_length
+    def _validate_label_length(self):
+        return self._label is None or len(self._label) <= self.label_max_length
+
+    @JsonValidator(f"text attribute cannot exceed {label_max_length} characters")
+    def _validate_text_length(self):
+        return (
+            self._text is None
+            or self._text.text is None
+            or len(self._text.text) <= self.label_max_length
+        )
 
     @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
-    def value_length(self):
+    def _validate_value_length(self):
         return len(self.value) <= self.value_max_length
+
+    @classmethod
+    def parse_all(
+        cls, options: Optional[List[Union[dict, "Option"]]]
+    ) -> List["Option"]:
+        if options is None:
+            return None
+        option_objects: List[Option] = []
+        for o in options:
+            if isinstance(o, dict):
+                d = copy.copy(o)
+                option_objects.append(Option(**d))
+            elif isinstance(o, Option):
+                option_objects.append(o)
+            else:
+                cls.logger.warning(f"Unknown option object detected and skipped ({o})")
+        return option_objects
 
     def to_dict(self, option_type: str = "block") -> dict:
         """
@@ -351,10 +433,16 @@ class Option(JsonObject):
                 json["description"] = self.description
             return json
         else:  # if option_type == "block"; this should be the most common case
-            return {
-                "text": PlainTextObject.direct_from_string(self.label),
+            text: TextObject = self._text or PlainTextObject.from_str(self.label)
+            json: dict = {
+                "text": text.to_dict(),
                 "value": self.value,
             }
+            if self.description:
+                json["description"] = self.description
+            if self.url:
+                json["url"] = self.url
+            return json
 
     @staticmethod
     def from_single_value(value_and_label: str):
@@ -371,11 +459,17 @@ class OptionGroup(JsonObject):
     """
 
     attributes = {}  # no attributes because to_dict has unique implementations
-
     label_max_length = 75
     options_max_length = 100
+    logger = logging.getLogger(__name__)
 
-    def __init__(self, *, label: str, options: List[Option]):
+    def __init__(
+        self,
+        *,
+        label: Optional[Union[str, dict, TextObject]] = None,
+        options: List[Union[dict, Option]],
+        **others: dict,
+    ):
         """
         Create a group of Option objects - pass in a label (that will be part of the
         UI) and a list of Option objects.
@@ -393,31 +487,57 @@ class OptionGroup(JsonObject):
             label: Text to display at the top of this group of options.
             options: A list of no more than 100 Option objects.
         """  # noqa prevent flake8 blowing up on the long URL
-        self.label = label
-        self.options = options
+        # default_type=PlainTextObject.type is for backward-compatibility
+        self._label: Optional[TextObject] = TextObject.parse(
+            label, default_type=PlainTextObject.type
+        )
+        self.label: Optional[str] = self._label.text if self._label else None
+        self.options = Option.parse_all(options)  # compatible with version 2.5
+        show_unknown_key_warning(self, others)
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
-    def label_length(self):
-        return len(self.label) <= self.label_max_length
+    def _validate_label_length(self):
+        return self.label is None or len(self.label) <= self.label_max_length
 
     @JsonValidator(f"options attribute cannot exceed {options_max_length} elements")
-    def options_length(self):
-        return len(self.options) <= self.options_max_length
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) <= self.options_max_length
+
+    @classmethod
+    def parse_all(
+        cls, option_groups: Optional[List[Union[dict, "OptionGroup"]]]
+    ) -> Optional[List["OptionGroup"]]:
+        if option_groups is None:
+            return None
+        option_group_objects = []
+        for o in option_groups:
+            if isinstance(o, dict):
+                d = copy.copy(o)
+                option_group_objects.append(OptionGroup(**d))
+            elif isinstance(o, OptionGroup):
+                option_group_objects.append(o)
+            else:
+                cls.logger.warning(
+                    f"Unknown option group object detected and skipped ({o})"
+                )
+        return option_group_objects
 
     def to_dict(self, option_type: str = "block") -> dict:
         self.validate_json()
+        dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == "dialog":
             return {
                 "label": self.label,
-                "options": extract_json(self.options, option_type),
+                "options": dict_options,
             }
         elif option_type == "action":
             return {
                 "text": self.label,
-                "options": extract_json(self.options, option_type),
+                "options": dict_options,
             }
         else:  # if option_type == "block"; this should be the most common case
+            dict_label: dict = self._label.to_dict()
             return {
-                "label": PlainTextObject.direct_from_string(self.label),
-                "options": extract_json(self.options, option_type),
+                "label": dict_label,
+                "options": dict_options,
             }

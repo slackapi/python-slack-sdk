@@ -1,27 +1,30 @@
-# Standard Imports
+import asyncio
 import collections
 import unittest
-from unittest import mock
-import asyncio
 
-# Internal Imports
 import slack
 import slack.errors as e
-from tests.helpers import mock_rtm_response
+from tests.rtm.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestRTMClient(unittest.TestCase):
     def setUp(self):
-        self.client = slack.RTMClient(token="xoxp-1234", auto_reconnect=False)
+        setup_mock_web_api_server(self)
+        self.client = slack.RTMClient(
+            token="xoxp-1234",
+            base_url="http://localhost:8888",
+            auto_reconnect=False
+        )
 
     def tearDown(self):
+        cleanup_mock_web_api_server(self)
         slack.RTMClient._callbacks = collections.defaultdict(list)
 
     def test_run_on_returns_callback(self):
         @slack.RTMClient.run_on(event="message")
         def fn_used_elsewhere(**_unused_payload):
             pass
-        
+
         self.assertIsNotNone(fn_used_elsewhere)
         self.assertEqual(fn_used_elsewhere.__name__, "fn_used_elsewhere")
 
@@ -81,18 +84,10 @@ class TestRTMClient(unittest.TestCase):
         error = str(context.exception)
         self.assertIn(expected_error, error)
 
-    @mock.patch("slack.WebClient._send", new_callable=mock_rtm_response)
-    def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(
-        self, mock_rtm_response
-    ):
-        mock_rtm_response.coro.return_value = {
-            "data": {"ok": True},
-            "headers": {},
-            "status_code": 200,
-        }
-
+    def test_start_raises_an_error_if_rtm_ws_url_is_not_returned(self):
         with self.assertRaises(e.SlackApiError) as context:
             slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
-        expected_error = "Unable to retrieve RTM URL from Slack"
+        expected_error = "The request to the Slack API failed.\n" \
+                         "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
         self.assertIn(expected_error, str(context.exception))

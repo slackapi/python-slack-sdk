@@ -1,0 +1,39 @@
+{
+  "type": "modal",
+  "title": {
+    "type": "plain_text",
+    "text": "My App",
+    "emoji": true
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "close": {
+    "type": "plain_text",
+    "text": "Cancel",
+    "emoji": true
+  },
+  "private_metadata": "something important here",
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
+      }
+    }
+  ],
+  "state": {
+    "values": {
+      "multi-line": {
+        "ml-value": {
+          "type": "plain_text_input",
+          "value": "This is my example inputted value"
+        }
+      }
+    }
+  },
+  "hash": "156663117.cd33ad1f"
+}

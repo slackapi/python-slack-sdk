@@ -12,11 +12,11 @@ __pycache__/
 *~
 
 # virtualenv
-env/
+env*/
 venv/
 
 # codecov / coverage
-.coverage
+.coverage*
 cov_*
 coverage.xml
 
@@ -33,3 +33,4 @@ pip
 
 tmp.txt
 .DS_Store
+logs/

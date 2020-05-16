@@ -1,6 +1,7 @@
+import logging
 from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Callable, Iterable, List, Set, Union
+from typing import Callable, Iterable, List, Set, Union, Dict, Any
 
 from ...errors import SlackObjectFormationError
 
@@ -14,9 +15,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
     @property
     @abstractmethod
     def attributes(self) -> Set[str]:
-        """
-        Provide a set of attributes of this object that will make up its JSON structure
-        """
+        """Provide a set of attributes of this object that will make up its JSON structure"""
         return set()
 
     def validate_json(self) -> None:
@@ -25,7 +24,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
           SlackObjectFormationError if the object was not valid
         """
         for attribute in (func for func in dir(self) if not func.startswith("__")):
-            method = getattr(self, attribute)
+            method = getattr(self, attribute, None)
             if callable(method) and hasattr(method, "validator"):
                 method()
 
@@ -34,10 +33,33 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         Construct a dictionary out of non-null keys (from attributes property)
         present on this object
         """
+
+        def to_dict_compatible(value: Union[dict, list, object]) -> Union[dict, list]:
+            if isinstance(value, list):
+                return [to_dict_compatible(v) for v in value]
+            else:
+                to_dict = getattr(value, "to_dict", None)
+                if to_dict and callable(to_dict):
+                    return {
+                        k: to_dict_compatible(v) for k, v in value.to_dict().items()
+                    }
+                else:
+                    return value
+
+        def is_not_empty(self, key: str) -> bool:
+            value = getattr(self, key, None)
+            if value is None:
+                return False
+            has_len = getattr(value, "__len__", None) is not None
+            if has_len:
+                return len(value) > 0
+            else:
+                return value is not None
+
         return {
-            key: getattr(self, key, None)
+            key: to_dict_compatible(getattr(self, key, None))
             for key in sorted(self.attributes)
-            if getattr(self, key, None) is not None
+            if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -> dict:
@@ -54,9 +76,9 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         return self.get_non_null_attributes()
 
     def __repr__(self):
-        json = self.to_dict()
-        if json:
-            return f"<slack.{self.__class__.__name__}: {json}>"
+        dict_value = self.get_non_null_attributes()
+        if dict_value:
+            return f"<slack.{self.__class__.__name__}: {dict_value}>"
         else:
             return self.__str__()
 
@@ -90,9 +112,10 @@ class EnumValidator(JsonValidator):
         )
 
 
+# NOTE: used only for legacy components - don't use this for Block Kit
 def extract_json(
-    item_or_items: Union[JsonObject, List[JsonObject], str], *format_args
-) -> Union[dict, List[dict], str]:
+    item_or_items: Union[JsonObject, List[JsonObject]], *format_args
+) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:
     """
     Given a sequence (or single item), attempt to call the to_dict() method on each
     item and return a plain list. If item is not the expected type, return it
@@ -113,4 +136,19 @@ def extract_json(
             item_or_items.to_dict(*format_args)
             if isinstance(item_or_items, JsonObject)
             else item_or_items
+        )
+
+
+def show_unknown_key_warning(name: Union[str, object], others: dict):
+    if "type" in others:
+        others.pop("type")
+    if len(others) > 0:
+        keys = ", ".join(others.keys())
+        logger = logging.getLogger(__name__)
+        if isinstance(name, object):
+            name = name.__class__.__name__
+        logger.debug(
+            f"!!! {name}'s constructor args ({keys}) were ignored."
+            f"If they should be supported by this library, report this issue to the project :bow: "
+            f"https://github.com/slackapi/python-slackclient/issues"
         )

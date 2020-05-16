@@ -1,8 +1,9 @@
 """A Python module for interacting and consuming responses from Slack."""
 
+import asyncio
+
 # Standard Imports
 import logging
-import asyncio
 
 # Internal Imports
 import slack.errors as e
@@ -63,6 +64,7 @@ class SlackResponse(object):
         data: dict,
         headers: dict,
         status_code: int,
+        use_sync_aiohttp: bool = True,  # True for backward-compatibility
     ):
         self.http_verb = http_verb
         self.api_url = api_url
@@ -72,6 +74,7 @@ class SlackResponse(object):
         self.status_code = status_code
         self._initial_data = data
         self._client = client
+        self._use_sync_aiohttp = use_sync_aiohttp
         self._logger = logging.getLogger(__name__)
 
     def __str__(self):
@@ -132,13 +135,21 @@ class SlackResponse(object):
                 {"cursor": self.data["response_metadata"]["next_cursor"]}
             )
 
-            response = asyncio.get_event_loop().run_until_complete(
-                self._client._request(
-                    http_verb=self.http_verb,
-                    api_url=self.api_url,
-                    req_args=self.req_args,
+            if self._use_sync_aiohttp:
+                # We no longer recommend going with this way
+                response = asyncio.get_event_loop().run_until_complete(
+                    self._client._request(
+                        http_verb=self.http_verb,
+                        api_url=self.api_url,
+                        req_args=self.req_args,
+                    )
                 )
-            )
+            else:
+                # This method sends a request in a synchronous way
+                response = self._client._request_for_pagination(
+                    api_url=self.api_url, req_args=self.req_args
+                )
+
             self.data = response["data"]
             self.headers = response["headers"]
             self.status_code = response["status_code"]
@@ -169,8 +180,14 @@ class SlackResponse(object):
         Raises:
             SlackApiError: The request to the Slack API failed.
         """
-        if self.status_code == 200 and self.data.get("ok", False):
-            self._logger.debug("Received the following response: %s", self.data)
+        if self._logger.level <= logging.DEBUG:
+            self._logger.debug(
+                "Received the following response - "
+                f"status: {self.status_code}, "
+                f"headers: {dict(self.headers)}, "
+                f"body: {self.data}"
+            )
+        if self.status_code == 200 and self.data and self.data.get("ok", False):
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
