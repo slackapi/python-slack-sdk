@@ -19,9 +19,9 @@ Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/miles
 2. [WebClient] #681 #560 Enable using bool values for request parameters - Thanks @roman-kachanovsky @seratch
 3. [WebClient] #661 #678 Improve handling of required "ids" parameters (e.g., channel_ids, users) - Thanks @seratch
 4. [WebClient] #680 Add non-conversation API deprecation warnings - Thanks @seratch
-5. [WebClient] #671 #670 Enable passing None values for request parameters (they used to result in errors) - Thanks @seratch
+5. [WebClient] #671 #670 Enable passing None values for request parameters (they used to result in errors) - Thanks @yuji38kwmt @seratch
 6. [WebClient] #673 Fix #672 files.upload fails with a filepath containing multi byte chars - Thanks @yuji38kwmt @seratch
-7. [WebClient] #656 Fix #594 preview_image for files.remote.add API method is not properly supported - Thanks @seratch
+7. [WebClient] #656 Fix #594 preview_image for files.remote.add API method is not properly supported - Thanks @Eothred @seratch
 8. [Maintenance] #618 Add py.typed file to package distribution - Thanks @JKillian
 9. [WebClient] #599 Strip token string parameters of whitespace - Thanks @TheFrozenFire
 
