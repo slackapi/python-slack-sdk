@@ -15,7 +15,7 @@ from slack.web.classes.objects import DateLink
 class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
-    https://github.com/slackapi/python-slackclient/issues/672
+    https://github.com/slackapi/python-slackclient/issues/677
     """
 
     def setUp(self):
@@ -40,10 +40,13 @@ class TestWebClient(unittest.TestCase):
             fallback="fallback string",
             link="https://www.example.com"
         )
-        message=f"Here is a date link: {link}"
+        message = f"Here is a date link: {link}"
         response = client.chat_postMessage(channel=self.channel_id, text=message)
         self.assertIsNotNone(response)
-        self.assertRegexpMatches(response["message"]["text"], r"Here is a date link: <!date^\d+^{date_long} {time}^https://www.example.com|fallback string>")
+        self.assertRegex(
+            r"Here is a date link: <!date^\d+^{date_long} {time}^https://www.example.com|fallback string>",
+            response["message"]["text"],
+        )
 
     @async_test
     async def test_date_link_async(self):
@@ -54,7 +57,10 @@ class TestWebClient(unittest.TestCase):
             fallback="fallback string",
             link="https://www.example.com"
         )
-        message=f"Here is a date link: {link}"
+        message = f"Here is a date link: {link}"
         response = await client.chat_postMessage(channel=self.channel_id, text=message)
         self.assertIsNotNone(response)
-        self.assertRegexpMatches(response["message"]["text"], r"Here is a date link: <!date^\d+^{date_long} {time}^https://www.example.com|fallback string>")
+        self.assertRegex(
+            r"Here is a date link: <!date^\d+^{date_long} {time}^https://www.example.com|fallback string>",
+            response["message"]["text"],
+        )
