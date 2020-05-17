@@ -7,6 +7,7 @@ from typing import Union, List
 
 import slack.errors as e
 from slack.web.base_client import BaseClient, SlackResponse
+from slack.web.classes.views import View
 
 
 class WebClient(BaseClient):
@@ -1855,7 +1856,7 @@ class WebClient(BaseClient):
         return self.api_call("users.profile.set", json=kwargs)
 
     def views_open(
-        self, *, trigger_id: str, view: dict, **kwargs
+        self, *, trigger_id: str, view: Union[dict, View], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Open a view for a user.
 
@@ -1868,9 +1869,13 @@ class WebClient(BaseClient):
         Args:
             trigger_id (str): Exchange a trigger to post to the user.
                 e.g. '12345.98765.abcd2358fdea'
-            view (dict): The view payload.
+            view (dict or View): The view payload.
         """
-        kwargs.update({"trigger_id": trigger_id, "view": view})
+        kwargs.update({"trigger_id": trigger_id})
+        if isinstance(view, View):
+            kwargs.update({"view": view.to_dict()})
+        else:
+            kwargs.update({"view": view})
         return self.api_call("views.open", json=kwargs)
 
     def views_push(

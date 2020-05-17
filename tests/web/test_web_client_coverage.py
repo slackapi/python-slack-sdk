@@ -2,6 +2,8 @@ import os
 import unittest
 
 import slack
+from slack.web.classes.blocks import DividerBlock
+from slack.web.classes.views import View
 from tests.web.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
@@ -273,6 +275,10 @@ class TestWebClientCoverage(unittest.TestCase):
                     self.api_methods_to_call.remove(method(presence="away")["method"])
                 elif method_name == "views_open":
                     self.api_methods_to_call.remove(method(trigger_id="123123", view={})["method"])
+                    method(
+                        trigger_id="123123",
+                        view=View(type="modal", blocks=[DividerBlock()])
+                    )
                 elif method_name == "views_publish":
                     self.api_methods_to_call.remove(method(user_id="U123", view={})["method"])
                 elif method_name == "views_push":
