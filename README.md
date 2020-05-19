@@ -6,7 +6,6 @@ The Python slackclient is a developer kit for interfacing with the Slack Web API
 
 [![pypi package][pypi-image]][pypi-url]
 [![Build Status][travis-image]][travis-url]
-[![Build Status][windows-build-status]][windows-build-url]
 [![Python Version][python-version]][pypi-url]
 [![codecov][codecov-image]][codecov-url]
 [![contact][contact-image]][contact-url]
@@ -314,8 +313,6 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 
 [pypi-image]: https://badge.fury.io/py/slackclient.svg
 [pypi-url]: https://pypi.python.org/pypi/slackclient
-[windows-build-status]: https://ci.appveyor.com/api/projects/status/rif04t60ptslj32x/branch/master?svg=true
-[windows-build-url]: https://ci.appveyor.com/project/slackapi/python-slackclient
 [travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
 [travis-url]: https://travis-ci.org/slackapi/python-slackclient
 [python-version]: https://img.shields.io/pypi/pyversions/slackclient.svg
