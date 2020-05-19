@@ -13,6 +13,8 @@ class View(JsonObject):
     https://api.slack.com/reference/surfaces/views
     """
 
+    types = ["modal", "home"]
+
     attributes = {
         "type",
         "id",
@@ -36,7 +38,7 @@ class View(JsonObject):
 
     def __init__(
         self,
-        type: str = None,  # "modal", "home"
+        type: str,  # "modal", "home"
         id: Optional[str] = None,
         callback_id: Optional[str] = None,
         external_id: Optional[str] = None,
@@ -83,13 +85,30 @@ class View(JsonObject):
     private_metadata_max_length = 3000
     callback_id_max_length: int = 255
 
+    @JsonValidator('type must be either "modal" or "home"')
+    def _validate_type(self):
+        return self.type is not None and self.type in self.types
+
     @JsonValidator(f"title must be between 1 and {title_max_length} characters")
     def _validate_title_length(self):
         return self.title is None or 1 <= len(self.title.text) <= self.title_max_length
 
-    @JsonValidator(f"modals must contain between 1 and {blocks_max_length} blocks")
+    @JsonValidator(f"views must contain between 1 and {blocks_max_length} blocks")
     def _validate_blocks_length(self):
         return self.blocks is None or 0 < len(self.blocks) <= self.blocks_max_length
+
+    @JsonValidator("home view cannot have input blocks")
+    def _validate_input_blocks(self):
+        return self.type == "modal" or (
+            self.type == "home"
+            and len([b for b in self.blocks if b.type == "input"]) == 0
+        )
+
+    @JsonValidator("home view cannot have submit and close")
+    def _validate_home_tab_structure(self):
+        return self.type != "home" or (
+            self.type == "home" and self.close is None and self.submit is None
+        )
 
     @JsonValidator(f"close cannot exceed {close_max_length} characters")
     def _validate_close_length(self):

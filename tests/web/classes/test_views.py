@@ -2,7 +2,11 @@ import json
 import logging
 import unittest
 
-from slack.web.classes.objects import PlainTextObject, Option
+from slack.errors import SlackObjectFormationError
+from slack.web.classes.blocks import InputBlock, SectionBlock, DividerBlock, ActionsBlock, ContextBlock
+from slack.web.classes.elements import PlainTextInputElement, RadioButtonsElement, CheckboxesElement, ButtonElement, \
+    ImageElement
+from slack.web.classes.objects import PlainTextObject, Option, MarkdownTextObject
 from slack.web.classes.views import View, ViewState, ViewStateValue
 
 
@@ -20,6 +24,85 @@ class ViewTests(unittest.TestCase):
     # --------------------------------
     # Modals
     # --------------------------------
+
+    def test_valid_construction(self):
+        modal_view = View(
+            type="modal",
+            callback_id="modal-id",
+            title=PlainTextObject(text="Awesome Modal"),
+            submit=PlainTextObject(text="Submit"),
+            close=PlainTextObject(text="Cancel"),
+            blocks=[
+                InputBlock(
+                    block_id="b-id",
+                    label=PlainTextObject(text="Input label"),
+                    element=PlainTextInputElement(action_id="a-id")
+                ),
+                InputBlock(
+                    block_id="cb-id",
+                    label=PlainTextObject(text="Label"),
+                    element=CheckboxesElement(
+                        action_id="a-cb-id",
+                        options=[
+                            Option(text=PlainTextObject(text="*this is plain_text text*"), value="v1"),
+                            Option(text=MarkdownTextObject(text="*this is mrkdwn text*"), value="v2"),
+                        ],
+                    ),
+                ),
+                SectionBlock(
+                    block_id="sb-id",
+                    text=MarkdownTextObject(text="This is a mrkdwn text section block."),
+                    fields=[
+                        PlainTextObject(text="*this is plain_text text*", emoji=True),
+                        MarkdownTextObject(text="*this is mrkdwn text*"),
+                        PlainTextObject(text="*this is plain_text text*", emoji=True),
+                    ]
+                ),
+                DividerBlock(),
+                SectionBlock(
+                    block_id="rb-id",
+                    text=MarkdownTextObject(text="This is a section block with radio button accessory"),
+                    accessory=RadioButtonsElement(
+                        initial_option=Option(
+                            text=PlainTextObject(text="Option 1"),
+                            value="option 1",
+                            description=PlainTextObject(text="Description for option 1"),
+                        ),
+                        options=[
+                            Option(
+                                text=PlainTextObject(text="Option 1"),
+                                value="option 1",
+                                description=PlainTextObject(text="Description for option 1"),
+                            ),
+                            Option(
+                                text=PlainTextObject(text="Option 2"),
+                                value="option 2",
+                                description=PlainTextObject(text="Description for option 2"),
+                            ),
+                        ]
+                    )
+                )
+            ]
+        )
+        modal_view.validate_json()
+
+    def test_invalid_type_value(self):
+        modal_view = View(
+            type="modallll",
+            callback_id="modal-id",
+            title=PlainTextObject(text="Awesome Modal"),
+            submit=PlainTextObject(text="Submit"),
+            close=PlainTextObject(text="Cancel"),
+            blocks=[
+                InputBlock(
+                    block_id="b-id",
+                    label=PlainTextObject(text="Input label"),
+                    element=PlainTextInputElement(action_id="a-id")
+                ),
+            ]
+        )
+        with self.assertRaises(SlackObjectFormationError):
+            modal_view.validate_json()
 
     def test_simple_state_values(self):
         expected = {
@@ -269,6 +352,89 @@ class ViewTests(unittest.TestCase):
     # --------------------------------
     # Home Tabs
     # --------------------------------
+
+    def test_home_tab_construction(self):
+        home_tab_view = View(
+            type="home",
+            blocks=[
+                SectionBlock(
+                    text=MarkdownTextObject(text="*Here's what you can do with Project Tracker:*"),
+                ),
+                ActionsBlock(
+                    elements=[
+                        ButtonElement(
+                            text=PlainTextObject(text="Create New Task", emoji=True),
+                            style="primary",
+                            value="create_task",
+                        ),
+                        ButtonElement(
+                            text=PlainTextObject(text="Create New Project", emoji=True),
+                            value="create_project",
+                        ),
+                        ButtonElement(
+                            text=PlainTextObject(text="Help", emoji=True),
+                            value="help",
+                        ),
+                    ],
+                ),
+                ContextBlock(
+                    elements=[
+                        ImageElement(
+                            image_url="https://api.slack.com/img/blocks/bkb_template_images/placeholder.png",
+                            alt_text="placeholder",
+                        ),
+                    ],
+                ),
+                SectionBlock(
+                    text=MarkdownTextObject(text="*Your Configurations*"),
+                ),
+                DividerBlock(),
+                SectionBlock(
+                    text=MarkdownTextObject(
+                        text="*#public-relations*\n<fakelink.toUrl.com|PR Strategy 2019> posts new tasks, comments, and project updates to <fakelink.toChannel.com|#public-relations>"),
+                    accessory=ButtonElement(
+                        text=PlainTextObject(text="Edit", emoji=True),
+                        value="public-relations",
+                    ),
+                )
+            ],
+        )
+        home_tab_view.validate_json()
+
+    def test_input_blocks_in_home_tab(self):
+        modal_view = View(
+            type="home",
+            callback_id="home-tab-id",
+            blocks=[
+                InputBlock(
+                    block_id="b-id",
+                    label=PlainTextObject(text="Input label"),
+                    element=PlainTextInputElement(action_id="a-id")
+                ),
+            ]
+        )
+        with self.assertRaises(SlackObjectFormationError):
+            modal_view.validate_json()
+
+    def test_submit_in_home_tab(self):
+        modal_view = View(
+            type="home",
+            callback_id="home-tab-id",
+            submit=PlainTextObject(text="Submit"),
+            blocks=[DividerBlock()]
+        )
+        with self.assertRaises(SlackObjectFormationError):
+            modal_view.validate_json()
+
+    def test_close_in_home_tab(self):
+        modal_view = View(
+            type="home",
+            callback_id="home-tab-id",
+            close=PlainTextObject(text="Cancel"),
+            blocks=[DividerBlock()]
+        )
+        with self.assertRaises(SlackObjectFormationError):
+            modal_view.validate_json()
 
     def test_load_home_tab_view_001(self):
         with open("tests/data/view_home_001.json") as file:
