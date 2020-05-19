@@ -87,7 +87,7 @@ class BaseClient:
         """
         final_headers = {
             "User-Agent": self._get_user_agent(),
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            "Content-Type": "application/x-www-form-urlencoded",
         }
 
         if self.token:
@@ -505,7 +505,7 @@ class BaseClient:
             headers["Content-Length"] = len(body)
         elif args["params"]:
             body = urlencode(args["params"])
-            headers["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8"
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
         else:
             body = None
 
@@ -552,7 +552,7 @@ class BaseClient:
     ):
         headers = {
             "User-Agent": self._get_user_agent(),
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            "Content-Type": "application/x-www-form-urlencoded",
         }
         headers.update(self.headers)
         if token:
