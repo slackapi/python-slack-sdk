@@ -174,6 +174,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     keywords="slack slack-web slack-rtm chat chatbots bots chatops",
     packages=find_packages(
