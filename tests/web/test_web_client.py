@@ -147,3 +147,33 @@ class TestWebClient(unittest.TestCase):
         await self.async_client.conversations_list(exclude_archived=1)  # ok
         await self.async_client.conversations_list(exclude_archived="true")  # ok
         await self.async_client.conversations_list(exclude_archived=True)  # TypeError
+
+    def test_issue_690_oauth_v2_access(self):
+        self.client.token = ""
+        resp = self.client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            self.client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+
+    @async_test
+    async def test_issue_690_oauth_v2_access_async(self):
+        self.async_client.token = ""
+        resp = await self.async_client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            await self.async_client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+
+    def test_issue_690_oauth_access(self):
+        self.client.token = ""
+        resp = self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            self.client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+
+    @async_test
+    async def test_issue_690_oauth_access_async(self):
+        self.async_client.token = ""
+        resp = await self.async_client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            await self.async_client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")

@@ -45,6 +45,16 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def _handle(self):
         try:
+            if self.path in {"/oauth.access", "/oauth.v2.access"}:
+                self.send_response(200)
+                self.set_common_headers()
+                if self.headers["authorization"] == "Basic MTExLjIyMjpzZWNyZXQ=":
+                    self.wfile.write("""{"ok":true}""".encode("utf-8"))
+                    return
+                else:
+                    self.wfile.write("""{"ok":false, "error":"invalid"}""".encode("utf-8"))
+                    return
+
             if self.is_valid_token() and self.is_valid_user_agent():
                 parsed_path = urlparse(self.path)
 
