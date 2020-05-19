@@ -12,8 +12,7 @@ The code for this step is available [here](PythOnBoardingBot).
 ```
 slackclient>=2.0.0
 slackeventsapi>=2.1.0
-Flask>=1.1.1
-certifi
+Flask>=1.1.2
 ```
 
 > 💡 **[Certifi](https://github.com/certifi/python-certifi)** is a carefully curated collection of Root Certificates for validating the trustworthiness of SSL certificates while verifying the identity of TLS hosts. It has been extracted from the Requests project.
@@ -39,8 +38,6 @@ import logging
 from flask import Flask
 from slack import WebClient
 from slackeventsapi import SlackEventAdapter
-import ssl as ssl_lib
-import certifi
 from onboarding_tutorial import OnboardingTutorial
 ```
 
@@ -210,18 +207,24 @@ def message(payload):
 
 Finally, we need to make our app runnable.
 
-- 🏁 Add the following lines of code to the end of `app.py`.
+- 🏁 Add the following lines of code to the end of `app.py` and run `FLASK_ENV=development python app.py`.
 
 ```Python
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
-    ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
     app.run(port=3000)
 ```
 
 **Note:** When running in a virtual environment you often need to specify the location of the SSL Certificate(`cacert.pem`). To make this easy we use Certifi's built-in `where()` function to locate the installed certificate authority (CA) bundle.
+
+```python
+import ssl as ssl_lib
+import certifi
+
+ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
+```
 
 **Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](PythOnBoardingBot/async_app.py).
 
