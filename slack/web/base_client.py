@@ -304,6 +304,19 @@ class BaseClient:
         _json = req_args["json"] if "json" in req_args else None
         headers = req_args["headers"] if "headers" in req_args else None
         token = params.get("token") if params and "token" in params else None
+        auth = (
+            req_args["auth"] if "auth" in req_args else None
+        )  # Basic Auth for oauth.v2.access / oauth.access
+        if auth is not None:
+            if isinstance(auth, BasicAuth):
+                headers["Authorization"] = auth.encode()
+            elif isinstance(auth, str):
+                headers["Authorization"] = auth
+            else:
+                self._logger.warning(
+                    f"As the auth: {auth}: {type(auth)} is unsupported, skipped"
+                )
+
         body_params = {}
         if params:
             body_params.update(params)
