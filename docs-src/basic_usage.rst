@@ -416,6 +416,25 @@ Uploading files
 
 See `files.upload <https://api.slack.com/methods/files.upload>`_ for more info.
 
+--------
+
+Calling any API methods
+---------------
+
+This library covers all the public endpoints as the methods in ``WebClient``. That said, you may see a bit delay of the library release. When you're in a hurry, you can directly use ``api_call`` method as below.
+
+.. code-block:: python
+
+  import os
+  from slack import WebClient
+
+  client = WebClient(token=os.environ['SLACK_API_TOKEN'])
+  response = client.api_call(
+    api_method='chat.postMessage',
+    json={'channel': '#random','text': "Hello world!"}
+  )
+  assert response["message"]["text"] == "Hello world!"
+
 
 --------
 
