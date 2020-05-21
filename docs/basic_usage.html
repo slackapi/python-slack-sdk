@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#listing-team-members">Listing team members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-any-api-methods">Calling any API methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
@@ -162,7 +163,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0rc1-2020-05-14">v2.6.0rc1 (2020-05-14)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0rc2-2020-05-19">v2.6.0rc2 (2020-05-19)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -560,6 +561,22 @@ joined one by accident. This is how you leave a channel.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/files.upload">files.upload</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="calling-any-api-methods">
+<h2>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this headline">¶</a></h2>
+<p>This library covers all the public endpoints as the methods in <code class="docutils literal notranslate"><span class="pre">WebClient</span></code>. That said, you may see a bit delay of the library release. When you’re in a hurry, you can directly use <code class="docutils literal notranslate"><span class="pre">api_call</span></code> method as below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SLACK_API_TOKEN&#39;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+  <span class="n">api_method</span><span class="o">=</span><span class="s1">&#39;chat.postMessage&#39;</span><span class="p">,</span>
+  <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
+</pre></div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="web-api-rate-limits">
