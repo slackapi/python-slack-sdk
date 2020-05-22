@@ -2,14 +2,14 @@
 Changelog
 ==============================================
 
-v2.6.0rc2 (2020-05-19)
+v2.6.0 (2020-05-21)
 -------------------
 
 Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/milestone/5>`_ to know the complete list of the issues resolved by this release.
 
 **New Features**
 
-1. [Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676) - Thanks @seratch @diurnalist @ruberVulpes @jeremyschulman @e271828- @RodneyU215
+1. [Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676 #699) - Thanks @seratch @diurnalist @ruberVulpes @jeremyschulman @e271828- @RodneyU215
 2. [Signature] #686 Add slack.signature.SignatureVerifier for request verification - Thanks @seratch
 3. [WebClient] #682 Add missing Grid admin APIs (`admin.usergroups.*`, `admin.users.*`, `admin.apps.*`) - Thanks @stevengill @seratch
 
@@ -25,6 +25,7 @@ Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/miles
 8. [Maintenance] #618 Add py.typed file to package distribution - Thanks @JKillian
 9. [WebClient] #599 Strip token string parameters of whitespace - Thanks @TheFrozenFire
 10. [WebClient] #692 Fix superfluous_charset warnings since v2.4.0 - Thanks @seratch
+11. [WebClient] #652 Update oauth_v2_access to include redirect_uri (as optional) - Thanks @tomasreimers
 
 v2.5.0 (2019-12-09)
 -------------------

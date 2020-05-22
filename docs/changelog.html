@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-team-members">Listing team members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#calling-any-api-methods">Calling any API methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
@@ -155,6 +156,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-cannot-install-slackclient">I cannot install slackclient…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#should-i-go-with-run-async">Should I go with run_async?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-a-bug">I found a bug!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#there-s-a-feature-missing">There’s a feature missing!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-contribute">How do I contribute?</a></li>
@@ -162,7 +165,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v2-6-0rc2-2020-05-19">v2.6.0rc2 (2020-05-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-6-0-2020-05-21">v2.6.0 (2020-05-21)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -223,12 +226,12 @@
           <div class="card">
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v2-6-0rc2-2020-05-19">
-<h2>v2.6.0rc2 (2020-05-19)<a class="headerlink" href="#v2-6-0rc2-2020-05-19" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="v2-6-0-2020-05-21">
+<h2>v2.6.0 (2020-05-21)<a class="headerlink" href="#v2-6-0-2020-05-21" title="Permalink to this headline">¶</a></h2>
 <p>Refer to <a class="reference external" href="https://github.com/slackapi/python-slackclient/milestone/5">v2.6.0 milestone</a> to know the complete list of the issues resolved by this release.</p>
 <p><strong>New Features</strong></p>
 <ol class="arabic simple">
-<li><p>[Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676) - Thanks &#64;seratch &#64;diurnalist &#64;ruberVulpes &#64;jeremyschulman &#64;e271828- &#64;RodneyU215</p></li>
+<li><p>[Block Kit] #659 Add complete supports for Block Kit components and fixed a few existing bugs as well (#500 #519 #623 #632 #635 #639 #676 #699) - Thanks &#64;seratch &#64;diurnalist &#64;ruberVulpes &#64;jeremyschulman &#64;e271828- &#64;RodneyU215</p></li>
 <li><p>[Signature] #686 Add slack.signature.SignatureVerifier for request verification - Thanks &#64;seratch</p></li>
 <li><p>[WebClient] #682 Add missing Grid admin APIs (<cite>admin.usergroups.*</cite>, <cite>admin.users.*</cite>, <cite>admin.apps.*</cite>) - Thanks &#64;stevengill &#64;seratch</p></li>
 </ol>
@@ -244,6 +247,7 @@
 <li><p>[Maintenance] #618 Add py.typed file to package distribution - Thanks &#64;JKillian</p></li>
 <li><p>[WebClient] #599 Strip token string parameters of whitespace - Thanks &#64;TheFrozenFire</p></li>
 <li><p>[WebClient] #692 Fix superfluous_charset warnings since v2.4.0 - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #652 Update oauth_v2_access to include redirect_uri (as optional) - Thanks &#64;tomasreimers</p></li>
 </ol>
 </div>
 <div class="section" id="v2-5-0-2019-12-09">
