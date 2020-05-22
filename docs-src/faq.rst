@@ -2,10 +2,52 @@
 Frequently Asked Questions
 ==============================================
 
+I cannot install slackclient...
+******************
+
+We recommend using `virtualenv (venv) <https://docs.python.org/3/tutorial/venv.html>`_ to set up your Python runtime.
+
+.. code-block:: bash
+
+  # Create a dedicated virtual env for running your Python scripts
+  python -m menv env
+
+  # Run env\Scripts\activate on Windows OS
+  source env/bin/activate
+
+  # Install slackclient PyPI package
+  pip install "slackclient>=2.0"
+
+  # Set your token as an env variable (`set` command for Windows OS)
+  export SLACK_API_TOKEN=xoxb-***
+
+Then, verify the following code works on the Python REPL (you can start it by just ``python``).
+
+.. code-block:: python
+
+  import os
+  import logging
+  from slack import WebClient
+  logging.basicConfig(level=logging.DEBUG)
+  client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+  res = client.api_test()
+
+
+If you encounter an error saying ``AttributeError: module 'slack' has no attribute 'WebClient'``, run ``pip list``. If you find both ``slackclient`` and ``slack`` in the output, try removing ``slack`` by ``pip uninstall slack`` and reinstalling ``slackclient``.
+
+Should I go with run_async?
+******************
+
+For most cases, we recommend going with ``run_async=False`` mode. So, the default is ``False``.
+
+If your application turns ``run_async`` on, the app should follow right and efficient ways to use `asyncio <https://docs.python.org/3/library/asyncio.html>`_'s non-blocking event loops and `aiohttp <https://docs.aiohttp.org/en/stable/>`_. Also, consider using async frameworks and their appropriate runtime. Running event loops along with Flask or similar may not be a good fit.
+
+If you have to simultaneously run ``WebClient`` with ``run_async=True`` outside an event loop for some reason, sharing a single ``WebClient`` instance doesn't work for you. Create an instance every time you run the code. The ``run_async=False`` mode doesn't have such issues.
+
 I found a bug!
 ******************
 
-That's great! Thank you. Let us know on the `Issue Tracker`_. If you're feeling particularly ambitious, why not submit a `pull request`_ with a bug fix?
+That's great! Thank you. Let us know on the `Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_. If you're feeling particularly ambitious, why not submit a `pull request <https://github.com/slackapi/python-slackclient/pulls>`_ with a bug fix?
 
 There's a feature missing!
 *******************************
