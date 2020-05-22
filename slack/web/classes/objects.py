@@ -250,6 +250,7 @@ class ConfirmObject(JsonObject):
         text: Union[str, dict, TextObject],
         confirm: Union[str, dict, PlainTextObject] = "Yes",
         deny: Union[str, dict, PlainTextObject] = "No",
+        style: str = None,
     ):
         """
         An object that defines a dialog that provides a confirmation step to any
@@ -261,12 +262,14 @@ class ConfirmObject(JsonObject):
         self._text = TextObject.parse(text, default_type=MarkdownTextObject.type)
         self._confirm = TextObject.parse(confirm, default_type=PlainTextObject.type)
         self._deny = TextObject.parse(deny, default_type=PlainTextObject.type)
+        self._style = style
 
         # for backward-compatibility with version 2.0-2.5, the following fields return str values
         self.title = self._title.text if self._title else None
         self.text = self._text.text if self._text else None
         self.confirm = self._confirm.text if self._confirm else None
         self.deny = self._deny.text if self._deny else None
+        self.style = self._style
 
     @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
     def title_length(self):
@@ -285,6 +288,10 @@ class ConfirmObject(JsonObject):
     @JsonValidator(f"deny attribute cannot exceed {deny_max_length} characters")
     def deny_length(self):
         return self._deny is None or len(self._deny.text) <= self.deny_max_length
+
+    @JsonValidator('style for confirm must be either "primary" or "danger"')
+    def _validate_confirm_style(self):
+        return self._style is None or self._style in ["primary", "danger"]
 
     def to_dict(self, option_type: str = "block") -> dict:
         if option_type == "action":
@@ -315,6 +322,8 @@ class ConfirmObject(JsonObject):
                 json["confirm"] = self._confirm.to_dict()
             if self._deny:
                 json["deny"] = self._deny.to_dict()
+            if self._style:
+                json["style"] = self._style
             return json
 
 
