@@ -476,3 +476,47 @@ class OptionGroupTests(unittest.TestCase):
                 "text"
             )
 
+    def test_confirm_style(self):
+        obj = ConfirmObject.parse({
+            "title": {
+                "type": "plain_text",
+                "text": "Are you sure?"
+            },
+            "text": {
+                "type": "mrkdwn",
+                "text": "Wouldn't you prefer a good game of _chess_?"
+            },
+            "confirm": {
+                "type": "plain_text",
+                "text": "Do it"
+            },
+            "deny": {
+                "type": "plain_text",
+                "text": "Stop, I've changed my mind!"
+            },
+            "style": "primary"
+        })
+        obj.validate_json()
+        self.assertEqual("primary", obj.style)
+
+    def test_confirm_style_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ConfirmObject.parse({
+                "title": {
+                    "type": "plain_text",
+                    "text": "Are you sure?"
+                },
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Wouldn't you prefer a good game of _chess_?"
+                },
+                "confirm": {
+                    "type": "plain_text",
+                    "text": "Do it"
+                },
+                "deny": {
+                    "type": "plain_text",
+                    "text": "Stop, I've changed my mind!"
+                },
+                "style": "something-wrong"
+            }).validate_json()
