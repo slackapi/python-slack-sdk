@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-team-members">Listing team members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#calling-any-api-methods">Calling any API methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
@@ -155,6 +156,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-cannot-install-slackclient">I cannot install slackclient…</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-a-bug">I found a bug!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#there-s-a-feature-missing">There’s a feature missing!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-contribute">How do I contribute?</a></li>
@@ -162,6 +164,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0rc2-2020-05-19">v2.6.0rc2 (2020-05-19)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -277,17 +280,17 @@ your workspace for changes to take effect.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/finish_auth&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">post_install</span><span class="p">():</span>
   <span class="c1"># Retrieve the auth code from the request params</span>
-    <span class="n">auth_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>
+  <span class="n">auth_code</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>
 
   <span class="c1"># An empty string is a valid token for this request</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+  <span class="n">client</span> <span class="o">=</span> <span class="n">slack</span><span class="o">.</span><span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
   <span class="c1"># Request the auth tokens from Slack</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">oauth_v2_access</span><span class="p">(</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
-        <span class="n">code</span><span class="o">=</span><span class="n">auth_code</span>
-    <span class="p">)</span>
+  <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">oauth_v2_access</span><span class="p">(</span>
+    <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+    <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+    <span class="n">code</span><span class="o">=</span><span class="n">auth_code</span>
+  <span class="p">)</span>
 </pre></div>
 </div>
 <p>A successful request to <code class="docutils literal notranslate"><span class="pre">oauth.v2.access</span></code> will yield a JSON payload with at least one token, a bot token that begins with <code class="docutils literal notranslate"><span class="pre">xoxb</span></code>.</p>

@@ -136,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-team-members">Listing team members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#calling-any-api-methods">Calling any API methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
 </ul>
 </li>
@@ -155,6 +156,8 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#i-cannot-install-slackclient">I cannot install slackclient…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#should-i-go-with-run-async">Should I go with run_async?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#i-found-a-bug">I found a bug!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#there-s-a-feature-missing">There’s a feature missing!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-do-i-contribute">How do I contribute?</a></li>
@@ -162,6 +165,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0rc2-2020-05-19">v2.6.0rc2 (2020-05-19)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
@@ -222,9 +226,42 @@
           <div class="card">
   <div class="section" id="frequently-asked-questions">
 <h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="i-cannot-install-slackclient">
+<h2>I cannot install slackclient…<a class="headerlink" href="#i-cannot-install-slackclient" title="Permalink to this headline">¶</a></h2>
+<p>We recommend using <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtualenv (venv)</a> to set up your Python runtime.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dedicated virtual env for running your Python scripts</span>
+python -m menv env
+
+<span class="c1"># Run env\Scripts\activate on Windows OS</span>
+<span class="nb">source</span> env/bin/activate
+
+<span class="c1"># Install slackclient PyPI package</span>
+pip install <span class="s2">&quot;slackclient&gt;=2.0&quot;</span>
+
+<span class="c1"># Set your token as an env variable (`set` command for Windows OS)</span>
+<span class="nb">export</span> <span class="nv">SLACK_API_TOKEN</span><span class="o">=</span>xoxb-***
+</pre></div>
+</div>
+<p>Then, verify the following code works on the Python REPL (you can start it by just <code class="docutils literal notranslate"><span class="pre">python</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_test</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you encounter an error saying <code class="docutils literal notranslate"><span class="pre">AttributeError:</span> <span class="pre">module</span> <span class="pre">'slack'</span> <span class="pre">has</span> <span class="pre">no</span> <span class="pre">attribute</span> <span class="pre">'WebClient'</span></code>, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">list</span></code>. If you find both <code class="docutils literal notranslate"><span class="pre">slackclient</span></code> and <code class="docutils literal notranslate"><span class="pre">slack</span></code> in the output, try removing <code class="docutils literal notranslate"><span class="pre">slack</span></code> by <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">slack</span></code> and reinstalling <code class="docutils literal notranslate"><span class="pre">slackclient</span></code>.</p>
+</div>
+<div class="section" id="should-i-go-with-run-async">
+<h2>Should I go with run_async?<a class="headerlink" href="#should-i-go-with-run-async" title="Permalink to this headline">¶</a></h2>
+<p>For most cases, we recommend going with <code class="docutils literal notranslate"><span class="pre">run_async=False</span></code> mode. So, the default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>If your application turns <code class="docutils literal notranslate"><span class="pre">run_async</span></code> on, the app should follow right and efficient ways to use <a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a>’s non-blocking event loops and <a class="reference external" href="https://docs.aiohttp.org/en/stable/">aiohttp</a>. Also, consider using async frameworks and their appropriate runtime. Running event loops along with Flask or similar may not be a good fit.</p>
+<p>If you have to simultaneously run <code class="docutils literal notranslate"><span class="pre">WebClient</span></code> with <code class="docutils literal notranslate"><span class="pre">run_async=True</span></code> outside an event loop for some reason, sharing a single <code class="docutils literal notranslate"><span class="pre">WebClient</span></code> instance doesn’t work for you. Create an instance every time you run the code. The <code class="docutils literal notranslate"><span class="pre">run_async=False</span></code> mode doesn’t have such issues.</p>
+</div>
 <div class="section" id="i-found-a-bug">
 <h2>I found a bug!<a class="headerlink" href="#i-found-a-bug" title="Permalink to this headline">¶</a></h2>
-<p>That’s great! Thank you. Let us know on the <a href="#id4"><span class="problematic" id="id5">`Issue Tracker`_</span></a>. If you’re feeling particularly ambitious, why not submit a <a href="#id6"><span class="problematic" id="id7">`pull request`_</span></a> with a bug fix?</p>
+<p>That’s great! Thank you. Let us know on the <a class="reference external" href="https://github.com/slackapi/python-slackclient/issues">Issue Tracker</a>. If you’re feeling particularly ambitious, why not submit a <a class="reference external" href="https://github.com/slackapi/python-slackclient/pulls">pull request</a> with a bug fix?</p>
 </div>
 <div class="section" id="there-s-a-feature-missing">
 <h2>There’s a feature missing!<a class="headerlink" href="#there-s-a-feature-missing" title="Permalink to this headline">¶</a></h2>

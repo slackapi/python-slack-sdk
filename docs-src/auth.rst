@@ -80,22 +80,21 @@ Once the user has agreed to the permissions you've requested, Slack will redirec
   @app.route("/finish_auth", methods=["GET", "POST"])
   def post_install():
     # Retrieve the auth code from the request params
-      auth_code = request.args['code']
+    auth_code = request.args['code']
 
     # An empty string is a valid token for this request
-      client = slack.WebClient(token="")
+    client = slack.WebClient(token="")
 
     # Request the auth tokens from Slack
-      response = client.oauth_v2_access(
-          client_id=client_id,
-          client_secret=client_secret,
-          code=auth_code
-      )
+    response = client.oauth_v2_access(
+      client_id=client_id,
+      client_secret=client_secret,
+      code=auth_code
+    )
 
 A successful request to ``oauth.v2.access`` will yield a JSON payload with at least one token, a bot token that begins with ``xoxb``.
 
 .. code-block:: python
-
 
   # Save the bot token to an environmental variable or to your data store
   # for later use
