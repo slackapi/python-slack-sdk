@@ -8,7 +8,9 @@ test_patterns = [
 exclude_patterns = [
   'setup.py',
   'docs-src/**/*.py',
-  'tutorial/**/*.py'
+  'tutorial/**/*.py',
+  'integration_tests/web/*.py',
+  'integration_tests/rtm/*.py'
 ]
 
 [[analyzers]]
