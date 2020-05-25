@@ -27,7 +27,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate limited errors")
+    @pytest.mark.skipif(condition=is_not_specified(), reason="Still unfixed")
     @async_test
     async def test_issue_558(self):
         channel_id = os.environ[SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID]
