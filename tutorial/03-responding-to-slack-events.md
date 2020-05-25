@@ -54,7 +54,7 @@ slack_web_client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
 Next we'll need our app to store some data. For simplicity we'll store our app data in-memory with the following data structure: `{"channel": {"user_id": OnboardingTutorial}}`.
 
-- Add the the following line under the previous code:
+- Add the following line under the previous code:
 
 ```Python
 onboarding_tutorials_sent = {}
