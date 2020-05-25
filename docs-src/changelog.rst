@@ -2,6 +2,15 @@
 Changelog
 ==============================================
 
+v2.6.1 (2020-05-24)
+-------------------
+
+This patch release is a quick fix for #701, a major issue for RTMClient users with v2.6.0. The malfunction was introduced by #667 trying to address #558 #619. Those issues were reopened and will be resolved by another approach. Refer to `v2.6.1 milestone <https://github.com/slackapi/python-slackclient/milestone/8>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [RTMClient] #701 RTMClient drops some messages when they come in rapid succession - Thanks @pbrackin @seratch
+
 v2.6.0 (2020-05-21)
 -------------------
 
@@ -15,7 +24,7 @@ Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/miles
 
 **Updates**
 
-1. [WebClient][RTMClient] Fixed a bunch of the currency issues this SDK had (#429 #463 #492 #497 #530 #558 #569 #605 #613 #619 #626 #630 #631 #633 #669) - Thanks @seratch @aaguilartablada @aoberoi @stevengill @marshallino16
+1. [WebClient][RTMClient] Fixed a bunch of the currency issues this SDK had (#429 #463 #492 #497 #530 #569 #605 #613 #626 #630 #631 #633 #669) - Thanks @seratch @aaguilartablada @aoberoi @stevengill @marshallino16
 2. [WebClient] #681 #560 Enable using bool values for request parameters - Thanks @roman-kachanovsky @seratch
 3. [WebClient] #661 #678 Improve handling of required "ids" parameters (e.g., channel_ids, users) - Thanks @seratch
 4. [WebClient] #680 Add non-conversation API deprecation warnings - Thanks @seratch
