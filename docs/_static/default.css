@@ -2,6 +2,11 @@ a.headerlink {
     display: none !important;
 }
 
+h2 {
+  margin-top: -120px;
+  padding-top: 120px;
+}
+
 .section-title {
   font-size: 2rem;
   line-height: 2.5rem;

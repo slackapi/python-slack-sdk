@@ -5,7 +5,7 @@ Changelog
 v2.6.1 (2020-05-24)
 -------------------
 
-This patch release is a quick fix for #701, a major issue for RTMClient users with v2.6.0. The malfunction was introduced by #667 trying to address #558 #619. Those issues were reopened and will be resolved by another approach. Refer to `v2.6.1 milestone <https://github.com/slackapi/python-slackclient/milestone/8>`_ to know the complete list of the issues resolved by this release.
+This patch release is a quick fix for #701, a major issue that affected RTMClient users in v2.6.0. The malfunction was introduced by #667 trying to address #558 #619. Those issues were reopened and will be resolved by another approach. Refer to `v2.6.1 milestone <https://github.com/slackapi/python-slackclient/milestone/8>`_ to know the complete list of the issues resolved by this release.
 
 **Updates**
 
