@@ -9,8 +9,6 @@ import json
 import logging
 import mimetypes
 import os
-import platform
-import sys
 import uuid
 import warnings
 from http.client import HTTPResponse
@@ -25,9 +23,8 @@ import aiohttp
 from aiohttp import FormData, BasicAuth
 
 import slack.errors as err
-import slack.version as slack_version
 from slack.errors import SlackRequestError
-from slack.web import convert_bool_to_0_or_1
+from slack.web import convert_bool_to_0_or_1, get_user_agent
 from slack.web.classes.blocks import Block
 from slack.web.slack_response import SlackResponse
 
@@ -92,7 +89,7 @@ class BaseClient:
                 }
         """
         final_headers = {
-            "User-Agent": self._get_user_agent(),
+            "User-Agent": get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded",
         }
 
@@ -580,7 +577,7 @@ class BaseClient:
         self, token: str, has_json: bool, has_files: bool, additional_headers: dict,
     ):
         headers = {
-            "User-Agent": self._get_user_agent(),
+            "User-Agent": get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded",
         }
         headers.update(self.headers)
@@ -596,24 +593,6 @@ class BaseClient:
         return headers
 
     # =================================================================
-
-    @staticmethod
-    def _get_user_agent():
-        """Construct the user-agent header with the package info,
-        Python version and OS version.
-
-        Returns:
-            The user agent string.
-            e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
-        """
-        # __name__ returns all classes, we only want the client
-        client = "{0}/{1}".format("slackclient", slack_version.__version__)
-        python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(
-            v=sys.version_info
-        )
-        system_info = "{0}/{1}".format(platform.system(), platform.release())
-        user_agent_string = " ".join([python_version, client, system_info])
-        return user_agent_string
 
     @staticmethod
     def validate_slack_signature(
