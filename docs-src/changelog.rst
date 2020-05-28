@@ -2,6 +2,15 @@
 Changelog
 ==============================================
 
+v2.6.2 (2020-05-28)
+-------------------
+
+Refer to `v2.6.2 milestone <https://github.com/slackapi/python-slackclient/milestone/9>`_ to know the complete details of this release.
+
+**Updates**
+
+1. [RTMClient] #705 WebClient's paginated API calls may fail with no params - Thanks @seratch
+
 v2.6.1 (2020-05-24)
 -------------------
 
