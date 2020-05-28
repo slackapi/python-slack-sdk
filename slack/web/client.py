@@ -1,9 +1,8 @@
 """A Python module for interacting with Slack's Web API."""
-
 import os
 from asyncio import Future
 from io import IOBase
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Dict
 
 import slack.errors as e
 from slack.web.base_client import BaseClient, SlackResponse
@@ -473,6 +472,62 @@ class WebClient(BaseClient):
         """Gets information about a bot user."""
         return self.api_call("bots.info", http_verb="GET", params=kwargs)
 
+    def calls_add(
+        self, *, external_unique_id: str, join_url: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Registers a new Call.
+
+        Args:
+            external_unique_id (str): An ID supplied by the 3rd-party Call provider.
+                It must be unique across all Calls from that service.
+                e.g. '025169F6-E37A-4E62-BB54-7F93A0FC4C1F'
+            join_url (str): The URL required for a client to join the Call.
+                e.g. 'https://example.com/calls/1234567890'
+        """
+        kwargs.update({"external_unique_id": external_unique_id, "join_url": join_url})
+        self._update_call_participants(kwargs, kwargs.get("users", None))
+        return self.api_call("calls.add", http_verb="POST", params=kwargs)
+
+    def calls_end(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+        """Ends a Call.
+
+        Args:
+            id (str): id returned when registering the call using the calls.add method.
+        """
+        kwargs.update({"id": id})
+        return self.api_call("calls.end", http_verb="POST", params=kwargs)
+
+    def calls_info(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+        """Returns information about a Call.
+
+        Args:
+            id (str): id returned when registering the call using the calls.add method.
+        """
+        kwargs.update({"id": id})
+        return self.api_call("calls.info", http_verb="POST", params=kwargs)
+
+    def calls_participants_add(
+        self, *, id: str, users: Union[str, List[Dict[str, str]]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Registers new participants added to a Call.
+
+        Args:
+            id (str): id returned when registering the call using the calls.add method.
+            users: (list): The list of users to add as participants in the Call.
+        """
+        kwargs.update({"id": id})
+        self._update_call_participants(kwargs, users)
+        return self.api_call("calls.participants.add", http_verb="POST", params=kwargs)
+
+    def calls_update(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+        """Updates information about a Call.
+
+        Args:
+            id (str): id returned by the calls.add method.
+        """
+        kwargs.update({"id": id})
+        return self.api_call("calls.update", http_verb="POST", params=kwargs)
+
     def channels_archive(
         self, *, channel: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -696,6 +751,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel, "user": user})
+        self._parse_blocks(kwargs)
         return self.api_call("chat.postEphemeral", json=kwargs)
 
     def chat_postMessage(
@@ -712,6 +768,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel})
+        self._parse_blocks(kwargs)
         return self.api_call("chat.postMessage", json=kwargs)
 
     def chat_scheduleMessage(
@@ -725,6 +782,7 @@ class WebClient(BaseClient):
             text (str): The message you'd like to send. e.g. 'Hello world'
         """
         kwargs.update({"channel": channel, "post_at": post_at, "text": text})
+        self._parse_blocks(kwargs)
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
     def chat_unfurl(
@@ -756,6 +814,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel, "ts": ts})
+        self._parse_blocks(kwargs)
         return self.api_call("chat.update", json=kwargs)
 
     def chat_scheduledMessages_list(self, **kwargs) -> Union[Future, SlackResponse]:

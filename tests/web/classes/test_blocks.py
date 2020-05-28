@@ -7,7 +7,7 @@ from slack.web.classes.blocks import (
     ContextBlock,
     DividerBlock,
     ImageBlock,
-    SectionBlock, InputBlock, FileBlock, Block,
+    SectionBlock, InputBlock, FileBlock, Block, CallBlock,
 )
 from slack.web.classes.elements import ButtonElement, ImageElement, LinkButtonElement
 from slack.web.classes.objects import PlainTextObject, MarkdownTextObject
@@ -602,3 +602,73 @@ class FileBlockTests(unittest.TestCase):
             "source": "remote",
         }
         self.assertDictEqual(input, FileBlock(**input).to_dict())
+
+# ----------------------------------------------
+# Call
+# ----------------------------------------------
+
+class CallBlockTests(unittest.TestCase):
+    def test_with_real_payload(self):
+        self.maxDiff = None
+        input = {
+            "type": "call",
+            "call_id": "R00000000",
+            "api_decoration_available": False,
+            "call": {
+                "v1": {
+                    "id": "R00000000",
+                    "app_id": "A00000000",
+                    "app_icon_urls": {
+                        "image_32": "https://www.example.com/",
+                        "image_36": "https://www.example.com/",
+                        "image_48": "https://www.example.com/",
+                        "image_64": "https://www.example.com/",
+                        "image_72": "https://www.example.com/",
+                        "image_96": "https://www.example.com/",
+                        "image_128": "https://www.example.com/",
+                        "image_192": "https://www.example.com/",
+                        "image_512": "https://www.example.com/",
+                        "image_1024": "https://www.example.com/",
+                        "image_original": "https://www.example.com/"
+                    },
+                    "date_start": 12345,
+                    "active_participants": [
+                        {
+                            "slack_id": "U00000000"
+                        },
+                        {
+                            "slack_id": "U00000000",
+                            "external_id": "",
+                            "avatar_url": "https://www.example.com/",
+                            "display_name": ""
+                        }
+                    ],
+                    "all_participants": [
+                        {
+                            "slack_id": "U00000000"
+                        },
+                        {
+                            "slack_id": "U00000000",
+                            "external_id": "",
+                            "avatar_url": "https://www.example.com/",
+                            "display_name": ""
+                        }
+                    ],
+                    "display_id": "",
+                    "join_url": "https://www.example.com/",
+                    "name": "",
+                    "created_by": "U00000000",
+                    "date_end": 12345,
+                    "channels": [
+                        "C00000000"
+                    ],
+                    "is_dm_call": False,
+                    "was_rejected": False,
+                    "was_missed": False,
+                    "was_accepted": False,
+                    "has_ended": False,
+                    "desktop_app_join_url": "https://www.example.com/"
+                }
+            }
+        }
+        self.assertDictEqual(input, CallBlock(**input).to_dict())

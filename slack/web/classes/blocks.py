@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import List, Optional, Set, Union
+from typing import List, Optional, Set, Union, Dict
 
 from . import JsonObject, JsonValidator, show_unknown_key_warning
 from .elements import (
@@ -347,3 +347,30 @@ class FileBlock(Block):
 
         self.external_id = external_id
         self.source = source
+
+
+class CallBlock(Block):
+    type = "call"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"call_id", "api_decoration_available", "call"})
+
+    def __init__(
+        self,
+        *,
+        call_id: str,
+        api_decoration_available: Optional[bool] = None,
+        call: Optional[Dict[str, Dict[str, any]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays a call information
+        https://api.slack.com/reference/block-kit/blocks#call
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.call_id = call_id
+        self.api_decoration_available = api_decoration_available
+        self.call = call

@@ -11,10 +11,7 @@ from slack import WebClient
 
 
 class TestWebClient(unittest.TestCase):
-    """Runs integration tests with real Slack API
-
-    https://github.com/slackapi/python-slackclient/issues/378
-    """
+    """Runs integration tests with real Slack API"""
 
     def setUp(self):
         self.logger = logging.getLogger(__name__)
