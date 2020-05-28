@@ -9,7 +9,7 @@ Refer to `v2.6.2 milestone <https://github.com/slackapi/python-slackclient/miles
 
 **Updates**
 
-1. [RTMClient] #705 WebClient's paginated API calls may fail with no params - Thanks @seratch
+1. [WebClient] #705 WebClient's paginated API calls may fail with no params - Thanks @seratch
 
 v2.6.1 (2020-05-24)
 -------------------
