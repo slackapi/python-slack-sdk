@@ -177,3 +177,10 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
             await self.async_client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+
+    def test_issue_705_no_param_request_pagination(self):
+        self.client.token = "xoxb-users_list_pagination"
+        users = []
+        for page in self.client.users_list():
+            users = users + page["members"]
+        self.assertTrue(len(users) == 4)

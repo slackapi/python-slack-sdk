@@ -131,9 +131,11 @@ class SlackResponse(object):
         if self._iteration == 1:
             return self
         if self._next_cursor_is_present(self.data):
-            self.req_args.get("params", {}).update(
-                {"cursor": self.data["response_metadata"]["next_cursor"]}
-            )
+            params = self.req_args.get("params", {})
+            if params is None:
+                params = {}
+            params.update({"cursor": self.data["response_metadata"]["next_cursor"]})
+            self.req_args.update({"params": params})
 
             if self._use_sync_aiohttp:
                 # We no longer recommend going with this way
