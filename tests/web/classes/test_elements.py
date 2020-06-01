@@ -652,6 +652,7 @@ class ConversationSelectMultiElementTests(unittest.TestCase):
             },
             "initial_conversations": ["C123", "C234"],
             "max_selected_items": 2,
+            "default_to_current_conversation": True,
             "filter": {
                 "include": [
                     "public",
@@ -674,6 +675,7 @@ class ConversationSelectElementTests(unittest.TestCase):
             },
             "initial_conversation": "C123",
             "response_url_enabled": True,
+            "default_to_current_conversation": True,
             "filter": {
                 "include": [
                     "public",
