@@ -2,10 +2,25 @@
 Changelog
 ==============================================
 
+v2.7.0 (2020-06-02)
+-------------------
+
+Refer to `v2.7.0 milestone <https://github.com/slackapi/python-slackclient/milestone/6?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**New Features**
+
+1. [WebhookClient] #707 #270 #531 Add `WebhookClient` for Incoming Webhooks & response_url - Thanks @seratch @chubz @Ambro17
+
+**Updates**
+
+1. [WebClient] #704 #695 Add `calls_*` methods to `WebClient` and `CallBlock` in Block Kit classes - Thanks @seratch
+2. [WebClient] #710 #536 Allow Tokens to be specified per request - Thanks @seratch
+3. [WebClient] #709 #708 Add default_to_current_conversation in conversations_select elements - Thanks @seratch
+
 v2.6.2 (2020-05-28)
 -------------------
 
-Refer to `v2.6.2 milestone <https://github.com/slackapi/python-slackclient/milestone/9>`_ to know the complete details of this release.
+Refer to `v2.6.2 milestone <https://github.com/slackapi/python-slackclient/milestone/9?closed=1>`_ to know the complete details of this release.
 
 **Updates**
 
@@ -23,7 +38,7 @@ This patch release is a quick fix for #701, a major issue that affected RTMClien
 v2.6.0 (2020-05-21)
 -------------------
 
-Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/milestone/5>`_ to know the complete list of the issues resolved by this release.
+Refer to `v2.6.0 milestone <https://github.com/slackapi/python-slackclient/milestone/5?closed=1>`_ to know the complete list of the issues resolved by this release.
 
 **New Features**
 
