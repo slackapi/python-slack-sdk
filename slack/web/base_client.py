@@ -69,7 +69,12 @@ class BaseClient:
             return loop
 
     def _get_headers(
-        self, has_json: bool, has_files: bool, request_specific_headers: Optional[dict]
+        self,
+        *,
+        token: Optional[str],
+        has_json: bool,
+        has_files: bool,
+        request_specific_headers: Optional[dict],
     ):
         """Constructs the headers need for a request.
         Args:
@@ -90,8 +95,8 @@ class BaseClient:
             "Content-Type": "application/x-www-form-urlencoded",
         }
 
-        if self.token:
-            final_headers.update({"Authorization": "Bearer {}".format(self.token)})
+        if token:
+            final_headers.update({"Authorization": "Bearer {}".format(token)})
 
         # Merge headers specified at client initialization.
         final_headers.update(self.headers)
@@ -169,8 +174,18 @@ class BaseClient:
         if params is not None and isinstance(params, dict):
             params = {k: v for k, v in params.items() if v is not None}
 
+        token: Optional[str] = self.token
+        if params is not None and "token" in params:
+            token = params.pop("token")
+        if json is not None and "token" in json:
+            token = json.pop("token")
         req_args = {
-            "headers": self._get_headers(has_json, has_files, headers),
+            "headers": self._get_headers(
+                token=token,
+                has_json=has_json,
+                has_files=has_files,
+                request_specific_headers=headers,
+            ),
             "data": data,
             "files": files,
             "params": params,

@@ -97,7 +97,7 @@ def oauth_callback():
         state = request.args["state"]
         if state_service.consume(state):
             code = request.args["code"]
-            client = WebClient(token="")  # not prepared token needed for this app
+            client = WebClient()  # no prepared token needed for this app
             response = client.oauth_v2_access(
                 client_id=client_id,
                 client_secret=client_secret,

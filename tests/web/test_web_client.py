@@ -158,10 +158,18 @@ class TestWebClient(unittest.TestCase):
     @async_test
     async def test_issue_690_oauth_v2_access_async(self):
         self.async_client.token = ""
-        resp = await self.async_client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        resp = await self.async_client.oauth_v2_access(
+            client_id="111.222",
+            client_secret="secret",
+            code="codeeeeeeeeee",
+        )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            await self.async_client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+            await self.async_client.oauth_v2_access(
+                client_id="999.999",
+                client_secret="secret",
+                code="codeeeeeeeeee",
+            )
 
     def test_issue_690_oauth_access(self):
         self.client.token = ""
@@ -184,3 +192,22 @@ class TestWebClient(unittest.TestCase):
         for page in self.client.users_list():
             users = users + page["members"]
         self.assertTrue(len(users) == 4)
+
+    def test_token_param(self):
+        client = WebClient(base_url="http://localhost:8888")
+        with self.assertRaises(err.SlackApiError):
+            client.users_list()
+        resp = client.users_list(token="xoxb-users_list_pagination")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            client.users_list()
+
+    @async_test
+    async def test_token_param_async(self):
+        client = WebClient(base_url="http://localhost:8888", run_async=True)
+        with self.assertRaises(err.SlackApiError):
+            await client.users_list()
+        resp = await client.users_list(token="xoxb-users_list_pagination")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            await client.users_list()

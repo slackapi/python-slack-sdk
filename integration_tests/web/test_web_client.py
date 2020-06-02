@@ -220,6 +220,45 @@ class TestWebClient(unittest.TestCase):
         deletion = client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
+    def test_uploading_file_with_token_param(self):
+        client = WebClient()
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        upload = client.files_upload(
+            token=self.bot_token,
+            channels=self.channel_id,
+            title="Good Old Slack Logo",
+            filename="slack_logo.png",
+            file=file,
+        )
+        self.assertIsNotNone(upload)
+
+        deletion = client.files_delete(
+            token=self.bot_token,
+            file=upload["file"]["id"],
+        )
+        self.assertIsNotNone(deletion)
+
+    @async_test
+    async def test_uploading_file_with_token_param_async(self):
+        client = WebClient(run_async=True)
+        current_dir = os.path.dirname(__file__)
+        file = f"{current_dir}/../../tests/data/slack_logo.png"
+        upload = await client.files_upload(
+            token=self.bot_token,
+            channels=self.channel_id,
+            title="Good Old Slack Logo",
+            filename="slack_logo.png",
+            file=file,
+        )
+        self.assertIsNotNone(upload)
+
+        deletion = client.files_delete(
+            token=self.bot_token,
+            file=upload["file"]["id"],
+        )
+        self.assertIsNotNone(deletion)
+
     # -------------------------
     # pagination
 
