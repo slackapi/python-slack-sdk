@@ -94,14 +94,22 @@ class MockHandler(SimpleHTTPRequestHandler):
                     page = request_body["cursor"]
                     pattern = f"{pattern}_{page}"
                 if pattern == "coverage":
-                    ids = ["channels", "users", "channel_ids"]
-                    if request_body:
+                    if self.path.startswith("/calls."):
                         for k, v in request_body.items():
-                            if k in ids:
-                                if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(v):
-                                    raise Exception(
-                                        f"The parameter {k} is not a comma-separated string value: {v}"
-                                    )
+                            if k == "users":
+                                users = json.loads(v)
+                                for u in users:
+                                    if "slack_id" not in u and "external_id" not in u:
+                                        raise Exception(f"User ({u}) is invalid value")
+                    else:
+                        ids = ["channels", "users", "channel_ids"]
+                        if request_body:
+                            for k, v in request_body.items():
+                                if k in ids:
+                                    if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(v):
+                                        raise Exception(
+                                            f"The parameter {k} is not a comma-separated string value: {v}"
+                                        )
                     body = {"ok": True, "method": parsed_path.path.replace("/", "")}
                 else:
                     with open(f"tests/data/web_response_{pattern}.json") as file:

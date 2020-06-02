@@ -28,6 +28,7 @@ import slack.errors as err
 import slack.version as slack_version
 from slack.errors import SlackRequestError
 from slack.web import convert_bool_to_0_or_1
+from slack.web.classes.blocks import Block
 from slack.web.slack_response import SlackResponse
 
 
@@ -650,6 +651,31 @@ class BaseClient:
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
         calculated_signature = f"v0={request_hash}"
         return hmac.compare_digest(calculated_signature, signature)
+
+    @staticmethod
+    def _parse_blocks(kwargs):
+        blocks = kwargs.get("blocks", None)
+
+        def to_dict(b: Union[Dict, Block]):
+            if isinstance(b, Block):
+                return b.to_dict()
+            return b
+
+        if blocks is not None and isinstance(blocks, list):
+            dict_blocks = [to_dict(b) for b in blocks]
+            kwargs.update({"blocks": dict_blocks})
+
+    @staticmethod
+    def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
+        if users is None:
+            return
+
+        if isinstance(users, list):
+            kwargs.update({"users": json.dumps(users)})
+        elif isinstance(users, str):
+            kwargs.update({"users": users})
+        else:
+            raise SlackRequestError("users must be either str or List[Dict[str, str]]")
 
 
 # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
