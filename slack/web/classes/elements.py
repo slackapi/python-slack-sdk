@@ -786,7 +786,12 @@ class ConversationSelectElement(InputInteractiveElement):
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union(
-            {"initial_conversation", "response_url_enabled", "filter"}
+            {
+                "initial_conversation",
+                "response_url_enabled",
+                "filter",
+                "default_to_current_conversation",
+            }
         )
 
     def __init__(
@@ -797,6 +802,7 @@ class ConversationSelectElement(InputInteractiveElement):
         initial_conversation: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
+        default_to_current_conversation: Optional[bool] = None,
         filter: Optional[ConversationFilter] = None,
         **others: dict,
     ):
@@ -815,6 +821,7 @@ class ConversationSelectElement(InputInteractiveElement):
 
         self.initial_conversation = initial_conversation
         self.response_url_enabled = response_url_enabled
+        self.default_to_current_conversation = default_to_current_conversation
         self.filter = filter
 
 
@@ -824,7 +831,12 @@ class ConversationMultiSelectElement(InputInteractiveElement):
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union(
-            {"initial_conversations", "max_selected_items", "filter"}
+            {
+                "initial_conversations",
+                "max_selected_items",
+                "default_to_current_conversation",
+                "filter",
+            }
         )
 
     def __init__(
@@ -835,6 +847,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         initial_conversations: Optional[List[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        default_to_current_conversation: Optional[bool] = None,
         filter: Optional[Union[dict, ConversationFilter]] = None,
         **others: dict,
     ):
@@ -853,6 +866,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
 
         self.initial_conversations = initial_conversations
         self.max_selected_items = max_selected_items
+        self.default_to_current_conversation = default_to_current_conversation
         self.filter = ConversationFilter.parse(filter)
 
 
