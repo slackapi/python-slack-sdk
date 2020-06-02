@@ -751,7 +751,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel, "user": user})
-        self._parse_blocks(kwargs)
+        self._parse_web_class_objects(kwargs)
         return self.api_call("chat.postEphemeral", json=kwargs)
 
     def chat_postMessage(
@@ -768,7 +768,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel})
-        self._parse_blocks(kwargs)
+        self._parse_web_class_objects(kwargs)
         return self.api_call("chat.postMessage", json=kwargs)
 
     def chat_scheduleMessage(
@@ -782,7 +782,7 @@ class WebClient(BaseClient):
             text (str): The message you'd like to send. e.g. 'Hello world'
         """
         kwargs.update({"channel": channel, "post_at": post_at, "text": text})
-        self._parse_blocks(kwargs)
+        self._parse_web_class_objects(kwargs)
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
     def chat_unfurl(
@@ -814,7 +814,7 @@ class WebClient(BaseClient):
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
         kwargs.update({"channel": channel, "ts": ts})
-        self._parse_blocks(kwargs)
+        self._parse_web_class_objects(kwargs)
         return self.api_call("chat.update", json=kwargs)
 
     def chat_scheduledMessages_list(self, **kwargs) -> Union[Future, SlackResponse]:
