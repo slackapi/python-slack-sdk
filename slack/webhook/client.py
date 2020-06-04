@@ -2,6 +2,7 @@ import json
 import logging
 import re
 from http.client import HTTPResponse
+from ssl import SSLContext
 from typing import Dict, Union, List, Optional
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -20,17 +21,20 @@ class WebhookClient:
         self,
         url: str,
         timeout: int = 30,
+        ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
         default_headers: Dict[str, str] = {},
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
         :param timeout: request timeout (in seconds)
+        :param ssl: ssl.SSLContext to use for requests
         :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
         :param default_headers: request headers to add to all requests
         """
         self.url = url
         self.timeout = timeout
+        self.ssl = ssl
         self.proxy = proxy
         self.default_headers = default_headers
 
@@ -107,7 +111,7 @@ class WebhookClient:
             else:
                 raise SlackRequestError(f"Invalid URL detected: {url}")
 
-            resp: HTTPResponse = urlopen(req, timeout=self.timeout)
+            resp: HTTPResponse = urlopen(req, context=self.ssl, timeout=self.timeout)
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(
