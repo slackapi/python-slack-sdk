@@ -547,20 +547,13 @@ class BaseClient:
             # which might be a security risk if the URL to open can be manipulated by an external user.
             if url.lower().startswith("http"):
                 req = Request(method="POST", url=url, data=body, headers=headers)
-                resp: HTTPResponse = urlopen(req)
+                resp: HTTPResponse = urlopen(req, context=self.ssl)
                 charset = resp.headers.get_content_charset()
                 body: str = resp.read().decode(charset)  # read the response body here
-                return {
-                    "status": resp.code,
-                    "headers": resp.headers,
-                    "body": body,
-                }
+                return {"status": resp.code, "headers": resp.headers, "body": body}
             raise SlackRequestError(f"Invalid URL detected: {url}")
         except HTTPError as e:
-            resp = {
-                "status": e.code,
-                "headers": e.headers,
-            }
+            resp = {"status": e.code, "headers": e.headers}
             if e.code == 429:
                 # for compatibility with aiohttp
                 resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
@@ -575,7 +568,7 @@ class BaseClient:
             raise err
 
     def _build_urllib_request_headers(
-        self, token: str, has_json: bool, has_files: bool, additional_headers: dict,
+        self, token: str, has_json: bool, has_files: bool, additional_headers: dict
     ):
         headers = {
             "User-Agent": get_user_agent(),
