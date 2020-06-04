@@ -27,14 +27,18 @@ Details on the Tokens and Authentication can be found in our [Auth Guide](https:
 * [Installation](#installation)
 * [Getting started tutorial](#getting-started-tutorial)
 * [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
-    * [Sending a message to Slack](#sending-a-message-to-slack)
-    * [Uploading files to Slack](#uploading-files-to-slack)
+  * [Sending a message to Slack](#sending-a-message-to-slack)
+  * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
-* [Async Usage](#async-usage)
-    * [Slackclient as a script](#slackclient-as-a-script)
-    * [Slackclient in a framework](#slackclient-in-a-framework)
+* [Async usage](#async-usage)
+  * [Slackclient as a script](#slackclient-as-a-script)
+  * [Slackclient in a framework](#slackclient-in-a-framework)
 * [Advanced Options](#advanced-options)
-* [Migrating from v1.x](#migrating-from-v1)
+  * [SSL](#ssl)
+  * [Proxy](#proxy)
+  * [DNS performance](#dns-performance)
+  * [Example](#example)
+* [Migrating from v1](#migrating-from-v1)
 * [Support](#support)
 
 ### Requirements
@@ -174,9 +178,9 @@ rtm_client.start()
 
 ### Async usage
 
-slackclient v2 and higher uses aiohttp and asyncio to enable async functionality.
+slackclient v2 and higher uses [AIOHttp][aiohttp] under the hood for asynchronous requests and [urllib][urllib] for synchronous requests.
 
-Normal usage of the library does not run it in async, hence a kwarg of run_async=True is needed.
+Normal usage of the library does not run it in async, hence a kwarg of `run_async=True` is needed.
 
 When in async mode its important to remember to await or run/run_until_complete the call.
 
@@ -260,14 +264,28 @@ if __name__ == '__main__':
 
 ### Advanced Options
 
-The Python slackclient v2 now uses [AIOHttp][aiohttp] under the hood.
+#### SSL
 
-Looking for a performance boost? Installing the optional dependencies (aiodns) may help speed up DNS resolving by the client. We've included it as an extra called "optional":
+You can provide a custom SSL context or disable verification by passing the `ssl` option, supported by both the RTM and the Web client.
+
+For async requests, see the [AIOHttp SSL documentation](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets).
+
+For sync requests, see the [urllib SSL documentation](https://docs.python.org/3/library/urllib.request.html#urllib.request.urlopen).
+
+#### Proxy
+
+A proxy is supported when making async requests, pass the `proxy` option, supported by both the RTM and the Web client.
+
+For more information, see [AIOHttp Proxy documentation](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support).
+
+#### DNS performance
+
+Using the async client and looking for a performance boost? Installing the optional dependencies (aiodns) may help speed up DNS resolving by the client. We've included it as an extra called "optional":
 ```bash
 $ pip3 install slackclient[optional]
 ```
 
-Interested in SSL or Proxy support? Simply use their built-in [SSL](https://docs.aiohttp.org/en/stable/client_advanced.html#ssl-control-for-tcp-sockets) and [Proxy](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support) arguments. You can pass these options directly into both the RTM and the Web client.
+#### Example
 
 ```python
 import os
@@ -290,7 +308,6 @@ response = client.chat_postMessage(
 print(response)
 ```
 
-We will always follow the standard process in AIOHttp for those proxy and SSL settings so for more information, check out their documentation page linked [here][aiohttp].
 
 ### Migrating from v1
 
@@ -338,3 +355,4 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 [auth-guide]: documentation_v2/auth.md
 [basic-usage]: documentation_v2/basic_usage.md
 [aiohttp]: https://aiohttp.readthedocs.io/
+[urllib]: https://docs.python.org/3/library/urllib.request.html
