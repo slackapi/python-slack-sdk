@@ -9,6 +9,7 @@ import json
 import logging
 import mimetypes
 import os
+import re
 import uuid
 import warnings
 from http.client import HTTPResponse
@@ -547,6 +548,16 @@ class BaseClient:
             # which might be a security risk if the URL to open can be manipulated by an external user.
             if url.lower().startswith("http"):
                 req = Request(method="POST", url=url, data=body, headers=headers)
+                if self.proxy is not None:
+                    if isinstance(self.proxy, str):
+                        host = re.sub("^https?://", "", self.proxy)
+                        req.set_proxy(host, "http")
+                        req.set_proxy(host, "https")
+                    else:
+                        raise SlackRequestError(
+                            f"Invalid proxy detected: {self.proxy} must be a str value"
+                        )
+
                 resp: HTTPResponse = urlopen(req, context=self.ssl)
                 charset = resp.headers.get_content_charset()
                 body: str = resp.read().decode(charset)  # read the response body here

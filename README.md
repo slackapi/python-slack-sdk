@@ -276,7 +276,9 @@ For sync requests, see the [urllib SSL documentation](https://docs.python.org/3/
 
 A proxy is supported when making async requests, pass the `proxy` option, supported by both the RTM and the Web client.
 
-For more information, see [AIOHttp Proxy documentation](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support).
+For async requests, see [AIOHttp Proxy documentation](https://docs.aiohttp.org/en/stable/client_advanced.html#proxy-support).
+
+For sync requests, setting either `HTTPS_PROXY` env variable or the `proxy` option works.
 
 #### DNS performance
 
