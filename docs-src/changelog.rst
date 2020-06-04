@@ -2,6 +2,17 @@
 Changelog
 ==============================================
 
+v2.7.1 (2020-06-04)
+-------------------
+
+This release includes the fixes for regression bugs in `WebClient` since v2.6.0. Refer to `v2.7.1 milestone <https://github.com/slackapi/python-slackclient/milestone/11?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] #716 #712 Support timeout in sync WebClient/WebClient - Thanks @DanialErfanian @seratch
+2. [WebClient] #713 Support custom SSL context in sync WebClient - Thanks @austinbutler
+3. [WebClient] #715 #714 Support proxy in sync WebClient/WebClient - Thanks @austinbutler @seratch
+
 v2.7.0 (2020-06-02)
 -------------------
 
