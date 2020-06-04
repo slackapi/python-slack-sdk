@@ -221,5 +221,5 @@ class TestWebClient(unittest.TestCase):
     @async_test
     async def test_timeout_issue_712_async(self):
         client = WebClient(base_url="http://localhost:8888", timeout=1, run_async=True)
-        with self.assertRaises(asyncio.exceptions.TimeoutError):
+        with self.assertRaises(asyncio.TimeoutError):
             await client.users_list(token="xoxb-timeout")
