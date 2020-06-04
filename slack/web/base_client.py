@@ -558,7 +558,9 @@ class BaseClient:
                             f"Invalid proxy detected: {self.proxy} must be a str value"
                         )
 
-                resp: HTTPResponse = urlopen(req, context=self.ssl)
+                resp: HTTPResponse = urlopen(
+                    req, context=self.ssl, timeout=self.timeout
+                )
                 charset = resp.headers.get_content_charset()
                 body: str = resp.read().decode(charset)  # read the response body here
                 return {"status": resp.code, "headers": resp.headers, "body": body}

@@ -2,6 +2,7 @@ import json
 import logging
 import re
 import threading
+import time
 from http import HTTPStatus
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from typing import Type
@@ -87,6 +88,13 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.send_header("Retry-After", 30)
                     self.set_common_headers()
                     self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
+                    self.wfile.close()
+                    return
+
+                if pattern == "timeout":
+                    time.sleep(2)
+                    self.send_response(200)
+                    self.wfile.write("""{"ok":true}""".encode("utf-8"))
                     self.wfile.close()
                     return
 

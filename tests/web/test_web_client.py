@@ -1,5 +1,6 @@
 import asyncio
 import re
+import socket
 import unittest
 
 import slack.errors as err
@@ -211,3 +212,14 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
             await client.users_list()
+
+    def test_timeout_issue_712(self):
+        client = WebClient(base_url="http://localhost:8888", timeout=1)
+        with self.assertRaises(socket.timeout):
+            client.users_list(token="xoxb-timeout")
+
+    @async_test
+    async def test_timeout_issue_712_async(self):
+        client = WebClient(base_url="http://localhost:8888", timeout=1, run_async=True)
+        with self.assertRaises(asyncio.TimeoutError):
+            await client.users_list(token="xoxb-timeout")
