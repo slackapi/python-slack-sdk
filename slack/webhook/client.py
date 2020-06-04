@@ -16,13 +16,15 @@ class WebhookClient:
     logger = logging.getLogger(__name__)
 
     def __init__(
-        self, url: str, default_headers: Dict[str, str] = {},
+        self, url: str, timeout: int = 30, default_headers: Dict[str, str] = {}
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
+        :param timeout: request timeout (in seconds)
         :param default_headers: request headers to add to all requests
         """
         self.url = url
+        self.timeout = timeout
         self.default_headers = default_headers
 
     def send(
@@ -65,11 +67,11 @@ class WebhookClient:
         body = convert_bool_to_0_or_1(body)
         self._parse_web_class_objects(body)
         return self._perform_http_request(
-            url=self.url, body=body, headers=self._build_request_headers(headers),
+            body=body, headers=self._build_request_headers(headers)
         )
 
     def _perform_http_request(
-        self, *, url: str, body: Dict[str, any], headers: Dict[str, str]
+        self, *, body: Dict[str, any], headers: Dict[str, str]
     ) -> WebhookResponse:
         """Performs an HTTP request and parses the response.
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -85,6 +87,7 @@ class WebhookClient:
                 f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
             )
         try:
+            url = self.url
             # for security
             if url.lower().startswith("http"):
                 req = Request(
@@ -93,11 +96,11 @@ class WebhookClient:
             else:
                 raise SlackRequestError(f"Invalid URL detected: {url}")
 
-            resp: HTTPResponse = urlopen(req)
+            resp: HTTPResponse = urlopen(req, timeout=self.timeout)
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(
-                url=self.url,
+                url=url,
                 status_code=resp.status,
                 body=response_body,
                 headers=resp.headers,
@@ -109,7 +112,7 @@ class WebhookClient:
             charset: str = e.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(
-                url=self.url, status_code=e.code, body=response_body, headers=e.headers,
+                url=url, status_code=e.code, body=response_body, headers=e.headers,
             )
             if e.code == 429:
                 # for backward-compatibility with WebClient (v.2.5.0 or older)

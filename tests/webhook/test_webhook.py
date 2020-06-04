@@ -1,4 +1,5 @@
 import unittest
+import socket
 
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
@@ -154,3 +155,8 @@ class TestWebhook(unittest.TestCase):
         resp: WebhookResponse = client.send_dict({"text": "hello!"})
         self.assertEqual(200, resp.status_code)
         self.assertEqual("ok", resp.body)
+
+    def test_timeout_issue_712(self):
+        client = WebhookClient(url="http://localhost:8888/timeout", timeout=1)
+        with self.assertRaises(socket.timeout):
+            client.send_dict({"text": "hello!"})

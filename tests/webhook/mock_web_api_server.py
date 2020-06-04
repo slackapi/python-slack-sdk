@@ -1,7 +1,7 @@
-import json
 import logging
 import re
 import threading
+import time
 from http import HTTPStatus
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from typing import Type
@@ -28,6 +28,9 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         try:
+            if self.path == "/timeout":
+                time.sleep(2)
+
             body = "ok"
 
             self.send_response(HTTPStatus.OK)
