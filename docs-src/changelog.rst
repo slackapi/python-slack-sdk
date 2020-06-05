@@ -9,9 +9,9 @@ This release includes the fixes for regression bugs in `WebClient` since v2.6.0.
 
 **Updates**
 
-1. [WebClient] #716 #712 Support timeout in sync WebClient/WebClient - Thanks @DanialErfanian @seratch
-2. [WebClient] #713 Support custom SSL context in sync WebClient - Thanks @austinbutler
-3. [WebClient] #715 #714 Support proxy in sync WebClient/WebClient - Thanks @austinbutler @seratch
+1. [WebClient] #716 #712 Support timeout in sync sync web clients - Thanks @DanialErfanian @seratch
+2. [WebClient] #713 Support custom SSL context in sync sync web clients - Thanks @austinbutler
+3. [WebClient] #715 #714 Support proxy in sync sync web clients - Thanks @austinbutler @seratch
 
 v2.7.0 (2020-06-02)
 -------------------
