@@ -291,8 +291,8 @@ class TestRTMClientFunctional(unittest.TestCase):
     ):
         self.client._disable_signals = True
         self.client._event_loop = Mock()
-        FakeTask = Mock()
-        FakeTask._source_traceback = []
+        class FakeTask:
+            _source_traceback = []
         self.client._event_loop.create_task.return_value = FakeTask()
         self.client.start()
         self.client._event_loop.add_signal_handler.assert_not_called()
