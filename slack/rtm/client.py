@@ -137,6 +137,7 @@ class RTMClient(object):
         self._last_message_id = 0
         self._connection_attempts = 0
         self._stopped = False
+        self._disable_signals = disable_signals
         self._web_client = WebClient(
             token=self.token,
             base_url=self.base_url,
@@ -198,7 +199,7 @@ class RTMClient(object):
             SlackApiError: Unable to retrieve RTM URL from Slack.
         """
         # TODO: Add Windows support for graceful shutdowns.
-        if os.name != "nt" and current_thread() == main_thread():
+        if os.name != "nt" and current_thread() == main_thread() and not self._disable_signals:
             signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)

@@ -284,3 +284,16 @@ class TestRTMClientFunctional(unittest.TestCase):
         client.start()  # intentionally no await here
         await asyncio.sleep(3)
         self.assertFalse(self.called)
+
+    def test_start_disable_signals(
+            self, *args
+    ):
+        self.client._disable_signals = True
+        self.client._event_loop = unittest.mock.Mock()
+
+        FakeTask = unittest.mock.Mock()
+        FakeTask._source_traceback = None
+
+        self.client._event_loop.create_task.return_value = FakeTask()
+        self.client.start()
+        self.client._event_loop.add_signal_handler.assert_not_called()
