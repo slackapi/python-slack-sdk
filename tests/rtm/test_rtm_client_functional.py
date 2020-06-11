@@ -3,6 +3,7 @@ import collections
 import unittest
 
 from aiohttp import web, WSCloseCode
+from unittest.mock import Mock
 
 import slack
 import slack.errors as e
@@ -289,11 +290,9 @@ class TestRTMClientFunctional(unittest.TestCase):
             self, *args
     ):
         self.client._disable_signals = True
-        self.client._event_loop = unittest.mock.Mock()
-
-        FakeTask = unittest.mock.Mock()
+        self.client._event_loop = Mock()
+        FakeTask = Mock()
         FakeTask._source_traceback = None
-
         self.client._event_loop.create_task.return_value = FakeTask()
         self.client.start()
         self.client._event_loop.add_signal_handler.assert_not_called()
