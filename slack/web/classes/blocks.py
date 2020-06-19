@@ -280,7 +280,7 @@ class InputBlock(Block):
     def __init__(
         self,
         *,
-        label: Union[str, dict, TextObject],
+        label: Union[str, dict, PlainTextObject],
         element: Union[str, dict, InputInteractiveElement],
         block_id: Optional[str] = None,
         hint: Optional[Union[str, dict, PlainTextObject]] = None,
@@ -295,9 +295,9 @@ class InputBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.label = TextObject.parse(label)
+        self.label = TextObject.parse(label, default_type=PlainTextObject.type)
         self.element = BlockElement.parse(element)
-        self.hint = PlainTextObject.parse(hint)
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
         self.optional = optional
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")

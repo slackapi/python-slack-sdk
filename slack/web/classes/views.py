@@ -47,7 +47,7 @@ class View(JsonObject):
         app_id: Optional[str] = None,
         root_view_id: Optional[str] = None,
         previous_view_id: Optional[str] = None,
-        title: Union[dict, PlainTextObject] = None,
+        title: Union[str, dict, PlainTextObject] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
         blocks: List[Union[dict, Block]] = [],
