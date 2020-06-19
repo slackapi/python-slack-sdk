@@ -15,7 +15,7 @@ long_description = ""
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
-tests_require = ["pytest", "pytest-cov", "codecov", "flake8", "black", "psutil"]
+tests_require = ["pytest>=5,<6", "pytest-cov>=2,<3", "codecov>=2,<3", "flake8>=3,<4", "black", "psutil"]
 
 
 class BaseCommand(Command):
