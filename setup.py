@@ -17,6 +17,9 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
 
 tests_require = ["pytest>=5,<6", "pytest-cov>=2,<3", "codecov>=2,<3", "flake8>=3,<4", "black", "psutil"]
 
+needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if needs_pytest else []
+
 
 class BaseCommand(Command):
     """Base Command"""
@@ -182,7 +185,7 @@ setup(
     ),
     install_requires=["aiohttp>3.5.2,<4.0.0"],
     extras_require={"optional": ["aiodns>1.0"]},
-    setup_requires=["pytest-runner"],
+    setup_requires=pytest_runner,
     test_suite="tests",
     tests_require=tests_require,
     cmdclass={
