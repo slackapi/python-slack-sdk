@@ -344,7 +344,7 @@ class Option(JsonObject):
         *,
         value: str,
         label: Optional[str] = None,
-        text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
+        text: Optional[Union[str, dict, PlainTextObject]] = None,  # Block Kit
         description: Optional[str] = None,
         url: Optional[str] = None,
         **others: dict,
@@ -374,10 +374,10 @@ class Option(JsonObject):
                 dialogs.
         """
         if text:
-            self._text: Optional[TextObject] = TextObject.parse(text)
+            self._text: Optional[PlainTextObject] = TextObject.parse(text, PlainTextObject.type)
             self._label: Optional[str] = None
         else:
-            self._text: Optional[TextObject] = None
+            self._text: Optional[PlainTextObject] = None
             self._label: Optional[str] = label
 
         # for backward-compatibility with version 2.0-2.5, the following fields return str values
