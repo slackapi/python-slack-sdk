@@ -584,7 +584,23 @@ class InputBlockTests(unittest.TestCase):
                     "text": "Label",
                     "emoji": True
                 }
-            }
+            },
+            {
+                "type": "input",
+                "element": {
+                    "type": "plain_text_input",
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Label",
+                    "emoji": True,
+                },
+                "hint": {
+                    "type": "plain_text",
+                    "text": "some hint",
+                    "emoji": True,
+                },
+            },
         ]
         for input in blocks:
             self.assertDictEqual(input, InputBlock(**input).to_dict())
