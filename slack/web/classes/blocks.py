@@ -310,7 +310,11 @@ class InputBlock(Block):
 
     @JsonValidator(f"hint attribute cannot exceed {hint_max_length} characters")
     def _validate_hint_length(self):
-        return self.hint is None or len(self.hint) <= self.hint_max_length
+        return (
+            self.hint is None
+            or self.hint.text is None
+            or len(self.hint.text) <= self.label_max_length
+        )
 
     @JsonValidator(
         (
