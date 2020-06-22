@@ -223,3 +223,22 @@ class TestWebClient(unittest.TestCase):
         client = WebClient(base_url="http://localhost:8888", timeout=1, run_async=True)
         with self.assertRaises(asyncio.TimeoutError):
             await client.users_list(token="xoxb-timeout")
+
+    def test_unclosed_client_session_issue_645_in_async_mode(self):
+        def exception_handler(_, context):
+            nonlocal session_unclosed
+            if context["message"] == "Unclosed client session":
+                session_unclosed = True
+
+        async def issue_645():
+            client = WebClient(base_url="http://localhost:8888", timeout=1, run_async=True)
+            try:
+                await client.users_list(token="xoxb-timeout")
+            except asyncio.TimeoutError:
+                pass
+
+        session_unclosed = False
+        loop = asyncio.get_event_loop()
+        loop.set_exception_handler(exception_handler)
+        loop.run_until_complete(issue_645())
+        self.assertFalse(session_unclosed, "Unclosed client session")
