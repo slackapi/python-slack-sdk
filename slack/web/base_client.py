@@ -427,6 +427,8 @@ class BaseClient:
                         f: BinaryIO = open(v.encode("utf-8", "ignore"), "rb")
                         files_to_close.append(f)
                         request_data.update({k: f})
+                    elif isinstance(v, bytearray):
+                        request_data.update({k: io.BytesIO(v)})
                     else:
                         request_data.update({k: v})
 
