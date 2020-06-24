@@ -2,6 +2,17 @@
 Changelog
 ==============================================
 
+v2.7.2 (2020-06-23)
+-------------------
+
+Refer to `v2.7.2 milestone <https://github.com/slackapi/python-slackclient/milestone/12?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] Fix #728 by adding bytearray support in files_upload (sync mode) - Thanks @sofya-salmanova @seratch
+2. [WebClient] #726 Fix InputBlock.hint validation failure - Thanks @jourdanrodrigues
+3. [WebClient] #723 Correct the default value of InputBlock.label, hint - Thanks @jourdanrodrigues
+
 v2.7.1 (2020-06-04)
 -------------------
 
