@@ -1,4 +1,5 @@
 import asyncio
+import gc
 import re
 import socket
 import unittest
@@ -241,4 +242,5 @@ class TestWebClient(unittest.TestCase):
         loop = asyncio.get_event_loop()
         loop.set_exception_handler(exception_handler)
         loop.run_until_complete(issue_645())
+        gc.collect()  # force Python to gc unclosed client session
         self.assertFalse(session_unclosed, "Unclosed client session")
