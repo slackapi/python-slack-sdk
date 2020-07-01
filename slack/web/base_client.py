@@ -294,18 +294,23 @@ class BaseClient:
             )
 
         response = None
-        async with session.request(http_verb, api_url, **req_args) as res:
-            data = {}
-            try:
-                data = await res.json()
-            except aiohttp.ContentTypeError:
-                self._logger.debug(
-                    f"No response data returned from the following API call: {api_url}."
-                )
-            response = {"data": data, "headers": res.headers, "status_code": res.status}
-
-        if not use_running_session:
-            await session.close()
+        try:
+            async with session.request(http_verb, api_url, **req_args) as res:
+                data = {}
+                try:
+                    data = await res.json()
+                except aiohttp.ContentTypeError:
+                    self._logger.debug(
+                        f"No response data returned from the following API call: {api_url}."
+                    )
+                response = {
+                    "data": data,
+                    "headers": res.headers,
+                    "status_code": res.status,
+                }
+        finally:
+            if not use_running_session:
+                await session.close()
         return response
 
     # =================================================================
