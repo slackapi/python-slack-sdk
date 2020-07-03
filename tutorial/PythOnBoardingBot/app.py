@@ -94,7 +94,7 @@ def update_emoji(payload):
 
 # =============== Pin Added Events ================ #
 # When a users pins a message the type of the event will be 'pin_added'.
-# Here we'll link the update_pin callback to the 'reaction_added' event.
+# Here we'll link the update_pin callback to the 'pin_added' event.
 @slack_events_adapter.on("pin_added")
 def update_pin(payload):
     """Update the onboarding welcome message after receiving a "pin_added"
