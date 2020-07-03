@@ -10,7 +10,7 @@ We recommend using `virtualenv (venv) <https://docs.python.org/3/tutorial/venv.h
 .. code-block:: bash
 
   # Create a dedicated virtual env for running your Python scripts
-  python -m menv env
+  python -m venv env
 
   # Run env\Scripts\activate on Windows OS
   source env/bin/activate
