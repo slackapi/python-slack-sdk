@@ -178,7 +178,7 @@ Modals use the same blocks that compose messages with the addition of an `input`
 
 .. code-block:: python
 
-  # This module is available since v2.6.0rc1
+  # This module is available since v2.6
   from slack.signature import SignatureVerifier
   signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
@@ -250,6 +250,11 @@ Modals use the same blocks that compose messages with the addition of an `input`
     app.run("localhost", 3000)
 
 See `views.open <https://api.slack.com/methods/views.open>`_ more details and additional parameters.
+
+Also, to run the above example, the following `Slack app configurations <https://api.slack.com/apps>`_ are required.
+
+* Add a slash command named ``/open-modal`` with a valid Request URL: ``https://{your-public-domain}/slack/events``
+* Enable **Interactivity** with a valid Request URL: ``https://{your-public-domain}/slack/events``
 
 --------
 

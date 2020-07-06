@@ -363,7 +363,7 @@ article for more information.</p>
 <h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
 <p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6.0rc1</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6</span>
 <span class="kn">from</span> <span class="nn">slack.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
 <span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
 
@@ -436,6 +436,11 @@ article for more information.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/views.open">views.open</a> more details and additional parameters.</p>
+<p>Also, to run the above example, the following <a class="reference external" href="https://api.slack.com/apps">Slack app configurations</a> are required.</p>
+<ul class="simple">
+<li><p>Add a slash command named <code class="docutils literal notranslate"><span class="pre">/open-modal</span></code> with a valid Request URL: <code class="docutils literal notranslate"><span class="pre">https://{your-public-domain}/slack/events</span></code></p></li>
+<li><p>Enable <strong>Interactivity</strong> with a valid Request URL: <code class="docutils literal notranslate"><span class="pre">https://{your-public-domain}/slack/events</span></code></p></li>
+</ul>
 </div>
 <hr class="docutils" />
 <div class="section" id="updating-and-pushing-modals">
