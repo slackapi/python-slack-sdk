@@ -196,8 +196,8 @@ class DatePickerElementTests(unittest.TestCase):
         self.assertDictEqual(input, DatePickerElement(**input).to_dict())
 
     def test_json(self):
-        for month in range(1 - 12):
-            for day in range(1 - 31):
+        for month in range(1, 12):
+            for day in range(1, 31):
                 date = f"2020-{month:02}-{day:02}"
                 self.assertDictEqual(
                     {
