@@ -138,10 +138,7 @@ If you prefer events to be pushed to you instead, we recommend using the HTTP-ba
 
 An RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
-The event-driven architecture of this client allows you to simply
-link callbacks to their corresponding events. When an event occurs
-this client executes your callback while passing along any
-information it receives. We also give you the ability to call our web client from inside your callbacks.
+The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
 
 In our example below, we watch for a [message event][message-event] that contains "Hello" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
@@ -175,6 +172,12 @@ def say_hello(**payload):
 rtm_client = RTMClient(token=os.environ["SLACK_API_TOKEN"])
 rtm_client.start()
 ```
+
+Please note that the default way of creating Slack apps no longer supports RTM API. Events using the RTM API **must** use a classic Slack app (with a plain `bot` scope).
+
+If you already have a classic Slack app, you can use those credentials. If you don't and need to use the RTM API, you can create a classic Slack app from [this link](https://api.slack.com/apps?new_classic_app=1). You can learn more in the [API documentation](https://api.slack.com/authentication/basics#soon).
+
+Also, even if the Slack app configuration pages encourage you to upgrade to the newer permission model, don't upgrade it and keep using the "classic" bot permission.
 
 ### Async usage
 

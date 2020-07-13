@@ -6,24 +6,27 @@ Real Time Messaging (RTM)
 The `Real Time Messaging (RTM) API`_ is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
 
 If you prefer events to be pushed to your app, we recommend using the HTTP-based `Events API <https://api.slack.com/events-api>`_ instead. 
-The Events API contains some events that aren't supported in the RTM API (like `the app_home_opened event <https://api.slack.com/events/app_home_opened>`_), 
+The Events API contains some events that aren't supported in the RTM API (like `app_home_opened event <https://api.slack.com/events/app_home_opened>`_),
 and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the `Python Slack Events Adaptor <https://github.com/slackapi/python-slack-events-api>`_.
 
 The RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
-Events using the RTM API **must** use a classic Slack app (with a plain `bot` scope). If you already have a classic Slack app, you can use those credentials. 
-If you don't and need to use the RTM API, you can `create a classic Slack app <https://api.slack.com/apps?new_classic_app=1>`_. You can learn more in the 
-`API documentation <https://api.slack.com/authentication/basics#soon>`_.
+The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-The event-driven architecture of this client allows you to simply
-link callbacks to their corresponding events. When an event occurs
-this client executes your callback while passing along any
-information it receives. We also give you the ability to call our web client from inside your callbacks.
+In our example below, we watch for a `message event <https://api.slack.com/events/message>`_ that contains "Hello" and if its received, we call the ``say_hello()`` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
 
-In our example below, we watch for a `message event <https://api.slack.com/events/message>`_ that contains "Hello" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
+Configuring the RTM API
+------------------------------------------
+
+Events using the RTM API **must** use a classic Slack app (with a plain ``bot`` scope).
+
+If you already have a classic Slack app, you can use those credentials. If you don't and need to use the RTM API, you can `create a classic Slack app <https://api.slack.com/apps?new_classic_app=1>`_. You can learn more in the `API documentation <https://api.slack.com/authentication/basics#soon>`_.
+
+Also, even if the Slack app configuration pages encourage you to upgrade to the newer permission model, don't upgrade it and keep using the "classic" bot permission.
 
 Connecting to the RTM API
 ------------------------------------------
+
 .. code-block:: python
 
   import os
@@ -52,9 +55,9 @@ Connecting to the RTM API
 rtm.start vs rtm.connect
 ---------------------------
 
-By default, the RTM client uses `rtm.connect` to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url. 
-If you'd rather use `rtm.start` to establish the connection, which provides more information about the conversations and users on the team, you can set the 
-`connect_method` option to `rtm.start` when instantiating the RTM Client. Note that on larger teams, use of `rtm.start` can be slow and unreliable.
+By default, the RTM client uses ``rtm.connect`` to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.
+
+If you'd rather use ``rtm.start`` to establish the connection, which provides more information about the conversations and users on the team, you can set the ``connect_method`` option to ``rtm.start`` when instantiating the RTM Client. Note that on larger teams, use of ``rtm.start`` can be slow and unreliable.
 
 .. code-block:: python
 
