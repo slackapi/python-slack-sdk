@@ -48,7 +48,30 @@ Of course, you can always pull the source code directly into your project:
 .. code-block:: bash
 
 	git clone https://github.com/slackapi/python-slackclient.git
-	pip install -r requirements.txt
+
+And then, save a few lines of code as ``./test.py``.
+
+.. code-block:: python
+
+    # test.py
+    import sys
+    # Load the local source directly
+    sys.path.insert(1, "./python-slackclient")
+    # Enable debug logging
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    # Verify it works
+    from slack import WebClient
+    client = WebClient()
+    api_response = client.api_test()
+
+You can run the code this way.
+
+.. code-block:: bash
+
+	python test.py
+
+It's also good to try on the Python REPL.
 
 Getting Help
 ************

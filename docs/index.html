@@ -258,9 +258,27 @@ consider using v1 of the SDK.</p>
 </div>
 <p>Of course, you can always pull the source code directly into your project:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/slackapi/python-slackclient.git
-pip install -r requirements.txt
 </pre></div>
 </div>
+<p>And then, save a few lines of code as <code class="docutils literal notranslate"><span class="pre">./test.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># test.py</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1"># Load the local source directly</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;./python-slackclient&quot;</span><span class="p">)</span>
+<span class="c1"># Enable debug logging</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="c1"># Verify it works</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">()</span>
+<span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_test</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can run the code this way.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python test.py
+</pre></div>
+</div>
+<p>It’s also good to try on the Python REPL.</p>
 </div>
 <div class="section" id="getting-help">
 <h2>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
