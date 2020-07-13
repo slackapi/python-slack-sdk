@@ -1,6 +1,6 @@
 # Python slackclient
 
-The Python slackclient is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
+The Python `slackclient` library is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
 
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slackclient/](https://slack.dev/python-slackclient/)**
 
