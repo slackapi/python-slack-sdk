@@ -63,7 +63,7 @@ def open_modal(trigger_id: str):
                 ),
             ]
         )
-        response = client.views_open(
+        api_response = client.views_open(
             trigger_id=trigger_id,
             view=view
         )
@@ -80,19 +80,23 @@ def slack_app():
 
     if "command" in request.form \
         and request.form["command"] == "/view":
-        trigger_id = request.form["trigger_id"]
-        return open_modal(trigger_id)
+        # Open a new modal by a slash command
+        return open_modal(request.form["trigger_id"])
 
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
+
+        if payload["type"] == "shortcut" \
+            and payload["callback_id"] == "open-modal-shortcut":
+            # Open a new modal by a global shortcut
+            return open_modal(payload["trigger_id"])
+
         if payload["type"] == "view_submission" \
             and payload["view"]["callback_id"] == "modal-id":
+            # Handle a data submission request from the modal
             submitted_data = payload["view"]["state"]["values"]
             print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
-        if payload["type"] == "shortcut" \
-            and payload["callback_id"] == "view-test":
-            return open_modal(payload["trigger_id"])
 
     return make_response("", 404)
 
