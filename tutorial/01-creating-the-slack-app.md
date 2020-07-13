@@ -24,7 +24,7 @@ For now, we'll only use one scope.
 
 🎉 You should briefly see a success banner.
 
-_If you want to change your bot user's name, click on **Bot User** in the left sidebar and modify the display name._
+_If you want to change your bot user's name, click on **App Home** in the left sidebar and modify the display name._
 
 ### Install the app in your workspace
 
