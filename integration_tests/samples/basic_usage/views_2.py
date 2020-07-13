@@ -40,37 +40,38 @@ def slack_app():
     if not signature_verifier.is_valid_request(request.get_data(), request.headers):
         return make_response("invalid request", 403)
 
-    if "command" in request.form \
-        and request.form["command"] == "/open-modal":
-        trigger_id = request.form["trigger_id"]
-        try:
-            view = View(
-                type="modal",
-                callback_id="modal-id",
-                title=PlainTextObject(text="Awesome Modal"),
-                submit=PlainTextObject(text="Submit"),
-                close=PlainTextObject(text="Cancel"),
-                blocks=[
-                    InputBlock(
-                        block_id="b-id",
-                        label=PlainTextObject(text="Input label"),
-                        element=PlainTextInputElement(action_id="a-id")
-                    )
-                ]
-            )
-            response = client.views_open(
-                trigger_id=trigger_id,
-                view=view
-            )
-            return make_response("", 200)
-        except SlackApiError as e:
-            code = e.response["error"]
-            return make_response(f"Failed to open a modal due to {code}", 200)
-
-    elif "payload" in request.form:
+    if "payload" in request.form:
         payload = json.loads(request.form["payload"])
+        if payload["type"] == "shortcut" \
+            and payload["callback_id"] == "open-modal-shortcut":
+            # Open a new modal by a global shortcut
+            try:
+                view = View(
+                    type="modal",
+                    callback_id="modal-id",
+                    title=PlainTextObject(text="Awesome Modal"),
+                    submit=PlainTextObject(text="Submit"),
+                    close=PlainTextObject(text="Cancel"),
+                    blocks=[
+                        InputBlock(
+                            block_id="b-id",
+                            label=PlainTextObject(text="Input label"),
+                            element=PlainTextInputElement(action_id="a-id")
+                        )
+                    ]
+                )
+                api_response = client.views_open(
+                    trigger_id=payload["trigger_id"],
+                    view=view,
+                )
+                return make_response("", 200)
+            except SlackApiError as e:
+                code = e.response["error"]
+                return make_response(f"Failed to open a modal due to {code}", 200)
+
         if payload["type"] == "view_submission" \
             and payload["view"]["callback_id"] == "modal-id":
+            # Handle a data submission request from the modal
             submitted_data = payload["view"]["state"]["values"]
             print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)

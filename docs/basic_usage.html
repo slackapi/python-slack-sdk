@@ -150,6 +150,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">Real Time Messaging (RTM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#configuring-the-rtm-api">Configuring the RTM API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#connecting-to-the-rtm-api">Connecting to the RTM API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
@@ -363,7 +364,7 @@ article for more information.</p>
 <h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
 <p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6.0rc1</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6</span>
 <span class="kn">from</span> <span class="nn">slack.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
 <span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
 
@@ -375,52 +376,54 @@ article for more information.</p>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">signature_verifier</span><span class="o">.</span><span class="n">is_valid_request</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;invalid request&quot;</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
 
-  <span class="k">if</span> <span class="s2">&quot;command&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span> \
-    <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/open-modal&quot;</span><span class="p">:</span>
-    <span class="n">trigger_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">]</span>
-    <span class="k">try</span><span class="p">:</span>
-      <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
-        <span class="n">trigger_id</span><span class="o">=</span><span class="n">trigger_id</span><span class="p">,</span>
-        <span class="n">view</span><span class="o">=</span><span class="p">{</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Cancel&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
-              <span class="p">},</span>
-              <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
-              <span class="p">}</span>
-            <span class="p">}</span>
-          <span class="p">]</span>
-        <span class="p">}</span>
-      <span class="p">)</span>
-      <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-      <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
-      <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
-
-  <span class="k">elif</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+  <span class="k">if</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
     <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span> \
+      <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;open-modal-shortcut&quot;</span><span class="p">:</span>
+      <span class="c1"># Open a new modal by a global shortcut</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+          <span class="n">trigger_id</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">],</span>
+          <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Cancel&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+              <span class="p">}</span>
+            <span class="p">]</span>
+          <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span> \
       <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">:</span>
+      <span class="c1"># Handle a data submission request from the modal</span>
       <span class="n">submitted_data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
       <span class="nb">print</span><span class="p">(</span><span class="n">submitted_data</span><span class="p">)</span>  <span class="c1"># {&#39;b-id&#39;: {&#39;a-id&#39;: {&#39;type&#39;: &#39;plain_text_input&#39;, &#39;value&#39;: &#39;your input&#39;}}}</span>
       <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
@@ -436,6 +439,11 @@ article for more information.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/views.open">views.open</a> more details and additional parameters.</p>
+<p>Also, to run the above example, the following <a class="reference external" href="https://api.slack.com/apps">Slack app configurations</a> are required.</p>
+<ul class="simple">
+<li><p>Enable <strong>Interactivity</strong> with a valid Request URL: <code class="docutils literal notranslate"><span class="pre">https://{your-public-domain}/slack/events</span></code></p></li>
+<li><p>Add a global shortcut with the Callback ID: <code class="docutils literal notranslate"><span class="pre">open-modal-shortcut</span></code></p></li>
+</ul>
 </div>
 <hr class="docutils" />
 <div class="section" id="updating-and-pushing-modals">
