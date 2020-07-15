@@ -105,7 +105,9 @@ class WebClient(BaseClient):
 
     def admin_apps_restricted_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List restricted apps for an org or workspace."""
-        return self.api_call("admin.apps.restricted.list", http_verb="GET", params=kwargs)
+        return self.api_call(
+            "admin.apps.restricted.list", http_verb="GET", params=kwargs
+        )
 
     def admin_conversations_restrictAccess_addGroup(self, **kwargs) -> Union[Future, SlackResponse]:
         """Add an allowlist of IDP groups for accessing a channel."""
@@ -939,6 +941,18 @@ class WebClient(BaseClient):
     def conversations_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """Lists all channels in a Slack team."""
         return self.api_call("conversations.list", http_verb="GET", params=kwargs)
+
+    def conversations_mark(
+        self, *, channel: str, ts: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Sets the read cursor in a channel.
+
+        Args:
+            channel (str): Channel or conversation to set the read cursor for e.g. 'C1234567890'
+            ts (str): Unique identifier of message you want marked as most recently seen in this conversation. e.g. '1593473566.000200'
+        """
+        kwargs.update({"channel": channel, "ts": ts})
+        return self.api_call("conversations.mark", json=kwargs)
 
     def conversations_members(
         self, *, channel: str, **kwargs
