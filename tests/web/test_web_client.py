@@ -244,3 +244,22 @@ class TestWebClient(unittest.TestCase):
         loop.run_until_complete(issue_645())
         gc.collect()  # force Python to gc unclosed client session
         self.assertFalse(session_unclosed, "Unclosed client session")
+
+    def test_html_response_body_issue_718(self):
+        client = WebClient(base_url="http://localhost:8888")
+        try:
+            client.users_list(token="xoxb-html_response")
+            self.fail("SlackApiError expected here")
+        except err.SlackApiError as e:
+            self.assertTrue(
+                str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
+
+    @async_test
+    async def test_html_response_body_issue_718_async(self):
+        client = WebClient(base_url="http://localhost:8888", run_async=True)
+        try:
+            await client.users_list(token="xoxb-html_response")
+            self.fail("SlackApiError expected here")
+        except err.SlackApiError as e:
+            self.assertTrue(
+                str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
