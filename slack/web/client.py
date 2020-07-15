@@ -949,7 +949,7 @@ class WebClient(BaseClient):
 
         Args:
             channel (str): Channel or conversation to set the read cursor for e.g. 'C1234567890'
-            ts (str): Unique identifier of message you want marked as most recently seen in this conversation. e.g. '1593473566.000200'
+            ts (str): Unique identifier of message to mark as most recently seen in the convo e.g. '1593473566.000200'
         """
         kwargs.update({"channel": channel, "ts": ts})
         return self.api_call("conversations.mark", json=kwargs)
