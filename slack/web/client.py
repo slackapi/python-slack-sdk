@@ -105,9 +105,19 @@ class WebClient(BaseClient):
 
     def admin_apps_restricted_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List restricted apps for an org or workspace."""
-        return self.api_call(
-            "admin.apps.restricted.list", http_verb="GET", params=kwargs
-        )
+        return self.api_call("admin.apps.restricted.list", http_verb="GET", params=kwargs)
+
+    def admin_conversations_restrictAccess_addGroup(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Add an allowlist of IDP groups for accessing a channel."""
+        return self.api_call("admin.conversations.restrictAccess.addGroup", http_verb="GET", params=kwargs)
+
+    def admin_conversations_restrictAccess_listGroups(self, **kwargs) -> Union[Future, SlackResponse]:
+        """List all IDP Groups linked to a channel."""
+        return self.api_call("admin.conversations.restrictAccess.listGroups", http_verb="GET", params=kwargs)
+
+    def admin_conversations_restrictAccess_removeGroup(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Remove a linked IDP group linked from a private channel."""
+        return self.api_call("admin.conversations.restrictAccess.removeGroup", http_verb="GET", params=kwargs)
 
     def admin_conversations_setTeams(self, **kwargs) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel."""
