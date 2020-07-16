@@ -29,10 +29,17 @@ class TestWebClient(unittest.TestCase):
 
         if not hasattr(self, "channel_id"):
             team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
-            client = WebClient(token=team_admin_token, run_async=False, loop=asyncio.new_event_loop())
+            client = WebClient(token=team_admin_token)
             # Only fetching private channels since admin.conversations.restrictAccess methods do not work for public channels
             convs = client.conversations_list(exclude_archived=True, limit=100, types="private_channel")
-            self.channel_id = next((c["id"] for c in convs["channels"] if c["name"] == "general"), None)
+            self.channel_id = next((c["id"] for c in convs["channels"] if c["name"] != "general"), None)
+            if self.channel_id is None:
+                millis = int(round(time.time() * 1000))
+                channel_name = f"private-test-channel-{millis}"
+                self.channel_id = client.conversations_create(
+                    name=channel_name,
+                    is_private=True,
+                )["channel"]["id"]
 
     def tearDown(self):
         pass
@@ -76,12 +83,16 @@ class TestWebClient(unittest.TestCase):
             team_id=self.team_id
         )
         self.assertIsNotNone(add_group)
+        # To avoid rate limiting errors
+        await asyncio.sleep(10)
 
         list_groups = await client.admin_conversations_restrictAccess_listGroups(
             team_id=self.team_id,
             channel_id=self.channel_id
         )
         self.assertIsNotNone(list_groups)
+        # To avoid rate limiting errors
+        await asyncio.sleep(10)
 
         remove_group = await client.admin_conversations_restrictAccess_removeGroup(
             channel_id=self.channel_id,
@@ -89,3 +100,5 @@ class TestWebClient(unittest.TestCase):
             team_id=self.team_id
         )
         self.assertIsNotNone(remove_group)
+        # To avoid rate limiting errors
+        await asyncio.sleep(20)
