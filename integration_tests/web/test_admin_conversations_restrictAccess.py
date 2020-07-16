@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import time
 import unittest
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN, \
@@ -45,12 +46,16 @@ class TestWebClient(unittest.TestCase):
             team_id=self.team_id
         )
         self.assertIsNotNone(add_group)
+        # To avoid rate limiting errors
+        time.sleep(10)
 
         list_groups = client.admin_conversations_restrictAccess_listGroups(
             team_id=self.team_id,
             channel_id=self.channel_id
         )
         self.assertIsNotNone(list_groups)
+        # To avoid rate limiting errors
+        time.sleep(10)
 
         remove_group = client.admin_conversations_restrictAccess_removeGroup(
             channel_id=self.channel_id,
@@ -58,6 +63,8 @@ class TestWebClient(unittest.TestCase):
             team_id=self.team_id
         )
         self.assertIsNotNone(remove_group)
+        # To avoid rate limiting errors
+        time.sleep(20)
 
     @async_test
     async def test_async(self):
