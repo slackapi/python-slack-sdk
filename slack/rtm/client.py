@@ -401,6 +401,10 @@ class RTMClient(object):
                 # True
                 message = await self._websocket.receive(timeout=1)
             except asyncio.TimeoutError:
+                if self._websocket is None:
+                    # For some reason, the connection unexpectedly doesn't exist here.
+                    # In the case, this method can do nothing.
+                    return
                 if not self._websocket.closed:
                     # We didn't receive a message within the timeout interval, but
                     # aiohttp hasn't closed the socket, so ping responses must still be
