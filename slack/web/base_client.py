@@ -686,7 +686,13 @@ class BaseClient:
 
 
 # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
-deprecated_method_prefixes_2020_01 = ["channels.", "groups.", "im.", "mpim.", "admin.conversations.whitelist."]
+deprecated_method_prefixes_2020_01 = [
+    "channels.",
+    "groups.",
+    "im.",
+    "mpim.",
+    "admin.conversations.whitelist.",
+]
 
 
 def show_2020_01_deprecation(method_name: str):

@@ -26,6 +26,11 @@ class TestWebClientCoverage(unittest.TestCase):
                 "oauth.v2.access",
                 "oauth.token",
                 "users.setActive",
+                "admin.conversations.whitelist.add",  # deprecated
+                "admin.conversations.whitelist.listGroupsLinkedToChannel",  # deprecated
+                "admin.conversations.whitelist.remove",  # deprecated
+                "admin.usergroups.addTeams",  # TODO
+                "calls.participants.remove",  # TODO
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
