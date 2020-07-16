@@ -18,6 +18,8 @@ class MockHandler(SimpleHTTPRequestHandler):
     pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
     pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
 
+    html_response_body = '<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /api/team.info was not found on this server.</p>\n</body></html>\n'
+
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
         return self.pattern_for_language.search(user_agent) \
@@ -95,6 +97,13 @@ class MockHandler(SimpleHTTPRequestHandler):
                     time.sleep(2)
                     self.send_response(200)
                     self.wfile.write("""{"ok":true}""".encode("utf-8"))
+                    self.wfile.close()
+                    return
+
+                if pattern == "html_response":
+                    self.send_response(404)
+                    self.set_common_headers()
+                    self.wfile.write(self.html_response_body.encode("utf-8"))
                     self.wfile.close()
                     return
 
