@@ -303,6 +303,10 @@ class BaseClient:
                     self._logger.debug(
                         f"No response data returned from the following API call: {api_url}."
                     )
+                except json.decoder.JSONDecodeError as e:
+                    message = f"Failed to parse the response body: {str(e)}"
+                    raise err.SlackApiError(message, res)
+
                 response = {
                     "data": data,
                     "headers": res.headers,
@@ -456,7 +460,11 @@ class BaseClient:
 
             response = self._perform_urllib_http_request(url=url, args=request_args)
             if response.get("body", None):
-                response_body_data: dict = json.loads(response["body"])
+                try:
+                    response_body_data: dict = json.loads(response["body"])
+                except json.decoder.JSONDecodeError as e:
+                    message = f"Failed to parse the response body: {str(e)}"
+                    raise err.SlackApiError(message, response)
             else:
                 response_body_data: dict = None
 
