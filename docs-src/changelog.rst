@@ -2,6 +2,20 @@
 Changelog
 ==============================================
 
+v2.7.3 (2020-07-20)
+-------------------
+
+Refer to `v2.7.3 milestone <https://github.com/slackapi/python-slackclient/milestone/13?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] #754 Fix #729 Add admin.conversations.restrictAccess.*, conversations.mark API - Thanks @ruberVulpes @kian2attari
+2. [WebClient] #758 Fix #757 Add admin.usergroups.addTeams, calls.participants.remove API - Thanks @seratch
+3. [WebClient] #727 Fix #645 Unclosed client session - Thanks @NoAnyLove @jourdanrodrigues
+4. [WebClient] #745 Fix #744 a validation logic bug in DatePickerElement - Thanks @dzudi941
+5. [WebClient] #752 Fix #733 Better error handling when getting TimeoutError in RTMClient#start() - Thanks @liorblob @seratch
+6. [WebClient] #751 Fix #718 by handling unexpected response body format - Thanks @jeffbuswell @seratch
+
 v2.7.2 (2020-06-23)
 -------------------
 
