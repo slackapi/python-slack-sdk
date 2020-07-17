@@ -436,7 +436,7 @@ class DialogBuilder(JsonObject):
     def state_length(self):
         return not self._state or len(self._state) <= self.state_max_length
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         self.validate_json()
         json = {
             "title": self._title,

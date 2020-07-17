@@ -536,7 +536,9 @@ class WebClient(BaseClient):
         self._update_call_participants(kwargs, kwargs.get("users", None))
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 
-    def calls_end(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+    def calls_end(
+        self, *, id: str, **kwargs  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Ends a Call.
 
         Args:
@@ -545,7 +547,9 @@ class WebClient(BaseClient):
         kwargs.update({"id": id})
         return self.api_call("calls.end", http_verb="POST", params=kwargs)
 
-    def calls_info(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+    def calls_info(
+        self, *, id: str, **kwargs  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Returns information about a Call.
 
         Args:
@@ -555,7 +559,11 @@ class WebClient(BaseClient):
         return self.api_call("calls.info", http_verb="POST", params=kwargs)
 
     def calls_participants_add(
-        self, *, id: str, users: Union[str, List[Dict[str, str]]], **kwargs
+        self,
+        *,
+        id: str,  # skipcq: PYL-W0622
+        users: Union[str, List[Dict[str, str]]],
+        **kwargs
     ) -> Union[Future, SlackResponse]:
         """Registers new participants added to a Call.
 
@@ -568,7 +576,11 @@ class WebClient(BaseClient):
         return self.api_call("calls.participants.add", http_verb="POST", params=kwargs)
 
     def calls_participants_remove(
-        self, *, id: str, users: Union[str, List[Dict[str, str]]], **kwargs
+        self,
+        *,
+        id: str,  # skipcq: PYL-W0622
+        users: Union[str, List[Dict[str, str]]],
+        **kwargs
     ) -> Union[Future, SlackResponse]:
         """Registers participants removed from a Call.
 
@@ -582,7 +594,9 @@ class WebClient(BaseClient):
             "calls.participants.remove", http_verb="POST", params=kwargs
         )
 
-    def calls_update(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
+    def calls_update(
+        self, *, id: str, **kwargs  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Updates information about a Call.
 
         Args:
@@ -1152,7 +1166,7 @@ class WebClient(BaseClient):
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     def files_comments_delete(
-        self, *, file: str, id: str, **kwargs
+        self, *, file: str, id: str, **kwargs  # skipcq: PYL-W0622
     ) -> Union[Future, SlackResponse]:
         """Deletes an existing comment on a file.
 
@@ -2013,12 +2027,7 @@ class WebClient(BaseClient):
         self, *, trigger_id: str, view: Union[dict, View], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Open a view for a user.
-
-        Open a modal with a user by exchanging a trigger_id received
-        from another interaction.
-​
-        See the modals (https://api.slack.com/block-kit/surfaces/modals)
-        documentation to learn how to obtain triggers from interactive components.
+        See https://api.slack.com/block-kit/surfaces/modals for details.
 
         Args:
             trigger_id (str): Exchange a trigger to post to the user.

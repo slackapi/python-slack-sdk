@@ -185,7 +185,7 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     def data_source_valid(self):
         return self.data_source in self.DataSourceTypes
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if self.data_source == "external":
             if isinstance(self.value, Option):

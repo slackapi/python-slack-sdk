@@ -19,7 +19,7 @@ import slack.errors as client_err
 from slack.web.client import WebClient
 
 
-class RTMClient(object):
+class RTMClient:
     """An RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
     The event-driven architecture of this client allows you to simply
@@ -193,7 +193,7 @@ class RTMClient(object):
         Raises:
             SlackApiError: Unable to retrieve RTM URL from Slack.
         """
-        # TODO: Add Windows support for graceful shutdowns.
+        # NOTE: We may need to add Windows support for graceful shutdowns
         if os.name != "nt" and current_thread() == main_thread():
             signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
             for s in signals:
@@ -371,7 +371,7 @@ class RTMClient(object):
             except (
                 client_err.SlackClientNotConnectedError,
                 client_err.SlackApiError,
-                # TODO: Catch websocket exceptions thrown by aiohttp.
+                # NOTE: We may want to catch WebSocket exceptions thrown by aiohttp too
             ) as exception:
                 await self._dispatch_event(event="error", data=exception)
                 error_code = (
@@ -425,7 +425,7 @@ class RTMClient(object):
                     payload = message.json()
                     event = payload.pop("type", "Unknown")
                     await self._dispatch_event(event, data=payload)
-                except Exception as err:
+                except Exception as err:  # skipcq: PYL-W0703
                     data = message.data if message else message
                     self._logger.info(
                         f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})"
@@ -577,7 +577,9 @@ class RTMClient(object):
         futures = []
         close_method = getattr(self._websocket, "close", None)
         if callable(close_method):
-            future = asyncio.ensure_future(close_method(), loop=self._event_loop)
+            future = asyncio.ensure_future(
+                close_method(), loop=self._event_loop,  # skipcq: PYL-E1102
+            )
             futures.append(future)
         self._websocket = None
         event_f = asyncio.ensure_future(

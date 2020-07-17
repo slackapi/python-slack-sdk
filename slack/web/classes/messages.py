@@ -51,7 +51,7 @@ class Message(JsonObject):
             or len(self.attachments) <= self.attachments_max_length
         )
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if len(self.text) > 40000:
             LOGGER.error(

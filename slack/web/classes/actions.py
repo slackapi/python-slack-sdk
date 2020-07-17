@@ -37,7 +37,7 @@ class Action(JsonObject):
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         json["type"] = self.subtype
         return json

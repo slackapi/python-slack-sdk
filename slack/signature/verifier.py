@@ -5,7 +5,8 @@ from typing import Dict, Optional, Union
 
 
 class Clock:
-    def now(self) -> float:
+    @staticmethod
+    def now() -> float:
         return time()
 
 

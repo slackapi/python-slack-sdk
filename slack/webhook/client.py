@@ -23,7 +23,7 @@ class WebhookClient:
         timeout: int = 30,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
-        default_headers: Dict[str, str] = {},
+        default_headers: Optional[Dict[str, str]] = None,
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -36,7 +36,7 @@ class WebhookClient:
         self.timeout = timeout
         self.ssl = ssl
         self.proxy = proxy
-        self.default_headers = default_headers
+        self.default_headers = default_headers if default_headers else {}
 
     def send(
         self,
@@ -99,7 +99,7 @@ class WebhookClient:
             )
         try:
             url = self.url
-            # for security
+            # for security (BAN-B310)
             if url.lower().startswith("http"):
                 req = Request(
                     method="POST", url=url, data=body.encode("utf-8"), headers=headers
@@ -111,7 +111,10 @@ class WebhookClient:
             else:
                 raise SlackRequestError(f"Invalid URL detected: {url}")
 
-            resp: HTTPResponse = urlopen(req, context=self.ssl, timeout=self.timeout)
+            # NOTE: BAN-B310 is already checked above
+            resp: HTTPResponse = urlopen(  # skipcq: BAN-B310
+                req, context=self.ssl, timeout=self.timeout,
+            )
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(
