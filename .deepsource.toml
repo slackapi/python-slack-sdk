@@ -24,4 +24,5 @@ enabled = true
   [analyzers.meta]
   runtime_version = "3.x.x"
   max_line_length = 125
-  type_checker = "mypy"
+  # TODO: Enable type checker
+  # type_checker = "mypy"
