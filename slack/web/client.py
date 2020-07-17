@@ -109,6 +109,36 @@ class WebClient(BaseClient):
             "admin.apps.restricted.list", http_verb="GET", params=kwargs
         )
 
+    def admin_conversations_restrictAccess_addGroup(
+        self, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Add an allowlist of IDP groups for accessing a channel."""
+        return self.api_call(
+            "admin.conversations.restrictAccess.addGroup",
+            http_verb="GET",
+            params=kwargs,
+        )
+
+    def admin_conversations_restrictAccess_listGroups(
+        self, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """List all IDP Groups linked to a channel."""
+        return self.api_call(
+            "admin.conversations.restrictAccess.listGroups",
+            http_verb="GET",
+            params=kwargs,
+        )
+
+    def admin_conversations_restrictAccess_removeGroup(
+        self, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Remove a linked IDP group linked from a private channel."""
+        return self.api_call(
+            "admin.conversations.restrictAccess.removeGroup",
+            http_verb="GET",
+            params=kwargs,
+        )
+
     def admin_conversations_setTeams(self, **kwargs) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel."""
         return self.api_call("admin.conversations.setTeams", json=kwargs)
@@ -929,6 +959,18 @@ class WebClient(BaseClient):
     def conversations_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """Lists all channels in a Slack team."""
         return self.api_call("conversations.list", http_verb="GET", params=kwargs)
+
+    def conversations_mark(
+        self, *, channel: str, ts: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Sets the read cursor in a channel.
+
+        Args:
+            channel (str): Channel or conversation to set the read cursor for e.g. 'C1234567890'
+            ts (str): Unique identifier of message to mark as most recently seen in the convo e.g. '1593473566.000200'
+        """
+        kwargs.update({"channel": channel, "ts": ts})
+        return self.api_call("conversations.mark", json=kwargs)
 
     def conversations_members(
         self, *, channel: str, **kwargs
