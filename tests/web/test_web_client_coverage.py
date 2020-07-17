@@ -29,8 +29,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 "admin.conversations.whitelist.add",  # deprecated
                 "admin.conversations.whitelist.listGroupsLinkedToChannel",  # deprecated
                 "admin.conversations.whitelist.remove",  # deprecated
-                "admin.usergroups.addTeams",  # TODO
-                "calls.participants.remove",  # TODO
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
@@ -88,6 +86,17 @@ class TestWebClientCoverage(unittest.TestCase):
                         usergroup_id="S123",
                         channel_ids="C1A2B3C4D,C26Z25Y24",
                     )
+                elif method_name == "admin_usergroups_addTeams":
+                    self.api_methods_to_call.remove(method(
+                        team_id="T123",
+                        usergroup_id="S123",
+                        team_ids=["T111", "T222"],
+                    )["method"])
+                    method(
+                        team_id="T123",
+                        usergroup_id="S123",
+                        team_ids="T111,T222",
+                    )
                 elif method_name == "admin_usergroups_listChannels":
                     self.api_methods_to_call.remove(method(usergroup_id="S123")["method"])
                     method(usergroup_id="S123", include_num_members=True, team_id="T123")
@@ -144,6 +153,20 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "calls_info":
                     self.api_methods_to_call.remove(method(id="R111")["method"])
                 elif method_name == "calls_participants_add":
+                    self.api_methods_to_call.remove(method(
+                        id="R111",
+                        users=[
+                            {
+                                "slack_id": "U1H77"
+                            },
+                            {
+                                "external_id": "54321678",
+                                "display_name": "External User",
+                                "avatar_url": "https://example.com/users/avatar1234.jpg"
+                            }
+                        ],
+                    )["method"])
+                elif method_name == "calls_participants_remove":
                     self.api_methods_to_call.remove(method(
                         id="R111",
                         users=[
