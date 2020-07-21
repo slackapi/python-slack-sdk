@@ -44,6 +44,12 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(list_channels)
 
+        add_teams = client.admin_usergroups_addTeams(
+            usergroup_id=self.idp_usergroup_id,
+            team_ids=self.team_id,
+        )
+        self.assertIsNotNone(add_teams)
+
         add_channels = client.admin_usergroups_addChannels(
             team_id=self.team_id,
             usergroup_id=self.idp_usergroup_id,
@@ -66,6 +72,12 @@ class TestWebClient(unittest.TestCase):
             usergroup_id=self.idp_usergroup_id,
         )
         self.assertIsNotNone(list_channels)
+
+        add_teams = await client.admin_usergroups_addTeams(
+            usergroup_id=self.idp_usergroup_id,
+            team_ids=self.team_id,
+        )
+        self.assertIsNotNone(add_teams)
 
         add_channels = await client.admin_usergroups_addChannels(
             team_id=self.team_id,

@@ -355,6 +355,24 @@ class WebClient(BaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return self.api_call("admin.usergroups.addChannels", json=kwargs)
 
+    def admin_usergroups_addTeams(
+        self, *, usergroup_id: str, team_ids: Union[str, List[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Associate one or more default workspaces with an organization-wide IDP group.
+
+        Args:
+            usergroup_id (str): ID of the IDP group. e.g. 'S1234'
+            team_ids (str or list): A comma separated list of encoded team (workspace) IDs.
+                Each workspace MUST belong to the organization associated with the token.
+                e.g. 'T12345678,T98765432' or ['T12345678', 'T98765432']
+        """
+        kwargs.update({"usergroup_id": usergroup_id})
+        if isinstance(team_ids, list):
+            kwargs.update({"team_ids": ",".join(team_ids)})
+        else:
+            kwargs.update({"team_ids": team_ids})
+        return self.api_call("admin.usergroups.addTeams", json=kwargs)
+
     def admin_usergroups_listChannels(
         self, *, usergroup_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -548,6 +566,21 @@ class WebClient(BaseClient):
         kwargs.update({"id": id})
         self._update_call_participants(kwargs, users)
         return self.api_call("calls.participants.add", http_verb="POST", params=kwargs)
+
+    def calls_participants_remove(
+        self, *, id: str, users: Union[str, List[Dict[str, str]]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Registers participants removed from a Call.
+
+        Args:
+            id (str): id returned when registering the call using the calls.add method.
+            users: (list): The list of users to remove as participants in the Call.
+        """
+        kwargs.update({"id": id})
+        self._update_call_participants(kwargs, users)
+        return self.api_call(
+            "calls.participants.remove", http_verb="POST", params=kwargs
+        )
 
     def calls_update(self, *, id: str, **kwargs) -> Union[Future, SlackResponse]:
         """Updates information about a Call.

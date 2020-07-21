@@ -69,6 +69,15 @@ class TestWebClient(unittest.TestCase):
         ])
         self.assertIsNotNone(new_participants)
 
+        participants_removal = client.calls_participants_remove(id=call_id, users=[
+            {
+                "external_id": "anon-222",
+                "avatar_url": "https://assets.brandfolder.com/pmix53-32t4so-a6439g/original/slackbot.png",
+                "display_name": "anonymous user 2",
+            }
+        ])
+        self.assertIsNotNone(participants_removal)
+
         modified_call = client.calls_update(id=call_id, join_url="https://www.example.com/calls/99999")
         self.assertIsNotNone(modified_call)
 
