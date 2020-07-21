@@ -9,7 +9,7 @@ import logging
 import slack.errors as e
 
 
-class SlackResponse(object):
+class SlackResponse:
     """An iterable container of response data.
 
     Attributes:
@@ -73,6 +73,7 @@ class SlackResponse(object):
         self.headers = headers
         self.status_code = status_code
         self._initial_data = data
+        self._iteration = None  # for __iter__ & __next__
         self._client = client
         self._use_sync_aiohttp = use_sync_aiohttp
         self._logger = logging.getLogger(__name__)
@@ -130,7 +131,7 @@ class SlackResponse(object):
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if self._next_cursor_is_present(self.data):
+        if self._next_cursor_is_present(self.data):  # skipcq: PYL-R1705
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -140,7 +141,7 @@ class SlackResponse(object):
             if self._use_sync_aiohttp:
                 # We no longer recommend going with this way
                 response = asyncio.get_event_loop().run_until_complete(
-                    self._client._request(
+                    self._client._request(  # skipcq: PYL-W0212
                         http_verb=self.http_verb,
                         api_url=self.api_url,
                         req_args=self.req_args,
@@ -148,7 +149,7 @@ class SlackResponse(object):
                 )
             else:
                 # This method sends a request in a synchronous way
-                response = self._client._request_for_pagination(
+                response = self._client._request_for_pagination(  # skipcq: PYL-W0212
                     api_url=self.api_url, req_args=self.req_args
                 )
 

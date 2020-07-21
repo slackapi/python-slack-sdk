@@ -92,7 +92,9 @@ class DialogInteractiveEvent(InteractiveEvent):
         Args:
           requirements: List of required dialog components, by name
         """
-        if any(self.submission.get(requirement, "") for requirement in requirements):
+        if any(  # skipcq: PYL-R1705
+            self.submission.get(requirement, "") for requirement in requirements
+        ):
             return {}
         else:
             errors = []
@@ -133,7 +135,7 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
                 broadcast the reply (_and_ the user's original invocation) to the
                 channel publicly
         """
-        if ephemeral:
+        if ephemeral:  # skipcq: PYL-R1705
             return {"text": message, "response_type": "ephemeral"}
         else:
             return {"text": message, "response_type": "in_channel"}

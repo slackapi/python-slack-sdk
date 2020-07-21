@@ -59,7 +59,8 @@ class BaseClient:
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
-    def _get_event_loop(self):
+    @staticmethod
+    def _get_event_loop():
         """Retrieves the event loop or creates a new one."""
         try:
             return asyncio.get_event_loop()
@@ -114,7 +115,7 @@ class BaseClient:
 
         return final_headers
 
-    def api_call(
+    def api_call(  # skipcq: PYL-R1710
         self,
         api_method: str,
         *,
@@ -122,7 +123,7 @@ class BaseClient:
         files: dict = None,
         data: Union[dict, FormData] = None,
         params: dict = None,
-        json: dict = None,
+        json: dict = None,  # skipcq: PYL-W0621
         headers: dict = None,
         auth: dict = None,
     ) -> Union[asyncio.Future, SlackResponse]:
@@ -561,6 +562,7 @@ class BaseClient:
             # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
             # With this it might be possible to open local files on the executing machine
             # which might be a security risk if the URL to open can be manipulated by an external user.
+            # (BAN-B310)
             if url.lower().startswith("http"):
                 req = Request(method="POST", url=url, data=body, headers=headers)
                 if self.proxy is not None:
@@ -573,7 +575,8 @@ class BaseClient:
                             f"Invalid proxy detected: {self.proxy} must be a str value"
                         )
 
-                resp: HTTPResponse = urlopen(
+                # NOTE: BAN-B310 is already checked above
+                resp: HTTPResponse = urlopen(  # skipcq: BAN-B310
                     req, context=self.ssl, timeout=self.timeout
                 )
                 charset = resp.headers.get_content_charset()
@@ -696,6 +699,8 @@ deprecated_method_prefixes_2020_01 = [
 
 
 def show_2020_01_deprecation(method_name: str):
+    """Prints a warning if the given method is deprecated"""
+
     skip_deprecation = os.environ.get(
         "SLACKCLIENT_SKIP_DEPRECATION"
     )  # for unit tests etc.

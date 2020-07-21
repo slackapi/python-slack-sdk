@@ -181,7 +181,7 @@ class Attachment(JsonObject):
     def author_link_without_author_icon(self):
         return self.author_link is None or self.author_icon is not None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if self.fields is not None:
             json["fields"] = extract_json(self.fields)
