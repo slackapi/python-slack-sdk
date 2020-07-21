@@ -52,9 +52,10 @@ You can generate the documentation by running `tox -e docs`.
 
 2.  Distribute the release
 
-    - Build the distribtuions: `python3 setup.py sdist bdist_wheel --universal`. This will create artifacts in the `dist` directory.
-    - Publish to PyPI: `twine upload dist/*`. You must have access to the credentials to publish.
-    - Create a GitHub Release. You will select the commit with updated version number (e.g. `2.5.0`) to assiociate with the tag, and name the tag after this version (e.g. `2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
+    - Use the latest stable Python runtime
+    - `python -m venv env`
+    - `python setup.py upload`
+    - Create a GitHub Release. You will select the commit with updated version number (e.g. `2.5.0`) to associate with the tag, and name the tag after this version (e.g. `2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
 3.  (Slack Internal) Communicate the release internally. Include a link to the GitHub Release.
 
