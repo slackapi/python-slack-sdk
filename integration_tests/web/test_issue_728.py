@@ -15,9 +15,8 @@ class TestWebClient(unittest.TestCase):
     """
 
     def setUp(self):
-        if not hasattr(self, "logger"):
-            self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-            self.channel_ids = ",".join([os.environ[SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID]])
+        self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        self.channel_ids = ",".join([os.environ[SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID]])
 
     def tearDown(self):
         pass
