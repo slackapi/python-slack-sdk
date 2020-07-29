@@ -143,7 +143,7 @@ class BaseClient:
     # aiohttp based async WebClient
     # =================================================================
 
-    async def _send(self, http_verb: str, api_url: str, req_args: dict):
+    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> SlackResponse:
         """Sends the request out for transmission.
 
         Args:
@@ -182,7 +182,7 @@ class BaseClient:
         }
         return SlackResponse(**{**data, **res}).validate()
 
-    async def _request(self, *, http_verb, api_url, req_args):
+    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
         """Submit the HTTP request with the running session or a new session.
         Returns:
             A dictionary of the response data.
@@ -200,7 +200,7 @@ class BaseClient:
     # urllib based WebClient
     # =================================================================
 
-    def _sync_send(self, api_url, req_args):
+    def _sync_send(self, api_url, req_args) -> SlackResponse:
         params = req_args["params"] if "params" in req_args else None
         data = req_args["data"] if "data" in req_args else None
         files = req_args["files"] if "files" in req_args else None
@@ -478,7 +478,7 @@ class BaseClient:
 
     def _build_urllib_request_headers(
         self, token: str, has_json: bool, has_files: bool, additional_headers: dict
-    ):
+    ) -> Dict[str, str]:
         headers = {
             "User-Agent": get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded",

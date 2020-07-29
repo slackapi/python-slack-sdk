@@ -1,6 +1,6 @@
 import logging
 from ssl import SSLContext
-from typing import Optional, Union
+from typing import Optional, Union, Dict
 
 import aiohttp
 from aiohttp import FormData
@@ -104,7 +104,7 @@ class AsyncBaseClient:
             http_verb=http_verb, api_url=api_url, req_args=req_args,
         )
 
-    async def _send(self, http_verb: str, api_url: str, req_args: dict):
+    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> AsyncSlackResponse:
         """Sends the request out for transmission.
 
         Args:
@@ -142,7 +142,7 @@ class AsyncBaseClient:
         }
         return AsyncSlackResponse(**{**data, **res}).validate()
 
-    async def _request(self, *, http_verb, api_url, req_args):
+    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
         """Submit the HTTP request with the running session or a new session.
         Returns:
             A dictionary of the response data.

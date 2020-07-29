@@ -2,7 +2,7 @@ import asyncio
 import json
 from logging import Logger
 from ssl import SSLContext
-from typing import Union, Optional, BinaryIO, List
+from typing import Union, Optional, BinaryIO, List, Dict
 from urllib.parse import urljoin
 
 import aiohttp
@@ -43,7 +43,7 @@ def _get_headers(
     has_json: bool,
     has_files: bool,
     request_specific_headers: Optional[dict],
-):
+) -> Dict[str, str]:
     """Constructs the headers need for a request.
     Args:
         has_json (bool): Whether or not the request has json.
@@ -160,7 +160,7 @@ async def _request_with_session(
     http_verb: str,
     api_url: str,
     req_args: dict,
-):
+) -> Dict[str, any]:
     """Submit the HTTP request with the running session or a new session.
     Returns:
         A dictionary of the response data.
