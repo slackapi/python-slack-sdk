@@ -8,7 +8,6 @@ import io
 import json
 import logging
 import mimetypes
-import os
 import re
 import uuid
 import warnings
@@ -26,8 +25,7 @@ from aiohttp import FormData, BasicAuth
 import slack.errors as err
 from slack.errors import SlackRequestError
 from slack.web import convert_bool_to_0_or_1, get_user_agent
-from slack.web.classes.attachments import Attachment
-from slack.web.classes.blocks import Block
+from slack.web.deprecation import show_2020_01_deprecation
 from slack.web.slack_response import SlackResponse
 
 
@@ -44,7 +42,7 @@ class BaseClient:
         proxy=None,
         run_async=False,
         use_sync_aiohttp=False,
-        session=None,
+        session: Optional[aiohttp.ClientSession] = None,
         headers: Optional[dict] = None,
     ):
         self.token = None if token is None else token.strip()
@@ -655,69 +653,3 @@ class BaseClient:
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
         calculated_signature = f"v0={request_hash}"
         return hmac.compare_digest(calculated_signature, signature)
-
-    @staticmethod
-    def _parse_web_class_objects(kwargs) -> None:
-        def to_dict(obj: Union[Dict, Block, Attachment]):
-            if isinstance(obj, Block):
-                return obj.to_dict()
-            if isinstance(obj, Attachment):
-                return obj.to_dict()
-            return obj
-
-        blocks = kwargs.get("blocks", None)
-        if blocks is not None and isinstance(blocks, list):
-            dict_blocks = [to_dict(b) for b in blocks]
-            kwargs.update({"blocks": dict_blocks})
-
-        attachments = kwargs.get("attachments", None)
-        if attachments is not None and isinstance(attachments, list):
-            dict_attachments = [to_dict(a) for a in attachments]
-            kwargs.update({"attachments": dict_attachments})
-
-    @staticmethod
-    def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
-        if users is None:
-            return
-
-        if isinstance(users, list):
-            kwargs.update({"users": json.dumps(users)})
-        elif isinstance(users, str):
-            kwargs.update({"users": users})
-        else:
-            raise SlackRequestError("users must be either str or List[Dict[str, str]]")
-
-
-# https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
-deprecated_method_prefixes_2020_01 = [
-    "channels.",
-    "groups.",
-    "im.",
-    "mpim.",
-    "admin.conversations.whitelist.",
-]
-
-
-def show_2020_01_deprecation(method_name: str):
-    """Prints a warning if the given method is deprecated"""
-
-    skip_deprecation = os.environ.get(
-        "SLACKCLIENT_SKIP_DEPRECATION"
-    )  # for unit tests etc.
-    if skip_deprecation:
-        return
-    if not method_name:
-        return
-
-    matched_prefixes = [
-        prefix
-        for prefix in deprecated_method_prefixes_2020_01
-        if method_name.startswith(prefix)
-    ]
-    if len(matched_prefixes) > 0:
-        message = (
-            f"{method_name} is deprecated. Please use the Conversations API instead. "
-            "For more info, go to "
-            "https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api"
-        )
-        warnings.warn(message)
