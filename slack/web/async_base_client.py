@@ -21,9 +21,9 @@ class AsyncBaseClient:
 
     def __init__(
         self,
-        token=None,
-        base_url=BASE_URL,
-        timeout=30,
+        token: Optional[str] = None,
+        base_url: str = BASE_URL,
+        timeout: int = 30,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
@@ -69,6 +69,8 @@ class AsyncBaseClient:
             json (dict): JSON for the body to attach to the request
                 (if files or data is not specified).
                 e.g. {'key1': 'value1', 'key2': 'value2'}
+            headers (dict): Additional request headers
+            auth (dict): A dictionary that consists of client_id and client_secret
 
         Returns:
             (AsyncSlackResponse)

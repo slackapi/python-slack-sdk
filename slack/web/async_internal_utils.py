@@ -1,5 +1,6 @@
 import asyncio
 import json
+from asyncio import AbstractEventLoop
 from logging import Logger
 from ssl import SSLContext
 from typing import Union, Optional, BinaryIO, List, Dict
@@ -12,7 +13,7 @@ from slack.errors import SlackRequestError, SlackApiError
 from slack.web import get_user_agent
 
 
-def _get_event_loop():
+def _get_event_loop() -> AbstractEventLoop:
     """Retrieves the event loop or creates a new one."""
     try:
         return asyncio.get_event_loop()
@@ -22,7 +23,7 @@ def _get_event_loop():
         return loop
 
 
-def _get_url(base_url: str, api_method: str):
+def _get_url(base_url: str, api_method: str) -> str:
     """Joins the base Slack URL and an API method to form an absolute URL.
 
     Args:

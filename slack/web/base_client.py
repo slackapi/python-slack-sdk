@@ -92,6 +92,8 @@ class BaseClient:
             json (dict): JSON for the body to attach to the request
                 (if files or data is not specified).
                 e.g. {'key1': 'value1', 'key2': 'value2'}
+            headers (dict): Additional request headers
+            auth (dict): A dictionary that consists of client_id and client_secret
 
         Returns:
             (SlackResponse)
