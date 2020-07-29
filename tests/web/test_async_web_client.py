@@ -119,7 +119,7 @@ class TestAsyncWebClient(unittest.TestCase):
 
     @async_test
     async def test_timeout_issue_712_async(self):
-        with self.assertRaises(aiohttp.client_exceptions.ServerDisconnectedError):
+        with self.assertRaises(Exception):
             await self.client.users_list(token="xoxb-timeout")
 
     @async_test
