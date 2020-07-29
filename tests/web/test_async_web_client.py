@@ -9,7 +9,7 @@ from tests.helpers import async_test
 from tests.web.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
-class TestWebClient(unittest.TestCase):
+class TestAsyncWebClient(unittest.TestCase):
 
     def setUp(self):
         setup_mock_web_api_server(self)
