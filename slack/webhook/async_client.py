@@ -8,11 +8,10 @@ import aiohttp
 from aiohttp import BasicAuth
 
 from slack.errors import SlackApiError
+from .internal_utils import _debug_log_response, _build_request_headers, _build_body
 from .webhook_response import WebhookResponse
-from ..web import convert_bool_to_0_or_1, get_user_agent
 from ..web.classes.attachments import Attachment
 from ..web.classes.blocks import Block
-from ..web.internal_utils import _parse_web_class_objects
 
 
 class AsyncWebhookClient:
@@ -83,11 +82,9 @@ class AsyncWebhookClient:
         :param headers: request headers to append only for this request
         :return: API response
         """
-        body = {k: v for k, v in body.items() if v is not None}
-        body = convert_bool_to_0_or_1(body)
-        _parse_web_class_objects(body)
         return await self._perform_http_request(
-            body=body, headers=self._build_request_headers(headers)
+            body=_build_body(body),
+            headers=_build_request_headers(self.default_headers, headers),
         )
 
     async def _perform_http_request(
@@ -142,32 +139,8 @@ class AsyncWebhookClient:
                     body=response_body,
                     headers=res.headers,
                 )
-                self._debug_log_response(resp)
+                _debug_log_response(self.logger, resp)
                 return resp
         finally:
             if not use_running_session:
                 await session.close()
-
-    def _build_request_headers(
-        self, additional_headers: Optional[Dict[str, str]],
-    ) -> Dict[str, str]:
-        if additional_headers is None:
-            return {}
-
-        request_headers = {
-            "User-Agent": get_user_agent(),
-            "Content-Type": "application/json;charset=utf-8",
-        }
-        request_headers.update(self.default_headers)
-        if additional_headers:
-            request_headers.update(additional_headers)
-        return request_headers
-
-    def _debug_log_response(self, resp: WebhookResponse) -> None:
-        if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                "Received the following response - "
-                f"status: {resp.status_code}, "
-                f"headers: {(dict(resp.headers))}, "
-                f"body: {resp.body}"
-            )

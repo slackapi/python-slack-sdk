@@ -7,7 +7,6 @@
 #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
 """A Python module for interacting with Slack's Web API."""
 import os
 from io import IOBase

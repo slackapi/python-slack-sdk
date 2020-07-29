@@ -8,8 +8,8 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from slack.errors import SlackRequestError
+from .internal_utils import _build_body, _build_request_headers, _debug_log_response
 from .webhook_response import WebhookResponse
-from ..web import convert_bool_to_0_or_1, get_user_agent
 from ..web.classes.attachments import Attachment
 from ..web.classes.blocks import Block
 
@@ -74,11 +74,9 @@ class WebhookClient:
         :param headers: request headers to append only for this request
         :return: API response
         """
-        body = {k: v for k, v in body.items() if v is not None}
-        body = convert_bool_to_0_or_1(body)
-        self._parse_web_class_objects(body)
         return self._perform_http_request(
-            body=body, headers=self._build_request_headers(headers)
+            body=_build_body(body),
+            headers=_build_request_headers(self.default_headers, headers),
         )
 
     def _perform_http_request(
@@ -123,7 +121,7 @@ class WebhookClient:
                 body=response_body,
                 headers=resp.headers,
             )
-            self._debug_log_response(resp)
+            _debug_log_response(self.logger, resp)
             return resp
 
         except HTTPError as e:
@@ -135,53 +133,9 @@ class WebhookClient:
             if e.code == 429:
                 # for backward-compatibility with WebClient (v.2.5.0 or older)
                 resp.headers["Retry-After"] = resp.headers["retry-after"]
-            self._debug_log_response(resp)
+            _debug_log_response(self.logger, resp)
             return resp
 
         except Exception as err:
             self.logger.error(f"Failed to send a request to Slack API server: {err}")
             raise err
-
-    def _build_request_headers(
-        self, additional_headers: Optional[Dict[str, str]],
-    ) -> Dict[str, str]:
-        if additional_headers is None:
-            return {}
-
-        request_headers = {
-            "User-Agent": get_user_agent(),
-            "Content-Type": "application/json;charset=utf-8",
-        }
-        request_headers.update(self.default_headers)
-        if additional_headers:
-            request_headers.update(additional_headers)
-        return request_headers
-
-    @staticmethod
-    def _parse_web_class_objects(body) -> None:
-        def to_dict(obj: Union[Dict, Block, Attachment]):
-            if isinstance(obj, Block):
-                return obj.to_dict()
-            if isinstance(obj, Attachment):
-                return obj.to_dict()
-            return obj
-
-        blocks = body.get("blocks", None)
-
-        if blocks is not None and isinstance(blocks, list):
-            dict_blocks = [to_dict(b) for b in blocks]
-            body.update({"blocks": dict_blocks})
-
-        attachments = body.get("attachments", None)
-        if attachments is not None and isinstance(attachments, list):
-            dict_attachments = [to_dict(a) for a in attachments]
-            body.update({"attachments": dict_attachments})
-
-    def _debug_log_response(self, resp: WebhookResponse) -> None:
-        if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                "Received the following response - "
-                f"status: {resp.status_code}, "
-                f"headers: {(dict(resp.headers))}, "
-                f"body: {resp.body}"
-            )
