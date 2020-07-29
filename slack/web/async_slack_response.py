@@ -53,7 +53,7 @@ class AsyncSlackResponse:
     def __init__(
         self,
         *,
-        client: "AsyncWebClient",
+        client,  # AsyncWebClient
         http_verb: str,
         api_url: str,
         req_args: dict,
