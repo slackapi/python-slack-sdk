@@ -1,4 +1,5 @@
 import logging
+from ssl import SSLContext
 from typing import Optional, Union
 
 import aiohttp
@@ -23,10 +24,10 @@ class AsyncBaseClient:
         token=None,
         base_url=BASE_URL,
         timeout=30,
-        ssl=None,
-        proxy=None,
-        trust_env_in_session: bool = False,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
         session: Optional[aiohttp.ClientSession] = None,
+        trust_env_in_session: bool = False,
         headers: Optional[dict] = None,
     ):
         self.token = None if token is None else token.strip()
@@ -103,11 +104,7 @@ class AsyncBaseClient:
             http_verb=http_verb, api_url=api_url, req_args=req_args,
         )
 
-    # =================================================================
-    # aiohttp based async WebClient
-    # =================================================================
-
-    async def _send(self, http_verb, api_url, req_args):
+    async def _send(self, http_verb: str, api_url: str, req_args: dict):
         """Sends the request out for transmission.
 
         Args:
@@ -125,17 +122,17 @@ class AsyncBaseClient:
             The response parsed into a AsyncSlackResponse object.
         """
         open_files = _files_to_data(req_args)
+        try:
+            if "params" in req_args:
+                # True/False -> "1"/"0"
+                req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
-        if "params" in req_args:
-            # True/False -> "1"/"0"
-            req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
-
-        res = await self._request(
-            http_verb=http_verb, api_url=api_url, req_args=req_args
-        )
-
-        for f in open_files:
-            f.close()
+            res = await self._request(
+                http_verb=http_verb, api_url=api_url, req_args=req_args
+            )
+        finally:
+            for f in open_files:
+                f.close()
 
         data = {
             "client": self,

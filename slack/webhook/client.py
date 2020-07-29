@@ -125,10 +125,8 @@ class WebhookClient:
             return resp
 
         except HTTPError as e:
-            charset: str = e.headers.get_content_charset() or "utf-8"
-            response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(
-                url=url, status_code=e.code, body=response_body, headers=e.headers,
+                url=url, status_code=e.code, body="", headers=e.headers,
             )
             if e.code == 429:
                 # for backward-compatibility with WebClient (v.2.5.0 or older)

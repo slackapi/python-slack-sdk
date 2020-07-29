@@ -17,7 +17,7 @@ class TestAsyncWebClient(unittest.TestCase):
         if not hasattr(self, "logger"):
             self.logger = logging.getLogger(__name__)
             self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-            self.async_client: AsyncWebClient = AsyncWebClient(token=self.bot_token, run_async=True)
+            self.async_client: AsyncWebClient = AsyncWebClient(token=self.bot_token)
             self.channel_id = os.environ[SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID]
 
     def tearDown(self):
@@ -128,7 +128,7 @@ class TestAsyncWebClient(unittest.TestCase):
 
     @async_test
     async def test_uploading_file_with_token_param_async(self):
-        client = AsyncWebClient(run_async=True)
+        client = AsyncWebClient()
         current_dir = os.path.dirname(__file__)
         file = f"{current_dir}/../../tests/data/slack_logo.png"
         upload = await client.files_upload(

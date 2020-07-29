@@ -1,11 +1,10 @@
-import asyncio
 import json
 import logging
 from ssl import SSLContext
 from typing import Dict, Union, List, Optional
 
 import aiohttp
-from aiohttp import BasicAuth
+from aiohttp import BasicAuth, ClientSession
 
 from slack.errors import SlackApiError
 from .internal_utils import _debug_log_response, _build_request_headers, _build_body
@@ -21,11 +20,10 @@ class AsyncWebhookClient:
         self,
         url: str,
         timeout: int = 30,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
+        session: Optional[ClientSession] = None,
         trust_env_in_session: bool = False,
-        session: Optional[aiohttp.ClientSession] = None,
         auth: Optional[BasicAuth] = None,
         default_headers: Optional[Dict[str, str]] = None,
     ):
@@ -34,11 +32,13 @@ class AsyncWebhookClient:
         :param timeout: request timeout (in seconds)
         :param ssl: ssl.SSLContext to use for requests
         :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
+        :param session: a complete aiohttp.ClientSession
+        :param trust_env_in_session: True/False for aiohttp.ClientSession
+        :param auth: Basic auth info for aiohttp.ClientSession
         :param default_headers: request headers to add to all requests
         """
         self.url = url
         self.timeout = timeout
-        self.loop = loop
         self.ssl = ssl
         self.proxy = proxy
         self.trust_env_in_session = trust_env_in_session
@@ -103,7 +103,7 @@ class AsyncWebhookClient:
             self.logger.debug(
                 f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
             )
-        session = None
+        session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed
         if use_running_session:
             session = self.session

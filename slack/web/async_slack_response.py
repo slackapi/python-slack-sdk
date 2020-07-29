@@ -3,6 +3,7 @@
 import logging
 
 import slack.errors as e
+from slack.web.internal_utils import _next_cursor_is_present
 
 
 class AsyncSlackResponse:
@@ -23,17 +24,16 @@ class AsyncSlackResponse:
     import os
     import slack
 
-    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+    client = slack.AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
 
-    response1 = client.auth_revoke(test='true')
+    response1 = await client.auth_revoke(test='true')
     assert not response1['revoked']
 
-    response2 = client.auth_test()
+    response2 = await client.auth_test()
     assert response2.get('ok', False)
 
     users = []
-    for page in client.users_list(limit=2):
-        TODO: This example should specify when to break.
+    async for page in await client.users_list(limit=2):
         users = users + page['members']
     ```
 
@@ -91,13 +91,13 @@ class AsyncSlackResponse:
 
     def __aiter__(self):
         """Enables the ability to iterate over the response.
-        It's required for the iterator protocol.
+        It's required async-for the iterator protocol.
 
         Note:
             This enables Slack cursor-based pagination.
 
         Returns:
-            (SlackResponse) self
+            (AsyncSlackResponse) self
         """
         self._iteration = 0
         self.data = self._initial_data
@@ -115,7 +115,7 @@ class AsyncSlackResponse:
             to be found.
 
         Returns:
-            (SlackResponse) self
+            (AsyncSlackResponse) self
                 With the new response data now attached to this object.
 
         Raises:
@@ -125,7 +125,7 @@ class AsyncSlackResponse:
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if self._next_cursor_is_present(self.data):  # skipcq: PYL-R1705
+        if _next_cursor_is_present(self.data):  # skipcq: PYL-R1705
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -161,7 +161,7 @@ class AsyncSlackResponse:
         """Check if the response from Slack was successful.
 
         Returns:
-            (SlackResponse)
+            (AsyncSlackResponse)
                 This method returns it's own object. e.g. 'self'
 
         Raises:
@@ -178,18 +178,3 @@ class AsyncSlackResponse:
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
-
-    @staticmethod
-    def _next_cursor_is_present(data):
-        """Determine if the response contains 'next_cursor'
-        and 'next_cursor' is not empty.
-
-        Returns:
-            A boolean value.
-        """
-        present = (
-            "response_metadata" in data
-            and "next_cursor" in data["response_metadata"]
-            and data["response_metadata"]["next_cursor"] != ""
-        )
-        return present

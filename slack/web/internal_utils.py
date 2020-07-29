@@ -35,3 +35,18 @@ def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
         kwargs.update({"users": users})
     else:
         raise SlackRequestError("users must be either str or List[Dict[str, str]]")
+
+
+def _next_cursor_is_present(data):
+    """Determine if the response contains 'next_cursor'
+    and 'next_cursor' is not empty.
+
+    Returns:
+        A boolean value.
+    """
+    present = (
+        "response_metadata" in data
+        and "next_cursor" in data["response_metadata"]
+        and data["response_metadata"]["next_cursor"] != ""
+    )
+    return present

@@ -1,12 +1,10 @@
 """A Python module for interacting and consuming responses from Slack."""
 
 import asyncio
-
-# Standard Imports
 import logging
 
-# Internal Imports
 import slack.errors as e
+from slack.web.internal_utils import _next_cursor_is_present
 
 
 class SlackResponse:
@@ -131,7 +129,7 @@ class SlackResponse:
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if self._next_cursor_is_present(self.data):  # skipcq: PYL-R1705
+        if _next_cursor_is_present(self.data):  # skipcq: PYL-R1705
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -194,18 +192,3 @@ class SlackResponse:
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
-
-    @staticmethod
-    def _next_cursor_is_present(data):
-        """Determine if the response contains 'next_cursor'
-        and 'next_cursor' is not empty.
-
-        Returns:
-            A boolean value.
-        """
-        present = (
-            "response_metadata" in data
-            and "next_cursor" in data["response_metadata"]
-            and data["response_metadata"]["next_cursor"] != ""
-        )
-        return present
