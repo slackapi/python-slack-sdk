@@ -130,10 +130,6 @@ class ValidateCommand(BaseCommand):
                 output.write(async_source)
 
         self._run(
-            "Copy WebClient to async…",
-            [sys.executable, "-m", "pip", "install"] + tests_require,
-        )
-        self._run(
             "Installing test dependencies…",
             [sys.executable, "-m", "pip", "install"] + tests_require,
         )
