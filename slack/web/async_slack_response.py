@@ -53,7 +53,7 @@ class AsyncSlackResponse:
     def __init__(
         self,
         *,
-        client,
+        client: "AsyncWebClient",
         http_verb: str,
         api_url: str,
         req_args: dict,
@@ -132,7 +132,6 @@ class AsyncSlackResponse:
             params.update({"cursor": self.data["response_metadata"]["next_cursor"]})
             self.req_args.update({"params": params})
 
-            # We no longer recommend going with this way
             response = await self._client._request(  # skipcq: PYL-W0212
                 http_verb=self.http_verb, api_url=self.api_url, req_args=self.req_args,
             )
