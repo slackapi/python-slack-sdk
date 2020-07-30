@@ -121,7 +121,6 @@ class ValidateCommand(BaseCommand):
             async_source = re.sub(
                 "class WebClient\(BaseClient\):",
                 "class AsyncWebClient(AsyncBaseClient):", async_source)
-            # from slack.web.base_client import BaseClient
             with open('./slack/web/async_client.py', 'w') as output:
                 output.write(async_source)
 
