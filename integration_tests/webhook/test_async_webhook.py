@@ -13,7 +13,7 @@ from slack.web.classes.elements import ButtonElement
 from slack.web.classes.objects import MarkdownTextObject, PlainTextObject
 
 
-class TestWebhook(unittest.TestCase):
+class TestAsyncWebhook(unittest.TestCase):
 
     def setUp(self):
         pass

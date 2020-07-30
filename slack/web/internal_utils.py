@@ -25,7 +25,7 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"attachments": dict_attachments})
 
 
-def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
+def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]) -> None:
     if users is None:
         return
 
@@ -37,7 +37,7 @@ def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
         raise SlackRequestError("users must be either str or List[Dict[str, str]]")
 
 
-def _next_cursor_is_present(data):
+def _next_cursor_is_present(data) -> bool:
     """Determine if the response contains 'next_cursor'
     and 'next_cursor' is not empty.
 
