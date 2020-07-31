@@ -145,7 +145,9 @@ class BaseClient:
     # aiohttp based async WebClient
     # =================================================================
 
-    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> SlackResponse:
+    async def _send(
+        self, http_verb: str, api_url: str, req_args: dict
+    ) -> SlackResponse:
         """Sends the request out for transmission.
 
         Args:

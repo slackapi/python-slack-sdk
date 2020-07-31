@@ -162,6 +162,12 @@ class TestWebhook(unittest.TestCase):
         with self.assertRaises(socket.timeout):
             client.send_dict({"text": "hello!"})
 
+    def test_error_response(self):
+        client = WebhookClient(url="http://localhost:8888/error")
+        resp: WebhookResponse = client.send_dict({"text": "hello!"})
+        self.assertEqual(500, resp.status_code)
+        self.assertEqual("error", resp.body)
+
     def test_proxy_issue_714(self):
         client = WebhookClient(url="http://localhost:8888", proxy="http://invalid-host:9999")
         with self.assertRaises(urllib.error.URLError):

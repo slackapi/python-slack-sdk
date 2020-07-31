@@ -106,7 +106,9 @@ class AsyncBaseClient:
             http_verb=http_verb, api_url=api_url, req_args=req_args,
         )
 
-    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> AsyncSlackResponse:
+    async def _send(
+        self, http_verb: str, api_url: str, req_args: dict
+    ) -> AsyncSlackResponse:
         """Sends the request out for transmission.
 
         Args:

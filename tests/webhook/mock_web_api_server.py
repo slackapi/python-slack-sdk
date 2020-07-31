@@ -30,6 +30,12 @@ class MockHandler(SimpleHTTPRequestHandler):
         try:
             if self.path == "/timeout":
                 time.sleep(2)
+            if self.path == "/error":
+                self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
+                self.set_common_headers()
+                self.wfile.write("error".encode("utf-8"))
+                self.wfile.close()
+                return
 
             body = "ok"
 
