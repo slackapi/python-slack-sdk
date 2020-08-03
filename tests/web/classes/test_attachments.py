@@ -214,10 +214,10 @@ class BlockAttachmentTests(unittest.TestCase):
     def test_basic_json(self):
         blocks = [
             SectionBlock(text="Some text"),
-            ImageBlock(image_url="image.jpg", alt_text="an image")
+            ImageBlock(image_url="image.jpg", alt_text="an image"),
         ]
 
         self.assertDictEqual(
-            BlockAttachment(blocks=blocks).to_dict(), {"blocks": [b.to_dict() for b in blocks]}
+            BlockAttachment(blocks=blocks).to_dict(),
+            {"blocks": [b.to_dict() for b in blocks]},
         )
-

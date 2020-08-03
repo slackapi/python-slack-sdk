@@ -21,17 +21,13 @@ logger = logging.getLogger(__name__)
 
 import os
 
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
 
-singleton_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=False)
+singleton_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 
-singleton_loop = asyncio.new_event_loop()
-singleton_async_client = WebClient(
-    token=os.environ["SLACK_BOT_TOKEN"],
-    run_async=True,
-    loop=singleton_loop
-)
+singleton_async_client = AsyncWebClient(token=os.environ["SLACK_BOT_TOKEN"])
 
 
 # Fixed in 2.6.0: This doesn't work
@@ -43,7 +39,7 @@ def singleton():
         # until this completion, other simultaneous requests get "RuntimeError: This event loop is already running"
         response = singleton_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         return str(response)
     except SlackApiError as e:
@@ -53,13 +49,9 @@ def singleton():
 @app.route("/sync/per-request", methods=["GET"])
 def per_request():
     try:
-        client = WebClient(
-            token=os.environ["SLACK_BOT_TOKEN"],
-            run_async=False
-        )
+        client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
         response = client.chat_postMessage(
-            channel="#random",
-            text="You used a new WebClient for posting this message!"
+            channel="#random", text="You used a new WebClient for posting this message!"
         )
         return str(response)
     except SlackApiError as e:
@@ -72,12 +64,12 @@ def singleton_async():
     try:
         future = singleton_async_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         # blocking here!!!
         # as described at https://github.com/slackapi/python-slackclient/issues/497
         # until this completion, other simultaneous requests get "RuntimeError: This event loop is already running"
-        response = singleton_loop.run_until_complete(future)
+        response = asyncio.run(future)
         return str(response)
     except SlackApiError as e:
         return make_response(str(e), 400)
@@ -88,15 +80,10 @@ def per_request_async():
     try:
         # This is not optimal and the host should have a large number of FD (File Descriptor)
         loop_for_this_request = asyncio.new_event_loop()
-
-        async_client = WebClient(
-            token=os.environ["SLACK_BOT_TOKEN"],
-            run_async=True,
-            loop=loop_for_this_request
-        )
+        async_client = AsyncWebClient(token=os.environ["SLACK_BOT_TOKEN"])
         future = async_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         response = loop_for_this_request.run_until_complete(future)
         return str(response)

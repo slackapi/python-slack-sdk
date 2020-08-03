@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG)
 # python3 integration_tests/samples/basic_usage/channels.py
 
 import os
-from slack import WebClient
+from slack_sdk import WebClient
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 

@@ -21,7 +21,7 @@ app.debug = True
 
 import os
 from uuid import uuid4
-from slack import WebClient
+from slack_sdk import WebClient
 
 client_id = os.environ["SLACK_TEST_CLIENT_ID"]
 client_secret = os.environ["SLACK_TEST_CLIENT_SECRET"]
@@ -60,7 +60,9 @@ class Database:
             "bot_token": oauth_v2_response["access_token"],
             "bot_user_id": oauth_v2_response["bot_user_id"],
             "user_id": installer["id"],
-            "user_token": installer["access_token"] if "access_token" in installer else None,
+            "user_token": installer["access_token"]
+            if "access_token" in installer
+            else None,
         }
         logger.debug(f"all rows: {list(self.tokens.keys())}")
 
@@ -80,14 +82,16 @@ database = Database()
 @app.route("/slack/oauth/start", methods=["GET"])
 def oauth_start():
     state = state_service.generate()
-    return f'<a href="https://slack.com/oauth/v2/authorize?' \
-           f'scope={scopes}&' \
-           f'user_scope={user_scopes}&' \
-           f'client_id={client_id}&' \
-           f'redirect_uri={redirect_uri}&' \
-           f'state={state}' \
-           f'">' \
-           f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+    return (
+        f'<a href="https://slack.com/oauth/v2/authorize?'
+        f"scope={scopes}&"
+        f"user_scope={user_scopes}&"
+        f"client_id={client_id}&"
+        f"redirect_uri={redirect_uri}&"
+        f"state={state}"
+        f'">'
+        f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+    )
 
 
 @app.route("/slack/oauth/callback", methods=["GET"])
@@ -102,16 +106,20 @@ def oauth_callback():
                 client_id=client_id,
                 client_secret=client_secret,
                 redirect_uri=redirect_uri,
-                code=code
+                code=code,
             )
             logger.info(f"oauth.v2.access response: {response}")
             database.save(response)
             return "Thanks for installing this app!"
         else:
-            return make_response(f"Try the installation again (the state value is already expired)", 400)
+            return make_response(
+                f"Try the installation again (the state value is already expired)", 400
+            )
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(f"Something is wrong with the installation (error: {error})", 400)
+    return make_response(
+        f"Something is wrong with the installation (error: {error})", 400
+    )
 
 
 # ---------------------
@@ -124,10 +132,8 @@ from time import time
 
 
 def verify_slack_request(
-    signing_secret: str,
-    request_body: str,
-    timestamp: str,
-    signature: str) -> bool:
+    signing_secret: str, request_body: str, timestamp: str, signature: str
+) -> bool:
     """Slack Request Verification
 
     For more information: https://github.com/slackapi/python-slack-events-api
@@ -137,19 +143,19 @@ def verify_slack_request(
         return False
 
     if hasattr(hmac, "compare_digest"):
-        req = str.encode('v0:' + str(timestamp) + ':') + request_body
-        request_hash = 'v0=' + hmac.new(
-            str.encode(signing_secret),
-            req, hashlib.sha256
-        ).hexdigest()
+        req = str.encode("v0:" + str(timestamp) + ":") + request_body
+        request_hash = (
+            "v0="
+            + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
+        )
         return hmac.compare_digest(request_hash, signature)
     else:
         # So, we'll compare the signatures explicitly
-        req = str.encode('v0:' + str(timestamp) + ':') + request_body
-        request_hash = 'v0=' + hmac.new(
-            str.encode(signing_secret),
-            req, hashlib.sha256
-        ).hexdigest()
+        req = str.encode("v0:" + str(timestamp) + ":") + request_body
+        request_hash = (
+            "v0="
+            + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
+        )
 
         if len(request_hash) != len(signature):
             return False
@@ -163,7 +169,7 @@ def verify_slack_request(
         return result == 0
 
 
-from slack.errors import SlackApiError
+from slack_sdk.errors import SlackApiError
 
 signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 
@@ -174,11 +180,11 @@ def slack_app():
         signing_secret=signing_secret,
         request_body=request.get_data(),
         timestamp=request.headers.get("X-Slack-Request-Timestamp"),
-        signature=request.headers.get("X-Slack-Signature")):
+        signature=request.headers.get("X-Slack-Signature"),
+    ):
         return make_response("invalid request", 403)
 
-    if "command" in request.form \
-        and request.form["command"] == "/do-something":
+    if "command" in request.form and request.form["command"] == "/do-something":
         trigger_id = request.form["trigger_id"]
         try:
             team_id = request.form["team_id"]
@@ -193,33 +199,21 @@ def slack_app():
                 view={
                     "type": "modal",
                     "callback_id": "modal-id",
-                    "title": {
-                        "type": "plain_text",
-                        "text": "Awesome Modal"
-                    },
-                    "submit": {
-                        "type": "plain_text",
-                        "text": "Submit"
-                    },
-                    "close": {
-                        "type": "plain_text",
-                        "text": "Cancel"
-                    },
+                    "title": {"type": "plain_text", "text": "Awesome Modal"},
+                    "submit": {"type": "plain_text", "text": "Submit"},
+                    "close": {"type": "plain_text", "text": "Cancel"},
                     "blocks": [
                         {
                             "type": "input",
                             "block_id": "b-id",
-                            "label": {
-                                "type": "plain_text",
-                                "text": "Input label",
-                            },
+                            "label": {"type": "plain_text", "text": "Input label",},
                             "element": {
                                 "action_id": "a-id",
                                 "type": "plain_text_input",
-                            }
+                            },
                         }
-                    ]
-                }
+                    ],
+                },
             )
             return make_response("", 200)
         except SlackApiError as e:
@@ -228,10 +222,14 @@ def slack_app():
 
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if payload["type"] == "view_submission" \
-            and payload["view"]["callback_id"] == "modal-id":
+        if (
+            payload["type"] == "view_submission"
+            and payload["view"]["callback_id"] == "modal-id"
+        ):
             submitted_data = payload["view"]["state"]["values"]
-            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(
+                submitted_data
+            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
 
     return make_response("", 404)

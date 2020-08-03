@@ -13,18 +13,15 @@ logging.basicConfig(level=logging.DEBUG)
 
 import os
 import time
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 
 
 # Simple wrapper for sending a Slack message
 def send_slack_message(channel, message):
-    return client.chat_postMessage(
-        channel=channel,
-        text=message
-    )
+    return client.chat_postMessage(channel=channel, text=message)
 
 
 # Make the API call and save results to `response`
@@ -38,7 +35,7 @@ while True:
     except SlackApiError as e:
         if e.response["error"] == "ratelimited":
             # The `Retry-After` header will tell you how long to wait before retrying
-            delay = int(e.response.headers['Retry-After'])
+            delay = int(e.response.headers["Retry-After"])
             print(f"Rate limited. Retrying in {delay} seconds")
             time.sleep(delay)
             response = send_slack_message(channel, message)

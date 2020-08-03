@@ -12,15 +12,13 @@ logging.basicConfig(level=logging.DEBUG)
 # python3 integration_tests/samples/readme/sending_messages.py
 
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 
 try:
-    response = client.chat_postMessage(
-        channel='#random',
-        text="Hello world!")
+    response = client.chat_postMessage(channel="#random", text="Hello world!")
     assert response["message"]["text"] == "Hello world!"
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False

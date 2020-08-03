@@ -13,13 +13,16 @@ class MockHandler(SimpleHTTPRequestHandler):
     logger = logging.getLogger(__name__)
 
     def is_valid_token(self):
-        return "authorization" in self.headers \
-               and str(self.headers["authorization"]).startswith("Bearer xoxb-")
+        return "authorization" in self.headers and str(
+            self.headers["authorization"]
+        ).startswith("Bearer xoxb-")
 
     def is_invalid_rtm_start(self):
-        return "authorization" in self.headers \
-               and str(self.headers["authorization"]).startswith("Bearer xoxb-rtm.start") \
-               and str(self.path) != '/rtm.start'
+        return (
+            "authorization" in self.headers
+            and str(self.headers["authorization"]).startswith("Bearer xoxb-rtm.start")
+            and str(self.path) != "/rtm.start"
+        )
 
     def set_common_headers(self):
         self.send_header("content-type", "application/json;charset=utf-8")
@@ -30,11 +33,7 @@ class MockHandler(SimpleHTTPRequestHandler):
         "ok": True,
         "url": "ws://localhost:8765",
         "self": {"id": "U01234ABC", "name": "robotoverlord"},
-        "team": {
-            "domain": "exampledomain",
-            "id": "T123450FP",
-            "name": "ExampleName",
-        },
+        "team": {"domain": "exampledomain", "id": "T123450FP", "name": "ExampleName",},
     }
 
     rtm_start_failure = {
@@ -50,7 +49,9 @@ class MockHandler(SimpleHTTPRequestHandler):
 
         self.send_response(HTTPStatus.OK)
         self.set_common_headers()
-        body = self.rtm_start_success if self.is_valid_token() else self.rtm_start_failure
+        body = (
+            self.rtm_start_success if self.is_valid_token() else self.rtm_start_failure
+        )
         self.wfile.write(json.dumps(body).encode("utf-8"))
         self.wfile.close()
 
@@ -62,14 +63,15 @@ class MockHandler(SimpleHTTPRequestHandler):
 
 
 class MockServerThread(threading.Thread):
-
-    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
+    def __init__(
+        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
+    ):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test
 
     def run(self):
-        self.server = HTTPServer(('localhost', 8888), self.handler)
+        self.server = HTTPServer(("localhost", 8888), self.handler)
         self.test.server_url = "http://localhost:8888"
         self.test.host, self.test.port = self.server.socket.getsockname()
         self.test.server_started.set()  # threading.Event()

@@ -6,11 +6,13 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
-    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN,
+    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test, is_not_specified
-from slack import RTMClient, WebClient
+from slack_sdk.web.legacy_client import LegacyWebClient
+from slack_sdk.rtm import RTMClient
 
 
 class TestRTMClient(unittest.TestCase):
@@ -45,10 +47,10 @@ class TestRTMClient(unittest.TestCase):
             self.reaction_count += 1
 
         rtm = RTMClient(token=self.bot_token, run_async=True)
-        RTMClient.on(event='message', callback=process_messages)
-        RTMClient.on(event='reaction_added', callback=process_reactions)
+        RTMClient.on(event="message", callback=process_messages)
+        RTMClient.on(event="reaction_added", callback=process_reactions)
 
-        web_client = WebClient(token=self.bot_token, run_async=True)
+        web_client = LegacyWebClient(token=self.bot_token, run_async=True)
         message = await web_client.chat_postMessage(channel=channel_id, text=text)
         self.assertFalse("error" in message)
         ts = message["ts"]
@@ -59,7 +61,9 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(3)
 
         try:
-            first_reaction = await web_client.reactions_add(channel=channel_id, timestamp=ts, name="eyes")
+            first_reaction = await web_client.reactions_add(
+                channel=channel_id, timestamp=ts, name="eyes"
+            )
             self.assertFalse("error" in first_reaction)
             await asyncio.sleep(2)
 
@@ -68,7 +72,9 @@ class TestRTMClient(unittest.TestCase):
             # used to start blocking here
 
             # This reaction_add event won't be handled due to a bug
-            second_reaction = await web_client.reactions_add(channel=channel_id, timestamp=ts, name="tada")
+            second_reaction = await web_client.reactions_add(
+                channel=channel_id, timestamp=ts, name="tada"
+            )
             self.assertFalse("error" in second_reaction)
             await asyncio.sleep(2)
 

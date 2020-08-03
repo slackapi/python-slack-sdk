@@ -7,7 +7,10 @@ from aiohttp import web, WSCloseCode
 import slack
 import slack.errors as e
 from tests.helpers import async_test
-from tests.rtm.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
+from tests.rtm.mock_web_api_server import (
+    setup_mock_web_api_server,
+    cleanup_mock_web_api_server,
+)
 
 
 class TestRTMClientFunctional(unittest.TestCase):
@@ -26,9 +29,7 @@ class TestRTMClientFunctional(unittest.TestCase):
             run_async=False,
         )
         self.client._web_client = slack.WebClient(
-            token="xoxb-valid",
-            base_url="http://localhost:8888",
-            run_async=False,
+            token="xoxb-valid", base_url="http://localhost:8888", run_async=False,
         )
 
     def tearDown(self):
@@ -245,14 +246,10 @@ class TestRTMClientFunctional(unittest.TestCase):
     @async_test
     async def test_run_async_valid(self):
         client = slack.RTMClient(
-            token="xoxb-valid",
-            base_url="http://localhost:8765",
-            run_async=True,
+            token="xoxb-valid", base_url="http://localhost:8765", run_async=True,
         )
         client._web_client = slack.WebClient(
-            token="xoxb-valid",
-            base_url="http://localhost:8888",
-            run_async=True,
+            token="xoxb-valid", base_url="http://localhost:8888", run_async=True,
         )
         self.called = False
 
@@ -267,14 +264,10 @@ class TestRTMClientFunctional(unittest.TestCase):
     @async_test
     async def test_run_async_invalid(self):
         client = slack.RTMClient(
-            token="xoxb-valid",
-            base_url="http://localhost:8765",
-            run_async=True,
+            token="xoxb-valid", base_url="http://localhost:8765", run_async=True,
         )
         client._web_client = slack.WebClient(
-            token="xoxb-valid",
-            base_url="http://localhost:8888",
-            run_async=True,
+            token="xoxb-valid", base_url="http://localhost:8888", run_async=True,
         )
         self.called = False
 

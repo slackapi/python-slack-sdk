@@ -10,7 +10,8 @@ import pytest
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN
 from integration_tests.helpers import async_test, is_not_specified
-from slack import RTMClient, WebClient
+from slack_sdk.web.legacy_client import LegacyWebClient
+from slack_sdk.rtm import RTMClient
 
 
 class TestRTMClient(unittest.TestCase):
@@ -31,7 +32,7 @@ class TestRTMClient(unittest.TestCase):
     @pytest.mark.skip()
     def test_receiving_all_messages(self):
         self.rtm_client = RTMClient(token=self.bot_token, loop=asyncio.new_event_loop())
-        self.web_client = WebClient(token=self.bot_token)
+        self.web_client = LegacyWebClient(token=self.bot_token)
 
         self.call_count = 0
 
@@ -39,7 +40,9 @@ class TestRTMClient(unittest.TestCase):
         def send_reply(**payload):
             self.logger.debug(payload)
             web_client, data = payload["web_client"], payload["data"]
-            web_client.reactions_add(channel=data["channel"], timestamp=data["ts"], name="eyes")
+            web_client.reactions_add(
+                channel=data["channel"], timestamp=data["ts"], name="eyes"
+            )
             self.call_count += 1
 
         def connect():
@@ -81,13 +84,17 @@ class TestRTMClient(unittest.TestCase):
             time.sleep(1)
             wait_seconds += 1
 
-        self.assertEqual(total_num * num_of_senders, self.call_count, "The RTM handler failed")
+        self.assertEqual(
+            total_num * num_of_senders, self.call_count, "The RTM handler failed"
+        )
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="to avoid rate_limited errors")
+    @pytest.mark.skipif(
+        condition=is_not_specified(), reason="to avoid rate_limited errors"
+    )
     @async_test
     async def test_receiving_all_messages_async(self):
         self.rtm_client = RTMClient(token=self.bot_token, run_async=True)
-        self.web_client = WebClient(token=self.bot_token, run_async=False)
+        self.web_client = LegacyWebClient(token=self.bot_token, run_async=False)
 
         self.call_count = 0
 
@@ -95,7 +102,9 @@ class TestRTMClient(unittest.TestCase):
         async def send_reply(**payload):
             self.logger.debug(payload)
             web_client, data = payload["web_client"], payload["data"]
-            await web_client.reactions_add(channel=data["channel"], timestamp=data["ts"], name="eyes")
+            await web_client.reactions_add(
+                channel=data["channel"], timestamp=data["ts"], name="eyes"
+            )
             self.call_count += 1
 
         # intentionally not waiting here
@@ -132,4 +141,6 @@ class TestRTMClient(unittest.TestCase):
             await asyncio.sleep(1)
             wait_seconds += 1
 
-        self.assertEqual(total_num * num_of_senders, self.call_count, "The RTM handler failed")
+        self.assertEqual(
+            total_num * num_of_senders, self.call_count, "The RTM handler failed"
+        )

@@ -13,16 +13,14 @@ logging.basicConfig(level=logging.DEBUG)
 # python3 integration_tests/samples/readme/uploading_files.py
 
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 
 try:
     filepath = "./tmp.txt"
-    response = client.files_upload(
-        channels='#random',
-        file=filepath)
+    response = client.files_upload(channels="#random", file=filepath)
     assert response["file"]  # the uploaded file
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False

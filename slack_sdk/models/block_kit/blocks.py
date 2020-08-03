@@ -20,6 +20,7 @@ from .block_elements import InteractiveElement
 # Base Classes
 # -------------------------------------------------
 
+
 class Block(JsonObject):
     """Blocks are a series of components that can be combined
     to create visually rich and compellingly interactive messages.

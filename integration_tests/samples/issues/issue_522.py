@@ -15,12 +15,12 @@ import asyncio
 import logging
 import os
 
-import slack
-
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-token = os.environ['SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN']
+from slack_sdk.rtm import RTMClient
+
+token = os.environ["SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN"]
 
 
 async def sleepy_count(name, sleep_for):
@@ -31,7 +31,7 @@ async def sleepy_count(name, sleep_for):
 
 async def slack_client_and_sleeps():
     # real-time-messaging Slack client
-    client = slack.RTMClient(token=token, run_async=True)
+    client = RTMClient(token=token, run_async=True)
 
     sleepy_count_task = asyncio.create_task(sleepy_count("first counter", 1))
     sleepy_count_task2 = asyncio.create_task(sleepy_count("second counter", 3))
@@ -41,7 +41,7 @@ async def slack_client_and_sleeps():
 
 async def slack_client():
     # real-time-messaging Slack client
-    client = slack.RTMClient(token=token, run_async=True)
+    client = RTMClient(token=token, run_async=True)
 
     await asyncio.gather(client.start())
 
