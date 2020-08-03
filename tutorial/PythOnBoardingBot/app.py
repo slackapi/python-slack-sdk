@@ -1,9 +1,11 @@
-import os
 import logging
+import os
+
 from flask import Flask
-from slack import WebClient
 from slackeventsapi import SlackEventAdapter
-from onboarding_tutorial import OnboardingTutorial
+
+from slack_sdk import WebClient
+from .onboarding_tutorial import OnboardingTutorial
 
 # Initialize a Flask app to host the events adapter
 app = Flask(__name__)
@@ -134,7 +136,6 @@ def message(payload):
     channel_id = event.get("channel")
     user_id = event.get("user")
     text = event.get("text")
-
 
     if text and text.lower() == "start":
         return start_onboarding(user_id, channel_id)

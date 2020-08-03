@@ -6,9 +6,17 @@ python:
   - "3.8"
 install:
   - python setup.py install
+  - pip install "pytest>=5,<6"
 script:
+  # codegen for slack_sdk
+  - python setup.py codegen
+  # testing without aiohttp
+  - travis_retry pytest tests/slack_sdk_tests/
+  # testing with aiohttp
+  - pip install "pytest-asyncio<1" "aiohttp>=3,<4"
+  - travis_retry pytest tests/slack_sdk_tests_async/
+  # run all tests just in case
+  - export SLACKCLIENT_SKIP_DEPRECATION=1
   - travis_retry python setup.py validate
-  # TODO: Enable this
-  # - if git status --porcelain | grep .; then git --no-pager diff; exit 1; fi
 after_success:
   - codecov -e $TRAVIS_PYTHON_VERSION

@@ -1,6 +1,6 @@
-# Python slackclient
+# Python Slack SDK (still in beta)
 
-The Python `slackclient` library is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
+The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slackclient/](https://slack.dev/python-slackclient/)**
 
@@ -12,14 +12,16 @@ The Python `slackclient` library is a developer kit for interfacing with the Sla
 
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
-The **Python slackclient** allows interaction with:
+The **Python Slack SDK** allows interaction with:
 
-- The Slack web api methods available at our [Api Docs site][api-methods]
-- Interaction with our [RTM API][rtm-docs]
+- `slack_sdk.web`: for calling the Slack Web API methods ([Api Docs site][api-methods])
+- `slack_sdk.webhook`: for utilizing the Incoming Webhooks and `response_url`s in payloads
+- `slack_sdk.signature`: for verifying incoming requests from the Slack API server
+- `slack_sdk.oauth`: for implementing the Slack OAuth flow
+- `slack_sdk.models`: for constructing UI components using easy-to-use builders
+- `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
-
-Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slackclient/auth.html).
+If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api]. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slackclient/auth.html).
 
 ## Table of contents
 
@@ -62,7 +64,7 @@ python3 --version
 We recommend using [PyPI][pypi] to install the Slack Developer Kit for Python.
 
 ```bash
-$ pip3 install slackclient
+$ pip install slack_sdk
 ```
 
 ### Getting started tutorial
@@ -85,15 +87,13 @@ One of the most common use-cases is sending a message to Slack. If you want to s
 
 ```python
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
 try:
-    response = client.chat_postMessage(
-        channel='#random',
-        text="Hello world!")
+    response = client.chat_postMessage(channel='#random', text="Hello world!")
     assert response["message"]["text"] == "Hello world!"
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
@@ -110,16 +110,14 @@ We've changed the process for uploading files to Slack to be much easier and str
 
 ```python
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 client = WebClient(token=os.environ['SLACK_API_TOKEN'])
 
 try:
     filepath="./tmp.txt"
-    response = client.files_upload(
-        channels='#random',
-        file=filepath)
+    response = client.files_upload(channels='#random', file=filepath)
     assert response["file"]  # the uploaded file
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
@@ -128,141 +126,71 @@ except SlackApiError as e:
     print(f"Got an error: {e.response['error']}")
 ```
 
-### Basic Usage of the RTM Client
-
----
-
-The [Real Time Messaging (RTM) API][rtm-docs] is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
-
-If you prefer events to be pushed to you instead, we recommend using the HTTP-based [Events API][events-docs] instead. Most event types supported by the RTM API are also available in the Events API. You can check out our [Python Slack Events Adaptor][events-sdk] if you want to use this API instead.
-
-An RTMClient allows apps to communicate with the Slack Platform's RTM API.
-
-The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
-
-In our example below, we watch for a [message event][message-event] that contains "Hello" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying "Hi" to the user.
-
-```python
-import os
-from slack import RTMClient
-from slack.errors import SlackApiError
-
-@RTMClient.run_on(event='message')
-def say_hello(**payload):
-    data = payload['data']
-    web_client = payload['web_client']
-    rtm_client = payload['rtm_client']
-    if 'text' in data and 'Hello' in data.get('text', []):
-        channel_id = data['channel']
-        thread_ts = data['ts']
-        user = data['user']
-
-        try:
-            response = web_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Hi <@{user}>!",
-                thread_ts=thread_ts
-            )
-        except SlackApiError as e:
-            # You will get a SlackApiError if "ok" is False
-            assert e.response["ok"] is False
-            assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-            print(f"Got an error: {e.response['error']}")
-
-rtm_client = RTMClient(token=os.environ["SLACK_API_TOKEN"])
-rtm_client.start()
-```
-
-Please note that the default way of creating Slack apps no longer supports RTM API. Events using the RTM API **must** use a classic Slack app (with a plain `bot` scope).
-
-If you already have a classic Slack app, you can use those credentials. If you don't and need to use the RTM API, you can create a classic Slack app from [this link](https://api.slack.com/apps?new_classic_app=1). You can learn more in the [API documentation](https://api.slack.com/authentication/basics#soon).
-
-Also, even if the Slack app configuration pages encourage you to upgrade to the newer permission model, don't upgrade it and keep using the "classic" bot permission.
-
 ### Async usage
 
-slackclient v2 and higher uses [AIOHttp][aiohttp] under the hood for asynchronous requests and [urllib][urllib] for synchronous requests.
+`AsyncWebClient` in this SDK requires [AIOHttp][aiohttp] under the hood for asynchronous requests.
 
-Normal usage of the library does not run it in async, hence a kwarg of `run_async=True` is needed.
-
-When in async mode its important to remember to await or run/run_until_complete the call.
-
-#### Slackclient as a script
+#### AsyncWebClient in a script
 
 ```python 
 import asyncio
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    run_async=True
-)
-future = client.chat_postMessage(
-    channel='#random',
-    text="Hello world!"
-)
+client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
 
-loop = asyncio.get_event_loop()
-try:
-    # run_until_complete returns the Future's result, or raise its exception.
-    response = loop.run_until_complete(future)
-    assert response["message"]["text"] == "Hello world!"
-except SlackApiError as e:
-    assert e.response["ok"] is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-    print(f"Got an error: {e.response['error']}")
-finally:
-    loop.close()
+async def post_message():
+    try:
+        response = await client.chat_postMessage(channel='#random', text="Hello world!")
+        assert response["message"]["text"] == "Hello world!"
+    except SlackApiError as e:
+        assert e.response["ok"] is False
+        assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+        print(f"Got an error: {e.response['error']}")
+
+asyncio.run(post_message())
 ```
 
-#### Slackclient in a framework
+#### AsyncWebClient in a framework
 
 If you are using a framework invoking the asyncio event loop like : sanic/jupyter notebook/etc.
 
 ```python
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    run_async=True # turn async mode on
-)
+client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
 # Define this as an async function
 async def send_to_slack(channel, text):
     try:
         # Don't forget to have await as the client returns asyncio.Future
-        response = await client.chat_postMessage(
-            channel=channel,
-            text=text
-        )
+        response = await client.chat_postMessage(channel=channel, text=text)
         assert response["message"]["text"] == text
     except SlackApiError as e:
         assert e.response["ok"] is False
         assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
         raise e
 
-# https://sanicframework.org/
-from sanic import Sanic
-from sanic.response import json
+from aiohttp import web
 
-app = Sanic()
-# e.g., http://localhost:3000/?text=foo&text=bar
-@app.route('/')
-async def test(request):
+async def handle_requests(request: web.Request) -> web.Response:
     text = 'Hello World!'
-    if 'text' in request.args:
-        text = "\t".join(request.args['text'])
+    if 'text' in request.query:
+        text = "\t".join(request.query.getall("text"))
     try:
         await send_to_slack(channel="#random", text=text)
-        return json({'message': 'Done!'})
+        return web.json_response(data={'message': 'Done!'})
     except SlackApiError as e:
-        return json({'message': f"Failed due to {e.response['error']}"})
+        return web.json_response(data={'message': f"Failed due to {e.response['error']}"})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+
+if __name__ == "__main__":
+    app = web.Application()
+    app.add_routes([web.get("/", handle_requests)])
+    # e.g., http://localhost:3000/?text=foo&text=bar
+    web.run_app(app, host="0.0.0.0", port=3000)
 ```
 
 ### Advanced Options
@@ -287,14 +215,14 @@ For sync requests, setting either `HTTPS_PROXY` env variable or the `proxy` opti
 
 Using the async client and looking for a performance boost? Installing the optional dependencies (aiodns) may help speed up DNS resolving by the client. We've included it as an extra called "optional":
 ```bash
-$ pip3 install slackclient[optional]
+$ pip install slack_sdk[optional]
 ```
 
 #### Example
 
 ```python
 import os
-from slack import WebClient
+from slack_sdk import WebClient
 from ssl import SSLContext
 
 sslcert = SSLContext()
@@ -307,11 +235,13 @@ client = WebClient(
     ssl=sslcert,
     proxy=proxyinfo
 )
-response = client.chat_postMessage(
-    channel="#random",
-    text="Hello World!")
+response = client.chat_postMessage(channel="#random", text="Hello World!")
 print(response)
 ```
+
+### Migrating from v2
+
+(To be updated)
 
 
 ### Migrating from v1

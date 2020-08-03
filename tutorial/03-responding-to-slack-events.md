@@ -36,7 +36,7 @@ The first thing we'll need to do is import the code our app needs to run.
 import os
 import logging
 from flask import Flask
-from slack import WebClient
+from slack_sdk import WebClient
 from slackeventsapi import SlackEventAdapter
 from onboarding_tutorial import OnboardingTutorial
 ```
