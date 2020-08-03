@@ -25,12 +25,15 @@ logger = logging.getLogger(__name__)
 def endpoint():
     code = request.args.get("code")
     try:
-        from slack import WebClient
-        from slack.errors import SlackApiError
+        from slack_sdk import WebClient
+        from slack_sdk.errors import SlackApiError
+
         client = WebClient(token="")
         client_id = os.environ["SLACK_CLIENT_ID"]
         client_secret = os.environ["SLACK_CLIENT_SECRET"]
-        response = client.oauth_v2_access(client_id=client_id, client_secret=client_secret, code=code)
+        response = client.oauth_v2_access(
+            client_id=client_id, client_secret=client_secret, code=code
+        )
         result = response.get("error", "success!")
         return str(result)
     except SlackApiError as e:

@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG)
 # python3 integration_tests/samples/issues/issue_506.py
 
 import os
-from slack import RTMClient
+from slack_sdk.rtm import RTMClient
 
 logger = logging.getLogger(__name__)
 global_state = {}

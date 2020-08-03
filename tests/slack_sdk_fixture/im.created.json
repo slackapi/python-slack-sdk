@@ -1,0 +1,9 @@
+{
+    "type": "im_created",
+    "user": "U024BE7LH",
+    "channel": {
+        "id": "D024BE91L",
+        "user": "U123BL234",
+        "created": 1360782804
+    }
+}

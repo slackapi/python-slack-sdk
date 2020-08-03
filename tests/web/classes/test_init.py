@@ -11,10 +11,12 @@ class TestInit(unittest.TestCase):
             MarkdownTextObject.from_str("bar"),
         ]
         output = extract_json(json_objects)
-        expected = {"result": [
-            {"type": "plain_text", "text": "foo", "emoji": True},
-            {"type": "mrkdwn", "text": "bar"},
-        ]}
+        expected = {
+            "result": [
+                {"type": "plain_text", "text": "foo", "emoji": True},
+                {"type": "mrkdwn", "text": "bar"},
+            ]
+        }
         self.assertDictEqual(expected, {"result": output})
 
     def test_from_single_json_object(self):

@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG)
 # python3 integration_tests/samples/readme/proxy.py
 
 import os
-from slack import WebClient
+from slack_sdk import WebClient
 from ssl import SSLContext
 
 sslcert = SSLContext()
@@ -20,12 +20,6 @@ sslcert = SSLContext()
 # proxy --port 9000 --log-level d
 proxyinfo = "http://localhost:9000"
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    ssl=sslcert,
-    proxy=proxyinfo
-)
-response = client.chat_postMessage(
-    channel="#random",
-    text="Hello World!")
+client = WebClient(token=os.environ["SLACK_API_TOKEN"], ssl=sslcert, proxy=proxyinfo)
+response = client.chat_postMessage(channel="#random", text="Hello World!")
 print(response)

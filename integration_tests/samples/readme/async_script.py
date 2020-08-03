@@ -13,26 +13,20 @@ logging.basicConfig(level=logging.DEBUG)
 
 import asyncio
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    run_async=True
-)
-future = client.chat_postMessage(
-    channel='#random',
-    text="Hello world!"
-)
+client = AsyncWebClient(token=os.environ["SLACK_API_TOKEN"])
 
-loop = asyncio.get_event_loop()
-try:
-    # run_until_complete returns the Future's result, or raise its exception.
-    response = loop.run_until_complete(future)
-    assert response["message"]["text"] == "Hello world!"
-except SlackApiError as e:
-    assert e.response["ok"] is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-    print(f"Got an error: {e.response['error']}")
-finally:
-    loop.close()
+
+async def post_message():
+    try:
+        response = await client.chat_postMessage(channel="#random", text="Hello world!")
+        assert response["message"]["text"] == "Hello world!"
+    except SlackApiError as e:
+        assert e.response["ok"] is False
+        assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+        print(f"Got an error: {e.response['error']}")
+
+
+asyncio.run(post_message())
