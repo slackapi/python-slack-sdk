@@ -8,16 +8,15 @@ import io
 import json
 import logging
 import mimetypes
-import os
 import re
 import uuid
 import warnings
 from http.client import HTTPResponse
+from ssl import SSLContext
 from typing import BinaryIO, Dict, List
 from typing import Optional, Union
 from urllib.error import HTTPError
 from urllib.parse import urlencode
-from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
 import aiohttp
@@ -26,8 +25,14 @@ from aiohttp import FormData, BasicAuth
 import slack.errors as err
 from slack.errors import SlackRequestError
 from slack.web import convert_bool_to_0_or_1, get_user_agent
-from slack.web.classes.attachments import Attachment
-from slack.web.classes.blocks import Block
+from slack.web.async_internal_utils import (
+    _get_event_loop,
+    _build_req_args,
+    _get_url,
+    _files_to_data,
+    _request_with_session,
+)
+from slack.web.deprecation import show_2020_01_deprecation
 from slack.web.slack_response import SlackResponse
 
 
@@ -36,15 +41,15 @@ class BaseClient:
 
     def __init__(
         self,
-        token=None,
-        base_url=BASE_URL,
-        timeout=30,
+        token: Optional[str] = None,
+        base_url: str = BASE_URL,
+        timeout: int = 30,
         loop: Optional[asyncio.AbstractEventLoop] = None,
-        ssl=None,
-        proxy=None,
-        run_async=False,
-        use_sync_aiohttp=False,
-        session=None,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
+        run_async: bool = False,
+        use_sync_aiohttp: bool = False,
+        session: Optional[aiohttp.ClientSession] = None,
         headers: Optional[dict] = None,
     ):
         self.token = None if token is None else token.strip()
@@ -58,62 +63,6 @@ class BaseClient:
         self.headers = headers or {}
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
-
-    @staticmethod
-    def _get_event_loop():
-        """Retrieves the event loop or creates a new one."""
-        try:
-            return asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            return loop
-
-    def _get_headers(
-        self,
-        *,
-        token: Optional[str],
-        has_json: bool,
-        has_files: bool,
-        request_specific_headers: Optional[dict],
-    ):
-        """Constructs the headers need for a request.
-        Args:
-            has_json (bool): Whether or not the request has json.
-            has_files (bool): Whether or not the request has files.
-            request_specific_headers (dict): Additional headers specified by the user for a specific request.
-
-        Returns:
-            The headers dictionary.
-                e.g. {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'Authorization': 'Bearer xoxb-1234-1243',
-                    'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
-                }
-        """
-        final_headers = {
-            "User-Agent": get_user_agent(),
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-
-        if token:
-            final_headers.update({"Authorization": "Bearer {}".format(token)})
-
-        # Merge headers specified at client initialization.
-        final_headers.update(self.headers)
-
-        # Merge headers specified for a specific request. e.g. oauth.access
-        if request_specific_headers:
-            final_headers.update(request_specific_headers)
-
-        if has_json:
-            final_headers.update({"Content-Type": "application/json;charset=utf-8"})
-
-        if has_files:
-            # These are set automatically by the aiohttp library.
-            final_headers.pop("Content-Type", None)
-
-        return final_headers
 
     def api_call(  # skipcq: PYL-R1710
         self,
@@ -143,6 +92,8 @@ class BaseClient:
             json (dict): JSON for the body to attach to the request
                 (if files or data is not specified).
                 e.g. {'key1': 'value1', 'key2': 'value2'}
+            headers (dict): Additional request headers
+            auth (dict): A dictionary that consists of client_id and client_secret
 
         Returns:
             (SlackResponse)
@@ -157,51 +108,26 @@ class BaseClient:
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-        has_json = json is not None
-        has_files = files is not None
-        if has_json and http_verb != "POST":
-            msg = "Json data can only be submitted as POST requests. GET requests should use the 'params' argument."
-            raise err.SlackRequestError(msg)
 
-        api_url = self._get_url(api_method)
-
-        if auth:
-            auth = BasicAuth(auth["client_id"], auth["client_secret"])
-
-        if data is not None and isinstance(data, dict):
-            data = {k: v for k, v in data.items() if v is not None}
-        if files is not None and isinstance(files, dict):
-            files = {k: v for k, v in files.items() if v is not None}
-        if params is not None and isinstance(params, dict):
-            params = {k: v for k, v in params.items() if v is not None}
-
-        token: Optional[str] = self.token
-        if params is not None and "token" in params:
-            token = params.pop("token")
-        if json is not None and "token" in json:
-            token = json.pop("token")
-        req_args = {
-            "headers": self._get_headers(
-                token=token,
-                has_json=has_json,
-                has_files=has_files,
-                request_specific_headers=headers,
-            ),
-            "data": data,
-            "files": files,
-            "params": params,
-            "json": json,
-            "ssl": self.ssl,
-            "proxy": self.proxy,
-            "auth": auth,
-        }
+        api_url = _get_url(self.base_url, api_method)
+        req_args = _build_req_args(
+            token=self.token,
+            http_verb=http_verb,
+            files=files,
+            data=data,
+            params=params,
+            json=json,  # skipcq: PYL-W0621
+            headers=headers,
+            auth=auth,
+            ssl=self.ssl,
+            proxy=self.proxy,
+        )
 
         show_2020_01_deprecation(api_method)
 
         if self.run_async or self.use_sync_aiohttp:
-
             if self._event_loop is None:
-                self._event_loop = self._get_event_loop()
+                self._event_loop = _get_event_loop()
 
             future = asyncio.ensure_future(
                 self._send(http_verb=http_verb, api_url=api_url, req_args=req_args),
@@ -215,23 +141,13 @@ class BaseClient:
         else:
             return self._sync_send(api_url=api_url, req_args=req_args)
 
-    def _get_url(self, api_method):
-        """Joins the base Slack URL and an API method to form an absolute URL.
-
-        Args:
-            api_method (str): The Slack Web API method. e.g. 'chat.postMessage'
-
-        Returns:
-            The absolute API URL.
-                e.g. 'https://www.slack.com/api/chat.postMessage'
-        """
-        return urljoin(self.base_url, api_method)
-
     # =================================================================
     # aiohttp based async WebClient
     # =================================================================
 
-    async def _send(self, http_verb, api_url, req_args):
+    async def _send(
+        self, http_verb: str, api_url: str, req_args: dict
+    ) -> SlackResponse:
         """Sends the request out for transmission.
 
         Args:
@@ -248,27 +164,18 @@ class BaseClient:
         Returns:
             The response parsed into a SlackResponse object.
         """
-        open_files = []
-        files = req_args.pop("files", None)
-        if files is not None:
-            for k, v in files.items():
-                if isinstance(v, str):
-                    f = open(v.encode("utf-8", "ignore"), "rb")
-                    open_files.append(f)
-                    req_args["data"].update({k: f})
-                else:
-                    req_args["data"].update({k: v})
+        open_files = _files_to_data(req_args)
+        try:
+            if "params" in req_args:
+                # True/False -> "1"/"0"
+                req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
-        if "params" in req_args:
-            # True/False -> "1"/"0"
-            req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
-
-        res = await self._request(
-            http_verb=http_verb, api_url=api_url, req_args=req_args
-        )
-
-        for f in open_files:
-            f.close()
+            res = await self._request(
+                http_verb=http_verb, api_url=api_url, req_args=req_args
+            )
+        finally:
+            for f in open_files:
+                f.close()
 
         data = {
             "client": self,
@@ -279,50 +186,25 @@ class BaseClient:
         }
         return SlackResponse(**{**data, **res}).validate()
 
-    async def _request(self, *, http_verb, api_url, req_args):
+    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
         """Submit the HTTP request with the running session or a new session.
         Returns:
             A dictionary of the response data.
         """
-        session = None
-        use_running_session = self.session and not self.session.closed
-        if use_running_session:
-            session = self.session
-        else:
-            session = aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=self.timeout),
-                auth=req_args.pop("auth", None),
-            )
-
-        response = None
-        try:
-            async with session.request(http_verb, api_url, **req_args) as res:
-                data = {}
-                try:
-                    data = await res.json()
-                except aiohttp.ContentTypeError:
-                    self._logger.debug(
-                        f"No response data returned from the following API call: {api_url}."
-                    )
-                except json.decoder.JSONDecodeError as e:
-                    message = f"Failed to parse the response body: {str(e)}"
-                    raise err.SlackApiError(message, res)
-
-                response = {
-                    "data": data,
-                    "headers": res.headers,
-                    "status_code": res.status,
-                }
-        finally:
-            if not use_running_session:
-                await session.close()
-        return response
+        return await _request_with_session(
+            current_session=self.session,
+            timeout=self.timeout,
+            logger=self._logger,
+            http_verb=http_verb,
+            api_url=api_url,
+            req_args=req_args,
+        )
 
     # =================================================================
     # urllib based WebClient
     # =================================================================
 
-    def _sync_send(self, api_url, req_args):
+    def _sync_send(self, api_url, req_args) -> SlackResponse:
         params = req_args["params"] if "params" in req_args else None
         data = req_args["data"] if "data" in req_args else None
         files = req_args["files"] if "files" in req_args else None
@@ -600,7 +482,7 @@ class BaseClient:
 
     def _build_urllib_request_headers(
         self, token: str, has_json: bool, has_files: bool, additional_headers: dict
-    ):
+    ) -> Dict[str, str]:
         headers = {
             "User-Agent": get_user_agent(),
             "Content-Type": "application/x-www-form-urlencoded",
@@ -655,69 +537,3 @@ class BaseClient:
         request_hash = hmac.new(encoded_secret, format_req, hashlib.sha256).hexdigest()
         calculated_signature = f"v0={request_hash}"
         return hmac.compare_digest(calculated_signature, signature)
-
-    @staticmethod
-    def _parse_web_class_objects(kwargs) -> None:
-        def to_dict(obj: Union[Dict, Block, Attachment]):
-            if isinstance(obj, Block):
-                return obj.to_dict()
-            if isinstance(obj, Attachment):
-                return obj.to_dict()
-            return obj
-
-        blocks = kwargs.get("blocks", None)
-        if blocks is not None and isinstance(blocks, list):
-            dict_blocks = [to_dict(b) for b in blocks]
-            kwargs.update({"blocks": dict_blocks})
-
-        attachments = kwargs.get("attachments", None)
-        if attachments is not None and isinstance(attachments, list):
-            dict_attachments = [to_dict(a) for a in attachments]
-            kwargs.update({"attachments": dict_attachments})
-
-    @staticmethod
-    def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]):
-        if users is None:
-            return
-
-        if isinstance(users, list):
-            kwargs.update({"users": json.dumps(users)})
-        elif isinstance(users, str):
-            kwargs.update({"users": users})
-        else:
-            raise SlackRequestError("users must be either str or List[Dict[str, str]]")
-
-
-# https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
-deprecated_method_prefixes_2020_01 = [
-    "channels.",
-    "groups.",
-    "im.",
-    "mpim.",
-    "admin.conversations.whitelist.",
-]
-
-
-def show_2020_01_deprecation(method_name: str):
-    """Prints a warning if the given method is deprecated"""
-
-    skip_deprecation = os.environ.get(
-        "SLACKCLIENT_SKIP_DEPRECATION"
-    )  # for unit tests etc.
-    if skip_deprecation:
-        return
-    if not method_name:
-        return
-
-    matched_prefixes = [
-        prefix
-        for prefix in deprecated_method_prefixes_2020_01
-        if method_name.startswith(prefix)
-    ]
-    if len(matched_prefixes) > 0:
-        message = (
-            f"{method_name} is deprecated. Please use the Conversations API instead. "
-            "For more info, go to "
-            "https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api"
-        )
-        warnings.warn(message)

@@ -1,13 +1,12 @@
 """A Python module for interacting and consuming responses from Slack."""
 
-import asyncio
 import logging
 
 import slack.errors as e
 from slack.web.internal_utils import _next_cursor_is_present
 
 
-class SlackResponse:
+class AsyncSlackResponse:
     """An iterable container of response data.
 
     Attributes:
@@ -25,17 +24,16 @@ class SlackResponse:
     import os
     import slack
 
-    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+    client = slack.AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
 
-    response1 = client.auth_revoke(test='true')
+    response1 = await client.auth_revoke(test='true')
     assert not response1['revoked']
 
-    response2 = client.auth_test()
+    response2 = await client.auth_test()
     assert response2.get('ok', False)
 
     users = []
-    for page in client.users_list(limit=2):
-        TODO: This example should specify when to break.
+    async for page in await client.users_list(limit=2):
         users = users + page['members']
     ```
 
@@ -55,14 +53,13 @@ class SlackResponse:
     def __init__(
         self,
         *,
-        client,
+        client,  # AsyncWebClient
         http_verb: str,
         api_url: str,
         req_args: dict,
         data: dict,
         headers: dict,
         status_code: int,
-        use_sync_aiohttp: bool = True,  # True for backward-compatibility
     ):
         self.http_verb = http_verb
         self.api_url = api_url
@@ -73,7 +70,6 @@ class SlackResponse:
         self._initial_data = data
         self._iteration = None  # for __iter__ & __next__
         self._client = client
-        self._use_sync_aiohttp = use_sync_aiohttp
         self._logger = logging.getLogger(__name__)
 
     def __str__(self):
@@ -93,21 +89,21 @@ class SlackResponse:
         """
         return self.data.get(key, None)
 
-    def __iter__(self):
+    def __aiter__(self):
         """Enables the ability to iterate over the response.
-        It's required for the iterator protocol.
+        It's required async-for the iterator protocol.
 
         Note:
             This enables Slack cursor-based pagination.
 
         Returns:
-            (SlackResponse) self
+            (AsyncSlackResponse) self
         """
         self._iteration = 0
         self.data = self._initial_data
         return self
 
-    def __next__(self):
+    async def __anext__(self):
         """Retrieves the next portion of results, if 'next_cursor' is present.
 
         Note:
@@ -119,12 +115,12 @@ class SlackResponse:
             to be found.
 
         Returns:
-            (SlackResponse) self
+            (AsyncSlackResponse) self
                 With the new response data now attached to this object.
 
         Raises:
             SlackApiError: If the request to the Slack API failed.
-            StopIteration: If 'next_cursor' is not present or empty.
+            StopAsyncIteration: If 'next_cursor' is not present or empty.
         """
         self._iteration += 1
         if self._iteration == 1:
@@ -136,27 +132,16 @@ class SlackResponse:
             params.update({"cursor": self.data["response_metadata"]["next_cursor"]})
             self.req_args.update({"params": params})
 
-            if self._use_sync_aiohttp:
-                # We no longer recommend going with this way
-                response = asyncio.get_event_loop().run_until_complete(
-                    self._client._request(  # skipcq: PYL-W0212
-                        http_verb=self.http_verb,
-                        api_url=self.api_url,
-                        req_args=self.req_args,
-                    )
-                )
-            else:
-                # This method sends a request in a synchronous way
-                response = self._client._request_for_pagination(  # skipcq: PYL-W0212
-                    api_url=self.api_url, req_args=self.req_args
-                )
+            response = await self._client._request(  # skipcq: PYL-W0212
+                http_verb=self.http_verb, api_url=self.api_url, req_args=self.req_args,
+            )
 
             self.data = response["data"]
             self.headers = response["headers"]
             self.status_code = response["status_code"]
             return self.validate()
         else:
-            raise StopIteration
+            raise StopAsyncIteration
 
     def get(self, key, default=None):
         """Retrieves any key from the response data.
@@ -175,7 +160,7 @@ class SlackResponse:
         """Check if the response from Slack was successful.
 
         Returns:
-            (SlackResponse)
+            (AsyncSlackResponse)
                 This method returns it's own object. e.g. 'self'
 
         Raises:
