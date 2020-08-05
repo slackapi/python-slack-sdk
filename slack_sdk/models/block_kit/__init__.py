@@ -37,6 +37,7 @@ from .blocks import CallBlock  # noqa
 from .blocks import ContextBlock  # noqa
 from .blocks import DividerBlock  # noqa
 from .blocks import FileBlock  # noqa
+from .blocks import HeaderBlock  # noqa
 from .blocks import ImageBlock  # noqa
 from .blocks import InputBlock  # noqa
 from .blocks import SectionBlock  # noqa
