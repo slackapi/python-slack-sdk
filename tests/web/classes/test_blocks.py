@@ -6,6 +6,7 @@ from slack.web.classes.blocks import (
     ActionsBlock,
     ContextBlock,
     DividerBlock,
+    HeaderBlock,
     ImageBlock,
     SectionBlock, InputBlock, FileBlock, Block, CallBlock,
 )
@@ -688,3 +689,18 @@ class CallBlockTests(unittest.TestCase):
             }
         }
         self.assertDictEqual(input, CallBlock(**input).to_dict())
+
+
+# ----------------------------------------------
+# Header
+# ----------------------------------------------
+
+
+class HeaderBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "header",
+            "block_id": "budget-header",
+            "text": {"type": "plain_text", "text": "Budget Performance"},
+        }
+        self.assertDictEqual(input, HeaderBlock(**input).to_dict())
