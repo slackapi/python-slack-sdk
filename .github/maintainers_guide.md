@@ -8,61 +8,119 @@ this project. If you use this package within your own software as is but don't p
 
 ### Python (and friends)
 
-Not surprisingly, you will need to have Python installed on your system to work on this package. We support non-EOL,
-stable versions of CPython. The current supported versions are listed in the CI configurations (e.g. `.travis.yml`).
-At a minimum, you should have the latest version of Python 2 and the latest version of Python 3 to develop against.
-It's tricky to set up a system that has more than that, so you can lean on the CI servers to test changes on the
-in-between versions for you.
+We recommend using [pyenv](https://github.com/pyenv/pyenv) for Python runtime management. If you use macOS, follow the following steps:
 
-You should also make sure you have the latest versions of `pip`, `setuptools`, `virtualenv`, `wheel`, `twine` and
-[`tox`](https://tox.readthedocs.io/en/latest/) installed with your version of Python.
+```bash
+$ brew update
+$ brew install pyenv
+```
 
-On macOS, the easiest way to install these tools is by using [Homebrew](https://brew.sh/) and installing the `python`
-and `python3` packages. Some of the above packages are preinstalled and you can install the remaining on your own:
-`pip install virtualenv wheel twine tox sphinx && pip3 install virtualenv twine tox sphinx`.
+Install necessary Python runtimes for development/testing. You can rely on Travis CI builds for testing with various major versions. https://github.com/slackapi/python-slackclient/blob/main/.travis.yml
+
+```bash
+$ pyenv install -l | grep -v "-e[conda|stackless|pypy]"
+
+$ pyenv install 3.8.5 # select the latest patch version
+$ pyenv local 3.8.5
+
+$ pyenv versions
+  system
+  3.6.10
+  3.7.7
+* 3.8.5 (set by /path-to-python-slackclient/.python-version)
+
+$ pyenv rehash
+```
+
+Then, you can create a new Virtual Environment this way:
+
+```
+$ python -m venv env_3.8.5
+$ source env_3.8.5/bin/activate
+```
 
 ## Tasks
 
-### Testing
+### Testing (Unit Tests)
 
-Tox is used to run the test suite across multiple isolated versions of Python. It is configured in `tox.ini` to
-run all the supported versions of Python, but when you invoke it, you should only select the versions you have on your
-system. For example, on a system with Python 2.7.13 and Python 3.6.1, you would run the tests using the following
-command: `tox -e flake8,py27,py36` (flake8 is a quality analysis tool).
+When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests by running the command. The `validate` command runs Flake8 (static code analyzer), Black (code formatter), and unit tests in the `tests` directory for you.
+
+```bash
+python setup.py validate # run all
+
+# run a single test
+python setup.py validate \
+  --test-target tests/web/test_web_client.py
+```
+
+You can rely on Travis CI builds for running the tests on a variety of Python runtimes.
+
+### Testing (Integration Tests with Real Slack APIs)
+
+This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slackclient/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
+
+```bash
+python setup.py run_integration_tests # run all
+
+# run a single test
+python setup.py run_integration_tests \
+  --test-target integration_tests/web/test_web_client.py
+```
 
 ### Generating Documentation
 
 The documentation is generated from the source and templates in the `docs-src` directory. The generated documentation
 gets committed to the repo in `docs` and also published to a GitHub Pages website.
 
-You can generate the documentation by running `tox -e docs`.
+You can generate the documentation by running `./docs.sh`.
 
 ### Releasing
 
-1.  Create the commit for the release:
+1. Create the commit for the release:
 
-    - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slackclient/version.py`.
-    - Add a description of changes to the Changelog in `docs-src/changelog.rst`
-    - Build the docs with `./docs.sh`.
-    - Commit with a message including the new version number. For example `2.5.0`.
-    - Push the commit to a branch and create a PR to sanity check.
-    - Merge in release PR.
-    - Create a git tag for the release. For example `git tag 2.5.0`.
-    - Push the tag up to github with `git push origin --tags`
+- Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slackclient/version.py`.
+- Add a description of changes to the Changelog in `docs-src/changelog.rst`
+- Build the docs with `./docs.sh`.
+- Cut off a branch for the release with `git branch -b v2.5.0-release`
+- Set the version in `slack/version.py` (e.g., `2.5.0`)
+- Commit with a message including the new version number: `git commit -m'version 2.5.0'`.
+- Push the commit to a branch and create a PR to sanity check.
+- Merge in release PR after receiving at least one approval from other maintainers.
+- Create a git tag for the release. For example `git tag 2.5.0`.
+- Push the tag up to github with `git push origin --tags`
 
-2.  Distribute the release
+2. Distribute the release
 
-    - Use the latest stable Python runtime
-    - `python -m venv env`
-    - `python setup.py upload`
-    - Create a GitHub Release. You will select the commit with updated version number (e.g. `2.5.0`) to associate with the tag, and name the tag after this version (e.g. `2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
+- Use the latest stable Python runtime
+  - `python -m venv env`
+  - `python setup.py upload`
+- Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
-3.  (Slack Internal) Communicate the release internally. Include a link to the GitHub Release.
+```markdown
+Refer to [v{version} milestone](https://github.com/slackapi/python-slackclient/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
 
-4.  Announce on Slack Team dev4slack in #slack-api
+**Updates**
 
-5.  (Slack Internal) Tweet? Not necessary for patch updates, might be needed for minor updates, definitely needed for
-    major updates. Include a link to the GitHub Release.
+1. [WebClient] #111 Make an awesome change - Thanks @SlackHQ
+1. [RTMClient] #222 Make an awesome change - Thanks @SlackAPI
+
+**All Changes**
+
+https://github.com/slackapi/python-slackclient/compare/{the previous release version tag}...{the release version tag}
+```
+
+3. (Slack Internal) Communicate the release internally
+
+- Include a link to the GitHub release
+
+4. Make announcements
+
+- #slack-api in dev4slack.slack.com
+- #lang-python in community.slack.com
+
+5. (Slack Internal) Tweet by @SlackAPI
+
+- Not necessary for patch updates, might be needed for minor updates, definitely needed for major updates. Include a link to the GitHub release
 
 ## Workflow
 
@@ -73,7 +131,7 @@ This project uses semantic versioning, expressed through the numbering scheme of
 
 ### Branches
 
-`master` is where active development occurs. Long running named feature branches are occasionally created for
+The `main` branch is where active development occurs. Long running named feature branches are occasionally created for
 collaboration on a feature that has a large scope (because everyone cannot push commits to another person's open Pull
 Request). At some point in the future after a major version increment, there may be maintenance branches for older major
 versions.
@@ -87,17 +145,10 @@ Labels are used to run issues through an organized workflow. Here are the basic 
 - `enhancement`: A feature request for something this package might not already do.
 - `docs`: An issue that is purely about documentation work.
 - `tests`: An issue that is purely about testing work.
-- `needs feedback`: An issue that may have claimed to be a bug but was not reproducible, or was otherwise missing some information.
-- `discussion`: An issue that is purely meant to hold a discussion. Typically the maintainers are looking for feedback in this issues.
 - `question`: An issue that is like a support request because the user's usage was not correct.
-- `semver:major|minor|patch`: Metadata about how resolving this issue would affect the version number.
-- `security`: An issue that has special consideration for security reasons.
-- `good first contribution`: An issue that has a well-defined relatively-small scope, with clear expectations. It helps when the testing approach is also known.
-- `duplicate`: An issue that is functionally the same as another issue. Apply this only if you've linked the other issue by number.
 
 **Triage** is the process of taking new issues that aren't yet "seen" and marking them with a basic level of information
-with labels. An issue should have **one** of the following labels applied: `bug`, `enhancement`, `question`,
-`needs feedback`, `docs`, `tests`, or `discussion`.
+with labels. An issue should have **one** of the following labels applied: `bug`, `enhancement`, `question`, `docs`, `tests`, or `discussion`.
 
 Issues are closed when a resolution has been reached. If for any reason a closed issue seems relevant once again,
 reopening is great and better than creating a duplicate issue.
