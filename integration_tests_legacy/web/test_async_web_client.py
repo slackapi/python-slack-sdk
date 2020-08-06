@@ -6,8 +6,7 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
-from slack import AsyncWebClient
-from slack.web.async_base_client import AsyncSlackResponse
+from slack.web.async_client import AsyncWebClient, AsyncSlackResponse
 
 
 class TestAsyncWebClient(unittest.TestCase):
@@ -123,7 +122,7 @@ class TestAsyncWebClient(unittest.TestCase):
             channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(file=upload["file"]["id"])
+        deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
     @async_test
@@ -140,7 +139,7 @@ class TestAsyncWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(
+        deletion = await client.files_delete(
             token=self.bot_token,
             file=upload["file"]["id"],
         )

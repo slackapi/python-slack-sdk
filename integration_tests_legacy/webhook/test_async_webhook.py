@@ -5,8 +5,8 @@ from integration_tests.env_variable_names import SLACK_SDK_TEST_INCOMING_WEBHOOK
     SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME, \
     SLACK_SDK_TEST_BOT_TOKEN
 from integration_tests.helpers import async_test
-from slack import AsyncWebClient
-from slack import AsyncWebhookClient
+from slack.web.async_client import AsyncWebClient
+from slack.webhook.async_client import AsyncWebhookClient
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, DividerBlock, ActionsBlock
 from slack.web.classes.elements import ButtonElement
