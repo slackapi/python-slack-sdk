@@ -158,7 +158,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                                         )
                     body = {"ok": True, "method": parsed_path.path.replace("/", "")}
                 else:
-                    with open(f"tests/data/web_response_{pattern}.json") as file:
+                    with open(f"tests/slack_sdk_fixture/web_response_{pattern}.json") as file:
                         body = json.load(file)
 
                     if self.path == "/api.test" and request_body:
