@@ -11,4 +11,4 @@ from slack_sdk.models.dialoags import TextElementSubtypes  # noqa
 
 from slack import deprecation
 
-deprecation.show_message(__name__, "slack_sdk.models.block_kit")
+deprecation.show_message(__name__, "slack_sdk.models.blocks")

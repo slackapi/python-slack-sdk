@@ -4,7 +4,7 @@ from typing import Optional, List, Union
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models import JsonObject, JsonValidator
-from slack_sdk.models.block_kit import (
+from slack_sdk.models.blocks import (
     ConfirmObject,
     MarkdownTextObject,
     Option,

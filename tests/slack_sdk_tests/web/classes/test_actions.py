@@ -9,7 +9,7 @@ from slack_sdk.models.attachments import (
     ActionLinkButton,
     ActionUserSelector,
 )
-from slack_sdk.models.block_kit import ConfirmObject, Option, OptionGroup
+from slack_sdk.models.blocks import ConfirmObject, Option, OptionGroup
 from slack_sdk.models.dialoags import ActionStaticSelector
 from tests.slack_sdk_tests.web.classes import STRING_3001_CHARS
 

@@ -10,9 +10,9 @@ from integration_tests.helpers import async_test
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.webhook.async_client import AsyncWebhookClient
 from slack_sdk.models.attachments import Attachment, AttachmentField
-from slack_sdk.models.block_kit import SectionBlock, DividerBlock, ActionsBlock
-from slack_sdk.models.block_kit import ButtonElement
-from slack_sdk.models.block_kit import MarkdownTextObject, PlainTextObject
+from slack_sdk.models.blocks import SectionBlock, DividerBlock, ActionsBlock
+from slack_sdk.models.blocks import ButtonElement
+from slack_sdk.models.blocks import MarkdownTextObject, PlainTextObject
 
 
 class TestAsyncWebhook(unittest.TestCase):

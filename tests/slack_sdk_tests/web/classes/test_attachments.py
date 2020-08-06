@@ -9,7 +9,7 @@ from slack_sdk.models.attachments import (
     AttachmentField,
     InteractiveAttachment,
 )
-from slack_sdk.models.block_kit import SectionBlock, ImageBlock
+from slack_sdk.models.blocks import SectionBlock, ImageBlock
 from tests.slack_sdk_tests.web.classes import STRING_301_CHARS
 
 

@@ -7,7 +7,7 @@ from slack_sdk.models.basic_objects import (
     JsonObject,
     JsonValidator,
 )
-from slack_sdk.models.block_kit import Block
+from slack_sdk.models.blocks import Block
 
 LOGGER = logging.getLogger(__name__)
 

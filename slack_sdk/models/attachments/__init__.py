@@ -8,7 +8,7 @@ from slack_sdk.models.basic_objects import (
     JsonObject,
     JsonValidator,
 )
-from slack_sdk.models.block_kit import (
+from slack_sdk.models.blocks import (
     Block,
     Option,
     ConfirmObject,

@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
-from slack_sdk.models.block_kit import Block
+from slack_sdk.models.blocks import Block
 
 
 def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:

@@ -3,7 +3,7 @@ import logging
 import unittest
 
 from slack_sdk.errors import SlackObjectFormationError
-from slack_sdk.models.block_kit import (
+from slack_sdk.models.blocks import (
     InputBlock,
     SectionBlock,
     DividerBlock,

@@ -7,7 +7,7 @@ from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN
 from integration_tests.helpers import async_test
 from slack_sdk import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
-from slack_sdk.models.block_kit import CallBlock
+from slack_sdk.models.blocks import CallBlock
 
 
 class TestWebClient(unittest.TestCase):

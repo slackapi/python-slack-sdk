@@ -8,7 +8,7 @@ from aiohttp import BasicAuth, ClientSession
 
 from slack_sdk.errors import SlackApiError
 from slack_sdk.models.attachments import Attachment
-from slack_sdk.models.block_kit import Block
+from slack_sdk.models.blocks import Block
 from .internal_utils import (
     _debug_log_response,
     _build_request_headers,

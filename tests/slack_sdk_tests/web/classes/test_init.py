@@ -1,7 +1,7 @@
 import unittest
 
 from slack_sdk.models import extract_json
-from slack_sdk.models.block_kit import PlainTextObject, MarkdownTextObject
+from slack_sdk.models.blocks import PlainTextObject, MarkdownTextObject
 
 
 class TestInit(unittest.TestCase):

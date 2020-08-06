@@ -9,9 +9,9 @@ from integration_tests.env_variable_names import (
 from slack_sdk import WebClient
 from slack_sdk.webhook import WebhookClient
 from slack_sdk.models.attachments import Attachment, AttachmentField
-from slack_sdk.models.block_kit import SectionBlock, DividerBlock, ActionsBlock
-from slack_sdk.models.block_kit import ButtonElement
-from slack_sdk.models.block_kit import MarkdownTextObject, PlainTextObject
+from slack_sdk.models.blocks import SectionBlock, DividerBlock, ActionsBlock
+from slack_sdk.models.blocks import ButtonElement
+from slack_sdk.models.blocks import MarkdownTextObject, PlainTextObject
 
 
 class TestWebhook(unittest.TestCase):

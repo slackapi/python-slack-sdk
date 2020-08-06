@@ -2,7 +2,7 @@ import unittest
 from copy import copy
 
 from slack_sdk.errors import SlackObjectFormationError
-from slack_sdk.models.block_kit import Option
+from slack_sdk.models.blocks import Option
 from slack_sdk.models.dialoags import (
     DialogChannelSelector,
     DialogConversationSelector,

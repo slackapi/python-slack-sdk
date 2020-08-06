@@ -3,7 +3,7 @@ import unittest
 import urllib
 
 from slack_sdk.models.attachments import Attachment, AttachmentField
-from slack_sdk.models.block_kit import SectionBlock, ImageBlock
+from slack_sdk.models.blocks import SectionBlock, ImageBlock
 from slack_sdk.webhook import WebhookClient, WebhookResponse
 from tests.slack_sdk_tests.webhook.mock_web_api_server import (
     cleanup_mock_web_api_server,

@@ -2,7 +2,7 @@ import os
 import unittest
 
 import slack_sdk
-from slack_sdk.models.block_kit import DividerBlock
+from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.views import View
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_tests_async.helpers import async_test

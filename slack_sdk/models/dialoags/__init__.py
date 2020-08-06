@@ -5,7 +5,7 @@ from typing import List, Optional, Union, Set
 from slack_sdk.models import extract_json
 from slack_sdk.models.attachments import AbstractActionSelector
 from slack_sdk.models.basic_objects import EnumValidator, JsonObject, JsonValidator
-from slack_sdk.models.block_kit import Option, OptionGroup, DynamicSelectElementTypes
+from slack_sdk.models.blocks import Option, OptionGroup, DynamicSelectElementTypes
 
 TextElementSubtypes = {"email", "number", "tel", "url"}
 

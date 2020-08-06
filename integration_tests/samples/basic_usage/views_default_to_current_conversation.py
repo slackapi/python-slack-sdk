@@ -17,12 +17,12 @@ import os
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from slack_sdk.signature import SignatureVerifier
-from slack_sdk.models.block_kit import InputBlock
-from slack_sdk.models.block_kit import (
+from slack_sdk.models.blocks import InputBlock
+from slack_sdk.models.blocks import (
     ConversationMultiSelectElement,
     ConversationSelectElement,
 )
-from slack_sdk.models.block_kit import PlainTextObject
+from slack_sdk.models.blocks import PlainTextObject
 from slack_sdk.models.views import View
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
