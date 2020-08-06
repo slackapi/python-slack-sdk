@@ -78,6 +78,8 @@ class Block(JsonObject):
                     return InputBlock(**block)
                 elif type == FileBlock.type:
                     return FileBlock(**block)
+                elif type == CallBlock.type:
+                    return CallBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
