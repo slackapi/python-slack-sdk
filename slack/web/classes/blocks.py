@@ -406,6 +406,6 @@ class HeaderBlock(Block):
 
         self.text = TextObject.parse(text)
 
-    @JsonValidator("text or fields attribute must be specified")
-    def _validate_text_or_fields_populated(self):
-        return self.text is not None or self.fields
+    @JsonValidator("text attribute must be specified")
+    def _validate_text_populated(self):
+        return self.text is not None
