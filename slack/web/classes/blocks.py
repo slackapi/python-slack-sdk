@@ -80,6 +80,8 @@ class Block(JsonObject):
                     return FileBlock(**block)
                 elif type == CallBlock.type:
                     return CallBlock(**block)
+                elif type == HeaderBlock.type:
+                    return HeaderBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -381,3 +383,31 @@ class CallBlock(Block):
         self.call_id = call_id
         self.api_decoration_available = api_decoration_available
         self.call = call
+
+
+class HeaderBlock(Block):
+    type = "header"
+    text_max_length = 3000
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"text"})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Union[str, dict, TextObject] = None,
+        **others: dict,
+    ):
+        """A header is a plain-text block that displays in a larger, bold font.
+        https://api.slack.com/reference/block-kit/blocks#header
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text_populated(self):
+        return self.text is not None
