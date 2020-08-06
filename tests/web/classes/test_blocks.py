@@ -704,3 +704,4 @@ class HeaderBlockTests(unittest.TestCase):
             "text": {"type": "plain_text", "text": "Budget Performance"},
         }
         self.assertDictEqual(input, HeaderBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
