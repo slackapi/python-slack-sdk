@@ -174,3 +174,13 @@ class TestAsyncWebhook(unittest.TestCase):
         client = AsyncWebhookClient(url="http://localhost:8888", proxy="http://invalid-host:9999")
         with self.assertRaises(Exception):
             await client.send_dict({"text": "hello!"})
+
+    @async_test
+    async def test_user_agent_customization_issue_769(self):
+        client = AsyncWebhookClient(
+            url="http://localhost:8888/user-agent-this_is-test",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = await client.send_dict({"text": "hi!"})
+        self.assertEqual(resp.body, "ok")

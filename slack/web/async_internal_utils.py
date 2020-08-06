@@ -60,9 +60,10 @@ def _get_headers(
             }
     """
     final_headers = {
-        "User-Agent": get_user_agent(),
         "Content-Type": "application/x-www-form-urlencoded",
     }
+    if headers is None or "User-Agent" not in headers:
+        final_headers["User-Agent"] = get_user_agent()
 
     if token:
         final_headers.update({"Authorization": "Bearer {}".format(token)})

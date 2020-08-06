@@ -30,6 +30,25 @@ class MockHandler(SimpleHTTPRequestHandler):
         try:
             if self.path == "/timeout":
                 time.sleep(2)
+
+            # user-agent-this_is-test
+            if self.path.startswith("/user-agent-"):
+                elements = self.path.split("-")
+                prefix, suffix = elements[2], elements[-1]
+                ua: str = self.headers["User-Agent"]
+                if ua.startswith(prefix) and ua.endswith(suffix):
+                    self.send_response(HTTPStatus.OK)
+                    self.set_common_headers()
+                    self.wfile.write("ok".encode("utf-8"))
+                    self.wfile.close()
+                    return
+                else:
+                    self.send_response(HTTPStatus.BAD_REQUEST)
+                    self.set_common_headers()
+                    self.wfile.write("invalid user agent".encode("utf-8"))
+                    self.wfile.close()
+                    return
+
             if self.path == "/error":
                 self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
                 self.set_common_headers()

@@ -51,6 +51,8 @@ class BaseClient:
         use_sync_aiohttp: bool = False,
         session: Optional[aiohttp.ClientSession] = None,
         headers: Optional[dict] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -61,6 +63,9 @@ class BaseClient:
         self.use_sync_aiohttp = use_sync_aiohttp
         self.session = session
         self.headers = headers or {}
+        self.headers["User-Agent"] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
@@ -110,6 +115,9 @@ class BaseClient:
         """
 
         api_url = _get_url(self.base_url, api_method)
+        headers = headers or {}
+        headers.update(self.headers)
+
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
@@ -483,10 +491,7 @@ class BaseClient:
     def _build_urllib_request_headers(
         self, token: str, has_json: bool, has_files: bool, additional_headers: dict
     ) -> Dict[str, str]:
-        headers = {
-            "User-Agent": get_user_agent(),
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
         headers.update(self.headers)
         if token:
             headers.update({"Authorization": "Bearer {}".format(token)})

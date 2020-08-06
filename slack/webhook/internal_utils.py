@@ -14,15 +14,17 @@ def _build_body(original_body: Dict[str, any]) -> Dict[str, any]:
 
 
 def _build_request_headers(
-    default_headers, additional_headers: Optional[Dict[str, str]],
+    default_headers: Dict[str, str], additional_headers: Optional[Dict[str, str]],
 ) -> Dict[str, str]:
-    if additional_headers is None:
+    if default_headers is None and additional_headers is None:
         return {}
 
     request_headers = {
-        "User-Agent": get_user_agent(),
         "Content-Type": "application/json;charset=utf-8",
     }
+    if default_headers is None or "User-Agent" not in default_headers:
+        request_headers["User-Agent"] = get_user_agent()
+
     request_headers.update(default_headers)
     if additional_headers:
         request_headers.update(additional_headers)

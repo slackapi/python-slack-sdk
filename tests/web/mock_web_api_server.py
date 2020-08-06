@@ -107,6 +107,23 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.wfile.close()
                     return
 
+                if pattern.startswith("user-agent"):
+                    elements = pattern.split(" ")
+                    prefix, suffix = elements[1], elements[-1]
+                    ua: str = self.headers["User-Agent"]
+                    if ua.startswith(prefix) and ua.endswith(suffix):
+                        self.send_response(200)
+                        self.set_common_headers()
+                        self.wfile.write("""{"ok":true}""".encode("utf-8"))
+                        self.wfile.close()
+                        return
+                    else:
+                        self.send_response(400)
+                        self.set_common_headers()
+                        self.wfile.write("""{"ok":false, "error":"invalid_user_agent"}""".encode("utf-8"))
+                        self.wfile.close()
+                        return
+
                 if request_body and "cursor" in request_body:
                     page = request_body["cursor"]
                     pattern = f"{pattern}_{page}"
