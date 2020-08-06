@@ -91,7 +91,7 @@ Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the
 
 RTM Events
 -------------
-.. code-block:: json
+.. code-block:: javascript
 
   {
     'type': 'message',

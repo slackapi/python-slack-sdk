@@ -39,6 +39,7 @@ Sending an ephemeral message, which is only visible to an assigned user in a spe
 as sending a regular message, but with an additional ``user`` parameter.
 
 .. code-block:: python
+
   import os
   from slack import WebClient
 
@@ -261,7 +262,7 @@ Also, to run the above example, the following `Slack app configurations <https:/
 --------
 
 Updating and pushing modals
--------------------
+------------------------------
 You can dynamically update a view inside of a modal by calling `views.update` and passing the view ID returned in the previous `views.open` call.
 
 .. code-block:: python
@@ -426,7 +427,7 @@ See `files.upload <https://api.slack.com/methods/files.upload>`_ for more info.
 --------
 
 Calling any API methods
----------------
+--------------------------
 
 This library covers all the public endpoints as the methods in ``WebClient``. That said, you may see a bit delay of the library release. When you're in a hurry, you can directly use ``api_call`` method as below.
 

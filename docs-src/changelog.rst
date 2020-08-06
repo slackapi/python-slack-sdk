@@ -2,6 +2,22 @@
 Changelog
 ==============================================
 
+v2.8.0 (2020-08-06)
+-------------------
+
+Refer to `v2.8.0 milestone <https://github.com/slackapi/python-slackclient/milestone/14?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**New Features**
+
+1. [WebClient] #765 #766 Introduce AsyncWebClient/AsyncWebhookClient providing coroutines - Thanks @seratch
+2. [Block Kit] #767 #768 Add "header" block support - Thanks @mwbrooks
+
+**Updates**
+
+1. [WebClient] #738 Add HTTP_PROXY, HTTPS_PROXY env variable support in async WebClient - Thanks @iamtofr @seratch
+2. [WebClient] #769 #773 Enable User-Agent to have additional info part - Thanks @seratch
+3. [WebClient] #770 #771 Fix a bug where ``files.upload``'s file param doesn't accept bytes data - Thanks @seratch
+
 v2.7.3 (2020-07-20)
 -------------------
 

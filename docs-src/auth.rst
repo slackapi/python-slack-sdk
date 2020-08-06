@@ -1,5 +1,5 @@
 ==============================================
-Tokens & Authentication
+Tokens & Installation
 ==============================================
 .. _handling-tokens:
 
@@ -12,13 +12,13 @@ The OAuth token you use to call the Slack API has access to the data on the work
 
 .. code-block:: python
 
-  token = 'xoxb-abc-1232'
+  token = 'xoxb-111-222-xxxxx'
 
 We recommend you pass tokens in as environment variables, or persist them in a database that is accessed at runtime. You can add a token to the environment by starting your app as:
 
 .. code-block:: python
 
-  SLACK_BOT_TOKEN="xoxb-abc-1232" python myapp.py
+  SLACK_BOT_TOKEN="xoxb-111-222-xxxxx" python myapp.py
 
 Then retrieve the key with:
 
@@ -27,7 +27,7 @@ Then retrieve the key with:
   import os
   SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 
-For additional information, please see our `Safely Storing Credentials <https://api.slack.com/docs/oauth-safety>`_ page.
+For additional information, please see our `Safely Storing Credentials <https://api.slack.com/authentication/best-practices>`_ page.
 
 Single Workspace Install
 ---------------------------------------
@@ -37,39 +37,42 @@ Once you've setup your features, click on the **Install App to Team** button fou
 If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to
 your workspace for changes to take effect.
 
-For additional information, see the `Installing Apps <https://api.slack.com/slack-apps#installing_apps>`_ of our `Building Slack apps <https://api.slack.com/slack-apps#installing_apps>`_ page.
+For additional information, see the `Installing Apps <https://api.slack.com/start/overview#installing_distributing>`_ of our `Building Slack apps <https://api.slack.com/start>`_ page.
 
 Multiple Workspace Install
----------------------------------------------------
+-------------------------------------------------------
 If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about `how Slack handles Oauth <https://api.slack.com/authentication/oauth-v2>`_.
 
-(The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we'll use `Flask <http://flask.pocoo.org/>`_.)
+(The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we'll use `Flask <https://flask.palletsprojects.com/>`_.)
 
 To configure your app for OAuth, you'll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from your `app's configuration page <https://api.slack.com/apps>`_. The scopes are determined by the functionality of the app -- every method you wish to access has a corresponding scope and your app will need to request that scope in order to be able to access the method. Review Slack's `full list of OAuth scopes <https://api.slack.com/scopes>`_.
 
 .. code-block:: python
 
   import os
-  import slack
+  from slack import WebClient
   from flask import Flask, request
 
   client_id = os.environ["SLACK_CLIENT_ID"]
   client_secret = os.environ["SLACK_CLIENT_SECRET"]
-  oauth_scope = os.environ["SLACK_BOT_SCOPE"]
+  oauth_scope = os.environ["SLACK_SCOPES"]
 
   app = Flask(__name__)
 
 **The OAuth initiation link**
 
-To begin the OAuth flow that will install your app on a workspace, you'll need to provide the user with a link to Slack's OAuth page. This can be a simple link to https://slack.com/oauth/authorize with ``scope`` and ``client_id`` query parameters, or you can use our pre-built `Add to Slack button <https://api.slack.com/docs/slack-button>`_ to do all the work for you.
+To begin the OAuth flow that will install your app on a workspace, you'll need to provide the user with a link to Slack's OAuth page. This can be a simple link to ``https://slack.com/oauth/v2/authorize`` with ``scope`` and ``client_id`` query parameters, or you can use our pre-built `Add to Slack button <https://api.slack.com/docs/slack-button>`_ to do all the work for you.
 
 This link directs the user to Slack's OAuth acceptance page, where the user will review and accept or refuse the permissions your app is requesting as defined by the scope(s).
 
 .. code-block:: python
 
-  @app.route("/begin_auth", methods=["GET"])
+  @app.route("/slack/install", methods=["GET"])
   def pre_install():
-    return f'<a href="https://slack.com/oauth/v2/authorize?scope={ oauth_scope }&client_id={ client_id }">Add to Slack</a>'
+    state = "randomly-generated-one-time-value"
+    return '<a href="https://slack.com/oauth/v2/authorize?' \
+      f'scope={oauth_scope}&client_id={client_id}&state={state}">' \
+      'Add to Slack</a>'
 
 **The OAuth completion page**
 
@@ -77,34 +80,57 @@ Once the user has agreed to the permissions you've requested, Slack will redirec
 
 .. code-block:: python
 
-  @app.route("/finish_auth", methods=["GET", "POST"])
+  @app.route("/slack/oauth_redirect", methods=["GET"])
   def post_install():
+    # Verify the "state" parameter
+
     # Retrieve the auth code from the request params
-    auth_code = request.args['code']
+    code_param = request.args['code']
 
     # An empty string is a valid token for this request
-    client = slack.WebClient(token="")
+    client = WebClient()
 
     # Request the auth tokens from Slack
     response = client.oauth_v2_access(
       client_id=client_id,
       client_secret=client_secret,
-      code=auth_code
+      code=code_param
     )
 
 A successful request to ``oauth.v2.access`` will yield a JSON payload with at least one token, a bot token that begins with ``xoxb``.
 
 .. code-block:: python
 
-  # Save the bot token to an environmental variable or to your data store
-  # for later use
-  os.environ["SLACK_BOT_TOKEN"] = response['access_token']
+  @app.route("/slack/oauth_redirect", methods=["GET"])
+  def post_install():
+    # Verify the "state" parameter
 
-  # Don't forget to let the user know that auth has succeeded!
-  return "Auth complete!"
+    # Retrieve the auth code from the request params
+    code_param = request.args['code']
+
+    # An empty string is a valid token for this request
+    client = WebClient()
+
+    # Request the auth tokens from Slack
+    response = client.oauth_v2_access(
+      client_id=client_id,
+      client_secret=client_secret,
+      code=code_param
+    )
+    print(response)
+
+    # Save the bot token to an environmental variable or to your data store
+    # for later use
+    os.environ["SLACK_BOT_TOKEN"] = response['access_token']
+
+    # Don't forget to let the user know that OAuth has succeeded!
+    return "Installation is completed!"
+
+  if __name__ == "__main__":
+    app.run("localhost", 3000)
 
 Once your user has completed the OAuth flow, you'll be able to use the provided tokens to call any of Slack's API methods that require an access token.
 
-See the :ref:`Web API usage <basic_usage>` section of this documentation for usage examples.
+See the `Basic Usage <./basic_usage.html>`_ section of this documentation for usage examples.
 
 .. include:: metadata.rst

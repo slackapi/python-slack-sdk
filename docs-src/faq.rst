@@ -3,7 +3,7 @@ Frequently Asked Questions
 ==============================================
 
 I cannot install slackclient...
-******************
+*********************************
 
 We recommend using `virtualenv (venv) <https://docs.python.org/3/tutorial/venv.html>`_ to set up your Python runtime.
 
@@ -36,7 +36,7 @@ Then, verify the following code works on the Python REPL (you can start it by ju
 If you encounter an error saying ``AttributeError: module 'slack' has no attribute 'WebClient'``, run ``pip list``. If you find both ``slackclient`` and ``slack`` in the output, try removing ``slack`` by ``pip uninstall slack`` and reinstalling ``slackclient``.
 
 Should I go with run_async?
-******************
+****************************
 
 For most cases, we recommend going with ``run_async=False`` mode. So, the default is ``False``.
 
@@ -47,17 +47,17 @@ If you have to simultaneously run ``WebClient`` with ``run_async=True`` outside 
 I found a bug!
 ******************
 
-That's great! Thank you. Let us know on the `Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_. If you're feeling particularly ambitious, why not submit a `pull request <https://github.com/slackapi/python-slackclient/pulls>`_ with a bug fix?
+That's great! Thank you. Let us know on the `Issue Tracker`_. If you're feeling particularly ambitious, why not submit a `pull request`_ with a bug fix?
 
 There's a feature missing!
 *******************************
 
-There's always something more that could be added! You can let us know in the `Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ to start a discussion around the proposed feature, that's a good start. If you're feeling particularly ambitious, why not write the feature yourself, and submit a `pull request <https://github.com/slackapi/python-slackclient/pulls>`_! We love feedback and we love help and we don't bite. Much.
+There's always something more that could be added! You can let us know in the `Issue Tracker`_ to start a discussion around the proposed feature, that's a good start. If you're feeling particularly ambitious, why not write the feature yourself, and submit a `pull request`_! We love feedback and we love help and we don't bite. Much.
 
 How do I contribute?
 *********************************
 
-What an excellent question. First of all, please have a look at our general `contributing guidelines <https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md>`_.
+What an excellent question. First of all, please have a look at our general `contributing guidelines`_.
 
 All done? Great! While we're super excited to incorporate your new feature, there are a couple of things we want to make sure you've given thought to.
 
@@ -74,7 +74,7 @@ Including these two items with your pull request will totally make our day—and
 On that note...
 
 How do I compile the documentation?
-***********************************
+*************************************
 
 This project's documentation is generated with `Sphinx <http://www.sphinx-doc.org>`_. If you are editing one of the many reStructuredText files in the ``docs-src`` folder, you'll need to rebuild the documentation. It is recommended to run the following steps inside a ``virtualenv`` environment.
 

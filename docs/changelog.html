@@ -115,7 +115,7 @@
           <div id="api_sections">
              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#keeping-tokens-safe">Keeping tokens safe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-install">Single Workspace Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#multiple-workspace-install">Multiple Workspace Install</a></li>
@@ -166,6 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v2-7-1-2020-06-04">v2.7.1 (2020-06-04)</a></li>
@@ -233,6 +234,21 @@
           <div class="card">
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v2-8-0-2020-08-06">
+<h2>v2.8.0 (2020-08-06)<a class="headerlink" href="#v2-8-0-2020-08-06" title="Permalink to this headline">¶</a></h2>
+<p>Refer to <a class="reference external" href="https://github.com/slackapi/python-slackclient/milestone/14?closed=1">v2.8.0 milestone</a> to know the complete list of the issues resolved by this release.</p>
+<p><strong>New Features</strong></p>
+<ol class="arabic simple">
+<li><p>[WebClient] #765 #766 Introduce AsyncWebClient/AsyncWebhookClient providing coroutines - Thanks &#64;seratch</p></li>
+<li><p>[Block Kit] #767 #768 Add “header” block support - Thanks &#64;mwbrooks</p></li>
+</ol>
+<p><strong>Updates</strong></p>
+<ol class="arabic simple">
+<li><p>[WebClient] #738 Add HTTP_PROXY, HTTPS_PROXY env variable support in async WebClient - Thanks &#64;iamtofr &#64;seratch</p></li>
+<li><p>[WebClient] #769 #773 Enable User-Agent to have additional info part - Thanks &#64;seratch</p></li>
+<li><p>[WebClient] #770 #771 Fix a bug where <code class="docutils literal notranslate"><span class="pre">files.upload</span></code>’s file param doesn’t accept bytes data - Thanks &#64;seratch</p></li>
+</ol>
+</div>
 <div class="section" id="v2-7-3-2020-07-20">
 <h2>v2.7.3 (2020-07-20)<a class="headerlink" href="#v2-7-3-2020-07-20" title="Permalink to this headline">¶</a></h2>
 <p>Refer to <a class="reference external" href="https://github.com/slackapi/python-slackclient/milestone/13?closed=1">v2.7.3 milestone</a> to know the complete list of the issues resolved by this release.</p>

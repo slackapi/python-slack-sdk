@@ -115,7 +115,7 @@
           <div id="api_sections">
              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Authentication</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#keeping-tokens-safe">Keeping tokens safe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-install">Single Workspace Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth.html#multiple-workspace-install">Multiple Workspace Install</a></li>
@@ -166,6 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-1-2020-06-04">v2.7.1 (2020-06-04)</a></li>
@@ -261,6 +262,19 @@
 </div>
 <p>Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
 as sending a regular message, but with an additional <code class="docutils literal notranslate"><span class="pre">user</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postEphemeral</span><span class="p">(</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+  <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello silently from your app! :tada:&quot;</span><span class="p">,</span>
+  <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
 </div>
 <hr class="docutils" />
