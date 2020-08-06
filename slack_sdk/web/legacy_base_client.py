@@ -315,7 +315,7 @@ class LegacyBaseClient:
                         f: BinaryIO = open(v.encode("utf-8", "ignore"), "rb")
                         files_to_close.append(f)
                         request_data.update({k: f})
-                    elif isinstance(v, bytearray):
+                    elif isinstance(v, (bytearray, bytes)):
                         request_data.update({k: io.BytesIO(v)})
                     else:
                         request_data.update({k: v})
