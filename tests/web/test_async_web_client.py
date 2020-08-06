@@ -1,8 +1,6 @@
 import re
 import unittest
 
-import aiohttp
-
 import slack.errors as err
 from slack import AsyncWebClient
 from tests.helpers import async_test
@@ -130,3 +128,14 @@ class TestAsyncWebClient(unittest.TestCase):
         except err.SlackApiError as e:
             self.assertTrue(
                 str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
+
+    @async_test
+    async def test_user_agent_customization_issue_769_async(self):
+        client = AsyncWebClient(
+            token="xoxb-user-agent this_is test",
+            base_url="http://localhost:8888",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = await client.api_test()
+        self.assertTrue(resp["ok"])

@@ -263,3 +263,25 @@ class TestWebClient(unittest.TestCase):
         except err.SlackApiError as e:
             self.assertTrue(
                 str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
+
+    def test_user_agent_customization_issue_769(self):
+        client = WebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-user-agent this_is test",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = client.api_test()
+        self.assertTrue(resp["ok"])
+
+    @async_test
+    async def test_user_agent_customization_issue_769_async(self):
+        client = WebClient(
+            run_async=True,
+            base_url="http://localhost:8888",
+            token="xoxb-user-agent this_is test",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = await client.api_test()
+        self.assertTrue(resp["ok"])

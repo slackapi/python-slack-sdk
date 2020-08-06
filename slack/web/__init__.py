@@ -1,6 +1,6 @@
 import platform
 import sys
-from typing import Dict
+from typing import Dict, Optional
 
 import slack.version as slack_version
 
@@ -26,7 +26,7 @@ def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:
     return None
 
 
-def get_user_agent():
+def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
     """Construct the user-agent header with the package info,
     Python version and OS version.
 
@@ -39,4 +39,6 @@ def get_user_agent():
     python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(v=sys.version_info)
     system_info = "{0}/{1}".format(platform.system(), platform.release())
     user_agent_string = " ".join([python_version, client, system_info])
-    return user_agent_string
+    prefix = f"{prefix} " if prefix else ""
+    suffix = f" {suffix}" if suffix else ""
+    return prefix + user_agent_string + suffix

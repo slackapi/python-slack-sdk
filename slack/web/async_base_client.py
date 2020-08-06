@@ -5,7 +5,7 @@ from typing import Optional, Union, Dict
 import aiohttp
 from aiohttp import FormData
 
-from slack.web import convert_bool_to_0_or_1
+from slack.web import convert_bool_to_0_or_1, get_user_agent
 from slack.web.async_internal_utils import (
     _build_req_args,
     _get_url,
@@ -29,6 +29,8 @@ class AsyncBaseClient:
         session: Optional[aiohttp.ClientSession] = None,
         trust_env_in_session: bool = False,
         headers: Optional[dict] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -39,6 +41,9 @@ class AsyncBaseClient:
         # https://github.com/slackapi/python-slackclient/issues/738
         self.trust_env_in_session = trust_env_in_session
         self.headers = headers or {}
+        self.headers["User-Agent"] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
         self._logger = logging.getLogger(__name__)
 
     async def api_call(  # skipcq: PYL-R1710
@@ -87,6 +92,9 @@ class AsyncBaseClient:
         """
 
         api_url = _get_url(self.base_url, api_method)
+        headers = headers or {}
+        headers.update(self.headers)
+
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
