@@ -10,7 +10,12 @@ from urllib.request import Request, urlopen
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.block_kit import Block
-from .internal_utils import _build_body, _build_request_headers, _debug_log_response
+from .internal_utils import (
+    _build_body,
+    _build_request_headers,
+    _debug_log_response,
+    get_user_agent,
+)
 from .webhook_response import WebhookResponse
 
 
@@ -24,6 +29,8 @@ class WebhookClient:
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
         default_headers: Optional[Dict[str, str]] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -31,12 +38,17 @@ class WebhookClient:
         :param ssl: ssl.SSLContext to use for requests
         :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
         :param default_headers: request headers to add to all requests
+        :param user_agent_prefix: prefix for User-Agent header value
+        :param user_agent_suffix: suffix for User-Agent header value
         """
         self.url = url
         self.timeout = timeout
         self.ssl = ssl
         self.proxy = proxy
         self.default_headers = default_headers if default_headers else {}
+        self.default_headers["User-Agent"] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
 
     def send(
         self,

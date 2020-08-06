@@ -137,3 +137,14 @@ class TestAsyncWebClient(unittest.TestCase):
                 ),
                 e,
             )
+
+    @async_test
+    async def test_user_agent_customization_issue_769_async(self):
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-user-agent this_is test",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = await client.api_test()
+        self.assertTrue(resp["ok"])

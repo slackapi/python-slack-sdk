@@ -168,3 +168,12 @@ class TestWebhook(unittest.TestCase):
         )
         with self.assertRaises(urllib.error.URLError):
             client.send_dict({"text": "hello!"})
+
+    def test_user_agent_customization_issue_769(self):
+        client = WebhookClient(
+            url="http://localhost:8888/user-agent-this_is-test",
+            user_agent_prefix="this_is",
+            user_agent_suffix="test",
+        )
+        resp = client.send_dict({"text": "hi!"})
+        self.assertEqual(resp.body, "ok")

@@ -27,7 +27,7 @@ def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:
     return None
 
 
-def get_user_agent():
+def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
     """Construct the user-agent header with the package info,
     Python version and OS version.
 
@@ -40,7 +40,9 @@ def get_user_agent():
     python_version = "Python/{v.major}.{v.minor}.{v.micro}".format(v=sys.version_info)
     system_info = "{0}/{1}".format(platform.system(), platform.release())
     user_agent_string = " ".join([python_version, client, system_info])
-    return user_agent_string
+    prefix = f"{prefix} " if prefix else ""
+    suffix = f" {suffix}" if suffix else ""
+    return prefix + user_agent_string + suffix
 
 
 def _get_url(base_url: str, api_method: str) -> str:
@@ -80,9 +82,10 @@ def _get_headers(
             }
     """
     final_headers = {
-        "User-Agent": get_user_agent(),
         "Content-Type": "application/x-www-form-urlencoded",
     }
+    if headers is None or "User-Agent" not in headers:
+        final_headers["User-Agent"] = get_user_agent()
 
     if token:
         final_headers.update({"Authorization": "Bearer {}".format(token)})

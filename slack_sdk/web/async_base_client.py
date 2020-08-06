@@ -15,6 +15,7 @@ from .internal_utils import (
     convert_bool_to_0_or_1,
     _build_req_args,
     _get_url,
+    get_user_agent,
 )
 
 
@@ -31,6 +32,8 @@ class AsyncBaseClient:
         session: Optional[aiohttp.ClientSession] = None,
         trust_env_in_session: bool = False,
         headers: Optional[dict] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -41,6 +44,9 @@ class AsyncBaseClient:
         # https://github.com/slackapi/python-slackclient/issues/738
         self.trust_env_in_session = trust_env_in_session
         self.headers = headers or {}
+        self.headers["User-Agent"] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
         self._logger = logging.getLogger(__name__)
 
     async def api_call(  # skipcq: PYL-R1710
@@ -94,6 +100,8 @@ class AsyncBaseClient:
         elif isinstance(auth, BasicAuth):
             headers["Authorization"] = auth.encode()
 
+        headers = headers or {}
+        headers.update(self.headers)
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,

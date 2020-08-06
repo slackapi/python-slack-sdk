@@ -9,7 +9,12 @@ from aiohttp import BasicAuth, ClientSession
 from slack_sdk.errors import SlackApiError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.block_kit import Block
-from .internal_utils import _debug_log_response, _build_request_headers, _build_body
+from .internal_utils import (
+    _debug_log_response,
+    _build_request_headers,
+    _build_body,
+    get_user_agent,
+)
 from .webhook_response import WebhookResponse
 
 
@@ -26,6 +31,8 @@ class AsyncWebhookClient:
         trust_env_in_session: bool = False,
         auth: Optional[BasicAuth] = None,
         default_headers: Optional[Dict[str, str]] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -36,6 +43,8 @@ class AsyncWebhookClient:
         :param trust_env_in_session: True/False for aiohttp.ClientSession
         :param auth: Basic auth info for aiohttp.ClientSession
         :param default_headers: request headers to add to all requests
+        :param user_agent_prefix: prefix for User-Agent header value
+        :param user_agent_suffix: suffix for User-Agent header value
         """
         self.url = url
         self.timeout = timeout
@@ -45,6 +54,9 @@ class AsyncWebhookClient:
         self.session = session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
+        self.default_headers["User-Agent"] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
 
     async def send(
         self,
