@@ -68,6 +68,7 @@ class UploadCommand(BaseCommand):
         try:
             self.status("Removing previous builds ...")
             rmtree(os.path.join(here, "dist"))
+            rmtree(os.path.join(here, "build"))
         except OSError:
             pass
 
@@ -75,19 +76,14 @@ class UploadCommand(BaseCommand):
             "Building Source and Wheel (universal) distribution ...",
             [sys.executable, "setup.py", "sdist", "bdist_wheel", "--universal"],
         )
-
         self._run(
             "Installing Twine dependency ...",
             [sys.executable, "-m", "pip", "install", "twine"],
         )
-
         self._run(
             "Uploading the package to PyPI via Twine ...",
             [sys.executable, "-m", "twine", "upload", "dist/*"],
         )
-
-        self._run("Creating git tags ...", ["git", "tag", f"v{__version__}"])
-        self._run("Pushing git tags ...", ["git", "push", "--tags"])
 
 
 class CodegenCommand(BaseCommand):
