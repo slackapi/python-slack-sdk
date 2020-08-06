@@ -63,6 +63,7 @@ class SectionBlockTests(unittest.TestCase):
             }
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_document_2(self):
         input = {
@@ -218,6 +219,7 @@ class DividerBlockTests(unittest.TestCase):
             "type": "divider"
         }
         self.assertDictEqual(input, DividerBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_json(self):
         self.assertDictEqual(
@@ -253,6 +255,7 @@ class ImageBlockTests(unittest.TestCase):
             "alt_text": "An incredibly cute kitten."
         }
         self.assertDictEqual(input, ImageBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_json(self):
         self.assertDictEqual(
@@ -337,6 +340,7 @@ class ActionsBlockTests(unittest.TestCase):
             ]
         }
         self.assertDictEqual(input, ActionsBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_document_2(self):
         input = {
@@ -444,6 +448,7 @@ class ContextBlockTests(unittest.TestCase):
             ]
         }
         self.assertDictEqual(input, ContextBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_basic_json(self):
         self.elements = [
@@ -605,6 +610,7 @@ class InputBlockTests(unittest.TestCase):
         ]
         for input in blocks:
             self.assertDictEqual(input, InputBlock(**input).to_dict())
+            self.assertDictEqual(input, Block.parse(input).to_dict())
 
 
 # ----------------------------------------------
@@ -619,6 +625,7 @@ class FileBlockTests(unittest.TestCase):
             "source": "remote",
         }
         self.assertDictEqual(input, FileBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
 # ----------------------------------------------
 # Call
@@ -689,6 +696,7 @@ class CallBlockTests(unittest.TestCase):
             }
         }
         self.assertDictEqual(input, CallBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
 
 # ----------------------------------------------

@@ -78,6 +78,8 @@ class Block(JsonObject):
                     return InputBlock(**block)
                 elif type == FileBlock.type:
                     return FileBlock(**block)
+                elif type == CallBlock.type:
+                    return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
                 else:
