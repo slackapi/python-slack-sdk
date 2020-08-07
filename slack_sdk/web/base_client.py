@@ -1,6 +1,5 @@
 """A Python module for interacting with Slack's Web API."""
 
-import asyncio
 import copy
 import hashlib
 import hmac
@@ -40,7 +39,6 @@ class BaseClient:
         token: Optional[str] = None,
         base_url: str = BASE_URL,
         timeout: int = 30,
-        loop: Optional[asyncio.AbstractEventLoop] = None,
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
         headers: Optional[dict] = None,
@@ -57,7 +55,6 @@ class BaseClient:
             user_agent_prefix, user_agent_suffix
         )
         self._logger = logging.getLogger(__name__)
-        self._event_loop = loop
 
     def api_call(  # skipcq: PYL-R1710
         self,
@@ -70,7 +67,7 @@ class BaseClient:
         json: dict = None,  # skipcq: PYL-W0621
         headers: dict = None,
         auth: dict = None,
-    ) -> Union[asyncio.Future, SlackResponse]:
+    ) -> SlackResponse:
         """Create a request and execute the API call to Slack.
 
         Args:
