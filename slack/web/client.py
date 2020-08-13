@@ -2067,7 +2067,12 @@ class WebClient(BaseClient):
         return self.api_call("views.push", json=kwargs)
 
     def views_update(
-        self, *, view: Union[dict, View], external_id: str = None, view_id: str = None, **kwargs
+        self,
+        *,
+        view: Union[dict, View],
+        external_id: str = None,
+        view_id: str = None,
+        **kwargs
     ) -> Union[Future, SlackResponse]:
         """Update an existing view.
 

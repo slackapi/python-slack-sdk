@@ -2045,7 +2045,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("views.open", json=kwargs)
 
     async def views_push(
-        self, *, trigger_id: str, view: dict, **kwargs
+        self, *, trigger_id: str, view: Union[dict, View], **kwargs
     ) -> AsyncSlackResponse:
         """Push a view onto the stack of a root view.
 
@@ -2059,13 +2059,22 @@ class AsyncWebClient(AsyncBaseClient):
         Args:
             trigger_id (str): Exchange a trigger to post to the user.
                 e.g. '12345.98765.abcd2358fdea'
-            view (dict): The view payload.
+            view (dict or View): The view payload.
         """
-        kwargs.update({"trigger_id": trigger_id, "view": view})
+        kwargs.update({"trigger_id": trigger_id})
+        if isinstance(view, View):
+            kwargs.update({"view": view.to_dict()})
+        else:
+            kwargs.update({"view": view})
         return await self.api_call("views.push", json=kwargs)
 
     async def views_update(
-        self, *, view: dict, external_id: str = None, view_id: str = None, **kwargs
+        self,
+        *,
+        view: Union[dict, View],
+        external_id: str = None,
+        view_id: str = None,
+        **kwargs
     ) -> AsyncSlackResponse:
         """Update an existing view.
 
@@ -2076,7 +2085,7 @@ class AsyncWebClient(AsyncBaseClient):
         to learn more about updating views and avoiding race conditions with the hash argument.
 
         Args:
-            view (dict): The view payload.
+            view (dict or View): The view payload.
             external_id (str): A unique identifier of the view set by the developer.
                 e.g. 'bmarley_view2'
             view_id (str): A unique identifier of the view to be updated.
@@ -2084,7 +2093,6 @@ class AsyncWebClient(AsyncBaseClient):
         Raises:
             SlackRequestError: Either view_id or external_id is required.
         """
-        kwargs.update({"view": view})
         if external_id:
             kwargs.update({"external_id": external_id})
         elif view_id:
@@ -2092,10 +2100,15 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             raise e.SlackRequestError("Either view_id or external_id is required.")
 
+        if isinstance(view, View):
+            kwargs.update({"view": view.to_dict()})
+        else:
+            kwargs.update({"view": view})
+
         return await self.api_call("views.update", json=kwargs)
 
     async def views_publish(
-        self, *, user_id: str, view: dict, **kwargs
+        self, *, user_id: str, view: Union[dict, View], **kwargs
     ) -> AsyncSlackResponse:
         """Publish a static view for a User.
         Create or update the view that comprises an
@@ -2104,7 +2117,11 @@ class AsyncWebClient(AsyncBaseClient):
         Args:
             user_id (str): id of the user you want publish a view to.
                 e.g. 'U0BPQUNTA'
-            view (dict): The view payload.
+            view (dict or View): The view payload.
         """
-        kwargs.update({"user_id": user_id, "view": view})
+        kwargs.update({"user_id": user_id})
+        if isinstance(view, View):
+            kwargs.update({"view": view.to_dict()})
+        else:
+            kwargs.update({"view": view})
         return await self.api_call("views.publish", json=kwargs)
