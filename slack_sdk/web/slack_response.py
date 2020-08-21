@@ -34,7 +34,6 @@ class SlackResponse:
 
     users = []
     for page in client.users_list(limit=2):
-        TODO: This example should specify when to break.
         users = users + page['members']
     ```
 

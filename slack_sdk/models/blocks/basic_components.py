@@ -228,7 +228,7 @@ class Option(JsonObject):
     @classmethod
     def parse_all(
         cls, options: Optional[List[Union[dict, "Option"]]]
-    ) -> List["Option"]:
+    ) -> Optional[List["Option"]]:
         if options is None:
             return None
         option_objects: List[Option] = []

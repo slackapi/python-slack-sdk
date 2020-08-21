@@ -10,7 +10,7 @@ import signal
 from asyncio import Future
 from ssl import SSLContext
 from threading import current_thread, main_thread
-from typing import List
+from typing import List, Any, Union
 from typing import Optional, Callable, DefaultDict
 
 import aiohttp
@@ -178,7 +178,7 @@ class RTMClient(object):
             cls._validate_callback(callback)
             cls._callbacks[event].append(callback)
 
-    def start(self) -> asyncio.Future:
+    def start(self) -> Union[asyncio.Future, Any]:
         """Starts an RTM Session with Slack.
 
         Makes an authenticated call to Slack's RTM API to retrieve
@@ -199,7 +199,7 @@ class RTMClient(object):
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
 
-        future = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
+        future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
         if self.run_async:
             return future
@@ -407,10 +407,10 @@ class RTMClient(object):
                     # returning
                     continue
                 self._logger.warning(
-                    "Websocket was closed (%s).", self._websocket.close_code
+                    "Websocket was closed (%s).", self._websocket.close_code if self._websocket else ""
                 )
                 await self._dispatch_event(
-                    event="error", data=self._websocket.exception()
+                    event="error", data=self._websocket.exception() if self._websocket else ""
                 )
                 self._websocket = None
                 await self._dispatch_event(event="close")
@@ -561,12 +561,13 @@ class RTMClient(object):
         of wait time specified via 'max_wait_time'. However,
         if Slack returned how long to wait use that.
         """
-        wait_time = exception.response.get("headers", {}).get(
-            "Retry-After",
-            min((2 ** self._connection_attempts) + random.random(), max_wait_time),
-        )
-        self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
-        await asyncio.sleep(float(wait_time))
+        if hasattr(exception, "response"):
+            wait_time = exception.response.get("headers", {}).get(
+                "Retry-After",
+                min((2 ** self._connection_attempts) + random.random(), max_wait_time),
+            )
+            self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
+            await asyncio.sleep(float(wait_time))
 
     def _close_websocket(self) -> List[Future]:
         """Closes the websocket connection."""

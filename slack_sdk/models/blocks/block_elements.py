@@ -58,7 +58,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     @classmethod
     def parse(
         cls, block_element: Union[dict, "BlockElement"]
-    ) -> Optional["BlockElement"]:
+    ) -> Optional[Union["BlockElement", TextObject]]:
         if block_element is None:
             return None
         elif isinstance(block_element, dict):

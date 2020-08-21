@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 
 from slack_sdk.web.internal_utils import (
     _parse_web_class_objects,
@@ -9,11 +9,13 @@ from slack_sdk.web.internal_utils import (
 from .webhook_response import WebhookResponse
 
 
-def _build_body(original_body: Dict[str, any]) -> Dict[str, any]:
-    body = {k: v for k, v in original_body.items() if v is not None}
-    body = convert_bool_to_0_or_1(body)
-    _parse_web_class_objects(body)
-    return body
+def _build_body(original_body: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    if original_body:
+        body = {k: v for k, v in original_body.items() if v is not None}
+        body = convert_bool_to_0_or_1(body)
+        _parse_web_class_objects(body)
+        return body
+    return None
 
 
 def _build_request_headers(

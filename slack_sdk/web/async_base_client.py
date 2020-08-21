@@ -1,6 +1,6 @@
 import logging
 from ssl import SSLContext
-from typing import Optional, Union, Dict
+from typing import Optional, Union, Dict, Any
 
 import aiohttp
 from aiohttp import FormData, BasicAuth
@@ -161,7 +161,7 @@ class AsyncBaseClient:
         }
         return AsyncSlackResponse(**{**data, **res}).validate()
 
-    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
+    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, Any]:
         """Submit the HTTP request with the running session or a new session.
         Returns:
             A dictionary of the response data.

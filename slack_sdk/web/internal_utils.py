@@ -2,7 +2,7 @@ import json
 import platform
 import sys
 from ssl import SSLContext
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 from typing import Union, List
 from urllib.parse import urljoin
 
@@ -12,7 +12,7 @@ from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
 
 
-def convert_bool_to_0_or_1(params: Dict[str, any]) -> Dict[str, any]:
+def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Converts all bool values in dict to "0" or "1".
 
     Slack APIs safely accept "0"/"1" as boolean values.
@@ -205,7 +205,7 @@ def _next_cursor_is_present(data) -> bool:
     return present
 
 
-def _to_0_or_1_if_bool(v: any) -> str:
+def _to_0_or_1_if_bool(v: Any) -> str:
     if isinstance(v, bool):
         return "1" if v else "0"
-    return v
+    return str(v)

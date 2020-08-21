@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, List, Optional, Set, Union, Any
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -373,7 +373,7 @@ class CallBlock(Block):
         *,
         call_id: str,
         api_decoration_available: Optional[bool] = None,
-        call: Optional[Dict[str, Dict[str, any]]] = None,
+        call: Optional[Dict[str, Dict[str, Any]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):

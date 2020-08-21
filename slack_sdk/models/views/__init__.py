@@ -179,18 +179,18 @@ class ViewState(JsonObject):
                 self._show_warning_about_unknown(v)
         self.values = value_objects
 
-    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:
+    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]: # type: ignore
         self.validate_json()
         if self.values:
-            dict_values = {}
+            dict_values: Dict[str, Dict[str, dict]] = {}
             for block_id, actions in self.values.items():
                 if actions:
                     dict_value: Dict[str, dict] = {
-                        action_id: value.to_dict()
-                        for action_id, value in actions.items()
+                        action_id: value.to_dict() # type: ignore
+                        for action_id, value in actions.items() # type: ignore
                     }
                     dict_values[block_id] = dict_value
-            return {"values": dict_values}
+            return {"values": dict_values} # type: ignore
         else:
             return {}
 

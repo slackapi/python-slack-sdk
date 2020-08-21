@@ -40,7 +40,7 @@ class FileOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
         return self.consume(state)
 
     def issue(self) -> str:
-        state = uuid4()
+        state = str(uuid4())
         self._mkdir(self.base_dir)
         filepath = f"{self.base_dir}/{state}"
         with open(filepath, "w") as f:

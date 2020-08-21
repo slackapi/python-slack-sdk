@@ -1,7 +1,7 @@
 import json
 import logging
 from ssl import SSLContext
-from typing import Dict, Union, List, Optional
+from typing import Dict, Union, List, Optional, Any
 
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
@@ -62,8 +62,8 @@ class AsyncWebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[List[Union[Dict[str, any], Attachment]]] = None,
-        blocks: Optional[List[Union[Dict[str, any], Block]]] = None,
+        attachments: Optional[List[Union[Dict[str, Any], Attachment]]] = None,
+        blocks: Optional[List[Union[Dict[str, Any], Block]]] = None,
         response_type: Optional[str] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
@@ -86,7 +86,7 @@ class AsyncWebhookClient:
         )
 
     async def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
+        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
         :param body: json data structure (it's still a dict at this point),
@@ -100,7 +100,7 @@ class AsyncWebhookClient:
         )
 
     async def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
+        self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -> WebhookResponse:
         """Performs an HTTP request and parses the response.
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -126,6 +126,7 @@ class AsyncWebhookClient:
                 trust_env=self.trust_env_in_session,
             )
 
+        resp: WebhookResponse
         try:
             request_kwargs = {
                 "headers": headers,
@@ -138,7 +139,7 @@ class AsyncWebhookClient:
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
-                    self._logger.debug(
+                    self.logger.debug(
                         f"No response data returned from the following API call: {self.url}."
                     )
                 except json.decoder.JSONDecodeError as e:
@@ -152,7 +153,8 @@ class AsyncWebhookClient:
                     headers=res.headers,
                 )
                 _debug_log_response(self.logger, resp)
-                return resp
         finally:
             if not use_running_session:
                 await session.close()
+
+        return resp

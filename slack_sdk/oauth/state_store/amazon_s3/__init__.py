@@ -36,9 +36,9 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
         return self.consume(state)
 
     def issue(self) -> str:
-        state = uuid4()
+        state = str(uuid4())
         response = self.s3_client.put_object(
-            Bucket=self.bucket_name, Body=str(time.time()), Key=str(state),
+            Bucket=self.bucket_name, Body=str(time.time()), Key=state,
         )
         self.logger.debug(f"S3 put_object response: {response}")
         return state
