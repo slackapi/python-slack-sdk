@@ -2,11 +2,9 @@
 name: Bug
 about: Report the SDK bug
 title: (Set a clear title describing the issue)
-labels: 'bug'
-assignees: ''
+labels: "untriaged"
+assignees: ""
 ---
-
-## Bug Report
 
 (Filling out the following details about bugs will help us solve your issue sooner.)
 
@@ -34,9 +32,7 @@ sw_vers && uname -v # or `ver`
 
 (Share the commands to run, source code, and project settings (e.g., setup.py))
 
-1.
-2.
-3.
+1. 2. 3.
 
 ### Expected result:
 
@@ -46,11 +42,8 @@ sw_vers && uname -v # or `ver`
 
 (Tell what actually happened with logs, screenshots)
 
-## Requirements (place an `x` in each of the `[ ]`)
+### Requirements
 
-(For general questions/issues about Slack API platform or its server-side, could you submit questions at https://my.slack.com/help/requests/new instead. :bow:)
+For general questions/issues about Slack API platform or its server-side, could you submit questions at https://my.slack.com/help/requests/new instead. :bow:
 
-* [ ] This is a bug specific to this SDK project.
-* [ ] I've read and understood the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and have done my best effort to follow them.
-* [ ] I've read and agree to the [Code of Conduct](https://slackhq.github.io/code-of-conduct).
-* [ ] I've searched for any related issues and avoided creating a duplicate issue [here](https://github.com/slackapi/python-slackclient/issues).
+Please read the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to the those rules.
