@@ -335,10 +335,10 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 
 [pypi-image]: https://badge.fury.io/py/slackclient.svg
 [pypi-url]: https://pypi.python.org/pypi/slackclient
-[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
+[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=main
 [travis-url]: https://travis-ci.org/slackapi/python-slackclient
 [python-version]: https://img.shields.io/pypi/pyversions/slackclient.svg
-[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
+[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
 [contact-url]: https://slack.com/support
