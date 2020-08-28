@@ -111,11 +111,7 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_addGroup(
-        self,
-        *,
-        channel_id: str,
-        group_id: str,
-        **kwargs
+        self, *, channel_id: str, group_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Add an allowlist of IDP groups for accessing a channel.
 
@@ -127,7 +123,7 @@ class WebClient(BaseClient):
                 and optional for channels that are shared across an organization.
                 e.g 'T1234'
         """
-        kwargs.update({"channel_id": channel_id, 'group_id': group_id})
+        kwargs.update({"channel_id": channel_id, "group_id": group_id})
         return self.api_call(
             "admin.conversations.restrictAccess.addGroup",
             http_verb="GET",
@@ -135,10 +131,7 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_listGroups(
-        self,
-        *,
-        channel_id: str,
-        **kwargs
+        self, *, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """List all IDP Groups linked to a channel.
 
@@ -157,12 +150,7 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_removeGroup(
-        self,
-        *,
-        channel_id: str,
-        group_id: str,
-        team_id: str,
-        **kwargs
+        self, *, channel_id: str, group_id: str, team_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Remove a linked IDP group linked from a private channel.
 
@@ -174,7 +162,9 @@ class WebClient(BaseClient):
                 and optional for channels that are shared across an organization.
                 e.g 'T1234'
         """
-        kwargs.update({"channel_id": channel_id, 'group_id': group_id, 'team_id': team_id})
+        kwargs.update(
+            {"channel_id": channel_id, "group_id": group_id, "team_id": team_id}
+        )
         return self.api_call(
             "admin.conversations.restrictAccess.removeGroup",
             http_verb="GET",
