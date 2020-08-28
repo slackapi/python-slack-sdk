@@ -166,6 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-1-2020-08-28">v2.8.1 (2020-08-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
@@ -434,7 +435,7 @@ article for more information.</p>
         <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
       <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span> \
       <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">:</span>
@@ -639,7 +640,7 @@ joined one by accident. This is how you leave a channel.</p>
     <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ratelimited&quot;</span><span class="p">:</span>
       <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
       <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Retry-After&#39;</span><span class="p">])</span>
-      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{delay}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
       <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
       <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>

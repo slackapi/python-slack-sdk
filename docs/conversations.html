@@ -166,6 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-1-2020-08-28">v2.8.1 (2020-08-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
@@ -261,7 +262,7 @@
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">])</span>
-<span class="n">channel_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;my-private-channel-{round(time())}&quot;</span>
+<span class="n">channel_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;my-private-channel-</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_create</span><span class="p">(</span>
   <span class="n">name</span><span class="o">=</span><span class="n">channel_name</span><span class="p">,</span>
   <span class="n">is_private</span><span class="o">=</span><span class="kc">True</span>

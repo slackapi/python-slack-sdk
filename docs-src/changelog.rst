@@ -2,6 +2,16 @@
 Changelog
 ==============================================
 
+v2.8.1 (2020-08-28)
+-------------------
+
+Refer to `v2.8.1 milestone <https://github.com/slackapi/python-slackclient/milestone/15?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] #778 #779 Adding support for View objects for views.push/update/publish - Thanks @ruberVulpes
+2. [WebClient] #786 Fix admin.conversations.restrictAccess.* methods to match documentation - Thanks @ruberVulpes
+
 v2.8.0 (2020-08-06)
 -------------------
 

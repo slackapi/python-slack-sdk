@@ -166,8 +166,7 @@ var Search = {
           objectterms.push(tmp[i].toLowerCase());
       }
 
-      if ($u.indexOf(stopwords, tmp[i].toLowerCase()) != -1 || tmp[i].match(/^\d+$/) ||
-          tmp[i] === "") {
+      if ($u.indexOf(stopwords, tmp[i].toLowerCase()) != -1 || tmp[i] === "") {
         // skip this "word"
         continue;
       }
@@ -251,6 +250,7 @@ var Search = {
         var item = results.pop();
         var listItem = $('<li style="display:none"></li>');
         var requestUrl = "";
+        var linkUrl = "";
         if (DOCUMENTATION_OPTIONS.BUILDER === 'dirhtml') {
           // dirhtml builder
           var dirname = item[0] + '/';
@@ -260,13 +260,15 @@ var Search = {
             dirname = '';
           }
           requestUrl = DOCUMENTATION_OPTIONS.URL_ROOT + dirname;
+          linkUrl = requestUrl;
 
         } else {
           // normal html builders
           requestUrl = DOCUMENTATION_OPTIONS.URL_ROOT + item[0] + DOCUMENTATION_OPTIONS.FILE_SUFFIX;
+          linkUrl = item[0] + DOCUMENTATION_OPTIONS.LINK_SUFFIX;
         }
         listItem.append($('<a/>').attr('href',
-            requestUrl +
+            linkUrl +
             highlightstring + item[2]).html(item[1]));
         if (item[3]) {
           listItem.append($('<span> (' + item[3] + ')</span>'));

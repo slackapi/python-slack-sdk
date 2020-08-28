@@ -166,6 +166,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-1-2020-08-28">v2.8.1 (2020-08-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
@@ -283,7 +284,7 @@ your workspace for changes to take effect.</p>
 <span class="k">def</span> <span class="nf">pre_install</span><span class="p">():</span>
   <span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;randomly-generated-one-time-value&quot;</span>
   <span class="k">return</span> <span class="s1">&#39;&lt;a href=&quot;https://slack.com/oauth/v2/authorize?&#39;</span> \
-    <span class="sa">f</span><span class="s1">&#39;scope=</span><span class="si">{oauth_scope}</span><span class="s1">&amp;client_id=</span><span class="si">{client_id}</span><span class="s1">&amp;state=</span><span class="si">{state}</span><span class="s1">&quot;&gt;&#39;</span> \
+    <span class="sa">f</span><span class="s1">&#39;scope=</span><span class="si">{</span><span class="n">oauth_scope</span><span class="si">}</span><span class="s1">&amp;client_id=</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s1">&amp;state=</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span> \
     <span class="s1">&#39;Add to Slack&lt;/a&gt;&#39;</span>
 </pre></div>
 </div>
