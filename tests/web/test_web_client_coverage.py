@@ -622,6 +622,15 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "mpim_replies":
                     self.api_methods_to_call.remove(method(channel="D123", thread_ts="123.123")["method"])
                     await async_method(channel="D123", thread_ts="123.123")
+                elif method_name == "admin_conversations_restrictAccess_addGroup":
+                    self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123")["method"])
+                    await async_method(channel_id="D123", group_id="G123")
+                elif method_name == "admin_conversations_restrictAccess_listGroups":
+                    self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123")["method"])
+                    await async_method(channel_id="D123", group_id="G123")
+                elif method_name == "admin_conversations_restrictAccess_removeGroup":
+                    self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123", team_id="T13")["method"])
+                    await async_method(channel_id="D123", group_id="G123", team_id="T123")
                 else:
                     self.api_methods_to_call.remove(method(*{})["method"])
                     await async_method(*{})
