@@ -111,9 +111,23 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_addGroup(
-        self, **kwargs
+        self,
+        *,
+        channel_id: str,
+        group_id: str,
+        **kwargs
     ) -> Union[Future, SlackResponse]:
-        """Add an allowlist of IDP groups for accessing a channel."""
+        """Add an allowlist of IDP groups for accessing a channel.
+
+        Args:
+            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
+            group_id (str): The IDP Group ID to be an allowlist for the private channel. 'S0604QSJC'
+            team_id (str): The workspace where the channel exists.
+                This argument is required for channels only tied to one workspace,
+                and optional for channels that are shared across an organization.
+                e.g 'T1234'
+        """
+        kwargs.update({"channel_id": channel_id, 'group_id': group_id})
         return self.api_call(
             "admin.conversations.restrictAccess.addGroup",
             http_verb="GET",
@@ -121,9 +135,21 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_listGroups(
-        self, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs
     ) -> Union[Future, SlackResponse]:
-        """List all IDP Groups linked to a channel."""
+        """List all IDP Groups linked to a channel.
+
+        Args:
+            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
+            team_id (str): The workspace where the channel exists.
+                This argument is required for channels only tied to one workspace,
+                and optional for channels that are shared across an organization.
+                e.g 'T1234'
+        """
+        kwargs.update({"channel_id": channel_id})
         return self.api_call(
             "admin.conversations.restrictAccess.listGroups",
             http_verb="GET",
@@ -131,9 +157,24 @@ class WebClient(BaseClient):
         )
 
     def admin_conversations_restrictAccess_removeGroup(
-        self, **kwargs
+        self,
+        *,
+        channel_id: str,
+        group_id: str,
+        team_id: str,
+        **kwargs
     ) -> Union[Future, SlackResponse]:
-        """Remove a linked IDP group linked from a private channel."""
+        """Remove a linked IDP group linked from a private channel.
+
+        Args:
+            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
+            group_id (str): The IDP Group ID to be an allowlist for the private channel. 'S0604QSJC'
+            team_id (str): The workspace where the channel exists.
+                This argument is required for channels only tied to one workspace,
+                and optional for channels that are shared across an organization.
+                e.g 'T1234'
+        """
+        kwargs.update({"channel_id": channel_id, 'group_id': group_id, 'team_id': team_id})
         return self.api_call(
             "admin.conversations.restrictAccess.removeGroup",
             http_verb="GET",
