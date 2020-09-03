@@ -82,6 +82,7 @@ class TestWebClient(unittest.TestCase):
         created_channel_id = conversations_create.data["channel_id"]
 
         self.assertIsNotNone(client.admin_conversations_invite(channel_id=created_channel_id, user_ids=[self.user_id]))
+        self.assertIsNotNone(client.admin_conversations_invite(channel_id=created_channel_id, user_ids=self.user_id))
         self.assertIsNotNone(client.admin_conversations_archive(channel_id=created_channel_id))
         self.assertIsNotNone(client.admin_conversations_unarchive(channel_id=created_channel_id))
         self.assertIsNotNone(client.admin_conversations_rename(channel_id=created_channel_id, name=self.channel_rename))
@@ -137,6 +138,8 @@ class TestWebClient(unittest.TestCase):
 
         self.assertIsNotNone(
             await client.admin_conversations_invite(channel_id=created_channel_id, user_ids=[self.user_id]))
+        self.assertIsNotNone(
+            await client.admin_conversations_invite(channel_id=created_channel_id, user_ids=self.user_id))
         self.assertIsNotNone(await client.admin_conversations_archive(channel_id=created_channel_id))
         self.assertIsNotNone(await client.admin_conversations_unarchive(channel_id=created_channel_id))
         self.assertIsNotNone(await client.admin_conversations_rename(
