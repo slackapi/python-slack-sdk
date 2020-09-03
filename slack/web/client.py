@@ -2231,8 +2231,8 @@ class WebClient(BaseClient):
         """Rename a public or private channel.
 
         Args:
-            channel_id (str): The channel to unarchive.
-            name (str): The name to rename the channel to
+            channel_id (str): The channel to rename.
+            name (str): The name to rename the channel to.
         """
         kwargs.update({"channel_id": channel_id, "name": name})
         return self.api_call("admin.conversations.unarchive", json=kwargs)
