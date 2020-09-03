@@ -2252,7 +2252,7 @@ class WebClient(BaseClient):
     def admin_conversations_setConversationPrefs(
             self, channel_id: str, prefs: Union[str, dict], **kwargs
     ) -> Union[Future, SlackResponse]:
-        """Get conversation preferences for a public or private channel.
+        """Set the posting permissions for a public or private channel.
 
         Args:
             channel_id (str): The channel to set the prefs for
