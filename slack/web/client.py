@@ -2289,3 +2289,14 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.getConversationPrefs", json=kwargs)
+
+    def admin_conversations_disconnectShared(
+            self, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Disconnect a connected channel from one or more workspaces.
+
+        Args:
+            channel_id (str): The channel to be disconnected from some workspaces.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.disconnectShared", json=kwargs)
