@@ -2224,3 +2224,15 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.unarchive", json=kwargs)
+
+    def admin_conversations_rename(
+            self, channel_id: str, name:str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Rename a public or private channel.
+
+        Args:
+            channel_id (str): The channel to unarchive.
+            name (str): The name to rename the channel to
+        """
+        kwargs.update({"channel_id": channel_id, "name": name})
+        return self.api_call("admin.conversations.unarchive", json=kwargs)
