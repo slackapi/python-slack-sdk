@@ -631,6 +631,49 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "admin_conversations_restrictAccess_removeGroup":
                     self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123", team_id="T13")["method"])
                     await async_method(channel_id="D123", group_id="G123", team_id="T123")
+                elif method_name == "admin_conversations_create":
+                    self.api_methods_to_call.remove(method(is_private=False, name="Foo", team_id="T123")["method"])
+                    await async_method(is_private=False, name="Foo", team_id="T123")
+                elif method_name == "admin_conversations_delete":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_invite":
+                    self.api_methods_to_call.remove(method(channel_id="C123", user_ids=["U123", "U456"])["method"])
+                    await async_method(channel_id="C123", user_ids=["U123", "U456"])
+                elif method_name == "admin_conversations_archive":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_unarchive":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_rename":
+                    self.api_methods_to_call.remove(method(channel_id="C123", name="Foo")["method"])
+                    await async_method(channel_id="C123", name="Foo")
+                elif method_name == "admin_conversations_search":
+                    self.api_methods_to_call.remove(method()["method"])
+                    await async_method()
+                elif method_name == "admin_conversations_convertToPrivate":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_setConversationPrefs":
+                    self.api_methods_to_call.remove(method(
+                        channel_id="C123",
+                        prefs={"who_can_post": "type:admin,user:U1234,subteam:S1234"})["method"])
+                    await async_method(
+                        channel_id="C123",
+                        prefs={"who_can_post": "type:admin,user:U1234,subteam:S1234"})
+                elif method_name == "admin_conversations_getConversationPrefs":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_setTeams":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_getTeams":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_disconnectShared":
+                    self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                    await async_method(channel_id="C123")
                 else:
                     self.api_methods_to_call.remove(method(*{})["method"])
                     await async_method(*{})
