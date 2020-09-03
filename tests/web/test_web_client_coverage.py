@@ -674,6 +674,9 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "admin_conversations_disconnectShared":
                     self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                     await async_method(channel_id="C123")
+                elif method_name == "admin_conversations_ekm_listOriginalConnectedChannelInfo":
+                    self.api_methods_to_call.remove(method()["method"])
+                    await async_method()
                 else:
                     self.api_methods_to_call.remove(method(*{})["method"])
                     await async_method(*{})

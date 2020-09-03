@@ -2313,3 +2313,14 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.disconnectShared", json=kwargs)
+
+    async def admin_conversations_ekm_listOriginalConnectedChannelInfo(
+        self, **kwargs
+    ) -> AsyncSlackResponse:
+        """List all disconnected channels—i.e.,
+        channels that were once connected to other workspaces and then disconnected—and
+        the corresponding original channel IDs for key revocation with EKM.
+        """
+        return await self.api_call(
+            "admin.conversations.ekm.listOriginalConnectedChannelInfo", params=kwargs
+        )

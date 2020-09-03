@@ -97,6 +97,8 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(client.admin_conversations_convertToPrivate(channel_id=created_channel_id))
         self.assertIsNotNone(client.admin_conversations_delete(channel_id=created_channel_id))
 
+        self.assertIsNotNone(client.admin_conversations_ekm_listOriginalConnectedChannelInfo())
+
     @async_test
     async def test_async(self):
         # await asyncio.sleep(seconds) are included to avoid rate limiting errors
@@ -155,3 +157,5 @@ class TestWebClient(unittest.TestCase):
 
         self.assertIsNotNone(await client.admin_conversations_convertToPrivate(channel_id=created_channel_id))
         self.assertIsNotNone(await client.admin_conversations_delete(channel_id=created_channel_id))
+
+        self.assertIsNotNone(await client.admin_conversations_ekm_listOriginalConnectedChannelInfo())
