@@ -2173,3 +2173,14 @@ class WebClient(BaseClient):
             raise e.SlackRequestError("team_id is required if org_wide is False")
         kwargs.update({"is_private": is_private, "name": name, "org_wide": org_wide, "team_id": team_id})
         return self.api_call("admin.conversations.create", json=kwargs)
+
+    def admin_conversations_delete(
+            self, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Delete a public or private channel.
+        Args:
+            channel_id (str): The channel to delete.
+
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.delete", json=kwargs)
