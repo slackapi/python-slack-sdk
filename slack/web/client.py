@@ -2236,3 +2236,14 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id, "name": name})
         return self.api_call("admin.conversations.unarchive", json=kwargs)
+
+    def admin_conversations_convertToPrivate(
+            self, channel_id: str, name:str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Convert a public channel to a private channel.
+
+        Args:
+            channel_id (str): The channel to convert to private.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.convertToPrivate", json=kwargs)
