@@ -171,13 +171,16 @@ class WebClient(BaseClient):
             params=kwargs,
         )
 
-    def admin_conversations_setTeams(self, **kwargs) -> Union[Future, SlackResponse]:
+    def admin_conversations_setTeams(
+        self, *, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
 
         Args:
             channel_id (str): The encoded channel_id to add or remove to workspaces.
 
         """
+        kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.setTeams", json=kwargs)
 
     def admin_conversations_getTeams(

@@ -183,13 +183,16 @@ class AsyncWebClient(AsyncBaseClient):
             params=kwargs,
         )
 
-    async def admin_conversations_setTeams(self, **kwargs) -> AsyncSlackResponse:
+    async def admin_conversations_setTeams(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
 
         Args:
             channel_id (str): The encoded channel_id to add or remove to workspaces.
 
         """
+        kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.setTeams", json=kwargs)
 
     async def admin_conversations_getTeams(
