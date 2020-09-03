@@ -6,7 +6,7 @@ import unittest
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN, \
     SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN, \
-    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID, SLACK_SDK_TEST_GRID_TEAM_ID
+    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID, SLACK_SDK_TEST_GRID_TEAM_ID, SLACK_SDK_TEST_WEB_TEST_USER_ID
 from integration_tests.helpers import async_test
 from slack import WebClient
 
@@ -26,6 +26,9 @@ class TestWebClient(unittest.TestCase):
 
         self.team_id = os.environ[SLACK_SDK_TEST_GRID_TEAM_ID]
         self.idp_group_id = os.environ[SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID]
+        self.user_id = os.environ[SLACK_SDK_TEST_WEB_TEST_USER_ID]
+        self.channel_name = f'my-channel-{int(round(time.time() * 1000))}'
+        self.channel_rename = f'my-renamed-channel-{int(round(time.time() * 1000))}'
 
         if not hasattr(self, "channel_id"):
             team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
@@ -45,6 +48,7 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_sync(self):
+        # time.sleep(seconds) are included to avoid rate limiting errors
         client = self.sync_client
 
         add_group = client.admin_conversations_restrictAccess_addGroup(
@@ -73,8 +77,30 @@ class TestWebClient(unittest.TestCase):
         # To avoid rate limiting errors
         time.sleep(20)
 
+        conversations_create = client.admin_conversations_create(is_private=False, name=self.channel_name)
+        self.assertIsNotNone(conversations_create)
+        created_channel_id = conversations_create.data["channel_id"]
+
+        self.assertIsNotNone(client.admin_conversations_invite(channel_id=created_channel_id, user_ids=[self.user_id]))
+        self.assertIsNotNone(client.admin_conversations_archive(channel_id=created_channel_id))
+        self.assertIsNotNone(client.admin_conversations_unarchive(channel_id=created_channel_id))
+        self.assertIsNotNone(client.admin_conversations_rename(channel_id=created_channel_id, name=self.channel_rename))
+        self.assertIsNotNone(client.admin_conversations_search())
+
+        self.assertIsNotNone(client.admin_conversations_getConversationPrefs(channel_id=created_channel_id))
+        self.assertIsNotNone(client.admin_conversations_setConversationPrefs(channel_id=created_channel_id, prefs={}))
+
+        self.assertIsNotNone(client.admin_conversations_getTeams(channel_id=created_channel_id))
+        self.assertIsNotNone(client.admin_conversations_setTeams(channel_id=created_channel_id, org_channel=True))
+        self.assertIsNotNone(client.admin_conversations_disconnectShared(channel_id=created_channel_id))
+
+        self.assertIsNotNone(client.admin_conversations_convertToPrivate(channel_id=created_channel_id))
+        self.assertIsNotNone(client.admin_conversations_delete(channel_id=created_channel_id))
+
     @async_test
     async def test_async(self):
+        # await asyncio.sleep(seconds) are included to avoid rate limiting errors
+
         client = self.async_client
 
         add_group = await client.admin_conversations_restrictAccess_addGroup(
@@ -102,3 +128,30 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(remove_group)
         # To avoid rate limiting errors
         await asyncio.sleep(20)
+
+        conversations_create = await client.admin_conversations_create(is_private=False, name=self.channel_name)
+        self.assertIsNotNone(conversations_create)
+        created_channel_id = conversations_create.data["channel_id"]
+
+        self.assertIsNotNone(
+            await client.admin_conversations_invite(channel_id=created_channel_id, user_ids=[self.user_id]))
+        self.assertIsNotNone(await client.admin_conversations_archive(channel_id=created_channel_id))
+        self.assertIsNotNone(await client.admin_conversations_unarchive(channel_id=created_channel_id))
+        self.assertIsNotNone(await client.admin_conversations_rename(
+            channel_id=created_channel_id,
+            name=self.channel_rename
+        ))
+        self.assertIsNotNone(await client.admin_conversations_search())
+
+        self.assertIsNotNone(await client.admin_conversations_getConversationPrefs(channel_id=created_channel_id))
+        self.assertIsNotNone(await client.admin_conversations_setConversationPrefs(
+            channel_id=created_channel_id,
+            prefs={}
+        ))
+
+        self.assertIsNotNone(await client.admin_conversations_getTeams(channel_id=created_channel_id))
+        self.assertIsNotNone(await client.admin_conversations_setTeams(channel_id=created_channel_id, org_channel=True))
+        self.assertIsNotNone(await client.admin_conversations_disconnectShared(channel_id=created_channel_id))
+
+        self.assertIsNotNone(await client.admin_conversations_convertToPrivate(channel_id=created_channel_id))
+        self.assertIsNotNone(await client.admin_conversations_delete(channel_id=created_channel_id))
