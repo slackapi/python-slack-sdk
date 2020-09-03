@@ -2159,6 +2159,7 @@ class WebClient(BaseClient):
             self, is_private: bool, name: str, *, org_wide: bool = False, team_id: str = None, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Create a public or private channel-based conversation.
+
         Args:
             is_private (bool): When true, creates a private channel instead of a public channel
             name (str): Name of the public or private channel to create.
@@ -2178,6 +2179,7 @@ class WebClient(BaseClient):
             self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Delete a public or private channel.
+
         Args:
             channel_id (str): The channel to delete.
 
@@ -2188,7 +2190,8 @@ class WebClient(BaseClient):
     def admin_conversations_invite(
             self, channel_id: str, user_ids: Union[str, List[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
-        """Delete a public or private channel.
+        """Invite a user to a public or private channel.
+
         Args:
             channel_id (str): The channel to delete.
             user_ids (str or list): The users to invite.
