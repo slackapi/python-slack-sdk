@@ -175,13 +175,15 @@ class WebClient(BaseClient):
     def admin_conversations_setTeams(self, **kwargs) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
 
-            Args:
-                channel_id (str): The encoded channel_id to add or remove to workspaces.
+        Args:
+            channel_id (str): The encoded channel_id to add or remove to workspaces.
 
         """
         return self.api_call("admin.conversations.setTeams", json=kwargs)
 
-    def admin_conversations_getTeams(self, channel_id: str, **kwargs) -> Union[Future, SlackResponse]:
+    def admin_conversations_getTeams(
+        self, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
 
         Args:
@@ -2172,7 +2174,13 @@ class WebClient(BaseClient):
         return self.api_call("views.publish", json=kwargs)
 
     def admin_conversations_create(
-            self, is_private: bool, name: str, *, org_wide: bool = False, team_id: str = None, **kwargs
+        self,
+        is_private: bool,
+        name: str,
+        *,
+        org_wide: bool = False,
+        team_id: str = None,
+        **kwargs
     ) -> Union[Future, SlackResponse]:
         """Create a public or private channel-based conversation.
 
@@ -2187,11 +2195,18 @@ class WebClient(BaseClient):
         """
         if not org_wide and team_id is None:
             raise e.SlackRequestError("team_id is required if org_wide is False")
-        kwargs.update({"is_private": is_private, "name": name, "org_wide": org_wide, "team_id": team_id})
+        kwargs.update(
+            {
+                "is_private": is_private,
+                "name": name,
+                "org_wide": org_wide,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.conversations.create", json=kwargs)
 
     def admin_conversations_delete(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Delete a public or private channel.
 
@@ -2203,7 +2218,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.delete", json=kwargs)
 
     def admin_conversations_invite(
-            self, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+        self, channel_id: str, user_ids: Union[str, List[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a public or private channel.
 
@@ -2219,7 +2234,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.invite", json=kwargs)
 
     def admin_conversations_archive(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Archive a public or private channel.
 
@@ -2230,7 +2245,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.archive", json=kwargs)
 
     def admin_conversations_unarchive(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Unarchive a public or private channel.
 
@@ -2241,7 +2256,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.unarchive", json=kwargs)
 
     def admin_conversations_rename(
-            self, channel_id: str, name:str, **kwargs
+        self, channel_id: str, name: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Rename a public or private channel.
 
@@ -2257,7 +2272,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.search", json=kwargs)
 
     def admin_conversations_convertToPrivate(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Convert a public channel to a private channel.
 
@@ -2268,7 +2283,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.convertToPrivate", json=kwargs)
 
     def admin_conversations_setConversationPrefs(
-            self, channel_id: str, prefs: Union[str, dict], **kwargs
+        self, channel_id: str, prefs: Union[str, dict], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Set the posting permissions for a public or private channel.
 
@@ -2284,7 +2299,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.setConversationPrefs", json=kwargs)
 
     def admin_conversations_getConversationPrefs(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Get conversation preferences for a public or private channel.
 
@@ -2295,7 +2310,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.getConversationPrefs", json=kwargs)
 
     def admin_conversations_disconnectShared(
-            self, channel_id: str, **kwargs
+        self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Disconnect a connected channel from one or more workspaces.
 
