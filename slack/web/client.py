@@ -2164,7 +2164,6 @@ class WebClient(BaseClient):
         Args:
             is_private (bool): When true, creates a private channel instead of a public channel
             name (str): Name of the public or private channel to create.
-            description (str): Description of the public or private channel to create.
             org_wide (bool): When true, the channel will be available org-wide.
                 Note: if the channel is not org_wide=true, you must specify a team_id for this channel
             team_id (str): The workspace to create the channel in.
