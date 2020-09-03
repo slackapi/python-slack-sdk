@@ -2228,9 +2228,9 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         if isinstance(user_ids, list):
-            kwargs.update({"channel_ids": ",".join(user_ids)})
+            kwargs.update({"user_ids": ",".join(user_ids)})
         else:
-            kwargs.update({"channel_ids": user_ids})
+            kwargs.update({"user_ids": user_ids})
         return self.api_call("admin.conversations.invite", json=kwargs)
 
     def admin_conversations_archive(
