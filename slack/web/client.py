@@ -2238,7 +2238,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.rename", json=kwargs)
 
     def admin_conversations_convertToPrivate(
-            self, channel_id: str, name:str, **kwargs
+            self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Convert a public channel to a private channel.
 
