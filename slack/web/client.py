@@ -2184,3 +2184,18 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.delete", json=kwargs)
+
+    def admin_conversations_invite(
+            self, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Delete a public or private channel.
+        Args:
+            channel_id (str): The channel to delete.
+            user_ids (str or list): The users to invite.
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(user_ids, list):
+            kwargs.update({"channel_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"channel_ids": user_ids})
+        return self.api_call("admin.conversations.invite", json=kwargs)
