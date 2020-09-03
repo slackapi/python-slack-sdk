@@ -176,6 +176,16 @@ class WebClient(BaseClient):
         """Set the workspaces in an Enterprise grid org that connect to a channel."""
         return self.api_call("admin.conversations.setTeams", json=kwargs)
 
+    def admin_conversations_getTeams(self, channel_id: str, **kwargs) -> Union[Future, SlackResponse]:
+        """Set the workspaces in an Enterprise grid org that connect to a channel.
+
+        Args:
+            channel_id (str): The channel to determine connected workspaces within the organization for.
+
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.getTeams", json=kwargs)
+
     def admin_emoji_add(self, **kwargs) -> Union[Future, SlackResponse]:
         """Add an emoji."""
         return self.api_call("admin.emoji.add", http_verb="GET", params=kwargs)
