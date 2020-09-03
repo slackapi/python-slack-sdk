@@ -2213,3 +2213,14 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.archive", json=kwargs)
+
+    def admin_conversations_unarchive(
+            self, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Unarchive a public or private channel.
+
+        Args:
+            channel_id (str): The channel to unarchive.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.unarchive", json=kwargs)
