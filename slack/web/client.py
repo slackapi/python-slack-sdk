@@ -2235,7 +2235,7 @@ class WebClient(BaseClient):
             name (str): The name to rename the channel to.
         """
         kwargs.update({"channel_id": channel_id, "name": name})
-        return self.api_call("admin.conversations.unarchive", json=kwargs)
+        return self.api_call("admin.conversations.rename", json=kwargs)
 
     def admin_conversations_convertToPrivate(
             self, channel_id: str, name:str, **kwargs
