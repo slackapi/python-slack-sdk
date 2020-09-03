@@ -2,6 +2,7 @@
 import os
 from asyncio import Future
 from io import IOBase
+from json import dumps
 from typing import Union, List, Optional, Dict
 
 import slack.errors as e
@@ -2247,3 +2248,19 @@ class WebClient(BaseClient):
         """
         kwargs.update({"channel_id": channel_id})
         return self.api_call("admin.conversations.convertToPrivate", json=kwargs)
+
+    def admin_conversations_setConversationPrefs(
+            self, channel_id: str, prefs: Union[str, dict], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Convert a public channel to a private channel.
+
+        Args:
+            channel_id (str): The channel to set the prefs for
+            prefs (str or dict): The prefs for this channel in a stringified JSON format.
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(prefs, dict):
+            kwargs.update({"prefs": dumps(prefs)})
+        else:
+            kwargs.update({"prefs": prefs})
+        return self.api_call("admin.conversations.setConversationPrefs", json=kwargs)
