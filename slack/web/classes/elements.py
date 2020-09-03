@@ -444,7 +444,7 @@ class StaticSelectElement(InputInteractiveElement):
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
-        ps://api.slack.com/reference/block-kit/block-elements#static_select
+        https://api.slack.com/reference/block-kit/block-elements#static_select
         """
         super().__init__(
             type=self.type,
