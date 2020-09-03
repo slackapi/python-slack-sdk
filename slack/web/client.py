@@ -2154,3 +2154,22 @@ class WebClient(BaseClient):
         else:
             kwargs.update({"view": view})
         return self.api_call("views.publish", json=kwargs)
+
+    def admin_conversations_create(
+            self, is_private: bool, name: str, *, org_wide: bool = False, team_id: str = None, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Create a public or private channel-based conversation.
+        Args:
+            is_private (bool): When true, creates a private channel instead of a public channel
+            name (str): Name of the public or private channel to create.
+            description (str): Description of the public or private channel to create.
+            org_wide (bool): When true, the channel will be available org-wide.
+                Note: if the channel is not org_wide=true, you must specify a team_id for this channel
+            team_id (str): The workspace to create the channel in.
+                Note: this argument is required unless you set org_wide=true.
+
+        """
+        if not org_wide and team_id is None:
+            raise e.SlackRequestError("team_id is required if org_wide is False")
+        kwargs.update({"is_private": is_private, "name": name, "org_wide": org_wide, "team_id": team_id})
+        return self.api_call("admin.conversations.create", json=kwargs)
