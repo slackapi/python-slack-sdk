@@ -2,7 +2,6 @@
 import os
 from asyncio import Future
 from io import IOBase
-from json import dumps
 from typing import Union, List, Optional, Dict
 
 import slack.errors as e
@@ -2174,13 +2173,7 @@ class WebClient(BaseClient):
         return self.api_call("views.publish", json=kwargs)
 
     def admin_conversations_create(
-        self,
-        is_private: bool,
-        name: str,
-        *,
-        org_wide: bool = False,
-        team_id: str = None,
-        **kwargs
+        self, *, is_private: bool, name: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Create a public or private channel-based conversation.
 
@@ -2193,14 +2186,10 @@ class WebClient(BaseClient):
                 Note: this argument is required unless you set org_wide=true.
 
         """
-        if not org_wide and team_id is None:
-            raise e.SlackRequestError("team_id is required if org_wide is False")
         kwargs.update(
             {
                 "is_private": is_private,
                 "name": name,
-                "org_wide": org_wide,
-                "team_id": team_id,
             }
         )
         return self.api_call("admin.conversations.create", json=kwargs)
@@ -2218,7 +2207,7 @@ class WebClient(BaseClient):
         return self.api_call("admin.conversations.delete", json=kwargs)
 
     def admin_conversations_invite(
-        self, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+        self, *, channel_id: str, user_ids: Union[str, List[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a public or private channel.
 
@@ -2291,11 +2280,7 @@ class WebClient(BaseClient):
             channel_id (str): The channel to set the prefs for
             prefs (str or dict): The prefs for this channel in a stringified JSON format.
         """
-        kwargs.update({"channel_id": channel_id})
-        if isinstance(prefs, dict):
-            kwargs.update({"prefs": dumps(prefs)})
-        else:
-            kwargs.update({"prefs": prefs})
+        kwargs.update({"channel_id": channel_id, "prefs": prefs})
         return self.api_call("admin.conversations.setConversationPrefs", json=kwargs)
 
     def admin_conversations_getConversationPrefs(
