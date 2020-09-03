@@ -2193,7 +2193,7 @@ class WebClient(BaseClient):
         """Invite a user to a public or private channel.
 
         Args:
-            channel_id (str): The channel to delete.
+            channel_id (str): The channel that the users will be invited to.
             user_ids (str or list): The users to invite.
         """
         kwargs.update({"channel_id": channel_id})
