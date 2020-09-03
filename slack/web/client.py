@@ -2264,3 +2264,14 @@ class WebClient(BaseClient):
         else:
             kwargs.update({"prefs": prefs})
         return self.api_call("admin.conversations.setConversationPrefs", json=kwargs)
+
+    def admin_conversations_getConversationPrefs(
+            self, channel_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Get conversation preferences for a public or private channel.
+
+        Args:
+            channel_id (str): The channel to get the preferences for.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.getConversationPrefs", json=kwargs)
