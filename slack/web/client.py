@@ -2252,6 +2252,10 @@ class WebClient(BaseClient):
         kwargs.update({"channel_id": channel_id, "name": name})
         return self.api_call("admin.conversations.rename", json=kwargs)
 
+    def admin_conversations_search(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Search for public or private channels in an Enterprise organization."""
+        return self.api_call("admin.conversations.search", json=kwargs)
+
     def admin_conversations_convertToPrivate(
             self, channel_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
