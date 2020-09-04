@@ -2189,12 +2189,7 @@ class WebClient(BaseClient):
                 Note: this argument is required unless you set org_wide=true.
 
         """
-        kwargs.update(
-            {
-                "is_private": is_private,
-                "name": name,
-            }
-        )
+        kwargs.update({"is_private": is_private, "name": name})
         return self.api_call("admin.conversations.create", json=kwargs)
 
     def admin_conversations_delete(
@@ -2223,7 +2218,8 @@ class WebClient(BaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return self.api_call("admin.conversations.invite", json=kwargs)
+        # NOTE: the endpoint is unable to handle Content-Type: application/json as of Sep 3, 2020.
+        return self.api_call("admin.conversations.invite", params=kwargs)
 
     def admin_conversations_archive(
         self, *, channel_id: str, **kwargs

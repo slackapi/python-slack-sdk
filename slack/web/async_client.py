@@ -2191,12 +2191,7 @@ class AsyncWebClient(AsyncBaseClient):
                 Note: this argument is required unless you set org_wide=true.
 
         """
-        kwargs.update(
-            {
-                "is_private": is_private,
-                "name": name,
-            }
-        )
+        kwargs.update({"is_private": is_private, "name": name})
         return await self.api_call("admin.conversations.create", json=kwargs)
 
     async def admin_conversations_delete(
@@ -2225,7 +2220,8 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return await self.api_call("admin.conversations.invite", json=kwargs)
+        # NOTE: the endpoint is unable to handle Content-Type: application/json as of Sep 3, 2020.
+        return await self.api_call("admin.conversations.invite", params=kwargs)
 
     async def admin_conversations_archive(
         self, *, channel_id: str, **kwargs
