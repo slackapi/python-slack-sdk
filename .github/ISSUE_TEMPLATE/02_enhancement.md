@@ -11,10 +11,10 @@ assignees: ""
 ### Category (place an `x` in each of the `[ ]`)
 
 - [ ] **slack.web.WebClient** (Web API client)
-- [ ] **slack.webhook.WebHookClient** (Incoming Webhook, response_url sender)
+- [ ] **slack.webhook.WebhookClient** (Incoming Webhook, response_url sender)
 - [ ] **slack.web.classes** (UI component builders)
 - [ ] **slack.rtm.RTMClient** (RTM client)
 
 ### Requirements
 
-Please read the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to the those rules.
+Please read the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to those rules.

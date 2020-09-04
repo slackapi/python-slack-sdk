@@ -32,7 +32,9 @@ sw_vers && uname -v # or `ver`
 
 (Share the commands to run, source code, and project settings (e.g., setup.py))
 
-1. 2. 3.
+1.
+2.
+3.
 
 ### Expected result:
 
@@ -46,4 +48,4 @@ sw_vers && uname -v # or `ver`
 
 For general questions/issues about Slack API platform or its server-side, could you submit questions at https://my.slack.com/help/requests/new instead. :bow:
 
-Please read the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to the those rules.
+Please read the [Contributing guidelines](https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to those rules.
