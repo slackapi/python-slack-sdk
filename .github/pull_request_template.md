@@ -5,7 +5,7 @@
 ### Category (place an `x` in each of the `[ ]`)
 
 - [ ] **slack.web.WebClient** (Web API client)
-- [ ] **slack.webhook.WebHookClient** (Incoming Webhook, response_url sender)
+- [ ] **slack.webhook.WebhookClient** (Incoming Webhook, response_url sender)
 - [ ] **slack.web.classes** (UI component builders)
 - [ ] **slack.rtm.RTMClient** (RTM client)
 
