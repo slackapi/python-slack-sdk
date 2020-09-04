@@ -183,9 +183,29 @@ class AsyncWebClient(AsyncBaseClient):
             params=kwargs,
         )
 
-    async def admin_conversations_setTeams(self, **kwargs) -> AsyncSlackResponse:
-        """Set the workspaces in an Enterprise grid org that connect to a channel."""
+    async def admin_conversations_setTeams(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Set the workspaces in an Enterprise grid org that connect to a channel.
+
+        Args:
+            channel_id (str): The encoded channel_id to add or remove to workspaces.
+
+        """
+        kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.setTeams", json=kwargs)
+
+    async def admin_conversations_getTeams(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Set the workspaces in an Enterprise grid org that connect to a channel.
+
+        Args:
+            channel_id (str): The channel to determine connected workspaces within the organization for.
+
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.getTeams", json=kwargs)
 
     async def admin_emoji_add(self, **kwargs) -> AsyncSlackResponse:
         """Add an emoji."""
@@ -2156,3 +2176,147 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             kwargs.update({"view": view})
         return await self.api_call("views.publish", json=kwargs)
+
+    async def admin_conversations_create(
+        self, *, is_private: bool, name: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Create a public or private channel-based conversation.
+
+        Args:
+            is_private (bool): When true, creates a private channel instead of a public channel
+            name (str): Name of the public or private channel to create.
+            org_wide (bool): When true, the channel will be available org-wide.
+                Note: if the channel is not org_wide=true, you must specify a team_id for this channel
+            team_id (str): The workspace to create the channel in.
+                Note: this argument is required unless you set org_wide=true.
+
+        """
+        kwargs.update({"is_private": is_private, "name": name})
+        return await self.api_call("admin.conversations.create", json=kwargs)
+
+    async def admin_conversations_delete(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Delete a public or private channel.
+
+        Args:
+            channel_id (str): The channel to delete.
+
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.delete", json=kwargs)
+
+    async def admin_conversations_invite(
+        self, *, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+    ) -> AsyncSlackResponse:
+        """Invite a user to a public or private channel.
+
+        Args:
+            channel_id (str): The channel that the users will be invited to.
+            user_ids (str or list): The users to invite.
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(user_ids, list):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        # NOTE: the endpoint is unable to handle Content-Type: application/json as of Sep 3, 2020.
+        return await self.api_call("admin.conversations.invite", params=kwargs)
+
+    async def admin_conversations_archive(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Archive a public or private channel.
+
+        Args:
+            channel_id (str): The channel to archive.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.archive", json=kwargs)
+
+    async def admin_conversations_unarchive(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Unarchive a public or private channel.
+
+        Args:
+            channel_id (str): The channel to unarchive.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.unarchive", json=kwargs)
+
+    async def admin_conversations_rename(
+        self, *, channel_id: str, name: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Rename a public or private channel.
+
+        Args:
+            channel_id (str): The channel to rename.
+            name (str): The name to rename the channel to.
+        """
+        kwargs.update({"channel_id": channel_id, "name": name})
+        return await self.api_call("admin.conversations.rename", json=kwargs)
+
+    async def admin_conversations_search(self, **kwargs) -> AsyncSlackResponse:
+        """Search for public or private channels in an Enterprise organization."""
+        return await self.api_call("admin.conversations.search", json=kwargs)
+
+    async def admin_conversations_convertToPrivate(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Convert a public channel to a private channel.
+
+        Args:
+            channel_id (str): The channel to convert to private.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.convertToPrivate", json=kwargs)
+
+    async def admin_conversations_setConversationPrefs(
+        self, *, channel_id: str, prefs: Union[str, dict], **kwargs
+    ) -> AsyncSlackResponse:
+        """Set the posting permissions for a public or private channel.
+
+        Args:
+            channel_id (str): The channel to set the prefs for
+            prefs (str or dict): The prefs for this channel in a stringified JSON format.
+        """
+        kwargs.update({"channel_id": channel_id, "prefs": prefs})
+        return await self.api_call(
+            "admin.conversations.setConversationPrefs", json=kwargs
+        )
+
+    async def admin_conversations_getConversationPrefs(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Get conversation preferences for a public or private channel.
+
+        Args:
+            channel_id (str): The channel to get the preferences for.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call(
+            "admin.conversations.getConversationPrefs", json=kwargs
+        )
+
+    async def admin_conversations_disconnectShared(
+        self, *, channel_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Disconnect a connected channel from one or more workspaces.
+
+        Args:
+            channel_id (str): The channel to be disconnected from some workspaces.
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.disconnectShared", json=kwargs)
+
+    async def admin_conversations_ekm_listOriginalConnectedChannelInfo(
+        self, **kwargs
+    ) -> AsyncSlackResponse:
+        """List all disconnected channels—i.e.,
+        channels that were once connected to other workspaces and then disconnected—and
+        the corresponding original channel IDs for key revocation with EKM.
+        """
+        return await self.api_call(
+            "admin.conversations.ekm.listOriginalConnectedChannelInfo", params=kwargs
+        )

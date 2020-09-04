@@ -6,7 +6,7 @@ import unittest
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN, \
     SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN, \
-    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID, SLACK_SDK_TEST_GRID_TEAM_ID
+    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID, SLACK_SDK_TEST_GRID_TEAM_ID, SLACK_SDK_TEST_WEB_TEST_USER_ID
 from integration_tests.helpers import async_test
 from slack import WebClient
 
@@ -45,6 +45,7 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_sync(self):
+        # time.sleep(seconds) are included to avoid rate limiting errors
         client = self.sync_client
 
         add_group = client.admin_conversations_restrictAccess_addGroup(
@@ -75,6 +76,8 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_async(self):
+        # await asyncio.sleep(seconds) are included to avoid rate limiting errors
+
         client = self.async_client
 
         add_group = await client.admin_conversations_restrictAccess_addGroup(
