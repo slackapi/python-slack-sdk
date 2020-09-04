@@ -111,7 +111,9 @@ class AsyncBaseClient:
         show_2020_01_deprecation(api_method)
 
         return await self._send(
-            http_verb=http_verb, api_url=api_url, req_args=req_args,
+            http_verb=http_verb,
+            api_url=api_url,
+            req_args=req_args,
         )
 
     async def _send(

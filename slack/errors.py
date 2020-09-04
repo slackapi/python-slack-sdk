@@ -35,7 +35,7 @@ class SlackApiError(SlackClientError):
 
 class SlackClientNotConnectedError(SlackClientError):
     """Error raised when attempting to send messages over the websocket when the
-    connection is closed. """
+    connection is closed."""
 
 
 class SlackObjectFormationError(SlackClientError):
