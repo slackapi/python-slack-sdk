@@ -2,6 +2,16 @@
 Changelog
 ==============================================
 
+v2.8.2 (2020-09-04)
+-------------------
+
+Refer to `v2.8.2 milestone <https://github.com/slackapi/python-slackclient/milestone/16?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] #795 #794 Add admin.conversations.* API methods in WebClient/AsyncWebClient - Thanks @ruberVulpes
+2. [WebClient] #796 Fix a link to the Static options documentation - Thanks @Jamim
+
 v2.8.1 (2020-08-28)
 -------------------
 
