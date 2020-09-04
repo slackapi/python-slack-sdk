@@ -62,7 +62,13 @@ class TestWebClient(unittest.TestCase):
             channel_id=created_channel_id,
             name=self.channel_rename,
         ))
-        self.assertIsNotNone(client.admin_conversations_search())
+        search_result = client.admin_conversations_search(
+            limit=1,
+            sort="member_count",
+            sort_dir="desc",
+        )
+        self.assertIsNotNone(search_result.data["next_cursor"])
+        self.assertIsNotNone(search_result.data["conversations"])
 
         self.assertIsNotNone(client.admin_conversations_getConversationPrefs(
             channel_id=created_channel_id,
