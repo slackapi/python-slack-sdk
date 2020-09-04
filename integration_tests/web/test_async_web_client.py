@@ -123,7 +123,7 @@ class TestAsyncWebClient(unittest.TestCase):
             channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(file=upload["file"]["id"])
+        deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
     @async_test
@@ -140,7 +140,7 @@ class TestAsyncWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(
+        deletion = await client.files_delete(
             token=self.bot_token,
             file=upload["file"]["id"],
         )
