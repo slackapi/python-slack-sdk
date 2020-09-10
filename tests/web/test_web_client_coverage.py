@@ -504,6 +504,15 @@ class TestWebClientCoverage(unittest.TestCase):
                 elif method_name == "views_update":
                     self.api_methods_to_call.remove(method(view_id="V123", view={})["method"])
                     await async_method(view_id="V123", view={})
+                elif method_name == "workflows_stepCompleted":
+                    self.api_methods_to_call.remove(method(workflow_step_execute_id="S123", outputs={})["method"])
+                    await async_method(workflow_step_execute_id="S123", outputs={})
+                elif method_name == "workflows_stepFailed":
+                    self.api_methods_to_call.remove(method(workflow_step_execute_id="S456", error={})["method"])
+                    await async_method(workflow_step_execute_id="S456", error={})
+                elif method_name == "workflows_updateStep":
+                    self.api_methods_to_call.remove(method(workflow_step_edit_id="S789", inputs={}, outputs=[])["method"])
+                    await async_method(workflow_step_edit_id="S789", inputs={}, outputs=[])
                 elif method_name == "channels_archive":
                     self.api_methods_to_call.remove(method(channel="C123")["method"])
                     await async_method(channel="C123")
