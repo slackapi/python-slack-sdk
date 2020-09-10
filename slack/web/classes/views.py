@@ -13,7 +13,7 @@ class View(JsonObject):
     https://api.slack.com/reference/surfaces/views
     """
 
-    types = ["modal", "home"]
+    types = ["modal", "home", "workflow_step"]
 
     attributes = {
         "type",
@@ -38,7 +38,7 @@ class View(JsonObject):
 
     def __init__(
         self,
-        # type's possible values are "modal", "home"
+        # type's possible values are "modal", "home" and "workflow_step"
         type: str,  # skipcq: PYL-W0622
         id: Optional[str] = None,  # skipcq: PYL-W0622
         callback_id: Optional[str] = None,
@@ -88,7 +88,7 @@ class View(JsonObject):
     private_metadata_max_length = 3000
     callback_id_max_length: int = 255
 
-    @JsonValidator('type must be either "modal" or "home"')
+    @JsonValidator('type must be either "modal", "home" or "workflow_step"')
     def _validate_type(self):
         return self.type is not None and self.type in self.types
 
