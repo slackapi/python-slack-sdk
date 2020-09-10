@@ -2319,7 +2319,7 @@ class WebClient(BaseClient):
         self,
         *,
         workflow_step_execute_id: str,
-        outputs: dict = {},
+        outputs: dict = None,
         **kwargs
     ) -> Union[Future, SlackResponse]:
         """Indicate a successful outcome of a workflow step's execution.
@@ -2356,11 +2356,11 @@ class WebClient(BaseClient):
         self,
         *,
         workflow_step_edit_id: str,
-        inputs: dict = {},
-        outputs: list = [],
+        inputs: dict = None,
+        outputs: list = None,
         **kwargs
     ) -> Union[Future, SlackResponse]:
-        """Indicate an unsuccessful outcome of a workflow step's execution.
+        """Update the configuration for a workflow extension step.
         Args:
             workflow_step_edit_id (str): A unique identifier of the workflow step to be updated.
                 e.g. 'add_task'
