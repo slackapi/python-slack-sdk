@@ -1,2 +1,1 @@
-# see: http://legacy.python.org/dev/peps/pep-0440/#public-version-identifiers
-__version__ = "2.9.0"
+from slack_sdk.version import __version__  # noqa
