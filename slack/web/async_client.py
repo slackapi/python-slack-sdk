@@ -1501,7 +1501,7 @@ class AsyncWebClient(AsyncBaseClient):
             )
 
         if file:
-            if "filename" not in kwargs:
+            if "filename" not in kwargs and isinstance(file, str):
                 # use the local filename if filename is missing
                 kwargs["filename"] = file.split(os.path.sep)[-1]
             return await self.api_call(

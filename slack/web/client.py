@@ -1491,7 +1491,7 @@ class WebClient(BaseClient):
             )
 
         if file:
-            if "filename" not in kwargs:
+            if "filename" not in kwargs and isinstance(file, str):
                 # use the local filename if filename is missing
                 kwargs["filename"] = file.split(os.path.sep)[-1]
             return self.api_call("files.upload", files={"file": file}, data=kwargs)
