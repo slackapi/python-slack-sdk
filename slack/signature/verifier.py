@@ -23,9 +23,7 @@ class SignatureVerifier:
         self.clock = clock
 
     def is_valid_request(
-        self,
-        body: Union[str, bytes],
-        headers: Dict[str, str],
+        self, body: Union[str, bytes], headers: Dict[str, str],
     ) -> bool:
         """Verifies if the given signature is valid"""
         if headers is None:
@@ -38,10 +36,7 @@ class SignatureVerifier:
         )
 
     def is_valid(
-        self,
-        body: Union[str, bytes],
-        timestamp: str,
-        signature: str,
+        self, body: Union[str, bytes], timestamp: str, signature: str,
     ) -> bool:
         """Verifies if the given signature is valid"""
         if timestamp is None or signature is None:

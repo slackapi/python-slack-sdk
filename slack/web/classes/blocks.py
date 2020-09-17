@@ -159,10 +159,7 @@ class DividerBlock(Block):
     type = "divider"
 
     def __init__(
-        self,
-        *,
-        block_id: Optional[str] = None,
-        **others: dict,
+        self, *, block_id: Optional[str] = None, **others: dict,
     ):
         """A content divider, like an <hr>, to split up different blocks inside of a message.
         https://api.slack.com/reference/block-kit/blocks#divider

@@ -14,8 +14,7 @@ def _build_body(original_body: Dict[str, any]) -> Dict[str, any]:
 
 
 def _build_request_headers(
-    default_headers: Dict[str, str],
-    additional_headers: Optional[Dict[str, str]],
+    default_headers: Dict[str, str], additional_headers: Optional[Dict[str, str]],
 ) -> Dict[str, str]:
     if default_headers is None and additional_headers is None:
         return {}

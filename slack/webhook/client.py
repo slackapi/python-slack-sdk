@@ -119,9 +119,7 @@ class WebhookClient:
 
             # NOTE: BAN-B310 is already checked above
             resp: HTTPResponse = urlopen(  # skipcq: BAN-B310
-                req,
-                context=self.ssl,
-                timeout=self.timeout,
+                req, context=self.ssl, timeout=self.timeout,
             )
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
@@ -138,10 +136,7 @@ class WebhookClient:
             charset = e.headers.get_content_charset()
             body: str = e.read().decode(charset)  # read the response body here
             resp = WebhookResponse(
-                url=url,
-                status_code=e.code,
-                body=body,
-                headers=e.headers,
+                url=url, status_code=e.code, body=body, headers=e.headers,
             )
             if e.code == 429:
                 # for backward-compatibility with WebClient (v.2.5.0 or older)

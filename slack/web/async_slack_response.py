@@ -133,9 +133,7 @@ class AsyncSlackResponse:
             self.req_args.update({"params": params})
 
             response = await self._client._request(  # skipcq: PYL-W0212
-                http_verb=self.http_verb,
-                api_url=self.api_url,
-                req_args=self.req_args,
+                http_verb=self.http_verb, api_url=self.api_url, req_args=self.req_args,
             )
 
             self.data = response["data"]
