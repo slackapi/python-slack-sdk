@@ -1,0 +1,82 @@
+{
+  "ok": true,
+  "channels": [
+    {
+      "id": "C111",
+      "name": "general",
+      "is_channel": true,
+      "is_group": false,
+      "is_im": false,
+      "created": 1421924831,
+      "is_archived": false,
+      "is_general": true,
+      "unlinked": 0,
+      "name_normalized": "general",
+      "is_shared": false,
+      "creator": "U111",
+      "is_ext_shared": false,
+      "is_org_shared": false,
+      "shared_team_ids": [
+        "T111"
+      ],
+      "pending_shared": [],
+      "pending_connected_team_ids": [],
+      "is_pending_ext_shared": false,
+      "is_member": true,
+      "is_private": false,
+      "is_mpim": false,
+      "topic": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      },
+      "purpose": {
+        "value": "This channel is for team-wide communication and announcements. All team members are in this channel.",
+        "creator": "",
+        "last_set": 0
+      },
+      "previous_names": [],
+      "num_members": 8
+    },
+    {
+      "id": "C222",
+      "name": "random",
+      "is_channel": true,
+      "is_group": false,
+      "is_im": false,
+      "created": 1421924831,
+      "is_archived": false,
+      "is_general": false,
+      "unlinked": 0,
+      "name_normalized": "random",
+      "is_shared": false,
+      "creator": "U111",
+      "is_ext_shared": false,
+      "is_org_shared": false,
+      "shared_team_ids": [
+        "T111"
+      ],
+      "pending_shared": [],
+      "pending_connected_team_ids": [],
+      "is_pending_ext_shared": false,
+      "is_member": true,
+      "is_private": false,
+      "is_mpim": false,
+      "topic": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      },
+      "purpose": {
+        "value": "A place for non-work banter, links, articles of interest, humor or anything else which you\u0027d like concentrated in some place other than work-related channels.",
+        "creator": "",
+        "last_set": 0
+      },
+      "previous_names": [],
+      "num_members": 10
+    }
+  ],
+  "response_metadata": {
+    "next_cursor": ""
+  }
+}

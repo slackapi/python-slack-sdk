@@ -1,0 +1,237 @@
+{
+  "type": "home",
+  "blocks": [
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Create New TODO List",
+            "emoji": true
+          },
+          "style": "primary",
+          "value": "create_task"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Help",
+            "emoji": true
+          },
+          "value": "help"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://api.slack.com/img/blocks/bkb_template_images/placeholder.png",
+          "alt_text": "placeholder"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Today*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":memo: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "checkboxes",
+          "initial_options": [
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "~*Get into the garden :house_with_garden:*~"
+              },
+              "value": "option 1"
+            }
+          ],
+          "options": [
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "~*Get into the garden :house_with_garden:*~"
+              },
+              "value": "option 1"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Get the groundskeeper wet :sweat_drops:*"
+              },
+              "value": "option 2"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Steal the groundskeeper's keys :old_key:*"
+              },
+              "value": "option 3"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Make the groundskeeper wear his sun hat :male-farmer:*"
+              },
+              "value": "option 4"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Rake in the lake :ocean:*"
+              },
+              "value": "option 5"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Have a picnic :knife_fork_plate:*"
+              },
+              "value": "option 6",
+              "description": {
+                "type": "mrkdwn",
+                "text": "Bring to the picnic: sandwich, apple, pumpkin, carrot, basket"
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Add Item",
+            "emoji": true
+          },
+          "style": "primary"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Tomorrow*"
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":memo: Edit",
+              "emoji": true
+            },
+            "value": "edit"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": ":x: Delete",
+              "emoji": true
+            },
+            "value": "delete"
+          }
+        ]
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "checkboxes",
+          "options": [
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Break the broom :anger:*"
+              },
+              "value": "option 1"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Trap the boy in the phone booth :phone:*"
+              },
+              "value": "option 2"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Make the boy wear the wrong glasses :nerd_face:*"
+              },
+              "value": "option 3"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Make someone buy back their own stuff :money_with_wings:*"
+              },
+              "value": "option 4"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Get on TV :tv:*"
+              },
+              "value": "option 5"
+            },
+            {
+              "text": {
+                "type": "mrkdwn",
+                "text": "*Go shopping :shopping_trolley:*"
+              },
+              "value": "option 6",
+              "description": {
+                "type": "mrkdwn",
+                "text": "Toothbrush, hairbrush, tinned food, cleaner, fruits & vegetables"
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Add Item",
+            "emoji": true
+          },
+          "style": "primary"
+        }
+      ]
+    }
+  ]
+}

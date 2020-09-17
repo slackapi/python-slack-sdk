@@ -6,6 +6,7 @@ python:
   - "3.8"
 install:
   - python setup.py install
+  - pip install -e ".[testing]"
 script:
   - pip install "aiohttp>=3,<4"
   - travis_retry python setup.py validate

@@ -1,0 +1,524 @@
+{
+  "type": "modal",
+  "title": {
+    "type": "plain_text",
+    "text": "My App",
+    "emoji": true
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "close": {
+    "type": "plain_text",
+    "text": "Cancel",
+    "emoji": true
+  },
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
+      }
+    },
+    {
+      "type": "image",
+      "title": {
+        "type": "plain_text",
+        "text": "image1",
+        "emoji": true
+      },
+      "image_url": "https://api.slack.com/img/blocks/bkb_template_images/beagle.png",
+      "alt_text": "image1"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "For more info, contact <support@acme.inc>"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "datepicker",
+          "initial_date": "1990-04-28",
+          "placeholder": {
+            "type": "plain_text",
+            "text": "Select a date",
+            "emoji": true
+          }
+        },
+        {
+          "type": "datepicker",
+          "initial_date": "1990-04-28",
+          "placeholder": {
+            "type": "plain_text",
+            "text": "Select a date",
+            "emoji": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "You can add an image next to text in this block."
+      },
+      "accessory": {
+        "type": "image",
+        "image_url": "https://api.slack.com/img/blocks/bkb_template_images/plants.png",
+        "alt_text": "plants"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "You can add a button alongside text in your message. "
+      },
+      "accessory": {
+        "type": "button",
+        "text": {
+          "type": "plain_text",
+          "text": "Button",
+          "emoji": true
+        },
+        "value": "click_me_123"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Pick an item from the dropdown list"
+      },
+      "accessory": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 1",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 2",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 3",
+              "emoji": true
+            },
+            "value": "value-2"
+          }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Pick one or more items from the list"
+      },
+      "accessory": {
+        "type": "multi_static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select items",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 1",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 2",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Choice 3",
+              "emoji": true
+            },
+            "value": "value-2"
+          }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "This block has an overflow menu."
+      },
+      "accessory": {
+        "type": "overflow",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 1",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 2",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 3",
+              "emoji": true
+            },
+            "value": "value-2"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 4",
+              "emoji": true
+            },
+            "value": "value-3"
+          }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Pick a date for the deadline."
+      },
+      "accessory": {
+        "type": "datepicker",
+        "initial_date": "1990-04-28",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select a date",
+          "emoji": true
+        }
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "plain_text",
+          "text": "*this is plain_text text*",
+          "emoji": true
+        },
+        {
+          "type": "plain_text",
+          "text": "*this is plain_text text*",
+          "emoji": true
+        },
+        {
+          "type": "plain_text",
+          "text": "*this is plain_text text*",
+          "emoji": true
+        },
+        {
+          "type": "plain_text",
+          "text": "*this is plain_text text*",
+          "emoji": true
+        },
+        {
+          "type": "plain_text",
+          "text": "*this is plain_text text*",
+          "emoji": true
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "This is a section block with _another_ fields radio button accessory"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "This is a section block with *fields* radio button accessory"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "This is a section block."
+        }
+      ],
+      "accessory": {
+        "type": "radio_buttons",
+        "initial_option": {
+          "text": {
+            "type": "plain_text",
+            "text": "Option 3"
+          },
+          "value": "option 3",
+          "description": {
+            "type": "plain_text",
+            "text": "Description for option 3"
+          }
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 1"
+            },
+            "value": "option 1",
+            "description": {
+              "type": "plain_text",
+              "text": "Description for option 1"
+            }
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 2"
+            },
+            "value": "option 2",
+            "description": {
+              "type": "plain_text",
+              "text": "Description for option 2"
+            }
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Option 3"
+            },
+            "value": "option 3",
+            "description": {
+              "type": "plain_text",
+              "text": "Description for option 3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "This is a section block with checkboxes."
+      },
+      "accessory": {
+        "type": "checkboxes",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "description": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "description": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "description": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-2"
+          }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "plain_text_input"
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "plain_text_input",
+        "multiline": true
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "datepicker",
+        "initial_date": "1990-04-28",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select a date",
+          "emoji": true
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-2"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "multi_users_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select users",
+          "emoji": true
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "checkboxes",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-1"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "*this is plain_text text*",
+              "emoji": true
+            },
+            "value": "value-2"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Label",
+        "emoji": true
+      }
+    }
+  ]
+}

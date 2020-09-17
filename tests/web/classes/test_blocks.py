@@ -8,7 +8,11 @@ from slack.web.classes.blocks import (
     DividerBlock,
     HeaderBlock,
     ImageBlock,
-    SectionBlock, InputBlock, FileBlock, Block, CallBlock,
+    SectionBlock,
+    InputBlock,
+    FileBlock,
+    Block,
+    CallBlock,
 )
 from slack.web.classes.elements import ButtonElement, ImageElement, LinkButtonElement
 from slack.web.classes.objects import PlainTextObject, MarkdownTextObject
@@ -24,13 +28,11 @@ class BlockTests(unittest.TestCase):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "A message *with some bold text* and _some italicized text_."
+                "text": "A message *with some bold text* and _some italicized text_.",
             },
             "unexpected_field": "test",
             "unexpected_fields": [1, 2, 3],
-            "unexpected_object": {
-                "something": "wrong"
-            },
+            "unexpected_object": {"something": "wrong"},
         }
         block = Block.parse(input)
         self.assertIsNotNone(block)
@@ -40,16 +42,17 @@ class BlockTests(unittest.TestCase):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "A message *with some bold text* and _some italicized text_."
+                    "text": "A message *with some bold text* and _some italicized text_.",
                 },
             },
-            block.to_dict()
+            block.to_dict(),
         )
 
 
 # ----------------------------------------------
 # Section
 # ----------------------------------------------
+
 
 class SectionBlockTests(unittest.TestCase):
     maxDiff = None
@@ -59,8 +62,8 @@ class SectionBlockTests(unittest.TestCase):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "A message *with some bold text* and _some italicized text_."
-            }
+                "text": "A message *with some bold text* and _some italicized text_.",
+            },
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
@@ -70,19 +73,12 @@ class SectionBlockTests(unittest.TestCase):
             "type": "section",
             "text": {
                 "text": "A message *with some bold text* and _some italicized text_.",
-                "type": "mrkdwn"
+                "type": "mrkdwn",
             },
             "fields": [
-                {
-                    "type": "mrkdwn",
-                    "text": "High"
-                },
-                {
-                    "type": "plain_text",
-                    "emoji": True,
-                    "text": "String"
-                }
-            ]
+                {"type": "mrkdwn", "text": "High"},
+                {"type": "plain_text", "emoji": True, "text": "String"},
+            ],
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
 
@@ -91,17 +87,14 @@ class SectionBlockTests(unittest.TestCase):
             "type": "section",
             "text": {
                 "text": "*Sally* has requested you set the deadline for the Nano launch project",
-                "type": "mrkdwn"
+                "type": "mrkdwn",
             },
             "accessory": {
                 "type": "datepicker",
                 "action_id": "datepicker123",
                 "initial_date": "1990-04-28",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select a date"
-                }
-            }
+                "placeholder": {"type": "plain_text", "text": "Select a date"},
+            },
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
 
@@ -111,8 +104,8 @@ class SectionBlockTests(unittest.TestCase):
             "text": {
                 "type": "plain_text",
                 "text": "This is a plain text section block.",
-                "emoji": True
-            }
+                "emoji": True,
+            },
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
 
@@ -138,7 +131,9 @@ class SectionBlockTests(unittest.TestCase):
                 ],
                 "type": "section",
             },
-            SectionBlock(text="some text", fields=[f"field{i}" for i in range(5)]).to_dict(),
+            SectionBlock(
+                text="some text", fields=[f"field{i}" for i in range(5)]
+            ).to_dict(),
         )
 
         button = LinkButtonElement(text="Click me!", url="http://google.com")
@@ -171,29 +166,27 @@ class SectionBlockTests(unittest.TestCase):
         blocks = [
             {
                 "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"*{msg1}*:\n{msg2}"
-                }
+                "text": {"type": "mrkdwn", "text": f"*{msg1}*:\n{msg2}"},
             },
-            {
-                "type": "section",
-                "fields": []
-            }
+            {"type": "section", "fields": []},
         ]
-        names = list(set(data.keys()) - set('user_comments'))
-        fields = [{"type": "mrkdwn", "text": f"*{name}*:\n{data[name]}"} for name in names]
-        blocks[1]['fields'] = fields
+        names = list(set(data.keys()) - set("user_comments"))
+        fields = [
+            {"type": "mrkdwn", "text": f"*{name}*:\n{data[name]}"} for name in names
+        ]
+        blocks[1]["fields"] = fields
         return blocks
 
     @classmethod
     def build_slack_block_native(cls, msg1, msg2, data):
         blocks: List[SectionBlock] = [
             SectionBlock(text=MarkdownTextObject.parse(f"*{msg1}*:\n{msg2}")),
-            SectionBlock(fields=[])
+            SectionBlock(fields=[]),
         ]
-        names: List[str] = list(set(data.keys()) - set('user_comments'))
-        fields = [MarkdownTextObject.parse(f"*{name}*:\n{data[name]}") for name in names]
+        names: List[str] = list(set(data.keys()) - set("user_comments"))
+        fields = [
+            MarkdownTextObject.parse(f"*{name}*:\n{data[name]}") for name in names
+        ]
         blocks[1].fields = fields
         return list(b.to_dict() for b in blocks)
 
@@ -202,7 +195,7 @@ class SectionBlockTests(unittest.TestCase):
             "first": "1",
             "second": "2",
             "third": "3",
-            "user_comments": {"first", "other"}
+            "user_comments": {"first", "other"},
         }
         expected = self.build_slack_block("category", "tech", data)
         actual = self.build_slack_block_native("category", "tech", data)
@@ -213,34 +206,34 @@ class SectionBlockTests(unittest.TestCase):
 # Divider
 # ----------------------------------------------
 
+
 class DividerBlockTests(unittest.TestCase):
     def test_document(self):
-        input = {
-            "type": "divider"
-        }
+        input = {"type": "divider"}
         self.assertDictEqual(input, DividerBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_json(self):
+        self.assertDictEqual({"type": "divider"}, DividerBlock().to_dict())
         self.assertDictEqual(
-            {"type": "divider"},
-            DividerBlock().to_dict())
-        self.assertDictEqual(
-            {"type": "divider"},
-            DividerBlock(**{"type": "divider"}).to_dict())
+            {"type": "divider"}, DividerBlock(**{"type": "divider"}).to_dict()
+        )
 
     def test_json_with_block_id(self):
         self.assertDictEqual(
             {"type": "divider", "block_id": "foo"},
-            DividerBlock(block_id="foo").to_dict())
+            DividerBlock(block_id="foo").to_dict(),
+        )
         self.assertDictEqual(
             {"type": "divider", "block_id": "foo"},
-            DividerBlock(**{"type": "divider", "block_id": "foo"}).to_dict())
+            DividerBlock(**{"type": "divider", "block_id": "foo"}).to_dict(),
+        )
 
 
 # ----------------------------------------------
 # Image
 # ----------------------------------------------
+
 
 class ImageBlockTests(unittest.TestCase):
     def test_document(self):
@@ -248,11 +241,11 @@ class ImageBlockTests(unittest.TestCase):
             "type": "image",
             "title": {
                 "type": "plain_text",
-                "text": "Please enjoy this photo of a kitten"
+                "text": "Please enjoy this photo of a kitten",
             },
             "block_id": "image4",
             "image_url": "http://placekitten.com/500/500",
-            "alt_text": "An incredibly cute kitten."
+            "alt_text": "An incredibly cute kitten.",
         }
         self.assertDictEqual(input, ImageBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
@@ -264,7 +257,9 @@ class ImageBlockTests(unittest.TestCase):
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageBlock(image_url="http://google.com", alt_text="not really an image").to_dict(),
+            ImageBlock(
+                image_url="http://google.com", alt_text="not really an image"
+            ).to_dict(),
         )
 
     def test_image_url_length(self):
@@ -273,16 +268,21 @@ class ImageBlockTests(unittest.TestCase):
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(image_url="http://google.com", alt_text=STRING_3001_CHARS).to_dict()
+            ImageBlock(
+                image_url="http://google.com", alt_text=STRING_3001_CHARS
+            ).to_dict()
 
     def test_title_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(image_url="http://google.com", alt_text="text", title=STRING_3001_CHARS).to_dict()
+            ImageBlock(
+                image_url="http://google.com", alt_text="text", title=STRING_3001_CHARS
+            ).to_dict()
 
 
 # ----------------------------------------------
 # Actions
 # ----------------------------------------------
+
 
 class ActionsBlockTests(unittest.TestCase):
     def test_document_1(self):
@@ -294,50 +294,35 @@ class ActionsBlockTests(unittest.TestCase):
                     "type": "static_select",
                     "placeholder": {
                         "type": "plain_text",
-                        "text": "Which witch is the witchiest witch?"
+                        "text": "Which witch is the witchiest witch?",
                     },
                     "action_id": "select_2",
                     "options": [
                         {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Matilda"
-                            },
-                            "value": "matilda"
+                            "text": {"type": "plain_text", "text": "Matilda"},
+                            "value": "matilda",
                         },
                         {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Glinda"
-                            },
-                            "value": "glinda"
+                            "text": {"type": "plain_text", "text": "Glinda"},
+                            "value": "glinda",
                         },
                         {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Granny Weatherwax"
-                            },
-                            "value": "grannyWeatherwax"
+                            "text": {"type": "plain_text", "text": "Granny Weatherwax"},
+                            "value": "grannyWeatherwax",
                         },
                         {
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Hermione"
-                            },
-                            "value": "hermione"
-                        }
-                    ]
+                            "text": {"type": "plain_text", "text": "Hermione"},
+                            "value": "hermione",
+                        },
+                    ],
                 },
                 {
                     "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Cancel"
-                    },
+                    "text": {"type": "plain_text", "text": "Cancel"},
                     "value": "cancel",
-                    "action_id": "button_1"
-                }
-            ]
+                    "action_id": "button_1",
+                },
+            ],
         }
         self.assertDictEqual(input, ActionsBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
@@ -351,10 +336,7 @@ class ActionsBlockTests(unittest.TestCase):
                     "type": "datepicker",
                     "action_id": "datepicker123",
                     "initial_date": "1990-04-28",
-                    "placeholder": {
-                        "type": "plain_text",
-                        "text": "Select a date"
-                    }
+                    "placeholder": {"type": "plain_text", "text": "Select a date"},
                 },
                 {
                     "type": "overflow",
@@ -362,51 +344,48 @@ class ActionsBlockTests(unittest.TestCase):
                         {
                             "text": {
                                 "type": "plain_text",
-                                "text": "*this is plain_text text*"
+                                "text": "*this is plain_text text*",
                             },
-                            "value": "value-0"
+                            "value": "value-0",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
-                                "text": "*this is plain_text text*"
+                                "text": "*this is plain_text text*",
                             },
-                            "value": "value-1"
+                            "value": "value-1",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
-                                "text": "*this is plain_text text*"
+                                "text": "*this is plain_text text*",
                             },
-                            "value": "value-2"
+                            "value": "value-2",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
-                                "text": "*this is plain_text text*"
+                                "text": "*this is plain_text text*",
                             },
-                            "value": "value-3"
+                            "value": "value-3",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
-                                "text": "*this is plain_text text*"
+                                "text": "*this is plain_text text*",
                             },
-                            "value": "value-4"
-                        }
+                            "value": "value-4",
+                        },
                     ],
-                    "action_id": "overflow"
+                    "action_id": "overflow",
                 },
                 {
                     "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Click Me"
-                    },
+                    "text": {"type": "plain_text", "text": "Click Me"},
                     "value": "click_me_123",
-                    "action_id": "button"
-                }
-            ]
+                    "action_id": "button",
+                },
+            ],
         }
         self.assertDictEqual(input, ActionsBlock(**input).to_dict())
 
@@ -431,6 +410,7 @@ class ActionsBlockTests(unittest.TestCase):
 # Context
 # ----------------------------------------------
 
+
 class ContextBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
@@ -439,13 +419,10 @@ class ContextBlockTests(unittest.TestCase):
                 {
                     "type": "image",
                     "image_url": "https://image.freepik.com/free-photo/red-drawing-pin_1156-445.jpg",
-                    "alt_text": "images"
+                    "alt_text": "images",
                 },
-                {
-                    "type": "mrkdwn",
-                    "text": "Location: **Dogpatch**"
-                }
-            ]
+                {"type": "mrkdwn", "text": "Location: **Dogpatch**"},
+            ],
         }
         self.assertDictEqual(input, ContextBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
@@ -454,7 +431,8 @@ class ContextBlockTests(unittest.TestCase):
         self.elements = [
             ImageElement(
                 image_url="https://api.slack.com/img/blocks/bkb_template_images/palmtree.png",
-                alt_text="palmtree"),
+                alt_text="palmtree",
+            ),
             PlainTextObject(text="Just text"),
         ]
         e = {
@@ -462,7 +440,7 @@ class ContextBlockTests(unittest.TestCase):
                 {
                     "type": "image",
                     "image_url": "https://api.slack.com/img/blocks/bkb_template_images/palmtree.png",
-                    "alt_text": "palmtree"
+                    "alt_text": "palmtree",
                 },
                 {"type": "plain_text", "text": "Just text"},
             ],
@@ -479,31 +457,19 @@ class ContextBlockTests(unittest.TestCase):
 # Input
 # ----------------------------------------------
 
+
 class InputBlockTests(unittest.TestCase):
     def test_document(self):
         blocks = [
             {
                 "type": "input",
-                "element": {
-                    "type": "plain_text_input"
-                },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "element": {"type": "plain_text_input"},
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
-                "element": {
-                    "type": "plain_text_input",
-                    "multiline": True
-                },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "element": {"type": "plain_text_input", "multiline": True},
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
@@ -513,14 +479,10 @@ class InputBlockTests(unittest.TestCase):
                     "placeholder": {
                         "type": "plain_text",
                         "text": "Select a date",
-                        "emoji": True
-                    }
+                        "emoji": True,
+                    },
                 },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
@@ -529,14 +491,10 @@ class InputBlockTests(unittest.TestCase):
                     "placeholder": {
                         "type": "plain_text",
                         "text": "Select a channel",
-                        "emoji": True
-                    }
+                        "emoji": True,
+                    },
                 },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
@@ -545,14 +503,10 @@ class InputBlockTests(unittest.TestCase):
                     "placeholder": {
                         "type": "plain_text",
                         "text": "Select users",
-                        "emoji": True
-                    }
+                        "emoji": True,
+                    },
                 },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
@@ -563,49 +517,35 @@ class InputBlockTests(unittest.TestCase):
                             "text": {
                                 "type": "plain_text",
                                 "text": "*this is plain_text text*",
-                                "emoji": True
+                                "emoji": True,
                             },
-                            "value": "value-0"
+                            "value": "value-0",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
                                 "text": "*this is plain_text text*",
-                                "emoji": True
+                                "emoji": True,
                             },
-                            "value": "value-1"
+                            "value": "value-1",
                         },
                         {
                             "text": {
                                 "type": "plain_text",
                                 "text": "*this is plain_text text*",
-                                "emoji": True
+                                "emoji": True,
                             },
-                            "value": "value-2"
-                        }
-                    ]
+                            "value": "value-2",
+                        },
+                    ],
                 },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True
-                }
+                "label": {"type": "plain_text", "text": "Label", "emoji": True},
             },
             {
                 "type": "input",
-                "element": {
-                    "type": "plain_text_input",
-                },
-                "label": {
-                    "type": "plain_text",
-                    "text": "Label",
-                    "emoji": True,
-                },
-                "hint": {
-                    "type": "plain_text",
-                    "text": "some hint",
-                    "emoji": True,
-                },
+                "element": {"type": "plain_text_input",},
+                "label": {"type": "plain_text", "text": "Label", "emoji": True,},
+                "hint": {"type": "plain_text", "text": "some hint", "emoji": True,},
             },
         ]
         for input in blocks:
@@ -617,6 +557,7 @@ class InputBlockTests(unittest.TestCase):
 # File
 # ----------------------------------------------
 
+
 class FileBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
@@ -627,9 +568,11 @@ class FileBlockTests(unittest.TestCase):
         self.assertDictEqual(input, FileBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
 
+
 # ----------------------------------------------
 # Call
 # ----------------------------------------------
+
 
 class CallBlockTests(unittest.TestCase):
     def test_with_real_payload(self):
@@ -653,47 +596,41 @@ class CallBlockTests(unittest.TestCase):
                         "image_192": "https://www.example.com/",
                         "image_512": "https://www.example.com/",
                         "image_1024": "https://www.example.com/",
-                        "image_original": "https://www.example.com/"
+                        "image_original": "https://www.example.com/",
                     },
                     "date_start": 12345,
                     "active_participants": [
-                        {
-                            "slack_id": "U00000000"
-                        },
+                        {"slack_id": "U00000000"},
                         {
                             "slack_id": "U00000000",
                             "external_id": "",
                             "avatar_url": "https://www.example.com/",
-                            "display_name": ""
-                        }
+                            "display_name": "",
+                        },
                     ],
                     "all_participants": [
-                        {
-                            "slack_id": "U00000000"
-                        },
+                        {"slack_id": "U00000000"},
                         {
                             "slack_id": "U00000000",
                             "external_id": "",
                             "avatar_url": "https://www.example.com/",
-                            "display_name": ""
-                        }
+                            "display_name": "",
+                        },
                     ],
                     "display_id": "",
                     "join_url": "https://www.example.com/",
                     "name": "",
                     "created_by": "U00000000",
                     "date_end": 12345,
-                    "channels": [
-                        "C00000000"
-                    ],
+                    "channels": ["C00000000"],
                     "is_dm_call": False,
                     "was_rejected": False,
                     "was_missed": False,
                     "was_accepted": False,
                     "has_ended": False,
-                    "desktop_app_join_url": "https://www.example.com/"
+                    "desktop_app_join_url": "https://www.example.com/",
                 }
-            }
+            },
         }
         self.assertDictEqual(input, CallBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())

@@ -17,7 +17,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
 validate_dependencies = [
-    "pytest>=5,<6",
+    "pytest>=5.4,<6",
     "pytest-asyncio<1",  # for async
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
@@ -182,8 +182,12 @@ class ValidateCommand(BaseCommand):
             [sys.executable, "-m", "pip", "install"] + validate_dependencies,
         )
         self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack"])
+        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
         self._run(
             "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack"]
+        )
+        self._run(
+            "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"]
         )
 
         target = self.test_target.replace("tests/", "")
@@ -194,7 +198,7 @@ class ValidateCommand(BaseCommand):
                 "-m",
                 "pytest",
                 "--cov-report=xml",
-                f"--cov={here}/slack",
+                f"--cov={here}/slack_sdk",
                 f"tests/{target}",
             ],
         )
@@ -227,8 +231,6 @@ class IntegrationTestsCommand(BaseCommand):
                 sys.executable,
                 "-m",
                 "pytest",
-                "--cov-report=xml",
-                f"--cov={here}/slack",
                 path,
             ],
         )

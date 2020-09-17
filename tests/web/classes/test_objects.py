@@ -41,10 +41,7 @@ class KeyValueObject(JsonObject):
     attributes = {"name", "value"}
 
     def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        value: Optional[str] = None,
+        self, *, name: Optional[str] = None, value: Optional[str] = None,
     ):
         self.name = name
         self.value = value
@@ -59,10 +56,11 @@ class NestedObject(JsonObject):
         initial: Union[dict, KeyValueObject],
         options: List[Union[dict, KeyValueObject]],
     ):
-        self.initial = KeyValueObject(**initial) if isinstance(initial, dict) else initial
+        self.initial = (
+            KeyValueObject(**initial) if isinstance(initial, dict) else initial
+        )
         self.options = [
-            KeyValueObject(**o) if isinstance(o, dict) else o
-            for o in options
+            KeyValueObject(**o) if isinstance(o, dict) else o for o in options
         ]
 
 
@@ -97,7 +95,10 @@ class JsonObjectTests(unittest.TestCase):
     def test_get_non_null_attributes_nested(self):
         expected = {
             "initial": {"name": "something"},
-            "options": [{"name": "something"}, {"name": "message", "value": "That's great!"}]
+            "options": [
+                {"name": "something"},
+                {"name": "message", "value": "That's great!"},
+            ],
         }
         obj1 = KeyValueObject(name="something", value=None)
         obj2 = KeyValueObject(name="message", value="That's great!")
@@ -128,11 +129,17 @@ class JsonObjectTests(unittest.TestCase):
     def test_get_non_null_attributes_nested_2(self):
         expected = {
             "initial": {"name": "something"},
-            "options": [{"name": "something"}, {"name": "message", "value": "That's great!"}]
+            "options": [
+                {"name": "something"},
+                {"name": "message", "value": "That's great!"},
+            ],
         }
         nested = NestedObject(
             initial={"name": "something"},
-            options=[{"name": "something"}, {"name": "message", "value": "That's great!"}]
+            options=[
+                {"name": "something"},
+                {"name": "message", "value": "That's great!"},
+            ],
         )
         self.assertDictEqual(expected, nested.get_non_null_attributes())
 
@@ -245,8 +252,7 @@ class PlainTextObjectTests(unittest.TestCase):
     def test_from_string(self):
         plaintext = PlainTextObject(text="some text", emoji=True)
         self.assertDictEqual(
-            plaintext.to_dict(),
-            PlainTextObject.direct_from_string("some text")
+            plaintext.to_dict(), PlainTextObject.direct_from_string("some text")
         )
 
 
@@ -265,8 +271,7 @@ class MarkdownTextObjectTests(unittest.TestCase):
     def test_from_string(self):
         markdown = MarkdownTextObject(text="some text")
         self.assertDictEqual(
-            markdown.to_dict(),
-            MarkdownTextObject.direct_from_string("some text")
+            markdown.to_dict(), MarkdownTextObject.direct_from_string("some text")
         )
 
 
@@ -477,46 +482,35 @@ class OptionGroupTests(unittest.TestCase):
             )
 
     def test_confirm_style(self):
-        obj = ConfirmObject.parse({
-            "title": {
-                "type": "plain_text",
-                "text": "Are you sure?"
-            },
-            "text": {
-                "type": "mrkdwn",
-                "text": "Wouldn't you prefer a good game of _chess_?"
-            },
-            "confirm": {
-                "type": "plain_text",
-                "text": "Do it"
-            },
-            "deny": {
-                "type": "plain_text",
-                "text": "Stop, I've changed my mind!"
-            },
-            "style": "primary"
-        })
+        obj = ConfirmObject.parse(
+            {
+                "title": {"type": "plain_text", "text": "Are you sure?"},
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Wouldn't you prefer a good game of _chess_?",
+                },
+                "confirm": {"type": "plain_text", "text": "Do it"},
+                "deny": {"type": "plain_text", "text": "Stop, I've changed my mind!"},
+                "style": "primary",
+            }
+        )
         obj.validate_json()
         self.assertEqual("primary", obj.style)
 
     def test_confirm_style_validation(self):
         with self.assertRaises(SlackObjectFormationError):
-            ConfirmObject.parse({
-                "title": {
-                    "type": "plain_text",
-                    "text": "Are you sure?"
-                },
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "Wouldn't you prefer a good game of _chess_?"
-                },
-                "confirm": {
-                    "type": "plain_text",
-                    "text": "Do it"
-                },
-                "deny": {
-                    "type": "plain_text",
-                    "text": "Stop, I've changed my mind!"
-                },
-                "style": "something-wrong"
-            }).validate_json()
+            ConfirmObject.parse(
+                {
+                    "title": {"type": "plain_text", "text": "Are you sure?"},
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Wouldn't you prefer a good game of _chess_?",
+                    },
+                    "confirm": {"type": "plain_text", "text": "Do it"},
+                    "deny": {
+                        "type": "plain_text",
+                        "text": "Stop, I've changed my mind!",
+                    },
+                    "style": "something-wrong",
+                }
+            ).validate_json()

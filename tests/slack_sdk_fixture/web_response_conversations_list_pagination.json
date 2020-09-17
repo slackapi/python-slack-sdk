@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "channels": [
+    {
+      "id": "C1"
+    }
+  ],
+  "response_metadata": {
+    "next_cursor": "has_page2"
+  }
+}

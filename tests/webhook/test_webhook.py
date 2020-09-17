@@ -5,11 +5,13 @@ import urllib
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
 from slack.webhook import WebhookClient, WebhookResponse
-from tests.webhook.mock_web_api_server import cleanup_mock_web_api_server, setup_mock_web_api_server
+from tests.webhook.mock_web_api_server import (
+    cleanup_mock_web_api_server,
+    setup_mock_web_api_server,
+)
 
 
 class TestWebhook(unittest.TestCase):
-
     def setUp(self):
         setup_mock_web_api_server(self)
 
@@ -34,8 +36,8 @@ class TestWebhook(unittest.TestCase):
             response_type="ephemeral",
             blocks=[
                 SectionBlock(text="Some text"),
-                ImageBlock(image_url="image.jpg", alt_text="an image")
-            ]
+                ImageBlock(image_url="image.jpg", alt_text="an image"),
+            ],
         )
         self.assertEqual("ok", resp.body)
 
@@ -47,28 +49,20 @@ class TestWebhook(unittest.TestCase):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
-                    }
+                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>",
+                    },
                 },
-                {
-                    "type": "divider"
-                },
+                {"type": "divider"},
                 {
                     "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Pick a date for the deadline."
-                    },
+                    "text": {"type": "mrkdwn", "text": "Pick a date for the deadline."},
                     "accessory": {
                         "type": "datepicker",
                         "initial_date": "1990-04-28",
-                        "placeholder": {
-                            "type": "plain_text",
-                            "text": "Select a date",
-                        }
-                    }
-                }
-            ]
+                        "placeholder": {"type": "plain_text", "text": "Select a date",},
+                    },
+                },
+            ],
         )
         self.assertEqual("ok", resp.body)
 
@@ -77,8 +71,8 @@ class TestWebhook(unittest.TestCase):
             response_type="ephemeral",
             blocks=[
                 SectionBlock(text="Some text"),
-                ImageBlock(image_url="image.jpg", alt_text="an image")
-            ]
+                ImageBlock(image_url="image.jpg", alt_text="an image"),
+            ],
         )
         self.assertEqual("ok", resp.body)
 
@@ -96,17 +90,15 @@ class TestWebhook(unittest.TestCase):
                             "type": "section",
                             "text": {
                                 "type": "mrkdwn",
-                                "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
-                            }
+                                "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>",
+                            },
                         },
-                        {
-                            "type": "divider"
-                        },
+                        {"type": "divider"},
                         {
                             "type": "section",
                             "text": {
                                 "type": "mrkdwn",
-                                "text": "Pick a date for the deadline."
+                                "text": "Pick a date for the deadline.",
                             },
                             "accessory": {
                                 "type": "datepicker",
@@ -114,12 +106,12 @@ class TestWebhook(unittest.TestCase):
                                 "placeholder": {
                                     "type": "plain_text",
                                     "text": "Select a date",
-                                }
-                            }
-                        }
-                    ]
+                                },
+                            },
+                        },
+                    ],
                 }
-            ]
+            ],
         )
         self.assertEqual("ok", resp.body)
 
@@ -134,7 +126,9 @@ class TestWebhook(unittest.TestCase):
                     pretext="some_pretext",
                     title_link="link in title",
                     fields=[
-                        AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value")
+                        AttachmentField(
+                            title=f"field_{i}_title", value=f"field_{i}_value"
+                        )
                         for i in range(5)
                     ],
                     color="#FFFF00",
@@ -147,7 +141,7 @@ class TestWebhook(unittest.TestCase):
                     ts=123456789,
                     markdown_in=["fields"],
                 )
-            ]
+            ],
         )
         self.assertEqual("ok", resp.body)
 
@@ -169,7 +163,9 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual("error", resp.body)
 
     def test_proxy_issue_714(self):
-        client = WebhookClient(url="http://localhost:8888", proxy="http://invalid-host:9999")
+        client = WebhookClient(
+            url="http://localhost:8888", proxy="http://invalid-host:9999"
+        )
         with self.assertRaises(urllib.error.URLError):
             client.send_dict({"text": "hello!"})
 

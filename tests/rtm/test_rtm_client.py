@@ -4,16 +4,17 @@ import unittest
 
 import slack
 import slack.errors as e
-from tests.rtm.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
+from tests.rtm.mock_web_api_server import (
+    setup_mock_web_api_server,
+    cleanup_mock_web_api_server,
+)
 
 
 class TestRTMClient(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.client = slack.RTMClient(
-            token="xoxp-1234",
-            base_url="http://localhost:8888",
-            auto_reconnect=False
+            token="xoxp-1234", base_url="http://localhost:8888", auto_reconnect=False
         )
 
     def tearDown(self):
@@ -88,6 +89,8 @@ class TestRTMClient(unittest.TestCase):
         with self.assertRaises(e.SlackApiError) as context:
             slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
-        expected_error = "The request to the Slack API failed.\n" \
-                         "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
+        expected_error = (
+            "The request to the Slack API failed.\n"
+            "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
+        )
         self.assertIn(expected_error, str(context.exception))
