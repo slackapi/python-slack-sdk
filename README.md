@@ -2,7 +2,7 @@
 
 The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
-**Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slackclient/](https://slack.dev/python-slackclient/)**
+**Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slack-sdk/](https://slack.dev/python-slack-sdk/)**
 
 [![pypi package][pypi-image]][pypi-url]
 [![Build Status][travis-image]][travis-url]
@@ -21,7 +21,7 @@ The **Python Slack SDK** allows interaction with:
 - `slack_sdk.models`: for constructing UI components using easy-to-use builders
 - `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api]. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slackclient/auth.html).
+If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api]. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slack-sdk/auth.html).
 
 ## Table of contents
 
@@ -79,7 +79,7 @@ We've created this [tutorial](/tutorial) to build a basic Slack app in less than
 
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage](https://slack.dev/python-slackclient/basic_usage.html) guide.
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage](https://slack.dev/python-slack-sdk/basic_usage.html) guide.
 
 #### Sending a message to Slack
 
@@ -90,7 +90,7 @@ import os
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-client = WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
 try:
     response = client.chat_postMessage(channel='#random', text="Hello world!")
@@ -113,7 +113,7 @@ import os
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-client = WebClient(token=os.environ['SLACK_API_TOKEN'])
+client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
 try:
     filepath="./tmp.txt"
@@ -138,7 +138,7 @@ import os
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
-client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
+client = AsyncWebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
 async def post_message():
     try:
@@ -161,7 +161,7 @@ import os
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
-client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
+client = AsyncWebClient(token=os.environ['SLACK_BOT_TOKEN'])
 # Define this as an async function
 async def send_to_slack(channel, text):
     try:
@@ -231,7 +231,7 @@ sslcert = SSLContext()
 proxyinfo = "http://localhost:9000"
 
 client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
+    token=os.environ['SLACK_BOT_TOKEN'],
     ssl=sslcert,
     proxy=proxyinfo
 )
@@ -264,11 +264,11 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 <!-- Markdown links -->
 
 [pypi-image]: https://badge.fury.io/py/slackclient.svg
-[pypi-url]: https://pypi.python.org/pypi/slackclient
-[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=master
+[pypi-url]: https://pypi.python.org/pypi/slack_sdk
+[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=main
 [travis-url]: https://travis-ci.org/slackapi/python-slackclient
-[python-version]: https://img.shields.io/pypi/pyversions/slackclient.svg
-[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/master/graph/badge.svg
+[python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
+[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
 [contact-url]: https://slack.com/support

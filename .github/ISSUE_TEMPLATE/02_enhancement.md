@@ -10,10 +10,12 @@ assignees: ""
 
 ### Category (place an `x` in each of the `[ ]`)
 
-- [ ] **slack.web.WebClient** (Web API client)
-- [ ] **slack.webhook.WebhookClient** (Incoming Webhook, response_url sender)
-- [ ] **slack.web.classes** (UI component builders)
-- [ ] **slack.rtm.RTMClient** (RTM client)
+- [ ] **slack_sdk.web.WebClient** (Web API client)
+- [ ] **slack_sdk.webhook.WebhookClient** (Incoming Webhook, response_url sender)
+- [ ] **slack_sdk.models** (UI component builders)
+- [ ] **slack_sdk.oauth** (OAuth Flow Utilities)
+- [ ] **slack_sdk.rtm.RTMClient** (RTM client)
+- [ ] **slack_sdk.signature** (Request Signature Verifier)
 
 ### Requirements
 
