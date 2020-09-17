@@ -10,6 +10,7 @@
 - [ ] **slack_sdk.oauth** (OAuth Flow Utilities)
 - [ ] **slack_sdk.rtm.RTMClient** (RTM client)
 - [ ] **slack_sdk.signature** (Request Signature Verifier)
+- [ ] `/docs-src` (Documents, have you run `./docs.sh`?)
 
 ## Requirements (place an `x` in each `[ ]`)
 
