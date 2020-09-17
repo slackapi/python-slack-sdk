@@ -2,6 +2,16 @@
 Changelog
 ==============================================
 
+v2.9.0 (2020-09-17)
+-------------------
+
+Refer to `v2.9.0 milestone <https://github.com/slackapi/python-slackclient/milestone/17?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient] #811 Add workflows.* API support - Thanks @misscoded
+2. [WebClient] #810 #809 Only set default filename in files_upload if file is an instance of str - Thanks @csaska
+
 v2.8.2 (2020-09-04)
 -------------------
 
