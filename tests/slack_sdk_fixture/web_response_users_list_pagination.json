@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "members": [
+    "Bob",
+    "cat"
+  ],
+  "response_metadata": {
+    "next_cursor": 1
+  }
+}

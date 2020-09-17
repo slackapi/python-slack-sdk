@@ -13,6 +13,7 @@ class TestAsyncioEventLoops(unittest.TestCase):
     Also, the tests here ensure WebClient and RTMClient don't generate a large number of event loops
     even when a lot of those instances are created.
     """
+
     def setUp(self):
         self.logger = logging.getLogger(__name__)
 

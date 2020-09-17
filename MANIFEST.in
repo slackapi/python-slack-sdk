@@ -1,1 +1,1 @@
-include README.md LICENSE slack/py.typed
+include README.md LICENSE slack/py.typed slack_sdk/py.typed
