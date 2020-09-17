@@ -2320,3 +2320,60 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             kwargs.update({"view": view})
         return await self.api_call("views.publish", json=kwargs)
+
+    async def workflows_stepCompleted(
+        self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
+    ) -> AsyncSlackResponse:
+        """Indicate a successful outcome of a workflow step's execution.
+        Args:
+            workflow_step_execute_id (str): A unique identifier of the workflow step to be updated.
+                e.g. 'add_task'
+            outputs (dict): A key-value object of outputs from your step.
+                e.g. { 'task_name': 'Task Name' }
+        """
+        kwargs.update({"workflow_step_execute_id": workflow_step_execute_id})
+        if outputs:
+            kwargs.update({"outputs": outputs})
+
+        return await self.api_call("workflows.stepCompleted", json=kwargs)
+
+    async def workflows_stepFailed(
+        self, *, workflow_step_execute_id: str, error: dict, **kwargs
+    ) -> AsyncSlackResponse:
+        """Indicate an unsuccessful outcome of a workflow step's execution.
+        Args:
+            workflow_step_execute_id (str): A unique identifier of the workflow step to be updated.
+                e.g. 'add_task'
+            error (dict): A dict with a message property that contains a human readable error message
+                e.g. { message: 'Step failed to execute.' }
+        """
+        kwargs.update(
+            {"workflow_step_execute_id": workflow_step_execute_id, "error": error}
+        )
+        return await self.api_call("workflows.stepFailed", json=kwargs)
+
+    async def workflows_updateStep(
+        self,
+        *,
+        workflow_step_edit_id: str,
+        inputs: dict = None,
+        outputs: list = None,
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Update the configuration for a workflow extension step.
+        Args:
+            workflow_step_edit_id (str): A unique identifier of the workflow step to be updated.
+                e.g. 'add_task'
+            inputs (dict): A key-value object of inputs required from a user during step configuration.
+                e.g. { 'title': { 'value': 'The Title' }, 'submitter': { 'value': 'The Submitter' } }
+            outputs (list): A list of output objects used during step execution.
+                e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]
+        """
+        kwargs.update({"workflow_step_edit_id": workflow_step_edit_id})
+
+        if inputs:
+            kwargs.update({"inputs": inputs})
+        if outputs:
+            kwargs.update({"outputs": outputs})
+
+        return await self.api_call("workflows.updateStep", json=kwargs)

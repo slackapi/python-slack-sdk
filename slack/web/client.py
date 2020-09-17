@@ -2316,11 +2316,7 @@ class WebClient(BaseClient):
         return self.api_call("views.publish", json=kwargs)
 
     def workflows_stepCompleted(
-        self,
-        *,
-        workflow_step_execute_id: str,
-        outputs: dict = None,
-        **kwargs
+        self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Indicate a successful outcome of a workflow step's execution.
         Args:
@@ -2336,11 +2332,7 @@ class WebClient(BaseClient):
         return self.api_call("workflows.stepCompleted", json=kwargs)
 
     def workflows_stepFailed(
-        self,
-        *,
-        workflow_step_execute_id: str,
-        error: dict,
-        **kwargs
+        self, *, workflow_step_execute_id: str, error: dict, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Indicate an unsuccessful outcome of a workflow step's execution.
         Args:
@@ -2349,7 +2341,9 @@ class WebClient(BaseClient):
             error (dict): A dict with a message property that contains a human readable error message
                 e.g. { message: 'Step failed to execute.' }
         """
-        kwargs.update({"workflow_step_execute_id": workflow_step_execute_id, "error": error})
+        kwargs.update(
+            {"workflow_step_execute_id": workflow_step_execute_id, "error": error}
+        )
         return self.api_call("workflows.stepFailed", json=kwargs)
 
     def workflows_updateStep(
