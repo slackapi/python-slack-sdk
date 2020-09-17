@@ -1,5 +1,6 @@
 import asyncio
 import gc
+import io
 import re
 import socket
 import unittest
@@ -285,3 +286,14 @@ class TestWebClient(unittest.TestCase):
         )
         resp = await client.api_test()
         self.assertTrue(resp["ok"])
+
+    def test_issue_809_filename_for_IOBase(self):
+        self.client.token = "xoxb-api_test"
+        file = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        resp = self.client.files_upload(file=file)
+        self.assertIsNone(resp["error"])
+        #         if file:
+        #             if "filename" not in kwargs:
+        #                 # use the local filename if filename is missing
+        # >               kwargs["filename"] = file.split(os.path.sep)[-1]
+        # E               AttributeError: '_io.BytesIO' object has no attribute 'split'
