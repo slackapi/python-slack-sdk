@@ -1,6 +1,8 @@
 [run]
 branch = True
-source = slack
+source =
+    slack_sdk/**
+    slack/**
 
 [report]
 exclude_lines =

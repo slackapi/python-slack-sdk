@@ -37,8 +37,9 @@ class View(JsonObject):
 
     def __init__(
         self,
-        type: str,  # "modal", "home", and "workflow_step"
-        id: Optional[str] = None,
+        # "modal", "home", and "workflow_step"
+        type: str,  # skipcq: PYL-W0622
+        id: Optional[str] = None,  # skipcq: PYL-W0622
         callback_id: Optional[str] = None,
         external_id: Optional[str] = None,
         team_id: Optional[str] = None,
@@ -49,10 +50,10 @@ class View(JsonObject):
         title: Union[str, dict, PlainTextObject] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
-        blocks: List[Union[dict, Block]] = [],
+        blocks: Optional[List[Union[dict, Block]]] = None,
         private_metadata: Optional[str] = None,
         state: Optional[Union[dict, "ViewState"]] = None,
-        hash: Optional[str] = None,
+        hash: Optional[str] = None,  # skipcq: PYL-W0622
         clear_on_close: Optional[bool] = None,
         notify_on_close: Optional[bool] = None,
         **kwargs,
@@ -147,10 +148,10 @@ class ViewState(JsonObject):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def _show_warning_about_unknown(self, value):
+    def _show_warning_about_unknown(cls, value):
         c = value.__class__
         name = ".".join([c.__module__, c.__name__])
-        self.logger.warning(
+        cls.logger.warning(
             f"Unknown type for view.state.values detected ({name}) and ViewState skipped to add it"
         )
 
@@ -160,7 +161,7 @@ class ViewState(JsonObject):
         value_objects: Dict[str, Dict[str, ViewStateValue]] = {}
         new_state_values = copy.copy(values)
         for block_id, actions in new_state_values.items():
-            if actions is None:
+            if actions is None:  # skipcq: PYL-R1724
                 continue
             elif isinstance(actions, dict):
                 new_actions = copy.copy(actions)
@@ -181,7 +182,7 @@ class ViewState(JsonObject):
 
     def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:  # type: ignore
         self.validate_json()
-        if self.values:
+        if self.values:  # skipcq: PYL-R1705
             dict_values: Dict[str, Dict[str, dict]] = {}
             for block_id, actions in self.values.items():
                 if actions:
@@ -213,7 +214,7 @@ class ViewStateValue(JsonObject):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         value: Optional[str] = None,
         selected_date: Optional[str] = None,
         selected_conversation: Optional[str] = None,

@@ -36,11 +36,11 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         def to_dict_compatible(
             value: Union[dict, list, object]
         ) -> Union[dict, list, Any]:
-            if isinstance(value, list):
+            if isinstance(value, list):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, "to_dict", None)
-                if to_dict and callable(to_dict):
+                if to_dict and callable(to_dict):  # skipcq: PYL-R1705
                     return {
                         k: to_dict_compatible(v) for k, v in value.to_dict().items()  # type: ignore
                     }
@@ -52,7 +52,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             if value is None:
                 return False
             has_len = getattr(value, "__len__", None) is not None
-            if has_len:
+            if has_len:  # skipcq: PYL-R1705
                 return len(value) > 0
             else:
                 return value is not None
@@ -78,7 +78,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
 
     def __repr__(self):
         dict_value = self.get_non_null_attributes()
-        if dict_value:
+        if dict_value:  # skipcq: PYL-R1705
             return f"<slack_sdk.{self.__class__.__name__}: {dict_value}>"
         else:
             return self.__str__()

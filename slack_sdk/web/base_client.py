@@ -266,7 +266,7 @@ class BaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)
-            if response.get("body", None):
+            if response.get("body", None):  # skipcq: PTC-W0039
                 try:
                     response_body_data: dict = json.loads(response["body"])
                 except json.decoder.JSONDecodeError as e:

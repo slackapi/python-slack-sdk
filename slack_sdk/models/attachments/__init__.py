@@ -42,7 +42,7 @@ class Action(JsonObject):
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         json["type"] = self.subtype
         return json
@@ -423,7 +423,7 @@ class Attachment(JsonObject):
     def author_link_without_author_icon(self):
         return self.author_link is None or self.author_icon is not None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if self.fields is not None:
             json["fields"] = extract_json(self.fields)

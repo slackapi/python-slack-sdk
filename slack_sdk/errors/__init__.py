@@ -9,8 +9,7 @@ class BotUserAccessError(SlackClientError):
 
 
 class SlackRequestError(SlackClientError):
-    """Error raised when there's a problem with the request that's being submitted.
-    """
+    """Error raised when there's a problem with the request that's being submitted."""
 
 
 class SlackApiError(SlackClientError):

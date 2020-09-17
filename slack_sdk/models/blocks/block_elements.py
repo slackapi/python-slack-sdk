@@ -33,7 +33,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     attributes = {"type"}
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):
+    def _subtype_warning(self):  # skipcq: PYL-R0201
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -46,7 +46,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -59,13 +59,13 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def parse(
         cls, block_element: Union[dict, "BlockElement"]
     ) -> Optional[Union["BlockElement", TextObject]]:
-        if block_element is None:
+        if block_element is None:  # skipcq: PYL-R1705
             return None
         elif isinstance(block_element, dict):
             if "type" in block_element:
                 d = copy.copy(block_element)
                 t = d.pop("type")
-                if t == PlainTextObject.type:
+                if t == PlainTextObject.type:  # skipcq: PYL-R1705
                     return PlainTextObject(**d)
                 elif t == MarkdownTextObject.type:
                     return MarkdownTextObject(**d)
@@ -144,7 +144,7 @@ class InteractiveElement(BlockElement):
         self,
         *,
         action_id: Optional[str] = None,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -184,7 +184,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         *,
         action_id: Optional[str] = None,
         placeholder: Union[str, TextObject] = None,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
@@ -768,8 +768,8 @@ class ConversationFilter(JsonObject):
         self.exclude_bot_users = exclude_bot_users
 
     @classmethod
-    def parse(cls, filter: Union[dict, "ConversationFilter"]):
-        if filter is None:
+    def parse(cls, filter: Union[dict, "ConversationFilter"]):  # skipcq: PYL-W0622
+        if filter is None:  # skipcq: PYL-R1705
             return None
         elif isinstance(filter, ConversationFilter):
             return filter
@@ -806,7 +806,7 @@ class ConversationSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[ConversationFilter] = None,
+        filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
         **others: dict,
     ):
         """
@@ -851,7 +851,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[Union[dict, ConversationFilter]] = None,
+        filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
         **others: dict,
     ):
         """
@@ -1066,7 +1066,7 @@ class OverflowMenuElement(InteractiveElement):
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
 
-        self.options = options  # TODO
+        self.options = options
         self.confirm = ConfirmObject.parse(confirm)
 
     @JsonValidator(
