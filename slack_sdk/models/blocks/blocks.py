@@ -31,7 +31,7 @@ class Block(JsonObject):
     block_id_max_length = 255
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):
+    def _subtype_warning(self):  # skipcq: PYL-R0201
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -44,7 +44,7 @@ class Block(JsonObject):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,  # deprecated
         block_id: Optional[str] = None,
     ):
@@ -60,14 +60,14 @@ class Block(JsonObject):
 
     @classmethod
     def parse(cls, block: Union[dict, "Block"]) -> Optional["Block"]:
-        if block is None:
+        if block is None:  # skipcq: PYL-R1705
             return None
         elif isinstance(block, Block):
             return block
         else:
             if "type" in block:
-                type = block["type"]
-                if type == SectionBlock.type:
+                type = block["type"]  # skipcq: PYL-W0622
+                if type == SectionBlock.type:  # skipcq: PYL-R1705
                     return SectionBlock(**block)
                 elif type == DividerBlock.type:
                     return DividerBlock(**block)
@@ -93,7 +93,7 @@ class Block(JsonObject):
                 return None
 
     @classmethod
-    def parse_all(cls, blocks: List[Union[dict, "Block"]]) -> List["Block"]:
+    def parse_all(cls, blocks: Optional[List[Union[dict, "Block"]]]) -> List["Block"]:
         return [cls.parse(b) for b in blocks or []]
 
 

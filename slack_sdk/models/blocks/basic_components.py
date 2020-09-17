@@ -18,7 +18,7 @@ class TextObject(JsonObject):
     attributes = {"text", "type", "emoji"}
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):
+    def _subtype_warning(self):  # skipcq: PYL-R0201
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -32,17 +32,17 @@ class TextObject(JsonObject):
     def parse(
         cls, text: Union[str, dict, "TextObject"], default_type: str = "mrkdwn"
     ) -> Optional["TextObject"]:
-        if not text:
+        if not text:  # skipcq: PYL-R1705
             return None
         elif isinstance(text, str):
-            if default_type == PlainTextObject.type:
+            if default_type == PlainTextObject.type:  # skipcq: PYL-R1705
                 return PlainTextObject.from_str(text)
             else:
                 return MarkdownTextObject.from_str(text)
         elif isinstance(text, dict):
             d = copy.copy(text)
             t = d.pop("type")
-            if t == PlainTextObject.type:
+            if t == PlainTextObject.type:  # skipcq: PYL-R1705
                 return PlainTextObject(**d)
             else:
                 return MarkdownTextObject(**d)
@@ -57,14 +57,12 @@ class TextObject(JsonObject):
     def __init__(
         self,
         text: str,
-        type: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         emoji: Optional[bool] = None,
         **kwargs,
     ):
-        """
-        Super class for new text "objects" used in Block kit
-        """
+        """Super class for new text "objects" used in Block kit"""
         if subtype:
             self._subtype_warning()
 
@@ -94,9 +92,7 @@ class PlainTextObject(TextObject):
 
     @staticmethod
     def direct_from_string(text: str) -> dict:
-        """
-        Transforms a string into the required object shape to act as a PlainTextObject
-        """
+        """Transforms a string into the required object shape to act as a PlainTextObject"""
         return PlainTextObject.from_str(text).to_dict()
 
 
@@ -117,19 +113,19 @@ class MarkdownTextObject(TextObject):
 
     @staticmethod
     def from_str(text: str) -> "MarkdownTextObject":
-        """Transforms a string into the required object shape to act as a MarkdownTextObject
-        """
+        """Transforms a string into the required object shape to act as a MarkdownTextObject"""
         return MarkdownTextObject(text=text)
 
     @staticmethod
     def direct_from_string(text: str) -> dict:
-        """Transforms a string into the required object shape to act as a MarkdownTextObject
-        """
+        """Transforms a string into the required object shape to act as a MarkdownTextObject"""
         return MarkdownTextObject.from_str(text).to_dict()
 
     @staticmethod
     def from_link(link: Link, title: str = "") -> "MarkdownTextObject":
-        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject
+        """
+        Transform a Link object directly into the required object shape
+        to act as a MarkdownTextObject
         """
         if title:
             title = f": {title}"
@@ -137,7 +133,9 @@ class MarkdownTextObject(TextObject):
 
     @staticmethod
     def direct_from_link(link: Link, title: str = "") -> dict:
-        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject
+        """
+        Transform a Link object directly into the required object shape
+        to act as a MarkdownTextObject
         """
         return MarkdownTextObject.from_link(link, title).to_dict()
 
@@ -242,14 +240,14 @@ class Option(JsonObject):
                 cls.logger.warning(f"Unknown option object detected and skipped ({o})")
         return option_objects
 
-    def to_dict(self, option_type: str = "block") -> dict:
+    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
         """
         Different parent classes must call this with a valid value from OptionTypes -
         either "dialog", "action", or "block", so that JSON is returned in the
         correct shape.
         """
         self.validate_json()
-        if option_type == "dialog":
+        if option_type == "dialog":  # skipcq: PYL-R1705
             return {"label": self.label, "value": self.value}
         elif option_type == "action":
             json = {"text": self.label, "value": self.value}
@@ -270,9 +268,7 @@ class Option(JsonObject):
 
     @staticmethod
     def from_single_value(value_and_label: str):
-        """
-        Creates a simple Option instance with the same value and label
-        """
+        """Creates a simple Option instance with the same value and label"""
         return Option(value=value_and_label, label=value_and_label)
 
 
@@ -346,10 +342,10 @@ class OptionGroup(JsonObject):
                 )
         return option_group_objects
 
-    def to_dict(self, option_type: str = "block") -> dict:
+    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
-        if option_type == "dialog":
+        if option_type == "dialog":  # skipcq: PYL-R1705
             return {
                 "label": self.label,
                 "options": dict_options,
@@ -378,13 +374,14 @@ class ConfirmObject(JsonObject):
     @classmethod
     def parse(cls, confirm: Union["ConfirmObject", dict]):
         if confirm:
-            if isinstance(confirm, ConfirmObject):
+            if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
                 return confirm
             elif isinstance(confirm, dict):
                 return ConfirmObject(**confirm)
             else:
-                # TODO: warning
+                # Not yet implemented: show some warning here
                 return None
+        return None
 
     def __init__(
         self,
@@ -436,8 +433,8 @@ class ConfirmObject(JsonObject):
     def _validate_confirm_style(self):
         return self._style is None or self._style in ["primary", "danger"]
 
-    def to_dict(self, option_type: str = "block") -> dict:
-        if option_type == "action":
+    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
+        if option_type == "action":  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
             json = {

@@ -13,6 +13,9 @@ exclude_patterns = [
   "docs/**",
   "docs-src/**",
   "tutorial/**",
+  "slack/**",
+  "slack_sdk/web/async_client.py",
+  "slack_sdk/web/legacy_client.py",
   "tests/**",
   "integration_tests/**"
 ]

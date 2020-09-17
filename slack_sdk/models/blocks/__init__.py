@@ -9,8 +9,6 @@ from .basic_components import TextObject  # noqa
 from .block_elements import BlockElement  # noqa
 from .block_elements import ButtonElement  # noqa
 from .block_elements import ChannelMultiSelectElement  # noqa
-from .block_elements import ChannelMultiSelectElement  # noqa
-from .block_elements import ChannelMultiSelectElement  # noqa
 from .block_elements import ChannelSelectElement  # noqa
 from .block_elements import CheckboxesElement  # noqa
 from .block_elements import ConversationFilter  # noqa
