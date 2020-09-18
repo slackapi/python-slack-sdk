@@ -19,33 +19,73 @@ app = Flask(__name__)
 app.debug = True
 
 import os
-from slack_sdk.web import WebClient
-from slack_sdk.oauth import AuthorizeUrlGenerator
-from slack_sdk.oauth.installation_store import FileInstallationStore, Installation
-from slack_sdk.oauth.state_store import FileOAuthStateStore
+from uuid import uuid4
+from slack_sdk import WebClient
 
 client_id = os.environ["SLACK_TEST_CLIENT_ID"]
 client_secret = os.environ["SLACK_TEST_CLIENT_SECRET"]
 redirect_uri = os.environ["SLACK_TEST_REDIRECT_URI"]
-scopes = ["app_mentions:read","chat:write"]
-user_scopes = ["search:read"]
+scopes = "app_mentions:read,chat:write"
+user_scopes = "search:read"
 
 logger = logging.getLogger(__name__)
 
 
-state_store = FileOAuthStateStore(expiration_seconds=300)
-installation_store = FileInstallationStore()
-authorization_url_generator = AuthorizeUrlGenerator(
-    client_id=client_id,
-    scopes=scopes,
-    user_scopes=user_scopes,
-)
+class StateService:
+    def __init__(self):
+        # no expiration implemented
+        self.state_values = []
+
+    def generate(self):
+        new_value = str(uuid4())
+        self.state_values.append(new_value)
+        return new_value
+
+    def consume(self, state) -> bool:
+        is_valid = state in self.state_values
+        if is_valid:
+            self.state_values.remove(state)
+        return is_valid
+
+
+class Database:
+    def __init__(self):
+        self.tokens = {}
+
+    def save(self, oauth_v2_response):
+        team_id = oauth_v2_response["team"]["id"]
+        installer = oauth_v2_response["authed_user"]
+        self.tokens[team_id] = {
+            "bot_token": oauth_v2_response["access_token"],
+            "bot_user_id": oauth_v2_response["bot_user_id"],
+            "user_id": installer["id"],
+            "user_token": installer["access_token"] if "access_token" in installer else None,
+        }
+        logger.debug(f"all rows: {list(self.tokens.keys())}")
+
+    def find_bot_token(self, team_id: str) -> str:
+        logger.debug(f"all rows: {list(self.tokens.keys())}, team_id: {team_id}")
+        installation = self.tokens[team_id] if team_id in self.tokens else None
+        if installation:
+            return installation["bot_token"]
+        else:
+            return None
+
+
+state_service = StateService()
+database = Database()
+
 
 @app.route("/slack/oauth/start", methods=["GET"])
 def oauth_start():
-    state = state_store.issue()
-    url = authorization_url_generator.generate(state)
-    return f'<a href="{url}">' \
+    state = state_service.generate()
+    return f'<a href="https://slack.com/oauth/v2/authorize?' \
+           f'scope={scopes}&' \
+           f'user_scope={user_scopes}&' \
+           f'client_id={client_id}&' \
+           f'redirect_uri={redirect_uri}&' \
+           f'state={state}' \
+           f'">' \
            f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
 
 
@@ -54,44 +94,17 @@ def oauth_callback():
     # Retrieve the auth code and state from the request params
     if "code" in request.args:
         state = request.args["state"]
-        if state_store.consume(state):
+        if state_service.consume(state):
             code = request.args["code"]
             client = WebClient()  # no prepared token needed for this app
-            oauth_response = client.oauth_v2_access(
+            response = client.oauth_v2_access(
                 client_id=client_id,
                 client_secret=client_secret,
                 redirect_uri=redirect_uri,
                 code=code
             )
-            logger.info(f"oauth.v2.access response: {oauth_response}")
-
-            installed_enterprise = oauth_response.get("enterprise") or {}
-            installed_team = oauth_response.get("team") or {}
-            installer = oauth_response.get("authed_user") or {}
-            incoming_webhook = oauth_response.get("incoming_webhook") or {}
-            bot_token = oauth_response.get("access_token")
-            # NOTE: oauth.v2.access doesn't include bot_id in response
-            bot_id = None
-            if bot_token is not None:
-                auth_test = client.auth_test(token=bot_token)
-                bot_id = auth_test["bot_id"]
-
-            installation = Installation(
-                app_id=oauth_response.get("app_id"),
-                enterprise_id=installed_enterprise.get("id"),
-                team_id=installed_team.get("id"),
-                bot_token=bot_token,
-                bot_id=bot_id,
-                bot_user_id=oauth_response.get("bot_user_id"),
-                bot_scopes=oauth_response.get("scope"),  # comma-separated string
-                user_id=installer.get("id"),
-                user_token=installer.get("access_token"),
-                user_scopes=installer.get("scope"),  # comma-separated string
-                incoming_webhook_url=incoming_webhook.get("url"),
-                incoming_webhook_channel_id=incoming_webhook.get("channel_id"),
-                incoming_webhook_configuration_url=incoming_webhook.get("configuration_url"),
-            )
-            installation_store.save(installation)
+            logger.info(f"oauth.v2.access response: {response}")
+            database.save(response)
             return "Thanks for installing this app!"
         else:
             return make_response(f"Try the installation again (the state value is already expired)", 400)
@@ -104,36 +117,77 @@ def oauth_callback():
 # Flask App for Slack events
 # ---------------------
 
+import hmac
+import hashlib
+from time import time
 import json
+
+
+def verify_slack_request(
+    signing_secret: str,
+    request_body: str,
+    timestamp: str,
+    signature: str) -> bool:
+    """Slack Request Verification
+
+    For more information: https://github.com/slackapi/python-slack-events-api
+    """
+
+    if abs(time() - int(timestamp)) > 60 * 5:
+        return False
+
+    if hasattr(hmac, "compare_digest"):
+        req = str.encode('v0:' + str(timestamp) + ':') + request_body
+        request_hash = 'v0=' + hmac.new(
+            str.encode(signing_secret),
+            req, hashlib.sha256
+        ).hexdigest()
+        return hmac.compare_digest(request_hash, signature)
+    else:
+        # So, we'll compare the signatures explicitly
+        req = str.encode('v0:' + str(timestamp) + ':') + request_body
+        request_hash = 'v0=' + hmac.new(
+            str.encode(signing_secret),
+            req, hashlib.sha256
+        ).hexdigest()
+
+        if len(request_hash) != len(signature):
+            return False
+        result = 0
+        if isinstance(request_hash, bytes) and isinstance(signature, bytes):
+            for x, y in zip(request_hash, signature):
+                result |= x ^ y
+        else:
+            for x, y in zip(request_hash, signature):
+                result |= ord(x) ^ ord(y)
+        return result == 0
+
+
 from slack_sdk.errors import SlackApiError
-from slack_sdk.signature import SignatureVerifier
 
 signing_secret = os.environ["SLACK_SIGNING_SECRET"]
-signature_verifier = SignatureVerifier(signing_secret=signing_secret)
+
 
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
-    if not signature_verifier.is_valid(
-        body=request.get_data(),
+    if not verify_slack_request(
+        signing_secret=signing_secret,
+        request_body=request.get_data(),
         timestamp=request.headers.get("X-Slack-Request-Timestamp"),
         signature=request.headers.get("X-Slack-Signature")):
         return make_response("invalid request", 403)
 
     if "command" in request.form \
-        and request.form["command"] == "/open-modal":
+        and request.form["command"] == "/do-something":
+        trigger_id = request.form["trigger_id"]
         try:
-            enterprise_id = request.form.get("enterprise_id")
             team_id = request.form["team_id"]
-            bot = installation_store.find_bot(
-                enterprise_id=enterprise_id,
-                team_id=team_id,
-            )
-            bot_token = bot.bot_token if bot else None
+            bot_token = database.find_bot_token(team_id)
+            logger.debug(f"token: {bot_token}")
             if not bot_token:
                 return make_response("Please install this app first!", 200)
 
             client = WebClient(token=bot_token)
-            trigger_id = request.form["trigger_id"]
             response = client.views_open(
                 trigger_id=trigger_id,
                 view={
