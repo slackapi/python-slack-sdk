@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
+        />
+        
+        <title>Webhook Client &mdash; Python Slack SDK</title>
+
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+        </script>
+        <!-- End Google Tag Manager -->
+        
+        <link
+            href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/default.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/pygments.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/docs.css"
+            type="text/css"
+        />
+        <link
+            id="favicon"
+            rel="shortcut icon"
+            href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+            type="image/png"
+        />
+        <link
+            rel="top"
+            title="Python Slack SDK 1.0.1 documentation"
+            href="../index.html"
+        />
+    </head>
+
+    <body class="api light_theme">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+            <a id="menu_toggle" class="no_transition show_on_mobile">
+                <span class="menu_icon"></span>
+                <span class="vert_divider"></span>
+            </a>
+            <a
+                href="https://api.slack.com/"
+                id="header_logo"
+                class="api hide_on_mobile"
+                style="float:left; display: inline-block;"
+            >
+                <img
+                    alt="Slack API"
+                    src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+                    style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+                />
+            </a>
+            <span
+                style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+            >
+                <a style="color: #555459;" href="./index.html">Python Slack SDK</a>
+            </span>
+            <div class="header_nav">
+                <a
+                    href="https://github.com/SlackAPI/python-slackclient"
+                    class="btn header_btn float_right"
+                    data-qa="go_to_slack"
+                    >Go to GitHub</a
+                >
+            </div>
+        </header>
+        
+
+        <div id="page">
+            <div id="page_contents" class="clearfix">
+                <!-- Sidebar Content -->
+                <nav id="api_nav" class="col span_1_of_4">
+                    <div id="api_sections">
+                         <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python Slack SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../v3-migration/index.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../v3-migration/index.html#from-slackclient-2-x">From slackclient 2.x</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#access-tokens">Access Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#workspace-installations">Workspace Installations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../web/index.html">Web Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#messaging">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#conversations">Conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#modals">Modals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#rate-limits">Rate Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../web/index.html#calling-any-api-methods">Calling any API methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../web/index.html#asyncwebclient">AsyncWebClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Webhook Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Incoming Webhooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response-url">response_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#asyncwebhookclient">AsyncWebhookClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../oauth/index.html">OAuth Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#app-installation-flow">App Installation Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#token-lookup">Token Lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../real_time_messaging.html">RTM Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../real_time_messaging.html#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../real_time_messaging.html#rtm-events">RTM Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#installation-issues">Installation Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#bug-report">Bug Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#product-name">Python Slack SDK</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="footer">
+
+        <ul id="footer_nav">
+                <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+                <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+                <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
+                <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+        </ul>
+
+        <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+                Community
+        </p>
+</div> 
+                    </div>
+                </nav>
+                <!-- /Sidebar Content -->
+
+                <!-- Body Content -->
+                <div class="col span_3_of_4">
+                    <!-- <div class="section-title">Webhook Client</div> -->
+                    <div class="card">
+  <div class="section" id="webhook-client">
+<h1>Webhook Client<a class="headerlink" href="#webhook-client" title="Permalink to this headline">¶</a></h1>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">slack_sdk.webhook.WebhookClient</span></code> for <a class="reference external" href="https://api.slack.com/messaging/webhooks">Incoming Webhooks</a> and message responses using <a class="reference external" href="https://api.slack.com/interactivity/handling#message_responses">response_url in payloads</a>.</p>
+<div class="section" id="id1">
+<h2>Incoming Webhooks<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>To use <a class="reference external" href="https://api.slack.com/messaging/webhooks">Incoming Webhooks</a>, just calling <code class="docutils literal notranslate"><span class="pre">WebhookClient(url)#send(payload)</span></code> method works for you. The call posts a message in a channel associated with the webhook URL.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.webhook</span> <span class="kn">import</span> <span class="n">WebhookClient</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+<span class="n">webhook</span> <span class="o">=</span> <span class="n">WebhookClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">webhook</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">body</span> <span class="o">==</span> <span class="s2">&quot;ok&quot;</span>
+</pre></div>
+</div>
+<p>It’s also possible to use <code class="docutils literal notranslate"><span class="pre">blocks</span></code>, richer message using <a class="reference external" href="https://api.slack.com/block-kit">Block Kit</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.webhook</span> <span class="kn">import</span> <span class="n">WebhookClient</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+<span class="n">webhook</span> <span class="o">=</span> <span class="n">WebhookClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">webhook</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;fallback&quot;</span><span class="p">,</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;You have a new request:</span><span class="se">\n</span><span class="s2">*&lt;fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request&gt;*&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="response-url">
+<h2>response_url<a class="headerlink" href="#response-url" title="Permalink to this headline">¶</a></h2>
+<p>User actions in channels generates a <a class="reference external" href="https://api.slack.com/interactivity/handling#message_responses">response_url</a> and includes the URL in its payload. You can use <code class="docutils literal notranslate"><span class="pre">WebhookClient</span></code> to send a message via the <code class="docutils literal notranslate"><span class="pre">response_url</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
+<span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span>
+    <span class="n">signing_secret</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">slack_sdk.webhook</span> <span class="kn">import</span> <span class="n">WebhookClient</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">slack_app</span><span class="p">():</span>
+    <span class="c1"># Verify incoming requests from Slack</span>
+    <span class="c1"># https://api.slack.com/authentication/verifying-requests-from-slack</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">signature_verifier</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span>
+        <span class="n">timestamp</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Request-Timestamp&quot;</span><span class="p">),</span>
+        <span class="n">signature</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Slack-Signature&quot;</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;invalid request&quot;</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="c1"># Handle a slash command invocation</span>
+    <span class="k">if</span> <span class="s2">&quot;command&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span> \
+        <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/reply-this&quot;</span><span class="p">:</span>
+        <span class="n">response_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;response_url&quot;</span><span class="p">]</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+        <span class="n">webhook</span> <span class="o">=</span> <span class="n">WebhookClient</span><span class="p">(</span><span class="n">response_url</span><span class="p">)</span>
+        <span class="c1"># Send a reply in the channel</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">webhook</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;You said &#39;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="c1"># Acknowledge this request</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="asyncwebhookclient">
+<h2>AsyncWebhookClient<a class="headerlink" href="#asyncwebhookclient" title="Permalink to this headline">¶</a></h2>
+<p>The webhook client is available in asynchronous programming using the standard <a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a> library, too. You use <code class="docutils literal notranslate"><span class="pre">AsyncWebhookClient</span></code> instead for it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AsyncWebhookClient</span></code> internally relies on <a class="reference external" href="https://docs.aiohttp.org/en/stable/">AIOHTTP</a> library but it is an optional dependency. So, to use this class, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">aiohttp</span></code> beforehand.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="c1"># requires: pip install aiohttp</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.webhook.async_client</span> <span class="kn">import</span> <span class="n">AsyncWebhookClient</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">send_message_via_webhook</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">webhook</span> <span class="o">=</span> <span class="n">AsyncWebhookClient</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">webhook</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello!&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">body</span> <span class="o">==</span> <span class="s2">&quot;ok&quot;</span>
+
+<span class="c1"># This is the simplest way to run the async method</span>
+<span class="c1"># but you can go with any ways to run it</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">send_message_via_webhook</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+                        <div class="clear_both large_bottom_margin"></div>
+                    </div>
+                </div>
+                <!-- /Body Content -->
+            </div>
+        </div>
+
+        <footer>
+            <p class="light tiny align_center">
+                © 2020 Slack Technologies, Inc. and contributors
+            </p>
+        </footer>
+
+        <script>
+            window.ga =
+                window.ga ||
+                function() {
+                    (ga.q = ga.q || []).push(arguments);
+                };
+            ga.l = +new Date();
+            ga('create', 'UA-56978219-13', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
+</html>

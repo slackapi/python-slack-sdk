@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
+        />
+        
+        <title>Web Client &mdash; Python Slack SDK</title>
+
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+        </script>
+        <!-- End Google Tag Manager -->
+        
+        <link
+            href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/default.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/pygments.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href=".././_static/docs.css"
+            type="text/css"
+        />
+        <link
+            id="favicon"
+            rel="shortcut icon"
+            href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+            type="image/png"
+        />
+        <link
+            rel="top"
+            title="Python Slack SDK 1.0.1 documentation"
+            href="../index.html"
+        />
+    </head>
+
+    <body class="api light_theme">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+            <a id="menu_toggle" class="no_transition show_on_mobile">
+                <span class="menu_icon"></span>
+                <span class="vert_divider"></span>
+            </a>
+            <a
+                href="https://api.slack.com/"
+                id="header_logo"
+                class="api hide_on_mobile"
+                style="float:left; display: inline-block;"
+            >
+                <img
+                    alt="Slack API"
+                    src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+                    style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+                />
+            </a>
+            <span
+                style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+            >
+                <a style="color: #555459;" href="./index.html">Python Slack SDK</a>
+            </span>
+            <div class="header_nav">
+                <a
+                    href="https://github.com/SlackAPI/python-slackclient"
+                    class="btn header_btn float_right"
+                    data-qa="go_to_slack"
+                    >Go to GitHub</a
+                >
+            </div>
+        </header>
+        
+
+        <div id="page">
+            <div id="page_contents" class="clearfix">
+                <!-- Sidebar Content -->
+                <nav id="api_nav" class="col span_1_of_4">
+                    <div id="api_sections">
+                         <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Python Slack SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../v3-migration/index.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../v3-migration/index.html#from-slackclient-2-x">From slackclient 2.x</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#access-tokens">Access Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#workspace-installations">Workspace Installations</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Web Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#messaging">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conversations">Conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modals">Modals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rate-limits">Rate Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#calling-any-api-methods">Calling any API methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#asyncwebclient">AsyncWebClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../webhook/index.html">Webhook Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#id1">Incoming Webhooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#response-url">response_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../oauth/index.html">OAuth Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#app-installation-flow">App Installation Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#token-lookup">Token Lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../real_time_messaging.html">RTM Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../real_time_messaging.html#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../real_time_messaging.html#rtm-events">RTM Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#installation-issues">Installation Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#bug-report">Bug Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../about.html#product-name">Python Slack SDK</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="footer">
+
+        <ul id="footer_nav">
+                <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+                <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+                <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
+                <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+        </ul>
+
+        <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+                Community
+        </p>
+</div> 
+                    </div>
+                </nav>
+                <!-- /Sidebar Content -->
+
+                <!-- Body Content -->
+                <div class="col span_3_of_4">
+                    <!-- <div class="section-title">Web Client</div> -->
+                    <div class="card">
+  <div class="section" id="web-client">
+<h1>Web Client<a class="headerlink" href="#web-client" title="Permalink to this headline">¶</a></h1>
+<p>The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations we provide out of the box.</p>
+<p>Access Slack’s API methods requires an OAuth token – see the <a class="reference external" href="../installation/index.html">Tokens &amp; Authentication</a> section for more on how Slack uses OAuth tokens as well as best practices.</p>
+<p><a class="reference external" href="https://api.slack.com/methods">Each of these API methods</a> is fully documented on our developer site at <a class="reference external" href="https://api.slack.com/">https://api.slack.com/</a></p>
+<div class="section" id="messaging">
+<h2>Messaging<a class="headerlink" href="#messaging" title="Permalink to this headline">¶</a></h2>
+<p><strong>Sending a message</strong></p>
+<p>One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+        <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># You will get a SlackApiError if &quot;ok&quot; is False</span>
+    <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>    <span class="c1"># str like &#39;invalid_auth&#39;, &#39;channel_not_found&#39;</span>
+</pre></div>
+</div>
+<p>Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same
+as sending a regular message, but with an additional <code class="docutils literal notranslate"><span class="pre">user</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postEphemeral</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello silently from your app! :tada:&quot;</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;U0XXXXXXX&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
+<p><strong>Formatting with Block Kit</strong></p>
+<p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/block-kit">blocks</a>.</p>
+<p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.</p>
+<p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Danny Torrence left the following review for your property:&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;https://example.com|Overlook Hotel&gt; </span><span class="se">\n</span><span class="s2"> :star: </span><span class="se">\n</span><span class="s2"> Doors had too many axe holes, guest in room &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;237 was far too rowdy, whole place felt stuck in the 1920s.&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;accessory&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://images.pexels.com/photos/750319/pexels-photo-750319.jpeg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;alt_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Haunted hotel image&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;*Average Rating*</span><span class="se">\n</span><span class="s2">1.0&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> You can use the <a class="reference external" href="https://api.slack.com/tools/block-kit-builder">Block Kit Builder</a> to prototype your message’s look and feel.</p>
+<p><strong>Threading Messages</strong></p>
+<p>Threaded messages are a way of grouping messages together to provide greater context. You can reply to a thread or start a new threaded conversation by simply passing the original message’s <code class="docutils literal notranslate"><span class="pre">ts</span></code> ID in the <code class="docutils literal notranslate"><span class="pre">thread_ts</span></code> attribute when posting a message. If you’re replying to a threaded message, you’ll pass the <cite>thread_ts</cite> ID of the message you’re replying to.</p>
+<p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps. When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>. To indicate your reply is germane to all members of a channel, and therefore a notification of the reply should be posted in-channel, set the <code class="docutils literal notranslate"><span class="pre">reply_broadcast</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">thread_ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello from your app! :tada:&quot;</span><span class="p">,</span>
+    <span class="n">reply_broadcast</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> While threaded messages may contain attachments and message buttons, when your reply is broadcast to the
+channel, it’ll actually be a reference to your reply, not the reply itself.
+So, when appearing in the channel, it won’t contain any attachments or message buttons. Also note that updates and
+deletion of threaded replies works the same as regular messages.</p>
+<p>See the <a class="reference external" href="https://api.slack.com/docs/message-threading#forking_conversations">Threading messages together</a> article for more information.</p>
+<p><strong>Updating a message</strong></p>
+<p>Let’s say you have a bot which posts the status of a request. When that request changes, you’ll want to update the message to reflect it’s state.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_update</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476746830.000003&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;updates from your app! :tada:&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/chat.update">chat.update</a> for formatting options and some special considerations when calling this with a bot user.</p>
+<p><strong>Deleting a message</strong></p>
+<p>Sometimes you need to delete things.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_delete</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">ts</span><span class="o">=</span><span class="s2">&quot;1476745373.000002&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/chat.delete">chat.delete</a> for more info.</p>
+<p><strong>Emoji reactions</strong></p>
+<p>You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.</p>
+<p>This method adds a reaction (emoji) to an item (<code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">comment</span></code>, <code class="docutils literal notranslate"><span class="pre">channel</span> <span class="pre">message</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">message</span></code>, or <code class="docutils literal notranslate"><span class="pre">direct</span> <span class="pre">message</span></code>). One of file, file_comment, or the combination of channel and timestamp must be specified.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reactions_add</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
+    <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Removing an emoji reaction is basically the same format, but you’ll use <code class="docutils literal notranslate"><span class="pre">reactions.remove</span></code> instead of <code class="docutils literal notranslate"><span class="pre">reactions.add</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reactions_remove</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;thumbsup&quot;</span><span class="p">,</span>
+    <span class="n">timestamp</span><span class="o">=</span><span class="s2">&quot;1234567890.123456&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/reactions.add">reactions.add</a> and <a class="reference external" href="https://api.slack.com/methods/reactions.remove">reactions.remove</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<p><strong>Uploading files</strong></p>
+<p>You can upload files onto Slack and share the file with people in channels.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
+    <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
+    <span class="n">file</span><span class="o">=</span><span class="s2">&quot;files.pdf&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/files.upload">files.upload</a> for more info.</p>
+<p><strong>Adding a remote file</strong></p>
+<p>You can add a file information that is stored in an external storage, not in Slack.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_remote_add</span><span class="p">(</span>
+    <span class="n">external_id</span><span class="o">=</span><span class="s2">&quot;the-all-hands-deck-12345&quot;</span><span class="p">,</span>
+    <span class="n">external_url</span><span class="o">=</span><span class="s2">&quot;https://{your domain}/files/the-all-hands-deck-12345&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The All-hands Deck&quot;</span><span class="p">,</span>
+    <span class="n">preview_image</span><span class="o">=</span><span class="s2">&quot;./preview.png&quot;</span> <span class="c1"># will be displayed in channels</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/files.remote.add">files.remote.add</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="conversations">
+<h2>Conversations<a class="headerlink" href="#conversations" title="Permalink to this headline">¶</a></h2>
+<p>The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack; public channels, private channels, direct messages, group direct messages, and our newest channel type, Shared Channels.</p>
+<p>See <a class="reference external" href="https://api.slack.com/docs/conversations-api">Conversations API</a> docs for more info.</p>
+<p><strong>Start a direct message</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">conversations_open</span></code> method opens either a 1:1 direct message with a single user or a a multi-person direct message, depending on the number of users supplied to the <code class="docutils literal notranslate"><span class="pre">users</span></code> parameter.</p>
+<p><em>For public or private channels, use the conversations_create method.</em></p>
+<p>Provide a <code class="docutils literal notranslate"><span class="pre">users</span></code> parameter as an array with 1 to 8 user IDs to open or resume a conversation. Providing only 1 ID will create a direct message. Providing more will create a new multi-party DM or resume an existing conversation.</p>
+<p>Subsequent calls to <code class="docutils literal notranslate"><span class="pre">conversations_open</span></code> with the same set of users will return the already existing conversation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_open</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;W123456789&quot;</span><span class="p">,</span> <span class="s2">&quot;U987654321&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.open">conversations.open</a> additional info.</p>
+<p><strong>Creating channels</strong></p>
+<p>Creates a new channel, either public or private. The <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 21 characters. To make the channel private, set the option <code class="docutils literal notranslate"><span class="pre">is_private</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">channel_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;my-private-channel-</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_create</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="n">channel_name</span><span class="p">,</span>
+    <span class="n">is_private</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">channel_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;channel&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_archive</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.create">conversations.create</a> additional info.</p>
+<p><strong>Listing conversations</strong></p>
+<p>To get a list of all the conversations in a workspace, use <code class="docutils literal notranslate"><span class="pre">conversations_list</span></code>. By default, only public conversations are returned; use the <code class="docutils literal notranslate"><span class="pre">types</span></code> parameter specify which types of conversations you’re interested in (Note: <code class="docutils literal notranslate"><span class="pre">types</span></code> is a string of comma-separated values)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">()</span>
+<span class="n">conversations</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;channels&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">types</span></code> parameter to request additional channels, including <code class="docutils literal notranslate"><span class="pre">public_channel</span></code>, <code class="docutils literal notranslate"><span class="pre">private_channel</span></code>, <code class="docutils literal notranslate"><span class="pre">mpim</span></code>, and <code class="docutils literal notranslate"><span class="pre">im</span></code>. This parameter is a string of comma-separated values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span>
+    <span class="n">types</span><span class="o">=</span><span class="s2">&quot;public_channel, private_channel&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.list">conversations.list</a> for more info.</p>
+<p>Archived channels are included by default. You can exclude them by passing <code class="docutils literal notranslate"><span class="pre">exclude_archived=True</span></code> to your request.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span><span class="n">exclude_archived</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.list">conversations.list</a> for more info.</p>
+<p><strong>Getting a conversation information</strong></p>
+<p>To retrieve a set of metadata about a channel (public, private, DM, or multi-party DM), use <code class="docutils literal notranslate"><span class="pre">conversations_info</span></code>. The <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter is required and must be a valid channel ID. The optional <code class="docutils literal notranslate"><span class="pre">include_locale</span></code> boolean parameter will return locale data, which may be useful if you wish to return localized responses. The <code class="docutils literal notranslate"><span class="pre">include_num_members</span></code> boolean parameter will return the number of people in a channel.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_info</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C031415926&quot;</span><span class="p">,</span>
+    <span class="n">include_num_members</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.info">conversations.info</a> for more info.</p>
+<p><strong>Getting members of a conversation</strong></p>
+<p>To get a list of the members of a conversation, use <code class="docutils literal notranslate"><span class="pre">conversations_members</span></code> with the required <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_members</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C16180339&quot;</span><span class="p">)</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.members">conversations.members</a> for more info.</p>
+<p><strong>Joining a conversation</strong></p>
+<p>Channels are the social hub of most Slack teams. Here’s how you hop into one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_join</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXY&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are already in the channel, the response is slightly different.
+<code class="docutils literal notranslate"><span class="pre">already_in_channel</span></code> will be true, and a limited <code class="docutils literal notranslate"><span class="pre">channel</span></code> object will be returned. Bot users cannot join a channel on their own, they need to be invited by another user.</p>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.join">conversations.join</a> for more info.</p>
+<p><strong>Leaving a conversation</strong></p>
+<p>To leave a conversation, use <code class="docutils literal notranslate"><span class="pre">conversations_leave</span></code> with the required <code class="docutils literal notranslate"><span class="pre">channel</span></code> param containing the ID of the channel to leave.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_leave</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C27182818&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/conversations.leave">conversations.leave</a> for more info.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="modals">
+<h2>Modals<a class="headerlink" href="#modals" title="Permalink to this headline">¶</a></h2>
+<p><strong>Opening a modal</strong></p>
+<p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
+<p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
+<span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">slack_app</span><span class="p">():</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">signature_verifier</span><span class="o">.</span><span class="n">is_valid_request</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;invalid request&quot;</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span> \
+            <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;open-modal-shortcut&quot;</span><span class="p">:</span>
+            <span class="c1"># Open a new modal by a global shortcut</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+                    <span class="n">trigger_id</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">],</span>
+                    <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
+                                <span class="p">},</span>
+                                <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                        <span class="p">]</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span> \
+            <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">:</span>
+            <span class="c1"># Handle a data submission request from the modal</span>
+            <span class="n">submitted_data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">submitted_data</span><span class="p">)</span>    <span class="c1"># {&#39;b-id&#39;: {&#39;a-id&#39;: {&#39;type&#39;: &#39;plain_text_input&#39;, &#39;value&#39;: &#39;your input&#39;}}}</span>
+            <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># export SLACK_SIGNING_SECRET=***</span>
+    <span class="c1"># export SLACK_BOT_TOKEN=xoxb-***</span>
+    <span class="c1"># export FLASK_ENV=development</span>
+    <span class="c1"># python3 app.py</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/views.open">views.open</a> more details and additional parameters.</p>
+<p>Also, to run the above example, the following <a class="reference external" href="https://api.slack.com/apps">Slack app configurations</a> are required.</p>
+<ul class="simple">
+<li><p>Enable <strong>Interactivity</strong> with a valid Request URL: <code class="docutils literal notranslate"><span class="pre">https://{your-public-domain}/slack/events</span></code></p></li>
+<li><p>Add a global shortcut with the Callback ID: <code class="docutils literal notranslate"><span class="pre">open-modal-shortcut</span></code></p></li>
+</ul>
+<p><strong>Updating and pushing modals</strong></p>
+<p>You can dynamically update a view inside of a modal by calling <cite>views.update</cite> and passing the view ID returned in the previous <cite>views.open</cite> call.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">private_metadata</span> <span class="o">=</span> <span class="s2">&quot;any str data you want to store&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
+    <span class="n">view_id</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+    <span class="nb">hash</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;hash&quot;</span><span class="p">],</span>
+    <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;private_metadata&quot;</span><span class="p">:</span> <span class="n">private_metadata</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Awesome Modal&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Submit&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Cancel&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;block_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b-id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Input label&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;element&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;action_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a-id&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text_input&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://api.slack.com/methods/views.update">views.update</a> for more info.</p>
+<p>If you want to push a new view onto the modal instead of updating an existing view, reference the <a class="reference external" href="https://api.slack.com/methods/views.push">views.push</a> documentation.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="rate-limits">
+<h2>Rate Limits<a class="headerlink" href="#rate-limits" title="Permalink to this headline">¶</a></h2>
+<p>When posting messages to a channel, Slack allows applications to send no more than one message per channel per second. We allow bursts over that limit for short periods. However, if your app continues to exceed the limit over a longer period of time it will be rate limited. Different API methods have other rate limits – be sure to <a class="reference external" href="https://api.slack.com/docs/rate-limits">check the limits</a> and test that your application has a graceful fallback if it should hit those limits.</p>
+<p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error, a JSON object containing the number of calls you have been making, and a Retry-After header containing the number of seconds until you can retry.</p>
+<p>Here’s a very basic example of how one might deal with rate limited requests.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+
+<span class="c1"># Simple wrapper for sending a Slack message</span>
+<span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+        <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="n">message</span>
+    <span class="p">)</span>
+
+<span class="c1"># Make the API call and save results to `response`</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="s2">&quot;#random&quot;</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Hello, from Python!&quot;</span>
+<span class="c1"># Do until being rate limited</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ratelimited&quot;</span><span class="p">:</span>
+            <span class="c1"># The `Retry-After` header will tell you how long to wait before retrying</span>
+            <span class="n">delay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Retry-After&#39;</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">send_slack_message</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># other errors</span>
+            <span class="k">raise</span> <span class="n">e</span>
+</pre></div>
+</div>
+<p>See the documentation on <a class="reference external" href="https://api.slack.com/docs/rate-limits">Rate Limiting</a> for more info.</p>
+<hr class="docutils" />
+<div class="section" id="calling-any-api-methods">
+<h3>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this headline">¶</a></h3>
+<p>This library covers all the public endpoints as the methods in <code class="docutils literal notranslate"><span class="pre">WebClient</span></code>. That said, you may see a bit delay of the library release. When you’re in a hurry, you can directly use <code class="docutils literal notranslate"><span class="pre">api_call</span></code> method as below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SLACK_BOT_TOKEN&#39;</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
+    <span class="n">api_method</span><span class="o">=</span><span class="s1">&#39;chat.postMessage&#39;</span><span class="p">,</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="asyncwebclient">
+<h2>AsyncWebClient<a class="headerlink" href="#asyncwebclient" title="Permalink to this headline">¶</a></h2>
+<p>All the API methods are available in asynchronous programming using the standard <a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a> library. You use <code class="docutils literal notranslate"><span class="pre">AsyncWebClient</span></code> instead for it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AsyncWebClient</span></code> internally relies on <a class="reference external" href="https://docs.aiohttp.org/en/stable/">AIOHTTP</a> library but it is an optional dependency. So, to use this class, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">aiohttp</span></code> beforehand.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># requires: pip install aiohttp</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.web.async_client</span> <span class="kn">import</span> <span class="n">AsyncWebClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.errors</span> <span class="kn">import</span> <span class="n">SlackApiError</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">AsyncWebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SLACK_API_TOKEN&#39;</span><span class="p">])</span>
+
+<span class="c1"># This must be an async method</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">post_message</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Don&#39;t forget `await` keyword here</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+            <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;#random&#39;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Hello world!&quot;</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
+    <span class="k">except</span> <span class="n">SlackApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>  <span class="c1"># str like &#39;invalid_auth&#39;, &#39;channel_not_found&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got an error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># This is the simplest way to run the async method</span>
+<span class="c1"># but you can go with any ways to run it</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">post_message</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+                        <div class="clear_both large_bottom_margin"></div>
+                    </div>
+                </div>
+                <!-- /Body Content -->
+            </div>
+        </div>
+
+        <footer>
+            <p class="light tiny align_center">
+                © 2020 Slack Technologies, Inc. and contributors
+            </p>
+        </footer>
+
+        <script>
+            window.ga =
+                window.ga ||
+                function() {
+                    (ga.q = ga.q || []).push(arguments);
+                };
+            ga.l = +new Date();
+            ga('create', 'UA-56978219-13', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
+</html>

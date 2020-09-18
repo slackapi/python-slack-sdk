@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
+        />
+        
+        <title>FAQ &mdash; Python Slack SDK</title>
+
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+        </script>
+        <!-- End Google Tag Manager -->
+        
+        <link
+            href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/default.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/pygments.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/docs.css"
+            type="text/css"
+        />
+        <link
+            id="favicon"
+            rel="shortcut icon"
+            href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+            type="image/png"
+        />
+        <link
+            rel="top"
+            title="Python Slack SDK 1.0.1 documentation"
+            href="index.html"
+        />
+    </head>
+
+    <body class="api light_theme">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+            <a id="menu_toggle" class="no_transition show_on_mobile">
+                <span class="menu_icon"></span>
+                <span class="vert_divider"></span>
+            </a>
+            <a
+                href="https://api.slack.com/"
+                id="header_logo"
+                class="api hide_on_mobile"
+                style="float:left; display: inline-block;"
+            >
+                <img
+                    alt="Slack API"
+                    src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+                    style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+                />
+            </a>
+            <span
+                style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+            >
+                <a style="color: #555459;" href="./index.html">Python Slack SDK</a>
+            </span>
+            <div class="header_nav">
+                <a
+                    href="https://github.com/SlackAPI/python-slackclient"
+                    class="btn header_btn float_right"
+                    data-qa="go_to_slack"
+                    >Go to GitHub</a
+                >
+            </div>
+        </header>
+        
+
+        <div id="page">
+            <div id="page_contents" class="clearfix">
+                <!-- Sidebar Content -->
+                <nav id="api_nav" class="col span_1_of_4">
+                    <div id="api_sections">
+                         <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Python Slack SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v3-migration/index.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="v3-migration/index.html#from-slackclient-2-x">From slackclient 2.x</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#access-tokens">Access Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#workspace-installations">Workspace Installations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web/index.html">Web Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#messaging">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#conversations">Conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#modals">Modals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#rate-limits">Rate Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web/index.html#calling-any-api-methods">Calling any API methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#asyncwebclient">AsyncWebClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webhook/index.html">Webhook Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#id1">Incoming Webhooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#response-url">response_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oauth/index.html">OAuth Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#app-installation-flow">App Installation Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#token-lookup">Token Lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">RTM Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation-issues">Installation Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bug-report">Bug Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-requests">Feature Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Python Slack SDK</a></li>
+</ul>
+</li>
+</ul>
+
+
+<div id="footer">
+
+        <ul id="footer_nav">
+                <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+                <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+                <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
+                <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+        </ul>
+
+        <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+                Community
+        </p>
+</div> 
+                    </div>
+                </nav>
+                <!-- /Sidebar Content -->
+
+                <!-- Body Content -->
+                <div class="col span_3_of_4">
+                    <!-- <div class="section-title">FAQ</div> -->
+                    <div class="card">
+  <div class="section" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation-issues">
+<h2>Installation Issues<a class="headerlink" href="#installation-issues" title="Permalink to this headline">¶</a></h2>
+<p>We recommend using <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtualenv (venv)</a> to set up your Python runtime.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a dedicated virtual env for running your Python scripts</span>
+python -m venv .venv
+
+<span class="c1"># Run .venv\Scripts\activate on Windows OS</span>
+<span class="nb">source</span> .venv/bin/activate
+
+<span class="c1"># Install slack_sdk PyPI package</span>
+pip install <span class="s2">&quot;slack_sdk&gt;=3.0&quot;</span>
+
+<span class="c1"># Set your token as an env variable (`set` command for Windows OS)</span>
+<span class="nb">export</span> <span class="nv">SLACK_BOT_TOKEN</span><span class="o">=</span>xoxb-***
+</pre></div>
+</div>
+<p>Then, verify the following code works on the Python REPL (you can start it by just <code class="docutils literal notranslate"><span class="pre">python</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_test</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>As <code class="docutils literal notranslate"><span class="pre">slack</span></code> package is deprecated, we recommend switching to <code class="docutils literal notranslate"><span class="pre">slack_sdk</span></code> package. That being said, the code you’re working on may be still using the old package. If you encounter an error saying <code class="docutils literal notranslate"><span class="pre">AttributeError:</span> <span class="pre">module</span> <span class="pre">'slack'</span> <span class="pre">has</span> <span class="pre">no</span> <span class="pre">attribute</span> <span class="pre">'WebClient'</span></code>, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">list</span></code>. If you find both <code class="docutils literal notranslate"><span class="pre">slack_sdk</span></code> and <code class="docutils literal notranslate"><span class="pre">slack</span></code> in the output, try removing <code class="docutils literal notranslate"><span class="pre">slack</span></code> by <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span> <span class="pre">slack</span></code> and reinstalling <code class="docutils literal notranslate"><span class="pre">slack_sdk</span></code>.</p>
+</div>
+<div class="section" id="bug-report">
+<h2>Bug Report<a class="headerlink" href="#bug-report" title="Permalink to this headline">¶</a></h2>
+<p>That’s great! Thank you. Let us know on the <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/issues">Issue Tracker</a>. If you’re feeling particularly ambitious, why not submit a <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/pulls">pull request</a> with a bug fix?</p>
+</div>
+<div class="section" id="feature-requests">
+<h2>Feature Requests<a class="headerlink" href="#feature-requests" title="Permalink to this headline">¶</a></h2>
+<p>There’s always something more that could be added! You can let us know in the <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/issues">Issue Tracker</a> to start a discussion around the proposed feature, that’s a good start. If you’re feeling particularly ambitious, why not write the feature yourself, and submit a <a class="reference external" href="http://github.com/SlackAPI/python-slackclient/pulls">pull request</a>! We love feedback and we love help and we don’t bite. Much.</p>
+</div>
+<div class="section" id="contributions">
+<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<p>What an excellent question. First of all, please have a look at our general <a class="reference external" href="https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md">contributing guidelines</a>.</p>
+<p>All done? Great! While we’re super excited to incorporate your new feature, there are a couple of things we want to make sure you’ve given thought to.</p>
+<ul class="simple">
+<li><p>Please write unit tests for your new code. But don’t <strong>just</strong> aim to increase the test coverage, rather, we expect you to have written <strong>thoughtful</strong> tests that ensure your new feature will continue to work as expected, and to help future contributors to ensure they don’t break it!</p></li>
+<li><p>Please document your new feature. Think about <strong>concrete use cases</strong> for your feature, and add a section to the appropriate document, including a <strong>complete</strong> sample program that demonstrates your feature. Don’t forget to update the changelog in <code class="docutils literal notranslate"><span class="pre">changelog.rst</span></code>!</p></li>
+</ul>
+<p>Including these two items with your pull request will totally make our day—and, more importantly, your future users’ days!</p>
+<p>On that note…</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>This project’s documentation is generated with <a class="reference external" href="http://www.sphinx-doc.org">Sphinx</a>. If you are editing one of the many reStructuredText files in the <code class="docutils literal notranslate"><span class="pre">docs-src</span></code> folder, you’ll need to rebuild the documentation. It is recommended to run the following steps inside a <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./docs-v3.sh
+</pre></div>
+</div>
+<p>Do be sure to add the <code class="docutils literal notranslate"><span class="pre">docs-v3</span></code> folder and its contents to your pull request!</p>
+</div>
+</div>
+
+
+                        <div class="clear_both large_bottom_margin"></div>
+                    </div>
+                </div>
+                <!-- /Body Content -->
+            </div>
+        </div>
+
+        <footer>
+            <p class="light tiny align_center">
+                © 2020 Slack Technologies, Inc. and contributors
+            </p>
+        </footer>
+
+        <script>
+            window.ga =
+                window.ga ||
+                function() {
+                    (ga.q = ga.q || []).push(arguments);
+                };
+            ga.l = +new Date();
+            ga('create', 'UA-56978219-13', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
+</html>

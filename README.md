@@ -33,8 +33,8 @@ If you want to use our [Events API][events-docs], please check the [Slack Events
   * [Uploading files to Slack](#uploading-files-to-slack)
 * [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
 * [Async usage](#async-usage)
-  * [Slackclient as a script](#slackclient-as-a-script)
-  * [Slackclient in a framework](#slackclient-in-a-framework)
+  * [WebClient as a script](#asyncwebclient-in-a-script)
+  * [WebClient in a framework](#asyncwebclient-in-a-framework)
 * [Advanced Options](#advanced-options)
   * [SSL](#ssl)
   * [Proxy](#proxy)
@@ -241,12 +241,11 @@ print(response)
 
 ### Migrating from v2
 
-(To be updated)
+If you're migrating from slackclient v2.x of slack_sdk to v3.x, Please follow our migration guide to ensure your app continues working after updating.
 
+**[Check out the Migration Guide here!](https://slack.dev/python-slack-sdk/v3-migration/)**
 
 ### Migrating from v1
-
----
 
 If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.
 
