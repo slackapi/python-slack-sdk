@@ -10,10 +10,10 @@ We recommend using `virtualenv (venv) <https://docs.python.org/3/tutorial/venv.h
 .. code-block:: bash
 
     # Create a dedicated virtual env for running your Python scripts
-    python -m venv env
+    python -m venv .venv
 
-    # Run env\Scripts\activate on Windows OS
-    source env/bin/activate
+    # Run .venv\Scripts\activate on Windows OS
+    source .venv/bin/activate
 
     # Install slack_sdk PyPI package
     pip install "slack_sdk>=3.0"

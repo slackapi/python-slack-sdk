@@ -10,7 +10,7 @@ There are a few changes introduced in v3.0:
 * The PyPI project is renamed from ``slackclient`` to ``slack_sdk``
 * Importing ``slack_sdk.*`` is recommended. You can still use ``slack.*`` with deprecation warnings for a while.
 * ``slack_sdk`` has no required dependencies. This means ``aiohttp`` is no longer automatically resolved.
-* ``WebClient`` no longer has ``run_async`` and ``aiotttp`` specific options. If you still need the option or other ``aiohttp`` specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
+* ``WebClient`` no longer has ``run_async`` and ``aiohttp`` specific options. If you still need the option or other ``aiohttp`` specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
 
 We're sorry for the inconvenience.
 
@@ -22,7 +22,7 @@ We're sorry for the inconvenience.
 
 Since v3, the PyPI project name is `slack_sdk <https://pypi.org/project/slack_sdk/>`_ (technically ``slack-sdk`` also works).
 
-The biggest reason for the renaming is the feature coverage in v3 and newer. The SDK v3 provides not only API clients but also other modules. As the first step, it will start supporting OAuth flow out-of-the-box. The secondary reason is to make the names more consistent. The renaming will address the long-lived confusion between the PyPI project and package names.
+The biggest reason for the renaming is the feature coverage in v3 and newer. The SDK v3 provides not only API clients but also other modules. As the first step, it starts supporting OAuth flow out-of-the-box. The secondary reason is to make the names more consistent. The renaming addresses the long-lived confusion between the PyPI project and package names.
 
 -----
 
@@ -46,7 +46,7 @@ If you use some modules that require ``aiohttp``, your ``requirements.txt`` need
 
 -----
 
-**Change:** ``WebClient`` no longer has ``run_async`` and ``aiotttp`` specific options.
+**Change:** ``WebClient`` no longer has ``run_async`` and ``aiohttp`` specific options.
 
 **Action:** If you still need the option or other ``aiohttp`` specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
 
