@@ -190,7 +190,7 @@ class ValidateCommand(BaseCommand):
             "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"]
         )
 
-        target = self.test_target.replace("tests/", "")
+        target = self.test_target.replace("tests/", "", 1)
         self._run(
             "Running unit tests ...",
             [
@@ -219,7 +219,7 @@ class IntegrationTestsCommand(BaseCommand):
         self.legacy = ""
 
     def run(self):
-        target = self.test_target.replace("integration_tests/", "")
+        target = self.test_target.replace("integration_tests/", "", 1)
         path = (
             f"integration_tests_legacy/{target}"
             if self.legacy

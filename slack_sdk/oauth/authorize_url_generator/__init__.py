@@ -6,14 +6,12 @@ class AuthorizeUrlGenerator:
         self,
         *,
         client_id: str,
-        client_secret: str,
         redirect_uri: Optional[str] = None,
         scopes: Optional[List[str]] = None,
         user_scopes: Optional[List[str]] = None,
         authorization_url: str = "https://slack.com/oauth/v2/authorize",
     ):
         self.client_id = client_id
-        self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.scopes = scopes
         self.user_scopes = user_scopes
