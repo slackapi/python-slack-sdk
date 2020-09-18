@@ -8,9 +8,9 @@ From slackclient 2.x
 There are a few changes introduced in v3.0:
 
 * The PyPI project is renamed from ``slackclient`` to ``slack_sdk``
-* Importing ``slack_sdk.*`` is recommend. You can still use ``slack.*`` with deprecation warnings for a while.
+* Importing ``slack_sdk.*`` is recommended. You can still use ``slack.*`` with deprecation warnings for a while.
 * ``slack_sdk`` has no required dependencies. This means ``aiohttp`` is no longer automatically resolved.
-* ``WebClient`` no longer has ``run_async`` and aiotttp specific options. If you still need the option or other aiohttp specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
+* ``WebClient`` no longer has ``run_async`` and ``aiotttp`` specific options. If you still need the option or other ``aiohttp`` specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
 
 We're sorry for the inconvenience.
 
@@ -26,7 +26,7 @@ The biggest reason for the renaming is the feature coverage in v3 and newer. The
 
 -----
 
-**Change:** Importing ``slack_sdk.*`` is recommend. You can still use ``slack.*`` with deprecation warnings for a while.
+**Change:** Importing ``slack_sdk.*`` is recommended. You can still use ``slack.*`` with deprecation warnings for a while.
 
 **Action**: Replace ``from slack import``, ``import slack``, and so on in your source code.
 
@@ -46,11 +46,11 @@ If you use some modules that require ``aiohttp``, your ``requirements.txt`` need
 
 -----
 
-**Change:** ``WebClient`` no longer has ``run_async`` and aiotttp specific options.
+**Change:** ``WebClient`` no longer has ``run_async`` and ``aiotttp`` specific options.
 
-**Action:** If you still need the option or other aiohttp specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
+**Action:** If you still need the option or other ``aiohttp`` specific options, use ``LegacyWebClient`` (``slackclient`` v2 compatible) or ``AsyncWebClient``.
 
-The new ``slack_sdk.web.WebClient`` doesn't rely on aiohttp internally at all. The class provides only the synchronous way to call Web APIs. If you need a v2 compatible one, you can use ``LegacyWebClient``. Apart from the name, there is no breaking change in the class.
+The new ``slack_sdk.web.WebClient`` doesn't rely on ``aiohttp`` internally at all. The class provides only the synchronous way to call Web APIs. If you need a v2 compatible one, you can use ``LegacyWebClient``. Apart from the name, there is no breaking change in the class.
 
 If you're using ``run_async=True`` option, we highly recommend switching to ``AsyncWebClient``. ``AsyncWebClient`` is a straight-forward async HTTP client. You can expect the class properly works in the nature of ``async/await`` provided by the standard ``asyncio`` library.
 
