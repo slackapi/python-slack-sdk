@@ -650,3 +650,20 @@ class HeaderBlockTests(unittest.TestCase):
         }
         self.assertDictEqual(input, HeaderBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_text_length_150(self):
+        input = {
+            "type": "header",
+            "block_id": "budget-header",
+            "text": {"type": "plain_text", "text": "1234567890" * 15},
+        }
+        HeaderBlock(**input).validate_json()
+
+    def test_text_length_151(self):
+        input = {
+            "type": "header",
+            "block_id": "budget-header",
+            "text": {"type": "plain_text", "text": ("1234567890" * 15) + "1"},
+        }
+        with self.assertRaises(SlackObjectFormationError):
+            HeaderBlock(**input).validate_json()
