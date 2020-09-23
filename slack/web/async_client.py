@@ -743,7 +743,7 @@ class AsyncWebClient(AsyncBaseClient):
                 e.g. 'https://example.com/calls/1234567890'
         """
         kwargs.update({"external_unique_id": external_unique_id, "join_url": join_url})
-        _update_call_participants(kwargs, kwargs.get("users", None))
+        _update_call_participants(kwargs, kwargs.get("users"))
         return await self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     async def calls_end(

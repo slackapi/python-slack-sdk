@@ -269,7 +269,7 @@ class DialogStaticSelector(AbstractDialogSelector):
 class DialogUserSelector(AbstractDialogSelector):
     data_source = "users"
 
-    def __init__(
+    def __init__(  # skipcq: PYL-W0235
         self,
         *,
         name: str,
@@ -307,7 +307,7 @@ class DialogUserSelector(AbstractDialogSelector):
 class DialogChannelSelector(AbstractDialogSelector):
     data_source = "channels"
 
-    def __init__(
+    def __init__(  # skipcq: PYL-W0235
         self,
         *,
         name: str,
@@ -343,7 +343,7 @@ class DialogChannelSelector(AbstractDialogSelector):
 class DialogConversationSelector(AbstractDialogSelector):
     data_source = "conversations"
 
-    def __init__(
+    def __init__(  # skipcq: PYL-W0235
         self,
         *,
         name: str,
