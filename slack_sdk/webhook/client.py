@@ -1,11 +1,11 @@
 import json
 import logging
-import re
+import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import Dict, Union, List, Optional
 from urllib.error import HTTPError
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
@@ -109,22 +109,33 @@ class WebhookClient:
             )
         try:
             url = self.url
+            opener: Optional[OpenerDirector] = None
             # for security (BAN-B310)
             if url.lower().startswith("http"):
                 req = Request(
                     method="POST", url=url, data=body.encode("utf-8"), headers=headers
                 )
                 if self.proxy is not None:
-                    host = re.sub("^https?://", "", self.proxy)
-                    req.set_proxy(host, "http")
-                    req.set_proxy(host, "https")
+                    if isinstance(self.proxy, str):
+                        opener = urllib.request.build_opener(
+                            ProxyHandler({"http": self.proxy, "https": self.proxy}),
+                            HTTPSHandler(context=self.ssl),
+                        )
+                    else:
+                        raise SlackRequestError(
+                            f"Invalid proxy detected: {self.proxy} must be a str value"
+                        )
             else:
                 raise SlackRequestError(f"Invalid URL detected: {url}")
 
             # NOTE: BAN-B310 is already checked above
-            resp: HTTPResponse = urlopen(  # skipcq: BAN-B310
-                req, context=self.ssl, timeout=self.timeout,
-            )
+            resp: Optional[HTTPResponse] = None
+            if opener:
+                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            else:
+                resp = urlopen(  # skipcq: BAN-B310
+                    req, context=self.ssl, timeout=self.timeout
+                )
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(

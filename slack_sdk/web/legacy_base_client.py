@@ -8,7 +8,7 @@ import io
 import json
 import logging
 import mimetypes
-import re
+import urllib
 import uuid
 import warnings
 from http.client import HTTPResponse
@@ -17,7 +17,7 @@ from typing import BinaryIO, Dict, List
 from typing import Optional, Union
 from urllib.error import HTTPError
 from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
 import aiohttp
 from aiohttp import FormData, BasicAuth
@@ -450,20 +450,26 @@ class LegacyBaseClient:
             # (BAN-B310)
             if url.lower().startswith("http"):
                 req = Request(method="POST", url=url, data=body, headers=headers)
+                opener: Optional[OpenerDirector] = None
                 if self.proxy is not None:
                     if isinstance(self.proxy, str):
-                        host = re.sub("^https?://", "", self.proxy)
-                        req.set_proxy(host, "http")
-                        req.set_proxy(host, "https")
+                        opener = urllib.request.build_opener(
+                            ProxyHandler({"http": self.proxy, "https": self.proxy}),
+                            HTTPSHandler(context=self.ssl),
+                        )
                     else:
                         raise SlackRequestError(
                             f"Invalid proxy detected: {self.proxy} must be a str value"
                         )
 
                 # NOTE: BAN-B310 is already checked above
-                resp: HTTPResponse = urlopen(  # skipcq: BAN-B310
-                    req, context=self.ssl, timeout=self.timeout
-                )
+                resp: Optional[HTTPResponse] = None
+                if opener:
+                    resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+                else:
+                    resp = urlopen(  # skipcq: BAN-B310
+                        req, context=self.ssl, timeout=self.timeout
+                    )
                 charset = resp.headers.get_content_charset()
                 body: str = resp.read().decode(charset)  # read the response body here
                 return {"status": resp.code, "headers": resp.headers, "body": body}
