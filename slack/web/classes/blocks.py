@@ -387,7 +387,7 @@ class CallBlock(Block):
 
 class HeaderBlock(Block):
     type = "header"
-    text_max_length = 3000
+    text_max_length = 150
 
     @property
     def attributes(self) -> Set[str]:
@@ -411,3 +411,7 @@ class HeaderBlock(Block):
     @JsonValidator("text attribute must be specified")
     def _validate_text_populated(self):
         return self.text is not None
+
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) <= self.text_max_length
