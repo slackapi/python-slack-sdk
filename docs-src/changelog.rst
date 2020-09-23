@@ -2,6 +2,15 @@
 Changelog
 ==============================================
 
+v2.9.1 (2020-09-23)
+-------------------
+
+Refer to `v2.9.1 milestone <https://github.com/slackapi/python-slackclient/milestone/18?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [WebClient][WebhookClient] #820 #821 #822 The proxy option in WebClient/WebhookClient no longer works - Thanks @seratch
+
 v2.9.0 (2020-09-17)
 -------------------
 
