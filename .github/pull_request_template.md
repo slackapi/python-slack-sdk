@@ -8,6 +8,8 @@
 - [ ] **slack.webhook.WebhookClient** (Incoming Webhook, response_url sender)
 - [ ] **slack.web.classes** (UI component builders)
 - [ ] **slack.rtm.RTMClient** (RTM client)
+- [ ] Documents
+- [ ] Others
 
 ## Requirements (place an `x` in each `[ ]`)
 
