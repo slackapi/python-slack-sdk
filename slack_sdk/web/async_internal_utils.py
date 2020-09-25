@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from asyncio import AbstractEventLoop
 from logging import Logger
 from typing import Optional, BinaryIO, List, Dict
@@ -55,6 +56,29 @@ async def _request_with_session(
         session = aiohttp.ClientSession(
             timeout=aiohttp.ClientTimeout(total=timeout),
             auth=req_args.pop("auth", None),
+        )
+
+    if logger.level <= logging.DEBUG:
+
+        def convert_params(values: dict) -> dict:
+            if not values or not isinstance(values, dict):
+                return {}
+            return {
+                k: ("(bytes)" if isinstance(v, bytes) else v) for k, v in values.items()
+            }
+
+        headers = {
+            k: "(redacted)" if k.lower() == "authorization" else v
+            for k, v in req_args.get("headers", {}).items()
+        }
+        logger.debug(
+            f"Sending a request - url: {http_verb} {api_url}, "
+            f"params: {convert_params(req_args.get('params'))}, "
+            f"files: {convert_params(req_args.get('files'))}, "
+            f"data: {convert_params(req_args.get('data'))}, "
+            f"json: {convert_params(req_args.get('json'))}, "
+            f"proxy: {convert_params(req_args.get('proxy'))}, "
+            f"headers: {headers}"
         )
 
     response = None

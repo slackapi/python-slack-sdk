@@ -95,10 +95,14 @@ class AsyncBaseClient:
         """
 
         api_url = _get_url(self.base_url, api_method)
-        if isinstance(auth, dict):
-            auth = BasicAuth(auth["client_id"], auth["client_secret"])
-        elif isinstance(auth, BasicAuth):
-            headers["Authorization"] = auth.encode()
+        if auth is not None:
+            if isinstance(auth, dict):
+                auth = BasicAuth(auth["client_id"], auth["client_secret"])
+            if isinstance(auth, BasicAuth):
+                if headers is None:
+                    headers = {}
+                headers["Authorization"] = auth.encode()
+                auth = None
 
         headers = headers or {}
         headers.update(self.headers)
