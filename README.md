@@ -14,14 +14,14 @@ Whether you're building a custom app for your team, or integrating a third party
 
 The **Python Slack SDK** allows interaction with:
 
-- `slack_sdk.web`: for calling the Slack Web API methods ([Api Docs site][api-methods])
+- `slack_sdk.web`: for calling the Slack Web API methods ([API Docs site][api-methods])
 - `slack_sdk.webhook`: for utilizing the Incoming Webhooks and `response_url`s in payloads
 - `slack_sdk.signature`: for verifying incoming requests from the Slack API server
 - `slack_sdk.oauth`: for implementing the Slack OAuth flow
 - `slack_sdk.models`: for constructing UI components using easy-to-use builders
 - `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api]. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slack-sdk/auth.html).
+If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slack-sdk/auth.html).
 
 ## Table of contents
 
@@ -79,7 +79,7 @@ We've created this [tutorial](/tutorial) to build a basic Slack app in less than
 
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in our [Basic Usage](https://slack.dev/python-slack-sdk/basic_usage.html) guide.
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in [our guide](https://slack.dev/python-slack-sdk/web/).
 
 #### Sending a message to Slack
 
@@ -262,31 +262,23 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 
 <!-- Markdown links -->
 
-[pypi-image]: https://badge.fury.io/py/slackclient.svg
-[pypi-url]: https://pypi.python.org/pypi/slack_sdk
-[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=main
-[travis-url]: https://travis-ci.org/slackapi/python-slackclient
+[pypi-image]: https://badge.fury.io/py/slack-sdk.svg
+[pypi-url]: https://pypi.org/project/slack-sdk/
 [python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
-[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/main/graph/badge.svg
+[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=v3
+[travis-url]: https://travis-ci.org/slackapi/python-slackclient
+[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/v3/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
 [contact-url]: https://slack.com/support
-[api-docs]: https://api.slack.com
 [slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
 [api-methods]: https://api.slack.com/methods
 [rtm-docs]: https://api.slack.com/rtm
 [events-docs]: https://api.slack.com/events-api
-[events-sdk]: https://github.com/slackapi/python-slack-events-api
-[message-event]: https://api.slack.com/events/message
-[python-slack-events-api]: https://github.com/slackapi/python-slack-events-api
-[pypi]: https://pypi.python.org/pypi
-[pipenv]: https://pypi.org/project/pipenv/
+[bolt-python]: https://github.com/slackapi/bolt-python
+[pypi]: https://pypi.org/
 [gh-issues]: https://github.com/slackapi/python-slackclient/issues
 [slack-community]: http://slackcommunity.com/
-[dev-roadmap]: https://github.com/slackapi/python-slackclient/wiki/Slack-Python-SDK-Roadmap
-[migration-guide]: documentation_v2/Migration.md
 [files.upload]: https://api.slack.com/methods/files.upload
-[auth-guide]: documentation_v2/auth.md
-[basic-usage]: documentation_v2/basic_usage.md
 [aiohttp]: https://aiohttp.readthedocs.io/
 [urllib]: https://docs.python.org/3/library/urllib.request.html
