@@ -34,7 +34,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
     def init(self):
         try:
             with sqlite3.connect(database=self.database) as conn:
-                cur = conn.execute("select count(1) from installations;")
+                cur = conn.execute("select count(1) from slack_installations;")
                 row_num = cur.fetchone()[0]
                 self.logger.debug(
                     f"{row_num} installations are stored in {self.database}"
@@ -52,7 +52,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         with sqlite3.connect(database=self.database) as conn:
             conn.execute(
                 """
-            create table installations (
+            create table slack_installations (
                 id integer primary key autoincrement,
                 client_id text not null,
                 app_id text not null,
@@ -74,12 +74,18 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             conn.execute(
                 """
-            create index installations_idx on installations (client_id, enterprise_id, team_id, user_id);
+            create index slack_installations_idx on slack_installations (
+                client_id,
+                enterprise_id,
+                team_id,
+                user_id,
+                installed_at
+            );
             """
             )
             conn.execute(
                 """
-            create table bots (
+            create table slack_bots (
                 id integer primary key autoincrement,
                 client_id text not null,
                 app_id text not null,
@@ -95,7 +101,12 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             conn.execute(
                 """
-            create index bots_idx on bots (client_id, enterprise_id, team_id);
+            create index slack_bots_idx on slack_bots (
+                client_id,
+                enterprise_id,
+                team_id,
+                installed_at
+            );
             """
             )
             self.logger.debug(f"Tables have been created (database: {self.database})")
@@ -108,7 +119,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         with self.connect() as conn:
             conn.execute(
                 """
-                insert into bots (
+                insert into slack_bots (
                     client_id,
                     app_id,
                     enterprise_id,
@@ -143,7 +154,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             conn.execute(
                 """
-                insert into installations (
+                insert into slack_installations (
                     client_id,
                     app_id,
                     enterprise_id,
@@ -197,7 +208,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 ],
             )
             self.logger.debug(
-                f"New rows in bots and installations) have been created (database: {self.database})"
+                f"New rows in slack_bots and slack_installations) have been created (database: {self.database})"
             )
             conn.commit()
 
@@ -224,7 +235,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_scopes,
                         installed_at
                     from
-                        bots
+                        slack_bots
                     where
                         client_id = ?
                         and

@@ -113,7 +113,7 @@ async def oauth_callback(req: Request):
 
 
 # ---------------------
-# Flask App for Slack events
+# Sanic App for Slack events
 # ---------------------
 
 import json

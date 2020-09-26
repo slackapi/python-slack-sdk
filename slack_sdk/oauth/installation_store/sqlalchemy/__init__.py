@@ -8,62 +8,102 @@ from slack_sdk.oauth.installation_store.models.bot import Bot
 from slack_sdk.oauth.installation_store.models.installation import Installation
 
 import sqlalchemy
-from sqlalchemy import Table, Column, Integer, String, DateTime, Index, and_, desc
+from sqlalchemy import (
+    Table,
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Index,
+    and_,
+    desc,
+    MetaData,
+)
 
 
 class SQLAlchemyInstallationStore(InstallationStore):
-    engine: Engine
+    default_bots_table_name: str = "slack_bots"
+    default_installations_table_name: str = "slack_installations"
+
     client_id: str
+    engine: Engine
+    metadata: MetaData
+    installations: Table
 
-    metadata = sqlalchemy.MetaData()
-    installations: Table = sqlalchemy.Table(
-        "installations",
-        metadata,
-        Column("id", Integer, primary_key=True, autoincrement=True),
-        Column("client_id", String, nullable=False),
-        Column("app_id", String, nullable=False),
-        Column("enterprise_id", String),
-        Column("team_id", String),
-        Column("bot_token", String),
-        Column("bot_id", String),
-        Column("bot_user_id", String),
-        Column("bot_scopes", String),
-        Column("user_id", String, nullable=False),
-        Column("user_token", String),
-        Column("user_scopes", String),
-        Column("incoming_webhook_url", String),
-        Column("incoming_webhook_channel_id", String),
-        Column("incoming_webhook_configuration_url", String),
-        Column(
-            "installed_at", DateTime, nullable=False, default=sqlalchemy.sql.func.now()
-        ),
-        Index("installations_idx", "client_id", "enterprise_id", "team_id", "user_id",),
-    )
+    @classmethod
+    def build_installations_table(cls, metadata: MetaData, table_name: str) -> Table:
+        return sqlalchemy.Table(
+            table_name,
+            metadata,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("client_id", String, nullable=False),
+            Column("app_id", String, nullable=False),
+            Column("enterprise_id", String),
+            Column("team_id", String),
+            Column("bot_token", String),
+            Column("bot_id", String),
+            Column("bot_user_id", String),
+            Column("bot_scopes", String),
+            Column("user_id", String, nullable=False),
+            Column("user_token", String),
+            Column("user_scopes", String),
+            Column("incoming_webhook_url", String),
+            Column("incoming_webhook_channel_id", String),
+            Column("incoming_webhook_configuration_url", String),
+            Column(
+                "installed_at",
+                DateTime,
+                nullable=False,
+                default=sqlalchemy.sql.func.now(),
+            ),
+            Index(
+                "installations_idx",
+                "client_id",
+                "enterprise_id",
+                "team_id",
+                "user_id",
+                "installed_at",
+            ),
+        )
 
-    bots = Table(
-        "bots",
-        metadata,
-        Column("id", Integer, primary_key=True, autoincrement=True),
-        Column("client_id", String, nullable=False),
-        Column("app_id", String, nullable=False),
-        Column("enterprise_id", String),
-        Column("team_id", String),
-        Column("bot_token", String),
-        Column("bot_id", String),
-        Column("bot_user_id", String),
-        Column("bot_scopes", String),
-        Column(
-            "installed_at", DateTime, nullable=False, default=sqlalchemy.sql.func.now()
-        ),
-        Index("bots_idx", "client_id", "enterprise_id", "team_id",),
-    )
+    @classmethod
+    def build_bots_table(cls, metadata: MetaData, table_name: str) -> Table:
+        return Table(
+            table_name,
+            metadata,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("client_id", String, nullable=False),
+            Column("app_id", String, nullable=False),
+            Column("enterprise_id", String),
+            Column("team_id", String),
+            Column("bot_token", String),
+            Column("bot_id", String),
+            Column("bot_user_id", String),
+            Column("bot_scopes", String),
+            Column(
+                "installed_at",
+                DateTime,
+                nullable=False,
+                default=sqlalchemy.sql.func.now(),
+            ),
+            Index("bots_idx", "client_id", "enterprise_id", "team_id", "installed_at"),
+        )
 
     def __init__(
         self,
         client_id: str,
         engine: Engine,
+        bots_table_name: str = default_bots_table_name,
+        installations_table_name: str = default_installations_table_name,
         logger: Logger = logging.getLogger(__name__),
     ):
+        self.metadata = sqlalchemy.MetaData()
+        self.bots = self.build_bots_table(
+            metadata=self.metadata, table_name=bots_table_name
+        )
+        self.installations = self.build_installations_table(
+            metadata=self.metadata, table_name=installations_table_name
+        )
         self.client_id = client_id
         self._logger = logger
         self.engine = engine

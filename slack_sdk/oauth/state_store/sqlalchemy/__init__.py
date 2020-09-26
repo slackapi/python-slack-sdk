@@ -6,32 +6,41 @@ from uuid import uuid4
 
 from ..state_store import OAuthStateStore
 import sqlalchemy
-from sqlalchemy import Table, Column, Integer, String, DateTime, and_
+from sqlalchemy import Table, Column, Integer, String, DateTime, and_, MetaData
 from sqlalchemy.engine import Engine
 
 
 class SQLAlchemyOAuthStateStore(OAuthStateStore):
-    engine: Engine
-    expiration_seconds: int
+    default_table_name: str = "slack_oauth_states"
 
-    metadata = sqlalchemy.MetaData()
-    oauth_states: Table = sqlalchemy.Table(
-        "oauth_states",
-        metadata,
-        Column("id", Integer, primary_key=True, autoincrement=True),
-        Column("state", String, nullable=False),
-        Column("expire_at", DateTime, nullable=False),
-    )
+    expiration_seconds: int
+    engine: Engine
+    metadata: MetaData
+    oauth_states: Table
+
+    @classmethod
+    def build_oauth_states_table(cls, metadata: MetaData, table_name: str) -> Table:
+        return sqlalchemy.Table(
+            table_name,
+            metadata,
+            metadata,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("state", String, nullable=False),
+            Column("expire_at", DateTime, nullable=False),
+        )
 
     def __init__(
         self,
         expiration_seconds: int,
         engine: Engine,
         logger: Logger = logging.getLogger(__name__),
+        table_name: str = default_table_name,
     ):
         self.expiration_seconds = expiration_seconds
         self._logger = logger
         self.engine = engine
+        self.metadata = MetaData()
+        self.oauth_states = self.build_oauth_states_table(self.metadata, table_name)
 
     @property
     def logger(self) -> Logger:
