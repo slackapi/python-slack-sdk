@@ -1,5 +1,6 @@
+from datetime import datetime
 from time import time
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict, Any
 
 from slack_sdk.oauth.installation_store.models.bot import Bot
 
@@ -64,3 +65,21 @@ class Installation:
             bot_scopes=self.bot_scopes,
             installed_at=self.installed_at,
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "app_id": self.app_id,
+            "enterprise_id": self.enterprise_id,
+            "team_id": self.team_id,
+            "bot_token": self.bot_token,
+            "bot_id": self.bot_id,
+            "bot_user_id": self.bot_user_id,
+            "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
+            "user_id": self.user_id,
+            "user_token": self.user_token,
+            "user_scopes": ",".join(self.user_scopes) if self.user_scopes else None,
+            "incoming_webhook_url": self.incoming_webhook_url,
+            "incoming_webhook_channel_id": self.incoming_webhook_channel_id,
+            "incoming_webhook_configuration_url": self.incoming_webhook_configuration_url,
+            "installed_at": datetime.utcfromtimestamp(self.installed_at),
+        }

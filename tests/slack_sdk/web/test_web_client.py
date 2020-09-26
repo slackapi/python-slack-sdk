@@ -4,7 +4,7 @@ import unittest
 
 import slack_sdk.errors as err
 from slack_sdk import WebClient
-from tests.slack_sdk_tests.web.mock_web_api_server import (
+from tests.slack_sdk.web.mock_web_api_server import (
     setup_mock_web_api_server,
     cleanup_mock_web_api_server,
 )

@@ -5,8 +5,8 @@ import slack_sdk
 from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.views import View
 from slack_sdk.web.async_client import AsyncWebClient
-from tests.slack_sdk_tests_async.helpers import async_test
-from tests.slack_sdk_tests.web.mock_web_api_server import (
+from tests.slack_sdk_async.helpers import async_test
+from tests.slack_sdk.web.mock_web_api_server import (
     setup_mock_web_api_server,
     cleanup_mock_web_api_server,
 )

@@ -11,7 +11,7 @@ from slack_sdk.models.attachments import (
 )
 from slack_sdk.models.blocks import ConfirmObject, Option, OptionGroup
 from slack_sdk.models.dialoags import ActionStaticSelector
-from tests.slack_sdk_tests.web.classes import STRING_3001_CHARS
+from tests.slack_sdk.web.classes import STRING_3001_CHARS
 
 
 class ButtonTests(unittest.TestCase):

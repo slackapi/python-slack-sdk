@@ -62,9 +62,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
-                installer_user_id text not null,
-                installer_user_token text,
-                installer_user_scopes text,
+                user_id text not null,
+                user_token text,
+                user_scopes text,
                 incoming_webhook_url text,
                 incoming_webhook_channel_id text,
                 incoming_webhook_configuration_url text,
@@ -74,7 +74,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             conn.execute(
                 """
-            create index installations_idx on installations (client_id, enterprise_id, team_id, installer_user_id);
+            create index installations_idx on installations (client_id, enterprise_id, team_id, user_id);
             """
             )
             conn.execute(
@@ -152,9 +152,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
-                    installer_user_id,
-                    installer_user_token,
-                    installer_user_scopes,
+                    user_id,
+                    user_token,
+                    user_scopes,
                     incoming_webhook_url,
                     incoming_webhook_channel_id,
                     incoming_webhook_configuration_url

@@ -3,7 +3,7 @@ import unittest
 from slack_sdk.oauth.state_store.sqlite3 import SQLite3OAuthStateStore
 
 
-class TestFile(unittest.TestCase):
+class TestSQLite3(unittest.TestCase):
     def setUp(self):
         pass
 

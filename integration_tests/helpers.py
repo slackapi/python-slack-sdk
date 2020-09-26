@@ -21,7 +21,7 @@ def is_not_specified() -> bool:
     module = inspect.getmodule(frame[0])
     filepath: str = module.__file__
 
-    # python setup.py run_all_tests --integration-test-target=web/test_issue_560.py
-    test_target: str = sys.argv[3]  # e.g., web/test_issue_560.py
+    # python setup.py integration_tests --test-target=web/test_issue_560.py
+    test_target: str = sys.argv[1]  # e.g., web/test_issue_560.py
     return not test_target or \
            not filepath.endswith(test_target)

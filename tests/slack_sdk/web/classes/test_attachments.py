@@ -10,7 +10,7 @@ from slack_sdk.models.attachments import (
     InteractiveAttachment,
 )
 from slack_sdk.models.blocks import SectionBlock, ImageBlock
-from tests.slack_sdk_tests.web.classes import STRING_301_CHARS
+from tests.slack_sdk.web.classes import STRING_301_CHARS
 
 
 class FieldTests(unittest.TestCase):

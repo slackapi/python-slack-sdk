@@ -24,6 +24,7 @@ validate_dependencies = [
     "flake8>=3,<4",
     "black==19.10b0",
     "psutil>=5,<6",
+    "databases>=0.3",
 ]
 codegen_dependencies = [
     "black==19.10b0",
@@ -182,7 +183,9 @@ class ValidateCommand(BaseCommand):
             [sys.executable, "-m", "pip", "install"] + validate_dependencies,
         )
         self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack"])
-        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+        self._run(
+            "Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"]
+        )
         self._run(
             "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack"]
         )
@@ -204,6 +207,23 @@ class ValidateCommand(BaseCommand):
         )
 
 
+class UnitTestsCommand(BaseCommand):
+    """Support setup.py validate."""
+
+    description = "Run unit tests (pytest)."
+    user_options = [("test-target=", "i", "tests/{test-target}")]
+
+    def initialize_options(self):
+        self.test_target = ""
+
+    def run(self):
+        target = self.test_target.replace("tests/", "", 1)
+        self._run(
+            "Running unit tests ...",
+            [sys.executable, "-m", "pytest", f"tests/{target}",],
+        )
+
+
 class IntegrationTestsCommand(BaseCommand):
     """Support setup.py run_integration_tests"""
 
@@ -211,7 +231,6 @@ class IntegrationTestsCommand(BaseCommand):
 
     user_options = [
         ("test-target=", "i", "integration_tests/{test-target}"),
-        ("legacy=", "i", "1"),
     ]
 
     def initialize_options(self):
@@ -220,19 +239,9 @@ class IntegrationTestsCommand(BaseCommand):
 
     def run(self):
         target = self.test_target.replace("integration_tests/", "", 1)
-        path = (
-            f"integration_tests_legacy/{target}"
-            if self.legacy
-            else f"integration_tests/{target}"
-        )
+        path = f"integration_tests/{target}"
         self._run(
-            "Running integration tests ...",
-            [
-                sys.executable,
-                "-m",
-                "pytest",
-                path,
-            ],
+            "Running integration tests ...", [sys.executable, "-m", "pytest", path,],
         )
 
 
@@ -286,6 +295,8 @@ setup(
             "aiohttp>=3,<4",
             # used only under slack_sdk/*_store
             "boto3<=2",
+            # InstallationStore/OAuthStateStore
+            "SQLAlchemy>=1,<2",
         ],
     },
     setup_requires=pytest_runner,
@@ -295,6 +306,7 @@ setup(
         "upload": UploadCommand,
         "codegen": CodegenCommand,
         "validate": ValidateCommand,
+        "unit_tests": UnitTestsCommand,
         "integration_tests": IntegrationTestsCommand,
     },
 )
