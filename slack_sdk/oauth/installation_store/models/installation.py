@@ -6,6 +6,21 @@ from slack_sdk.oauth.installation_store.models.bot import Bot
 
 
 class Installation:
+    app_id: Optional[str]
+    enterprise_id: Optional[str]
+    team_id: Optional[str]
+    bot_token: str
+    bot_id: str
+    bot_user_id: str
+    bot_scopes: List[str]
+    user_id: Optional[str]
+    user_token: Optional[str]
+    user_scopes: Optional[List[str]]
+    incoming_webhook_url: Optional[str]
+    incoming_webhook_channel_id: Optional[str]
+    incoming_webhook_configuration_url: Optional[str]
+    installed_at: float
+
     def __init__(
         self,
         *,
@@ -21,7 +36,7 @@ class Installation:
         # installer
         user_id: Optional[str] = None,
         user_token: Optional[str] = None,
-        user_scopes: List[str] = "",
+        user_scopes: Union[str, List[str]] = "",
         # incoming webhook
         incoming_webhook_url: Optional[str] = None,
         incoming_webhook_channel_id: Optional[str] = None,
@@ -37,14 +52,14 @@ class Installation:
         self.bot_id = bot_id
         self.bot_user_id = bot_user_id
         if isinstance(bot_scopes, str):
-            self.bot_scopes = bot_scopes.split(",")
+            self.bot_scopes = bot_scopes.split(",") if len(bot_scopes) > 0 else []
         else:
             self.bot_scopes = bot_scopes
 
         self.user_id = user_id
         self.user_token = user_token
         if isinstance(user_scopes, str):
-            self.user_scopes = user_scopes.split(",")
+            self.user_scopes = user_scopes.split(",") if len(user_scopes) > 0 else []
         else:
             self.user_scopes = user_scopes
 

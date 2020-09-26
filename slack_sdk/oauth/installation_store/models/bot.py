@@ -3,6 +3,15 @@ from typing import Optional, Union, List, Dict, Any
 
 
 class Bot:
+    app_id: Optional[str]
+    enterprise_id: Optional[str]
+    team_id: Optional[str]
+    bot_token: str
+    bot_id: str
+    bot_user_id: str
+    bot_scopes: List[str]
+    installed_at: float
+
     def __init__(
         self,
         *,
@@ -14,7 +23,7 @@ class Bot:
         bot_token: str,
         bot_id: str,
         bot_user_id: str,
-        bot_scopes: Union[str, List[str]] = [],
+        bot_scopes: Union[str, List[str]] = "",
         # timestamps
         installed_at: float,
     ):
@@ -26,7 +35,7 @@ class Bot:
         self.bot_id = bot_id
         self.bot_user_id = bot_user_id
         if isinstance(bot_scopes, str):
-            self.bot_scopes = bot_scopes.split(",")
+            self.bot_scopes = bot_scopes.split(",") if len(bot_scopes) > 0 else []
         else:
             self.bot_scopes = bot_scopes
         self.installed_at = installed_at
