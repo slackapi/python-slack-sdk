@@ -2,11 +2,6 @@ import logging
 from logging import Logger
 from typing import Optional
 
-from sqlalchemy.engine import Engine
-from slack_sdk.oauth.installation_store.installation_store import InstallationStore
-from slack_sdk.oauth.installation_store.models.bot import Bot
-from slack_sdk.oauth.installation_store.models.installation import Installation
-
 import sqlalchemy
 from sqlalchemy import (
     Table,
@@ -19,6 +14,11 @@ from sqlalchemy import (
     desc,
     MetaData,
 )
+from sqlalchemy.engine import Engine
+
+from slack_sdk.oauth.installation_store.installation_store import InstallationStore
+from slack_sdk.oauth.installation_store.models.bot import Bot
+from slack_sdk.oauth.installation_store.models.installation import Installation
 
 
 class SQLAlchemyInstallationStore(InstallationStore):
@@ -57,7 +57,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 default=sqlalchemy.sql.func.now(),
             ),
             Index(
-                "installations_idx",
+                f"{table_name}_idx",
                 "client_id",
                 "enterprise_id",
                 "team_id",
@@ -86,7 +86,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 nullable=False,
                 default=sqlalchemy.sql.func.now(),
             ),
-            Index("bots_idx", "client_id", "enterprise_id", "team_id", "installed_at"),
+            Index(
+                f"{table_name}_idx",
+                "client_id",
+                "enterprise_id",
+                "team_id",
+                "installed_at",
+            ),
         )
 
     def __init__(
