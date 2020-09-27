@@ -23,6 +23,10 @@ The **Python Slack SDK** allows interaction with:
 
 If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slack-sdk/auth.html).
 
+## slackclient is in maintenance mode
+
+Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The website is live [here](https://slack.dev/python-slackclient/) just like before. However, the slackclient project is in maintenance mode now and this [`slack_sdk`](https://pypi.org/project/slack-sdk/) is the successor. If you have time to make a migration to slack_sdk v3, please follow [our migration guide](https://slack.dev/python-slack-sdk/v3-migration/) to ensure your app continues working after updating.
+
 ## Table of contents
 
 * [Requirements](#requirements)
