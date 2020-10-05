@@ -45,7 +45,7 @@ When you click the green **Save Changes** button, you'll need to reinstall your 
 
 ### 🎉 That's it. Congratulations! You've just built a Slack app. 🤖
 
-To demo the app, simply send the bot a message that says "start". And then, the app will post a new message in the same channel. You can interact with the message by adding a reaction to it and adding the message to the pinned items. If the app is properly configured, you will see the modifications of the message accordingly.
+To demo the app, simply invite your bot to a public channel and send a message that says "start". And then, the app will post a new message in the same channel. You can interact with the message by adding a reaction to it and adding the message to the pinned items. If the app is properly configured, you will see the modifications of the message accordingly.
 
 ## ![Onboarding](https://user-images.githubusercontent.com/3329665/56870674-ab02b300-69c7-11e9-9101-eb823235f3c2.gif)
 
