@@ -127,8 +127,11 @@ class TestAsyncWebClient(unittest.TestCase):
             await self.client.users_list(token="xoxb-html_response")
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
-            self.assertTrue(
-                str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
+            self.assertEqual(
+                "The request to the Slack API failed.\n"
+                "The server responded with: {}",
+                str(e)
+            )
 
     @async_test
     async def test_user_agent_customization_issue_769_async(self):
