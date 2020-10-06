@@ -113,6 +113,8 @@ class MockHandler(SimpleHTTPRequestHandler):
 
                 if pattern == "error_html_response":
                     self.send_response(503)
+                    # no charset here is intentional for testing
+                    self.send_header("content-type", "text/html")
                     self.send_header("connection", "close")
                     self.end_headers()
                     self.wfile.write(self.error_html_response_body.encode("utf-8"))
