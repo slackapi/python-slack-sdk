@@ -275,6 +275,8 @@ setup(
         exclude=[
             "docs",
             "docs-src",
+            "docs-v2",
+            "docs-src-v2",
             "docs-v3",
             "docs-src-v3",
             "integration_tests",
