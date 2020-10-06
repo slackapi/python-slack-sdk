@@ -160,7 +160,7 @@ class TestWebhook(unittest.TestCase):
         client = WebhookClient(url="http://localhost:8888/error")
         resp: WebhookResponse = client.send_dict({"text": "hello!"})
         self.assertEqual(500, resp.status_code)
-        self.assertEqual("error", resp.body)
+        self.assertTrue(resp.body.startswith("<!DOCTYPE html>"))
 
     def test_proxy_issue_714(self):
         client = WebhookClient(

@@ -136,7 +136,7 @@ class WebhookClient:
             return resp
 
         except HTTPError as e:
-            charset = e.headers.get_content_charset()
+            charset = e.headers.get_content_charset() or "utf-8"
             body: str = e.read().decode(charset)  # read the response body here
             resp = WebhookResponse(
                 url=url, status_code=e.code, body=body, headers=e.headers,
