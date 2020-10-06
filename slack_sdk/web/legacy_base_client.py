@@ -470,7 +470,7 @@ class LegacyBaseClient:
                     resp = urlopen(  # skipcq: BAN-B310
                         req, context=self.ssl, timeout=self.timeout
                     )
-                charset = resp.headers.get_content_charset()
+                charset = resp.headers.get_content_charset() or "utf-8"
                 body: str = resp.read().decode(charset)  # read the response body here
                 return {"status": resp.code, "headers": resp.headers, "body": body}
             raise SlackRequestError(f"Invalid URL detected: {url}")
