@@ -10,7 +10,7 @@ The code for this step is available [here](PythOnBoardingBot).
 - Add the following contents to that file and save the file.
 
 ```
-slackclient>=2.0.0
+slack_sdk>=3.0
 slackeventsapi>=2.1.0
 Flask>=1.1.2
 ```
@@ -21,7 +21,7 @@ Flask>=1.1.2
 
 ```
 $ pip3 install -r requirements.txt
--> Successfully installed slackclient-2.0.0
+-> Successfully installed slack_sdk-3.0.0
 ```
 
 ## Creating the app
@@ -36,7 +36,7 @@ The first thing we'll need to do is import the code our app needs to run.
 import os
 import logging
 from flask import Flask
-from slack import WebClient
+from slack_sdk.web import WebClient
 from slackeventsapi import SlackEventAdapter
 from onboarding_tutorial import OnboardingTutorial
 ```
@@ -94,9 +94,9 @@ def start_onboarding(user_id: str, channel: str):
 
 When events occur in Slack there are two primary ways to be notified about them. We can send you an HTTP Request through our Events API (preferred) or you can stream events through a websocket connection with our RTM API. The RTM API is only recommended if you're behind a firewall and cannot receive incoming web requests from Slack.
 
-> ⚠️ The RTM API isn't available for default Slack apps. If you need to use RTM (possibly due to corporate firewall limitations), you can do so by creating a [classic Slack app](https://api.slack.com/apps?new_classic_app=1). If you have an existing RTM app, you can continue to use its associated tokens. You can read more [in the documentation](https://slack.dev/python-slackclient/real_time_messaging.html).
+> ⚠️ The RTM API isn't available for default Slack apps. If you need to use RTM (possibly due to corporate firewall limitations), you can do so by creating a [classic Slack app](https://api.slack.com/apps?new_classic_app=1). If you have an existing RTM app, you can continue to use its associated tokens. You can read more [in the documentation](https://slack.dev/python-slack-sdk/real_time_messaging.html).
 
-In this tutorial we'll be using the Events API and the [SlackEventAdapter](https://github.com/slackapi/python-slack-events-api). If you need access to the RTM API, you can access it [via the `RTMClient`](https://slack.dev/python-slackclient/real_time_messaging.html).
+In this tutorial we'll be using the Events API and the [SlackEventAdapter](https://github.com/slackapi/python-slack-events-api). If you need access to the RTM API, you can access it [via the `RTMClient`](https://slack.dev/python-slack-sdk/real_time_messaging.html).
 
 Back to our application, it's time to link our onboarding functionality to Slack events.
 
