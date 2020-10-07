@@ -4,6 +4,7 @@ from logging import NullHandler
 # from .rtm import RTMClient  # noqa
 from .web import WebClient  # noqa
 from .webhook import WebhookClient  # noqa
+from .socketmode import SocketModeClient  # noqa
 
 # Set default logging handler to avoid "No handler found" warnings.
 logging.getLogger(__name__).addHandler(NullHandler())
