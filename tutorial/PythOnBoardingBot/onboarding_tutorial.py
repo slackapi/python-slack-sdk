@@ -1,9 +1,6 @@
 class OnboardingTutorial:
     """Constructs the onboarding message and stores the state of which tasks were completed."""
 
-    # TODO: Create a better message builder:
-    # https://github.com/slackapi/python-slackclient/issues/392
-    # https://github.com/slackapi/python-slackclient/pull/400
     WELCOME_BLOCK = {
         "type": "section",
         "text": {

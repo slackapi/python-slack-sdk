@@ -1,7 +1,7 @@
 import os
 import logging
 from flask import Flask
-from slack import WebClient
+from slack_sdk.web import WebClient
 from slackeventsapi import SlackEventAdapter
 from onboarding_tutorial import OnboardingTutorial
 
