@@ -366,6 +366,18 @@ class WebClient(BaseClient):
         kwargs.update({"user_id": user_id})
         return self.api_call("admin.users.session.reset", json=kwargs)
 
+    def admin_users_session_invalidate(
+        self, *, session_id: str, team_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Invalidate a single session for a user by session_id.
+
+        Args:
+            session_id (str): The ID of a session
+            team_id (str): ID of the team that the session belongs to
+        """
+        kwargs.update({"session_id": session_id, "team_id": team_id})
+        return self.api_call("admin.users.session.invalidate", params=kwargs)
+
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -699,6 +711,30 @@ class WebClient(BaseClient):
     def api_test(self, **kwargs) -> Union[Future, SlackResponse]:
         """Checks API calling code."""
         return self.api_call("api.test", json=kwargs)
+
+    def apps_event_authorizations_list(
+        self, event_context: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Get a list of authorizations for the given event context.
+        Each authorization represents an app installation that the event is visible to.
+
+        Args:
+            event_context (str): You'll receive an event_context identifying an event in each event payload sent to your app.
+        """
+        kwargs.update({"event_context": event_context})
+        return self.api_call("apps.event.authorizations.list", params=kwargs)
+
+    def apps_uninstall(
+        self, client_id: str, client_secret: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Uninstalls your app from a workspace.
+
+        Args:
+            client_id (str): Issued when you created your application. e.g. '56579136444.26251006572'
+            client_secret (str): Issued when you created your application. e.g. 'f25b5ceaf8a3c2a2c4f52bb4f0b0499e'
+        """
+        kwargs.update({"client_id": client_id, "client_secret": client_secret})
+        return self.api_call("apps.uninstall", params=kwargs)
 
     def auth_revoke(self, **kwargs) -> Union[Future, SlackResponse]:
         """Revokes a token."""
