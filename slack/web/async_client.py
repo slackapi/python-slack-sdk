@@ -384,6 +384,18 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"user_id": user_id})
         return await self.api_call("admin.users.session.reset", json=kwargs)
 
+    async def admin_users_session_invalidate(
+        self, *, session_id: str, team_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Invalidate a single session for a user by session_id.
+
+        Args:
+            session_id (str): The ID of a session
+            team_id (str): ID of the team that the session belongs to
+        """
+        kwargs.update({"session_id": session_id, "team_id": team_id})
+        return await self.api_call("admin.users.session.invalidate", params=kwargs)
+
     async def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -> AsyncSlackResponse:
@@ -717,6 +729,30 @@ class AsyncWebClient(AsyncBaseClient):
     async def api_test(self, **kwargs) -> AsyncSlackResponse:
         """Checks API calling code."""
         return await self.api_call("api.test", json=kwargs)
+
+    async def apps_event_authorizations_list(
+        self, event_context: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Get a list of authorizations for the given event context.
+        Each authorization represents an app installation that the event is visible to.
+
+        Args:
+            event_context (str): You'll receive an event_context identifying an event in each event payload sent to your app.
+        """
+        kwargs.update({"event_context": event_context})
+        return await self.api_call("apps.event.authorizations.list", params=kwargs)
+
+    async def apps_uninstall(
+        self, client_id: str, client_secret: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Uninstalls your app from a workspace.
+
+        Args:
+            client_id (str): Issued when you created your application. e.g. '56579136444.26251006572'
+            client_secret (str): Issued when you created your application. e.g. 'f25b5ceaf8a3c2a2c4f52bb4f0b0499e'
+        """
+        kwargs.update({"client_id": client_id, "client_secret": client_secret})
+        return await self.api_call("apps.uninstall", params=kwargs)
 
     async def auth_revoke(self, **kwargs) -> AsyncSlackResponse:
         """Revokes a token."""
