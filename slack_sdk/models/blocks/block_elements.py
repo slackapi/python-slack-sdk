@@ -13,6 +13,7 @@ from slack_sdk.models.basic_objects import (
 )
 from .basic_components import ButtonStyles
 from .basic_components import ConfirmObject
+from .basic_components import DispatchActionConfig
 from .basic_components import MarkdownTextObject
 from .basic_components import Option
 from .basic_components import OptionGroup
@@ -957,7 +958,13 @@ class PlainTextInputElement(InputInteractiveElement):
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union(
-            {"initial_value", "multiline", "min_length", "max_length"}
+            {
+                "initial_value",
+                "multiline",
+                "min_length",
+                "max_length",
+                "dispatch_action_config",
+            }
         )
 
     def __init__(
@@ -970,6 +977,7 @@ class PlainTextInputElement(InputInteractiveElement):
         multiline: Optional[bool] = None,
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         **others: dict,
     ):
         """
@@ -989,6 +997,7 @@ class PlainTextInputElement(InputInteractiveElement):
         self.multiline = multiline
         self.min_length = min_length
         self.max_length = max_length
+        self.dispatch_action_config = dispatch_action_config
 
 
 # -------------------------------------------------
