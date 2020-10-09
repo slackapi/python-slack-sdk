@@ -803,6 +803,16 @@ class PlainTextInputElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, PlainTextInputElement(**input).to_dict())
 
+    def test_document_3(self):
+        input = {
+            "type": "plain_text_input",
+            "multiline": True,
+            "dispatch_action_config": {
+                "trigger_actions_on": ["on_character_entered"]
+            }
+        }
+        self.assertDictEqual(input, PlainTextInputElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # Radio Buttons

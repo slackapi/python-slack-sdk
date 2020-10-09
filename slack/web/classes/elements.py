@@ -9,6 +9,7 @@ from . import EnumValidator, JsonObject, JsonValidator, show_unknown_key_warning
 from .objects import (
     ButtonStyles,
     ConfirmObject,
+    DispatchActionConfig,
     Option,
     OptionGroup,
     TextObject,
@@ -956,7 +957,13 @@ class PlainTextInputElement(InputInteractiveElement):
     @property
     def attributes(self) -> Set[str]:
         return super().attributes.union(
-            {"initial_value", "multiline", "min_length", "max_length"}
+            {
+                "initial_value",
+                "multiline",
+                "min_length",
+                "max_length",
+                "dispatch_action_config",
+            }
         )
 
     def __init__(
@@ -969,6 +976,7 @@ class PlainTextInputElement(InputInteractiveElement):
         multiline: Optional[bool] = None,
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         **others: dict,
     ):
         """
@@ -988,6 +996,7 @@ class PlainTextInputElement(InputInteractiveElement):
         self.multiline = multiline
         self.min_length = min_length
         self.max_length = max_length
+        self.dispatch_action_config = dispatch_action_config
 
 
 # -------------------------------------------------
