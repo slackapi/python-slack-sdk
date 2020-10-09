@@ -280,7 +280,9 @@ class InputBlock(Block):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"label", "hint", "element", "optional"})
+        return super().attributes.union(
+            {"label", "hint", "element", "optional", "dispatch_action"}
+        )
 
     def __init__(
         self,
@@ -290,6 +292,7 @@ class InputBlock(Block):
         block_id: Optional[str] = None,
         hint: Optional[Union[str, dict, PlainTextObject]] = None,
         optional: Optional[bool] = None,
+        dispatch_action: Optional[bool] = None,
         **others: dict,
     ):
         """A block that collects information from users - it can hold a plain-text input element,
@@ -304,6 +307,7 @@ class InputBlock(Block):
         self.element = BlockElement.parse(element)
         self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
         self.optional = optional
+        self.dispatch_action = dispatch_action
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
     def _validate_label_length(self):
