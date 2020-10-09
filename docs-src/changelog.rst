@@ -2,6 +2,18 @@
 Changelog
 ==============================================
 
+v2.9.2 (2020-10-09)
+-------------------
+
+Refer to `v2.9.2 milestone <https://github.com/slackapi/python-slackclient/milestone/19?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [Block Kit] #841 Dispatch Action in Input blocks - Thanks @seratch
+2. [WebClient] #838 Add apps.event.authorizations.list and other APIs - Thanks @seratch
+3. [WebClient][WebhookClient] #829 Improve error body parser to handle no charset responses - Thanks @adamchainz @seratch
+4. [Block Kit] #824 Correct text field validation in Header blocks - Thanks @seratch
+
 v2.9.1 (2020-09-23)
 -------------------
 
