@@ -465,3 +465,35 @@ class ConfirmObject(JsonObject):
             if self._style:
                 json["style"] = self._style
             return json
+
+
+class DispatchActionConfig(JsonObject):
+    attributes = {"trigger_actions_on"}
+
+    @classmethod
+    def parse(cls, config: Union["DispatchActionConfig", dict]):
+        if config:
+            if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
+                return config
+            elif isinstance(config, dict):
+                return DispatchActionConfig(**config)
+            else:
+                # Not yet implemented: show some warning here
+                return None
+        return None
+
+    def __init__(
+        self, *, trigger_actions_on: Optional[list] = None,
+    ):
+        """
+        Determines when a plain-text input element will return a block_actions interaction payload.
+        https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config
+        """
+        self._trigger_actions_on = trigger_actions_on or []
+
+    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if self._trigger_actions_on:
+            json["trigger_actions_on"] = self._trigger_actions_on
+        return json
