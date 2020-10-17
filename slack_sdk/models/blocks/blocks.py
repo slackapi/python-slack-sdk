@@ -413,7 +413,7 @@ class HeaderBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text)
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
 
     @JsonValidator("text attribute must be specified")
     def _validate_text(self):
