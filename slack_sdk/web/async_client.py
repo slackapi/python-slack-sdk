@@ -2288,7 +2288,7 @@ class AsyncWebClient(AsyncBaseClient):
                 e.g. '12345.98765.abcd2358fdea'
             view (dict or View): The view payload.
         """
-        kwargs.update({"trigger_id": trigger_id})
+        kwargs.update({"trigger_id": trigger_id, "view": view})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
@@ -2296,7 +2296,12 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("views.push", json=kwargs)
 
     async def views_update(
-        self, *, view: Union[dict, View], external_id: str = None, view_id: str = None, **kwargs
+        self,
+        *,
+        view: Union[dict, View],
+        external_id: str = None,
+        view_id: str = None,
+        **kwargs
     ) -> AsyncSlackResponse:
         """Update an existing view.
 

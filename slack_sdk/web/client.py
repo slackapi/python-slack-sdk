@@ -2138,7 +2138,9 @@ class WebClient(BaseClient):
             kwargs.update({"view": view})
         return self.api_call("views.open", json=kwargs)
 
-    def views_push(self, *, trigger_id: str, view: Union[dict, View], **kwargs) -> SlackResponse:
+    def views_push(
+        self, *, trigger_id: str, view: Union[dict, View], **kwargs
+    ) -> SlackResponse:
         """Push a view onto the stack of a root view.
 
         Push a new view onto the existing view stack by passing a view
@@ -2161,7 +2163,12 @@ class WebClient(BaseClient):
         return self.api_call("views.push", json=kwargs)
 
     def views_update(
-        self, *, view: Union[dict, View], external_id: str = None, view_id: str = None, **kwargs
+        self,
+        *,
+        view: Union[dict, View],
+        external_id: str = None,
+        view_id: str = None,
+        **kwargs
     ) -> SlackResponse:
         """Update an existing view.
 
@@ -2193,7 +2200,9 @@ class WebClient(BaseClient):
 
         return self.api_call("views.update", json=kwargs)
 
-    def views_publish(self, *, user_id: str, view: Union[dict, View], **kwargs) -> SlackResponse:
+    def views_publish(
+        self, *, user_id: str, view: Union[dict, View], **kwargs
+    ) -> SlackResponse:
         """Publish a static view for a User.
         Create or update the view that comprises an
         app's Home tab (https://api.slack.com/surfaces/tabs)
