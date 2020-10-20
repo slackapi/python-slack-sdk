@@ -401,21 +401,6 @@ class ViewTests(unittest.TestCase):
         )
         home_tab_view.validate_json()
 
-    def test_input_blocks_in_home_tab(self):
-        modal_view = View(
-            type="home",
-            callback_id="home-tab-id",
-            blocks=[
-                InputBlock(
-                    block_id="b-id",
-                    label=PlainTextObject(text="Input label"),
-                    element=PlainTextInputElement(action_id="a-id")
-                ),
-            ]
-        )
-        with self.assertRaises(SlackObjectFormationError):
-            modal_view.validate_json()
-
     def test_submit_in_home_tab(self):
         modal_view = View(
             type="home",
