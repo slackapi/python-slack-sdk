@@ -97,13 +97,6 @@ class View(JsonObject):
     def _validate_blocks_length(self):
         return self.blocks is None or 0 < len(self.blocks) <= self.blocks_max_length
 
-    @JsonValidator("home view cannot have input blocks")
-    def _validate_input_blocks(self):
-        return self.type == "modal" or (
-            self.type == "home"
-            and len([b for b in self.blocks if b.type == "input"]) == 0
-        )
-
     @JsonValidator("home view cannot have submit and close")
     def _validate_home_tab_structure(self):
         return self.type != "home" or (
