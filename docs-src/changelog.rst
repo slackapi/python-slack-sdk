@@ -2,6 +2,17 @@
 Changelog
 ==============================================
 
+v2.9.3 (2020-10-20)
+-------------------
+
+Refer to `v2.9.3 milestone <https://github.com/slackapi/python-slackclient/milestone/20?closed=1>`_ to know the complete list of the issues resolved by this release.
+
+**Updates**
+
+1. [Block Kit] #851 #852 Set default_type for HeaderBlock text - Thanks @fwump38
+2. [Block Kit] #853 #854 Enable to use input blocks in Home tab views - Thanks @fwump38
+3. [RTMClient] #857 #846 RTMClient does not pass timeout value to WebClient - Thanks @Luden @seratch
+
 v2.9.2 (2020-10-09)
 -------------------
 
