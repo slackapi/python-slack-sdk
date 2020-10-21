@@ -136,6 +136,7 @@ class RTMClient:
         self._web_client = WebClient(
             token=self.token,
             base_url=self.base_url,
+            timeout=self.timeout,
             ssl=self.ssl,
             proxy=self.proxy,
             run_async=self.run_async,
@@ -530,6 +531,7 @@ class RTMClient:
             self._web_client = WebClient(
                 token=self.token,
                 base_url=self.base_url,
+                timeout=self.timeout,
                 ssl=self.ssl,
                 proxy=self.proxy,
                 run_async=True,
