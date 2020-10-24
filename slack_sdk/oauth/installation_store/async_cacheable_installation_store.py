@@ -25,7 +25,6 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
         return await self.underlying.async_save(installation)
 
     async def async_find_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> Optional[Bot]:
-        pass
         key = f"{enterprise_id}-{team_id}"
         if key in self.cached_bots:
             return self.cached_bots[key]
