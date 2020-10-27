@@ -1,4 +1,4 @@
-# Python Slack SDK (still in beta)
+# Python Slack SDK
 
 The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 

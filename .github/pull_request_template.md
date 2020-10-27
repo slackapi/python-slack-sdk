@@ -11,6 +11,7 @@
 - [ ] **slack_sdk.rtm.RTMClient** (RTM client)
 - [ ] **slack_sdk.signature** (Request Signature Verifier)
 - [ ] `/docs-src` (Documents, have you run `./docs.sh`?)
+- [ ] `/docs-src-v2` (Documents, have you run `./docs-v2.sh`?)
 
 ## Requirements (place an `x` in each `[ ]`)
 
