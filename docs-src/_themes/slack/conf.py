@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# python-slackclient documentation build configuration file, created by
+# python-slack-sdk documentation build configuration file, created by
 # sphinx-quickstart on Mon Jun 27 17:36:09 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -146,7 +146,7 @@ highlight_language = "python"
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = u'python-slackclient v1.0.1'
+# html_title = u'python-slack-sdk v1.0.1'
 
 # A shorter title for the navigation bar.    Default is the same as html_title.
 #
@@ -250,7 +250,7 @@ html_context = {
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'python-slackclientdoc'
+htmlhelp_basename = 'python-slack-sdkdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -276,7 +276,7 @@ latex_elements = {
 # (source start file, target name, title,
 #    author, documentclass [howto, manual, or own class]).
 latex_documents = [
-        (master_doc, 'python-slackclient.tex', u'python-slackclient Documentation',
+        (master_doc, 'python-slack-sdk.tex', u'python-slack-sdk Documentation',
          u'Ryan Huber, Jeff Ammons', 'manual'),
 ]
 
@@ -312,7 +312,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-        (master_doc, 'python-slackclient', u'python-slackclient Documentation',
+        (master_doc, 'python-slack-sdk', u'python-slack-sdk Documentation',
          [author], 1)
 ]
 
@@ -327,8 +327,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #    dir menu entry, description, category)
 texinfo_documents = [
-        (master_doc, 'python-slackclient', u'python-slackclient Documentation',
-         author, 'python-slackclient', 'A basic client for Slack.com, which can optionally connect to the Slack Real Time Messaging (RTM) API.',
+        (master_doc, 'python-slack-sdk', u'python-slack-sdk Documentation',
+         author, 'python-slack-sdk', 'A basic client for Slack.com, which can optionally connect to the Slack Real Time Messaging (RTM) API.',
          'Miscellaneous'),
 ]
 

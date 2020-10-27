@@ -48,7 +48,7 @@ Of course, you can always pull the source code directly into your project:
 
 .. code-block:: bash
 
-	git clone https://github.com/slackapi/python-slackclient.git
+	git clone https://github.com/slackapi/python-slack-sdk.git
 
 And then, save a few lines of code as ``./test.py``.
 
@@ -57,7 +57,7 @@ And then, save a few lines of code as ``./test.py``.
         # test.py
         import sys
         # Load the local source directly
-        sys.path.insert(1, "./python-slackclient")
+        sys.path.insert(1, "./python-slack-sdk")
         # Enable debug logging
         import logging
         logging.basicConfig(level=logging.DEBUG)
@@ -79,7 +79,7 @@ Getting Help
 
 If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
 
-- `GitHub Issue Tracker <https://github.com/slackapi/python-slackclient/issues>`_ for questions, feature requests, bug reports and general discussion related to this package.
+- `GitHub Issue Tracker <https://github.com/slackapi/python-slack-sdk/issues>`_ for questions, feature requests, bug reports and general discussion related to this package.
 - Visit the `Slack Developer Community <http://slackcommunity.com>`_ for getting help using |product_name| or just generally bond with your fellow Slack developers.
 
 .. include:: metadata.rst

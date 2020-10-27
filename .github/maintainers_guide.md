@@ -15,7 +15,7 @@ $ brew update
 $ brew install pyenv
 ```
 
-Install necessary Python runtimes for development/testing. You can rely on Travis CI builds for testing with various major versions. https://github.com/slackapi/python-slackclient/blob/main/.travis.yml
+Install necessary Python runtimes for development/testing. You can rely on Travis CI builds for testing with various major versions. https://github.com/slackapi/python-slack-sdk/blob/main/.travis.yml
 
 ```bash
 $ pyenv install -l | grep -v "-e[conda|stackless|pypy]"
@@ -27,7 +27,7 @@ $ pyenv versions
   system
   3.6.10
   3.7.7
-* 3.8.5 (set by /path-to-python-slackclient/.python-version)
+* 3.8.5 (set by /path-to-python-slack-sdk/.python-version)
 
 $ pyenv rehash
 ```
@@ -57,7 +57,7 @@ You can rely on Travis CI builds for running the tests on a variety of Python ru
 
 ### Testing (Integration Tests with Real Slack APIs)
 
-This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slackclient/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
+This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
 ```bash
 python setup.py run_integration_tests # run all
@@ -97,7 +97,7 @@ You can generate the documentation by running `./docs.sh`.
 - Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
 ```markdown
-Refer to [v{version} milestone](https://github.com/slackapi/python-slackclient/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
+Refer to [v{version} milestone](https://github.com/slackapi/python-slack-sdk/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
 
 **Updates**
 
@@ -106,7 +106,7 @@ Refer to [v{version} milestone](https://github.com/slackapi/python-slackclient/m
 
 **All Changes**
 
-https://github.com/slackapi/python-slackclient/compare/{the previous release version tag}...{the release version tag}
+https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
 ```
 
 3. (Slack Internal) Communicate the release internally
