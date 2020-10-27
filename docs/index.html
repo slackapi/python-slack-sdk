@@ -1,217 +1,167 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta
-      http-equiv="Content-Type"
-      content="text/html; charset=utf-8"
-    />
-    
-    <title>Slack Developer Kit for Python &mdash; Slack Developer Kit for Python</title>
-
-    <!-- Google Tag Manager -->
-    <script>
-      (function(w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({
-          'gtm.start': new Date().getTime(),
-          event: 'gtm.js'
-        });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
-    </script>
-    <!-- End Google Tag Manager -->
-    
-    <link
-      href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/default.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/pygments.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/docs.css"
-      type="text/css"
-    />
-    <link
-      id="favicon"
-      rel="shortcut icon"
-      href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
-      type="image/png"
-    />
-    <link
-      rel="top"
-      title="Slack Developer Kit for Python 1.0.1 documentation"
-      href="#"
-    />
-  </head>
-
-  <body class="api light_theme">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <header>
-      <a id="menu_toggle" class="no_transition show_on_mobile">
-        <span class="menu_icon"></span>
-        <span class="vert_divider"></span>
-      </a>
-      <a
-        href="https://api.slack.com/"
-        id="header_logo"
-        class="api hide_on_mobile"
-        style="float:left; display: inline-block;"
-      >
-        <img
-          alt="Slack API"
-          src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
-          style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
         />
-      </a>
-      <span
-        style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
-      >
-        <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
-      </span>
-      <div class="header_nav">
-        <a
-          href="https://github.com/SlackAPI/python-slackclient"
-          class="btn header_btn float_right"
-          data-qa="go_to_slack"
-          >Go to GitHub</a
-        >
-      </div>
-    </header>
-    
+        
+        <title>Python Slack SDK &mdash; Python Slack SDK</title>
 
-    <div id="page">
-      <div id="page_contents" class="clearfix">
-        <!-- Sidebar Content -->
-        <nav id="api_nav" class="col span_1_of_4">
-          <div id="api_sections">
-             <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Slack Developer Kit for Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#keeping-tokens-safe">Keeping tokens safe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-install">Single Workspace Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#multiple-workspace-install">Multiple Workspace Install</a></li>
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+        </script>
+        <!-- End Google Tag Manager -->
+        
+        <link
+            href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/default.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/pygments.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/docs.css"
+            type="text/css"
+        />
+        <link
+            id="favicon"
+            rel="shortcut icon"
+            href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+            type="image/png"
+        />
+        <link
+            rel="top"
+            title="Python Slack SDK 1.0.1 documentation"
+            href="#"
+        />
+    </head>
+
+    <body class="api light_theme">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+            <a id="menu_toggle" class="no_transition show_on_mobile">
+                <span class="menu_icon"></span>
+                <span class="vert_divider"></span>
+            </a>
+            <a
+                href="https://api.slack.com/"
+                id="header_logo"
+                class="api hide_on_mobile"
+                style="float:left; display: inline-block;"
+            >
+                <img
+                    alt="Slack API"
+                    src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+                    style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+                />
+            </a>
+            <span
+                style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+            >
+                <a style="color: #555459;" href="./index.html">Python Slack SDK</a>
+            </span>
+            <div class="header_nav">
+                <a
+                    href="https://github.com/SlackAPI/python-slackclient"
+                    class="btn header_btn float_right"
+                    data-qa="go_to_slack"
+                    >Go to GitHub</a
+                >
+            </div>
+        </header>
+        
+
+        <div id="page">
+            <div id="page_contents" class="clearfix">
+                <!-- Sidebar Content -->
+                <nav id="api_nav" class="col span_1_of_4">
+                    <div id="api_sections">
+                         <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python Slack SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v3-migration/index.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="v3-migration/index.html#from-slackclient-2-x">From slackclient 2.x</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#formatting-with-block-kit">Formatting with Block Kit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#threading-messages">Threading Messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-a-message">Updating a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#opening-a-modal">Opening a modal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-and-pushing-modals">Updating and pushing modals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#emoji-reactions">Emoji reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-public-channels">Listing public channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-team-members">Listing team members</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#calling-any-api-methods">Calling any API methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#access-tokens">Access Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#workspace-installations">Workspace Installations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#direct-messages">Direct messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-channels">Creating channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-more-information">Getting more information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#listing-conversations">Listing conversations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#leaving-a-conversation">Leaving a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-members">Getting members</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web/index.html">Web Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#messaging">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#conversations">Conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#modals">Modals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#rate-limits">Rate Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web/index.html#calling-any-api-methods">Calling any API methods</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">Real Time Messaging (RTM)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#configuring-the-rtm-api">Configuring the RTM API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#connecting-to-the-rtm-api">Connecting to the RTM API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#asyncwebclient">AsyncWebClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webhook/index.html">Webhook Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#id1">Incoming Webhooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#response-url">response_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oauth/index.html">OAuth Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#app-installation-flow">App Installation Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#token-lookup">Token Lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">RTM Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-cannot-install-slackclient">I cannot install slackclient…</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#should-i-go-with-run-async">Should I go with run_async?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-a-bug">I found a bug!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#there-s-a-feature-missing">There’s a feature missing!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-contribute">How do I contribute?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-3-2020-10-20">v2.9.3 (2020-10-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-2-2020-10-09">v2.9.2 (2020-10-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-1-2020-09-23">v2.9.1 (2020-09-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-0-2020-09-17">v2.9.0 (2020-09-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-2-2020-09-04">v2.8.2 (2020-09-04)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-1-2020-08-28">v2.8.1 (2020-08-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-1-2020-06-04">v2.7.1 (2020-06-04)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-0-2020-06-02">v2.7.0 (2020-06-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-2-2020-05-28">v2.6.2 (2020-05-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-1-2020-05-24">v2.6.1 (2020-05-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0-2020-05-21">v2.6.0 (2020-05-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-0-2019-10-22">v2.3.0 (2019-10-22)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-1-2019-10-08">v2.2.1 (2019-10-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-0-2019-09-25">v2.2.0 (2019-09-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-0-2018-09-11">v1.3.0 (2018-09-11)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-1-2018-03-26">v1.2.1 (2018-03-26)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-0-2018-03-20">v1.2.0 (2018-03-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-3-2018-03-01">v1.1.3 (2018-03-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-2-2018-01-31">v1.1.2 (2018-01-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2018-01-30">v1.1.1 (2018-01-30)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2017-11-21">v1.1.0 (2017-11-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-08-31">v1.0.9 (2017-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-08-31">v1.0.8 (2017-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-7-2017-08-02">v1.0.7 (2017-08-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-06-12">v1.0.6 (2017-06-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-01-23">v1.0.5 (2017-01-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-0-2016-02-15">v0.17.0 (2016-02-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#installation-issues">Installation Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#bug-report">Bug Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#documentation">Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Slack Developer Kit for Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Python Slack SDK</a></li>
 </ul>
 </li>
 </ul>
@@ -219,49 +169,73 @@
 
 <div id="footer">
 
-    <ul id="footer_nav">
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/main/LICENSE">License</a></li>
-        <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
-        <li><a href="https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md">Contributing</a></li>
-        <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
-    </ul>
+        <ul id="footer_nav">
+                <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+                <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+                <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
+                <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+        </ul>
 
-    <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
-        Community
-    </p>
+        <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+                Community
+        </p>
 </div> 
-          </div>
-        </nav>
-        <!-- /Sidebar Content -->
+                    </div>
+                </nav>
+                <!-- /Sidebar Content -->
 
-        <!-- Body Content -->
-        <div class="col span_3_of_4">
-          <!-- <div class="section-title">Slack Developer Kit for Python</div> -->
-          <div class="card">
+                <!-- Body Content -->
+                <div class="col span_3_of_4">
+                    <!-- <div class="section-title">Python Slack SDK</div> -->
+                    <div class="card">
   <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="product-name">
-<h1>Slack Developer Kit for Python<a class="headerlink" href="#product-name" title="Permalink to this headline">¶</a></h1>
-<p>Slack’s APIs allow anyone to build full featured integrations that extend
-and expand the capabilities of your Slack workspace. These APIs allow you
-to build applications that interact with Slack just like the people on your
-team – they can post messages, respond to events that happen – as well
-as build complex UIs for getting work done.</p>
-<p>To make it easier for Python programmers to build Slack applications, we’ve
-provided this open source SDK. Slack Developer Kit for Python will let you get started building
-Python apps as quickly as possible. The current version, 2.0, is
-built for Python 3.6 and higher – if you need to target Python 2.x, you might
-consider using v1 of the SDK.</p>
-<div class="section" id="slack-platform-basics">
-<h2>Slack Platform Basics<a class="headerlink" href="#slack-platform-basics" title="Permalink to this headline">¶</a></h2>
-<p>If you’re new to the Slack platform, we have a general purpose <a class="reference external" href="https://api.slack.com/start">guide for building apps</a> that isn’t specific to any language or framework. It’s a great place to learn all about the concepts that go into building a great Slack app.</p>
-<p>Before you get started building on the Slack platform, you need to <a class="reference external" href="https://api.slack.com/apps/new">set up your app’s configuration</a>. This is where you define things like your app’s permissions and the endpoints that Slack should use for interacting with the backend you will build with Python.</p>
-<p>The app configuration page is also where you will acquire the OAuth token you will use to call Slack’s APIs. Treat this token with care, just like you would a password, because it has access to workspace and can potentially read and write data to and from it.</p>
-</div>
+<h1>Python Slack SDK<a class="headerlink" href="#product-name" title="Permalink to this headline">¶</a></h1>
+<p>The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 58%" />
+<col style="width: 22%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Feature</p></td>
+<td><p>What its for</p></td>
+<td><p>Package</p></td>
+</tr>
+<tr class="row-even"><td><p>Web API</p></td>
+<td><p>Send data to or query data from Slack using any of over 200 methods.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.web</span></code>
+<code class="docutils literal notranslate"><span class="pre">slack_sdk.web.async_client</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Webhooks / response_url</p></td>
+<td><p>Send a message using Incoming Webhooks or response_url</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.webhook</span></code>
+<code class="docutils literal notranslate"><span class="pre">slack_sdk.webhook.async_client</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>OAuth</p></td>
+<td><p>Setup the authentication flow using V2 OAuth for Slack apps.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.oauth</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>RTM API</p></td>
+<td><p>Listen for incoming messages and a limited set of events happening in Slack, using WebSocket.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.rtm`</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Request Signature Verification</p></td>
+<td><p>Verify incoming requests from the Slack API servers.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.signature</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>UI Builders</p></td>
+<td><p>Construct UI components using easy-to-use builders.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.models</span></code></p></td>
+</tr>
+</tbody>
+</table>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>We recommend using <a class="reference external" href="https://pypi.python.org/pypi">PyPI</a> to install Slack Developer Kit for Python</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install slackclient
+<p>This package supports Python 3.6 and higher. We recommend using <a class="reference external" href="https://pypi.python.org/pypi">PyPI</a> to install Python Slack SDK</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install slack_sdk
 </pre></div>
 </div>
 <p>Of course, you can always pull the source code directly into your project:</p>
@@ -277,7 +251,7 @@ consider using v1 of the SDK.</p>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 <span class="c1"># Verify it works</span>
-<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">()</span>
 <span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_test</span><span class="p">()</span>
 </pre></div>
@@ -292,36 +266,36 @@ consider using v1 of the SDK.</p>
 <h2>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
 <p>If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:</p>
 <ul class="simple">
-<li><p>Use our <a class="reference external" href="https://github.com/slackapi/python-slackclient/issues">Github Issue Tracker</a> for reporting bugs or requesting features.</p></li>
-<li><p>Visit the <a class="reference external" href="http://slackcommunity.com">Slack Developer Community</a> for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.</p></li>
+<li><p><a class="reference external" href="https://github.com/slackapi/python-slackclient/issues">GitHub Issue Tracker</a> for questions, feature requests, bug reports and general discussion related to this package.</p></li>
+<li><p>Visit the <a class="reference external" href="http://slackcommunity.com">Slack Developer Community</a> for getting help using Python Slack SDK or just generally bond with your fellow Slack developers.</p></li>
 </ul>
 </div>
 </div>
 
 
-            <div class="clear_both large_bottom_margin"></div>
-          </div>
+                        <div class="clear_both large_bottom_margin"></div>
+                    </div>
+                </div>
+                <!-- /Body Content -->
+            </div>
         </div>
-        <!-- /Body Content -->
-      </div>
-    </div>
 
-    <footer>
-      <p class="light tiny align_center">
-        © 2020 Slack Technologies, Inc. and contributors
-      </p>
-    </footer>
+        <footer>
+            <p class="light tiny align_center">
+                © 2020 Slack Technologies, Inc. and contributors
+            </p>
+        </footer>
 
-    <script>
-      window.ga =
-        window.ga ||
-        function() {
-          (ga.q = ga.q || []).push(arguments);
-        };
-      ga.l = +new Date();
-      ga('create', 'UA-56978219-13', 'auto');
-      ga('send', 'pageview');
-    </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
-  </body>
+        <script>
+            window.ga =
+                window.ga ||
+                function() {
+                    (ga.q = ga.q || []).push(arguments);
+                };
+            ga.l = +new Date();
+            ga('create', 'UA-56978219-13', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
 </html>

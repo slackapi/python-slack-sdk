@@ -1,217 +1,167 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta
-      http-equiv="Content-Type"
-      content="text/html; charset=utf-8"
-    />
-    
-    <title>Real Time Messaging (RTM) &mdash; Slack Developer Kit for Python</title>
-
-    <!-- Google Tag Manager -->
-    <script>
-      (function(w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({
-          'gtm.start': new Date().getTime(),
-          event: 'gtm.js'
-        });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
-    </script>
-    <!-- End Google Tag Manager -->
-    
-    <link
-      href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/default.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/pygments.css"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="./_static/docs.css"
-      type="text/css"
-    />
-    <link
-      id="favicon"
-      rel="shortcut icon"
-      href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
-      type="image/png"
-    />
-    <link
-      rel="top"
-      title="Slack Developer Kit for Python 1.0.1 documentation"
-      href="index.html"
-    />
-  </head>
-
-  <body class="api light_theme">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <header>
-      <a id="menu_toggle" class="no_transition show_on_mobile">
-        <span class="menu_icon"></span>
-        <span class="vert_divider"></span>
-      </a>
-      <a
-        href="https://api.slack.com/"
-        id="header_logo"
-        class="api hide_on_mobile"
-        style="float:left; display: inline-block;"
-      >
-        <img
-          alt="Slack API"
-          src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
-          style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
         />
-      </a>
-      <span
-        style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
-      >
-        <a style="color: #555459;" href="./index.html">Slack Developer Kit for Python</a>
-      </span>
-      <div class="header_nav">
-        <a
-          href="https://github.com/SlackAPI/python-slackclient"
-          class="btn header_btn float_right"
-          data-qa="go_to_slack"
-          >Go to GitHub</a
-        >
-      </div>
-    </header>
-    
+        
+        <title>RTM Client &mdash; Python Slack SDK</title>
 
-    <div id="page">
-      <div id="page_contents" class="clearfix">
-        <!-- Sidebar Content -->
-        <nav id="api_nav" class="col span_1_of_4">
-          <div id="api_sections">
-             <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">Slack Developer Kit for Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">Tokens &amp; Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#keeping-tokens-safe">Keeping tokens safe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#single-workspace-install">Single Workspace Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#multiple-workspace-install">Multiple Workspace Install</a></li>
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-KFZ5MK7');
+        </script>
+        <!-- End Google Tag Manager -->
+        
+        <link
+            href="https://a.slack-edge.com/4f227/style/rollup-slack_kit_legacy_adapters.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="https://a.slack-edge.com/3e02c0/style/rollup-api_site.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/default.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/pygments.css"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            href="./_static/docs.css"
+            type="text/css"
+        />
+        <link
+            id="favicon"
+            rel="shortcut icon"
+            href="https://a.slack-edge.com/4f28/img/icons/favicon-32.png"
+            type="image/png"
+        />
+        <link
+            rel="top"
+            title="Python Slack SDK 1.0.1 documentation"
+            href="index.html"
+        />
+    </head>
+
+    <body class="api light_theme">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KFZ5MK7"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+            <a id="menu_toggle" class="no_transition show_on_mobile">
+                <span class="menu_icon"></span>
+                <span class="vert_divider"></span>
+            </a>
+            <a
+                href="https://api.slack.com/"
+                id="header_logo"
+                class="api hide_on_mobile"
+                style="float:left; display: inline-block;"
+            >
+                <img
+                    alt="Slack API"
+                    src="https://a.slack-edge.com/3026cb/img/slack_api_logo_vogue.png"
+                    style="width: 225px; padding-right: 25px; border-right: 1px solid #DDD;"
+                />
+            </a>
+            <span
+                style="display: inline-block; padding-left: 20px; margin-top: 25px; font-weight: bold;"
+            >
+                <a style="color: #555459;" href="./index.html">Python Slack SDK</a>
+            </span>
+            <div class="header_nav">
+                <a
+                    href="https://github.com/SlackAPI/python-slackclient"
+                    class="btn header_btn float_right"
+                    data-qa="go_to_slack"
+                    >Go to GitHub</a
+                >
+            </div>
+        </header>
+        
+
+        <div id="page">
+            <div id="page_contents" class="clearfix">
+                <!-- Sidebar Content -->
+                <nav id="api_nav" class="col span_1_of_4">
+                    <div id="api_sections">
+                         <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Python Slack SDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v3-migration/index.html">Migration Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="v3-migration/index.html#from-slackclient-2-x">From slackclient 2.x</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#sending-a-message">Sending a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#formatting-with-block-kit">Formatting with Block Kit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#threading-messages">Threading Messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-a-message">Updating a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#deleting-a-message">Deleting a message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#opening-a-modal">Opening a modal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-and-pushing-modals">Updating and pushing modals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#emoji-reactions">Emoji reactions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-public-channels">Listing public channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#getting-a-channel-s-info">Getting a channel’s info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#joining-a-channel">Joining a channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#leaving-a-channel">Leaving a channel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#listing-team-members">Listing team members</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#uploading-files">Uploading files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#calling-any-api-methods">Calling any API methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#web-api-rate-limits">Web API Rate Limits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#access-tokens">Access Tokens</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#workspace-installations">Workspace Installations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="conversations.html">Conversations API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#direct-messages">Direct messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#creating-channels">Creating channels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-more-information">Getting more information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#listing-conversations">Listing conversations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#leaving-a-conversation">Leaving a conversation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="conversations.html#getting-members">Getting members</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web/index.html">Web Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#messaging">Messaging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#conversations">Conversations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#modals">Modals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#rate-limits">Rate Limits</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web/index.html#calling-any-api-methods">Calling any API methods</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Real Time Messaging (RTM)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#configuring-the-rtm-api">Configuring the RTM API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-to-the-rtm-api">Connecting to the RTM API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rtm-start-vs-rtm-connect">rtm.start vs rtm.connect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#asyncwebclient">AsyncWebClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webhook/index.html">Webhook Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#id1">Incoming Webhooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#response-url">response_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oauth/index.html">OAuth Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#app-installation-flow">App Installation Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#token-lookup">Token Lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">RTM Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rtm-events">RTM Events</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-cannot-install-slackclient">I cannot install slackclient…</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#should-i-go-with-run-async">Should I go with run_async?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-a-bug">I found a bug!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#there-s-a-feature-missing">There’s a feature missing!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-contribute">How do I contribute?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-compile-the-documentation">How do I compile the documentation?</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-3-2020-10-20">v2.9.3 (2020-10-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-2-2020-10-09">v2.9.2 (2020-10-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-1-2020-09-23">v2.9.1 (2020-09-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-9-0-2020-09-17">v2.9.0 (2020-09-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-2-2020-09-04">v2.8.2 (2020-09-04)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-1-2020-08-28">v2.8.1 (2020-08-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-8-0-2020-08-06">v2.8.0 (2020-08-06)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-3-2020-07-20">v2.7.3 (2020-07-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-2-2020-06-23">v2.7.2 (2020-06-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-1-2020-06-04">v2.7.1 (2020-06-04)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-7-0-2020-06-02">v2.7.0 (2020-06-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-2-2020-05-28">v2.6.2 (2020-05-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-1-2020-05-24">v2.6.1 (2020-05-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-6-0-2020-05-21">v2.6.0 (2020-05-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-5-0-2019-12-09">v2.5.0 (2019-12-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-4-0-2019-11-27">v2.4.0 (2019-11-27)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-1-2019-10-29">v2.3.1 (2019-10-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-3-0-2019-10-22">v2.3.0 (2019-10-22)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-1-2019-10-08">v2.2.1 (2019-10-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-2-0-2019-09-25">v2.2.0 (2019-09-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-1-0-2019-07-01">v2.1.0 (2019-07-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v2-0-0-2019-04-29">v2.0.0 (2019-04-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-1-2019-02-28">v1.3.1 (2019-02-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-3-0-2018-09-11">v1.3.0 (2018-09-11)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-1-2018-03-26">v1.2.1 (2018-03-26)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-2-0-2018-03-20">v1.2.0 (2018-03-20)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-3-2018-03-01">v1.1.3 (2018-03-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-2-2018-01-31">v1.1.2 (2018-01-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-1-2018-01-30">v1.1.1 (2018-01-30)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-1-0-2017-11-21">v1.1.0 (2017-11-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-9-2017-08-31">v1.0.9 (2017-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-8-2017-08-31">v1.0.8 (2017-08-31)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-7-2017-08-02">v1.0.7 (2017-08-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-6-2017-06-12">v1.0.6 (2017-06-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-5-2017-01-23">v1.0.5 (2017-01-23)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-4-2016-12-15">v1.0.4 (2016-12-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3-2016-12-13">v1.0.3 (2016-12-13)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2-2016-09-22">v1.0.2 (2016-09-22)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1-2016-03-25">v1.0.1 (2016-03-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-0-2016-02-28">v1.0.0 (2016-02-28)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-18-0-2016-02-21">v0.18.0 (2016-02-21)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-17-0-2016-02-15">v0.17.0 (2016-02-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#installation-issues">Installation Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#bug-report">Bug Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#feature-requests">Feature Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#contributions">Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#documentation">Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Slack Developer Kit for Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#product-name">Python Slack SDK</a></li>
 </ul>
 </li>
 </ul>
@@ -219,27 +169,29 @@
 
 <div id="footer">
 
-    <ul id="footer_nav">
-        <li><a href="https://github.com/SlackAPI/python-slackclient/blob/main/LICENSE">License</a></li>
-        <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
-        <li><a href="https://github.com/slackapi/python-slackclient/blob/main/.github/contributing.md">Contributing</a></li>
-        <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
-    </ul>
+        <ul id="footer_nav">
+                <li><a href="https://github.com/SlackAPI/python-slackclient/blob/master/LICENSE">License</a></li>
+                <li><a href="https://slackhq.github.io/code-of-conduct">Code of Conduct</a></li>
+                <li><a href="https://github.com/slackapi/python-slackclient/blob/master/.github/contributing.md">Contributing</a></li>
+                <li><a href="https://docs.google.com/a/slack-corp.com/forms/d/e/1FAIpQLSfzjVoCM7ohBnjWf7eDYQxzti1EPpinsIJQA5RAUBwJKRUQHg/viewform">Contributor License Agreement</a></li>
+        </ul>
 
-    <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
-        Community
-    </p>
+        <p id="footer_signature">Made with <i class="ts_icon ts_icon_heart"></i> by Slack<br/>and our Lovely
+                Community
+        </p>
 </div> 
-          </div>
-        </nav>
-        <!-- /Sidebar Content -->
+                    </div>
+                </nav>
+                <!-- /Sidebar Content -->
 
-        <!-- Body Content -->
-        <div class="col span_3_of_4">
-          <!-- <div class="section-title">Real Time Messaging (RTM)</div> -->
-          <div class="card">
-  <div class="section" id="real-time-messaging-rtm">
-<span id="real-time-messaging"></span><h1>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this headline">¶</a></h1>
+                <!-- Body Content -->
+                <div class="col span_3_of_4">
+                    <!-- <div class="section-title">RTM Client</div> -->
+                    <div class="card">
+  <div class="section" id="rtm-client">
+<span id="real-time-messaging"></span><h1>RTM Client<a class="headerlink" href="#rtm-client" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="real-time-messaging-rtm">
+<h2>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging (RTM) API</a> is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.</p>
 <p>If you prefer events to be pushed to your app, we recommend using the HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
 The Events API contains some events that aren’t supported in the RTM API (like <a class="reference external" href="https://api.slack.com/events/app_home_opened">app_home_opened event</a>),
@@ -247,65 +199,60 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 <p>The RTMClient allows apps to communicate with the Slack Platform’s RTM API.</p>
 <p>The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.</p>
 <p>In our example below, we watch for a <a class="reference external" href="https://api.slack.com/events/message">message event</a> that contains “Hello” and if its received, we call the <code class="docutils literal notranslate"><span class="pre">say_hello()</span></code> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
-<div class="section" id="configuring-the-rtm-api">
-<h2>Configuring the RTM API<a class="headerlink" href="#configuring-the-rtm-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>Configuring the RTM API</strong></p>
 <p>Events using the RTM API <strong>must</strong> use a classic Slack app (with a plain <code class="docutils literal notranslate"><span class="pre">bot</span></code> scope).</p>
 <p>If you already have a classic Slack app, you can use those credentials. If you don’t and need to use the RTM API, you can <a class="reference external" href="https://api.slack.com/apps?new_classic_app=1">create a classic Slack app</a>. You can learn more in the <a class="reference external" href="https://api.slack.com/authentication/basics#soon">API documentation</a>.</p>
 <p>Also, even if the Slack app configuration pages encourage you to upgrade to the newer permission model, don’t upgrade it and keep using the “classic” bot permission.</p>
-</div>
-<div class="section" id="connecting-to-the-rtm-api">
-<h2>Connecting to the RTM API<a class="headerlink" href="#connecting-to-the-rtm-api" title="Permalink to this headline">¶</a></h2>
+<p><strong>Connecting to the RTM API</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">RTMClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.rtm</span> <span class="kn">import</span> <span class="n">RTMClient</span>
 
 <span class="nd">@RTMClient</span><span class="o">.</span><span class="n">run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">):</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-  <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
 
-  <span class="k">if</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
-    <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
-    <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
+    <span class="k">if</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
+        <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
+        <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
 
-    <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
-      <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
-      <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
-      <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
-    <span class="p">)</span>
+        <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
+            <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
+        <span class="p">)</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">rtm_client</span> <span class="o">=</span> <span class="n">RTMClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
 <span class="n">rtm_client</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="rtm-start-vs-rtm-connect">
-<h2>rtm.start vs rtm.connect<a class="headerlink" href="#rtm-start-vs-rtm-connect" title="Permalink to this headline">¶</a></h2>
+<p><strong>rtm.start vs rtm.connect</strong></p>
 <p>By default, the RTM client uses <code class="docutils literal notranslate"><span class="pre">rtm.connect</span></code> to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.</p>
 <p>If you’d rather use <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> to establish the connection, which provides more information about the conversations and users on the team, you can set the <code class="docutils literal notranslate"><span class="pre">connect_method</span></code> option to <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> when instantiating the RTM Client. Note that on larger teams, use of <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> can be slow and unreliable.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">RTMClient</span>
+<span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">RTMClient</span>
 
 <span class="nd">@RTMClient</span><span class="o">.</span><span class="n">run_on</span><span class="p">(</span><span class="n">event</span><span class="o">=</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">):</span>
-  <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-  <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
-  <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
-    <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
-    <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">web_client</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;web_client&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s1">&#39;Hello&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
+        <span class="n">channel_id</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">]</span>
+        <span class="n">thread_ts</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">]</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="c1"># This is not username but user ID (the format is either U*** or W***)</span>
 
-    <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
-      <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
-      <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
-      <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
-    <span class="p">)</span>
+        <span class="n">web_client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hi &lt;@</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">&gt;!&quot;</span><span class="p">,</span>
+            <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
+        <span class="p">)</span>
 
-<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_API_TOKEN&quot;</span><span class="p">]</span>
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">rtm_client</span> <span class="o">=</span> <span class="n">RTMClient</span><span class="p">(</span>
-  <span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">,</span>
-  <span class="n">connect_method</span><span class="o">=</span><span class="s1">&#39;rtm.start&#39;</span>
+    <span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">,</span>
+    <span class="n">connect_method</span><span class="o">=</span><span class="s1">&#39;rtm.start&#39;</span>
 <span class="p">)</span>
 <span class="n">rtm_client</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
@@ -315,10 +262,10 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 <div class="section" id="rtm-events">
 <h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;ts&#39;</span><span class="o">:</span> <span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;user&#39;</span><span class="o">:</span> <span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;text&#39;</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span>
+    <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ts&#39;</span><span class="o">:</span> <span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;user&#39;</span><span class="o">:</span> <span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;text&#39;</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -327,29 +274,29 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 </div>
 
 
-            <div class="clear_both large_bottom_margin"></div>
-          </div>
+                        <div class="clear_both large_bottom_margin"></div>
+                    </div>
+                </div>
+                <!-- /Body Content -->
+            </div>
         </div>
-        <!-- /Body Content -->
-      </div>
-    </div>
 
-    <footer>
-      <p class="light tiny align_center">
-        © 2020 Slack Technologies, Inc. and contributors
-      </p>
-    </footer>
+        <footer>
+            <p class="light tiny align_center">
+                © 2020 Slack Technologies, Inc. and contributors
+            </p>
+        </footer>
 
-    <script>
-      window.ga =
-        window.ga ||
-        function() {
-          (ga.q = ga.q || []).push(arguments);
-        };
-      ga.l = +new Date();
-      ga('create', 'UA-56978219-13', 'auto');
-      ga('send', 'pageview');
-    </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
-  </body>
+        <script>
+            window.ga =
+                window.ga ||
+                function() {
+                    (ga.q = ga.q || []).push(arguments);
+                };
+            ga.l = +new Date();
+            ga('create', 'UA-56978219-13', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+    </body>
 </html>
