@@ -2,7 +2,9 @@ from logging import Logger
 from typing import Optional, Dict
 
 from slack_sdk.oauth.installation_store import Bot, Installation
-from slack_sdk.oauth.installation_store.async_installation_store import AsyncInstallationStore
+from slack_sdk.oauth.installation_store.async_installation_store import (
+    AsyncInstallationStore,
+)
 
 
 class AsyncCacheableInstallationStore(AsyncInstallationStore):
@@ -24,11 +26,15 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return await self.underlying.async_save(installation)
 
-    async def async_find_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> Optional[Bot]:
+    async def async_find_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> Optional[Bot]:
         key = f"{enterprise_id}-{team_id}"
         if key in self.cached_bots:
             return self.cached_bots[key]
-        bot = await self.underlying.async_find_bot(enterprise_id=enterprise_id, team_id=team_id)
+        bot = await self.underlying.async_find_bot(
+            enterprise_id=enterprise_id, team_id=team_id
+        )
         if bot:
             self.cached_bots[key] = bot
         return bot
