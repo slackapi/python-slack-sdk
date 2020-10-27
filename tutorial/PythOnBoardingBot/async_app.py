@@ -4,7 +4,8 @@ import asyncio
 import ssl as ssl_lib
 
 import certifi
-import slack
+from slack_sdk.web import WebClient
+from slack_sdk.rtm import RTMClient
 
 from onboarding_tutorial import OnboardingTutorial
 
@@ -15,7 +16,7 @@ from onboarding_tutorial import OnboardingTutorial
 onboarding_tutorials_sent = {}
 
 
-async def start_onboarding(web_client: slack.WebClient, user_id: str, channel: str):
+async def start_onboarding(web_client: WebClient, user_id: str, channel: str):
     # Create a new onboarding tutorial.
     onboarding_tutorial = OnboardingTutorial(channel)
 
@@ -39,7 +40,7 @@ async def start_onboarding(web_client: slack.WebClient, user_id: str, channel: s
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
 # Here we'll link the onboarding_message callback to the 'team_join' event.
-@slack.RTMClient.run_on(event="team_join")
+@RTMClient.run_on(event="team_join")
 async def onboarding_message(**payload):
     """Create and send an onboarding welcome message to new users. Save the
     time stamp of this message so we can update this message in the future.
@@ -62,7 +63,7 @@ async def onboarding_message(**payload):
 # When a users adds an emoji reaction to the onboarding message,
 # the type of the event will be 'reaction_added'.
 # Here we'll link the update_emoji callback to the 'reaction_added' event.
-@slack.RTMClient.run_on(event="reaction_added")
+@RTMClient.run_on(event="reaction_added")
 async def update_emoji(**payload):
     """Update the onboarding welcome message after receiving a "reaction_added"
     event from Slack. Update timestamp for welcome message as well.
@@ -91,7 +92,7 @@ async def update_emoji(**payload):
 # =============== Pin Added Events ================ #
 # When a users pins a message the type of the event will be 'pin_added'.
 # Here we'll link the update_pin callback to the 'reaction_added' event.
-@slack.RTMClient.run_on(event="pin_added")
+@RTMClient.run_on(event="pin_added")
 async def update_pin(**payload):
     """Update the onboarding welcome message after receiving a "pin_added"
     event from Slack. Update timestamp for welcome message as well.
@@ -120,7 +121,7 @@ async def update_pin(**payload):
 # ============== Message Events ============= #
 # When a user sends a DM, the event type will be 'message'.
 # Here we'll link the message callback to the 'message' event.
-@slack.RTMClient.run_on(event="message")
+@RTMClient.run_on(event="message")
 async def message(**payload):
     """Display the onboarding welcome message after receiving a message
     that contains "start".
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     slack_token = os.environ["SLACK_BOT_TOKEN"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    rtm_client = slack.RTMClient(
+    rtm_client = RTMClient(
         token=slack_token, ssl=ssl_context, run_async=True, loop=loop
     )
     loop.run_until_complete(rtm_client.start())

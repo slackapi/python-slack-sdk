@@ -12,7 +12,12 @@ exclude_patterns = [
   "setup.py",
   "docs/**",
   "docs-src/**",
+  "docs-v3/**",
+  "docs-src-v3/**",
   "tutorial/**",
+  "slack/**",
+  "slack_sdk/web/async_client.py",
+  "slack_sdk/web/legacy_client.py",
   "tests/**",
   "integration_tests/**"
 ]

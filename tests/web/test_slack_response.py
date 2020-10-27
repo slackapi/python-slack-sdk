@@ -18,12 +18,7 @@ class TestSlackResponse(unittest.TestCase):
             http_verb="POST",
             api_url="http://localhost:3000/api.test",
             req_args={},
-            data={
-                "ok": True,
-                "args": {
-                    "hello": "world"
-                }
-            },
+            data={"ok": True, "args": {"hello": "world"}},
             headers={},
             status_code=200,
         )

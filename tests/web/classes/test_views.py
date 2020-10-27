@@ -3,9 +3,20 @@ import logging
 import unittest
 
 from slack.errors import SlackObjectFormationError
-from slack.web.classes.blocks import InputBlock, SectionBlock, DividerBlock, ActionsBlock, ContextBlock
-from slack.web.classes.elements import PlainTextInputElement, RadioButtonsElement, CheckboxesElement, ButtonElement, \
-    ImageElement
+from slack.web.classes.blocks import (
+    InputBlock,
+    SectionBlock,
+    DividerBlock,
+    ActionsBlock,
+    ContextBlock,
+)
+from slack.web.classes.elements import (
+    PlainTextInputElement,
+    RadioButtonsElement,
+    CheckboxesElement,
+    ButtonElement,
+    ImageElement,
+)
 from slack.web.classes.objects import PlainTextObject, Option, MarkdownTextObject
 from slack.web.classes.views import View, ViewState, ViewStateValue
 
@@ -36,7 +47,7 @@ class ViewTests(unittest.TestCase):
                 InputBlock(
                     block_id="b-id",
                     label=PlainTextObject(text="Input label"),
-                    element=PlainTextInputElement(action_id="a-id")
+                    element=PlainTextInputElement(action_id="a-id"),
                 ),
                 InputBlock(
                     block_id="cb-id",
@@ -44,45 +55,61 @@ class ViewTests(unittest.TestCase):
                     element=CheckboxesElement(
                         action_id="a-cb-id",
                         options=[
-                            Option(text=PlainTextObject(text="*this is plain_text text*"), value="v1"),
-                            Option(text=MarkdownTextObject(text="*this is mrkdwn text*"), value="v2"),
+                            Option(
+                                text=PlainTextObject(text="*this is plain_text text*"),
+                                value="v1",
+                            ),
+                            Option(
+                                text=MarkdownTextObject(text="*this is mrkdwn text*"),
+                                value="v2",
+                            ),
                         ],
                     ),
                 ),
                 SectionBlock(
                     block_id="sb-id",
-                    text=MarkdownTextObject(text="This is a mrkdwn text section block."),
+                    text=MarkdownTextObject(
+                        text="This is a mrkdwn text section block."
+                    ),
                     fields=[
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
                         MarkdownTextObject(text="*this is mrkdwn text*"),
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    ]
+                    ],
                 ),
                 DividerBlock(),
                 SectionBlock(
                     block_id="rb-id",
-                    text=MarkdownTextObject(text="This is a section block with radio button accessory"),
+                    text=MarkdownTextObject(
+                        text="This is a section block with radio button accessory"
+                    ),
                     accessory=RadioButtonsElement(
                         initial_option=Option(
                             text=PlainTextObject(text="Option 1"),
                             value="option 1",
-                            description=PlainTextObject(text="Description for option 1"),
+                            description=PlainTextObject(
+                                text="Description for option 1"
+                            ),
                         ),
                         options=[
                             Option(
                                 text=PlainTextObject(text="Option 1"),
                                 value="option 1",
-                                description=PlainTextObject(text="Description for option 1"),
+                                description=PlainTextObject(
+                                    text="Description for option 1"
+                                ),
                             ),
                             Option(
                                 text=PlainTextObject(text="Option 2"),
                                 value="option 2",
-                                description=PlainTextObject(text="Description for option 2"),
+                                description=PlainTextObject(
+                                    text="Description for option 2"
+                                ),
                             ),
-                        ]
-                    )
-                )
-            ]
+                        ],
+                    ),
+                ),
+            ],
         )
         modal_view.validate_json()
 
@@ -97,9 +124,9 @@ class ViewTests(unittest.TestCase):
                 InputBlock(
                     block_id="b-id",
                     label=PlainTextObject(text="Input label"),
-                    element=PlainTextInputElement(action_id="a-id")
+                    element=PlainTextInputElement(action_id="a-id"),
                 ),
-            ]
+            ],
         )
         with self.assertRaises(SlackObjectFormationError):
             modal_view.validate_json()
@@ -107,34 +134,16 @@ class ViewTests(unittest.TestCase):
     def test_simple_state_values(self):
         expected = {
             "values": {
-                "b1": {
-                    "a1": {
-                        "type": "plain_text_input",
-                        "value": "Title"
-                    }
-                },
-                "b2": {
-                    "a2": {
-                        "type": "plain_text_input",
-                        "value": "Description"
-                    }
-                }
+                "b1": {"a1": {"type": "plain_text_input", "value": "Title"}},
+                "b2": {"a2": {"type": "plain_text_input", "value": "Description"}},
             }
         }
-        state = ViewState(values={
-            "b1": {
-                "a1": ViewStateValue(
-                    type="plain_text_input",
-                    value="Title"
-                )
-            },
-            "b2": {
-                "a2": {
-                    "type": "plain_text_input",
-                    "value": "Description"
-                }
-            },
-        })
+        state = ViewState(
+            values={
+                "b1": {"a1": ViewStateValue(type="plain_text_input", value="Title")},
+                "b2": {"a2": {"type": "plain_text_input", "value": "Description"}},
+            }
+        )
         self.assertDictEqual(expected, ViewState(**expected).to_dict())
         self.assertDictEqual(expected, state.to_dict())
 
@@ -143,59 +152,39 @@ class ViewTests(unittest.TestCase):
         # {"type":"modal","title":{"type":"plain_text","text":"My App","emoji":true},"submit":{"type":"plain_text","text":"Submit","emoji":true},"close":{"type":"plain_text","text":"Cancel","emoji":true},"blocks":[{"type":"input","element":{"type":"plain_text_input"},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"plain_text_input","multiline":true},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"datepicker","initial_date":"1990-04-28","placeholder":{"type":"plain_text","text":"Select a date","emoji":true}},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"users_select","placeholder":{"type":"plain_text","text":"Select a user","emoji":true}},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"multi_static_select","placeholder":{"type":"plain_text","text":"Select options","emoji":true},"options":[{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-0"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-1"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-2"}]},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"checkboxes","options":[{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-0"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-1"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-2"}]},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"radio_buttons","initial_option":{"text":{"type":"plain_text","text":"Option 1"},"value":"option 1","description":{"type":"plain_text","text":"Description for option 1"}},"options":[{"text":{"type":"plain_text","text":"Option 1"},"value":"option 1","description":{"type":"plain_text","text":"Description for option 1"}},{"text":{"type":"plain_text","text":"Option 2"},"value":"option 2","description":{"type":"plain_text","text":"Description for option 2"}},{"text":{"type":"plain_text","text":"Option 3"},"value":"option 3","description":{"type":"plain_text","text":"Description for option 3"}}]},"label":{"type":"plain_text","text":"Label","emoji":true}}]}
         expected = {
             "values": {
-                "b1": {
-                    "a1": {
-                        "type": "datepicker",
-                        "selected_date": "1990-04-12"
-                    }
-                },
-                "b2": {
-                    "a2": {
-                        "type": "plain_text_input",
-                        "value": "This is a test"
-                    }
-                },
+                "b1": {"a1": {"type": "datepicker", "selected_date": "1990-04-12"}},
+                "b2": {"a2": {"type": "plain_text_input", "value": "This is a test"}},
                 # multiline
                 "b3": {
                     "a3": {
                         "type": "plain_text_input",
-                        "value": "Something wrong\nPlease help me!"
+                        "value": "Something wrong\nPlease help me!",
                     }
                 },
-                "b4": {
-                    "a4": {
-                        "type": "users_select",
-                        "selected_user": "U123"
-                    }
-                },
+                "b4": {"a4": {"type": "users_select", "selected_user": "U123"}},
                 "b4-2": {
                     "a4-2": {
                         "type": "multi_users_select",
-                        "selected_users": ["U123", "U234"]
+                        "selected_users": ["U123", "U234"],
                     }
                 },
                 "b5": {
                     "a5": {
                         "type": "conversations_select",
-                        "selected_conversation": "C123"
+                        "selected_conversation": "C123",
                     }
                 },
                 "b5-2": {
                     "a5-2": {
                         "type": "multi_conversations_select",
-                        "selected_conversations": ["C123", "C234"]
+                        "selected_conversations": ["C123", "C234"],
                     }
                 },
-                "b6": {
-                    "a6": {
-                        "type": "channels_select",
-                        "selected_channel": "C123"
-                    }
-                },
+                "b6": {"a6": {"type": "channels_select", "selected_channel": "C123"}},
                 "b6-2": {
                     "a6-2": {
                         "type": "multi_channels_select",
-                        "selected_channels": ["C123", "C234"]
+                        "selected_channels": ["C123", "C234"],
                     }
                 },
                 "b7": {
@@ -206,19 +195,19 @@ class ViewTests(unittest.TestCase):
                                 "text": {
                                     "type": "plain_text",
                                     "text": "*this is plain_text text*",
-                                    "emoji": True
+                                    "emoji": True,
                                 },
-                                "value": "value-0"
+                                "value": "value-0",
                             },
                             {
                                 "text": {
                                     "type": "plain_text",
                                     "text": "*this is plain_text text*",
-                                    "emoji": True
+                                    "emoji": True,
                                 },
-                                "value": "value-1"
-                            }
-                        ]
+                                "value": "value-1",
+                            },
+                        ],
                     }
                 },
                 "b8": {
@@ -229,19 +218,19 @@ class ViewTests(unittest.TestCase):
                                 "text": {
                                     "type": "plain_text",
                                     "text": "*this is plain_text text*",
-                                    "emoji": True
+                                    "emoji": True,
                                 },
-                                "value": "value-0"
+                                "value": "value-0",
                             },
                             {
                                 "text": {
                                     "type": "plain_text",
                                     "text": "*this is plain_text text*",
-                                    "emoji": True
+                                    "emoji": True,
                                 },
-                                "value": "value-1"
-                            }
-                        ]
+                                "value": "value-1",
+                            },
+                        ],
                     }
                 },
                 "b9": {
@@ -251,61 +240,114 @@ class ViewTests(unittest.TestCase):
                             "text": {
                                 "type": "plain_text",
                                 "text": "Option 1",
-                                "emoji": True
+                                "emoji": True,
                             },
                             "value": "option 1",
                             "description": {
                                 "type": "plain_text",
                                 "text": "Description for option 1",
-                                "emoji": True
-                            }
-                        }
+                                "emoji": True,
+                            },
+                        },
                     }
-                }
+                },
             }
         }
-        state = ViewState(values={
-            "b1": {"a1": ViewStateValue(type="datepicker", selected_date="1990-04-12")},
-            "b2": {"a2": ViewStateValue(type="plain_text_input", value="This is a test")},
-            "b3": {"a3": ViewStateValue(type="plain_text_input", value="Something wrong\nPlease help me!")},
-            "b4": {"a4": ViewStateValue(type="users_select", selected_user="U123")},
-            "b4-2": {"a4-2": ViewStateValue(type="multi_users_select", selected_users=["U123", "U234"])},
-            "b5": {"a5": ViewStateValue(type="conversations_select", selected_conversation="C123")},
-            "b5-2": {"a5-2": ViewStateValue(
-                type="multi_conversations_select",
-                selected_conversations=["C123", "C234"]
-            )},
-            "b6": {"a6": ViewStateValue(type="channels_select", selected_channel="C123")},
-            "b6-2": {"a6-2": ViewStateValue(type="multi_channels_select", selected_channels=["C123", "C234"])},
-            "b7": {"a7": ViewStateValue(type="multi_static_select", selected_options=[
-                Option(
-                    text=PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    value="value-0"
-                ),
-                Option(
-                    text=PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    value="value-1"
-                ),
-            ])},
-            "b8": {"a8": ViewStateValue(type="checkboxes", selected_options=[
-                Option(
-                    text=PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    value="value-0"
-                ),
-                Option(
-                    text=PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    value="value-1"
-                ),
-            ])},
-            "b9": {"a9": ViewStateValue(
-                type="radio_buttons",
-                selected_option=Option(
-                    text=PlainTextObject(text="Option 1", emoji=True),
-                    value="option 1",
-                    description=PlainTextObject(text="Description for option 1", emoji=True)
-                )
-            )},
-        })
+        state = ViewState(
+            values={
+                "b1": {
+                    "a1": ViewStateValue(type="datepicker", selected_date="1990-04-12")
+                },
+                "b2": {
+                    "a2": ViewStateValue(
+                        type="plain_text_input", value="This is a test"
+                    )
+                },
+                "b3": {
+                    "a3": ViewStateValue(
+                        type="plain_text_input",
+                        value="Something wrong\nPlease help me!",
+                    )
+                },
+                "b4": {"a4": ViewStateValue(type="users_select", selected_user="U123")},
+                "b4-2": {
+                    "a4-2": ViewStateValue(
+                        type="multi_users_select", selected_users=["U123", "U234"]
+                    )
+                },
+                "b5": {
+                    "a5": ViewStateValue(
+                        type="conversations_select", selected_conversation="C123"
+                    )
+                },
+                "b5-2": {
+                    "a5-2": ViewStateValue(
+                        type="multi_conversations_select",
+                        selected_conversations=["C123", "C234"],
+                    )
+                },
+                "b6": {
+                    "a6": ViewStateValue(
+                        type="channels_select", selected_channel="C123"
+                    )
+                },
+                "b6-2": {
+                    "a6-2": ViewStateValue(
+                        type="multi_channels_select", selected_channels=["C123", "C234"]
+                    )
+                },
+                "b7": {
+                    "a7": ViewStateValue(
+                        type="multi_static_select",
+                        selected_options=[
+                            Option(
+                                text=PlainTextObject(
+                                    text="*this is plain_text text*", emoji=True
+                                ),
+                                value="value-0",
+                            ),
+                            Option(
+                                text=PlainTextObject(
+                                    text="*this is plain_text text*", emoji=True
+                                ),
+                                value="value-1",
+                            ),
+                        ],
+                    )
+                },
+                "b8": {
+                    "a8": ViewStateValue(
+                        type="checkboxes",
+                        selected_options=[
+                            Option(
+                                text=PlainTextObject(
+                                    text="*this is plain_text text*", emoji=True
+                                ),
+                                value="value-0",
+                            ),
+                            Option(
+                                text=PlainTextObject(
+                                    text="*this is plain_text text*", emoji=True
+                                ),
+                                value="value-1",
+                            ),
+                        ],
+                    )
+                },
+                "b9": {
+                    "a9": ViewStateValue(
+                        type="radio_buttons",
+                        selected_option=Option(
+                            text=PlainTextObject(text="Option 1", emoji=True),
+                            value="option 1",
+                            description=PlainTextObject(
+                                text="Description for option 1", emoji=True
+                            ),
+                        ),
+                    )
+                },
+            }
+        )
         self.assertDictEqual(expected, ViewState(**expected).to_dict())
         self.assertDictEqual(expected, state.to_dict())
 
@@ -358,7 +400,9 @@ class ViewTests(unittest.TestCase):
             type="home",
             blocks=[
                 SectionBlock(
-                    text=MarkdownTextObject(text="*Here's what you can do with Project Tracker:*"),
+                    text=MarkdownTextObject(
+                        text="*Here's what you can do with Project Tracker:*"
+                    ),
                 ),
                 ActionsBlock(
                     elements=[
@@ -372,8 +416,7 @@ class ViewTests(unittest.TestCase):
                             value="create_project",
                         ),
                         ButtonElement(
-                            text=PlainTextObject(text="Help", emoji=True),
-                            value="help",
+                            text=PlainTextObject(text="Help", emoji=True), value="help",
                         ),
                     ],
                 ),
@@ -385,18 +428,17 @@ class ViewTests(unittest.TestCase):
                         ),
                     ],
                 ),
-                SectionBlock(
-                    text=MarkdownTextObject(text="*Your Configurations*"),
-                ),
+                SectionBlock(text=MarkdownTextObject(text="*Your Configurations*"),),
                 DividerBlock(),
                 SectionBlock(
                     text=MarkdownTextObject(
-                        text="*#public-relations*\n<fakelink.toUrl.com|PR Strategy 2019> posts new tasks, comments, and project updates to <fakelink.toChannel.com|#public-relations>"),
+                        text="*#public-relations*\n<fakelink.toUrl.com|PR Strategy 2019> posts new tasks, comments, and project updates to <fakelink.toChannel.com|#public-relations>"
+                    ),
                     accessory=ButtonElement(
                         text=PlainTextObject(text="Edit", emoji=True),
                         value="public-relations",
                     ),
-                )
+                ),
             ],
         )
         home_tab_view.validate_json()
@@ -406,7 +448,7 @@ class ViewTests(unittest.TestCase):
             type="home",
             callback_id="home-tab-id",
             submit=PlainTextObject(text="Submit"),
-            blocks=[DividerBlock()]
+            blocks=[DividerBlock()],
         )
         with self.assertRaises(SlackObjectFormationError):
             modal_view.validate_json()
@@ -416,7 +458,7 @@ class ViewTests(unittest.TestCase):
             type="home",
             callback_id="home-tab-id",
             close=PlainTextObject(text="Cancel"),
-            blocks=[DividerBlock()]
+            blocks=[DividerBlock()],
         )
         with self.assertRaises(SlackObjectFormationError):
             modal_view.validate_json()

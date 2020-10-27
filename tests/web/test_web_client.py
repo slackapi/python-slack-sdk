@@ -8,21 +8,18 @@ import unittest
 import slack.errors as err
 from slack import WebClient
 from tests.helpers import async_test
-from tests.web.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
+from tests.web.mock_web_api_server import (
+    setup_mock_web_api_server,
+    cleanup_mock_web_api_server,
+)
 
 
 class TestWebClient(unittest.TestCase):
-
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = WebClient(
-            token="xoxp-1234",
-            base_url="http://localhost:8888",
-        )
+        self.client = WebClient(token="xoxp-1234", base_url="http://localhost:8888",)
         self.async_client = WebClient(
-            token="xoxp-1234",
-            run_async=True,
-            base_url="http://localhost:8888",
+            token="xoxp-1234", run_async=True, base_url="http://localhost:8888",
         )
 
     def tearDown(self):
@@ -153,41 +150,49 @@ class TestWebClient(unittest.TestCase):
 
     def test_issue_690_oauth_v2_access(self):
         self.client.token = ""
-        resp = self.client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        resp = self.client.oauth_v2_access(
+            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
+        )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            self.client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+            self.client.oauth_v2_access(
+                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
+            )
 
     @async_test
     async def test_issue_690_oauth_v2_access_async(self):
         self.async_client.token = ""
         resp = await self.async_client.oauth_v2_access(
-            client_id="111.222",
-            client_secret="secret",
-            code="codeeeeeeeeee",
+            client_id="111.222", client_secret="secret", code="codeeeeeeeeee",
         )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
             await self.async_client.oauth_v2_access(
-                client_id="999.999",
-                client_secret="secret",
-                code="codeeeeeeeeee",
+                client_id="999.999", client_secret="secret", code="codeeeeeeeeee",
             )
 
     def test_issue_690_oauth_access(self):
         self.client.token = ""
-        resp = self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        resp = self.client.oauth_access(
+            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
+        )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            self.client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+            self.client.oauth_access(
+                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
+            )
 
     @async_test
     async def test_issue_690_oauth_access_async(self):
         self.async_client.token = ""
-        resp = await self.async_client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        resp = await self.async_client.oauth_access(
+            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
+        )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            await self.async_client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+            await self.async_client.oauth_access(
+                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
+            )
 
     def test_issue_705_no_param_request_pagination(self):
         self.client.token = "xoxb-users_list_pagination"
@@ -233,7 +238,9 @@ class TestWebClient(unittest.TestCase):
                 session_unclosed = True
 
         async def issue_645():
-            client = WebClient(base_url="http://localhost:8888", timeout=1, run_async=True)
+            client = WebClient(
+                base_url="http://localhost:8888", timeout=1, run_async=True
+            )
             try:
                 await client.users_list(token="xoxb-timeout")
             except asyncio.TimeoutError:
@@ -253,7 +260,11 @@ class TestWebClient(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertTrue(
-                str(e).startswith("Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"), e)
+                str(e).startswith(
+                    "Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"
+                ),
+                e,
+            )
 
     @async_test
     async def test_html_response_body_issue_718_async(self):
@@ -292,7 +303,7 @@ class TestWebClient(unittest.TestCase):
 
     def test_issue_809_filename_for_IOBase(self):
         self.client.token = "xoxb-api_test"
-        file = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        file = io.BytesIO(b"here is my data but not sure what is wrong.......")
         resp = self.client.files_upload(file=file)
         self.assertIsNone(resp["error"])
         #         if file:

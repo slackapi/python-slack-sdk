@@ -196,7 +196,7 @@ v2.3.1 (2019-10-29)
 -------------------
 **Updates**
 
-1. [WebClient] Fixing a regression that causes the client to close sessions prematurely. #544 (Thanks @fatih-acar!) 
+1. [WebClient] Fixing a regression that causes the client to close sessions prematurely. #544 (Thanks @fatih-acar!)
 2. [WebClient] Adding required missing `view` param to views.update Web API method. #542
 
 v2.3.0 (2019-10-22)
@@ -276,7 +276,7 @@ v2.0.0 (2019-04-29)
 
 2. RTMClient: Completely redesigned, this client allows you to link your application's callbacks to corresponding Slack events.
 3. WebClient: The WebClient now provides built-in methods for Slack's Web API. These methods act as helpers enabling you to focus less on how the request is constructed. Here are a few things that this provides:
-  
+
   a. Basic information about each method through the docstring.
   b. Easy File Uploads: You can now pass in the location of a file and the library will handle opening and retrieving the file object to be transmitted.
   c. Token type validation: This gives you better error messaging when you're attempting to consume an api method that your token doesn't have access to.

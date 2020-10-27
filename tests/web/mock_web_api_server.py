@@ -18,20 +18,24 @@ class MockHandler(SimpleHTTPRequestHandler):
     pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
     pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
 
-    html_response_body = '<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /api/team.info was not found on this server.</p>\n</body></html>\n'
+    html_response_body = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL /api/team.info was not found on this server.</p>\n</body></html>\n'
+
+    error_html_response_body = '<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="utf-8">\n\t<title>Server Error | Slack</title>\n\t<meta name="author" content="Slack">\n\t<style></style>\n</head>\n<body>\n\t<nav class="top persistent">\n\t\t<a href="https://status.slack.com/" class="logo" data-qa="logo"></a>\n\t</nav>\n\t<div id="page">\n\t\t<div id="page_contents">\n\t\t\t<h1>\n\t\t\t\t<svg width="30px" height="27px" viewBox="0 0 60 54" class="warning_icon"><path d="" fill="#D94827"/></svg>\n\t\t\t\tServer Error\n\t\t\t</h1>\n\t\t\t<div class="card">\n\t\t\t\t<p>It seems like there’s a problem connecting to our servers, and we’re investigating the issue.</p>\n\t\t\t\t<p>Please <a href="https://status.slack.com/">check our Status page for updates</a>.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<script type="text/javascript">\n\t\tif (window.desktop) {\n\t\t\tdocument.documentElement.className = \'desktop\';\n\t\t}\n\n\t\tvar FIVE_MINS = 5 * 60 * 1000;\n\t\tvar TEN_MINS = 10 * 60 * 1000;\n\n\t\tfunction randomBetween(min, max) {\n\t\t\treturn Math.floor(Math.random() * (max - (min + 1))) + min;\n\t\t}\n\n\t\twindow.setTimeout(function () {\n\t\t\twindow.location.reload(true);\n\t\t}, randomBetween(FIVE_MINS, TEN_MINS));\n\t</script>\n</body>\n</html>'
 
     error_html_response_body = '<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="utf-8">\n\t<title>Server Error | Slack</title>\n\t<meta name="author" content="Slack">\n\t<style></style>\n</head>\n<body>\n\t<nav class="top persistent">\n\t\t<a href="https://status.slack.com/" class="logo" data-qa="logo"></a>\n\t</nav>\n\t<div id="page">\n\t\t<div id="page_contents">\n\t\t\t<h1>\n\t\t\t\t<svg width="30px" height="27px" viewBox="0 0 60 54" class="warning_icon"><path d="" fill="#D94827"/></svg>\n\t\t\t\tServer Error\n\t\t\t</h1>\n\t\t\t<div class="card">\n\t\t\t\t<p>It seems like there’s a problem connecting to our servers, and we’re investigating the issue.</p>\n\t\t\t\t<p>Please <a href="https://status.slack.com/">check our Status page for updates</a>.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<script type="text/javascript">\n\t\tif (window.desktop) {\n\t\t\tdocument.documentElement.className = \'desktop\';\n\t\t}\n\n\t\tvar FIVE_MINS = 5 * 60 * 1000;\n\t\tvar TEN_MINS = 10 * 60 * 1000;\n\n\t\tfunction randomBetween(min, max) {\n\t\t\treturn Math.floor(Math.random() * (max - (min + 1))) + min;\n\t\t}\n\n\t\twindow.setTimeout(function () {\n\t\t\twindow.location.reload(true);\n\t\t}, randomBetween(FIVE_MINS, TEN_MINS));\n\t</script>\n</body>\n</html>'
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
-        return self.pattern_for_language.search(user_agent) \
-               and self.pattern_for_package_identifier.search(user_agent)
+        return self.pattern_for_language.search(
+            user_agent
+        ) and self.pattern_for_package_identifier.search(user_agent)
 
     def is_valid_token(self):
         if self.path.startswith("oauth"):
             return True
-        return "Authorization" in self.headers \
-               and str(self.headers["Authorization"]).startswith("Bearer xoxb-")
+        return "Authorization" in self.headers and str(
+            self.headers["Authorization"]
+        ).startswith("Bearer xoxb-")
 
     def set_common_headers(self):
         self.send_header("content-type", "application/json;charset=utf-8")
@@ -57,13 +61,15 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.wfile.write("""{"ok":true}""".encode("utf-8"))
                     return
                 else:
-                    self.wfile.write("""{"ok":false, "error":"invalid"}""".encode("utf-8"))
+                    self.wfile.write(
+                        """{"ok":false, "error":"invalid"}""".encode("utf-8")
+                    )
                     return
 
             if self.is_valid_token() and self.is_valid_user_agent():
                 parsed_path = urlparse(self.path)
 
-                len_header = self.headers.get('Content-Length') or 0
+                len_header = self.headers.get("Content-Length") or 0
                 content_len = int(len_header)
                 post_body = self.rfile.read(content_len)
                 request_body = None
@@ -73,12 +79,16 @@ class MockHandler(SimpleHTTPRequestHandler):
                         if post_body.startswith("{"):
                             request_body = json.loads(post_body)
                         else:
-                            request_body = {k: v[0] for k, v in parse_qs(post_body).items()}
+                            request_body = {
+                                k: v[0] for k, v in parse_qs(post_body).items()
+                            }
                     except UnicodeDecodeError:
                         pass
                 else:
                     if parsed_path and parsed_path.query:
-                        request_body = {k: v[0] for k, v in parse_qs(parsed_path.query).items()}
+                        request_body = {
+                            k: v[0] for k, v in parse_qs(parsed_path.query).items()
+                        }
 
                 header = self.headers["authorization"]
                 pattern = str(header).split("xoxb-", 1)[1]
@@ -91,7 +101,9 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.send_response(429)
                     self.send_header("Retry-After", 30)
                     self.set_common_headers()
-                    self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
+                    self.wfile.write(
+                        """{"ok":false,"error":"rate_limited"}""".encode("utf-8")
+                    )
                     self.wfile.close()
                     return
 
@@ -134,7 +146,11 @@ class MockHandler(SimpleHTTPRequestHandler):
                     else:
                         self.send_response(400)
                         self.set_common_headers()
-                        self.wfile.write("""{"ok":false, "error":"invalid_user_agent"}""".encode("utf-8"))
+                        self.wfile.write(
+                            """{"ok":false, "error":"invalid_user_agent"}""".encode(
+                                "utf-8"
+                            )
+                        )
                         self.wfile.close()
                         return
 
@@ -154,7 +170,9 @@ class MockHandler(SimpleHTTPRequestHandler):
                         if request_body:
                             for k, v in request_body.items():
                                 if k in ids:
-                                    if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(v):
+                                    if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(
+                                        v
+                                    ):
                                         raise Exception(
                                             f"The parameter {k} is not a comma-separated string value: {v}"
                                         )
@@ -189,21 +207,22 @@ class MockHandler(SimpleHTTPRequestHandler):
 
 
 class MockServerThread(threading.Thread):
-
-    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
+    def __init__(
+        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
+    ):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test
 
     def run(self):
-        self.server = HTTPServer(('localhost', 8888), self.handler)
+        self.server = HTTPServer(("localhost", 8888), self.handler)
         self.test.server_url = "http://localhost:8888"
         self.test.host, self.test.port = self.server.socket.getsockname()
         self.test.server_started.set()  # threading.Event()
 
         self.test = None
         try:
-            self.server.serve_forever(0.05)
+            self.server.serve_forever()
         finally:
             self.server.server_close()
 
@@ -216,9 +235,11 @@ def setup_mock_web_api_server(test: TestCase):
     test.server_started = threading.Event()
     test.thread = MockServerThread(test)
     test.thread.start()
+
     test.server_started.wait()
 
 
 def cleanup_mock_web_api_server(test: TestCase):
     test.thread.stop()
+
     test.thread = None

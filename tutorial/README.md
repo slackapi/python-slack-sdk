@@ -2,7 +2,7 @@
 
 Welcome to the Slack app tutorial: **PythOnBoardingBot**.
 
-This tutorial serves as a walkthrough guide and example of the types of Slack apps you can build with Slack's Python SDK, python-slackclient. We'll cover all the basic steps you'll need to have a fully functioning app.
+This tutorial serves as a walkthrough guide and example of the types of Slack apps you can build with Slack's Python SDK, python-slack-sdk. We'll cover all the basic steps you'll need to have a fully functioning app.
 
 ## What is PythOnBoardingBot?
 
