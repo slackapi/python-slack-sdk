@@ -253,7 +253,7 @@ If you're migrating from slackclient v2.x of slack_sdk to v3.x, Please follow ou
 
 If you're migrating from v1.x of slackclient to v2.x, Please follow our migration guide to ensure your app continues working after updating.
 
-**[Check out the Migration Guide here!](https://github.com/slackapi/python-slackclient/wiki/Migrating-to-2.x)**
+**[Check out the Migration Guide here!](https://github.com/slackapi/python-slack-sdk/wiki/Migrating-to-2.x)**
 
 ### Support
 
@@ -269,10 +269,10 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 [pypi-image]: https://badge.fury.io/py/slack-sdk.svg
 [pypi-url]: https://pypi.org/project/slack-sdk/
 [python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
-[travis-image]: https://travis-ci.org/slackapi/python-slackclient.svg?branch=v3
-[travis-url]: https://travis-ci.org/slackapi/python-slackclient
-[codecov-image]: https://codecov.io/gh/slackapi/python-slackclient/branch/v3/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/slackapi/python-slackclient
+[travis-image]: https://travis-ci.org/slackapi/python-slack-sdk.svg?branch=main
+[travis-url]: https://travis-ci.org/slackapi/python-slack-sdk
+[codecov-image]: https://codecov.io/gh/slackapi/python-slack-sdk/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/slackapi/python-slack-sdk
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
 [contact-url]: https://slack.com/support
 [slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
@@ -281,7 +281,7 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 [events-docs]: https://api.slack.com/events-api
 [bolt-python]: https://github.com/slackapi/bolt-python
 [pypi]: https://pypi.org/
-[gh-issues]: https://github.com/slackapi/python-slackclient/issues
+[gh-issues]: https://github.com/slackapi/python-slack-sdk/issues
 [slack-community]: http://slackcommunity.com/
 [files.upload]: https://api.slack.com/methods/files.upload
 [aiohttp]: https://aiohttp.readthedocs.io/
