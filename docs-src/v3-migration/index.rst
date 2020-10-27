@@ -2,6 +2,8 @@
 Migration Guide
 ==============================================
 
+The v2 website is live `here <https://slack.dev/python-slackclient/>`_ just like before. However, the **slackclient** project is in maintenance mode now and this **slack_sdk** project is the successor.
+
 From slackclient 2.x
 *************************************************
 
@@ -54,5 +56,9 @@ The new ``slack_sdk.web.WebClient`` doesn't rely on ``aiohttp`` internally at al
 
 If you're using ``run_async=True`` option, we highly recommend switching to ``AsyncWebClient``. ``AsyncWebClient`` is a straight-forward async HTTP client. You can expect the class properly works in the nature of ``async/await`` provided by the standard ``asyncio`` library.
 
+From slackclient 1.x
+*************************************************
+
+Refer to `the migration guide <https://github.com/slackapi/python-slack-sdk/wiki/Migrating-to-2.x>`_.
 
 .. include:: ../metadata.rst
