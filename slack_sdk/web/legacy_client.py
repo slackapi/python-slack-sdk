@@ -384,6 +384,10 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"session_id": session_id, "team_id": team_id})
         return self.api_call("admin.users.session.invalidate", params=kwargs)
 
+    def admin_users_session_list(self, **kwargs) -> Union[Future, SlackResponse]:
+        """Lists all active user sessions for an organization"""
+        return self.api_call("admin.users.session.list", params=kwargs)
+
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
