@@ -24,7 +24,7 @@ class TestFile(unittest.TestCase):
             bot_id="B111",
             bot_token="xoxb-111",
             bot_scopes=["chat:write"],
-            bot_user_id="U222"
+            bot_user_id="U222",
         )
         store.save(installation)
 

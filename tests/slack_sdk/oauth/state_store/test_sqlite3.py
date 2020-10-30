@@ -11,17 +11,11 @@ class TestSQLite3(unittest.TestCase):
         pass
 
     def test_instance(self):
-        store = SQLite3OAuthStateStore(
-            database="logs/test.db",
-            expiration_seconds=10,
-        )
+        store = SQLite3OAuthStateStore(database="logs/test.db", expiration_seconds=10,)
         self.assertIsNotNone(store)
 
     def test_issue_and_consume(self):
-        store = SQLite3OAuthStateStore(
-            database="logs/test.db",
-            expiration_seconds=10,
-        )
+        store = SQLite3OAuthStateStore(database="logs/test.db", expiration_seconds=10,)
         state = store.issue()
         result = store.consume(state)
         self.assertTrue(result)

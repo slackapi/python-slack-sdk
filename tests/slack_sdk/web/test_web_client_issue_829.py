@@ -22,6 +22,8 @@ class TestWebClient_Issue_829(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertTrue(
-                str(e).startswith("Failed to parse the response body: Expecting value: "),
+                str(e).startswith(
+                    "Failed to parse the response body: Expecting value: "
+                ),
                 e,
             )

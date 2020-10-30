@@ -12,7 +12,7 @@ from tests.web.mock_web_api_server import (
 class TestWebClient_Issue_829(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = WebClient(token="xoxp-1234", base_url="http://localhost:8888", )
+        self.client = WebClient(token="xoxp-1234", base_url="http://localhost:8888",)
         self.async_client = WebClient(
             token="xoxp-1234", run_async=True, base_url="http://localhost:8888",
         )
@@ -27,7 +27,9 @@ class TestWebClient_Issue_829(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertTrue(
-                str(e).startswith("Failed to parse the response body: Expecting value: "),
+                str(e).startswith(
+                    "Failed to parse the response body: Expecting value: "
+                ),
                 e,
             )
 
@@ -41,5 +43,5 @@ class TestWebClient_Issue_829(unittest.TestCase):
             self.assertEqual(
                 "The request to the Slack API failed.\n"
                 "The server responded with: {}",
-                str(e)
+                str(e),
             )

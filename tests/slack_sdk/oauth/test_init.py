@@ -2,6 +2,7 @@ import unittest
 
 from slack_sdk.oauth import AuthorizeUrlGenerator
 
+
 class TestInit(unittest.TestCase):
     def setUp(self):
         pass

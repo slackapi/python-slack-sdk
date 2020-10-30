@@ -2,6 +2,7 @@ import unittest
 
 from slack_sdk.oauth import AuthorizeUrlGenerator
 
+
 class TestGenerator(unittest.TestCase):
     def setUp(self):
         pass
@@ -24,7 +25,7 @@ class TestGenerator(unittest.TestCase):
             client_id="111.222",
             scopes=["chat:write", "commands"],
             user_scopes=["search:read"],
-            authorization_url="https://www.example.com/authorize"
+            authorization_url="https://www.example.com/authorize",
         )
         url = generator.generate("state-value")
         expected = "https://www.example.com/authorize?state=state-value&client_id=111.222&scope=chat:write,commands&user_scope=search:read"

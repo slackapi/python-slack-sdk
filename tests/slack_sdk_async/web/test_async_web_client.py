@@ -134,7 +134,7 @@ class TestAsyncWebClient(unittest.TestCase):
             self.assertEqual(
                 "The request to the Slack API failed.\n"
                 "The server responded with: {}",
-                str(e)
+                str(e),
             )
 
     @async_test

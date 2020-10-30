@@ -12,27 +12,18 @@ class TestSQLite3(unittest.TestCase):
         pass
 
     def test_instance(self):
-        store = SQLite3InstallationStore(
-            database="logs/test.db",
-            client_id="111.222"
-        )
+        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
         self.assertIsNotNone(store)
         conn = store.connect()
         self.assertIsNotNone(conn)
         conn.close()
 
     def test_init(self):
-        store = SQLite3InstallationStore(
-            database="logs/test.db",
-            client_id="111.222"
-        )
+        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
         store.init()
 
     def test_save_and_find(self):
-        store = SQLite3InstallationStore(
-            database="logs/test.db",
-            client_id="111.222"
-        )
+        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
         installation = Installation(
             app_id="A111",
             enterprise_id="E111",
@@ -41,7 +32,7 @@ class TestSQLite3(unittest.TestCase):
             bot_id="B111",
             bot_token="xoxb-111",
             bot_scopes=["chat:write"],
-            bot_user_id="U222"
+            bot_user_id="U222",
         )
         store.save(installation)
 

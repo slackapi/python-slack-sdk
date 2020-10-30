@@ -1,7 +1,9 @@
 import unittest
 
 from slack_sdk.oauth.installation_store import InstallationStore
-from slack_sdk.oauth.installation_store.async_installation_store import AsyncInstallationStore
+from slack_sdk.oauth.installation_store.async_installation_store import (
+    AsyncInstallationStore,
+)
 
 
 class TestInterface(unittest.TestCase):

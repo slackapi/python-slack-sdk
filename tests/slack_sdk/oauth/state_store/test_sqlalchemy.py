@@ -12,10 +12,7 @@ class TestSQLAlchemy(unittest.TestCase):
 
     def setUp(self):
         self.engine = sqlalchemy.create_engine("sqlite:///:memory:")
-        self.store = SQLAlchemyOAuthStateStore(
-            engine=self.engine,
-            expiration_seconds = 2
-        )
+        self.store = SQLAlchemyOAuthStateStore(engine=self.engine, expiration_seconds=2)
         self.store.metadata.create_all(self.engine)
 
     def tearDown(self):
