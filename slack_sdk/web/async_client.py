@@ -71,6 +71,20 @@ class AsyncWebClient(AsyncBaseClient):
         removed at anytime.
     """
 
+    async def admin_analytics_getFile(
+        self, *, date: str, type: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Retrieve analytics data for a given date, presented as a compressed JSON file
+
+        Args:
+            date (str): Date to retrieve the analytics data for,
+                expressed as YYYY-MM-DD in UTC.
+            type (str): The type of analytics to retrieve.
+                The options are currently limited to member.
+        """
+        kwargs.update({"date": date, "type": type})
+        return await self.api_call("admin.analytics.getFile", params=kwargs)
+
     async def admin_apps_approve(
         self, *, app_id: str = None, request_id: str = None, **kwargs
     ) -> AsyncSlackResponse:
@@ -101,6 +115,19 @@ class AsyncWebClient(AsyncBaseClient):
         """List approved apps for an org or workspace."""
         return await self.api_call(
             "admin.apps.approved.list", http_verb="GET", params=kwargs
+        )
+
+    async def admin_apps_clearResolution(
+        self, *, app_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Clear an app resolution
+
+        Args:
+            app_id (str): The id of the app whose resolution you want to clear/undo.
+        """
+        kwargs.update({"app_id": app_id})
+        return await self.api_call(
+            "admin.apps.clearResolution", http_verb="POST", params=kwargs
         )
 
     async def admin_apps_requests_list(self, **kwargs) -> AsyncSlackResponse:

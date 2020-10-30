@@ -73,6 +73,20 @@ class LegacyWebClient(LegacyBaseClient):
         removed at anytime.
     """
 
+    def admin_analytics_getFile(
+        self, *, date: str, type: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve analytics data for a given date, presented as a compressed JSON file
+
+        Args:
+            date (str): Date to retrieve the analytics data for,
+                expressed as YYYY-MM-DD in UTC.
+            type (str): The type of analytics to retrieve.
+                The options are currently limited to member.
+        """
+        kwargs.update({"date": date, "type": type})
+        return self.api_call("admin.analytics.getFile", params=kwargs)
+
     def admin_apps_approve(
         self, *, app_id: str = None, request_id: str = None, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -102,6 +116,19 @@ class LegacyWebClient(LegacyBaseClient):
     def admin_apps_approved_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List approved apps for an org or workspace."""
         return self.api_call("admin.apps.approved.list", http_verb="GET", params=kwargs)
+
+    def admin_apps_clearResolution(
+        self, *, app_id: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Clear an app resolution
+
+        Args:
+            app_id (str): The id of the app whose resolution you want to clear/undo.
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call(
+            "admin.apps.clearResolution", http_verb="POST", params=kwargs
+        )
 
     def admin_apps_requests_list(self, **kwargs) -> Union[Future, SlackResponse]:
         """List app requests for a team/workspace."""

@@ -84,16 +84,20 @@ async def _request_with_session(
     response = None
     try:
         async with session.request(http_verb, api_url, **req_args) as res:
-            data = {}
-            try:
-                data = await res.json()
-            except aiohttp.ContentTypeError:
-                logger.debug(
-                    f"No response data returned from the following API call: {api_url}."
-                )
-            except json.decoder.JSONDecodeError as e:
-                message = f"Failed to parse the response body: {str(e)}"
-                raise SlackApiError(message, res)
+            data: Union[dict, bytes] = {}
+            if res.content_type == "application/gzip":
+                # admin.analytics.getFile
+                data = await res.read()
+            else:
+                try:
+                    data = await res.json()
+                except aiohttp.ContentTypeError:
+                    logger.debug(
+                        f"No response data returned from the following API call: {api_url}."
+                    )
+                except json.decoder.JSONDecodeError as e:
+                    message = f"Failed to parse the response body: {str(e)}"
+                    raise SlackApiError(message, res)
 
             response = {
                 "data": data,
