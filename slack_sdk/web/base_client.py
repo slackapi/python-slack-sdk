@@ -266,14 +266,14 @@ class BaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)
-            if response.get("body", None):  # skipcq: PTC-W0039
+            body = response.get("body", None)  # skipcq: PTC-W0039
+            response_body_data: Optional[Union[dict, bytes]] = body
+            if body is not None and not isinstance(body, bytes):
                 try:
-                    response_body_data: dict = json.loads(response["body"])
+                    response_body_data = json.loads(response["body"])
                 except json.decoder.JSONDecodeError as e:
                     message = f"Failed to parse the response body: {str(e)}"
                     raise err.SlackApiError(message, response)
-            else:
-                response_body_data: dict = None
 
             if query_params:
                 all_params = copy.copy(body_params)
@@ -390,6 +390,11 @@ class BaseClient:
                     resp = urlopen(  # skipcq: BAN-B310
                         req, context=self.ssl, timeout=self.timeout
                     )
+                if resp.headers.get_content_type() == "application/gzip":
+                    # admin.analytics.getFile
+                    body: bytes = resp.read()
+                    return {"status": resp.code, "headers": resp.headers, "body": body}
+
                 charset = resp.headers.get_content_charset() or "utf-8"
                 body: str = resp.read().decode(charset)  # read the response body here
                 return {"status": resp.code, "headers": resp.headers, "body": body}

@@ -1,6 +1,7 @@
 """A Python module for interacting and consuming responses from Slack."""
 
 import logging
+from typing import Union
 
 import slack_sdk.errors as e
 from .internal_utils import _next_cursor_is_present
@@ -57,7 +58,7 @@ class AsyncSlackResponse:
         http_verb: str,
         api_url: str,
         req_args: dict,
-        data: dict,
+        data: Union[dict, bytes],  # data can be binary data
         headers: dict,
         status_code: int,
     ):
@@ -74,6 +75,10 @@ class AsyncSlackResponse:
 
     def __str__(self):
         """Return the Response data if object is converted to a string."""
+        if isinstance(self.data, bytes):
+            raise ValueError(
+                "As the response.data is binary data, this operation is unsupported"
+            )
         return f"{self.data}"
 
     def __getitem__(self, key):
@@ -87,6 +92,10 @@ class AsyncSlackResponse:
         Returns:
             The value from data or None.
         """
+        if isinstance(self.data, bytes):
+            raise ValueError(
+                "As the response.data is binary data, this operation is unsupported"
+            )
         return self.data.get(key, None)
 
     def __aiter__(self):
@@ -99,6 +108,10 @@ class AsyncSlackResponse:
         Returns:
             (AsyncSlackResponse) self
         """
+        if isinstance(self.data, bytes):
+            raise ValueError(
+                "As the response.data is binary data, this operation is unsupported"
+            )
         self._iteration = 0
         self.data = self._initial_data
         return self
@@ -122,6 +135,10 @@ class AsyncSlackResponse:
             SlackApiError: If the request to the Slack API failed.
             StopAsyncIteration: If 'next_cursor' is not present or empty.
         """
+        if isinstance(self.data, bytes):
+            raise ValueError(
+                "As the response.data is binary data, this operation is unsupported"
+            )
         self._iteration += 1
         if self._iteration == 1:
             return self
@@ -154,6 +171,10 @@ class AsyncSlackResponse:
         Returns:
             The value from data or the specified default.
         """
+        if isinstance(self.data, bytes):
+            raise ValueError(
+                "As the response.data is binary data, this operation is unsupported"
+            )
         return self.data.get(key, default)
 
     def validate(self):
@@ -167,13 +188,18 @@ class AsyncSlackResponse:
             SlackApiError: The request to the Slack API failed.
         """
         if self._logger.level <= logging.DEBUG:
+            body = self.data if isinstance(self.data, dict) else "(binary)"
             self._logger.debug(
                 "Received the following response - "
                 f"status: {self.status_code}, "
                 f"headers: {dict(self.headers)}, "
-                f"body: {self.data}"
+                f"body: {body}"
             )
-        if self.status_code == 200 and self.data and self.data.get("ok", False):
+        if (
+            self.status_code == 200
+            and self.data
+            and (isinstance(self.data, bytes) or self.data.get("ok", False))
+        ):
             return self
         msg = "The request to the Slack API failed."
         raise e.SlackApiError(message=msg, response=self)
