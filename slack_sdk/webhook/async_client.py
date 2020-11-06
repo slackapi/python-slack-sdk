@@ -1,7 +1,7 @@
 import json
 import logging
 from ssl import SSLContext
-from typing import Dict, Union, List, Optional, Any
+from typing import Dict, Union, Optional, Any, Sequence
 
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
@@ -62,8 +62,8 @@ class AsyncWebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[List[Union[Dict[str, Any], Attachment]]] = None,
-        blocks: Optional[List[Union[Dict[str, Any], Block]]] = None,
+        attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
         response_type: Optional[str] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:

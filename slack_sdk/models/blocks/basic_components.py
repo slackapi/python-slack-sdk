@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import List, Optional, Set, Union
+from typing import List, Optional, Set, Union, Sequence
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -225,7 +225,7 @@ class Option(JsonObject):
 
     @classmethod
     def parse_all(
-        cls, options: Optional[List[Union[dict, "Option"]]]
+        cls, options: Optional[Sequence[Union[dict, "Option"]]]
     ) -> Optional[List["Option"]]:
         if options is None:
             return None
@@ -287,7 +287,7 @@ class OptionGroup(JsonObject):
         self,
         *,
         label: Optional[Union[str, dict, TextObject]] = None,
-        options: List[Union[dict, Option]],
+        options: Sequence[Union[dict, Option]],
         **others: dict,
     ):
         """
@@ -325,7 +325,7 @@ class OptionGroup(JsonObject):
 
     @classmethod
     def parse_all(
-        cls, option_groups: Optional[List[Union[dict, "OptionGroup"]]]
+        cls, option_groups: Optional[Sequence[Union[dict, "OptionGroup"]]]
     ) -> Optional[List["OptionGroup"]]:
         if option_groups is None:
             return None

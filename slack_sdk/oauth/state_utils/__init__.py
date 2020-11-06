@@ -1,4 +1,4 @@
-from typing import Optional, Dict, List, Union
+from typing import Optional, Dict, Sequence, Union
 
 
 class OAuthStateUtils:
@@ -36,7 +36,9 @@ class OAuthStateUtils:
         )
 
     def is_valid_browser(
-        self, state: Optional[str], request_headers: Dict[str, Union[str, List[str]]]
+        self,
+        state: Optional[str],
+        request_headers: Dict[str, Union[str, Sequence[str]]],
     ) -> bool:
         if (
             state is None

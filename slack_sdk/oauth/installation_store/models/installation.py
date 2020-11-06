@@ -1,6 +1,6 @@
 from datetime import datetime
 from time import time
-from typing import Optional, List, Union, Dict, Any
+from typing import Optional, Union, Dict, Any, Sequence
 
 from slack_sdk.oauth.installation_store.models.bot import Bot
 
@@ -12,10 +12,10 @@ class Installation:
     bot_token: str
     bot_id: str
     bot_user_id: str
-    bot_scopes: List[str]
+    bot_scopes: Sequence[str]
     user_id: Optional[str]
     user_token: Optional[str]
-    user_scopes: Optional[List[str]]
+    user_scopes: Optional[Sequence[str]]
     incoming_webhook_url: Optional[str]
     incoming_webhook_channel_id: Optional[str]
     incoming_webhook_configuration_url: Optional[str]
@@ -32,11 +32,11 @@ class Installation:
         bot_token: str,
         bot_id: str,
         bot_user_id: str,
-        bot_scopes: Union[str, List[str]] = "",
+        bot_scopes: Union[str, Sequence[str]] = "",
         # installer
         user_id: Optional[str] = None,
         user_token: Optional[str] = None,
-        user_scopes: Union[str, List[str]] = "",
+        user_scopes: Union[str, Sequence[str]] = "",
         # incoming webhook
         incoming_webhook_url: Optional[str] = None,
         incoming_webhook_channel_id: Optional[str] = None,
