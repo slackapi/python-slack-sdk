@@ -3,7 +3,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Union, List, Optional
+from typing import Dict, Union, Sequence, Optional
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -54,8 +54,8 @@ class WebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[List[Union[Dict[str, any], Attachment]]] = None,
-        blocks: Optional[List[Union[Dict[str, any], Block]]] = None,
+        attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
         response_type: Optional[str] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:

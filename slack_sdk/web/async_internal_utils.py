@@ -3,7 +3,7 @@ import json
 import logging
 from asyncio import AbstractEventLoop
 from logging import Logger
-from typing import Optional, BinaryIO, List, Dict
+from typing import Optional, BinaryIO, Dict, Sequence
 
 import aiohttp
 from aiohttp import ClientSession
@@ -21,7 +21,7 @@ def _get_event_loop() -> AbstractEventLoop:
         return loop
 
 
-def _files_to_data(req_args: dict) -> List[BinaryIO]:
+def _files_to_data(req_args: dict) -> Sequence[BinaryIO]:
     open_files = []
     files = req_args.pop("files", None)
     if files is not None:

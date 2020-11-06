@@ -1,6 +1,6 @@
 import re
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Set
+from typing import List, Optional, Set, Sequence
 
 from slack_sdk.models import extract_json
 from slack_sdk.models.basic_objects import (
@@ -296,9 +296,9 @@ class Attachment(JsonObject):
         *,
         text: str,
         fallback: Optional[str] = None,
-        fields: Optional[List[AttachmentField]] = None,
+        fields: Optional[Sequence[AttachmentField]] = None,
         color: Optional[str] = None,
-        markdown_in: Optional[List[str]] = None,
+        markdown_in: Optional[Sequence[str]] = None,
         title: Optional[str] = None,
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
@@ -436,7 +436,7 @@ class BlockAttachment(Attachment):
     attributes = {"color"}
     blocks: List[Block]
 
-    def __init__(self, *, blocks: List[Block], color: Optional[str] = None):
+    def __init__(self, *, blocks: Sequence[Block], color: Optional[str] = None):
         """
         A bridge between legacy attachments and blockkit formatting - pass a list of
         Block objects directly to this attachment.
@@ -474,13 +474,13 @@ class InteractiveAttachment(Attachment):
     def __init__(
         self,
         *,
-        actions: List[Action],
+        actions: Sequence[Action],
         callback_id: str,
         text: str,
         fallback: Optional[str] = None,
-        fields: Optional[List[AttachmentField]] = None,
+        fields: Optional[Sequence[AttachmentField]] = None,
         color: Optional[str] = None,
-        markdown_in: Optional[List[str]] = None,
+        markdown_in: Optional[Sequence[str]] = None,
         title: Optional[str] = None,
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,

@@ -10,7 +10,7 @@ import signal
 from asyncio import Future
 from ssl import SSLContext
 from threading import current_thread, main_thread
-from typing import List, Any, Union
+from typing import Any, Union, Sequence
 from typing import Optional, Callable, DefaultDict
 
 import aiohttp
@@ -575,7 +575,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
             self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
             await asyncio.sleep(float(wait_time))
 
-    def _close_websocket(self) -> List[Future]:
+    def _close_websocket(self) -> Sequence[Future]:
         """Closes the websocket connection."""
         futures = []
         close_method = getattr(self._websocket, "close", None)

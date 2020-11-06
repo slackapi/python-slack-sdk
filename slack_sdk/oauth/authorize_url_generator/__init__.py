@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, Sequence
 
 
 class AuthorizeUrlGenerator:
@@ -7,8 +7,8 @@ class AuthorizeUrlGenerator:
         *,
         client_id: str,
         redirect_uri: Optional[str] = None,
-        scopes: Optional[List[str]] = None,
-        user_scopes: Optional[List[str]] = None,
+        scopes: Optional[Sequence[str]] = None,
+        user_scopes: Optional[Sequence[str]] = None,
         authorization_url: str = "https://slack.com/oauth/v2/authorize",
     ):
         self.client_id = client_id

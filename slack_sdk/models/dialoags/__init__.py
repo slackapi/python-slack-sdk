@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from json import dumps
-from typing import List, Optional, Union, Set
+from typing import List, Optional, Union, Set, Sequence
 
 from slack_sdk.models import extract_json
 from slack_sdk.models.attachments import AbstractActionSelector
@@ -221,7 +221,7 @@ class DialogStaticSelector(AbstractDialogSelector):
         *,
         name: str,
         label: str,
-        options: Union[List[Option], List[OptionGroup]],
+        options: Union[Sequence[Option], Sequence[OptionGroup]],
         optional: bool = False,
         value: Union[Option, str] = None,
         placeholder: str = None,
@@ -627,7 +627,7 @@ class DialogBuilder(JsonObject):
         *,
         name: str,
         label: str,
-        options: Union[List[Option], List[OptionGroup]],
+        options: Union[Sequence[Option], Sequence[OptionGroup]],
         optional: bool = False,
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
@@ -883,7 +883,7 @@ class ActionStaticSelector(AbstractActionSelector):
         *,
         name: str,
         text: str,
-        options: List[Union[Option, OptionGroup]],
+        options: Sequence[Union[Option, OptionGroup]],
         selected_option: Optional[Option] = None,
     ):
         """

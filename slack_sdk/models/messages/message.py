@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional
+from typing import Optional, Sequence
 
 from slack_sdk.models import extract_json
 from slack_sdk.models.attachments import Attachment
@@ -21,8 +21,8 @@ class Message(JsonObject):
         self,
         *,
         text: str,
-        attachments: Optional[List[Attachment]] = None,
-        blocks: Optional[List[Block]] = None,
+        attachments: Optional[Sequence[Attachment]] = None,
+        blocks: Optional[Sequence[Block]] = None,
         markdown: bool = True,
     ):
         """

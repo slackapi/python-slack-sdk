@@ -3,7 +3,7 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import List, Optional, Set, Union
+from typing import List, Optional, Set, Union, Sequence
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -124,7 +124,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 
     @classmethod
     def parse_all(
-        cls, block_elements: List[Union[dict, "BlockElement"]]
+        cls, block_elements: Sequence[Union[dict, "BlockElement"]]
     ) -> List["BlockElement"]:
         return [cls.parse(e) for e in block_elements or []]
 
@@ -314,8 +314,8 @@ class CheckboxesElement(InputInteractiveElement):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[str] = None,
-        options: Optional[List[Union[dict, Option]]] = None,
-        initial_options: Optional[List[Union[dict, Option]]] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
@@ -439,8 +439,8 @@ class StaticSelectElement(InputInteractiveElement):
         *,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         action_id: Optional[str] = None,
-        options: Optional[List[Union[dict, Option]]] = None,
-        option_groups: Optional[List[Union[dict, OptionGroup]]] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
@@ -498,9 +498,9 @@ class StaticMultiSelectElement(InputInteractiveElement):
         *,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         action_id: Optional[str] = None,
-        options: Optional[List[Option]] = None,
-        option_groups: Optional[List[OptionGroup]] = None,
-        initial_options: Optional[List[Option]] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
+        initial_options: Optional[Sequence[Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         **others: dict,
@@ -559,8 +559,8 @@ class SelectElement(InputInteractiveElement):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[str] = None,
-        options: Optional[List[Option]] = None,
-        option_groups: Optional[List[OptionGroup]] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
         initial_option: Optional[Option] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
@@ -656,7 +656,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         action_id: Optional[str] = None,
         min_query_length: Optional[int] = None,
-        initial_options: Optional[List[Union[dict, Option]]] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         **others: dict,
@@ -728,7 +728,7 @@ class UserMultiSelectElement(InputInteractiveElement):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
-        initial_users: Optional[List[str]] = None,
+        initial_users: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         **others: dict,
@@ -762,7 +762,7 @@ class ConversationFilter(JsonObject):
     def __init__(
         self,
         *,
-        include: Optional[List[str]] = None,
+        include: Optional[Sequence[str]] = None,
         exclude_bot_users: Optional[bool] = None,
     ):
         self.include = include
@@ -848,7 +848,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         *,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         action_id: Optional[str] = None,
-        initial_conversations: Optional[List[str]] = None,
+        initial_conversations: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
@@ -925,7 +925,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         *,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         action_id: Optional[str] = None,
-        initial_channels: Optional[List[str]] = None,
+        initial_channels: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         **others: dict,
@@ -1017,7 +1017,7 @@ class RadioButtonsElement(InputInteractiveElement):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
-        options: Optional[List[Union[dict, Option]]] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
@@ -1055,7 +1055,7 @@ class OverflowMenuElement(InteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        options: List[Union[Option]],
+        options: Sequence[Union[Option]],
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):

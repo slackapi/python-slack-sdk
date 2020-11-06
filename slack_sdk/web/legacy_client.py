@@ -12,7 +12,7 @@ from asyncio import Future
 """A Python module for interacting with Slack's Web API."""
 import os
 from io import IOBase
-from typing import Union, List, Optional, Dict
+from typing import Union, Sequence, Optional, Dict
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
@@ -147,7 +147,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.conversations.delete", json=kwargs)
 
     def admin_conversations_invite(
-        self, *, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+        self, *, channel_id: str, user_ids: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a public or private channel.
 
@@ -478,7 +478,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.teams.settings.info", json=kwargs)
 
     def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, List[str]], **kwargs
+        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Set the default channels of a workspace.
 
@@ -552,7 +552,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         team_id: str,
         usergroup_id: str,
-        channel_ids: Union[str, List[str]],
+        channel_ids: Union[str, Sequence[str]],
         **kwargs
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
@@ -570,7 +570,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.usergroups.addChannels", json=kwargs)
 
     def admin_usergroups_addTeams(
-        self, *, usergroup_id: str, team_ids: Union[str, List[str]], **kwargs
+        self, *, usergroup_id: str, team_ids: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Associate one or more default workspaces with an organization-wide IDP group.
 
@@ -599,7 +599,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.usergroups.listChannels", json=kwargs)
 
     def admin_usergroups_removeChannels(
-        self, *, usergroup_id: str, channel_ids: Union[str, List[str]], **kwargs
+        self, *, usergroup_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
 
@@ -627,7 +627,12 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.users.assign", json=kwargs)
 
     def admin_users_invite(
-        self, *, team_id: str, email: str, channel_ids: Union[str, List[str]], **kwargs
+        self,
+        *,
+        team_id: str,
+        email: str,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a workspace.
 
@@ -800,7 +805,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         id: str,  # skipcq: PYL-W0622
-        users: Union[str, List[Dict[str, str]]],
+        users: Union[str, Sequence[Dict[str, str]]],
         **kwargs
     ) -> Union[Future, SlackResponse]:
         """Registers new participants added to a Call.
@@ -817,7 +822,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         id: str,  # skipcq: PYL-W0622
-        users: Union[str, List[Dict[str, str]]],
+        users: Union[str, Sequence[Dict[str, str]]],
         **kwargs
     ) -> Union[Future, SlackResponse]:
         """Registers participants removed from a Call.
@@ -1192,7 +1197,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("conversations.info", http_verb="GET", params=kwargs)
 
     def conversations_invite(
-        self, *, channel: str, users: Union[str, List[str]], **kwargs
+        self, *, channel: str, users: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Invites users to a channel.
 
@@ -1386,7 +1391,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("dnd.setSnooze", http_verb="GET", params=kwargs)
 
     def dnd_teamInfo(
-        self, users: Union[str, List[str]], **kwargs
+        self, users: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Retrieves the Do Not Disturb status for users on a team.
 
@@ -1480,7 +1485,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("files.remote.remove", http_verb="GET", params=kwargs)
 
     def files_remote_share(
-        self, *, channels: Union[str, List[str]], **kwargs
+        self, *, channels: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Share a remote file into a channel.
 
@@ -1767,7 +1772,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("im.replies", http_verb="GET", params=kwargs)
 
     def migration_exchange(
-        self, *, users: Union[str, List[str]], **kwargs
+        self, *, users: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """For Enterprise Grid workspaces, map local user IDs to global user IDs
 
@@ -1818,7 +1823,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("mpim.mark", json=kwargs)
 
     def mpim_open(
-        self, *, users: Union[str, List[str]], **kwargs
+        self, *, users: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """This method opens a multiparty direct message.
 
@@ -2166,7 +2171,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("usergroups.users.list", http_verb="GET", params=kwargs)
 
     def usergroups_users_update(
-        self, *, usergroup: str, users: Union[str, List[str]], **kwargs
+        self, *, usergroup: str, users: Union[str, Sequence[str]], **kwargs
     ) -> Union[Future, SlackResponse]:
         """Update the list of users for a User Group
 

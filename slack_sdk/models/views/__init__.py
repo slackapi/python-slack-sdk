@@ -1,6 +1,6 @@
 import copy
 import logging
-from typing import List, Optional, Union, Dict
+from typing import Optional, Union, Dict, Sequence
 
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option
@@ -50,7 +50,7 @@ class View(JsonObject):
         title: Union[str, dict, PlainTextObject] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
-        blocks: Optional[List[Union[dict, Block]]] = None,
+        blocks: Optional[Sequence[Union[dict, Block]]] = None,
         private_metadata: Optional[str] = None,
         state: Optional[Union[dict, "ViewState"]] = None,
         hash: Optional[str] = None,  # skipcq: PYL-W0622
@@ -214,10 +214,10 @@ class ViewStateValue(JsonObject):
         selected_channel: Optional[str] = None,
         selected_user: Optional[str] = None,
         selected_option: Optional[str] = None,
-        selected_conversations: Optional[List[str]] = None,
-        selected_channels: Optional[List[str]] = None,
-        selected_users: Optional[List[str]] = None,
-        selected_options: Optional[List[Union[dict, Option]]] = None,
+        selected_conversations: Optional[Sequence[str]] = None,
+        selected_channels: Optional[Sequence[str]] = None,
+        selected_users: Optional[Sequence[str]] = None,
+        selected_options: Optional[Sequence[Union[dict, Option]]] = None,
     ):
         self.type = type
         self.value = value

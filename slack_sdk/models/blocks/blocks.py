@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import Dict, List, Optional, Set, Union, Any
+from typing import Dict, Sequence, Optional, Set, Union, Any, List
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -93,7 +93,9 @@ class Block(JsonObject):
                 return None
 
     @classmethod
-    def parse_all(cls, blocks: Optional[List[Union[dict, "Block"]]]) -> List["Block"]:
+    def parse_all(
+        cls, blocks: Optional[Sequence[Union[dict, "Block"]]]
+    ) -> List["Block"]:
         return [cls.parse(b) for b in blocks or []]
 
 
@@ -116,7 +118,7 @@ class SectionBlock(Block):
         *,
         block_id: Optional[str] = None,
         text: Union[str, dict, TextObject] = None,
-        fields: List[Union[str, dict, TextObject]] = None,
+        fields: Sequence[Union[str, dict, TextObject]] = None,
         accessory: Optional[Union[dict, BlockElement]] = None,
         **others: dict,
     ):
@@ -231,7 +233,7 @@ class ActionsBlock(Block):
     def __init__(
         self,
         *,
-        elements: List[Union[dict, InteractiveElement]],
+        elements: Sequence[Union[dict, InteractiveElement]],
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -259,7 +261,7 @@ class ContextBlock(Block):
     def __init__(
         self,
         *,
-        elements: List[Union[dict, ImageBlock, TextObject]],
+        elements: Sequence[Union[dict, ImageBlock, TextObject]],
         block_id: Optional[str] = None,
         **others: dict,
     ):

@@ -2,8 +2,7 @@ import json
 import platform
 import sys
 from ssl import SSLContext
-from typing import Dict, Optional, Any
-from typing import Union, List
+from typing import Dict, Union, Optional, Any, Sequence
 from urllib.parse import urljoin
 
 from slack_sdk import version
@@ -180,7 +179,9 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"attachments": dict_attachments})
 
 
-def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]) -> None:
+def _update_call_participants(
+    kwargs, users: Union[str, Sequence[Dict[str, str]]]
+) -> None:
     if users is None:
         return
 
@@ -189,7 +190,7 @@ def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]) -
     elif isinstance(users, str):
         kwargs.update({"users": users})
     else:
-        raise SlackRequestError("users must be either str or List[Dict[str, str]]")
+        raise SlackRequestError("users must be either str or Sequence[Dict[str, str]]")
 
 
 def _next_cursor_is_present(data) -> bool:

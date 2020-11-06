@@ -1,5 +1,5 @@
 import logging
-from typing import List, Union, Dict, Any
+from typing import Union, Dict, Any, Sequence, List
 
 from .basic_objects import BaseObject  # noqa
 from .basic_objects import EnumValidator  # noqa
@@ -9,7 +9,7 @@ from .basic_objects import JsonValidator  # noqa
 
 # NOTE: used only for legacy components - don't use this for Block Kit
 def extract_json(
-    item_or_items: Union[JsonObject, List[JsonObject]], *format_args
+    item_or_items: Union[JsonObject, Sequence[JsonObject]], *format_args
 ) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:
     """
     Given a sequence (or single item), attempt to call the to_dict() method on each

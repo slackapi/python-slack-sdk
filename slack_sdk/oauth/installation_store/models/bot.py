@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Union, List, Dict, Any
+from typing import Optional, Union, Dict, Any, Sequence
 
 
 class Bot:
@@ -9,7 +9,7 @@ class Bot:
     bot_token: str
     bot_id: str
     bot_user_id: str
-    bot_scopes: List[str]
+    bot_scopes: Sequence[str]
     installed_at: float
 
     def __init__(
@@ -23,7 +23,7 @@ class Bot:
         bot_token: str,
         bot_id: str,
         bot_user_id: str,
-        bot_scopes: Union[str, List[str]] = "",
+        bot_scopes: Union[str, Sequence[str]] = "",
         # timestamps
         installed_at: float,
     ):

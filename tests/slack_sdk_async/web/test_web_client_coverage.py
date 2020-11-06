@@ -251,16 +251,22 @@ class TestWebClientCoverage(unittest.TestCase):
                     )
                     await async_method(team_id="T123", user_id="W123")
                 elif method_name == "admin_users_session_invalidate":
-                    self.api_methods_to_call.remove(method(session_id="XXX", team_id="T111")["method"])
+                    self.api_methods_to_call.remove(
+                        method(session_id="XXX", team_id="T111")["method"]
+                    )
                     await async_method(session_id="XXX", team_id="T111")
                 elif method_name == "admin_users_session_reset":
                     self.api_methods_to_call.remove(method(user_id="W123")["method"])
                     await async_method(user_id="W123")
                 elif method_name == "apps_event_authorizations_list":
-                    self.api_methods_to_call.remove(method(event_context="xxx")["method"])
+                    self.api_methods_to_call.remove(
+                        method(event_context="xxx")["method"]
+                    )
                     await async_method(event_context="xxx")
                 elif method_name == "apps_uninstall":
-                    self.api_methods_to_call.remove(method(client_id="111.222", client_secret="xxx")["method"])
+                    self.api_methods_to_call.remove(
+                        method(client_id="111.222", client_secret="xxx")["method"]
+                    )
                     await async_method(client_id="111.222", client_secret="xxx")
                 elif method_name == "calls_add":
                     self.api_methods_to_call.remove(

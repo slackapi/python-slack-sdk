@@ -10,7 +10,7 @@
 """A Python module for interacting with Slack's Web API."""
 import os
 from io import IOBase
-from typing import Union, List, Optional, Dict
+from typing import Union, Sequence, Optional, Dict
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
@@ -149,7 +149,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("admin.conversations.delete", json=kwargs)
 
     async def admin_conversations_invite(
-        self, *, channel_id: str, user_ids: Union[str, List[str]], **kwargs
+        self, *, channel_id: str, user_ids: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Invite a user to a public or private channel.
 
@@ -486,7 +486,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("admin.teams.settings.info", json=kwargs)
 
     async def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, List[str]], **kwargs
+        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Set the default channels of a workspace.
 
@@ -562,7 +562,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         team_id: str,
         usergroup_id: str,
-        channel_ids: Union[str, List[str]],
+        channel_ids: Union[str, Sequence[str]],
         **kwargs
     ) -> AsyncSlackResponse:
         """Add one or more default channels to an IDP group.
@@ -580,7 +580,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("admin.usergroups.addChannels", json=kwargs)
 
     async def admin_usergroups_addTeams(
-        self, *, usergroup_id: str, team_ids: Union[str, List[str]], **kwargs
+        self, *, usergroup_id: str, team_ids: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Associate one or more default workspaces with an organization-wide IDP group.
 
@@ -609,7 +609,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("admin.usergroups.listChannels", json=kwargs)
 
     async def admin_usergroups_removeChannels(
-        self, *, usergroup_id: str, channel_ids: Union[str, List[str]], **kwargs
+        self, *, usergroup_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Add one or more default channels to an IDP group.
 
@@ -637,7 +637,12 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("admin.users.assign", json=kwargs)
 
     async def admin_users_invite(
-        self, *, team_id: str, email: str, channel_ids: Union[str, List[str]], **kwargs
+        self,
+        *,
+        team_id: str,
+        email: str,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs
     ) -> AsyncSlackResponse:
         """Invite a user to a workspace.
 
@@ -808,7 +813,7 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         id: str,  # skipcq: PYL-W0622
-        users: Union[str, List[Dict[str, str]]],
+        users: Union[str, Sequence[Dict[str, str]]],
         **kwargs
     ) -> AsyncSlackResponse:
         """Registers new participants added to a Call.
@@ -827,7 +832,7 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         id: str,  # skipcq: PYL-W0622
-        users: Union[str, List[Dict[str, str]]],
+        users: Union[str, Sequence[Dict[str, str]]],
         **kwargs
     ) -> AsyncSlackResponse:
         """Registers participants removed from a Call.
@@ -1192,7 +1197,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("conversations.info", http_verb="GET", params=kwargs)
 
     async def conversations_invite(
-        self, *, channel: str, users: Union[str, List[str]], **kwargs
+        self, *, channel: str, users: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Invites users to a channel.
 
@@ -1386,7 +1391,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("dnd.setSnooze", http_verb="GET", params=kwargs)
 
     async def dnd_teamInfo(
-        self, users: Union[str, List[str]], **kwargs
+        self, users: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Retrieves the Do Not Disturb status for users on a team.
 
@@ -1484,7 +1489,7 @@ class AsyncWebClient(AsyncBaseClient):
         )
 
     async def files_remote_share(
-        self, *, channels: Union[str, List[str]], **kwargs
+        self, *, channels: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Share a remote file into a channel.
 
@@ -1763,7 +1768,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("im.replies", http_verb="GET", params=kwargs)
 
     async def migration_exchange(
-        self, *, users: Union[str, List[str]], **kwargs
+        self, *, users: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """For Enterprise Grid workspaces, map local user IDs to global user IDs
 
@@ -1812,7 +1817,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("mpim.mark", json=kwargs)
 
     async def mpim_open(
-        self, *, users: Union[str, List[str]], **kwargs
+        self, *, users: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """This method opens a multiparty direct message.
 
@@ -2160,7 +2165,7 @@ class AsyncWebClient(AsyncBaseClient):
         )
 
     async def usergroups_users_update(
-        self, *, usergroup: str, users: Union[str, List[str]], **kwargs
+        self, *, usergroup: str, users: Union[str, Sequence[str]], **kwargs
     ) -> AsyncSlackResponse:
         """Update the list of users for a User Group
 
