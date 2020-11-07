@@ -6,7 +6,7 @@ class OAuthStateStore:
     def logger(self) -> Logger:
         raise NotImplementedError()
 
-    def issue(self) -> str:
+    def issue(self, *args, **kwargs) -> str:
         raise NotImplementedError()
 
     def consume(self, state: str) -> bool:
