@@ -3,7 +3,7 @@ import json
 import logging
 from asyncio import AbstractEventLoop
 from logging import Logger
-from typing import Optional, BinaryIO, Dict, Sequence
+from typing import Optional, BinaryIO, Dict, Sequence, Union
 
 import aiohttp
 from aiohttp import ClientSession
