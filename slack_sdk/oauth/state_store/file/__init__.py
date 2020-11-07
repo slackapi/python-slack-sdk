@@ -33,13 +33,13 @@ class FileOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             self._logger = logging.getLogger(__name__)
         return self._logger
 
-    async def async_issue(self) -> str:
-        return self.issue()
+    async def async_issue(self, *args, **kwargs) -> str:
+        return self.issue(*args, **kwargs)
 
     async def async_consume(self, state: str) -> bool:
         return self.consume(state)
 
-    def issue(self) -> str:
+    def issue(self, *args, **kwargs) -> str:
         state = str(uuid4())
         self._mkdir(self.base_dir)
         filepath = f"{self.base_dir}/{state}"

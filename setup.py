@@ -187,10 +187,10 @@ class ValidateCommand(BaseCommand):
             "Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"]
         )
         self._run(
-            "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack"]
+            "Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"]
         )
         self._run(
-            "Running flake8 ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"]
+            "Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"]
         )
 
         target = self.test_target.replace("tests/", "", 1)

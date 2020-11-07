@@ -59,13 +59,13 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             self.logger.debug(f"Tables have been created (database: {self.database})")
             conn.commit()
 
-    async def async_issue(self) -> str:
-        return self.issue()
+    async def async_issue(self, *args, **kwargs) -> str:
+        return self.issue(*args, **kwargs)
 
     async def async_consume(self, state: str) -> bool:
         return self.consume(state)
 
-    def issue(self) -> str:
+    def issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
         with self.connect() as conn:
             parameters = [

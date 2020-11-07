@@ -21,3 +21,7 @@ class TestFile(unittest.TestCase):
         self.assertTrue(result)
         result = store.consume(state)
         self.assertFalse(result)
+
+    def test_kwargs(self):
+        store = FileOAuthStateStore(expiration_seconds=10)
+        store.issue(foo=123, bar="baz")
