@@ -48,7 +48,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
             self._logger = logging.getLogger(__name__)
         return self._logger
 
-    def issue(self) -> str:
+    def issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
         now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
         with self.engine.begin() as conn:

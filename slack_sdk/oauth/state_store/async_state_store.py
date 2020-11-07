@@ -6,7 +6,7 @@ class AsyncOAuthStateStore:
     def logger(self) -> Logger:
         raise NotImplementedError()
 
-    async def async_issue(self) -> str:
+    async def async_issue(self, *args, **kwargs) -> str:
         raise NotImplementedError()
 
     async def async_consume(self, state: str) -> bool:

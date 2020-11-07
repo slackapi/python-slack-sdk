@@ -29,13 +29,13 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             self._logger = logging.getLogger(__name__)
         return self._logger
 
-    async def async_issue(self) -> str:
-        return self.issue()
+    async def async_issue(self, *args, **kwargs) -> str:
+        return self.issue(*args, **kwargs)
 
     async def async_consume(self, state: str) -> bool:
         return self.consume(state)
 
-    def issue(self) -> str:
+    def issue(self, *args, **kwargs) -> str:
         state = str(uuid4())
         response = self.s3_client.put_object(
             Bucket=self.bucket_name, Body=str(time.time()), Key=state,
