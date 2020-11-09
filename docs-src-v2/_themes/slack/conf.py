@@ -51,7 +51,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Slack Developer Kit for Python'
+project = u'slackclient (Legacy Python Slack SDK)'
 copyright = u'2015–2016 Slack Technologies, Inc. and contributors'
 author = u'Slack Technologies, Inc. and contributors'
 

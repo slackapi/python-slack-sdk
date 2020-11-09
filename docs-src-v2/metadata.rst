@@ -1,5 +1,5 @@
 .. Site settings
-.. |product_name| replace:: Slack Developer Kit for Python
+.. |product_name| replace:: slackclient (Legacy Python Slack SDK)
 .. |current_version| replace:: 2.0
 .. |latest_release_date| replace:: April 29, 2019
 .. |email| replace:: opensource@slack.com
