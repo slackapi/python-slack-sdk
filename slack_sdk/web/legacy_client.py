@@ -1559,7 +1559,7 @@ class LegacyWebClient(LegacyBaseClient):
             content (str): Supply content when you'd like to create an
                 editable text file containing the specified text. e.g. 'launch plan'
         Raises:
-            SlackRequestError: If niether or both the `file` and `content` args are specified.
+            SlackRequestError: If neither or both the `file` and `content` args are specified.
         """
         if file is None and content is None:
             raise e.SlackRequestError("The file or content argument must be specified.")
