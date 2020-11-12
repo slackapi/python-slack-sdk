@@ -15,10 +15,22 @@ class RedirectUriPageRenderer:
         self.success_url = success_url
         self.failure_url = failure_url
 
-    def render_success_page(self, app_id: str, team_id: Optional[str]) -> str:
+    def render_success_page(
+        self,
+        app_id: str,
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool],
+        org_dashboard_grant_access: Optional[str],
+    ) -> str:
         url = self.success_url
         if url is None:
-            if team_id is None:
+            if (
+                is_enterprise_install is True
+                and org_dashboard_grant_access is not None
+                and app_id is not None
+            ):
+                url = f"{org_dashboard_grant_access}manage/organization/apps/profile/{app_id}/workspaces/add"
+            elif team_id is None or app_id is None:
                 url = "slack://open"
             else:
                 url = f"slack://app?team={team_id}&id={app_id}"
