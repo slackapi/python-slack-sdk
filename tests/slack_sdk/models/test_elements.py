@@ -4,6 +4,7 @@ from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
     ButtonElement,
     DatePickerElement,
+    TimePickerElement,
     ExternalDataSelectElement,
     ImageElement,
     LinkButtonElement,
@@ -214,6 +215,51 @@ class DatePickerElementTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             elem = DatePickerElement(action_id="1", placeholder="12345" * 100)
             elem.to_dict()
+
+
+# -------------------------------------------------
+# TimePicker
+# -------------------------------------------------
+
+
+class TimePickerElementTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "timepicker",
+            "action_id": "timepicker123",
+            "initial_time": "11:40",
+            "placeholder": {"type": "plain_text", "text": "Select a time",},
+        }
+        self.assertDictEqual(input, TimePickerElement(**input).to_dict())
+
+    def test_json(self):
+        for hour in range(0, 23):
+            for minute in range(0, 59):
+                time = f"{hour:02}:{minute:02}"
+                self.assertDictEqual(
+                    {
+                        "action_id": "timepicker123",
+                        "initial_time": time,
+                        "placeholder": {
+                            "emoji": True,
+                            "type": "plain_text",
+                            "text": "Select a time",
+                        },
+                        "type": "timepicker",
+                    },
+                    TimePickerElement(
+                        action_id="timepicker123",
+                        placeholder="Select a time",
+                        initial_time=time,
+                    ).to_dict(),
+                )
+
+        with self.assertRaises(SlackObjectFormationError):
+            TimePickerElement(
+                action_id="timepicker123",
+                placeholder="Select a time",
+                initial_time="25:00",
+            ).to_dict()
 
 
 # -------------------------------------------------
