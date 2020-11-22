@@ -754,6 +754,13 @@ class LegacyWebClient(LegacyBaseClient):
         """Checks API calling code."""
         return self.api_call("api.test", json=kwargs)
 
+    def apps_connections_open(
+        self, *, app_token: str, **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Get a new WSS URL for Socket Mode"""
+        kwargs.update({"token": app_token})
+        return self.api_call("apps.connections.open", http_verb="POST", params=kwargs)
+
     def apps_event_authorizations_list(
         self, event_context: str, **kwargs
     ) -> Union[Future, SlackResponse]:

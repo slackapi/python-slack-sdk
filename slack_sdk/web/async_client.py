@@ -762,6 +762,15 @@ class AsyncWebClient(AsyncBaseClient):
         """Checks API calling code."""
         return await self.api_call("api.test", json=kwargs)
 
+    async def apps_connections_open(
+        self, *, app_token: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Get a new WSS URL for Socket Mode"""
+        kwargs.update({"token": app_token})
+        return await self.api_call(
+            "apps.connections.open", http_verb="POST", params=kwargs
+        )
+
     async def apps_event_authorizations_list(
         self, event_context: str, **kwargs
     ) -> AsyncSlackResponse:
