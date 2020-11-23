@@ -11,7 +11,7 @@ from slack import WebClient
 
 class TestWebClient(unittest.TestCase):
     """
-    Suggestion for https://github.com/slackapi/python-slackclient/issues/762
+    Suggestion for https://github.com/slackapi/python-slack-sdk/issues/762
     """
 
     def setUp(self):

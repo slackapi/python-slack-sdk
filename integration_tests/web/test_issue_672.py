@@ -13,7 +13,7 @@ from slack import WebClient
 class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
-    https://github.com/slackapi/python-slackclient/issues/672
+    https://github.com/slackapi/python-slack-sdk/issues/672
     """
 
     def setUp(self):

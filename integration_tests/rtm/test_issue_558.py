@@ -16,7 +16,7 @@ from slack import RTMClient, WebClient
 class TestRTMClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
-    https://github.com/slackapi/python-slackclient/issues/558
+    https://github.com/slackapi/python-slack-sdk/issues/558
     """
 
     def setUp(self):

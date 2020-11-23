@@ -39,7 +39,7 @@ singleton_async_client = WebClient(
 def singleton():
     try:
         # blocking here!!!
-        # as described at https://github.com/slackapi/python-slackclient/issues/497
+        # as described at https://github.com/slackapi/python-slack-sdk/issues/497
         # until this completion, other simultaneous requests get "RuntimeError: This event loop is already running"
         response = singleton_client.chat_postMessage(
             channel="#random",
@@ -75,7 +75,7 @@ def singleton_async():
             text="You used the singleton WebClient for posting this message!"
         )
         # blocking here!!!
-        # as described at https://github.com/slackapi/python-slackclient/issues/497
+        # as described at https://github.com/slackapi/python-slack-sdk/issues/497
         # until this completion, other simultaneous requests get "RuntimeError: This event loop is already running"
         response = singleton_loop.run_until_complete(future)
         return str(response)

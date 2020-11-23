@@ -10,7 +10,7 @@ from slack import RTMClient
 class TestRTMClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
-    https://github.com/slackapi/python-slackclient/issues/530
+    https://github.com/slackapi/python-slack-sdk/issues/530
     """
 
     def setUp(self):

@@ -251,7 +251,7 @@ setup(
     description="The Slack API Platform SDK for Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/slackapi/python-slackclient",  # TODO: update the URL
+    url="https://github.com/slackapi/python-slack-sdk",
     author="Slack Technologies, Inc.",
     author_email="opensource@slack.com",
     python_requires=">=3.6.0",

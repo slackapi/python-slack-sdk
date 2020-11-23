@@ -38,7 +38,7 @@ class AsyncBaseClient:
         self.ssl = ssl
         self.proxy = proxy
         self.session = session
-        # https://github.com/slackapi/python-slackclient/issues/738
+        # https://github.com/slackapi/python-slack-sdk/issues/738
         self.trust_env_in_session = trust_env_in_session
         self.headers = headers or {}
         self.headers["User-Agent"] = get_user_agent(

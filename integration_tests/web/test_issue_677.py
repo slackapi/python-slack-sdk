@@ -15,7 +15,7 @@ from slack.web.classes.objects import DateLink
 class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
-    https://github.com/slackapi/python-slackclient/issues/677
+    https://github.com/slackapi/python-slack-sdk/issues/677
     """
 
     def setUp(self):
