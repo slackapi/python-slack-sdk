@@ -36,6 +36,7 @@ class Installation:
         enterprise_name: Optional[str] = None,
         enterprise_url: Optional[str] = None,
         team_id: Optional[str] = None,
+        team_name: Optional[str] = None,
         # bot
         bot_token: str,
         bot_id: str,
@@ -61,7 +62,7 @@ class Installation:
         self.enterprise_name = enterprise_name
         self.enterprise_url = enterprise_url
         self.team_id = team_id
-
+        self.team_name = team_name
         self.bot_token = bot_token
         self.bot_id = bot_id
         self.bot_user_id = bot_user_id
@@ -106,6 +107,7 @@ class Installation:
             "enterprise_name": self.enterprise_name,
             "enterprise_url": self.enterprise_url,
             "team_id": self.team_id,
+            "team_name": self.team_name,
             "bot_token": self.bot_token,
             "bot_id": self.bot_id,
             "bot_user_id": self.bot_user_id,
