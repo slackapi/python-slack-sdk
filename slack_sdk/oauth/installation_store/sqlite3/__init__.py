@@ -57,7 +57,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 client_id text not null,
                 app_id text not null,
                 enterprise_id text not null default '',
+                enterprise_name text,
+                enterprise_url text,
                 team_id text not null default '',
+                team_name text,
                 bot_token text not null,
                 bot_id text not null,
                 bot_user_id text not null,
@@ -66,8 +69,11 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 user_token text,
                 user_scopes text,
                 incoming_webhook_url text,
+                incoming_webhook_channel text,
                 incoming_webhook_channel_id text,
                 incoming_webhook_configuration_url text,
+                is_enterprise_install text,
+                token_type text,
                 installed_at datetime not null default current_timestamp
             );
             """
@@ -158,7 +164,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     client_id,
                     app_id,
                     enterprise_id,
+                    enterprise_name,
+                    enterprise_url,
                     team_id,
+                    team_name,
                     bot_token,
                     bot_id,
                     bot_user_id,
@@ -167,11 +176,20 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     user_token,
                     user_scopes,
                     incoming_webhook_url,
+                    incoming_webhook_channel,
                     incoming_webhook_channel_id,
-                    incoming_webhook_configuration_url
+                    incoming_webhook_configuration_url,
+                    is_enterprise_install,
+                    token_type
                 )
                 values
                 (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -192,7 +210,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     self.client_id,
                     installation.app_id,
                     installation.enterprise_id or "",
+                    installation.enterprise_name,
+                    installation.enterprise_url,
                     installation.team_id or "",
+                    installation.team_name,
                     installation.bot_token,
                     installation.bot_id,
                     installation.bot_user_id,
@@ -203,8 +224,11 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     if installation.user_scopes
                     else None,
                     installation.incoming_webhook_url,
+                    installation.incoming_webhook_channel,
                     installation.incoming_webhook_channel_id,
                     installation.incoming_webhook_configuration_url,
+                    installation.is_enterprise_install,
+                    installation.token_type,
                 ],
             )
             self.logger.debug(
