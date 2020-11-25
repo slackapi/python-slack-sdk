@@ -19,8 +19,8 @@ class RedirectUriPageRenderer:
         self,
         app_id: str,
         team_id: Optional[str],
-        is_enterprise_install: Optional[bool],
-        enterprise_url: Optional[str],
+        is_enterprise_install: Optional[bool] = None,
+        enterprise_url: Optional[str] = None,
     ) -> str:
         url = self.success_url
         if url is None:
