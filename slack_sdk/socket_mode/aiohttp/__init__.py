@@ -23,8 +23,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     app_token: str
     wss_uri: Optional[str]
     auto_reconnect_enabled: bool
-    web_socket_message_queue: Queue
-    web_socket_message_listeners: List[
+    message_queue: Queue
+    message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
             Callable[
@@ -39,8 +39,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         ]
     ]
 
-    web_socket_message_receiver: Optional[Future]
-    web_socket_message_processor: Future
+    message_receiver: Optional[Future]
+    message_processor: Future
 
     proxy: Optional[str]
     ping_interval: float
@@ -71,8 +71,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.ping_interval = ping_interval
 
         self.wss_uri = None
-        self.web_socket_message_queue = Queue()
-        self.web_socket_message_listeners = []
+        self.message_queue = Queue()
+        self.message_listeners = []
         self.socket_mode_request_listeners = []
         self.current_session = None
         self.current_session_monitor = None
@@ -81,10 +81,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.on_error_listeners = on_error_listeners or []
         self.on_close_listeners = on_close_listeners or []
 
-        self.web_socket_message_receiver = None
-        self.web_socket_message_processor = asyncio.ensure_future(
-            self.process_web_socket_messages()
-        )
+        self.message_receiver = None
+        self.message_processor = asyncio.ensure_future(self.process_messages())
 
     async def monitor_current_session(self) -> None:
         while True:
@@ -103,7 +101,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     f"(error: {type(e).__name__}, message: {e})"
                 )
 
-    async def receive_web_socket_messages(self) -> None:
+    async def receive_messages(self) -> None:
         consecutive_error_count = 0
         while True:
             try:
@@ -120,7 +118,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if message is not None:
                     if message.type == WSMsgType.TEXT:
                         message_data = message.data
-                        await self.enqueue_web_socket_message(message_data)
+                        await self.enqueue_message(message_data)
                         for listener in self.on_message_listeners:
                             listener(message)
                     elif message.type == WSMsgType.CLOSE:
@@ -163,31 +161,29 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.monitor_current_session()
         )
 
-        old_web_socket_message_receiver = self.web_socket_message_receiver
-        self.web_socket_message_receiver = asyncio.ensure_future(
-            self.receive_web_socket_messages()
-        )
+        old_message_receiver = self.message_receiver
+        self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if old_session is not None:
             await old_session.close()
             if old_current_session_monitor is not None:
                 old_current_session_monitor.cancel()
-            if old_web_socket_message_receiver is not None:
-                old_web_socket_message_receiver.cancel()
+            if old_message_receiver is not None:
+                old_message_receiver.cancel()
             self.logger.info("The old session has been abandoned")
 
     async def disconnect(self):
         await self.current_session.close()
 
-    async def send_web_socket_message(self, message: str):
+    async def send_message(self, message: str):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
         await self.current_session.send_str(message)
 
     async def close(self):
         self.disconnect()
-        self.web_socket_message_processor.cancel()
+        self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
-        if self.web_socket_message_receiver is not None:
-            self.web_socket_message_receiver.cancel()
+        if self.message_receiver is not None:
+            self.message_receiver.cancel()

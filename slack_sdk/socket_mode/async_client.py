@@ -22,8 +22,8 @@ class AsyncBaseSocketModeClient:
     app_token: str
     wss_uri: str
     auto_reconnect_enabled: bool
-    web_socket_message_queue: Queue
-    web_socket_message_listeners: List[
+    message_queue: Queue
+    message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
             Callable[
@@ -61,43 +61,41 @@ class AsyncBaseSocketModeClient:
     async def close(self):
         self.disconnect()
 
-    async def send_web_socket_message(self, message: str):
+    async def send_message(self, message: str):
         raise NotImplementedError()
 
     async def send_socket_mode_response(
         self, response: Union[Dict[str, Any], SocketModeResponse]
     ):
         if isinstance(response, SocketModeResponse):
-            await self.send_web_socket_message(json.dumps(response.to_dict()))
+            await self.send_message(json.dumps(response.to_dict()))
         else:
-            await self.send_web_socket_message(json.dumps(response))
+            await self.send_message(json.dumps(response))
 
-    async def enqueue_web_socket_message(self, message: str):
-        await self.web_socket_message_queue.put(message)
+    async def enqueue_message(self, message: str):
+        await self.message_queue.put(message)
         if self.logger.level <= logging.DEBUG:
-            queue_size = self.web_socket_message_queue.qsize()
+            queue_size = self.message_queue.qsize()
             self.logger.debug(
                 f"A new message enqueued (current queue size: {queue_size})"
             )
 
-    async def process_web_socket_messages(self):
+    async def process_messages(self):
         while True:
             try:
-                await self.process_web_socket_message()
+                await self.process_message()
             except Exception as e:
                 self.logger.exception(f"Failed to process a message: {e}")
 
-    async def process_web_socket_message(self):
-        raw_message = await self.web_socket_message_queue.get()
+    async def process_message(self):
+        raw_message = await self.message_queue.get()
         if raw_message is not None and raw_message.startswith("{"):
             message: dict = json.loads(raw_message)
             _: Future[None] = asyncio.ensure_future(
-                self.run_web_socket_message_listeners(message, raw_message)
+                self.run_message_listeners(message, raw_message)
             )
 
-    async def run_web_socket_message_listeners(
-        self, message: dict, raw_message: str
-    ) -> None:
+    async def run_message_listeners(self, message: dict, raw_message: str) -> None:
         type, envelope_id = message.get("type"), message.get("envelope_id")
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(
@@ -108,7 +106,7 @@ class AsyncBaseSocketModeClient:
                 await self.connect_to_new_endpoint()
                 return
 
-            for listener in self.web_socket_message_listeners:
+            for listener in self.message_listeners:
                 try:
                     await listener(self, message, raw_message)
                 except Exception as e:
@@ -121,7 +119,9 @@ class AsyncBaseSocketModeClient:
                         try:
                             await listener(self, request)
                         except Exception as e:
-                            self.logger.exception(f"Failed to run a request listener: {e}")
+                            self.logger.exception(
+                                f"Failed to run a request listener: {e}"
+                            )
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}")
         finally:

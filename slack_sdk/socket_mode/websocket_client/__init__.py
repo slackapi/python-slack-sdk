@@ -22,8 +22,8 @@ class SocketModeClient(BaseSocketModeClient):
     web_client: WebClient
     app_token: str
     wss_uri: Optional[str]
-    web_socket_message_queue: Queue
-    web_socket_message_listeners: List[
+    message_queue: Queue
+    message_listeners: List[
         Union[
             WebSocketMessageListener,
             Callable[["BaseSocketModeClient", dict, Optional[str]], None],
@@ -38,8 +38,8 @@ class SocketModeClient(BaseSocketModeClient):
 
     current_app_executor: ThreadPoolExecutor
     current_app_monitor: ThreadPoolExecutor
-    web_socket_message_processor: ThreadPoolExecutor
-    web_socket_message_workers: ThreadPoolExecutor
+    message_processor: ThreadPoolExecutor
+    message_workers: ThreadPoolExecutor
 
     current_session: Optional[WebSocketApp]
 
@@ -76,17 +76,17 @@ class SocketModeClient(BaseSocketModeClient):
         self.auto_reconnect_enabled = auto_reconnect_enabled
         self.ping_interval = ping_interval
         self.wss_uri = self.issue_new_wss_url()
-        self.web_socket_message_queue = Queue()
-        self.web_socket_message_listeners = []
+        self.message_queue = Queue()
+        self.message_listeners = []
         self.socket_mode_request_listeners = []
 
         self.current_session = None
         self.current_app_monitor = ThreadPoolExecutor(1)
         self.current_app_executor = ThreadPoolExecutor(1)
 
-        self.web_socket_message_processor = ThreadPoolExecutor(1)
-        self.web_socket_message_processor.submit(self.process_web_socket_messages)
-        self.web_socket_message_workers = ThreadPoolExecutor(max_workers=concurrency)
+        self.message_processor = ThreadPoolExecutor(1)
+        self.message_processor.submit(self.process_messages)
+        self.message_workers = ThreadPoolExecutor(max_workers=concurrency)
 
         # NOTE: only global settings is provided by the library
         websocket.enableTrace(trace_enabled)
@@ -111,7 +111,7 @@ class SocketModeClient(BaseSocketModeClient):
         def on_message(ws: WebSocketApp, message: str):
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(f"on_message invoked: (message: {message})")
-            self.enqueue_web_socket_message(message)
+            self.enqueue_message(message)
             for listener in self.on_message_listeners:
                 listener(ws, message)
 
@@ -179,7 +179,7 @@ class SocketModeClient(BaseSocketModeClient):
     def disconnect(self) -> None:
         self.current_session.close()
 
-    def send_web_socket_message(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
         self.current_session.send(message)
@@ -188,5 +188,5 @@ class SocketModeClient(BaseSocketModeClient):
         self.current_session.close()
         self.current_app_monitor.shutdown()
         self.current_app_executor.shutdown()
-        self.web_socket_message_processor.shutdown()
-        self.web_socket_message_workers.shutdown()
+        self.message_processor.shutdown()
+        self.message_workers.shutdown()

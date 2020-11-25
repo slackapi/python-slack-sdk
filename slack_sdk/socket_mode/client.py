@@ -20,8 +20,8 @@ class BaseSocketModeClient:
     web_client: WebClient
     app_token: str
     wss_uri: str
-    web_socket_message_queue: Queue
-    web_socket_message_listeners: List[
+    message_queue: Queue
+    message_listeners: List[
         Union[
             WebSocketMessageListener,
             Callable[["BaseSocketModeClient", dict, Optional[str]], None],
@@ -34,8 +34,8 @@ class BaseSocketModeClient:
         ]
     ]
 
-    web_socket_message_processor: ThreadPoolExecutor
-    web_socket_message_workers: ThreadPoolExecutor
+    message_processor: ThreadPoolExecutor
+    message_workers: ThreadPoolExecutor
 
     def issue_new_wss_url(self) -> str:
         try:
@@ -58,36 +58,36 @@ class BaseSocketModeClient:
     def close(self) -> None:
         self.disconnect()
 
-    def send_web_socket_message(self, message: str) -> None:
+    def send_message(self, message: str) -> None:
         raise NotImplementedError()
 
     def send_socket_mode_response(
         self, response: Union[Dict[str, Any], SocketModeResponse]
     ) -> None:
         if isinstance(response, SocketModeResponse):
-            self.send_web_socket_message(json.dumps(response.to_dict()))
+            self.send_message(json.dumps(response.to_dict()))
         else:
-            self.send_web_socket_message(json.dumps(response))
+            self.send_message(json.dumps(response))
 
-    def enqueue_web_socket_message(self, message: str):
-        self.web_socket_message_queue.put(message)
+    def enqueue_message(self, message: str):
+        self.message_queue.put(message)
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(
-                f"A new message enqueued (current queue size: {self.web_socket_message_queue.qsize()})"
+                f"A new message enqueued (current queue size: {self.message_queue.qsize()})"
             )
 
-    def process_web_socket_message(self):
-        raw_message = self.web_socket_message_queue.get()
+    def process_message(self):
+        raw_message = self.message_queue.get()
         print(raw_message)
 
-        def _run_web_socket_message_listeners():
+        def _run_message_listeners():
             if raw_message is not None and raw_message.startswith("{"):
                 message: dict = json.loads(raw_message)
-                self.run_web_socket_message_listeners(message, raw_message)
+                self.run_message_listeners(message, raw_message)
 
-        self.web_socket_message_workers.submit(_run_web_socket_message_listeners)
+        self.message_workers.submit(_run_message_listeners)
 
-    def run_web_socket_message_listeners(self, message: dict, raw_message: str) -> None:
+    def run_message_listeners(self, message: dict, raw_message: str) -> None:
         type, envelope_id = message.get("type"), message.get("envelope_id")
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(
@@ -98,7 +98,7 @@ class BaseSocketModeClient:
                 self.connect_to_new_endpoint()
                 return
 
-            for listener in self.web_socket_message_listeners:
+            for listener in self.message_listeners:
                 try:
                     listener(self, message, raw_message)
                 except Exception as e:
@@ -111,7 +111,9 @@ class BaseSocketModeClient:
                         try:
                             listener(self, request)
                         except Exception as e:
-                            self.logger.exception(f"Failed to run a request listener: {e}")
+                            self.logger.exception(
+                                f"Failed to run a request listener: {e}"
+                            )
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}")
         finally:
@@ -120,9 +122,9 @@ class BaseSocketModeClient:
                     f"Message processing completed (type: {type}, envelope_id: {envelope_id})"
                 )
 
-    def process_web_socket_messages(self) -> None:
+    def process_messages(self) -> None:
         while True:
             try:
-                self.process_web_socket_message()
+                self.process_message()
             except Exception as e:
                 self.logger.exception(f"Failed to process a message: {e}")
