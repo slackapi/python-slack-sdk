@@ -9,6 +9,7 @@ class Installation:
     app_id: Optional[str]
     enterprise_id: Optional[str]
     enterprise_name: Optional[str]
+    enterprise_url: Optional[str]
     team_id: Optional[str]
     team_name: Optional[str]
     bot_token: Optional[str]
@@ -23,7 +24,6 @@ class Installation:
     incoming_webhook_channel_id: Optional[str]
     incoming_webhook_configuration_url: Optional[str]
     is_enterprise_install: Optional[bool]
-    org_dashboard_grant_access: Optional[str]
     token_type: Optional[str]
     installed_at: float
 
@@ -34,6 +34,7 @@ class Installation:
         # org / workspace
         enterprise_id: Optional[str] = None,
         enterprise_name: Optional[str] = None,
+        enterprise_url: Optional[str] = None,
         team_id: Optional[str] = None,
         # bot
         bot_token: str,
@@ -51,15 +52,14 @@ class Installation:
         incoming_webhook_configuration_url: Optional[str] = None,
         # org app
         is_enterprise_install: Optional[bool] = None,
-        org_dashboard_grant_access: Optional[str] = None,
         token_type: Optional[str] = None,
         # timestamps
         installed_at: Optional[float] = None,
     ):
-        print("in init for Installation")
         self.app_id = app_id
         self.enterprise_id = enterprise_id
         self.enterprise_name = enterprise_name
+        self.enterprise_url = enterprise_url
         self.team_id = team_id
 
         self.bot_token = bot_token
@@ -83,7 +83,6 @@ class Installation:
         self.incoming_webhook_configuration_url = incoming_webhook_configuration_url
 
         self.is_enterprise_install = is_enterprise_install
-        self.org_dashboard_grant_access = org_dashboard_grant_access
         self.token_type = token_type
 
         self.installed_at = time() if installed_at is None else installed_at
@@ -105,6 +104,7 @@ class Installation:
             "app_id": self.app_id,
             "enterprise_id": self.enterprise_id,
             "enterprise_name": self.enterprise_name,
+            "enterprise_url": self.enterprise_url,
             "team_id": self.team_id,
             "bot_token": self.bot_token,
             "bot_id": self.bot_id,
@@ -118,7 +118,6 @@ class Installation:
             "incoming_webhook_channel_id": self.incoming_webhook_channel_id,
             "incoming_webhook_configuration_url": self.incoming_webhook_configuration_url,
             "is_enterprise_install": self.is_enterprise_install,
-            "org_dashboard_grant_access": self.org_dashboard_grant_access,
             "token_type": self.token_type,
             "installed_at": datetime.utcfromtimestamp(self.installed_at),
         }
