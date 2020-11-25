@@ -78,7 +78,6 @@ class BaseSocketModeClient:
 
     def process_message(self):
         raw_message = self.message_queue.get()
-        print(raw_message)
 
         def _run_message_listeners():
             if raw_message is not None and raw_message.startswith("{"):
