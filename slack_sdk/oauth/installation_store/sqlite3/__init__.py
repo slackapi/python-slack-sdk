@@ -72,7 +72,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 incoming_webhook_channel text,
                 incoming_webhook_channel_id text,
                 incoming_webhook_configuration_url text,
-                is_enterprise_install text,
+                is_enterprise_install boolean not null default 0,
                 token_type text,
                 installed_at datetime not null default current_timestamp
             );
@@ -227,7 +227,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.incoming_webhook_channel,
                     installation.incoming_webhook_channel_id,
                     installation.incoming_webhook_configuration_url,
-                    installation.is_enterprise_install,
+                    1 if installation.is_enterprise_install else 0,
                     installation.token_type,
                 ],
             )
