@@ -15,6 +15,7 @@ from sqlalchemy import (
     MetaData,
 )
 from sqlalchemy.engine import Engine
+from sqlalchemy.sql.sqltypes import Boolean
 
 from slack_sdk.oauth.installation_store.installation_store import InstallationStore
 from slack_sdk.oauth.installation_store.models.bot import Bot
@@ -54,7 +55,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             Column("incoming_webhook_channel", String),
             Column("incoming_webhook_channel_id", String),
             Column("incoming_webhook_configuration_url", String),
-            Column("is_enterprise_install", String),
+            Column("is_enterprise_install", Boolean, default=False, nullable=False),
             Column("token_type", String),
             Column(
                 "installed_at",
