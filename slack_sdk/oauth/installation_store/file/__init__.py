@@ -53,6 +53,14 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             with open(f"{team_installation_dir}/bot-{history_version}", "w") as f:
                 f.write(entity)
 
+            # per workspace
+            entity: str = json.dumps(installation.__dict__)
+            with open(f"{team_installation_dir}/installer-latest", "w") as f:
+                f.write(entity)
+            with open(f"{team_installation_dir}/installer-{history_version}", "w") as f:
+                f.write(entity)
+
+            # per workspace per user
             u_id = installation.user_id or none
             entity: str = json.dumps(installation.__dict__)
             with open(f"{team_installation_dir}/installer-{u_id}-latest", "w") as f:
@@ -74,17 +82,30 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 f.write(entity)
 
     async def async_find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        return self.find_bot(enterprise_id=enterprise_id, team_id=team_id)
+        return self.find_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            is_enterprise_install=is_enterprise_install,
+        )
 
     def find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        # Not yet implemented: org-apps support
         none = "none"
         e_id = enterprise_id or none
         t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
         bot_filepath = f"{self.base_dir}/{e_id}-{t_id}/bot-latest"
         try:
             with open(bot_filepath) as f:
@@ -92,6 +113,49 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 return Bot(**data)
         except FileNotFoundError as e:
             message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
+            self.logger.warning(message)
+            return None
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        return self.find_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+            is_enterprise_install=is_enterprise_install,
+        )
+
+    def find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
+        installation_filepath = f"{self.base_dir}/{e_id}-{t_id}/installer-latest"
+        if user_id is not None:
+            installation_filepath = (
+                f"{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-latest"
+            )
+
+        try:
+            with open(installation_filepath) as f:
+                data = json.loads(f.read())
+                return Installation(**data)
+        except FileNotFoundError as e:
+            message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
 

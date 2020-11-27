@@ -23,7 +23,7 @@ class Installation:
     incoming_webhook_channel: Optional[str]
     incoming_webhook_channel_id: Optional[str]
     incoming_webhook_configuration_url: Optional[str]
-    is_enterprise_install: Optional[bool]
+    is_enterprise_install: bool
     token_type: Optional[str]
     installed_at: float
 
@@ -38,12 +38,12 @@ class Installation:
         team_id: Optional[str] = None,
         team_name: Optional[str] = None,
         # bot
-        bot_token: str,
-        bot_id: str,
-        bot_user_id: str,
+        bot_token: Optional[str] = None,
+        bot_id: Optional[str] = None,
+        bot_user_id: Optional[str] = None,
         bot_scopes: Union[str, Sequence[str]] = "",
         # installer
-        user_id: Optional[str] = None,
+        user_id: str,
         user_token: Optional[str] = None,
         user_scopes: Union[str, Sequence[str]] = "",
         # incoming webhook
@@ -52,7 +52,7 @@ class Installation:
         incoming_webhook_channel_id: Optional[str] = None,
         incoming_webhook_configuration_url: Optional[str] = None,
         # org app
-        is_enterprise_install: Optional[bool] = None,
+        is_enterprise_install: Optional[bool] = False,
         token_type: Optional[str] = None,
         # timestamps
         installed_at: Optional[float] = None,
@@ -83,7 +83,7 @@ class Installation:
         self.incoming_webhook_channel_id = incoming_webhook_channel_id
         self.incoming_webhook_configuration_url = incoming_webhook_configuration_url
 
-        self.is_enterprise_install = is_enterprise_install
+        self.is_enterprise_install = is_enterprise_install or False
         self.token_type = token_type
 
         self.installed_at = time() if installed_at is None else installed_at
@@ -92,11 +92,14 @@ class Installation:
         return Bot(
             app_id=self.app_id,
             enterprise_id=self.enterprise_id,
+            enterprise_name=self.enterprise_name,
             team_id=self.team_id,
+            team_name=self.team_name,
             bot_token=self.bot_token,
             bot_id=self.bot_id,
             bot_user_id=self.bot_user_id,
             bot_scopes=self.bot_scopes,
+            is_enterprise_install=self.is_enterprise_install,
             installed_at=self.installed_at,
         )
 

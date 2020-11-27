@@ -60,6 +60,22 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             self.logger.debug(f"S3 put_object response: {response}")
 
+            # per workspace
+            entity: str = json.dumps(installation.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/installer-latest",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/installer-{history_version}",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+
+            # per workspace per user
             u_id = installation.user_id or none
             entity: str = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
@@ -84,6 +100,16 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             self.logger.debug(f"S3 put_object response: {response}")
 
+            # per workspace
+            entity: str = json.dumps(installation.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/installer-latest",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+
+            # per workspace per user
             u_id = installation.user_id or none
             entity: str = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
@@ -94,17 +120,30 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f"S3 put_object response: {response}")
 
     async def async_find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        return self.find_bot(enterprise_id=enterprise_id, team_id=team_id)
+        return self.find_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            is_enterprise_install=is_enterprise_install,
+        )
 
     def find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        # Not yet implemented: org-apps support
         none = "none"
         e_id = enterprise_id or none
         t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
         workspace_path = f"{self.client_id}/{e_id}-{t_id}"
         try:
             fetch_response = self.s3_client.get_object(
@@ -116,5 +155,52 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             return Bot(**data)
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
+            self.logger.warning(message)
+            return None
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        return self.find_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+            is_enterprise_install=is_enterprise_install,
+        )
+
+    def find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
+        workspace_path = f"{self.client_id}/{e_id}-{t_id}"
+        try:
+            key = (
+                f"{workspace_path}/installer-{user_id}-latest"
+                if user_id
+                else f"{workspace_path}/installer-latest"
+            )
+            fetch_response = self.s3_client.get_object(
+                Bucket=self.bucket_name, Key=key,
+            )
+            self.logger.debug(f"S3 get_object response: {fetch_response}")
+            body = fetch_response["Body"].read().decode("utf-8")
+            data = json.loads(body)
+            return Installation(**data)
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
