@@ -36,9 +36,78 @@ class TestSQLite3(unittest.TestCase):
 
         bot = self.store.find_bot(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(bot)
-
         bot = self.store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
-
         bot = self.store.find_bot(enterprise_id=None, team_id="T111")
         self.assertIsNone(bot)
+
+        i = self.store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(i)
+        i = self.store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(i)
+        i = self.store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(i)
+
+        i = self.store.find_installation(
+            enterprise_id="E111", team_id="T111", user_id="U111"
+        )
+        self.assertIsNotNone(i)
+        i = self.store.find_installation(
+            enterprise_id="E111", team_id="T111", user_id="U222"
+        )
+        self.assertIsNone(i)
+        i = self.store.find_installation(
+            enterprise_id="E111", team_id="T222", user_id="U111"
+        )
+        self.assertIsNone(i)
+
+    def test_org_installation(self):
+        installation = Installation(
+            app_id="AO111",
+            enterprise_id="EO111",
+            user_id="UO111",
+            bot_id="BO111",
+            bot_token="xoxb-O111",
+            bot_scopes=["chat:write"],
+            bot_user_id="UO222",
+            is_enterprise_install=True,
+        )
+        self.store.save(installation)
+
+        bot = self.store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(bot)
+        bot = self.store.find_bot(
+            enterprise_id="EO111", team_id="TO222", is_enterprise_install=True
+        )
+        self.assertIsNotNone(bot)
+        bot = self.store.find_bot(enterprise_id="EO111", team_id="TO222")
+        self.assertIsNone(bot)
+        bot = self.store.find_bot(enterprise_id=None, team_id="TO111")
+        self.assertIsNone(bot)
+
+        i = self.store.find_installation(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(i)
+        i = self.store.find_installation(
+            enterprise_id="EO111", team_id="T111", is_enterprise_install=True
+        )
+        self.assertIsNotNone(i)
+        i = self.store.find_installation(enterprise_id="EO111", team_id="T222")
+        self.assertIsNone(i)
+        i = self.store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(i)
+
+        i = self.store.find_installation(
+            enterprise_id="EO111", team_id=None, user_id="UO111"
+        )
+        self.assertIsNotNone(i)
+        i = self.store.find_installation(
+            enterprise_id="E111",
+            team_id="T111",
+            is_enterprise_install=True,
+            user_id="U222",
+        )
+        self.assertIsNone(i)
+        i = self.store.find_installation(
+            enterprise_id=None, team_id="T222", user_id="U111"
+        )
+        self.assertIsNone(i)

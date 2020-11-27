@@ -96,11 +96,14 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 client_id text not null,
                 app_id text not null,
                 enterprise_id text not null default '',
+                enterprise_name text,
                 team_id text not null default '',
+                team_name text,
                 bot_token text not null,
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
             """
@@ -129,14 +132,20 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     client_id,
                     app_id,
                     enterprise_id,
+                    enterprise_name,
                     team_id,
+                    team_name,
                     bot_token,
                     bot_id,
                     bot_user_id,
-                    bot_scopes
+                    bot_scopes,
+                    is_enterprise_install
                 )
                 values
                 (
+                    ?,
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -151,10 +160,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     self.client_id,
                     installation.app_id,
                     installation.enterprise_id or "",
+                    installation.enterprise_name,
                     installation.team_id or "",
+                    installation.team_name,
                     installation.bot_token,
                     installation.bot_id,
                     installation.bot_user_id,
+                    installation.is_enterprise_install,
                     ",".join(installation.bot_scopes),
                 ],
             )
@@ -232,19 +244,33 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 ],
             )
             self.logger.debug(
-                f"New rows in slack_bots and slack_installations) have been created (database: {self.database})"
+                f"New rows in slack_bots and slack_installations have been created (database: {self.database})"
             )
             conn.commit()
 
     async def async_find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        return self.find_bot(enterprise_id=enterprise_id, team_id=team_id)
+        return self.find_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            is_enterprise_install=is_enterprise_install,
+        )
 
     def find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        # Not yet implemented: org-apps support
+        if is_enterprise_install or team_id is None:
+            team_id = ""
+
         try:
             with self.connect() as conn:
                 cur = conn.execute(
@@ -252,11 +278,14 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     select
                         app_id,
                         enterprise_id,
+                        enterprise_name,
                         team_id,
+                        team_name,
                         bot_token,
                         bot_id,
                         bot_user_id,
                         bot_scopes,
+                        is_enterprise_install,
                         installed_at
                     from
                         slack_bots
@@ -280,17 +309,150 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot = Bot(
                         app_id=row[0],
                         enterprise_id=row[1],
-                        team_id=row[2],
-                        bot_token=row[3],
-                        bot_id=row[4],
-                        bot_user_id=row[5],
-                        bot_scopes=row[6],
-                        installed_at=row[7],
+                        enterprise_name=row[2],
+                        team_id=row[3],
+                        team_name=row[4],
+                        bot_token=row[5],
+                        bot_id=row[6],
+                        bot_user_id=row[7],
+                        bot_scopes=row[8],
+                        is_enterprise_install=row[9],
+                        installed_at=row[10],
                     )
                     return bot
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
+            self.logger.warning(message)
+            return None
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        return self.find_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+            is_enterprise_install=is_enterprise_install,
+        )
+
+    def find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
+        if is_enterprise_install or team_id is None:
+            team_id = ""
+
+        try:
+            with self.connect() as conn:
+                row = None
+                columns = """
+                    app_id,
+                    enterprise_id,
+                    enterprise_name,
+                    enterprise_url,
+                    team_id,
+                    team_name,
+                    bot_token,
+                    bot_id,
+                    bot_user_id,
+                    bot_scopes,
+                    user_id,
+                    user_token,
+                    user_scopes,
+                    incoming_webhook_url,
+                    incoming_webhook_channel,
+                    incoming_webhook_channel_id,
+                    incoming_webhook_configuration_url,
+                    is_enterprise_install,
+                    token_type,
+                    installed_at
+                """
+                if user_id is None:
+                    cur = conn.execute(
+                        f"""
+                        select
+                            {columns}
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                        order by installed_at desc
+                        limit 1
+                        """,
+                        [self.client_id, enterprise_id or "", team_id],
+                    )
+                    row = cur.fetchone()
+                else:
+                    cur = conn.execute(
+                        f"""
+                        select
+                            {columns}
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                            and
+                            user_id = ?
+                        order by installed_at desc
+                        limit 1
+                        """,
+                        [self.client_id, enterprise_id or "", team_id, user_id],
+                    )
+                    row = cur.fetchone()
+
+                if row is None:
+                    return None
+
+                result = "found" if row and len(row) > 0 else "not found"
+                self.logger.debug(
+                    f"find_installation's query result: {result} (database: {self.database})"
+                )
+                if row and len(row) > 0:
+                    installation = Installation(
+                        app_id=row[0],
+                        enterprise_id=row[1],
+                        enterprise_name=row[2],
+                        enterprise_url=row[3],
+                        team_id=row[4],
+                        team_name=row[5],
+                        bot_token=row[6],
+                        bot_id=row[7],
+                        bot_user_id=row[8],
+                        bot_scopes=row[9],
+                        user_id=row[10],
+                        user_token=row[11],
+                        user_scopes=row[12],
+                        incoming_webhook_url=row[13],
+                        incoming_webhook_channel=row[14],
+                        incoming_webhook_channel_id=row[15],
+                        incoming_webhook_configuration_url=row[16],
+                        is_enterprise_install=row[17],
+                        token_type=row[18],
+                        installed_at=row[19],
+                    )
+                    return installation
+                return None
+
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             self.logger.warning(message)
             return None

@@ -14,6 +14,20 @@ class AsyncInstallationStore:
         raise NotImplementedError()
 
     async def async_find_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str],
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
+        raise NotImplementedError()
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -> Optional[Installation]:
         raise NotImplementedError()
