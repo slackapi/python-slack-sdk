@@ -46,6 +46,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     current_session: Optional[WebSocketClientProtocol]
     current_session_monitor: Optional[Future]
 
+    auto_reconnect_enabled: bool
+    default_auto_reconnect_enabled: bool
+
     def __init__(
         self,
         app_token: str,
@@ -57,7 +60,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
-        self.auto_reconnect_enabled = auto_reconnect_enabled
+        self.default_auto_reconnect_enabled = auto_reconnect_enabled
+        self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
         self.wss_uri = None
         self.message_queue = Queue()
@@ -118,27 +122,25 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.current_session = await websockets.connect(
             uri=self.wss_uri, ping_interval=self.ping_interval,
         )
+        self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.logger.info("A new session has been established")
 
-        old_current_session_monitor = self.current_session_monitor
-        self.current_session_monitor = asyncio.ensure_future(
-            self.monitor_current_session()
-        )
+        if self.current_session_monitor is None:
+            self.current_session_monitor = asyncio.ensure_future(
+                self.monitor_current_session()
+            )
 
-        old_message_receiver = self.message_receiver
-        self.message_receiver = asyncio.ensure_future(self.receive_messages())
+        if self.message_receiver is None:
+            self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if old_session is not None:
             await old_session.close()
-            if old_current_session_monitor is not None:
-                old_current_session_monitor.cancel()
-            if old_message_receiver is not None:
-                old_message_receiver.cancel()
             self.logger.info("The old session has been abandoned")
 
     async def disconnect(self):
         if self.current_session is not None:
             await self.current_session.close()
+        self.auto_reconnect_enabled = False
 
     async def send_message(self, message: str):
         if self.logger.level <= logging.DEBUG:

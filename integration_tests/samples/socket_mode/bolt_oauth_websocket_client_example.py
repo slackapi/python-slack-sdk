@@ -14,9 +14,16 @@ import os
 
 from slack_bolt.app import App
 from slack_bolt.context import BoltContext
+from slack_bolt.oauth.oauth_settings import OAuthSettings
 
-bot_token = os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")
-app = App(signing_secret="will-be-removed-soon", token=bot_token)
+app = App(
+    signing_secret=os.environ["SLACK_SIGNING_SECRET"],
+    oauth_settings=OAuthSettings(
+        client_id=os.environ["SLACK_CLIENT_ID"],
+        client_secret=os.environ["SLACK_CLIENT_SECRET"],
+        scopes=os.environ["SLACK_SCOPES"].split(","),
+    )
+)
 
 
 @app.event("app_mention")
@@ -38,14 +45,18 @@ def hello_command(ack, body):
 
 
 if __name__ == "__main__":
-
     from bolt_adapter.websocket_client import SocketModeHandler
 
-    app_token = os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN")
-    SocketModeHandler(app, app_token).start()
+    app_token = os.environ.get("SLACK_APP_TOKEN")
+    SocketModeHandler(app, app_token).connect()
 
-    # export SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN=
-    # export SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN=
+    app.start()
+
+    # export SLACK_APP_TOKEN=
+    # export SLACK_SIGNING_SECRET=
+    # export SLACK_CLIENT_ID=
+    # export SLACK_CLIENT_SECRET=
+    # export SLACK_SCOPES=
     # pip install .[optional]
     # pip install slack_bolt
     # python integration_tests/samples/socket_mode/{this file name}.py

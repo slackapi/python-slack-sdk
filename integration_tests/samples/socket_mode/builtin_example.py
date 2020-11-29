@@ -15,7 +15,7 @@ from threading import Event
 from slack_sdk.web import WebClient
 from slack_sdk.socket_mode.response import SocketModeResponse
 from slack_sdk.socket_mode.request import SocketModeRequest
-from slack_sdk.socket_mode.websocket_client import SocketModeClient
+from slack_sdk.socket_mode.builtin import SocketModeClient
 
 client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),

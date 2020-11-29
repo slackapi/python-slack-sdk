@@ -31,11 +31,17 @@ def message(context: BoltContext, event: dict):
     )
 
 
+@app.command("/hello-socket-mode")
+def hello_command(ack, body):
+    user_id = body["user_id"]
+    ack(f"Hi <@{user_id}>!")
+
+
 async def main():
-    from bolt_adapter.aiohttp import SocketModeApp
+    from bolt_adapter.aiohttp import SocketModeHandler
 
     app_token = os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN")
-    await SocketModeApp(app, app_token).start_async()
+    await SocketModeHandler(app, app_token).start_async()
 
 
 if __name__ == "__main__":
