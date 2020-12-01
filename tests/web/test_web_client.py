@@ -311,3 +311,8 @@ class TestWebClient(unittest.TestCase):
         #                 # use the local filename if filename is missing
         # >               kwargs["filename"] = file.split(os.path.sep)[-1]
         # E               AttributeError: '_io.BytesIO' object has no attribute 'split'
+
+    def test_default_team_id(self):
+        client = WebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
+        resp = client.users_list(token="xoxb-users_list_pagination")
+        self.assertIsNone(resp["error"])

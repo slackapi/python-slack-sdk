@@ -147,3 +147,9 @@ class TestAsyncWebClient(unittest.TestCase):
         )
         resp = await client.api_test()
         self.assertTrue(resp["ok"])
+
+    @async_test
+    async def test_default_team_id(self):
+        client = AsyncWebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
+        resp = await client.users_list(token="xoxb-users_list_pagination")
+        self.assertIsNone(resp["error"])
