@@ -110,12 +110,19 @@ def _get_headers(
     return final_headers
 
 
+def _set_default_params(target: dict, default_params: dict) -> None:
+    for name, value in default_params.items():
+        if not name in target:
+            target[name] = value
+
+
 def _build_req_args(
     *,
     token: Optional[str],
     http_verb: str,
     files: dict,
-    data: Union[dict],
+    data: dict,
+    default_params: dict,
     params: dict,
     json: dict,  # skipcq: PYL-W0621
     headers: dict,
@@ -131,10 +138,15 @@ def _build_req_args(
 
     if data is not None and isinstance(data, dict):
         data = {k: v for k, v in data.items() if v is not None}
+        _set_default_params(data, default_params)
     if files is not None and isinstance(files, dict):
         files = {k: v for k, v in files.items() if v is not None}
+        _set_default_params(files, default_params)
     if params is not None and isinstance(params, dict):
         params = {k: v for k, v in params.items() if v is not None}
+        _set_default_params(params, default_params)
+    if json is not None and isinstance(json, dict):
+        _set_default_params(json, default_params)
 
     token: Optional[str] = token
     if params is not None and "token" in params:

@@ -52,6 +52,8 @@ class LegacyBaseClient:
         headers: Optional[dict] = None,
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
+        # for Org-Wide App installation
+        team_id: Optional[str] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -65,6 +67,9 @@ class LegacyBaseClient:
         self.headers["User-Agent"] = get_user_agent(
             user_agent_prefix, user_agent_suffix
         )
+        self.default_params = {}
+        if team_id is not None:
+            self.default_params["team_id"] = team_id
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
@@ -123,6 +128,7 @@ class LegacyBaseClient:
             http_verb=http_verb,
             files=files,
             data=data,
+            default_params=self.default_params,
             params=params,
             json=json,  # skipcq: PYL-W0621
             headers=headers,

@@ -170,3 +170,8 @@ class TestWebClient(unittest.TestCase):
         )
         resp = client.api_test()
         self.assertTrue(resp["ok"])
+
+    def test_default_team_id(self):
+        client = WebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
+        resp = client.users_list(token="xoxb-users_list_pagination")
+        self.assertIsNone(resp["error"])
