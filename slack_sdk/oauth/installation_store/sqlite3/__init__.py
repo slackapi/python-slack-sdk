@@ -166,8 +166,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_token,
                     installation.bot_id,
                     installation.bot_user_id,
-                    installation.is_enterprise_install,
                     ",".join(installation.bot_scopes),
+                    installation.is_enterprise_install,
                 ],
             )
             conn.execute(
