@@ -1,5 +1,4 @@
 import socket
-import socket
 import ssl
 import struct
 import time
@@ -18,7 +17,8 @@ from .internals import (
     _validate_sec_websocket_accept,
     _generate_sec_websocket_key,
     _to_readable_opcode,
-    _receive, _build_data_frame_for_sending,
+    _receive,
+    _build_data_frame_for_sending,
 )
 
 
@@ -27,7 +27,7 @@ class Connection:
     logger: Logger
     proxy: Optional[str]
     ping_interval: float
-    last_ping_pong_time: float
+    last_ping_pong_time: Optional[float]
     trace_enabled: bool
     session_id: str
     sock: Optional[ssl.SSLSocket]
@@ -44,6 +44,7 @@ class Connection:
         logger: Logger,
         proxy: Optional[str] = None,
         ping_interval: float = 10,  # seconds
+        receive_timeout: float = 5,
         trace_enabled: bool = False,
         on_message_listener: Optional[Callable[[str], None]] = None,
         on_error_listener: Optional[Callable[[Exception], None]] = None,
@@ -54,12 +55,13 @@ class Connection:
         self.proxy = proxy
 
         self.ping_interval = ping_interval
+        self.receive_timeout = receive_timeout
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
         self.sock = None
         self.sock_monitor = ThreadPoolExecutor(1)
         self.sock_monitor.submit(self._monitor_current_session)
-        self.last_ping_pong_time = time.time()
+        self.last_ping_pong_time = None
         self.message_receiver = ThreadPoolExecutor(1)
         self.message_receiver.submit(self._keep_receiving_messages)
 
@@ -70,10 +72,20 @@ class Connection:
     def connect(self) -> None:
         sock: Optional[ssl.SSLSocket] = None
         try:
-            parsed_url = urlparse(self.proxy or self.url)
+            url = (self.proxy or self.url).strip()
+            parsed_url = urlparse(url)
             sock = _open_new_socket(parsed_url.hostname)
-            address = (parsed_url.hostname, parsed_url.port or 443)
-            sock.connect(address)
+
+            hostname: str = parsed_url.hostname
+            port: int = parsed_url.port or (
+                443 if url.startswith("https://") or url.startswith("wss://") else 80
+            )
+            if self.trace_enabled:
+                self.logger.debug(
+                    f"Connecting to the address for handshake: {hostname}:{port}"
+                )
+
+            sock.connect((hostname, port))
 
             # WebSocket handshake
             try:
@@ -88,38 +100,57 @@ class Connection:
 
                 """
                 req: str = "\r\n".join([l.lstrip() for l in message.split("\n")])
-                self.logger.debug(f"Socket Mode handshake request:\n{req}")
+                if self.trace_enabled:
+                    self.logger.debug(
+                        f"Socket Mode handshake request (session id: {self.session_id}):\n{req}"
+                    )
                 sock.send(req.encode("utf-8"))
-                sock.settimeout(5)
+                sock.settimeout(self.receive_timeout)
                 status, headers, text = _parse_handshake_response(sock)
-                self.logger.debug(f"Socket Mode handshake response:\n{text}")
+                if self.trace_enabled:
+                    self.logger.debug(
+                        f"Socket Mode handshake response (session id: {self.session_id}):\n{text}"
+                    )
                 # HTTP/1.1 101 Switching Protocols
                 if status == 101:
                     if not _validate_sec_websocket_accept(sec_websocket_key, headers):
                         raise SlackClientNotConnectedError(
                             "Invalid response header detected in Socket Mode handshake response"
+                            f" (session id: {self.session_id})"
                         )
                     # set this successfully connected socket
                     self.sock = sock
                     self.ping(f"{self.session_id}:{time.time()}")
+                else:
+                    message = (
+                        f"Received an unexpected response for handshake "
+                        f"(status: {status}, response: {text}, session id: {self.session_id})"
+                    )
+                    self.logger.warning(message)
 
             except socket.error as e:
                 code: Optional[int] = None
                 if e.args and len(e.args) > 1 and isinstance(e.args[0], int):
                     code = e.args[0]
                 if code is not None:
-                    self.logger.exception(f"Error code: {code}", e)
+                    self.logger.exception(
+                        f"Error code: {code} (session id: {self.session_id}, error: {e})"
+                    )
                 raise
 
         except Exception as e:
-            self.logger.exception("Failed to establish a connection", e)
+            self.logger.exception(
+                f"Failed to establish a connection (session id: {self.session_id}, error: {e})"
+            )
             self.disconnect()
 
     def disconnect(self) -> None:
         if self.sock is not None:
             self.sock.close()
             self.sock = None
-        self.logger.info("The connection has been closed.")
+        self.logger.info(
+            f"The connection has been closed (session id: {self.session_id})"
+        )
 
     def run_forever(self) -> None:
         if not self.is_active():
@@ -135,21 +166,30 @@ class Connection:
         self.message_receiver.shutdown()
 
     def ping(self, payload: str = "") -> None:
-        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         if self.trace_enabled:
-            self.logger.debug(f"Ping (payload: {payload})")
+            self.logger.debug(
+                "Sending a ping data frame "
+                f"(session id: {self.session_id}, payload: {payload})"
+            )
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         self.sock.send(data)
 
     def pong(self, payload: Union[str, bytes] = "") -> None:
-        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         if self.trace_enabled:
-            self.logger.debug(f"Pong (payload: {payload})")
+            self.logger.debug(
+                "Sending a pong data frame "
+                f"(session id: {self.session_id}, payload: {payload})"
+            )
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         self.sock.send(data)
 
     def send(self, payload: str) -> None:
-        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         if self.trace_enabled:
-            self.logger.debug(f"Text (payload: {payload})")
+            self.logger.debug(
+                "Sending a text data frame "
+                f"(session id: {self.session_id}, payload: {payload})"
+            )
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         self.sock.send(data)
 
     # ---------------------------------------------------
@@ -160,14 +200,12 @@ class Connection:
                 if self.is_active():
                     header, data = _receive(self.sock)
                     if self.trace_enabled:
-                        opcode = (
-                            None
-                            if header is None
-                            else _to_readable_opcode(header.opcode)
-                        )
+                        opcode = _to_readable_opcode(header.opcode) if header else "-"
                         self.logger.debug(
-                            f"Received a new data frame (opcode: {opcode}, payload: {data})"
+                            "Received a new data frame "
+                            f"(session id: {self.session_id}, opcode: {opcode}, payload: {data})"
                         )
+
                     if header is not None:
                         if header.opcode == FrameHeader.OPCODE_PING:
                             self.pong(data)
@@ -192,11 +230,12 @@ class Connection:
                             self.disconnect()
                         else:
                             opcode = (
-                                None
-                                if header is None
-                                else _to_readable_opcode(header.opcode)
+                                _to_readable_opcode(header.opcode) if header else "-"
                             )
-                            message = f"Received an unsupported data frame (opcode: {opcode}, payload: {data})"
+                            message = (
+                                "Received an unsupported data frame "
+                                f"(session id: {self.session_id}, opcode: {opcode}, payload: {data})"
+                            )
                             self.logger.warning(message)
                 else:
                     time.sleep(1)
@@ -213,13 +252,21 @@ class Connection:
             time.sleep(self.ping_interval)
             try:
                 if self.sock is not None:
-                    if time.time() - self.last_ping_pong_time > self.ping_interval * 2:
-                        self.logger.info("The connection seems to already closed.")
+                    is_stale = (
+                        self.last_ping_pong_time is not None
+                        and time.time() - self.last_ping_pong_time
+                        > self.ping_interval * 2
+                    )
+                    if is_stale:
+                        self.logger.info(
+                            "The connection seems to already closed."
+                            f" (session id: {self.session_id})"
+                        )
                         self.disconnect()
                     else:
                         self.ping(f"{self.session_id}:{time.time()}")
             except Exception as e:
                 self.logger.exception(
                     "Failed to check the state of sock "
-                    f"(error: {type(e).__name__}, message: {e})"
+                    f"(session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
                 )
