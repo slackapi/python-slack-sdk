@@ -99,7 +99,7 @@ class Connection:
                     Sec-WebSocket-Version: 13
 
                 """
-                req: str = "\r\n".join([l.lstrip() for l in message.split("\n")])
+                req: str = "\r\n".join([line.lstrip() for line in message.split("\n")])
                 if self.trace_enabled:
                     self.logger.debug(
                         f"Socket Mode handshake request (session id: {self.session_id}):\n{req}"
@@ -239,7 +239,7 @@ class Connection:
                             self.logger.warning(message)
                 else:
                     time.sleep(1)
-            except socket.timeout as _:
+            except socket.timeout:
                 time.sleep(0.01)
             except Exception as e:
                 if self.on_error_listener is not None:

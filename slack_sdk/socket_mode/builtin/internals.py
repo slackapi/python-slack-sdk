@@ -109,13 +109,13 @@ def _receive(sock: ssl.SSLSocket) -> Tuple[Optional[FrameHeader], bytes]:
 
             # https://tools.ietf.org/html/rfc6455#section-5.2
             b1, b2 = bs[0], bs[1]
-            l = b2 & 0b01111111
-            length = l
+            _length = b2 & 0b01111111
+            length = _length
             idx_after_length = 2
-            if l == 126:
+            if _length == 126:
                 length = struct.unpack("!H", bytes(bs[2:4]))[0]
                 idx_after_length = 4
-            elif l == 127:
+            elif _length == 127:
                 length = struct.unpack("!H", bytes(bs[2:10]))[0]
                 idx_after_length = 10
 
@@ -130,7 +130,8 @@ def _receive(sock: ssl.SSLSocket) -> Tuple[Optional[FrameHeader], bytes]:
             )
             if header.masked > 0:
                 if mask_key is None:
-                    mask_key = bs[idx_after_length : idx_after_length + 4]
+                    idx1, idx2 = idx_after_length, idx_after_length + 4
+                    mask_key = bs[idx1:idx2]
                     idx_after_length += 4
 
         received_data = bs[idx_after_length:] if idx_after_length > 0 else bs
