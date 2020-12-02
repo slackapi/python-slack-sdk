@@ -981,9 +981,11 @@ class PlainTextInputElement(InputInteractiveElement):
         **others: dict,
     ):
         """
-        An element which lets users easily select a date from a calendar style UI.
-        Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
-        https://api.slack.com/reference/block-kit/block-elements#datepicker
+        A plain-text input, similar to the HTML <input> tag, creates a field
+        where a user can enter freeform data. It can appear as a single-line
+        field or a larger textarea using the multiline flag. Plain-text input
+        elements can be used inside of SectionBlocks and ActionsBlocks.
+        https://api.slack.com/reference/block-kit/block-elements#input
         """
         super().__init__(
             type=self.type,
