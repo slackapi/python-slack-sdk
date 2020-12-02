@@ -5,7 +5,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slack-sdk/](https://slack.dev/python-slack-sdk/)**
 
 [![pypi package][pypi-image]][pypi-url]
-[![Build Status][travis-image]][travis-url]
+[![Build Status][build-image]][build-url]
 [![Python Version][python-version]][pypi-url]
 [![codecov][codecov-image]][codecov-url]
 [![contact][contact-image]][contact-url]
@@ -269,8 +269,8 @@ Visit the [Slack Community][slack-community] for getting help using Slack Develo
 [pypi-image]: https://badge.fury.io/py/slack-sdk.svg
 [pypi-url]: https://pypi.org/project/slack-sdk/
 [python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
-[travis-image]: https://travis-ci.org/slackapi/python-slack-sdk.svg?branch=main
-[travis-url]: https://travis-ci.org/slackapi/python-slack-sdk
+[build-image]: https://github.com/slackapi/python-slack-sdk/workflows/CI%20Build/badge.svg
+[build-url]: https://github.com/slackapi/python-slack-sdk/actions?query=workflow%3A%22CI+Build%22
 [codecov-image]: https://codecov.io/gh/slackapi/python-slack-sdk/branch/main/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/slackapi/python-slack-sdk
 [contact-image]: https://img.shields.io/badge/contact-support-green.svg
