@@ -112,7 +112,7 @@ def _get_headers(
 
 def _set_default_params(target: dict, default_params: dict) -> None:
     for name, value in default_params.items():
-        if not name in target:
+        if name not in target:
             target[name] = value
 
 
