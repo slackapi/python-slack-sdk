@@ -82,7 +82,8 @@ class Connection:
             )
             if self.trace_enabled:
                 self.logger.debug(
-                    f"Connecting to the address for handshake: {hostname}:{port}"
+                    f"Connecting to the address for handshake: {hostname}:{port} "
+                    f"(session id: {self.session_id})"
                 )
 
             sock.connect((hostname, port))
@@ -165,8 +166,10 @@ class Connection:
         self.sock_monitor.shutdown()
         self.message_receiver.shutdown()
 
-    def ping(self, payload: str = "") -> None:
+    def ping(self, payload: Union[str, bytes] = "") -> None:
         if self.trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode("utf-8")
             self.logger.debug(
                 "Sending a ping data frame "
                 f"(session id: {self.session_id}, payload: {payload})"
@@ -176,6 +179,8 @@ class Connection:
 
     def pong(self, payload: Union[str, bytes] = "") -> None:
         if self.trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode("utf-8")
             self.logger.debug(
                 "Sending a pong data frame "
                 f"(session id: {self.session_id}, payload: {payload})"
@@ -185,6 +190,8 @@ class Connection:
 
     def send(self, payload: str) -> None:
         if self.trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode("utf-8")
             self.logger.debug(
                 "Sending a text data frame "
                 f"(session id: {self.session_id}, payload: {payload})"
@@ -201,9 +208,10 @@ class Connection:
                     header, data = _receive(self.sock)
                     if self.trace_enabled:
                         opcode = _to_readable_opcode(header.opcode) if header else "-"
+                        payload = data.decode("utf-8") if data is not None else ""
                         self.logger.debug(
                             "Received a new data frame "
-                            f"(session id: {self.session_id}, opcode: {opcode}, payload: {data})"
+                            f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
                         )
 
                     if header is not None:
@@ -232,9 +240,10 @@ class Connection:
                             opcode = (
                                 _to_readable_opcode(header.opcode) if header else "-"
                             )
+                            payload = data.decode("utf-8") if data is not None else ""
                             message = (
                                 "Received an unsupported data frame "
-                                f"(session id: {self.session_id}, opcode: {opcode}, payload: {data})"
+                                f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
                             )
                             self.logger.warning(message)
                 else:
@@ -259,12 +268,19 @@ class Connection:
                     )
                     if is_stale:
                         self.logger.info(
-                            "The connection seems to already closed."
+                            "The connection seems to be stale. Disconnecting..."
                             f" (session id: {self.session_id})"
                         )
                         self.disconnect()
+                        break
                     else:
                         self.ping(f"{self.session_id}:{time.time()}")
+                else:
+                    self.logger.info(
+                        "This connection is already closed."
+                        f" (session id: {self.session_id})"
+                    )
+                    break
             except Exception as e:
                 self.logger.exception(
                     "Failed to check the state of sock "
