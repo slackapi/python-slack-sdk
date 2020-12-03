@@ -14,11 +14,6 @@ from .frame_header import FrameHeader
 
 def _open_new_socket(server_hostname: str) -> ssl.SSLSocket:
     sock = socket.socket(family=ssl.AF_INET, type=ssl.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-    sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPINTVL, 10)
-    sock.setsockopt(socket.SOL_TCP, socket.TCP_KEEPCNT, 3)
-
     sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
         sock,
         do_handshake_on_connect=True,
