@@ -3,6 +3,7 @@ import logging
 from queue import Queue
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
+from threading import Lock
 from typing import Dict, Union, Any, Optional, List, Callable
 
 from slack_sdk.errors import SlackApiError
@@ -37,6 +38,8 @@ class BaseSocketModeClient:
     message_processor: ThreadPoolExecutor
     message_workers: ThreadPoolExecutor
 
+    connect_operation_lock: Lock
+
     def issue_new_wss_url(self) -> str:
         try:
             response = self.web_client.apps_connections_open(app_token=self.app_token)
@@ -45,6 +48,9 @@ class BaseSocketModeClient:
             self.logger.error(f"Failed to retrieve Socket Mode URL: {e}")
             raise e
 
+    def is_connected(self) -> bool:
+        return False
+
     def connect(self) -> None:
         raise NotImplementedError()
 
@@ -52,8 +58,13 @@ class BaseSocketModeClient:
         raise NotImplementedError()
 
     def connect_to_new_endpoint(self):
-        self.wss_uri = self.issue_new_wss_url()
-        self.connect()
+        try:
+            self.connect_operation_lock.acquire(blocking=True, timeout=5)
+            if not self.is_connected():
+                self.wss_uri = self.issue_new_wss_url()
+                self.connect()
+        finally:
+            self.connect_operation_lock.release()
 
     def close(self) -> None:
         self.disconnect()
