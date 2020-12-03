@@ -13,7 +13,7 @@ from .frame_header import FrameHeader
 
 
 def _open_new_socket(server_hostname: str) -> ssl.SSLSocket:
-    sock = socket.socket(family=ssl.AF_INET, type=ssl.SOCK_STREAM)
+    sock = socket.socket(type=ssl.SOCK_STREAM)
     sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
         sock,
         do_handshake_on_connect=True,
