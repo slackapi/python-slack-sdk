@@ -184,7 +184,6 @@ class SocketModeClient(BaseSocketModeClient):
 
     def disconnect(self) -> None:
         self.current_session.close()
-        self.auto_reconnect_enabled = False
 
     def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
@@ -194,6 +193,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.current_session.send(message)
 
     def close(self):
+        self.auto_reconnect_enabled = False
         self.disconnect()
         self.current_app_monitor.shutdown()
         self.current_app_executor.shutdown()

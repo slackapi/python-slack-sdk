@@ -57,10 +57,10 @@ class BaseSocketModeClient:
     def disconnect(self) -> None:
         raise NotImplementedError()
 
-    def connect_to_new_endpoint(self):
+    def connect_to_new_endpoint(self, force: bool = False):
         try:
             self.connect_operation_lock.acquire(blocking=True, timeout=5)
-            if not self.is_connected():
+            if force or not self.is_connected():
                 self.wss_uri = self.issue_new_wss_url()
                 self.connect()
         finally:
@@ -105,7 +105,7 @@ class BaseSocketModeClient:
             )
         try:
             if message.get("type") == "disconnect":
-                self.connect_to_new_endpoint()
+                self.connect_to_new_endpoint(force=True)
                 return
 
             for listener in self.message_listeners:

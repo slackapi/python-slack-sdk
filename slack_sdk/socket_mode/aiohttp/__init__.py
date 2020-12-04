@@ -174,8 +174,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.logger.info("The old session has been abandoned")
 
     async def disconnect(self):
-        await self.current_session.close()
-        self.auto_reconnect_enabled = False
+        if self.current_session is not None:
+            await self.current_session.close()
+        self.logger.info("The session has been abandoned")
 
     async def send_message(self, message: str):
         if self.logger.level <= logging.DEBUG:
@@ -183,6 +184,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         await self.current_session.send_str(message)
 
     async def close(self):
+        self.auto_reconnect_enabled = False
         self.disconnect()
         self.message_processor.cancel()
         if self.current_session_monitor is not None:
