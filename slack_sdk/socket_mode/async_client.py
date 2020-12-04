@@ -15,9 +15,6 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
 from slack_sdk.web.async_client import AsyncWebClient
 
-# Exposing as the default implementation
-from .aiohttp import SocketModeClient  # noqa
-
 
 class AsyncBaseSocketModeClient:
     logger: Logger
