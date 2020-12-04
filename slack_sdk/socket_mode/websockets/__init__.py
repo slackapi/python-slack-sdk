@@ -140,7 +140,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def disconnect(self):
         if self.current_session is not None:
             await self.current_session.close()
-        self.auto_reconnect_enabled = False
 
     async def send_message(self, message: str):
         if self.logger.level <= logging.DEBUG:
@@ -148,6 +147,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         await self.current_session.send(message)
 
     async def close(self):
+        self.auto_reconnect_enabled = False
         self.disconnect()
         self.message_processor.cancel()
         if self.current_session_monitor is not None:

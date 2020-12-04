@@ -149,6 +149,8 @@ class Connection:
         if self.sock is not None:
             self.sock.close()
             self.sock = None
+            self.sock_monitor.shutdown()
+            self.message_receiver.shutdown()
         self.logger.info(
             f"The connection has been closed (session id: {self.session_id})"
         )
@@ -163,8 +165,6 @@ class Connection:
 
     def close(self) -> None:
         self.disconnect()
-        self.sock_monitor.shutdown()
-        self.message_receiver.shutdown()
 
     def ping(self, payload: Union[str, bytes] = "") -> None:
         if self.trace_enabled:
@@ -202,6 +202,7 @@ class Connection:
     # ---------------------------------------------------
 
     def _keep_receiving_messages(self):
+        repeated_messages = {"payload": 0}
         while True:
             try:
                 if self.is_active():
@@ -209,10 +210,19 @@ class Connection:
                     if self.trace_enabled:
                         opcode = _to_readable_opcode(header.opcode) if header else "-"
                         payload = data.decode("utf-8") if data is not None else ""
-                        self.logger.debug(
-                            "Received a new data frame "
-                            f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
-                        )
+                        count: Optional[int] = repeated_messages.get(payload)
+                        if count is None:
+                            count = 1
+                        else:
+                            count += 1
+                        repeated_messages = {payload: count}
+                        if count < 5:
+                            # if so many same payloads came in, the trace logging should be skipped.
+                            # e.g., after receiving "UNAUTHENTICATED: cache_error", many "opcode: -, payload: "
+                            self.logger.debug(
+                                "Received a new data frame "
+                                f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
+                            )
 
                     if header is not None:
                         if header.opcode == FrameHeader.OPCODE_PING:
