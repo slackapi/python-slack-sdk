@@ -52,7 +52,7 @@ async def onboarding_message(**payload):
     user_id = payload["data"]["user"]["id"]
 
     # Open a DM with the new user.
-    response = web_client.im_open(user_id)
+    response = web_client.conversations_open(users=user_id)
     channel = response["channel"]["id"]
 
     # Post the onboarding message.
