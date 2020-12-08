@@ -1,12 +1,13 @@
 import json
 import logging
-from queue import Queue
+from queue import Queue, Empty
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from threading import Lock
 from typing import Dict, Union, Any, Optional, List, Callable
 
 from slack_sdk.errors import SlackApiError
+from slack_sdk.socket_mode.interval_runner import IntervalRunner
 from slack_sdk.socket_mode.listeners import (
     WebSocketMessageListener,
     SocketModeRequestListener,
@@ -35,7 +36,7 @@ class BaseSocketModeClient:
         ]
     ]
 
-    message_processor: ThreadPoolExecutor
+    message_processor: IntervalRunner
     message_workers: ThreadPoolExecutor
 
     connect_operation_lock: Lock
@@ -61,8 +62,10 @@ class BaseSocketModeClient:
         try:
             self.connect_operation_lock.acquire(blocking=True, timeout=5)
             if force or not self.is_connected():
+                self.logger.info(f"Connecting to a new endpoint...")
                 self.wss_uri = self.issue_new_wss_url()
                 self.connect()
+                self.logger.info(f"Connected to a new endpoint...")
         finally:
             self.connect_operation_lock.release()
 
@@ -88,14 +91,24 @@ class BaseSocketModeClient:
             )
 
     def process_message(self):
-        raw_message = self.message_queue.get()
+        try:
+            raw_message = self.message_queue.get(timeout=5)
+            if self.logger.level <= logging.DEBUG:
+                self.logger.debug(
+                    f"A message dequeued (current queue size: {self.message_queue.qsize()})"
+                )
 
-        def _run_message_listeners():
             if raw_message is not None and raw_message.startswith("{"):
                 message: dict = json.loads(raw_message)
-                self.run_message_listeners(message, raw_message)
+                if message.get("type") == "disconnect":
+                    self.connect_to_new_endpoint(force=True)
+                else:
+                    def _run_message_listeners():
+                        self.run_message_listeners(message, raw_message)
 
-        self.message_workers.submit(_run_message_listeners)
+                    self.message_workers.submit(_run_message_listeners)
+        except Empty:
+            pass
 
     def run_message_listeners(self, message: dict, raw_message: str) -> None:
         type, envelope_id = message.get("type"), message.get("envelope_id")
@@ -104,6 +117,7 @@ class BaseSocketModeClient:
                 f"Message processing started (type: {type}, envelope_id: {envelope_id})"
             )
         try:
+            # just in case, adding the same logic to reconnect here
             if message.get("type") == "disconnect":
                 self.connect_to_new_endpoint(force=True)
                 return

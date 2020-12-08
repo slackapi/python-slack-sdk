@@ -1,5 +1,4 @@
 import logging
-import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue
@@ -10,6 +9,7 @@ import websocket
 from websocket import WebSocketApp
 
 from slack_sdk.socket_mode.client import BaseSocketModeClient
+from slack_sdk.socket_mode.interval_runner import IntervalRunner
 from slack_sdk.socket_mode.listeners import (
     WebSocketMessageListener,
     SocketModeRequestListener,
@@ -37,13 +37,13 @@ class SocketModeClient(BaseSocketModeClient):
         ]
     ]
 
-    current_app_executor: ThreadPoolExecutor
-    current_app_monitor: ThreadPoolExecutor
+    current_app_monitor: IntervalRunner
     current_app_monitor_started: bool
-    message_processor: ThreadPoolExecutor
+    message_processor: IntervalRunner
     message_workers: ThreadPoolExecutor
 
     current_session: Optional[WebSocketApp]
+    current_session_runner: IntervalRunner
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
@@ -89,14 +89,14 @@ class SocketModeClient(BaseSocketModeClient):
         self.socket_mode_request_listeners = []
 
         self.current_session = None
-        self.current_app_monitor = ThreadPoolExecutor(1)
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
+
         self.current_app_monitor_started = False
-        self.current_app_executor = ThreadPoolExecutor(1)
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.connect_operation_lock = Lock()
 
-        self.message_processor = ThreadPoolExecutor(1)
-        self.message_processor.submit(self.process_messages)
+        self.message_processor = IntervalRunner(self.process_messages, 0.001).start()
         self.message_workers = ThreadPoolExecutor(max_workers=concurrency)
 
         # NOTE: only global settings is provided by the library
@@ -146,6 +146,7 @@ class SocketModeClient(BaseSocketModeClient):
                 listener(ws)
 
         old_session: Optional[WebSocketApp] = self.current_session
+
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
             on_open=on_open,
@@ -155,41 +156,14 @@ class SocketModeClient(BaseSocketModeClient):
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
-        def run_current_session():
-            self.current_session.run_forever(
-                ping_interval=self.ping_interval,
-                http_proxy_host=self.http_proxy_host,
-                http_proxy_port=self.http_proxy_port,
-                http_proxy_auth=self.http_proxy_auth,
-                proxy_type=self.proxy_type,
-            )
-
-        def monitor_current_session():
-            while True:
-                time.sleep(self.ping_interval)
-                try:
-                    if self.auto_reconnect_enabled and (
-                        self.current_session is None
-                        or self.current_session.sock is None
-                    ):
-                        self.logger.info(
-                            "The session seems to be already closed. Going to reconnect..."
-                        )
-                        self.connect_to_new_endpoint()
-                except Exception as e:
-                    self.logger.error(
-                        "Failed to check the current session or reconnect to the server "
-                        f"(error: {type(e).__name__}, message: {e})"
-                    )
-
-        self.current_app_executor.submit(run_current_session)
         if not self.current_app_monitor_started:
-            self.current_app_monitor.submit(monitor_current_session)
             self.current_app_monitor_started = True
+            self.current_app_monitor.start()
 
-        self.logger.info("A new session has been established")
         if old_session is not None:
             old_session.close()
+
+        self.logger.info("A new session has been established")
 
     def disconnect(self) -> None:
         self.current_session.close()
@@ -203,6 +177,37 @@ class SocketModeClient(BaseSocketModeClient):
         self.auto_reconnect_enabled = False
         self.disconnect()
         self.current_app_monitor.shutdown()
-        self.current_app_executor.shutdown()
         self.message_processor.shutdown()
         self.message_workers.shutdown()
+
+    def _run_current_session(self):
+        if self.current_session is not None:
+            try:
+                self.logger.info("Starting to receive messages from a new connection")
+                self.current_session.run_forever(
+                    ping_interval=self.ping_interval,
+                    http_proxy_host=self.http_proxy_host,
+                    http_proxy_port=self.http_proxy_port,
+                    http_proxy_auth=self.http_proxy_auth,
+                    proxy_type=self.proxy_type,
+                )
+                self.logger.info("Stopped receiving messages from a connection")
+            except Exception as e:
+                self.logger.exception(e)
+
+    def _monitor_current_session(self):
+        if self.current_app_monitor_started:
+            try:
+                if self.auto_reconnect_enabled and (
+                    self.current_session is None
+                    or self.current_session.sock is None
+                ):
+                    self.logger.info(
+                        "The session seems to be already closed. Going to reconnect..."
+                    )
+                    self.connect_to_new_endpoint()
+            except Exception as e:
+                self.logger.error(
+                    "Failed to check the current session or reconnect to the server "
+                    f"(error: {type(e).__name__}, message: {e})"
+                )

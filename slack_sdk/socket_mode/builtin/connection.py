@@ -2,9 +2,7 @@ import socket
 import ssl
 import struct
 import time
-from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
-from threading import Event
 from typing import Optional, Callable, Union
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -22,17 +20,24 @@ from .internals import (
 )
 
 
+class ConnectionState:
+    terminated: bool
+
+    def __init__(self):
+        self.terminated = False
+
+
 class Connection:
     url: str
     logger: Logger
     proxy: Optional[str]
-    ping_interval: float
-    last_ping_pong_time: Optional[float]
+
     trace_enabled: bool
+    ping_pong_trace_enabled: bool
+    last_ping_pong_time: Optional[float]
+
     session_id: str
     sock: Optional[ssl.SSLSocket]
-    sock_monitor: ThreadPoolExecutor
-    message_receiver: ThreadPoolExecutor
 
     on_message_listener: Optional[Callable[[str], None]]
     on_error_listener: Optional[Callable[[Exception], None]]
@@ -46,6 +51,7 @@ class Connection:
         ping_interval: float = 10,  # seconds
         receive_timeout: float = 5,
         trace_enabled: bool = False,
+        ping_pong_trace_enabled: bool = False,
         on_message_listener: Optional[Callable[[str], None]] = None,
         on_error_listener: Optional[Callable[[Exception], None]] = None,
         on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
@@ -58,12 +64,9 @@ class Connection:
         self.receive_timeout = receive_timeout
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
-        self.sock = None
-        self.sock_monitor = ThreadPoolExecutor(1)
-        self.sock_monitor.submit(self._monitor_current_session)
+        self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
-        self.message_receiver = ThreadPoolExecutor(1)
-        self.message_receiver.submit(self._keep_receiving_messages)
+        self.sock = None
 
         self.on_message_listener = on_message_listener
         self.on_error_listener = on_error_listener
@@ -149,16 +152,9 @@ class Connection:
         if self.sock is not None:
             self.sock.close()
             self.sock = None
-            self.sock_monitor.shutdown()
-            self.message_receiver.shutdown()
         self.logger.info(
             f"The connection has been closed (session id: {self.session_id})"
         )
-
-    def run_forever(self) -> None:
-        if not self.is_active():
-            self.connect()
-        Event().wait()
 
     def is_active(self) -> bool:
         return self.sock is not None
@@ -167,7 +163,7 @@ class Connection:
         self.disconnect()
 
     def ping(self, payload: Union[str, bytes] = "") -> None:
-        if self.trace_enabled:
+        if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode("utf-8")
             self.logger.debug(
@@ -178,7 +174,7 @@ class Connection:
         self.sock.send(data)
 
     def pong(self, payload: Union[str, bytes] = "") -> None:
-        if self.trace_enabled:
+        if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode("utf-8")
             self.logger.debug(
@@ -199,11 +195,39 @@ class Connection:
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         self.sock.send(data)
 
-    # ---------------------------------------------------
+    def check_state(self) -> None:
+        try:
+            if self.sock is not None:
+                is_stale = (
+                    self.last_ping_pong_time is not None
+                    and time.time() - self.last_ping_pong_time
+                    > self.ping_interval * 2
+                )
+                if is_stale:
+                    self.logger.info(
+                        "The connection seems to be stale. Disconnecting..."
+                        f" (session id: {self.session_id})"
+                    )
+                    self.disconnect()
+                else:
+                    self.ping(f"{self.session_id}:{time.time()}")
+            else:
+                self.logger.debug(
+                    "This connection is already closed."
+                    f" (session id: {self.session_id})"
+                )
+        except Exception as e:
+            self.logger.exception(
+                "Failed to check the state of sock "
+                f"(session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
+            )
 
-    def _keep_receiving_messages(self):
+    def run_until_completion(self, state: ConnectionState) -> None:
         repeated_messages = {"payload": 0}
-        while True:
+        ping_count = 0
+        pong_count = 0
+        ping_pong_log_summary_size = 1000
+        while not state.terminated:
             try:
                 if self.is_active():
                     header, data = _receive(self.sock)
@@ -216,7 +240,38 @@ class Connection:
                         else:
                             count += 1
                         repeated_messages = {payload: count}
-                        if count < 5:
+                        if (
+                            not self.ping_pong_trace_enabled
+                            and header is not None
+                            and header.opcode is not None
+                        ):
+                            if header.opcode == FrameHeader.OPCODE_PING:
+                                ping_count += 1
+                                if ping_count % ping_pong_log_summary_size == 0:
+                                    self.logger.debug(
+                                        f"Received {ping_pong_log_summary_size} ping data frame "
+                                        f"(session id: {self.session_id})"
+                                    )
+                                    ping_count = 0
+                            if header.opcode == FrameHeader.OPCODE_PONG:
+                                pong_count += 1
+                                if pong_count % ping_pong_log_summary_size == 0:
+                                    self.logger.debug(
+                                        f"Received {ping_pong_log_summary_size} pong data frame "
+                                        f"(session id: {self.session_id})"
+                                    )
+                                    pong_count = 0
+
+                        ping_pong_to_skip = (
+                            header is not None
+                            and header.opcode is not None
+                            and (
+                                header.opcode == FrameHeader.OPCODE_PING
+                                or header.opcode == FrameHeader.OPCODE_PONG
+                            )
+                            and not self.ping_pong_trace_enabled
+                        )
+                        if not ping_pong_to_skip and count < 5:
                             # if so many same payloads came in, the trace logging should be skipped.
                             # e.g., after receiving "UNAUTHENTICATED: cache_error", many "opcode: -, payload: "
                             self.logger.debug(
@@ -246,6 +301,7 @@ class Connection:
                                 else:
                                     self.on_close_listener(1005, "")
                             self.disconnect()
+                            state.terminated = True
                         else:
                             opcode = (
                                 _to_readable_opcode(header.opcode) if header else "-"
@@ -257,7 +313,7 @@ class Connection:
                             )
                             self.logger.warning(message)
                 else:
-                    time.sleep(1)
+                    time.sleep(0.2)
             except socket.timeout:
                 time.sleep(0.01)
             except Exception as e:
@@ -266,33 +322,4 @@ class Connection:
                 else:
                     self.logger.exception(e)
 
-    def _monitor_current_session(self):
-        while True:
-            time.sleep(self.ping_interval)
-            try:
-                if self.sock is not None:
-                    is_stale = (
-                        self.last_ping_pong_time is not None
-                        and time.time() - self.last_ping_pong_time
-                        > self.ping_interval * 2
-                    )
-                    if is_stale:
-                        self.logger.info(
-                            "The connection seems to be stale. Disconnecting..."
-                            f" (session id: {self.session_id})"
-                        )
-                        self.disconnect()
-                        break
-                    else:
-                        self.ping(f"{self.session_id}:{time.time()}")
-                else:
-                    self.logger.info(
-                        "This connection is already closed."
-                        f" (session id: {self.session_id})"
-                    )
-                    break
-            except Exception as e:
-                self.logger.exception(
-                    "Failed to check the state of sock "
-                    f"(session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
-                )
+        state.terminated = True

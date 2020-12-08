@@ -1,12 +1,10 @@
 import logging
-import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue
 from threading import Lock
 from typing import Union, Optional, List, Callable
 
-from .connection import Connection
 from slack_sdk.socket_mode.client import BaseSocketModeClient
 from slack_sdk.socket_mode.listeners import (
     WebSocketMessageListener,
@@ -14,6 +12,8 @@ from slack_sdk.socket_mode.listeners import (
 )
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web import WebClient
+from .connection import Connection, ConnectionState
+from ..interval_runner import IntervalRunner
 
 
 class SocketModeClient(BaseSocketModeClient):
@@ -35,14 +35,15 @@ class SocketModeClient(BaseSocketModeClient):
         ]
     ]
 
-    current_app_executor: ThreadPoolExecutor
-    current_app_monitor: ThreadPoolExecutor
+    current_session: Optional[Connection]
+    current_session_state: ConnectionState
+    current_session_runner: IntervalRunner
+
+    current_app_monitor: IntervalRunner
     current_app_monitor_started: bool
 
-    message_processor: ThreadPoolExecutor
-    message_workers: ThreadPoolExecutor
-
-    current_session: Optional[Connection]
+    message_processor: IntervalRunner
+    message_workers: IntervalRunner
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
@@ -61,6 +62,7 @@ class SocketModeClient(BaseSocketModeClient):
         web_client: Optional[WebClient] = None,
         auto_reconnect_enabled: bool = True,
         trace_enabled: bool = False,
+        ping_pong_trace_enabled: bool = False,
         ping_interval: float = 10,
         concurrency: int = 10,
         proxy: Optional[str] = None,
@@ -74,6 +76,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.trace_enabled = trace_enabled
+        self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.ping_interval = ping_interval
         self.wss_uri = self.issue_new_wss_url()
         self.message_queue = Queue()
@@ -81,14 +84,15 @@ class SocketModeClient(BaseSocketModeClient):
         self.socket_mode_request_listeners = []
 
         self.current_session = None
-        self.current_app_monitor = ThreadPoolExecutor(1)
+        self.current_session_state = ConnectionState()
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
+
         self.current_app_monitor_started = False
-        self.current_app_executor = ThreadPoolExecutor(1)
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.connect_operation_lock = Lock()
 
-        self.message_processor = ThreadPoolExecutor(1)
-        self.message_processor.submit(self.process_messages)
+        self.message_processor = IntervalRunner(self.process_messages, 0.001).start()
         self.message_workers = ThreadPoolExecutor(max_workers=concurrency)
 
         self.proxy = proxy
@@ -103,84 +107,36 @@ class SocketModeClient(BaseSocketModeClient):
         return None
 
     def is_connected(self) -> bool:
-        return self.current_session is not None \
-               and self.current_session.is_active()
+        return self.current_session is not None and self.current_session.is_active()
 
     def connect(self) -> None:
-        def on_message(message: str):
-            if self.logger.level <= logging.DEBUG:
-                self.logger.debug(f"on_message invoked: (message: {message})")
-            self.enqueue_message(message)
-            for listener in self.on_message_listeners:
-                listener(message)
-
-        def on_error(error: Exception):
-            self.logger.error(
-                f"on_error invoked (session id: {self.session_id()}, "
-                f"error: {type(error).__name__}, message: {error})",
-                error,
-            )
-            for listener in self.on_error_listeners:
-                listener(error)
-
-        def on_close(code: int, reason: Optional[str] = None):
-            if self.logger.level <= logging.DEBUG:
-                self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
-            if self.auto_reconnect_enabled:
-                self.logger.info(
-                    "Received CLOSE event. Going to reconnect... "
-                    f"(session id: {self.session_id()})"
-                )
-                self.connect_to_new_endpoint()
-            for listener in self.on_close_listeners:
-                listener(code, reason)
-
         old_session: Optional[Connection] = self.current_session
+
         self.current_session = Connection(
             url=self.wss_uri,
             logger=self.logger,
             ping_interval=self.ping_interval,
             trace_enabled=self.trace_enabled,
+            ping_pong_trace_enabled=self.ping_pong_trace_enabled,
             proxy=self.proxy,
-            on_message_listener=on_message,
-            on_error_listener=on_error,
-            on_close_listener=on_close,
+            on_message_listener=self._on_message,
+            on_error_listener=self._on_error,
+            on_close_listener=self._on_close,
         )
         self.current_session.connect()
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
-        def run_current_session():
-            self.current_session.run_forever()
+        if old_session is not None:
+            old_session.close()
+            self.current_session_state.terminated = True
 
-        def monitor_current_session():
-            while True:
-                time.sleep(self.ping_interval)
-                try:
-                    if self.auto_reconnect_enabled and (
-                        self.current_session is None
-                        or not self.current_session.is_active()
-                    ):
-                        self.logger.info(
-                            "The session seems to be already closed. Going to reconnect... "
-                            f"(session id: {self.session_id()})"
-                        )
-                        self.connect_to_new_endpoint()
-                except Exception as e:
-                    self.logger.error(
-                        "Failed to check the current session or reconnect to the server "
-                        f"(session id: {self.session_id()}, error: {type(e).__name__}, message: {e})"
-                    )
-
-        self.current_app_executor.submit(run_current_session)
         if not self.current_app_monitor_started:
-            self.current_app_monitor.submit(monitor_current_session)
             self.current_app_monitor_started = True
+            self.current_app_monitor.start()
 
         self.logger.info(
             f"A new session has been established (session id: {self.session_id()})"
         )
-        if old_session is not None:
-            old_session.close()
 
     def disconnect(self) -> None:
         self.current_session.close()
@@ -196,6 +152,66 @@ class SocketModeClient(BaseSocketModeClient):
         self.auto_reconnect_enabled = False
         self.disconnect()
         self.current_app_monitor.shutdown()
-        self.current_app_executor.shutdown()
         self.message_processor.shutdown()
         self.message_workers.shutdown()
+
+    def _on_message(self, message: str):
+        if self.logger.level <= logging.DEBUG:
+            self.logger.debug(f"on_message invoked: (message: {message})")
+        self.enqueue_message(message)
+        for listener in self.on_message_listeners:
+            listener(message)
+
+    def _on_error(self, error: Exception):
+        self.logger.error(
+            f"on_error invoked (session id: {self.session_id()}, "
+            f"error: {type(error).__name__}, message: {error})",
+            error,
+        )
+        for listener in self.on_error_listeners:
+            listener(error)
+
+    def _on_close(self, code: int, reason: Optional[str] = None):
+        if self.logger.level <= logging.DEBUG:
+            self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
+        if self.auto_reconnect_enabled:
+            self.logger.info(
+                "Received CLOSE event. Going to reconnect... "
+                f"(session id: {self.session_id()})"
+            )
+            self.connect_to_new_endpoint()
+        for listener in self.on_close_listeners:
+            listener(code, reason)
+
+    def _run_current_session(self):
+        try:
+            if self.current_session is not None and self.current_session.is_active():
+                self.logger.info("Starting to receive messages from a new connection"
+                                 f" (session id: {self.session_id()})")
+                self.current_session_state.terminated = False
+                current_session_id = self.session_id()
+                self.current_session.run_until_completion(self.current_session_state)
+                self.logger.info("Stopped receiving messages from a connection "
+                                 f" (session id: {current_session_id})")
+        except Exception as e:
+            self.logger.exception(e)
+
+    def _monitor_current_session(self):
+        if self.current_app_monitor_started:
+            try:
+                self.current_session.check_state()
+
+                if self.auto_reconnect_enabled and (
+                    self.current_session is None
+                    or not self.current_session.is_active()
+                ):
+                    self.logger.info(
+                        "The session seems to be already closed. Going to reconnect... "
+                        f"(session id: {self.session_id()})"
+                    )
+                    self.connect_to_new_endpoint()
+            except Exception as e:
+                self.logger.error(
+                    "Failed to check the current session or reconnect to the server "
+                    f"(session id: {self.session_id()}, error: {type(e).__name__}, message: {e})"
+                )
