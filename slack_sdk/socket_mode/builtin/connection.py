@@ -200,8 +200,7 @@ class Connection:
             if self.sock is not None:
                 is_stale = (
                     self.last_ping_pong_time is not None
-                    and time.time() - self.last_ping_pong_time
-                    > self.ping_interval * 2
+                    and time.time() - self.last_ping_pong_time > self.ping_interval * 2
                 )
                 if is_stale:
                     self.logger.info(

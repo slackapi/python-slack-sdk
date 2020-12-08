@@ -8,11 +8,7 @@ class IntervalRunner:
     event: Event
     thread: Thread
 
-    def __init__(
-        self,
-        target: Callable[[], None],
-        interval_seconds: float = 0.1
-    ):
+    def __init__(self, target: Callable[[], None], interval_seconds: float = 0.1):
         self.event = threading.Event()
         self.target = target
         self.interval_seconds = interval_seconds

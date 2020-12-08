@@ -89,10 +89,14 @@ class SocketModeClient(BaseSocketModeClient):
         self.socket_mode_request_listeners = []
 
         self.current_session = None
-        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
+        self.current_session_runner = IntervalRunner(
+            self._run_current_session, 0.5
+        ).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
+        self.current_app_monitor = IntervalRunner(
+            self._monitor_current_session, self.ping_interval
+        )
 
         self.connect_operation_lock = Lock()
 
@@ -199,8 +203,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.current_app_monitor_started:
             try:
                 if self.auto_reconnect_enabled and (
-                    self.current_session is None
-                    or self.current_session.sock is None
+                    self.current_session is None or self.current_session.sock is None
                 ):
                     self.logger.info(
                         "The session seems to be already closed. Going to reconnect..."
