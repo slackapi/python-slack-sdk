@@ -85,10 +85,14 @@ class SocketModeClient(BaseSocketModeClient):
 
         self.current_session = None
         self.current_session_state = ConnectionState()
-        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
+        self.current_session_runner = IntervalRunner(
+            self._run_current_session, 0.5
+        ).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
+        self.current_app_monitor = IntervalRunner(
+            self._monitor_current_session, self.ping_interval
+        )
 
         self.connect_operation_lock = Lock()
 
@@ -186,13 +190,17 @@ class SocketModeClient(BaseSocketModeClient):
     def _run_current_session(self):
         try:
             if self.current_session is not None and self.current_session.is_active():
-                self.logger.info("Starting to receive messages from a new connection"
-                                 f" (session id: {self.session_id()})")
+                self.logger.info(
+                    "Starting to receive messages from a new connection"
+                    f" (session id: {self.session_id()})"
+                )
                 self.current_session_state.terminated = False
                 current_session_id = self.session_id()
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info("Stopped receiving messages from a connection "
-                                 f" (session id: {current_session_id})")
+                self.logger.info(
+                    "Stopped receiving messages from a connection "
+                    f" (session id: {current_session_id})"
+                )
         except Exception as e:
             self.logger.exception(e)
 
@@ -202,8 +210,7 @@ class SocketModeClient(BaseSocketModeClient):
                 self.current_session.check_state()
 
                 if self.auto_reconnect_enabled and (
-                    self.current_session is None
-                    or not self.current_session.is_active()
+                    self.current_session is None or not self.current_session.is_active()
                 ):
                     self.logger.info(
                         "The session seems to be already closed. Going to reconnect... "

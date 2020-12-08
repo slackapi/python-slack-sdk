@@ -62,10 +62,10 @@ class BaseSocketModeClient:
         try:
             self.connect_operation_lock.acquire(blocking=True, timeout=5)
             if force or not self.is_connected():
-                self.logger.info(f"Connecting to a new endpoint...")
+                self.logger.info("Connecting to a new endpoint...")
                 self.wss_uri = self.issue_new_wss_url()
                 self.connect()
-                self.logger.info(f"Connected to a new endpoint...")
+                self.logger.info("Connected to a new endpoint...")
         finally:
             self.connect_operation_lock.release()
 
@@ -103,6 +103,7 @@ class BaseSocketModeClient:
                 if message.get("type") == "disconnect":
                     self.connect_to_new_endpoint(force=True)
                 else:
+
                     def _run_message_listeners():
                         self.run_message_listeners(message, raw_message)
 
