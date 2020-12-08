@@ -167,10 +167,9 @@ class SocketModeClient(BaseSocketModeClient):
             listener(message)
 
     def _on_error(self, error: Exception):
-        self.logger.error(
+        self.logger.exception(
             f"on_error invoked (session id: {self.session_id()}, "
-            f"error: {type(error).__name__}, message: {error})",
-            error,
+            f"error: {type(error).__name__}, message: {error})"
         )
         for listener in self.on_error_listeners:
             listener(error)

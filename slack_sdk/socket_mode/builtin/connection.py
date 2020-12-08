@@ -315,6 +315,18 @@ class Connection:
                     time.sleep(0.2)
             except socket.timeout:
                 time.sleep(0.01)
+            except OSError as e:
+                # getting errno.EBADF and the socket is no longer available
+                if e.errno == 9 and state.terminated:
+                    self.logger.debug(
+                        "The reason why you go[Errno 9] Bad file descriptor here is "
+                        "the socket is no longer available."
+                    )
+                else:
+                    if self.on_error_listener is not None:
+                        self.on_error_listener(e)
+                    else:
+                        self.logger.exception(e)
             except Exception as e:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
