@@ -146,6 +146,97 @@ class AsyncWebClient(AsyncBaseClient):
             "admin.apps.restricted.list", http_verb="GET", params=kwargs
         )
 
+    async def admin_barriers_create(
+        self,
+        *,
+        barriered_from_usergroup_ids: Union[str, Sequence[str]],
+        primary_usergroup_id: str,
+        restricted_subjects: Union[str, Sequence[str]],
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Create an Information Barrier.
+
+        Args:
+            barriered_from_usergroup_ids (str or list): A list of IDP Groups ids that the
+                primary usergroup is to be barriered from.
+            primary_usergroup_id (str): The id of the primary IDP Group.
+            restricted_subjects (str or list): What kind of interactions are blocked by this
+                barrier? For v1, we only support a list of all 3, eg im, mpim, call
+
+        """
+        kwargs.update({"primary_usergroup_id": primary_usergroup_id})
+
+        if isinstance(barriered_from_usergroup_ids, list):
+            kwargs.update(
+                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
+            )
+        else:
+            kwargs.update(
+                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
+            )
+
+        if isinstance(restricted_subjects, list):
+            kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
+        else:
+            kwargs.update({"restricted_subjects": restricted_subjects})
+
+        return await self.api_call("admin.barriers.create", json=kwargs)
+
+    async def admin_barriers_delete(
+        self, *, barrier_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Delete an existing Information Barrier.
+
+        Args:
+            barrier_id (str): The ID of the barrier you're trying to delete.
+
+        """
+        kwargs.update({"barrier_id": barrier_id})
+        return await self.api_call("admin.barriers.delete", json=kwargs)
+
+    async def admin_barriers_list(self, **kwargs) -> AsyncSlackResponse:
+        """Get all Information Barriers for your organization."""
+        return await self.api_call("admin.barriers.list", json=kwargs)
+
+    async def admin_barriers_update(
+        self,
+        *,
+        barrier_id: str,
+        barriered_from_usergroup_ids: Union[str, Sequence[str]],
+        primary_usergroup_id: str,
+        restricted_subjects: Union[str, Sequence[str]],
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Update an existing Information Barrier.
+
+        Args:
+            barrier_id (str): The ID of the barrier you're trying to modify
+            barriered_from_usergroup_ids (str or list): A list of IDP Groups ids that the
+                primary usergroup is to be barriered from.
+            primary_usergroup_id (str): The id of the primary IDP Group.
+            restricted_subjects (str or list): What kind of interactions are blocked by this
+                barrier? For v1, we only support a list of all 3, eg im, mpim, call
+
+        """
+        kwargs.update(
+            {"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id}
+        )
+
+        if isinstance(barriered_from_usergroup_ids, list):
+            kwargs.update(
+                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
+            )
+        else:
+            kwargs.update(
+                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
+            )
+
+        if isinstance(restricted_subjects, list):
+            kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
+        else:
+            kwargs.update({"restricted_subjects": restricted_subjects})
+        return await self.api_call("admin.barriers.update", json=kwargs)
+
     async def admin_conversations_create(
         self, *, is_private: bool, name: str, **kwargs
     ) -> AsyncSlackResponse:
