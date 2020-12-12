@@ -102,6 +102,8 @@ class TestWebClientCoverage(unittest.TestCase):
                     self.api_methods_to_call.remove(
                         method(team_id="T123", channel_ids=["C123", "C234"])["method"]
                     )
+                    # checking tuple compatibility as sample
+                    method(team_id="T123", channel_ids=("C123", "C234"))
                     method(team_id="T123", channel_ids="C123,C234")
                     await async_method(team_id="T123", channel_ids="C123,C234")
                 elif method_name == "admin_teams_settings_setDescription":
