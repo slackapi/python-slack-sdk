@@ -12,7 +12,7 @@ from asyncio import Future
 """A Python module for interacting with Slack's Web API."""
 import os
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict
+from typing import Union, Sequence, Optional, Dict, Tuple
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
@@ -183,7 +183,7 @@ class LegacyWebClient(LegacyBaseClient):
             user_ids (str or list): The users to invite.
         """
         kwargs.update({"channel_id": channel_id})
-        if isinstance(user_ids, list):
+        if isinstance(user_ids, (list, Tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -515,7 +515,7 @@ class LegacyWebClient(LegacyBaseClient):
                 At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
         """
         kwargs.update({"team_id": team_id})
-        if isinstance(channel_ids, list):
+        if isinstance(channel_ids, (list, Tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -590,7 +590,7 @@ class LegacyWebClient(LegacyBaseClient):
             channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
         """
         kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
-        if isinstance(channel_ids, list):
+        if isinstance(channel_ids, (list, Tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -608,7 +608,7 @@ class LegacyWebClient(LegacyBaseClient):
                 e.g. 'T12345678,T98765432' or ['T12345678', 'T98765432']
         """
         kwargs.update({"usergroup_id": usergroup_id})
-        if isinstance(team_ids, list):
+        if isinstance(team_ids, (list, Tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
@@ -635,7 +635,7 @@ class LegacyWebClient(LegacyBaseClient):
             channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
         """
         kwargs.update({"usergroup_id": usergroup_id})
-        if isinstance(channel_ids, list):
+        if isinstance(channel_ids, (list, Tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -670,7 +670,7 @@ class LegacyWebClient(LegacyBaseClient):
                 At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
         """
         kwargs.update({"team_id": team_id, "email": email})
-        if isinstance(channel_ids, list):
+        if isinstance(channel_ids, (list, Tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1233,7 +1233,7 @@ class LegacyWebClient(LegacyBaseClient):
             users (str or list): An list of user id's to invite. e.g. ['U2345678901', 'U3456789012']
         """
         kwargs.update({"channel": channel})
-        if isinstance(users, list):
+        if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -1425,7 +1425,7 @@ class LegacyWebClient(LegacyBaseClient):
         Args:
             users (str or list): User IDs to fetch information e.g. 'U123,U234' or ["U123", "U234"]
         """
-        if isinstance(users, list):
+        if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -1520,7 +1520,7 @@ class LegacyWebClient(LegacyBaseClient):
             channels (str or list): Comma-separated list of channel IDs where the file will be shared.
                 e.g. ['C1234567890', 'C2345678901']
         """
-        if isinstance(channels, list):
+        if isinstance(channels, (list, Tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
@@ -1807,7 +1807,7 @@ class LegacyWebClient(LegacyBaseClient):
             users (str or list): A list of user ids, up to 400 per request.
                 e.g. ['W1234567890', 'U2345678901', 'U3456789012']
         """
-        if isinstance(users, list):
+        if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -1859,7 +1859,7 @@ class LegacyWebClient(LegacyBaseClient):
                 is preserved whenever a MPIM group is returned.
                 e.g. ['W1234567890', 'U2345678901', 'U3456789012']
         """
-        if isinstance(users, list):
+        if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -2209,7 +2209,7 @@ class LegacyWebClient(LegacyBaseClient):
                 users for the User Group. e.g. ['U060R4BJ4', 'U060RNRCZ']
         """
         kwargs.update({"usergroup": usergroup})
-        if isinstance(users, list):
+        if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
