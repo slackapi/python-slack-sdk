@@ -194,14 +194,16 @@ class SocketModeClient(BaseSocketModeClient):
                     f" (session id: {self.session_id()})"
                 )
                 self.current_session_state.terminated = False
-                current_session_id = self.session_id()
                 self.current_session.run_until_completion(self.current_session_state)
                 self.logger.info(
-                    "Stopped receiving messages from a connection "
-                    f" (session id: {current_session_id})"
+                    "Stopped receiving messages from a connection"
+                    f" (session id: {self.session_id()})"
                 )
         except Exception as e:
-            self.logger.exception(e)
+            self.logger.exception(
+                "Failed to start or stop the current session"
+                f" (session id: {self.session_id()}, error: {e})"
+            )
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
