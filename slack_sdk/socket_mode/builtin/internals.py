@@ -7,6 +7,7 @@ import ssl
 import struct
 from base64 import encodebytes
 from hmac import compare_digest
+from logging import Logger
 from typing import Tuple, Optional, Union, List
 
 from .frame_header import FrameHeader
@@ -85,6 +86,16 @@ def _to_readable_opcode(opcode: int) -> str:
         return "ping"
     if opcode == FrameHeader.OPCODE_PONG:
         return "pong"
+
+
+def _parse_text_payload(data: Optional[bytes], logger: Logger) -> str:
+    try:
+        if data is not None and isinstance(data, bytes):
+            return data.decode("utf-8")
+        else:
+            return ""
+    except UnicodeDecodeError as e:
+        logger.debug(f"Failed to parse a payload (data: {data}, error: {e})")
 
 
 def _receive(sock: ssl.SSLSocket) -> Tuple[Optional[FrameHeader], bytes]:

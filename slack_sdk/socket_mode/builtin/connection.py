@@ -17,10 +17,13 @@ from .internals import (
     _to_readable_opcode,
     _receive,
     _build_data_frame_for_sending,
+    _parse_text_payload,
 )
 
 
 class ConnectionState:
+    # The flag supposed to be used for telling SocketModeClient
+    # when this connection is no longer available
     terminated: bool
 
     def __init__(self):
@@ -66,6 +69,7 @@ class Connection:
         self.trace_enabled = trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
+        self.consecutive_check_state_error_count = 0
         self.sock = None
 
         self.on_message_listener = on_message_listener
@@ -215,11 +219,15 @@ class Connection:
                     "This connection is already closed."
                     f" (session id: {self.session_id})"
                 )
+            self.consecutive_check_state_error_count = 0
         except Exception as e:
             self.logger.exception(
                 "Failed to check the state of sock "
                 f"(session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
             )
+            self.consecutive_check_state_error_count += 1
+            if self.consecutive_check_state_error_count >= 5:
+                self.disconnect()
 
     def run_until_completion(self, state: ConnectionState) -> None:
         repeated_messages = {"payload": 0}
@@ -232,7 +240,7 @@ class Connection:
                     header, data = _receive(self.sock)
                     if self.trace_enabled:
                         opcode = _to_readable_opcode(header.opcode) if header else "-"
-                        payload = data.decode("utf-8") if data is not None else ""
+                        payload = _parse_text_payload(data, self.logger)
                         count: Optional[int] = repeated_messages.get(payload)
                         if count is None:
                             count = 1
@@ -282,11 +290,18 @@ class Connection:
                         if header.opcode == FrameHeader.OPCODE_PING:
                             self.pong(data)
                         elif header.opcode == FrameHeader.OPCODE_PONG:
-                            elements = data.decode("utf-8").split(":")
+                            str_message = data.decode("utf-8")
+                            elements = str_message.split(":")
                             if len(elements) >= 2:
                                 session_id, ping_time = elements[0], elements[1]
                                 if self.session_id == session_id:
-                                    self.last_ping_pong_time = float(ping_time)
+                                    try:
+                                        self.last_ping_pong_time = float(ping_time)
+                                    except Exception as e:
+                                        self.logger.debug(
+                                            "Failed to parse a pong message "
+                                            f" (message: {str_message}, error: {e}"
+                                        )
                         elif header.opcode == FrameHeader.OPCODE_TEXT:
                             if self.on_message_listener is not None:
                                 text = data.decode("utf-8")
@@ -319,18 +334,35 @@ class Connection:
                 # getting errno.EBADF and the socket is no longer available
                 if e.errno == 9 and state.terminated:
                     self.logger.debug(
-                        "The reason why you go[Errno 9] Bad file descriptor here is "
+                        "The reason why you got [Errno 9] Bad file descriptor here is "
                         "the socket is no longer available."
                     )
                 else:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        self.logger.exception(e)
+                        self.logger.exception(
+                            "Got an OSError while receiving data"
+                            f" (session id: {self.session_id}, error: {e})"
+                        )
+                # As this connection no longer works in any way, terminating it
+                if self.is_active():
+                    try:
+                        self.disconnect()
+                    except Exception as disconnection_error:
+                        self.logger.exception(
+                            "Failed to disconnect"
+                            f" (session id: {self.session_id}, error: {disconnection_error})"
+                        )
+                state.terminated = True
+                break
             except Exception as e:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    self.logger.exception(e)
+                    self.logger.exception(
+                        "Got an exception while receiving data"
+                        f" (session id: {self.session_id}, error: {e})"
+                    )
 
         state.terminated = True
