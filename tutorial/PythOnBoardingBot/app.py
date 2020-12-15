@@ -88,9 +88,6 @@ def update_emoji(payload):
     # Post the updated message in Slack
     updated_message = slack_web_client.chat_update(**message)
 
-    # Update the timestamp saved on the onboarding tutorial object
-    onboarding_tutorial.timestamp = updated_message["ts"]
-
 
 # =============== Pin Added Events ================ #
 # When a users pins a message the type of the event will be 'pin_added'.
@@ -116,9 +113,6 @@ def update_pin(payload):
 
     # Post the updated message in Slack
     updated_message = slack_web_client.chat_update(**message)
-
-    # Update the timestamp saved on the onboarding tutorial object
-    onboarding_tutorial.timestamp = updated_message["ts"]
 
 
 # ============== Message Events ============= #
