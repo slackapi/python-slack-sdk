@@ -382,7 +382,7 @@ deletion of threaded replies works the same as regular messages.</p>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.open">conversations.open</a> additional info.</p>
 <p><strong>Creating channels</strong></p>
-<p>Creates a new channel, either public or private. The <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 21 characters. To make the channel private, set the option <code class="docutils literal notranslate"><span class="pre">is_private</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>Creates a new channel, either public or private. The <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 80 characters. To make the channel private, set the option <code class="docutils literal notranslate"><span class="pre">is_private</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack_sdk</span> <span class="kn">import</span> <span class="n">WebClient</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
