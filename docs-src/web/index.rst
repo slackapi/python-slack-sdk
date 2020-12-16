@@ -256,7 +256,7 @@ See `conversations.open <https://api.slack.com/methods/conversations.open>`_ add
 
 **Creating channels**
 
-Creates a new channel, either public or private. The ``name`` parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 21 characters. To make the channel private, set the option ``is_private`` parameter to ``True``.
+Creates a new channel, either public or private. The ``name`` parameter is required, may contain numbers, letters, hyphens, and underscores, and must contain fewer than 80 characters. To make the channel private, set the option ``is_private`` parameter to ``True``.
 
 .. code-block:: python
 
