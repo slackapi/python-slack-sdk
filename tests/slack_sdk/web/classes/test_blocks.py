@@ -13,11 +13,14 @@ from slack_sdk.models.blocks import (
     Block,
     CallBlock,
     ButtonElement,
+    StaticSelectElement,
+    OverflowMenuElement,
     ImageElement,
     LinkButtonElement,
     PlainTextObject,
     MarkdownTextObject,
     HeaderBlock,
+    Option,
 )
 from . import STRING_3001_CHARS
 
@@ -403,6 +406,26 @@ class ActionsBlockTests(unittest.TestCase):
         )
         with self.assertRaises(SlackObjectFormationError):
             ActionsBlock(elements=self.elements * 3).to_dict()
+
+    def test_element_parsing(self):
+        elements = [
+            ButtonElement(text="Click me", action_id="reg_button", value="1"),
+            StaticSelectElement(options=[Option(value='SelectOption')]),
+            ImageElement(image_url='url', alt_text='alt-text'),
+            OverflowMenuElement(options=[Option(value='MenuOption1'), Option(value='MenuOption2')]),
+        ]
+        input = {
+            "type": "actions",
+            "block_id": "actionblock789",
+            "elements": [
+               e.to_dict() for e in elements
+            ],
+        }
+        parsed_elements = ActionsBlock(**input).elements
+        self.assertEqual(len(elements), len(parsed_elements))
+        for original, parsed in zip(elements, parsed_elements):
+            self.assertEqual(type(original), type(parsed))
+            self.assertDictEqual(original.to_dict(), parsed.to_dict())
 
 
 # ----------------------------------------------
