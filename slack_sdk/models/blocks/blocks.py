@@ -243,7 +243,7 @@ class ActionsBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
 
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} elements")
     def _validate_elements_length(self):
