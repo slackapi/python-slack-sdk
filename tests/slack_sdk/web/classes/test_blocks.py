@@ -410,16 +410,16 @@ class ActionsBlockTests(unittest.TestCase):
     def test_element_parsing(self):
         elements = [
             ButtonElement(text="Click me", action_id="reg_button", value="1"),
-            StaticSelectElement(options=[Option(value='SelectOption')]),
-            ImageElement(image_url='url', alt_text='alt-text'),
-            OverflowMenuElement(options=[Option(value='MenuOption1'), Option(value='MenuOption2')]),
+            StaticSelectElement(options=[Option(value="SelectOption")]),
+            ImageElement(image_url="url", alt_text="alt-text"),
+            OverflowMenuElement(
+                options=[Option(value="MenuOption1"), Option(value="MenuOption2")]
+            ),
         ]
         input = {
             "type": "actions",
             "block_id": "actionblock789",
-            "elements": [
-               e.to_dict() for e in elements
-            ],
+            "elements": [e.to_dict() for e in elements],
         }
         parsed_elements = ActionsBlock(**input).elements
         self.assertEqual(len(elements), len(parsed_elements))
