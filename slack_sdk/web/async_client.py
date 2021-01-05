@@ -1549,7 +1549,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("files.sharedPublicURL", json=kwargs)
 
     async def files_upload(
-        self, *, file: Union[str, IOBase] = None, content: str = None, **kwargs
+        self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
     ) -> AsyncSlackResponse:
         """Uploads or creates a file.
 
