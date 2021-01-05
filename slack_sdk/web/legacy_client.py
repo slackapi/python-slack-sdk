@@ -1549,7 +1549,7 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("files.sharedPublicURL", json=kwargs)
 
     def files_upload(
-        self, *, file: Union[str, IOBase] = None, content: str = None, **kwargs
+        self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Uploads or creates a file.
 
