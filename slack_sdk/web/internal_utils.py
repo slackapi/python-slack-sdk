@@ -1,6 +1,8 @@
 import json
+import os
 import platform
 import sys
+import warnings
 from ssl import SSLContext
 from typing import Dict, Union, Optional, Any, Sequence
 from urllib.parse import urljoin
@@ -226,3 +228,19 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
     if isinstance(v, bool):
         return "1" if v else "0"
     return v
+
+
+def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
+    text = kwargs.get("text")
+    if text is None or len(text.strip()) == 0:
+        message = (
+            f"The `text` argument is missing in the request payload for a {endpoint} call - "
+            "It's a best practice to always provide a text argument when posting a message. "
+            "The `text` is used in places where `blocks` cannot be rendered such as: "
+            "system push notifications, assistive technology such as screen readers, etc."
+        )
+        # for unit tests etc.
+        skip_deprecation = os.environ.get("SKIP_SLACK_SDK_WARNING")
+        if skip_deprecation:
+            return
+        warnings.warn(message, UserWarning)

@@ -15,7 +15,11 @@ from typing import Union, Sequence, Optional, Dict, Tuple
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
-from .internal_utils import _parse_web_class_objects, _update_call_participants
+from .internal_utils import (
+    _parse_web_class_objects,
+    _update_call_participants,
+    _warn_if_text_is_missing,
+)
 
 
 class AsyncWebClient(AsyncBaseClient):
@@ -1103,6 +1107,7 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"channel": channel, "user": user})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.postEphemeral", kwargs)
         return await self.api_call("chat.postEphemeral", json=kwargs)
 
     async def chat_postMessage(self, *, channel: str, **kwargs) -> AsyncSlackResponse:
@@ -1118,6 +1123,7 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"channel": channel})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.postMessage", kwargs)
         return await self.api_call("chat.postMessage", json=kwargs)
 
     async def chat_scheduleMessage(
@@ -1132,6 +1138,7 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"channel": channel, "post_at": post_at, "text": text})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.scheduleMessage", kwargs)
         return await self.api_call("chat.scheduleMessage", json=kwargs)
 
     async def chat_unfurl(
@@ -1164,6 +1171,7 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"channel": channel, "ts": ts})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.update", kwargs)
         return await self.api_call("chat.update", json=kwargs)
 
     async def chat_scheduledMessages_list(self, **kwargs) -> AsyncSlackResponse:

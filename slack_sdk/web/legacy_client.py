@@ -17,7 +17,11 @@ from typing import Union, Sequence, Optional, Dict, Tuple
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
 from .legacy_base_client import LegacyBaseClient, SlackResponse
-from .internal_utils import _parse_web_class_objects, _update_call_participants
+from .internal_utils import (
+    _parse_web_class_objects,
+    _update_call_participants,
+    _warn_if_text_is_missing,
+)
 
 
 class LegacyWebClient(LegacyBaseClient):
@@ -1099,6 +1103,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"channel": channel, "user": user})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.postEphemeral", kwargs)
         return self.api_call("chat.postEphemeral", json=kwargs)
 
     def chat_postMessage(
@@ -1116,6 +1121,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"channel": channel})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.postMessage", kwargs)
         return self.api_call("chat.postMessage", json=kwargs)
 
     def chat_scheduleMessage(
@@ -1130,6 +1136,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"channel": channel, "post_at": post_at, "text": text})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.scheduleMessage", kwargs)
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
     def chat_unfurl(
@@ -1162,6 +1169,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"channel": channel, "ts": ts})
         _parse_web_class_objects(kwargs)
+        _warn_if_text_is_missing("chat.update", kwargs)
         return self.api_call("chat.update", json=kwargs)
 
     def chat_scheduledMessages_list(self, **kwargs) -> Union[Future, SlackResponse]:
