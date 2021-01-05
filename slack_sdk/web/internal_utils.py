@@ -141,7 +141,9 @@ def _build_req_args(
         _set_default_params(data, default_params)
     if files is not None and isinstance(files, dict):
         files = {k: v for k, v in files.items() if v is not None}
-        _set_default_params(files, default_params)
+        # NOTE: We do not need to all #_set_default_params here
+        # because other parameters in binary data requests can exist
+        # only in either data or params, not in files.
     if params is not None and isinstance(params, dict):
         params = {k: v for k, v in params.items() if v is not None}
         _set_default_params(params, default_params)
