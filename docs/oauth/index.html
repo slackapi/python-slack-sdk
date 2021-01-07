@@ -278,23 +278,29 @@
                 <span class="n">code</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span>
             <span class="p">)</span>
 
-            <span class="n">installed_enterprise</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enterprise&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">installed_team</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;team&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">installer</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;authed_user&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-            <span class="n">incoming_webhook</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;incoming_webhook&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">installed_enterprise</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enterprise&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">is_enterprise_install</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_enterprise_install&quot;</span><span class="p">)</span>
+            <span class="n">installed_team</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;team&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">installer</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;authed_user&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">incoming_webhook</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;incoming_webhook&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
             <span class="n">bot_token</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_token&quot;</span><span class="p">)</span>
-            <span class="c1"># NOTE: As oauth.v2.access doesn&#39;t include bot_id in response,</span>
-            <span class="c1"># we call bots.info for storing the installation data along with bot_id.</span>
+            <span class="c1"># NOTE: oauth.v2.access doesn&#39;t include bot_id in response</span>
             <span class="n">bot_id</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">enterprise_url</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="n">bot_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">auth_test</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">auth_test</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">bot_token</span><span class="p">)</span>
                 <span class="n">bot_id</span> <span class="o">=</span> <span class="n">auth_test</span><span class="p">[</span><span class="s2">&quot;bot_id&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">is_enterprise_install</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">enterprise_url</span> <span class="o">=</span> <span class="n">auth_test</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Build an installation data</span>
             <span class="n">installation</span> <span class="o">=</span> <span class="n">Installation</span><span class="p">(</span>
                 <span class="n">app_id</span><span class="o">=</span><span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;app_id&quot;</span><span class="p">),</span>
                 <span class="n">enterprise_id</span><span class="o">=</span><span class="n">installed_enterprise</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+                <span class="n">enterprise_name</span><span class="o">=</span><span class="n">installed_enterprise</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+                <span class="n">enterprise_url</span><span class="o">=</span><span class="n">enterprise_url</span><span class="p">,</span>
                 <span class="n">team_id</span><span class="o">=</span><span class="n">installed_team</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+                <span class="n">team_name</span><span class="o">=</span><span class="n">installed_team</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
                 <span class="n">bot_token</span><span class="o">=</span><span class="n">bot_token</span><span class="p">,</span>
                 <span class="n">bot_id</span><span class="o">=</span><span class="n">bot_id</span><span class="p">,</span>
                 <span class="n">bot_user_id</span><span class="o">=</span><span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bot_user_id&quot;</span><span class="p">),</span>
@@ -303,9 +309,13 @@
                 <span class="n">user_token</span><span class="o">=</span><span class="n">installer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_token&quot;</span><span class="p">),</span>
                 <span class="n">user_scopes</span><span class="o">=</span><span class="n">installer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scope&quot;</span><span class="p">),</span>  <span class="c1"># comma-separated string</span>
                 <span class="n">incoming_webhook_url</span><span class="o">=</span><span class="n">incoming_webhook</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">),</span>
+                <span class="n">incoming_webhook_channel</span><span class="o">=</span><span class="n">incoming_webhook</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channel&quot;</span><span class="p">),</span>
                 <span class="n">incoming_webhook_channel_id</span><span class="o">=</span><span class="n">incoming_webhook</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channel_id&quot;</span><span class="p">),</span>
                 <span class="n">incoming_webhook_configuration_url</span><span class="o">=</span><span class="n">incoming_webhook</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;configuration_url&quot;</span><span class="p">),</span>
+                <span class="n">is_enterprise_install</span><span class="o">=</span><span class="n">is_enterprise_install</span><span class="p">,</span>
+                <span class="n">token_type</span><span class="o">=</span><span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;token_type&quot;</span><span class="p">),</span>
             <span class="p">)</span>
+
             <span class="c1"># Store the installation</span>
             <span class="n">installation_store</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">installation</span><span class="p">)</span>
 

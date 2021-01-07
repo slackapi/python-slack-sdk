@@ -89,14 +89,14 @@ The redirection gives you a ``code`` parameter. You can exchange the value for a
                     code=request.args["code"]
                 )
 
-                installed_enterprise = oauth_response.get("enterprise") or {}
-                is_enterprise_install = oauth_response.get("is_enterprise_install") or False
-                installed_team = oauth_response.get("team") or {}
-                installer = oauth_response.get("authed_user") or {}
-                incoming_webhook = oauth_response.get("incoming_webhook") or {}
+                installed_enterprise = oauth_response.get("enterprise", {})
+                is_enterprise_install = oauth_response.get("is_enterprise_install")
+                installed_team = oauth_response.get("team", {})
+                installer = oauth_response.get("authed_user", {})
+                incoming_webhook = oauth_response.get("incoming_webhook", {})
+
                 bot_token = oauth_response.get("access_token")
-                # NOTE: As oauth.v2.access doesn't include bot_id in response,
-                # we call bots.info for storing the installation data along with bot_id.
+                # NOTE: oauth.v2.access doesn't include bot_id in response
                 bot_id = None
                 enterprise_url = None
                 if bot_token is not None:
@@ -105,7 +105,6 @@ The redirection gives you a ``code`` parameter. You can exchange the value for a
                     if is_enterprise_install is True:
                         enterprise_url = auth_test.get("url")
 
-                # Build an installation data
                 installation = Installation(
                     app_id=oauth_response.get("app_id"),
                     enterprise_id=installed_enterprise.get("id"),
@@ -127,6 +126,7 @@ The redirection gives you a ``code`` parameter. You can exchange the value for a
                     is_enterprise_install=is_enterprise_install,
                     token_type=oauth_response.get("token_type"),
                 )
+
                 # Store the installation
                 installation_store.save(installation)
 
