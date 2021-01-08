@@ -6,6 +6,7 @@
      installation/index
      web/index
      webhook/index
+     socket-mode/index
      oauth/index
      real_time_messaging
      faq
@@ -25,6 +26,8 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Webhooks / response_url        | Send a message using Incoming Webhooks or response_url                                        | ``slack_sdk.webhook``              |
 |                                |                                                                                               | ``slack_sdk.webhook.async_client`` |
++--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
+| Socket Mode                    | Receive and send messages over Socket Mode connections.                                       | ``slack_sdk.socket_mode``          |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | OAuth                          | Setup the authentication flow using V2 OAuth for Slack apps.                                  | ``slack_sdk.oauth``                |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
