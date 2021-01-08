@@ -17,6 +17,7 @@ The **Python Slack SDK** allows interaction with:
 - `slack_sdk.web`: for calling the Slack Web API methods ([API Docs site][api-methods])
 - `slack_sdk.webhook`: for utilizing the Incoming Webhooks and `response_url`s in payloads
 - `slack_sdk.signature`: for verifying incoming requests from the Slack API server
+- `slack_sdk.socket_mode`: for receiving and sending messages over [Socket Mode](https://api.slack.com/socket-mode) connections
 - `slack_sdk.oauth`: for implementing the Slack OAuth flow
 - `slack_sdk.models`: for constructing UI components using easy-to-use builders
 - `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
