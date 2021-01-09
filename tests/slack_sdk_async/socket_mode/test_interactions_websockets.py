@@ -35,7 +35,7 @@ class TestInteractionsWebsockets(unittest.TestCase):
 
     @async_test
     async def test_interactions(self):
-        t = Thread(target=start_socket_mode_server(3002))
+        t = Thread(target=start_socket_mode_server(self, 3002))
         t.daemon = True
         t.start()
 
@@ -90,3 +90,5 @@ class TestInteractionsWebsockets(unittest.TestCase):
             )
         finally:
             await client.close()
+            self.server.stop()
+            self.server.close()
