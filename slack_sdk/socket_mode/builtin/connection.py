@@ -3,7 +3,7 @@ import ssl
 import struct
 import time
 from logging import Logger
-from typing import Optional, Callable, Union
+from typing import Optional, Callable, Union, List, Tuple
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -15,7 +15,7 @@ from .internals import (
     _validate_sec_websocket_accept,
     _generate_sec_websocket_key,
     _to_readable_opcode,
-    _receive,
+    _receive_messages,
     _build_data_frame_for_sending,
     _parse_text_payload,
 )
@@ -77,11 +77,9 @@ class Connection:
         self.on_close_listener = on_close_listener
 
     def connect(self) -> None:
-        sock: Optional[ssl.SSLSocket] = None
         try:
             url = (self.proxy or self.url).strip()
             parsed_url = urlparse(url)
-            sock = _open_new_socket(parsed_url.hostname)
 
             hostname: str = parsed_url.hostname
             port: int = parsed_url.port or (
@@ -92,7 +90,11 @@ class Connection:
                     f"Connecting to the address for handshake: {hostname}:{port} "
                     f"(session id: {self.session_id})"
                 )
-
+            sock: Union[ssl.SSLSocket, socket] = _open_new_socket(
+                server_hostname=parsed_url.hostname,
+                server_port=port,
+                logger=self.logger,
+            )
             sock.connect((hostname, port))
 
             # WebSocket handshake
@@ -237,56 +239,76 @@ class Connection:
         while not state.terminated:
             try:
                 if self.is_active():
-                    header, data = _receive(self.sock)
-                    if self.trace_enabled:
-                        opcode = _to_readable_opcode(header.opcode) if header else "-"
-                        payload = _parse_text_payload(data, self.logger)
-                        count: Optional[int] = repeated_messages.get(payload)
-                        if count is None:
-                            count = 1
-                        else:
-                            count += 1
-                        repeated_messages = {payload: count}
-                        if (
-                            not self.ping_pong_trace_enabled
-                            and header is not None
-                            and header.opcode is not None
-                        ):
-                            if header.opcode == FrameHeader.OPCODE_PING:
-                                ping_count += 1
-                                if ping_count % ping_pong_log_summary_size == 0:
-                                    self.logger.debug(
-                                        f"Received {ping_pong_log_summary_size} ping data frame "
-                                        f"(session id: {self.session_id})"
-                                    )
-                                    ping_count = 0
-                            if header.opcode == FrameHeader.OPCODE_PONG:
-                                pong_count += 1
-                                if pong_count % ping_pong_log_summary_size == 0:
-                                    self.logger.debug(
-                                        f"Received {ping_pong_log_summary_size} pong data frame "
-                                        f"(session id: {self.session_id})"
-                                    )
-                                    pong_count = 0
+                    received_messages: List[
+                        Tuple[Optional[FrameHeader], bytes]
+                    ] = _receive_messages(
+                        sock=self.sock,
+                        logger=self.logger,
+                        trace_enabled=self.trace_enabled,
+                    )
+                    for message in received_messages:
+                        header, data = message
 
-                        ping_pong_to_skip = (
-                            header is not None
-                            and header.opcode is not None
-                            and (
-                                header.opcode == FrameHeader.OPCODE_PING
-                                or header.opcode == FrameHeader.OPCODE_PONG
-                            )
-                            and not self.ping_pong_trace_enabled
-                        )
-                        if not ping_pong_to_skip and count < 5:
-                            # if so many same payloads came in, the trace logging should be skipped.
-                            # e.g., after receiving "UNAUTHENTICATED: cache_error", many "opcode: -, payload: "
-                            self.logger.debug(
-                                "Received a new data frame "
-                                f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
-                            )
+                        # -----------------
+                        # trace logging
 
-                    if header is not None:
+                        if self.trace_enabled is True:
+                            opcode: str = _to_readable_opcode(
+                                header.opcode
+                            ) if header else "-"
+                            payload: str = _parse_text_payload(data, self.logger)
+                            count: Optional[int] = repeated_messages.get(payload)
+                            if count is None:
+                                count = 1
+                            else:
+                                count += 1
+                            repeated_messages = {payload: count}
+                            if (
+                                not self.ping_pong_trace_enabled
+                                and header is not None
+                                and header.opcode is not None
+                            ):
+                                if header.opcode == FrameHeader.OPCODE_PING:
+                                    ping_count += 1
+                                    if ping_count % ping_pong_log_summary_size == 0:
+                                        self.logger.debug(
+                                            f"Received {ping_pong_log_summary_size} ping data frame "
+                                            f"(session id: {self.session_id})"
+                                        )
+                                        ping_count = 0
+                                if header.opcode == FrameHeader.OPCODE_PONG:
+                                    pong_count += 1
+                                    if pong_count % ping_pong_log_summary_size == 0:
+                                        self.logger.debug(
+                                            f"Received {ping_pong_log_summary_size} pong data frame "
+                                            f"(session id: {self.session_id})"
+                                        )
+                                        pong_count = 0
+
+                            ping_pong_to_skip = (
+                                header is not None
+                                and header.opcode is not None
+                                and (
+                                    header.opcode == FrameHeader.OPCODE_PING
+                                    or header.opcode == FrameHeader.OPCODE_PONG
+                                )
+                                and not self.ping_pong_trace_enabled
+                            )
+                            if not ping_pong_to_skip and count < 5:
+                                # if so many same payloads came in, the trace logging should be skipped.
+                                # e.g., after receiving "UNAUTHENTICATED: cache_error", many "opcode: -, payload: "
+                                self.logger.debug(
+                                    "Received a new data frame "
+                                    f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
+                                )
+
+                        if header is None:
+                            # Skip no header message
+                            continue
+
+                        # -----------------
+                        # message with opcode
+
                         if header.opcode == FrameHeader.OPCODE_PING:
                             self.pong(data)
                         elif header.opcode == FrameHeader.OPCODE_PONG:
@@ -317,10 +339,20 @@ class Connection:
                             self.disconnect()
                             state.terminated = True
                         else:
+                            # Just warn logging
                             opcode = (
                                 _to_readable_opcode(header.opcode) if header else "-"
                             )
-                            payload = data.decode("utf-8") if data is not None else ""
+                            payload: Union[bytes, str] = data
+                            if header.opcode != FrameHeader.OPCODE_BINARY:
+                                try:
+                                    payload = (
+                                        data.decode("utf-8") if data is not None else ""
+                                    )
+                                except Exception as e:
+                                    self.logger.info(
+                                        f"Failed to convert the data to text {e}"
+                                    )
                             message = (
                                 "Received an unsupported data frame "
                                 f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"

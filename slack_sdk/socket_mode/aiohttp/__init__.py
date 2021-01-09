@@ -49,10 +49,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
+    closed: bool
 
-    on_message_listeners: List[Callable[[WSMessage], None]]
-    on_error_listeners: List[Callable[[WSMessage], None]]
-    on_close_listeners: List[Callable[[WSMessage], None]]
+    on_message_listeners: List[Callable[[WSMessage], Awaitable[None]]]
+    on_error_listeners: List[Callable[[WSMessage], Awaitable[None]]]
+    on_close_listeners: List[Callable[[WSMessage], Awaitable[None]]]
 
     def __init__(
         self,
@@ -69,6 +70,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
+        self.closed = False
         self.proxy = proxy
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
@@ -89,7 +91,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.message_processor = asyncio.ensure_future(self.process_messages())
 
     async def monitor_current_session(self) -> None:
-        while True:
+        while not self.closed:
             await asyncio.sleep(self.ping_interval)
             try:
                 if self.auto_reconnect_enabled and (
@@ -107,7 +109,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     async def receive_messages(self) -> None:
         consecutive_error_count = 0
-        while True:
+        while not self.closed:
             try:
                 message: WSMessage = await self.current_session.receive()
                 if self.logger.level <= logging.DEBUG:
@@ -124,18 +126,18 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         message_data = message.data
                         await self.enqueue_message(message_data)
                         for listener in self.on_message_listeners:
-                            listener(message)
+                            await listener(message)
                     elif message.type == WSMsgType.CLOSE:
                         if self.auto_reconnect_enabled:
                             self.logger.info(
                                 "Received CLOSE event. Going to reconnect..."
                             )
-                            self.connect_to_new_endpoint()
+                            await self.connect_to_new_endpoint()
                         for listener in self.on_close_listeners:
-                            listener(message)
+                            await listener(message)
                     elif message.type == WSMsgType.ERROR:
                         for listener in self.on_error_listeners:
-                            listener(message)
+                            await listener(message)
                     elif message.type == WSMsgType.CLOSED:
                         await asyncio.sleep(self.ping_interval)
                         continue
@@ -184,8 +186,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         await self.current_session.send_str(message)
 
     async def close(self):
+        self.closed = True
         self.auto_reconnect_enabled = False
-        self.disconnect()
+        await self.disconnect()
         self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()

@@ -19,6 +19,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
 validate_dependencies = [
     "pytest>=5.4,<6",
     "pytest-asyncio<1",  # for async
+    "Flask-Sockets>=0.2,<1",
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=3,<4",
