@@ -21,8 +21,11 @@ class TestAiohttp(unittest.TestCase):
 
     @async_test
     async def test_init_close(self):
-        client = SocketModeClient(app_token="xapp-A111-222-xyz")
-        await client.monitor_current_session()
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+        )
         try:
             self.assertIsNotNone(client)
         finally:
@@ -31,7 +34,9 @@ class TestAiohttp(unittest.TestCase):
     @async_test
     async def test_issue_new_wss_url(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
         )
         url = await client.issue_new_wss_url()
         self.assertTrue(url.startswith("wss://"))
@@ -39,7 +44,9 @@ class TestAiohttp(unittest.TestCase):
     @async_test
     async def test_connect_to_new_endpoint(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
         )
         try:
             await client.connect_to_new_endpoint()
@@ -54,7 +61,8 @@ class TestAiohttp(unittest.TestCase):
         client = SocketModeClient(
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
-            on_message_listeners=[listener],
+            auto_reconnect_enabled=False,
+            on_message_listeners=[lambda msg: None],
         )
         client.message_listeners.append(listener)
         try:
@@ -69,5 +77,5 @@ class TestAiohttp(unittest.TestCase):
             await client.close()
 
 
-async def listener(message, raw_message):
+async def listener(self, message, raw_message):
     pass

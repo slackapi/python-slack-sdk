@@ -36,7 +36,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
 
     @async_test
     async def test_interactions(self):
-        t = Thread(target=start_socket_mode_server(3001))
+        t = Thread(target=start_socket_mode_server(self, 3001))
         t.daemon = True
         t.start()
 
@@ -48,7 +48,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
             received_messages.append(message.data)
 
         async def socket_mode_listener(
-            receiver: AsyncBaseSocketModeClient, request: SocketModeRequest,
+            self: AsyncBaseSocketModeClient, request: SocketModeRequest,
         ):
             self.logger.info(f"Socket Mode Request: {request.payload}")
             received_socket_mode_requests.append(request.payload)
@@ -87,3 +87,5 @@ class TestInteractionsAiohttp(unittest.TestCase):
             )
         finally:
             await client.close()
+            self.server.stop()
+            self.server.close()

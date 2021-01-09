@@ -11,7 +11,7 @@ from flask import Flask
 from flask_sockets import Sockets
 
 
-def start_socket_mode_server(port: int):
+def start_socket_mode_server(self, port: int):
     def _start_socket_mode_server():
         logger = logging.getLogger(__name__)
         app: Flask = Flask(__name__)
@@ -36,6 +36,7 @@ def start_socket_mode_server(port: int):
         from geventwebsocket.handler import WebSocketHandler
 
         server = pywsgi.WSGIServer(("", port), app, handler_class=WebSocketHandler)
+        self.server = server
         server.serve_forever(stop_timeout=1)
 
     return _start_socket_mode_server

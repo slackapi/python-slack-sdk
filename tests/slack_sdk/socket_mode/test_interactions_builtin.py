@@ -32,7 +32,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
         cleanup_mock_web_api_server(self)
 
     def test_interactions(self):
-        t = Thread(target=start_socket_mode_server(3011))
+        t = Thread(target=start_socket_mode_server(self, 3011))
         t.daemon = True
         t.start()
 
@@ -86,3 +86,5 @@ class TestInteractionsBuiltin(unittest.TestCase):
             )
         finally:
             client.close()
+            self.server.stop()
+            self.server.close()
