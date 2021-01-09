@@ -48,6 +48,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
+    closed: bool
 
     def __init__(
         self,
@@ -60,6 +61,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
+        self.closed = False
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
@@ -74,7 +76,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.message_processor = asyncio.ensure_future(self.process_messages())
 
     async def monitor_current_session(self) -> None:
-        while True:
+        while not self.closed:
             await asyncio.sleep(self.ping_interval)
             try:
                 if self.auto_reconnect_enabled and (
@@ -92,7 +94,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     async def receive_messages(self) -> None:
         consecutive_error_count = 0
-        while True:
+        while not self.closed:
             try:
                 message = await self.current_session.recv()
                 if message is not None:
@@ -147,8 +149,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         await self.current_session.send(message)
 
     async def close(self):
+        self.closed = True
         self.auto_reconnect_enabled = False
-        self.disconnect()
+        await self.disconnect()
         self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()

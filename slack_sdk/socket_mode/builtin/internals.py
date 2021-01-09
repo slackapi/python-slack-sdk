@@ -3,18 +3,30 @@ import itertools
 import os
 import random
 import socket
+from socket import socket as Socket
 import ssl
 import struct
 from base64 import encodebytes
 from hmac import compare_digest
 from logging import Logger
-from typing import Tuple, Optional, Union, List
+from typing import Tuple, Optional, Union, List, Callable
 
 from .frame_header import FrameHeader
 
 
-def _open_new_socket(server_hostname: str) -> ssl.SSLSocket:
-    sock = socket.socket(type=ssl.SOCK_STREAM)
+def _open_new_socket(
+    server_hostname: str, server_port: int, logger: Logger
+) -> Union[ssl.SSLSocket, Socket]:
+    if server_port != 443:
+        # only for library testing
+        logger.info(
+            f"Using non-ssl socket to connect ({server_hostname}:{server_port})"
+        )
+        sock = Socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(3)
+        return sock
+
+    sock = Socket(type=ssl.SOCK_STREAM)
     sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
         sock,
         do_handshake_on_connect=True,
@@ -98,61 +110,175 @@ def _parse_text_payload(data: Optional[bytes], logger: Logger) -> str:
         logger.debug(f"Failed to parse a payload (data: {data}, error: {e})")
 
 
-def _receive(sock: ssl.SSLSocket) -> Tuple[Optional[FrameHeader], bytes]:
-    buf_size = 1024
-    length = 0
-    mask_key: Optional[str] = None
-    header: Optional[FrameHeader] = None
-    data: bytes = bytes()
-    while True:
-        bs: bytes = sock.recv(buf_size)
-        if bs is None or len(bs) == 0:
-            break
-        idx_after_length = 0
-        if header is None:
-            if len(bs) < 2:
-                return (None, bs)
+def _receive_messages(
+    sock: ssl.SSLSocket,
+    logger: Logger,
+    buffer_size: int = 1024,
+    trace_enabled: bool = False,
+) -> List[Tuple[Optional[FrameHeader], bytes]]:
+    def receive():
+        received_bytes = sock.recv(buffer_size)
+        if trace_enabled:
+            logger.debug(f"Received bytes: {received_bytes}")
+        return received_bytes
 
-            # https://tools.ietf.org/html/rfc6455#section-5.2
-            b1, b2 = bs[0], bs[1]
-            _length = b2 & 0b01111111
-            length = _length
-            idx_after_length = 2
-            if _length == 126:
-                length = struct.unpack("!H", bytes(bs[2:4]))[0]
-                idx_after_length = 4
-            elif _length == 127:
-                length = struct.unpack("!H", bytes(bs[2:10]))[0]
-                idx_after_length = 10
+    return _fetch_messages(
+        messages=[],
+        receive=receive,
+        remaining_bytes=None,
+        current_mask_key=None,
+        current_header=None,
+        current_data=bytes(),
+        logger=logger,
+    )
 
-            header = FrameHeader(
-                fin=b1 & 0b10000000,
-                rsv1=b1 & 0b01000000,
-                rsv2=b1 & 0b00100000,
-                rsv3=b1 & 0b00010000,
-                opcode=b1 & 0b00001111,
-                masked=b2 & 0b10000000,
-                length=length,
-            )
-            if header.masked > 0:
-                if mask_key is None:
-                    idx1, idx2 = idx_after_length, idx_after_length + 4
-                    mask_key = bs[idx1:idx2]
-                    idx_after_length += 4
 
-        received_data = bs[idx_after_length:] if idx_after_length > 0 else bs
-        if header.masked > 0:
-            for i in range(received_data):
-                mask = mask_key[i % 4]
-                received_data[i] ^= mask
-            data += received_data
+def _fetch_messages(
+    messages: List[Tuple[Optional[FrameHeader], bytes]],
+    receive: Callable[[], bytes],
+    logger: Logger,
+    remaining_bytes: Optional[bytes] = None,
+    current_mask_key: Optional[str] = None,
+    current_header: Optional[FrameHeader] = None,
+    current_data: Optional[bytes] = None,
+) -> List[Tuple[Optional[FrameHeader], bytes]]:
+
+    if remaining_bytes is None:
+        # Fetch more to complete the current message
+        remaining_bytes = receive()
+
+    if remaining_bytes is None or len(remaining_bytes) == 0:
+        # no more bytes
+        if current_header is not None:
+            _append_message(messages, current_header, current_data)
+        return messages
+
+    if current_header is None:
+        # new message
+        if len(remaining_bytes) < 2:
+            _append_message(messages, None, remaining_bytes)
+            return messages
+
+        if remaining_bytes[0] == 10:  # \n
+            if current_data is not None and len(current_data) >= 0:
+                _append_message(messages, current_header, current_data)
+            _append_message(messages, None, remaining_bytes[:1])
+            remaining_bytes = remaining_bytes[1:]
+            if len(remaining_bytes) == 0:
+                return messages
+            else:
+                return _fetch_messages(
+                    messages=messages,
+                    receive=receive,
+                    remaining_bytes=remaining_bytes,
+                    logger=logger,
+                )
+
+        # https://tools.ietf.org/html/rfc6455#section-5.2
+        b1, b2 = remaining_bytes[0], remaining_bytes[1]
+
+        # determine data length and the first index of the data part
+        current_data_length: int = b2 & 0b01111111
+        idx_after_length_part: int = 2
+        if current_data_length == 126:
+            current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:4]))[0]
+            idx_after_length_part = 4
+        elif current_data_length == 127:
+            current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:10]))[0]
+            idx_after_length_part = 10
+
+        current_header = FrameHeader(
+            fin=b1 & 0b10000000,
+            rsv1=b1 & 0b01000000,
+            rsv2=b1 & 0b00100000,
+            rsv3=b1 & 0b00010000,
+            opcode=b1 & 0b00001111,
+            masked=b2 & 0b10000000,
+            length=current_data_length,
+        )
+        if current_header.masked > 0:
+            if current_mask_key is None:
+                idx1, idx2 = idx_after_length_part, idx_after_length_part + 4
+                current_mask_key = remaining_bytes[idx1:idx2]
+                idx_after_length_part += 4
+
+        start, end = idx_after_length_part, idx_after_length_part + current_data_length
+        data_to_append = remaining_bytes[start:end]
+
+        current_data = bytes()
+        if current_header.masked > 0:
+            for i in range(data_to_append):
+                mask = current_mask_key[i % 4]
+                data_to_append[i] ^= mask
+            current_data += data_to_append
         else:
-            data += received_data
+            current_data += data_to_append
+        if len(current_data) == current_data_length:
+            _append_message(messages, current_header, current_data)
+            remaining_bytes = remaining_bytes[end:]
+            if len(remaining_bytes) > 0:
+                # continue with the remaining data
+                return _fetch_messages(
+                    messages=messages,
+                    receive=receive,
+                    remaining_bytes=remaining_bytes,
+                    logger=logger,
+                )
+            else:
+                return messages
+        elif len(current_data) < current_data_length:
+            # need more bytes to complete this message
+            return _fetch_messages(
+                messages=messages,
+                receive=receive,
+                current_mask_key=current_mask_key,
+                current_header=current_header,
+                current_data=current_data,
+                logger=logger,
+            )
+        else:
+            # This pattern is unexpected but set data with the expected length anyway
+            _append_message(current_header, current_data[:current_data_length])
+            return messages
 
-        if len(data) >= length:
-            break
+    # work in progress with the current_header/current_data
+    if current_header is not None:
+        length_needed = current_header.length - len(current_data)
+        if length_needed > len(remaining_bytes):
+            current_data += remaining_bytes
+            # need more bytes to complete this message
+            return _fetch_messages(
+                messages=messages,
+                receive=receive,
+                current_mask_key=current_mask_key,
+                current_header=current_header,
+                current_data=current_data,
+                logger=logger,
+            )
+        else:
+            current_data += remaining_bytes[:length_needed]
+            _append_message(messages, current_header, current_data)
+            remaining_bytes = remaining_bytes[length_needed:]
+            if len(remaining_bytes) == 0:
+                return messages
+            else:
+                # continue with the remaining data
+                return _fetch_messages(
+                    messages=messages,
+                    receive=receive,
+                    remaining_bytes=remaining_bytes,
+                    logger=logger,
+                )
 
-    return (header, data)
+    return messages
+
+
+def _append_message(
+    messages: List[Tuple[Optional[FrameHeader], bytes]],
+    header: Optional[FrameHeader],
+    data: bytes,
+) -> None:
+    messages.append((header, data))
 
 
 def _build_data_frame_for_sending(

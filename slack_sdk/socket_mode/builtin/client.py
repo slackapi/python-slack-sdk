@@ -43,7 +43,7 @@ class SocketModeClient(BaseSocketModeClient):
     current_app_monitor_started: bool
 
     message_processor: IntervalRunner
-    message_workers: IntervalRunner
+    message_workers: ThreadPoolExecutor
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
@@ -78,7 +78,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.trace_enabled = trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.ping_interval = ping_interval
-        self.wss_uri = self.issue_new_wss_url()
+        self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []
         self.socket_mode_request_listeners = []
@@ -94,6 +94,7 @@ class SocketModeClient(BaseSocketModeClient):
             self._monitor_current_session, self.ping_interval
         )
 
+        self.closed = False
         self.connect_operation_lock = Lock()
 
         self.message_processor = IntervalRunner(self.process_messages, 0.001).start()
@@ -115,6 +116,9 @@ class SocketModeClient(BaseSocketModeClient):
 
     def connect(self) -> None:
         old_session: Optional[Connection] = self.current_session
+
+        if self.wss_uri is None:
+            self.wss_uri = self.issue_new_wss_url()
 
         self.current_session = Connection(
             url=self.wss_uri,
@@ -143,7 +147,8 @@ class SocketModeClient(BaseSocketModeClient):
         )
 
     def disconnect(self) -> None:
-        self.current_session.close()
+        if self.current_session is not None:
+            self.current_session.close()
 
     def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
@@ -153,10 +158,13 @@ class SocketModeClient(BaseSocketModeClient):
         self.current_session.send(message)
 
     def close(self):
+        self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
-        self.current_app_monitor.shutdown()
-        self.message_processor.shutdown()
+        if self.current_app_monitor.is_alive():
+            self.current_app_monitor.shutdown()
+        if self.message_processor.is_alive():
+            self.message_processor.shutdown()
         self.message_workers.shutdown()
 
     def _on_message(self, message: str):

@@ -22,6 +22,7 @@ class AsyncBaseSocketModeClient:
     app_token: str
     wss_uri: str
     auto_reconnect_enabled: bool
+    closed: bool
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -59,6 +60,7 @@ class AsyncBaseSocketModeClient:
         await self.connect()
 
     async def close(self):
+        self.closed = True
         self.disconnect()
 
     async def send_message(self, message: str):
@@ -81,7 +83,7 @@ class AsyncBaseSocketModeClient:
             )
 
     async def process_messages(self):
-        while True:
+        while not self.closed:
             try:
                 await self.process_message()
             except Exception as e:
@@ -89,8 +91,10 @@ class AsyncBaseSocketModeClient:
 
     async def process_message(self):
         raw_message = await self.message_queue.get()
-        if raw_message is not None and raw_message.startswith("{"):
-            message: dict = json.loads(raw_message)
+        if raw_message is not None:
+            message: dict = {}
+            if raw_message.startswith("{"):
+                message = json.loads(raw_message)
             _: Future[None] = asyncio.ensure_future(
                 self.run_message_listeners(message, raw_message)
             )

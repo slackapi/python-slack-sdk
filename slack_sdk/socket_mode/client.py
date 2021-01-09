@@ -39,6 +39,7 @@ class BaseSocketModeClient:
     message_processor: IntervalRunner
     message_workers: ThreadPoolExecutor
 
+    closed: bool
     connect_operation_lock: Lock
 
     def issue_new_wss_url(self) -> str:
@@ -70,6 +71,7 @@ class BaseSocketModeClient:
             self.connect_operation_lock.release()
 
     def close(self) -> None:
+        self.closed = True
         self.disconnect()
 
     def send_message(self, message: str) -> None:
@@ -92,14 +94,16 @@ class BaseSocketModeClient:
 
     def process_message(self):
         try:
-            raw_message = self.message_queue.get(timeout=5)
+            raw_message = self.message_queue.get(timeout=1)
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(
                     f"A message dequeued (current queue size: {self.message_queue.qsize()})"
                 )
 
-            if raw_message is not None and raw_message.startswith("{"):
-                message: dict = json.loads(raw_message)
+            if raw_message is not None:
+                message: dict = {}
+                if raw_message.startswith("{"):
+                    message = json.loads(raw_message)
                 if message.get("type") == "disconnect":
                     self.connect_to_new_endpoint(force=True)
                 else:
@@ -148,7 +152,7 @@ class BaseSocketModeClient:
                 )
 
     def process_messages(self) -> None:
-        while True:
+        while not self.closed:
             try:
                 self.process_message()
             except Exception as e:

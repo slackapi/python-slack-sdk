@@ -48,6 +48,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
+    close: bool
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]
@@ -83,7 +84,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
-        self.wss_uri = self.issue_new_wss_url()
+        self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []
         self.socket_mode_request_listeners = []
@@ -98,6 +99,7 @@ class SocketModeClient(BaseSocketModeClient):
             self._monitor_current_session, self.ping_interval
         )
 
+        self.closed = False
         self.connect_operation_lock = Lock()
 
         self.message_processor = IntervalRunner(self.process_messages, 0.001).start()
@@ -151,6 +153,9 @@ class SocketModeClient(BaseSocketModeClient):
 
         old_session: Optional[WebSocketApp] = self.current_session
 
+        if self.wss_uri is None:
+            self.wss_uri = self.issue_new_wss_url()
+
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
             on_open=on_open,
@@ -170,7 +175,8 @@ class SocketModeClient(BaseSocketModeClient):
         self.logger.info("A new session has been established")
 
     def disconnect(self) -> None:
-        self.current_session.close()
+        if self.current_session is not None:
+            self.current_session.close()
 
     def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
@@ -178,6 +184,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.current_session.send(message)
 
     def close(self):
+        self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
         self.current_app_monitor.shutdown()

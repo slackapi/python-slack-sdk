@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 10
     strategy:
       matrix:
@@ -25,7 +25,7 @@ jobs:
       run: |
         pip install -U pip wheel
         pip install -e ".[testing]"
-        pip install "aiohttp>=3,<4"
+        pip install -e ".[optional]"
     - name: Run validation
       run: |
         python setup.py validate
