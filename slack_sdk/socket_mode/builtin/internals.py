@@ -113,11 +113,16 @@ def _parse_text_payload(data: Optional[bytes], logger: Logger) -> str:
 def _receive_messages(
     sock: ssl.SSLSocket,
     logger: Logger,
-    buffer_size: int = 1024,
+    receive_buffer_size: int = 1024,
     trace_enabled: bool = False,
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
-    def receive():
-        received_bytes = sock.recv(buffer_size)
+    def receive(specific_buffer_size: Optional[int] = None):
+        size = (
+            specific_buffer_size
+            if specific_buffer_size is not None
+            else receive_buffer_size
+        )
+        received_bytes = sock.recv(size)
         if trace_enabled:
             logger.debug(f"Received bytes: {received_bytes}")
         return received_bytes
@@ -135,7 +140,7 @@ def _receive_messages(
 
 def _fetch_messages(
     messages: List[Tuple[Optional[FrameHeader], bytes]],
-    receive: Callable[[], bytes],
+    receive: Callable[[Optional[int]], bytes],  # buffer size
     logger: Logger,
     remaining_bytes: Optional[bytes] = None,
     current_mask_key: Optional[str] = None,
@@ -155,9 +160,8 @@ def _fetch_messages(
 
     if current_header is None:
         # new message
-        if len(remaining_bytes) < 2:
-            _append_message(messages, None, remaining_bytes)
-            return messages
+        if len(remaining_bytes) <= 2:
+            remaining_bytes += receive()
 
         if remaining_bytes[0] == 10:  # \n
             if current_data is not None and len(current_data) >= 0:
@@ -181,9 +185,13 @@ def _fetch_messages(
         current_data_length: int = b2 & 0b01111111
         idx_after_length_part: int = 2
         if current_data_length == 126:
+            if len(remaining_bytes) < 4:
+                remaining_bytes += receive(1024)
             current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:4]))[0]
             idx_after_length_part = 4
         elif current_data_length == 127:
+            if len(remaining_bytes) < 10:
+                remaining_bytes += receive(1024)
             current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:10]))[0]
             idx_after_length_part = 10
 

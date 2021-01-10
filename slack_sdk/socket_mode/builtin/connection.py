@@ -7,7 +7,7 @@ from typing import Optional, Callable, Union, List, Tuple
 from urllib.parse import urlparse
 from uuid import uuid4
 
-from slack_sdk.errors import SlackClientNotConnectedError
+from slack_sdk.errors import SlackClientNotConnectedError, SlackClientConfigurationError
 from .frame_header import FrameHeader
 from .internals import (
     _open_new_socket,
@@ -53,6 +53,7 @@ class Connection:
         proxy: Optional[str] = None,
         ping_interval: float = 10,  # seconds
         receive_timeout: float = 5,
+        receive_buffer_size: int = 1024,
         trace_enabled: bool = False,
         ping_pong_trace_enabled: bool = False,
         on_message_listener: Optional[Callable[[str], None]] = None,
@@ -65,6 +66,12 @@ class Connection:
 
         self.ping_interval = ping_interval
         self.receive_timeout = receive_timeout
+        self.receive_buffer_size = receive_buffer_size
+        if self.receive_buffer_size < 16:
+            raise SlackClientConfigurationError(
+                "Too small receive_buffer_size detected."
+            )
+
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
@@ -244,6 +251,7 @@ class Connection:
                     ] = _receive_messages(
                         sock=self.sock,
                         logger=self.logger,
+                        receive_buffer_size=self.receive_buffer_size,
                         trace_enabled=self.trace_enabled,
                     )
                     for message in received_messages:

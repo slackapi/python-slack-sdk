@@ -14,6 +14,7 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web import WebClient
 from .connection import Connection, ConnectionState
 from ..interval_runner import IntervalRunner
+from ...errors import SlackClientConfigurationError
 
 
 class SocketModeClient(BaseSocketModeClient):
@@ -48,6 +49,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     trace_enabled: bool
+    receive_buffer_size: int  # bytes size
 
     connect_operation_lock: Lock
 
@@ -64,6 +66,7 @@ class SocketModeClient(BaseSocketModeClient):
         trace_enabled: bool = False,
         ping_pong_trace_enabled: bool = False,
         ping_interval: float = 10,
+        receive_buffer_size: int = 1024,
         concurrency: int = 10,
         proxy: Optional[str] = None,
         on_message_listeners: Optional[List[Callable[[str], None]]] = None,
@@ -78,6 +81,12 @@ class SocketModeClient(BaseSocketModeClient):
         self.trace_enabled = trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.ping_interval = ping_interval
+        self.receive_buffer_size = receive_buffer_size
+        if self.receive_buffer_size < 16:
+            raise SlackClientConfigurationError(
+                "Too small receive_buffer_size detected."
+            )
+
         self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []
@@ -126,6 +135,7 @@ class SocketModeClient(BaseSocketModeClient):
             ping_interval=self.ping_interval,
             trace_enabled=self.trace_enabled,
             ping_pong_trace_enabled=self.ping_pong_trace_enabled,
+            receive_buffer_size=self.receive_buffer_size,
             proxy=self.proxy,
             on_message_listener=self._on_message,
             on_error_listener=self._on_error,
