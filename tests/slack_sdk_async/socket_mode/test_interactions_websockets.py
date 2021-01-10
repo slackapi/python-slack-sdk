@@ -2,6 +2,7 @@ import asyncio
 import logging
 import time
 import unittest
+from random import randint
 from threading import Thread
 from typing import Optional
 
@@ -13,6 +14,7 @@ from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
+    socket_mode_hello_message,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_server import (
     setup_mock_web_api_server,
@@ -48,12 +50,14 @@ class TestInteractionsWebsockets(unittest.TestCase):
             raw_message: Optional[str],
         ):
             self.logger.info(f"Raw Message: {raw_message}")
+            await asyncio.sleep(randint(50, 200) / 1000)
             received_messages.append(raw_message)
 
         async def socket_mode_listener(
             receiver: AsyncBaseSocketModeClient, request: SocketModeRequest,
         ):
             self.logger.info(f"Socket Mode Request: {request}")
+            await asyncio.sleep(randint(50, 200) / 1000)
             received_socket_mode_requests.append(request)
 
         client = SocketModeClient(
@@ -70,11 +74,16 @@ class TestInteractionsWebsockets(unittest.TestCase):
             await client.connect()
             await asyncio.sleep(1)  # wait for the message receiver
 
-            await client.send_message("foo")
-            await client.send_message("bar")
-            await client.send_message("baz")
+            for _ in range(10):
+                await client.send_message("foo")
+                await client.send_message("bar")
+                await client.send_message("baz")
 
-            expected = socket_mode_envelopes + ["foo", "bar", "baz"]
+            expected = (
+                socket_mode_envelopes
+                + [socket_mode_hello_message]
+                + ["foo", "bar", "baz"] * 10
+            )
             expected.sort()
 
             count = 0

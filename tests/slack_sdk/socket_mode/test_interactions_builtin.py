@@ -1,6 +1,7 @@
 import logging
 import time
 import unittest
+from random import randint
 from threading import Thread
 
 from slack_sdk.socket_mode.request import SocketModeRequest
@@ -12,6 +13,7 @@ from slack_sdk.socket_mode import SocketModeClient
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
+    socket_mode_hello_message,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_server import (
     setup_mock_web_api_server,
@@ -41,12 +43,14 @@ class TestInteractionsBuiltin(unittest.TestCase):
 
         def message_handler(message):
             self.logger.info(f"Raw Message: {message}")
+            time.sleep(randint(50, 200) / 1000)
             received_messages.append(message)
 
         def socket_mode_request_handler(
             client: BaseSocketModeClient, request: SocketModeRequest
         ):
             self.logger.info(f"Socket Mode Request: {request}")
+            time.sleep(randint(50, 200) / 1000)
             received_socket_mode_requests.append(request)
 
         client = SocketModeClient(
@@ -65,12 +69,17 @@ class TestInteractionsBuiltin(unittest.TestCase):
             self.assertTrue(client.is_connected())
             time.sleep(2)  # wait for the message receiver
 
-            client.send_message("foo")
-            client.send_message("bar")
-            client.send_message("baz")
+            for _ in range(10):
+                client.send_message("foo")
+                client.send_message("bar")
+                client.send_message("baz")
             self.assertTrue(client.is_connected())
 
-            expected = socket_mode_envelopes + ["foo", "bar", "baz"]
+            expected = (
+                socket_mode_envelopes
+                + [socket_mode_hello_message]
+                + ["foo", "bar", "baz"] * 10
+            )
             expected.sort()
 
             count = 0
@@ -79,6 +88,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
                 count += 0.2
 
             received_messages.sort()
+            self.assertEqual(len(received_messages), len(expected))
             self.assertEqual(received_messages, expected)
 
             self.assertEqual(

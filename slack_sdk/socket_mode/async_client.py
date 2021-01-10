@@ -61,7 +61,7 @@ class AsyncBaseSocketModeClient:
 
     async def close(self):
         self.closed = True
-        self.disconnect()
+        await self.disconnect()
 
     async def send_message(self, message: str):
         raise NotImplementedError()
