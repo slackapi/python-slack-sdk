@@ -114,7 +114,7 @@ def _receive_messages(
     sock: ssl.SSLSocket,
     logger: Logger,
     receive_buffer_size: int = 1024,
-    trace_enabled: bool = False,
+    all_message_trace_enabled: bool = False,
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
     def receive(specific_buffer_size: Optional[int] = None):
         size = (
@@ -123,7 +123,7 @@ def _receive_messages(
             else receive_buffer_size
         )
         received_bytes = sock.recv(size)
-        if trace_enabled:
+        if all_message_trace_enabled:
             logger.debug(f"Received bytes: {received_bytes}")
         return received_bytes
 

@@ -64,6 +64,7 @@ class SocketModeClient(BaseSocketModeClient):
         web_client: Optional[WebClient] = None,
         auto_reconnect_enabled: bool = True,
         trace_enabled: bool = False,
+        all_message_trace_enabled: bool = False,
         ping_pong_trace_enabled: bool = False,
         ping_interval: float = 10,
         receive_buffer_size: int = 1024,
@@ -79,6 +80,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.trace_enabled = trace_enabled
+        self.all_message_trace_enabled = all_message_trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.ping_interval = ping_interval
         self.receive_buffer_size = receive_buffer_size
@@ -134,6 +136,7 @@ class SocketModeClient(BaseSocketModeClient):
             logger=self.logger,
             ping_interval=self.ping_interval,
             trace_enabled=self.trace_enabled,
+            all_message_trace_enabled=self.all_message_trace_enabled,
             ping_pong_trace_enabled=self.ping_pong_trace_enabled,
             receive_buffer_size=self.receive_buffer_size,
             proxy=self.proxy,
