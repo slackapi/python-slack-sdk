@@ -55,6 +55,7 @@ class Connection:
         receive_timeout: float = 5,
         receive_buffer_size: int = 1024,
         trace_enabled: bool = False,
+        all_message_trace_enabled: bool = False,
         ping_pong_trace_enabled: bool = False,
         on_message_listener: Optional[Callable[[str], None]] = None,
         on_error_listener: Optional[Callable[[Exception], None]] = None,
@@ -74,6 +75,7 @@ class Connection:
 
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
+        self.all_message_trace_enabled = all_message_trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
         self.consecutive_check_state_error_count = 0
@@ -252,7 +254,7 @@ class Connection:
                         sock=self.sock,
                         logger=self.logger,
                         receive_buffer_size=self.receive_buffer_size,
-                        trace_enabled=self.trace_enabled,
+                        all_message_trace_enabled=self.all_message_trace_enabled,
                     )
                     for message in received_messages:
                         header, data = message

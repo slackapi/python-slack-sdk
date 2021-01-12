@@ -25,6 +25,7 @@ client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),
     web_client=WebClient(token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")),
     trace_enabled=True,
+    all_message_trace_enabled=True,
 )
 
 if __name__ == "__main__":
