@@ -16,7 +16,11 @@ from typing import Optional, Callable, DefaultDict
 import aiohttp
 
 import slack_sdk.errors as client_err
+from slack_sdk.aiohttp_version_checker import validate_aiohttp_version
 from slack_sdk.web.legacy_client import LegacyWebClient as WebClient
+
+
+validate_aiohttp_version(aiohttp.__version__)
 
 
 class RTMClient(object):  # skipcq: PYL-R0205
