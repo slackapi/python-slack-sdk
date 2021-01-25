@@ -57,6 +57,8 @@ class WebhookClient:
         attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
         blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
         response_type: Optional[str] = None,
+        replace_original: Optional[bool] = None,
+        delete_original: Optional[bool] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
@@ -64,15 +66,21 @@ class WebhookClient:
         :param attachments: a collection of attachments
         :param blocks: a collection of Block Kit UI components
         :param response_type: the type of message (either 'in_channel' or 'ephemeral')
+        :param replace_original: True if you use this option for response_url requests
+        :param delete_original: True if you use this option for response_url requests
         :param headers: request headers to append only for this request
         :return: API response
         """
         return self.send_dict(
+            # It's fine to have None value elements here
+            # because _build_body() filters them out when constructing the actual body data
             body={
                 "text": text,
                 "attachments": attachments,
                 "blocks": blocks,
                 "response_type": response_type,
+                "replace_original": replace_original,
+                "delete_original": delete_original,
             },
             headers=headers,
         )
