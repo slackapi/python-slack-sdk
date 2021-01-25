@@ -1,6 +1,7 @@
 import socket
 import unittest
 import urllib
+from logging import Logger
 
 from slack_sdk.models.attachments import Attachment, AttachmentField
 from slack_sdk.models.blocks import SectionBlock, ImageBlock
@@ -201,3 +202,20 @@ class TestWebhook(unittest.TestCase):
             ],
         )
         self.assertEqual("ok", resp.body)
+
+    def test_if_it_uses_custom_logger_issue_921(self):
+        logger = CustomLogger("test-logger")
+        client = WebhookClient(url="http://localhost:8888", logger=logger)
+        client.send_dict({"text": "hi!"})
+        self.assertTrue(logger.called)
+
+
+class CustomLogger(Logger):
+    called: bool
+
+    def __init__(self, name, level="DEBUG"):
+        Logger.__init__(self, name, level)
+        self.called = False
+
+    def debug(self, msg, *args, **kwargs):
+        self.called = True

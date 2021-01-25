@@ -19,7 +19,15 @@ from .webhook_response import WebhookResponse
 
 
 class AsyncWebhookClient:
-    logger = logging.getLogger(__name__)
+    url: str
+    timeout: int
+    ssl: Optional[SSLContext]
+    proxy: Optional[str]
+    session: Optional[ClientSession]
+    trust_env_in_session: bool
+    auth: Optional[BasicAuth]
+    default_headers: Dict[str, str]
+    logger: logging.Logger
 
     def __init__(
         self,
@@ -33,6 +41,7 @@ class AsyncWebhookClient:
         default_headers: Optional[Dict[str, str]] = None,
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
     ):
         """API client for Incoming Webhooks and response_url
         :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
@@ -45,6 +54,7 @@ class AsyncWebhookClient:
         :param default_headers: request headers to add to all requests
         :param user_agent_prefix: prefix for User-Agent header value
         :param user_agent_suffix: suffix for User-Agent header value
+        :param logger: custom logger
         """
         self.url = url
         self.timeout = timeout
@@ -57,6 +67,7 @@ class AsyncWebhookClient:
         self.default_headers["User-Agent"] = get_user_agent(
             user_agent_prefix, user_agent_suffix
         )
+        self.logger = logger if logger is not None else logging.getLogger(__name__)
 
     async def send(
         self,
