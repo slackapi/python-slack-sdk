@@ -54,6 +54,7 @@ class LegacyBaseClient:
         user_agent_suffix: Optional[str] = None,
         # for Org-Wide App installation
         team_id: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -70,7 +71,7 @@ class LegacyBaseClient:
         self.default_params = {}
         if team_id is not None:
             self.default_params["team_id"] = team_id
-        self._logger = logging.getLogger(__name__)
+        self._logger = logger if logger is not None else logging.getLogger(__name__)
         self._event_loop = loop
 
     def api_call(  # skipcq: PYL-R1710
