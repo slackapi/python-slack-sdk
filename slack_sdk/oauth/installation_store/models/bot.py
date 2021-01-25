@@ -15,6 +15,8 @@ class Bot:
     is_enterprise_install: bool
     installed_at: float
 
+    custom_values: Dict[str, Any]
+
     def __init__(
         self,
         *,
@@ -32,6 +34,8 @@ class Bot:
         is_enterprise_install: Optional[bool] = False,
         # timestamps
         installed_at: float,
+        # custom values
+        custom_values: Optional[Dict[str, Any]] = None
     ):
         self.app_id = app_id
         self.enterprise_id = enterprise_id
@@ -48,9 +52,16 @@ class Bot:
             self.bot_scopes = bot_scopes
         self.is_enterprise_install = is_enterprise_install or False
         self.installed_at = installed_at
+        self.custom_values = custom_values if custom_values is not None else {}
+
+    def set_custom_value(self, name: str, value: Any):
+        self.custom_values[name] = value
+
+    def get_custom_value(self, name: str) -> Optional[Any]:
+        return self.custom_values.get(name)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        standard_values = {
             "app_id": self.app_id,
             "enterprise_id": self.enterprise_id,
             "enterprise_name": self.enterprise_name,
@@ -63,3 +74,6 @@ class Bot:
             "is_enterprise_install": self.is_enterprise_install,
             "installed_at": datetime.utcfromtimestamp(self.installed_at),
         }
+        # prioritize standard_values over custom_values
+        # when the same keys exist in both
+        return {**self.custom_values, **standard_values}
