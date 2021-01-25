@@ -177,3 +177,27 @@ class TestWebhook(unittest.TestCase):
         )
         resp = client.send_dict({"text": "hi!"})
         self.assertEqual(resp.body, "ok")
+
+    def test_issue_919_response_url_flag_options(self):
+        client = WebhookClient("http://localhost:8888")
+        resp = client.send(
+            text="hello!",
+            response_type="ephemeral",
+            replace_original=True,
+            blocks=[
+                SectionBlock(text="Some text"),
+                ImageBlock(image_url="image.jpg", alt_text="an image"),
+            ],
+        )
+        self.assertEqual("ok", resp.body)
+
+        resp = client.send(
+            text="hello!",
+            response_type="ephemeral",
+            delete_original=True,
+            blocks=[
+                SectionBlock(text="Some text"),
+                ImageBlock(image_url="image.jpg", alt_text="an image"),
+            ],
+        )
+        self.assertEqual("ok", resp.body)
