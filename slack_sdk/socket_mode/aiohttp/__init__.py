@@ -83,6 +83,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.current_session = None
         self.current_session_monitor = None
 
+        # https://docs.aiohttp.org/en/stable/client_reference.html
+        # Unless you are connecting to a large, unknown number of different servers
+        # over the lifetime of your application,
+        # it is suggested you use a single session for the lifetime of your application
+        # to benefit from connection pooling.
+        self.aiohttp_client_session = aiohttp.ClientSession()
+
         self.on_message_listeners = on_message_listeners or []
         self.on_error_listeners = on_error_listeners or []
         self.on_close_listeners = on_close_listeners or []
@@ -154,10 +161,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     async def connect(self):
         old_session = None if self.current_session is None else self.current_session
-        cs = aiohttp.ClientSession()
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        self.current_session = await cs.ws_connect(
+        self.current_session = await self.aiohttp_client_session.ws_connect(
             self.wss_uri, heartbeat=self.ping_interval, proxy=self.proxy,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
@@ -194,3 +200,5 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.current_session_monitor.cancel()
         if self.message_receiver is not None:
             self.message_receiver.cancel()
+        if self.aiohttp_client_session is not None:
+            await self.aiohttp_client_session.close()
