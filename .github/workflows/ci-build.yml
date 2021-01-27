@@ -14,7 +14,8 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9']
-
+    env:
+      PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,9 +30,9 @@ jobs:
     - name: Run validation
       run: |
         python setup.py validate
-    - name: Run codecov
+    - name: Run codecov (only 3.9)
       run: |
         python_version=`python -V`
-        if [ ${python_version:7:3} == "3.8" ]; then
+        if [ ${python_version:7:3} == "3.9" ]; then
           codecov -e ${python_version:7}
         fi

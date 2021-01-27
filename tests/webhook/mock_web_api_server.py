@@ -1,11 +1,18 @@
+import asyncio
+import json
 import logging
 import re
+import sys
 import threading
 import time
 from http import HTTPStatus
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from multiprocessing.context import Process
 from typing import Type
 from unittest import TestCase
+from urllib.request import Request, urlopen
+
+from tests.helpers import get_mock_server_mode
 
 
 class MockHandler(SimpleHTTPRequestHandler):
@@ -28,6 +35,13 @@ class MockHandler(SimpleHTTPRequestHandler):
         self.send_header("content-type", "text/plain;charset=utf-8")
         self.send_header("connection", "close")
         self.end_headers()
+
+    def do_GET(self):
+        if self.path == "/received_requests.json":
+            self.send_response(200)
+            self.set_common_headers()
+            self.wfile.write(json.dumps(self.received_requests).encode("utf-8"))
+            return
 
     def do_POST(self):
         try:
@@ -74,6 +88,82 @@ class MockHandler(SimpleHTTPRequestHandler):
             raise
 
 
+class MockServerProcessTarget:
+    def __init__(self, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
+        self.handler = handler
+
+    def run(self):
+        self.handler.received_requests = {}
+        self.server = HTTPServer(("localhost", 8888), self.handler)
+        try:
+            self.server.serve_forever(0.05)
+        finally:
+            self.server.server_close()
+
+    def stop(self):
+        self.handler.received_requests = {}
+        self.server.shutdown()
+        self.join()
+
+
+class MonitorThread(threading.Thread):
+    def __init__(
+        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
+    ):
+        threading.Thread.__init__(self, daemon=True)
+        self.handler = handler
+        self.test = test
+        self.test.mock_received_requests = None
+        self.is_running = True
+
+    def run(self) -> None:
+        while self.is_running:
+            try:
+                req = Request(f"{self.test.server_url}/received_requests.json")
+                resp = urlopen(req, timeout=1)
+                self.test.mock_received_requests = json.loads(
+                    resp.read().decode("utf-8")
+                )
+            except Exception as e:
+                # skip logging for the initial request
+                if self.test.mock_received_requests is not None:
+                    logging.getLogger(__name__).exception(e)
+            time.sleep(0.01)
+
+    def stop(self):
+        self.is_running = False
+        self.join()
+
+
+class MonitorThread(threading.Thread):
+    def __init__(
+        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
+    ):
+        threading.Thread.__init__(self, daemon=True)
+        self.handler = handler
+        self.test = test
+        self.test.mock_received_requests = None
+        self.is_running = True
+
+    def run(self) -> None:
+        while self.is_running:
+            try:
+                req = Request(f"{self.test.server_url}/received_requests.json")
+                resp = urlopen(req, timeout=1)
+                self.test.mock_received_requests = json.loads(
+                    resp.read().decode("utf-8")
+                )
+            except Exception as e:
+                # skip logging for the initial request
+                if self.test.mock_received_requests is not None:
+                    logging.getLogger(__name__).exception(e)
+            time.sleep(0.01)
+
+    def stop(self):
+        self.is_running = False
+        self.join()
+
+
 class MockServerThread(threading.Thread):
     def __init__(
         self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
@@ -100,14 +190,90 @@ class MockServerThread(threading.Thread):
 
 
 def setup_mock_web_api_server(test: TestCase):
-    test.server_started = threading.Event()
-    test.thread = MockServerThread(test)
-    test.thread.start()
+    if get_mock_server_mode() == "threading":
+        test.server_started = threading.Event()
+        test.thread = MockServerThread(test)
+        test.thread.start()
+        test.server_started.wait()
+    else:
+        # start a mock server as another process
+        target = MockServerProcessTarget()
+        test.server_url = "http://localhost:8888"
+        test.host, test.port = "localhost", 8888
+        test.process = Process(target=target.run, daemon=True)
+        test.process.start()
 
-    test.server_started.wait()
+        time.sleep(0.1)
+
+        # start a thread in the current process
+        # this thread fetches mock_received_requests from the remote process
+        test.monitor_thread = MonitorThread(test)
+        test.monitor_thread.start()
+        count = 0
+        # wait until the first successful data retrieval
+        while test.mock_received_requests is None:
+            time.sleep(0.01)
+            count += 1
+            if count >= 100:
+                raise Exception("The mock server is not yet running!")
 
 
 def cleanup_mock_web_api_server(test: TestCase):
-    test.thread.stop()
+    if get_mock_server_mode() == "threading":
+        test.thread.stop()
+        test.thread = None
+    else:
+        # stop the thread to fetch mock_received_requests from the remote process
+        test.monitor_thread.stop()
 
-    test.thread = None
+        retry_count = 0
+        # terminate the process
+        while test.process.is_alive():
+            test.process.terminate()
+            time.sleep(0.01)
+            retry_count += 1
+            if retry_count >= 100:
+                raise Exception("Failed to stop the mock server!")
+
+        # Python 3.6 does not have this method
+        if sys.version_info.major == 3 and sys.version_info.minor > 6:
+            # cleanup the process's resources
+            test.process.close()
+
+        test.process = None
+
+
+def assert_auth_test_count(test: TestCase, expected_count: int):
+    time.sleep(0.1)
+    retry_count = 0
+    error = None
+    while retry_count < 3:
+        try:
+            test.mock_received_requests["/auth.test"] == expected_count
+            break
+        except Exception as e:
+            error = e
+            retry_count += 1
+            # waiting for mock_received_requests updates
+            time.sleep(0.1)
+
+    if error is not None:
+        raise error
+
+
+async def assert_auth_test_count_async(test: TestCase, expected_count: int):
+    await asyncio.sleep(0.1)
+    retry_count = 0
+    error = None
+    while retry_count < 3:
+        try:
+            test.mock_received_requests["/auth.test"] == expected_count
+            break
+        except Exception as e:
+            error = e
+            retry_count += 1
+            # waiting for mock_received_requests updates
+            await asyncio.sleep(0.1)
+
+    if error is not None:
+        raise error
