@@ -15,7 +15,8 @@ class TestAsyncWebClient(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.client = AsyncWebClient(
-            token="xoxp-1234", base_url="http://localhost:8888",
+            token="xoxp-1234",
+            base_url="http://localhost:8888",
         )
 
     def tearDown(self):
@@ -88,12 +89,16 @@ class TestAsyncWebClient(unittest.TestCase):
     async def test_issue_690_oauth_v2_access_async(self):
         self.client.token = ""
         resp = await self.client.oauth_v2_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee",
+            client_id="111.222",
+            client_secret="secret",
+            code="codeeeeeeeeee",
         )
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
             await self.client.oauth_v2_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee",
+                client_id="999.999",
+                client_secret="secret",
+                code="codeeeeeeeeee",
             )
 
     @async_test

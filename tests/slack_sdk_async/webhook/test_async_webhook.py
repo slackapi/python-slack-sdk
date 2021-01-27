@@ -61,7 +61,10 @@ class TestAsyncWebhook(unittest.TestCase):
                     "accessory": {
                         "type": "datepicker",
                         "initial_date": "1990-04-28",
-                        "placeholder": {"type": "plain_text", "text": "Select a date",},
+                        "placeholder": {
+                            "type": "plain_text",
+                            "text": "Select a date",
+                        },
                     },
                 },
             ],

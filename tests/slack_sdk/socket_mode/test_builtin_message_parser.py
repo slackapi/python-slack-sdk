@@ -14,7 +14,9 @@ class TestBuiltin(unittest.TestCase):
             return b"\n\x8a7230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.3950982\x8a6230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.395274"
 
         messages: List[Tuple[Optional[FrameHeader], bytes]] = _fetch_messages(
-            messages=[], receive=receive, logger=self.logger,
+            messages=[],
+            receive=receive,
+            logger=self.logger,
         )
         self.assertEqual(len(messages), 3)
         self.assertEqual(messages[0], (None, b"\n"))
@@ -40,7 +42,9 @@ class TestBuiltin(unittest.TestCase):
                 return bytes()
 
         messages: List[Tuple[Optional[FrameHeader], bytes]] = _fetch_messages(
-            messages=[], receive=receive, logger=self.logger,
+            messages=[],
+            receive=receive,
+            logger=self.logger,
         )
         self.assertEqual(len(messages), 5)
         self.assertEqual(messages[0][1], b"foo")

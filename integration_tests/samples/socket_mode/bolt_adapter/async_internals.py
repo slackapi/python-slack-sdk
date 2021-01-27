@@ -45,7 +45,8 @@ async def send_async_response(
         else:
             await client.send_socket_mode_response(
                 SocketModeResponse(
-                    envelope_id=req.envelope_id, payload={"text": bolt_resp.body},
+                    envelope_id=req.envelope_id,
+                    payload={"text": bolt_resp.body},
                 )
             )
         if client.logger.level <= logging.DEBUG:

@@ -27,7 +27,9 @@ def mention(context: BoltContext):
 @app.event("message")
 def message(context: BoltContext, event: dict):
     context.client.reactions_add(
-        channel=event["channel"], timestamp=event["ts"], name="eyes",
+        channel=event["channel"],
+        timestamp=event["ts"],
+        name="eyes",
     )
 
 

@@ -41,7 +41,10 @@ class KeyValueObject(JsonObject):
     attributes = {"name", "value"}
 
     def __init__(
-        self, *, name: Optional[str] = None, value: Optional[str] = None,
+        self,
+        *,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
     ):
         self.name = name
         self.value = value

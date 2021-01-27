@@ -18,11 +18,8 @@ import os
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
-client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
-future = client.chat_postMessage(
-    channel='#random',
-    text="Hello world!"
-)
+client = AsyncWebClient(token=os.environ["SLACK_API_TOKEN"])
+future = client.chat_postMessage(channel="#random", text="Hello world!")
 
 loop = asyncio.get_event_loop()
 try:

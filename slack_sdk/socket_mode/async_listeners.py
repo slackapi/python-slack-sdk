@@ -14,6 +14,7 @@ class AsyncWebSocketMessageListener(Callable):
 
 class AsyncSocketModeRequestListener(Callable):
     async def __call__(
-        client: "AsyncBaseSocketModeClient", request: SocketModeRequest,  # noqa: F821
+        client: "AsyncBaseSocketModeClient",  # noqa: F821
+        request: SocketModeRequest,
     ):  # noqa: F821
         raise NotImplementedError()

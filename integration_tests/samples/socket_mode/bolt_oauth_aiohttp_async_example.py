@@ -22,7 +22,7 @@ app = AsyncApp(
         client_id=os.environ["SLACK_CLIENT_ID"],
         client_secret=os.environ["SLACK_CLIENT_SECRET"],
         scopes=os.environ["SLACK_SCOPES"].split(","),
-    )
+    ),
 )
 
 
@@ -34,7 +34,9 @@ async def mention(context: AsyncBoltContext):
 @app.event("message")
 async def message(context: AsyncBoltContext, event: dict):
     await context.client.reactions_add(
-        channel=event["channel"], timestamp=event["ts"], name="eyes",
+        channel=event["channel"],
+        timestamp=event["ts"],
+        name="eyes",
     )
 
 
@@ -51,6 +53,7 @@ if __name__ == "__main__":
 
     async def socket_mode_runner():
         from bolt_adapter.aiohttp import AsyncSocketModeHandler
+
         app_token = os.environ.get("SLACK_APP_TOKEN")
         await AsyncSocketModeHandler(app, app_token).connect_async()
         await asyncio.sleep(float("inf"))

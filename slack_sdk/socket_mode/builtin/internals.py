@@ -302,9 +302,9 @@ def _build_data_frame_for_sending(
     b1 = fin << 7 | rsv1 << 6 | rsv2 << 5 | rsv3 << 4 | opcode
     header: bytes = bytes([b1])
 
-    original_payload_data: bytes = payload.encode("utf-8") if isinstance(
-        payload, str
-    ) else payload
+    original_payload_data: bytes = (
+        payload.encode("utf-8") if isinstance(payload, str) else payload
+    )
     payload_length = len(original_payload_data)
     if payload_length <= 125:
         b2 = masked << 7 | payload_length

@@ -4,10 +4,11 @@ import os
 import unittest
 from uuid import uuid4
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_BOT_TOKEN, \
-    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID, \
-    SLACK_SDK_TEST_WEB_TEST_USER_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_BOT_TOKEN,
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID,
+    SLACK_SDK_TEST_WEB_TEST_USER_ID,
+)
 from slack_sdk.web import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
 
@@ -40,11 +41,13 @@ class TestWebClient(unittest.TestCase):
             external_url=external_url,
             title="Good Old Slack Logo",
             indexable_file_contents="Good Old Slack Logo",
-            preview_image=image
+            preview_image=image,
         )
         self.assertIsNotNone(creation)
 
-        sharing = client.files_remote_share(channels=self.channel_id, external_id=external_id)
+        sharing = client.files_remote_share(
+            channels=self.channel_id, external_id=external_id
+        )
         self.assertIsNotNone(sharing)
 
         message = client.chat_postEphemeral(
@@ -55,14 +58,14 @@ class TestWebClient(unittest.TestCase):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
-                    }
+                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>",
+                    },
                 },
                 {
                     "type": "file",
                     "external_id": external_id,
                     "source": "remote",
-                }
+                },
             ],
         )
         self.assertIsNotNone(message)
@@ -79,7 +82,9 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(creation)
 
-        sharing = client.files_remote_share(channels=self.channel_id, external_id=external_id)
+        sharing = client.files_remote_share(
+            channels=self.channel_id, external_id=external_id
+        )
         self.assertIsNotNone(sharing)
 
         message = client.chat_postEphemeral(
@@ -90,14 +95,14 @@ class TestWebClient(unittest.TestCase):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
-                    }
+                        "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>",
+                    },
                 },
                 {
                     "type": "file",
                     "external_id": external_id,
                     "source": "remote",
-                }
+                },
             ],
         )
         self.assertIsNotNone(message)

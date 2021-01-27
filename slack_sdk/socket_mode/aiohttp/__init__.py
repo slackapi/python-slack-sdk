@@ -164,7 +164,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
         self.current_session = await self.aiohttp_client_session.ws_connect(
-            self.wss_uri, heartbeat=self.ping_interval, proxy=self.proxy,
+            self.wss_uri,
+            heartbeat=self.ping_interval,
+            proxy=self.proxy,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.logger.info("A new session has been established")

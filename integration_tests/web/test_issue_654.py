@@ -4,9 +4,10 @@ import logging
 import os
 import unittest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_BOT_TOKEN, \
-    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_BOT_TOKEN,
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test
 from slack_sdk.web import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
@@ -30,8 +31,12 @@ class TestIssue654(unittest.TestCase):
         pass
 
     def test_issue_654_files_upload(self):
-        client, logger, channel_ids = self.sync_client, self.logger, ",".join([self.channel_id])
-        buff = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        client, logger, channel_ids = (
+            self.sync_client,
+            self.logger,
+            ",".join([self.channel_id]),
+        )
+        buff = io.BytesIO(b"here is my data but not sure what is wrong.......")
         buff.seek(0)
         upload = client.files_upload(
             file=buff,
@@ -47,8 +52,12 @@ class TestIssue654(unittest.TestCase):
 
     @async_test
     async def test_issue_654_files_upload_async(self):
-        client, logger, channel_ids = self.async_client, self.logger, ",".join([self.channel_id])
-        buff = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        client, logger, channel_ids = (
+            self.async_client,
+            self.logger,
+            ",".join([self.channel_id]),
+        )
+        buff = io.BytesIO(b"here is my data but not sure what is wrong.......")
         buff.seek(0)
         upload = await client.files_upload(
             file=buff,

@@ -20,7 +20,7 @@ import os
 from slack_sdk.web import WebClient
 from slack_sdk.signature import SignatureVerifier
 
-app_token_client = WebClient(token=os.environ["SLACK_APP_TOKEN"]) # xapp-
+app_token_client = WebClient(token=os.environ["SLACK_APP_TOKEN"])  # xapp-
 signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
 # ---------------------

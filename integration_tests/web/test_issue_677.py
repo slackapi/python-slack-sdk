@@ -4,11 +4,13 @@ import os
 import unittest
 from datetime import datetime
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_BOT_TOKEN, \
-    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_BOT_TOKEN,
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test
 from slack_sdk.web import WebClient
+
 # NOTE: this one is not supported in v3
 from slack.web.classes.objects import DateLink
 from slack_sdk.web.async_client import AsyncWebClient
@@ -37,7 +39,7 @@ class TestWebClient(unittest.TestCase):
             date=datetime.now(),
             date_format="{date_long} {time}",
             fallback="fallback string",
-            link="https://www.example.com"
+            link="https://www.example.com",
         )
         message = f"Here is a date link: {link}"
         response = client.chat_postMessage(channel=self.channel_id, text=message)
@@ -54,7 +56,7 @@ class TestWebClient(unittest.TestCase):
             date=datetime.now(),
             date_format="{date_long} {time}",
             fallback="fallback string",
-            link="https://www.example.com"
+            link="https://www.example.com",
         )
         message = f"Here is a date link: {link}"
         response = await client.chat_postMessage(channel=self.channel_id, text=message)

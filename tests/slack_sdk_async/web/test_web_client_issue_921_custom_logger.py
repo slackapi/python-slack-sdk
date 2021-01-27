@@ -20,7 +20,9 @@ class TestWebClient_Issue_921_CustomLogger(unittest.TestCase):
     async def test_if_it_uses_custom_logger(self):
         logger = CustomLogger("test-logger")
         client = AsyncWebClient(
-            base_url="http://localhost:8888", token="xoxb-api_test", logger=logger,
+            base_url="http://localhost:8888",
+            token="xoxb-api_test",
+            logger=logger,
         )
         await client.chat_postMessage(channel="C111", text="hello")
         self.assertTrue(logger.called)

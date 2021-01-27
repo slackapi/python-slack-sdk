@@ -20,15 +20,11 @@ from time import time
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 
 channel_name = f"my-private-channel-{round(time())}"
-response = client.conversations_create(
-    name=channel_name,
-    is_private=True
-)
+response = client.conversations_create(name=channel_name, is_private=True)
 channel_id = response["channel"]["id"]
 
 response = client.conversations_info(
-    channel=channel_id,
-    include_num_members=1  # TODO: True
+    channel=channel_id, include_num_members=1  # TODO: True
 )
 
 response = client.conversations_members(channel=channel_id)

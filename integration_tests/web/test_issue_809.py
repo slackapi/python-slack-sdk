@@ -27,7 +27,7 @@ class TestWebClient(unittest.TestCase):
 
     def test_issue_809(self):
         client = self.sync_client
-        buff = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        buff = io.BytesIO(b"here is my data but not sure what is wrong.......")
         buff.seek(0)
         upload = client.files_upload(file=buff)
         self.assertIsNotNone(upload)
@@ -35,7 +35,7 @@ class TestWebClient(unittest.TestCase):
     @async_test
     async def test_issue_809_async(self):
         client = self.async_client
-        buff = io.BytesIO(b'here is my data but not sure what is wrong.......')
+        buff = io.BytesIO(b"here is my data but not sure what is wrong.......")
         buff.seek(0)
         upload = await client.files_upload(file=buff)
         self.assertIsNotNone(upload)

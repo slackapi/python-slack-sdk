@@ -551,10 +551,16 @@ class UserSelectElementTests(unittest.TestCase):
                 "action_id": "a-123",
                 "type": "users_select",
                 "initial_user": "U123",
-                "placeholder": {"type": "plain_text", "text": "abc", "emoji": True,},
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "abc",
+                    "emoji": True,
+                },
             },
             UserSelectElement(
-                placeholder="abc", action_id="a-123", initial_user="U123",
+                placeholder="abc",
+                action_id="a-123",
+                initial_user="U123",
             ).to_dict(),
         )
 

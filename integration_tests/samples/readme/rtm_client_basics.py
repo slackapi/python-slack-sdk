@@ -18,21 +18,19 @@ from slack_sdk.rtm import RTMClient
 from slack_sdk.errors import SlackApiError
 
 
-@RTMClient.run_on(event='message')
+@RTMClient.run_on(event="message")
 def say_hello(**payload):
-    data = payload['data']
-    web_client = payload['web_client']
-    rtm_client = payload['rtm_client']
-    if 'text' in data and 'Hello' in data.get('text', []):
-        channel_id = data['channel']
-        thread_ts = data['ts']
-        user = data['user']
+    data = payload["data"]
+    web_client = payload["web_client"]
+    rtm_client = payload["rtm_client"]
+    if "text" in data and "Hello" in data.get("text", []):
+        channel_id = data["channel"]
+        thread_ts = data["ts"]
+        user = data["user"]
 
         try:
             response = web_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Hi <@{user}>!",
-                thread_ts=thread_ts
+                channel=channel_id, text=f"Hi <@{user}>!", thread_ts=thread_ts
             )
         except SlackApiError as e:
             # You will get a SlackApiError if "ok" is False

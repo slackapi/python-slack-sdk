@@ -6,9 +6,10 @@ import threading
 import time
 import unittest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
-    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN,
+    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test
 from slack_sdk.rtm import RTMClient
 from slack_sdk.web import WebClient
@@ -43,7 +44,7 @@ class TestRTMClient(unittest.TestCase):
         @RTMClient.run_on(event="message")
         def send_reply(**payload):
             self.logger.debug(payload)
-            self.sent_text = payload['data']['text']
+            self.sent_text = payload["data"]["text"]
 
         def connect():
             self.logger.debug("Starting RTM Client...")
@@ -58,13 +59,15 @@ class TestRTMClient(unittest.TestCase):
             time.sleep(5)
 
             text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_basic_operations)"
-            new_message = self.web_client.chat_postMessage(channel=self.channel_id, text=text)
+            new_message = self.web_client.chat_postMessage(
+                channel=self.channel_id, text=text
+            )
             self.assertFalse("error" in new_message)
 
             time.sleep(5)
             self.assertEqual(self.sent_text, text)
         finally:
-            t.join(.3)
+            t.join(0.3)
 
     @async_test
     async def test_basic_operations_async(self):
@@ -75,7 +78,7 @@ class TestRTMClient(unittest.TestCase):
         @RTMClient.run_on(event="message")
         async def send_reply(**payload):
             self.logger.debug(payload)
-            self.sent_text = payload['data']['text']
+            self.sent_text = payload["data"]["text"]
 
         # intentionally not waiting here
         self.rtm_client.start()
@@ -84,7 +87,9 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(5)
 
         text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_basic_operations_async)"
-        new_message = await self.async_web_client.chat_postMessage(channel=self.channel_id, text=text)
+        new_message = await self.async_web_client.chat_postMessage(
+            channel=self.channel_id, text=text
+        )
         self.assertFalse("error" in new_message)
         await asyncio.sleep(5)
         self.assertEqual(self.sent_text, text)

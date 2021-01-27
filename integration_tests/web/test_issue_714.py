@@ -12,7 +12,6 @@ from slack_sdk.web.async_client import AsyncWebClient
 
 
 class TestWebClient(unittest.TestCase):
-
     def setUp(self):
         self.proxy = "http://invalid-host:9999"
         self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]

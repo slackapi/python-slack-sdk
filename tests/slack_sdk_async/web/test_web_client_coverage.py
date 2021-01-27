@@ -153,14 +153,20 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "admin_usergroups_addTeams":
                 self.api_methods_to_call.remove(
                     method(
-                        team_id="T123", usergroup_id="S123", team_ids=["T111", "T222"],
+                        team_id="T123",
+                        usergroup_id="S123",
+                        team_ids=["T111", "T222"],
                     )["method"]
                 )
                 method(
-                    team_id="T123", usergroup_id="S123", team_ids="T111,T222",
+                    team_id="T123",
+                    usergroup_id="S123",
+                    team_ids="T111,T222",
                 )
                 await async_method(
-                    team_id="T123", usergroup_id="S123", team_ids="T111,T222",
+                    team_id="T123",
+                    usergroup_id="S123",
+                    team_ids="T111,T222",
                 )
             elif method_name == "admin_usergroups_listChannels":
                 self.api_methods_to_call.remove(method(usergroup_id="S123")["method"])
@@ -266,7 +272,8 @@ class TestWebClientCoverage(unittest.TestCase):
                     )["method"]
                 )
                 await async_method(
-                    external_unique_id="unique-id", join_url="https://www.example.com",
+                    external_unique_id="unique-id",
+                    join_url="https://www.example.com",
                 )
             elif method_name == "calls_end":
                 self.api_methods_to_call.remove(method(id="R111")["method"])

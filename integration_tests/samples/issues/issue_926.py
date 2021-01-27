@@ -14,6 +14,7 @@ from slack_sdk.socket_mode.aiohttp import SocketModeClient
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 async def main():
     client = SocketModeClient(app_token=os.environ["SLACK_APP_TOKEN"])
     await client.connect()

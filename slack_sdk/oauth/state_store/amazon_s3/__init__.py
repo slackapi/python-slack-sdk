@@ -38,7 +38,9 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
     def issue(self, *args, **kwargs) -> str:
         state = str(uuid4())
         response = self.s3_client.put_object(
-            Bucket=self.bucket_name, Body=str(time.time()), Key=state,
+            Bucket=self.bucket_name,
+            Body=str(time.time()),
+            Key=state,
         )
         self.logger.debug(f"S3 put_object response: {response}")
         return state
@@ -46,7 +48,8 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
     def consume(self, state: str) -> bool:
         try:
             fetch_response = self.s3_client.get_object(
-                Bucket=self.bucket_name, Key=state,
+                Bucket=self.bucket_name,
+                Key=state,
             )
             self.logger.debug(f"S3 get_object response: {fetch_response}")
             body = fetch_response["Body"].read().decode("utf-8")
@@ -55,7 +58,8 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             still_valid: bool = time.time() < expiration
 
             deletion_response = self.s3_client.delete_object(
-                Bucket=self.bucket_name, Key=state,
+                Bucket=self.bucket_name,
+                Key=state,
             )
             self.logger.debug(f"S3 delete_object response: {deletion_response}")
             return still_valid

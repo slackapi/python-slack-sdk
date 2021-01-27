@@ -416,7 +416,8 @@ class ViewTests(unittest.TestCase):
                             value="create_project",
                         ),
                         ButtonElement(
-                            text=PlainTextObject(text="Help", emoji=True), value="help",
+                            text=PlainTextObject(text="Help", emoji=True),
+                            value="help",
                         ),
                     ],
                 ),
@@ -428,7 +429,9 @@ class ViewTests(unittest.TestCase):
                         ),
                     ],
                 ),
-                SectionBlock(text=MarkdownTextObject(text="*Your Configurations*"),),
+                SectionBlock(
+                    text=MarkdownTextObject(text="*Your Configurations*"),
+                ),
                 DividerBlock(),
                 SectionBlock(
                     text=MarkdownTextObject(
