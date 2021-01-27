@@ -9,8 +9,10 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test, is_not_specified
-from slack import WebClient
-from slack.web.slack_response import SlackResponse
+from slack_sdk.web import WebClient
+from slack_sdk.web.slack_response import SlackResponse
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.web.legacy_client import LegacyWebClient
 
 
 class TestWebClient(unittest.TestCase):
@@ -20,12 +22,8 @@ class TestWebClient(unittest.TestCase):
         if not hasattr(self, "logger"):
             self.logger = logging.getLogger(__name__)
             self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-            self.async_client: WebClient = WebClient(token=self.bot_token, run_async=True)
-            self.sync_client: WebClient = WebClient(
-                token=self.bot_token,
-                run_async=False,
-                loop=asyncio.new_event_loop(),  # TODO: remove this
-            )
+            self.async_client: AsyncWebClient = AsyncWebClient(token=self.bot_token)
+            self.sync_client: WebClient = WebClient(token=self.bot_token)
             self.channel_id = os.environ[SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID]
 
     def tearDown(self):
@@ -241,7 +239,7 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_uploading_file_with_token_param_async(self):
-        client = WebClient(run_async=True)
+        client = AsyncWebClient()
         current_dir = os.path.dirname(__file__)
         file = f"{current_dir}/../../tests/data/slack_logo.png"
         upload = await client.files_upload(
@@ -274,7 +272,7 @@ class TestWebClient(unittest.TestCase):
         self.assertGreater(fetched_count, 1)
 
     def test_pagination_with_iterator_use_sync_aiohttp(self):
-        client: WebClient = WebClient(
+        client: LegacyWebClient = LegacyWebClient(
             token=self.bot_token,
             run_async=False,
             use_sync_aiohttp=True,

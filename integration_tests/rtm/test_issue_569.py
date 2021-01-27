@@ -13,7 +13,9 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test, is_not_specified
-from slack import RTMClient, WebClient
+from slack_sdk.rtm import RTMClient
+from slack_sdk.web import WebClient
+from slack_sdk.web.legacy_client import LegacyWebClient
 
 
 class TestRTMClient(unittest.TestCase):
@@ -56,7 +58,7 @@ class TestRTMClient(unittest.TestCase):
     @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate_limited errors")
     def test_cpu_usage(self):
         self.rtm_client = RTMClient(token=self.bot_token, run_async=False, loop=asyncio.new_event_loop())
-        self.web_client = WebClient(token=self.bot_token, run_async=False)
+        self.web_client = WebClient(token=self.bot_token)
 
         self.call_count = 0
         TestRTMClient.cpu_usage = 0
@@ -102,7 +104,7 @@ class TestRTMClient(unittest.TestCase):
     @async_test
     async def test_cpu_usage_async(self):
         self.rtm_client = RTMClient(token=self.bot_token, run_async=True)
-        self.web_client = WebClient(token=self.bot_token, run_async=True)
+        self.web_client = LegacyWebClient(token=self.bot_token, run_async=True)
 
         self.call_count = 0
         TestRTMClient.cpu_usage = 0

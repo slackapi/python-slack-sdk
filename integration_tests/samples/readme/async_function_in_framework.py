@@ -1,25 +1,24 @@
 # ------------------
 # Only for running this script here
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
-logging.basicConfig(level=logging.DEBUG)
 # ------------------
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # export SLACK_API_TOKEN=xoxb-***
 # pip3 install sanic
 # python3 integration_tests/samples/readme/async_function_in_framework.py
 
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    run_async=True  # turn async mode on
-)
+client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
 
 
 # Define this as an async function

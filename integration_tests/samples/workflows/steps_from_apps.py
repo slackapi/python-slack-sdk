@@ -1,12 +1,14 @@
 # ------------------
 # Only for running this script here
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
-logging.basicConfig(level=logging.DEBUG)
 # ------------------
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # ---------------------
 # Flask App for Slack OAuth flow
@@ -14,8 +16,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 import os
 import json
-from slack import WebClient
-from slack.signature import SignatureVerifier
+from slack_sdk.web import WebClient
+from slack_sdk.signature import SignatureVerifier
 
 logger = logging.getLogger(__name__)
 signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])

@@ -1,13 +1,16 @@
 # ------------------
 # Only for running this script here
-import asyncio
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
-logging.basicConfig(level=logging.DEBUG)
 # ------------------
+
+import asyncio
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 
 # ---------------------
 # Flask App
@@ -21,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 import os
 
-from slack import WebClient
-from slack.errors import SlackApiError
+from slack_sdk.web import WebClient
+from slack_sdk.errors import SlackApiError
 
 singleton_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=False)
 
