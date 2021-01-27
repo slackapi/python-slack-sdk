@@ -5,7 +5,8 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
-from slack import WebClient
+from slack_sdk.web import WebClient
+from slack_sdk.web.async_client import AsyncWebClient
 
 
 class TestWebClient(unittest.TestCase):
@@ -22,7 +23,7 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_bytes_for_file_param(self):
-        client: WebClient = WebClient(token=self.bot_token, run_async=False)
+        client: WebClient = WebClient(token=self.bot_token)
         bytes = bytearray("This is a test", "utf-8")
         upload = client.files_upload(file=bytes, filename="test.txt", channels=self.channel_ids)
         self.assertIsNotNone(upload)
@@ -31,7 +32,7 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_bytes_for_file_param_async(self):
-        client: WebClient = WebClient(token=self.bot_token, run_async=True)
+        client: AsyncWebClient = AsyncWebClient(token=self.bot_token)
         bytes = bytearray("This is a test", "utf-8")
         upload = await client.files_upload(file=bytes, filename="test.txt", channels=self.channel_ids)
         self.assertIsNotNone(upload)

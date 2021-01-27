@@ -1,17 +1,19 @@
 # ------------------
 # Only for running this script here
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../..")
-logging.basicConfig(level=logging.DEBUG)
 # ------------------
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def legacy():
-    from slack.web.classes.blocks import SectionBlock
-    from slack.web.classes.objects import TextObject
+    from slack_sdk.models.blocks import SectionBlock
+    from slack_sdk.models.blocks.basic_components import TextObject
 
     fields = []
     fields.append(TextObject(text='...', type='mrkdwn'))

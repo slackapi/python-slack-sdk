@@ -5,8 +5,10 @@ import uuid
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN
 from integration_tests.helpers import async_test
-from slack import WebClient
-from slack.web.classes.blocks import CallBlock
+from slack_sdk.web import WebClient
+from slack_sdk.models.blocks import CallBlock
+from slack_sdk.web.async_client import AsyncWebClient
+
 
 class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API"""
@@ -15,7 +17,7 @@ class TestWebClient(unittest.TestCase):
         self.logger = logging.getLogger(__name__)
         self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
         self.sync_client: WebClient = WebClient(token=self.bot_token)
-        self.async_client: WebClient = WebClient(token=self.bot_token, run_async=True)
+        self.async_client: AsyncWebClient = AsyncWebClient(token=self.bot_token)
 
     def tearDown(self):
         pass

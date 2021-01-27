@@ -1,12 +1,14 @@
 # ------------------
 # Only for running this script here
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
-logging.basicConfig(level=logging.DEBUG)
 # ------------------
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # ---------------------
 # Flask App
@@ -24,9 +26,9 @@ logger = logging.getLogger(__name__)
 @app.route("/slack/oauth/callback", methods=["GET"])
 def endpoint():
     code = request.args.get("code")
+    from slack_sdk.web import WebClient
+    from slack_sdk.errors import SlackApiError
     try:
-        from slack import WebClient
-        from slack.errors import SlackApiError
         client = WebClient(token="")
         client_id = os.environ["SLACK_CLIENT_ID"]
         client_secret = os.environ["SLACK_CLIENT_SECRET"]

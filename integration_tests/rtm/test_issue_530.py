@@ -4,7 +4,7 @@ import logging
 import unittest
 
 from integration_tests.helpers import async_test
-from slack import RTMClient
+from slack_sdk.rtm import RTMClient
 
 
 class TestRTMClient(unittest.TestCase):

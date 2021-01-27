@@ -1,11 +1,14 @@
 # ------------------
 # Only for running this script here
-import json
-import logging
 import sys
 from os.path import dirname
 
 sys.path.insert(1, f"{dirname(__file__)}/../../..")
+# ------------------
+
+import json
+import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 # ---------------------
@@ -14,9 +17,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 import os
 
-from slack import WebClient
-from slack.errors import SlackApiError
-from slack.signature import SignatureVerifier
+from slack_sdk.web import WebClient
+from slack_sdk.errors import SlackApiError
+from slack_sdk.signature import SignatureVerifier
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])

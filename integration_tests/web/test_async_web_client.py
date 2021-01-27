@@ -6,8 +6,8 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test
-from slack import AsyncWebClient
-from slack.web.async_base_client import AsyncSlackResponse
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.web.async_base_client import AsyncSlackResponse
 
 
 class TestAsyncWebClient(unittest.TestCase):

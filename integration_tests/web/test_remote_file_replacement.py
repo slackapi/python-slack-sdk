@@ -6,7 +6,7 @@ from uuid import uuid4
 from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_BOT_TOKEN, \
     SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
-from slack import WebClient
+from slack_sdk.web import WebClient
 
 
 class TestWebClient(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_replacing_remote_file_blocks_in_a_message(self):
-        client: WebClient = WebClient(token=self.bot_token, run_async=False)
+        client: WebClient = WebClient(token=self.bot_token)
         current_dir = os.path.dirname(__file__)
         url = "https://www.example.com/slack-logo"
 

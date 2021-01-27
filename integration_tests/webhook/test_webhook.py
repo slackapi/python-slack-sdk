@@ -4,12 +4,12 @@ import unittest
 from integration_tests.env_variable_names import SLACK_SDK_TEST_INCOMING_WEBHOOK_URL, \
     SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME, \
     SLACK_SDK_TEST_BOT_TOKEN
-from slack import WebClient
-from slack import WebhookClient
-from slack.web.classes.attachments import Attachment, AttachmentField
-from slack.web.classes.blocks import SectionBlock, DividerBlock, ActionsBlock
-from slack.web.classes.elements import ButtonElement
-from slack.web.classes.objects import MarkdownTextObject, PlainTextObject
+from slack_sdk.web import WebClient
+from slack_sdk.webhook import WebhookClient
+from slack_sdk.models.attachments import Attachment, AttachmentField
+from slack_sdk.models.blocks import SectionBlock, DividerBlock, ActionsBlock
+from slack_sdk.models.blocks.block_elements import ButtonElement
+from slack_sdk.models.blocks.basic_components import MarkdownTextObject, PlainTextObject
 
 
 class TestWebhook(unittest.TestCase):

@@ -10,7 +10,8 @@ from integration_tests.env_variable_names import \
     SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
     SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
 from integration_tests.helpers import async_test, is_not_specified
-from slack import RTMClient, WebClient
+from slack_sdk.rtm import RTMClient
+from slack_sdk.web import WebClient
 
 
 class TestRTMClient(unittest.TestCase):
