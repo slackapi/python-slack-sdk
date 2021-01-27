@@ -22,13 +22,17 @@ class TestRTMClient(unittest.TestCase):
 
     def test_issue_530(self):
         try:
-            rtm_client = RTMClient(token="I am not a token", run_async=False, loop=asyncio.new_event_loop())
+            rtm_client = RTMClient(
+                token="I am not a token", run_async=False, loop=asyncio.new_event_loop()
+            )
             rtm_client.start()
             self.fail("Raising an error here was expected")
         except Exception as e:
             self.assertEqual(
                 "The request to the Slack API failed.\n"
-                "The server responded with: {'ok': False, 'error': 'invalid_auth'}", str(e))
+                "The server responded with: {'ok': False, 'error': 'invalid_auth'}",
+                str(e),
+            )
         finally:
             if not rtm_client._stopped:
                 rtm_client.stop()
@@ -42,7 +46,9 @@ class TestRTMClient(unittest.TestCase):
         except Exception as e:
             self.assertEqual(
                 "The request to the Slack API failed.\n"
-                "The server responded with: {'ok': False, 'error': 'invalid_auth'}", str(e))
+                "The server responded with: {'ok': False, 'error': 'invalid_auth'}",
+                str(e),
+            )
         finally:
             if not rtm_client._stopped:
                 rtm_client.stop()

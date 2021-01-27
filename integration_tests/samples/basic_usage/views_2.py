@@ -45,8 +45,10 @@ def slack_app():
 
     if "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if payload["type"] == "shortcut" \
-            and payload["callback_id"] == "open-modal-shortcut":
+        if (
+            payload["type"] == "shortcut"
+            and payload["callback_id"] == "open-modal-shortcut"
+        ):
             # Open a new modal by a global shortcut
             try:
                 view = View(
@@ -59,9 +61,9 @@ def slack_app():
                         InputBlock(
                             block_id="b-id",
                             label=PlainTextObject(text="Input label"),
-                            element=PlainTextInputElement(action_id="a-id")
+                            element=PlainTextInputElement(action_id="a-id"),
                         )
-                    ]
+                    ],
                 )
                 api_response = client.views_open(
                     trigger_id=payload["trigger_id"],
@@ -72,11 +74,15 @@ def slack_app():
                 code = e.response["error"]
                 return make_response(f"Failed to open a modal due to {code}", 200)
 
-        if payload["type"] == "view_submission" \
-            and payload["view"]["callback_id"] == "modal-id":
+        if (
+            payload["type"] == "view_submission"
+            and payload["view"]["callback_id"] == "modal-id"
+        ):
             # Handle a data submission request from the modal
             submitted_data = payload["view"]["state"]["values"]
-            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(
+                submitted_data
+            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
 
     return make_response("", 404)

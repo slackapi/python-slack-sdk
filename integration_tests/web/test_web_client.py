@@ -5,9 +5,10 @@ import unittest
 
 import pytest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_BOT_TOKEN, \
-    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_BOT_TOKEN,
+    SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test, is_not_specified
 from slack_sdk.web import WebClient
 from slack_sdk.web.slack_response import SlackResponse
@@ -90,15 +91,22 @@ class TestWebClient(unittest.TestCase):
         subdomain = auth["team"]
 
         channel = self.channel_id
-        message = "This message was posted by <https://slack.dev/python-slackclient/|python-slackclient>! " + \
-                  "(integration_tests/test_web_client.py #test_chat_operations)"
-        new_message: SlackResponse = client.chat_postMessage(channel=channel, text=message)
+        message = (
+            "This message was posted by <https://slack.dev/python-slackclient/|python-slackclient>! "
+            + "(integration_tests/test_web_client.py #test_chat_operations)"
+        )
+        new_message: SlackResponse = client.chat_postMessage(
+            channel=channel, text=message
+        )
         self.assertEqual(new_message["message"]["text"], message)
         ts = new_message["ts"]
 
         permalink = client.chat_getPermalink(channel=channel, message_ts=ts)
         self.assertIsNotNone(permalink)
-        self.assertRegex(permalink["permalink"], f"https://{subdomain}.slack.com/archives/{channel}/.+")
+        self.assertRegex(
+            permalink["permalink"],
+            f"https://{subdomain}.slack.com/archives/{channel}/.+",
+        )
 
         new_reaction = client.reactions_add(channel=channel, timestamp=ts, name="eyes")
         self.assertIsNotNone(new_reaction)
@@ -106,13 +114,19 @@ class TestWebClient(unittest.TestCase):
         reactions = client.reactions_get(channel=channel, timestamp=ts)
         self.assertIsNotNone(reactions)
 
-        reaction_removal = client.reactions_remove(channel=channel, timestamp=ts, name="eyes")
+        reaction_removal = client.reactions_remove(
+            channel=channel, timestamp=ts, name="eyes"
+        )
         self.assertIsNotNone(reaction_removal)
 
-        thread_reply = client.chat_postMessage(channel=channel, thread_ts=ts, text="threading...")
+        thread_reply = client.chat_postMessage(
+            channel=channel, thread_ts=ts, text="threading..."
+        )
         self.assertIsNotNone(thread_reply)
 
-        modification = client.chat_update(channel=channel, ts=ts, text="Is this intentional?")
+        modification = client.chat_update(
+            channel=channel, ts=ts, text="Is this intentional?"
+        )
         self.assertIsNotNone(modification)
 
         reply_deletion = client.chat_delete(channel=channel, ts=thread_reply["ts"])
@@ -129,32 +143,49 @@ class TestWebClient(unittest.TestCase):
         subdomain = auth["team"]
 
         channel = self.channel_id
-        message = "This message was posted by <https://slack.dev/python-slackclient/|python-slackclient>! " + \
-                  "(integration_tests/test_web_client.py #test_chat_operations)"
-        new_message: SlackResponse = await client.chat_postMessage(channel=channel, text=message)
+        message = (
+            "This message was posted by <https://slack.dev/python-slackclient/|python-slackclient>! "
+            + "(integration_tests/test_web_client.py #test_chat_operations)"
+        )
+        new_message: SlackResponse = await client.chat_postMessage(
+            channel=channel, text=message
+        )
         self.assertEqual(new_message["message"]["text"], message)
         ts = new_message["ts"]
 
         permalink = await client.chat_getPermalink(channel=channel, message_ts=ts)
         self.assertIsNotNone(permalink)
-        self.assertRegex(permalink["permalink"], f"https://{subdomain}.slack.com/archives/{channel}/.+")
+        self.assertRegex(
+            permalink["permalink"],
+            f"https://{subdomain}.slack.com/archives/{channel}/.+",
+        )
 
-        new_reaction = await client.reactions_add(channel=channel, timestamp=ts, name="eyes")
+        new_reaction = await client.reactions_add(
+            channel=channel, timestamp=ts, name="eyes"
+        )
         self.assertIsNotNone(new_reaction)
 
         reactions = await client.reactions_get(channel=channel, timestamp=ts)
         self.assertIsNotNone(reactions)
 
-        reaction_removal = await client.reactions_remove(channel=channel, timestamp=ts, name="eyes")
+        reaction_removal = await client.reactions_remove(
+            channel=channel, timestamp=ts, name="eyes"
+        )
         self.assertIsNotNone(reaction_removal)
 
-        thread_reply = await client.chat_postMessage(channel=channel, thread_ts=ts, text="threading...")
+        thread_reply = await client.chat_postMessage(
+            channel=channel, thread_ts=ts, text="threading..."
+        )
         self.assertIsNotNone(thread_reply)
 
-        modification = await client.chat_update(channel=channel, ts=ts, text="Is this intentional?")
+        modification = await client.chat_update(
+            channel=channel, ts=ts, text="Is this intentional?"
+        )
         self.assertIsNotNone(modification)
 
-        reply_deletion = await client.chat_delete(channel=channel, ts=thread_reply["ts"])
+        reply_deletion = await client.chat_delete(
+            channel=channel, ts=thread_reply["ts"]
+        )
         self.assertIsNotNone(reply_deletion)
         message_deletion = await client.chat_delete(channel=channel, ts=ts)
         self.assertIsNotNone(message_deletion)
@@ -165,7 +196,9 @@ class TestWebClient(unittest.TestCase):
     def test_uploading_text_files(self):
         client = self.sync_client
         file, filename = __file__, os.path.basename(__file__)
-        upload = client.files_upload(channels=self.channel_id, filename=filename, file=file)
+        upload = client.files_upload(
+            channels=self.channel_id, filename=filename, file=file
+        )
         self.assertIsNotNone(upload)
 
         deletion = client.files_delete(file=upload["file"]["id"])
@@ -176,7 +209,11 @@ class TestWebClient(unittest.TestCase):
         client = self.async_client
         file, filename = __file__, os.path.basename(__file__)
         upload = await client.files_upload(
-            channels=self.channel_id, title="Good Old Slack Logo", filename=filename, file=file)
+            channels=self.channel_id,
+            title="Good Old Slack Logo",
+            filename=filename,
+            file=file,
+        )
         self.assertIsNotNone(upload)
 
         deletion = await client.files_delete(file=upload["file"]["id"])
@@ -187,7 +224,11 @@ class TestWebClient(unittest.TestCase):
         current_dir = os.path.dirname(__file__)
         file = f"{current_dir}/../../tests/data/slack_logo.png"
         upload = client.files_upload(
-            channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
+            channels=self.channel_id,
+            title="Good Old Slack Logo",
+            filename="slack_logo.png",
+            file=file,
+        )
         self.assertIsNotNone(upload)
 
         deletion = client.files_delete(file=upload["file"]["id"])
@@ -197,10 +238,14 @@ class TestWebClient(unittest.TestCase):
         client = self.sync_client
         current_dir = os.path.dirname(__file__)
         file = f"{current_dir}/../../tests/data/slack_logo.png"
-        with open(file, 'rb') as f:
+        with open(file, "rb") as f:
             content = f.read()
             upload = client.files_upload(
-                channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", content=content)
+                channels=self.channel_id,
+                title="Good Old Slack Logo",
+                filename="slack_logo.png",
+                content=content,
+            )
             self.assertIsNotNone(upload)
 
             deletion = client.files_delete(file=upload["file"]["id"])
@@ -212,7 +257,11 @@ class TestWebClient(unittest.TestCase):
         current_dir = os.path.dirname(__file__)
         file = f"{current_dir}/../../tests/data/slack_logo.png"
         upload = await client.files_upload(
-            channels=self.channel_id, title="Good Old Slack Logo", filename="slack_logo.png", file=file)
+            channels=self.channel_id,
+            title="Good Old Slack Logo",
+            filename="slack_logo.png",
+            file=file,
+        )
         self.assertIsNotNone(upload)
 
         deletion = client.files_delete(file=upload["file"]["id"])
@@ -264,7 +313,9 @@ class TestWebClient(unittest.TestCase):
         client = self.sync_client
         fetched_count = 0
         # SlackResponse is an iterator that fetches next if next_cursor is not ""
-        for response in client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):
+        for response in client.conversations_list(
+            limit=1, exclude_archived=1, types="public_channel"
+        ):
             fetched_count += len(response["channels"])
             if fetched_count > 1:
                 break
@@ -280,7 +331,9 @@ class TestWebClient(unittest.TestCase):
         )
         fetched_count = 0
         # SlackResponse is an iterator that fetches next if next_cursor is not ""
-        for response in client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):
+        for response in client.conversations_list(
+            limit=1, exclude_archived=1, types="public_channel"
+        ):
             fetched_count += len(response["channels"])
             if fetched_count > 1:
                 break
@@ -293,7 +346,9 @@ class TestWebClient(unittest.TestCase):
         client = self.async_client
         fetched_count = 0
         # SlackResponse is an iterator that fetches next if next_cursor is not ""
-        for response in await client.conversations_list(limit=1, exclude_archived=1, types="public_channel"):
+        for response in await client.conversations_list(
+            limit=1, exclude_archived=1, types="public_channel"
+        ):
             fetched_count += len(response["channels"])
             if fetched_count > 1:
                 break

@@ -10,8 +10,8 @@ import logging
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s.%(msecs)03d %(levelname)s %(pathname)s (%(lineno)s): %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
+    format="%(asctime)s.%(msecs)03d %(levelname)s %(pathname)s (%(lineno)s): %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 import os

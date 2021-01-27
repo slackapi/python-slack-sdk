@@ -7,7 +7,8 @@ def _print_warning_log(message: str) -> None:
 
 
 def validate_aiohttp_version(
-    aiohttp_version: str, print_warning: Callable[[str], None] = _print_warning_log,
+    aiohttp_version: str,
+    print_warning: Callable[[str], None] = _print_warning_log,
 ):
     if aiohttp_version is not None:
         elements = aiohttp_version.split(".")

@@ -53,7 +53,8 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
         with self.engine.begin() as conn:
             conn.execute(
-                self.oauth_states.insert(), {"state": state, "expire_at": now},
+                self.oauth_states.insert(),
+                {"state": state, "expire_at": now},
             )
         return state
 

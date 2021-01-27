@@ -18,17 +18,14 @@ import os
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
-client = AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
+client = AsyncWebClient(token=os.environ["SLACK_API_TOKEN"])
 
 
 # Define this as an async function
 async def send_to_slack(channel, text):
     try:
         # Don't forget to have await as the client returns asyncio.Future
-        response = await client.chat_postMessage(
-            channel=channel,
-            text=text
-        )
+        response = await client.chat_postMessage(channel=channel, text=text)
         assert response["message"]["text"] == text
     except SlackApiError as e:
         assert e.response["ok"] is False
@@ -44,17 +41,17 @@ app = Sanic()
 
 
 # e.g., http://localhost:3000/?text=foo&text=bar
-@app.route('/')
+@app.route("/")
 async def test(request):
-    text = 'Hello World!'
-    if 'text' in request.args:
-        text = "\t".join(request.args['text'])
+    text = "Hello World!"
+    if "text" in request.args:
+        text = "\t".join(request.args["text"])
     try:
         await send_to_slack(channel="#random", text=text)
-        return json({'message': 'Done!'})
+        return json({"message": "Done!"})
     except SlackApiError as e:
-        return json({'message': f"Failed due to {e.response['error']}"})
+        return json({"message": f"Failed due to {e.response['error']}"})
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3000)

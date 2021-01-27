@@ -23,5 +23,4 @@ def is_not_specified() -> bool:
 
     # python setup.py integration_tests --test-target=web/test_issue_560.py
     test_target: str = sys.argv[1]  # e.g., web/test_issue_560.py
-    return not test_target or \
-           not filepath.endswith(test_target)
+    return not test_target or not filepath.endswith(test_target)

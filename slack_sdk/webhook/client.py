@@ -168,7 +168,10 @@ class WebhookClient:
             charset = e.headers.get_content_charset() or "utf-8"
             body: str = e.read().decode(charset)
             resp = WebhookResponse(
-                url=url, status_code=e.code, body=body, headers=e.headers,
+                url=url,
+                status_code=e.code,
+                body=body,
+                headers=e.headers,
             )
             if e.code == 429:
                 # for backward-compatibility with WebClient (v.2.5.0 or older)

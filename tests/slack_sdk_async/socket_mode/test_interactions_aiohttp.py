@@ -30,7 +30,8 @@ class TestInteractionsAiohttp(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.web_client = AsyncWebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888",
+            token="xoxb-api_test",
+            base_url="http://localhost:8888",
         )
 
     def tearDown(self):
@@ -51,7 +52,8 @@ class TestInteractionsAiohttp(unittest.TestCase):
             received_messages.append(message.data)
 
         async def socket_mode_listener(
-            self: AsyncBaseSocketModeClient, request: SocketModeRequest,
+            self: AsyncBaseSocketModeClient,
+            request: SocketModeRequest,
         ):
             self.logger.info(f"Socket Mode Request: {request.payload}")
             await asyncio.sleep(randint(50, 200) / 1000)

@@ -26,7 +26,9 @@ async def mention(context: AsyncBoltContext):
 @app.event("message")
 async def message(context: AsyncBoltContext, event: dict):
     await context.client.reactions_add(
-        channel=event["channel"], timestamp=event["ts"], name="eyes",
+        channel=event["channel"],
+        timestamp=event["ts"],
+        name="eyes",
     )
 
 

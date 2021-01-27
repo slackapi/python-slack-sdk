@@ -483,7 +483,9 @@ class DispatchActionConfig(JsonObject):
         return None
 
     def __init__(
-        self, *, trigger_actions_on: Optional[list] = None,
+        self,
+        *,
+        trigger_actions_on: Optional[list] = None,
     ):
         """
         Determines when a plain-text input element will return a block_actions interaction payload.

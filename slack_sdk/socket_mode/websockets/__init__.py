@@ -117,12 +117,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def connect(self):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        old_session: Optional[
-            WebSocketClientProtocol
-        ] = None if self.current_session is None else self.current_session
+        old_session: Optional[WebSocketClientProtocol] = (
+            None if self.current_session is None else self.current_session
+        )
         # NOTE: websockets does not support proxy settings
         self.current_session = await websockets.connect(
-            uri=self.wss_uri, ping_interval=self.ping_interval,
+            uri=self.wss_uri,
+            ping_interval=self.ping_interval,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.logger.info("A new session has been established")

@@ -18,7 +18,7 @@ from slack_sdk.rtm import RTMClient
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-token = os.environ['SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN']
+token = os.environ["SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN"]
 
 
 async def sleepy_count(name, sleep_for):

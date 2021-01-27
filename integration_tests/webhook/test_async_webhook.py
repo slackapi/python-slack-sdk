@@ -1,9 +1,11 @@
 import os
 import unittest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_INCOMING_WEBHOOK_URL, \
-    SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME, \
-    SLACK_SDK_TEST_BOT_TOKEN
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_INCOMING_WEBHOOK_URL,
+    SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME,
+    SLACK_SDK_TEST_BOT_TOKEN,
+)
 from integration_tests.helpers import async_test
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.webhook.async_client import AsyncWebhookClient
@@ -14,7 +16,6 @@ from slack_sdk.models.blocks.basic_components import MarkdownTextObject, PlainTe
 
 
 class TestAsyncWebhook(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -30,7 +31,9 @@ class TestAsyncWebhook(unittest.TestCase):
         self.assertEqual("ok", response.body)
 
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace("#", "")
+        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace(
+            "#", ""
+        )
         client = AsyncWebClient(token=token)
         channel_id = None
         async for resp in await client.conversations_list(limit=10):
@@ -55,12 +58,14 @@ class TestAsyncWebhook(unittest.TestCase):
             blocks=[
                 SectionBlock(
                     block_id="sb-id",
-                    text=MarkdownTextObject(text="This is a mrkdwn text section block."),
+                    text=MarkdownTextObject(
+                        text="This is a mrkdwn text section block."
+                    ),
                     fields=[
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
                         MarkdownTextObject(text="*this is mrkdwn text*"),
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
-                    ]
+                    ],
                 ),
                 DividerBlock(),
                 ActionsBlock(
@@ -80,7 +85,7 @@ class TestAsyncWebhook(unittest.TestCase):
                         ),
                     ],
                 ),
-            ]
+            ],
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
@@ -111,13 +116,10 @@ class TestAsyncWebhook(unittest.TestCase):
                         {
                             "type": "plain_text",
                             "text": "*this is plain_text text*",
-                        }
-                    ]
+                        },
+                    ],
                 },
-                {
-                    "type": "divider",
-                    "block_id": "9SxG"
-                },
+                {"type": "divider", "block_id": "9SxG"},
                 {
                     "type": "actions",
                     "block_id": "avJ",
@@ -130,7 +132,7 @@ class TestAsyncWebhook(unittest.TestCase):
                                 "text": "Create New Task",
                             },
                             "style": "primary",
-                            "value": "create_task"
+                            "value": "create_task",
                         },
                         {
                             "type": "button",
@@ -139,7 +141,7 @@ class TestAsyncWebhook(unittest.TestCase):
                                 "type": "plain_text",
                                 "text": "Create New Project",
                             },
-                            "value": "create_project"
+                            "value": "create_project",
                         },
                         {
                             "type": "button",
@@ -148,11 +150,11 @@ class TestAsyncWebhook(unittest.TestCase):
                                 "type": "plain_text",
                                 "text": "Help",
                             },
-                            "value": "help"
-                        }
-                    ]
-                }
-            ]
+                            "value": "help",
+                        },
+                    ],
+                },
+            ],
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
@@ -171,7 +173,9 @@ class TestAsyncWebhook(unittest.TestCase):
                     pretext="some_pretext",
                     title_link="link in title",
                     fields=[
-                        AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value")
+                        AttachmentField(
+                            title=f"field_{i}_title", value=f"field_{i}_value"
+                        )
                         for i in range(5)
                     ],
                     color="#FFFF00",
@@ -184,7 +188,7 @@ class TestAsyncWebhook(unittest.TestCase):
                     ts=123456789,
                     markdown_in=["fields"],
                 )
-            ]
+            ],
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
@@ -226,13 +230,11 @@ class TestAsyncWebhook(unittest.TestCase):
                         {
                             "title": "field_4_title",
                             "value": "field_4_value",
-                        }
+                        },
                     ],
-                    "mrkdwn_in": [
-                        "fields"
-                    ]
+                    "mrkdwn_in": ["fields"],
                 }
-            ]
+            ],
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)

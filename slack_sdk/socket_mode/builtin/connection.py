@@ -263,9 +263,9 @@ class Connection:
                         # trace logging
 
                         if self.trace_enabled is True:
-                            opcode: str = _to_readable_opcode(
-                                header.opcode
-                            ) if header else "-"
+                            opcode: str = (
+                                _to_readable_opcode(header.opcode) if header else "-"
+                            )
                             payload: str = _parse_text_payload(data, self.logger)
                             count: Optional[int] = repeated_messages.get(payload)
                             if count is None:

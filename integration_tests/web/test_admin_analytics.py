@@ -2,7 +2,9 @@ import logging
 import os
 import unittest
 
-from integration_tests.env_variable_names import SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN,
+)
 from integration_tests.helpers import async_test
 from slack_sdk.errors import SlackApiError
 from slack_sdk.web.legacy_client import LegacyWebClient
@@ -16,7 +18,9 @@ class TestWebClient(unittest.TestCase):
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.org_admin_token = os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
-        self.legacy_client: LegacyWebClient = LegacyWebClient(token=self.org_admin_token)
+        self.legacy_client: LegacyWebClient = LegacyWebClient(
+            token=self.org_admin_token
+        )
         self.sync_client: WebClient = WebClient(token=self.org_admin_token)
         self.async_client: WebClient = AsyncWebClient(token=self.org_admin_token)
 
@@ -50,7 +54,9 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         client = self.async_client
 
-        response = await client.admin_analytics_getFile(date="2020-10-20", type="member")
+        response = await client.admin_analytics_getFile(
+            date="2020-10-20", type="member"
+        )
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 

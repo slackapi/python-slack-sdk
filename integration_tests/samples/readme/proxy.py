@@ -22,12 +22,6 @@ sslcert = SSLContext()
 # proxy --port 9000 --log-level d
 proxyinfo = "http://localhost:9000"
 
-client = WebClient(
-    token=os.environ['SLACK_API_TOKEN'],
-    ssl=sslcert,
-    proxy=proxyinfo
-)
-response = client.chat_postMessage(
-    channel="#random",
-    text="Hello World!")
+client = WebClient(token=os.environ["SLACK_API_TOKEN"], ssl=sslcert, proxy=proxyinfo)
+response = client.chat_postMessage(channel="#random", text="Hello World!")
 print(response)

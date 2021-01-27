@@ -26,7 +26,7 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 client_id = os.environ["SLACK_CLIENT_ID"]
 client_secret = os.environ["SLACK_CLIENT_SECRET"]
-scopes = ["app_mentions:read","chat:write"]
+scopes = ["app_mentions:read", "chat:write"]
 user_scopes = ["search:read"]
 
 logger = logging.getLogger(__name__)
@@ -40,12 +40,15 @@ authorization_url_generator = AuthorizeUrlGenerator(
     user_scopes=user_scopes,
 )
 
+
 @app.route("/slack/install", methods=["GET"])
 def oauth_start():
     state = state_store.issue()
     url = authorization_url_generator.generate(state)
-    return f'<a href="{url}">' \
-           f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+    return (
+        f'<a href="{url}">'
+        f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+    )
 
 
 @app.route("/slack/oauth_redirect", methods=["GET"])
@@ -57,9 +60,7 @@ def oauth_callback():
             code = request.args["code"]
             client = WebClient()  # no prepared token needed for this app
             oauth_response = client.oauth_v2_access(
-                client_id=client_id,
-                client_secret=client_secret,
-                code=code
+                client_id=client_id, client_secret=client_secret, code=code
             )
             logger.info(f"oauth.v2.access response: {oauth_response}")
 
@@ -96,17 +97,23 @@ def oauth_callback():
                 incoming_webhook_url=incoming_webhook.get("url"),
                 incoming_webhook_channel=incoming_webhook.get("channel"),
                 incoming_webhook_channel_id=incoming_webhook.get("channel_id"),
-                incoming_webhook_configuration_url=incoming_webhook.get("configuration_url"),
+                incoming_webhook_configuration_url=incoming_webhook.get(
+                    "configuration_url"
+                ),
                 is_enterprise_install=is_enterprise_install,
                 token_type=oauth_response.get("token_type"),
             )
             installation_store.save(installation)
             return "Thanks for installing this app!"
         else:
-            return make_response(f"Try the installation again (the state value is already expired)", 400)
+            return make_response(
+                f"Try the installation again (the state value is already expired)", 400
+            )
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(f"Something is wrong with the installation (error: {error})", 400)
+    return make_response(
+        f"Something is wrong with the installation (error: {error})", 400
+    )
 
 
 # ---------------------
@@ -120,16 +127,17 @@ from slack_sdk.signature import SignatureVerifier
 signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 signature_verifier = SignatureVerifier(signing_secret=signing_secret)
 
+
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
     if not signature_verifier.is_valid(
         body=request.get_data(),
         timestamp=request.headers.get("X-Slack-Request-Timestamp"),
-        signature=request.headers.get("X-Slack-Signature")):
+        signature=request.headers.get("X-Slack-Signature"),
+    ):
         return make_response("invalid request", 403)
 
-    if "command" in request.form \
-        and request.form["command"] == "/open-modal":
+    if "command" in request.form and request.form["command"] == "/open-modal":
         try:
             enterprise_id = request.form.get("enterprise_id")
             team_id = request.form["team_id"]
@@ -148,18 +156,9 @@ def slack_app():
                 view={
                     "type": "modal",
                     "callback_id": "modal-id",
-                    "title": {
-                        "type": "plain_text",
-                        "text": "Awesome Modal"
-                    },
-                    "submit": {
-                        "type": "plain_text",
-                        "text": "Submit"
-                    },
-                    "close": {
-                        "type": "plain_text",
-                        "text": "Cancel"
-                    },
+                    "title": {"type": "plain_text", "text": "Awesome Modal"},
+                    "submit": {"type": "plain_text", "text": "Submit"},
+                    "close": {"type": "plain_text", "text": "Cancel"},
                     "blocks": [
                         {
                             "type": "input",
@@ -171,10 +170,10 @@ def slack_app():
                             "element": {
                                 "action_id": "a-id",
                                 "type": "plain_text_input",
-                            }
+                            },
                         }
-                    ]
-                }
+                    ],
+                },
             )
             return make_response("", 200)
         except SlackApiError as e:
@@ -183,10 +182,14 @@ def slack_app():
 
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if payload["type"] == "view_submission" \
-            and payload["view"]["callback_id"] == "modal-id":
+        if (
+            payload["type"] == "view_submission"
+            and payload["view"]["callback_id"] == "modal-id"
+        ):
             submitted_data = payload["view"]["state"]["values"]
-            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(
+                submitted_data
+            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
 
     return make_response("", 404)

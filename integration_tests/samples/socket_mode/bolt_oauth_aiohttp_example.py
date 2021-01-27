@@ -22,7 +22,7 @@ app = App(
         client_id=os.environ["SLACK_CLIENT_ID"],
         client_secret=os.environ["SLACK_CLIENT_SECRET"],
         scopes=os.environ["SLACK_SCOPES"].split(","),
-    )
+    ),
 )
 
 
@@ -34,7 +34,9 @@ def mention(context: BoltContext):
 @app.event("message")
 def message(context: BoltContext, event: dict):
     context.client.reactions_add(
-        channel=event["channel"], timestamp=event["ts"], name="eyes",
+        channel=event["channel"],
+        timestamp=event["ts"],
+        name="eyes",
     )
 
 

@@ -33,7 +33,11 @@ class MockHandler(SimpleHTTPRequestHandler):
         "ok": True,
         "url": "ws://localhost:8765",
         "self": {"id": "U01234ABC", "name": "robotoverlord"},
-        "team": {"domain": "exampledomain", "id": "T123450FP", "name": "ExampleName",},
+        "team": {
+            "domain": "exampledomain",
+            "id": "T123450FP",
+            "name": "ExampleName",
+        },
     }
 
     rtm_start_failure = {

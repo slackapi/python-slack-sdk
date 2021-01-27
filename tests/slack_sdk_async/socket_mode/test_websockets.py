@@ -13,7 +13,8 @@ class TestAiohttp(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.web_client = AsyncWebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888",
+            token="xoxb-api_test",
+            base_url="http://localhost:8888",
         )
 
     def tearDown(self):
@@ -30,7 +31,8 @@ class TestAiohttp(unittest.TestCase):
     @async_test
     async def test_issue_new_wss_url(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
         )
         url = await client.issue_new_wss_url()
         self.assertTrue(url.startswith("wss://"))
@@ -38,7 +40,8 @@ class TestAiohttp(unittest.TestCase):
     @async_test
     async def test_connect_to_new_endpoint(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
         )
         try:
             await client.connect_to_new_endpoint()
@@ -51,7 +54,8 @@ class TestAiohttp(unittest.TestCase):
     @async_test
     async def test_enqueue_message(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
         )
         client.message_listeners.append(listener)
         try:

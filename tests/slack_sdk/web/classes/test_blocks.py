@@ -564,9 +564,19 @@ class InputBlockTests(unittest.TestCase):
             },
             {
                 "type": "input",
-                "element": {"type": "plain_text_input",},
-                "label": {"type": "plain_text", "text": "Label", "emoji": True,},
-                "hint": {"type": "plain_text", "text": "some hint", "emoji": True,},
+                "element": {
+                    "type": "plain_text_input",
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Label",
+                    "emoji": True,
+                },
+                "hint": {
+                    "type": "plain_text",
+                    "text": "some hint",
+                    "emoji": True,
+                },
             },
             {
                 "dispatch_action": True,

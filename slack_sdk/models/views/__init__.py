@@ -149,7 +149,9 @@ class ViewState(JsonObject):
         )
 
     def __init__(
-        self, *, values: Dict[str, Dict[str, Union[dict, "ViewStateValue"]]],
+        self,
+        *,
+        values: Dict[str, Dict[str, Union[dict, "ViewStateValue"]]],
     ):
         value_objects: Dict[str, Dict[str, ViewStateValue]] = {}
         new_state_values = copy.copy(values)

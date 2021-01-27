@@ -31,9 +31,7 @@ singleton_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=Fals
 
 singleton_loop = asyncio.new_event_loop()
 singleton_async_client = WebClient(
-    token=os.environ["SLACK_BOT_TOKEN"],
-    run_async=True,
-    loop=singleton_loop
+    token=os.environ["SLACK_BOT_TOKEN"], run_async=True, loop=singleton_loop
 )
 
 
@@ -46,7 +44,7 @@ def singleton():
         # until this completion, other simultaneous requests get "RuntimeError: This event loop is already running"
         response = singleton_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         return str(response)
     except SlackApiError as e:
@@ -56,13 +54,9 @@ def singleton():
 @app.route("/sync/per-request", methods=["GET"])
 def per_request():
     try:
-        client = WebClient(
-            token=os.environ["SLACK_BOT_TOKEN"],
-            run_async=False
-        )
+        client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=False)
         response = client.chat_postMessage(
-            channel="#random",
-            text="You used a new WebClient for posting this message!"
+            channel="#random", text="You used a new WebClient for posting this message!"
         )
         return str(response)
     except SlackApiError as e:
@@ -75,7 +69,7 @@ def singleton_async():
     try:
         future = singleton_async_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         # blocking here!!!
         # as described at https://github.com/slackapi/python-slack-sdk/issues/497
@@ -95,11 +89,11 @@ def per_request_async():
         async_client = WebClient(
             token=os.environ["SLACK_BOT_TOKEN"],
             run_async=True,
-            loop=loop_for_this_request
+            loop=loop_for_this_request,
         )
         future = async_client.chat_postMessage(
             channel="#random",
-            text="You used the singleton WebClient for posting this message!"
+            text="You used the singleton WebClient for posting this message!",
         )
         response = loop_for_this_request.run_until_complete(future)
         return str(response)

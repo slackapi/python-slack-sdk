@@ -60,14 +60,16 @@ class TestSignatureVerifier(unittest.TestCase):
 
     def test_is_valid_request_invalid_body(self):
         verifier = SignatureVerifier(
-            signing_secret=self.signing_secret, clock=MockClock(),
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
         )
         modified_body = self.body + "------"
         self.assertFalse(verifier.is_valid_request(modified_body, self.headers))
 
     def test_is_valid_request_invalid_body_as_bytes(self):
         verifier = SignatureVerifier(
-            signing_secret=self.signing_secret, clock=MockClock(),
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
         )
         modified_body = self.body + "------"
         self.assertFalse(
@@ -75,12 +77,15 @@ class TestSignatureVerifier(unittest.TestCase):
         )
 
     def test_is_valid_request_expiration(self):
-        verifier = SignatureVerifier(signing_secret=self.signing_secret,)
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+        )
         self.assertFalse(verifier.is_valid_request(self.body, self.headers))
 
     def test_is_valid_request_none(self):
         verifier = SignatureVerifier(
-            signing_secret=self.signing_secret, clock=MockClock(),
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
         )
         self.assertFalse(verifier.is_valid_request(None, self.headers))
         self.assertFalse(verifier.is_valid_request(self.body, None))
@@ -88,7 +93,8 @@ class TestSignatureVerifier(unittest.TestCase):
 
     def test_is_valid(self):
         verifier = SignatureVerifier(
-            signing_secret=self.signing_secret, clock=MockClock(),
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
         )
         self.assertTrue(
             verifier.is_valid(self.body, self.timestamp, self.valid_signature)
@@ -97,7 +103,8 @@ class TestSignatureVerifier(unittest.TestCase):
 
     def test_is_valid_none(self):
         verifier = SignatureVerifier(
-            signing_secret=self.signing_secret, clock=MockClock(),
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
         )
         self.assertFalse(verifier.is_valid(None, self.timestamp, self.valid_signature))
         self.assertFalse(verifier.is_valid(self.body, None, self.valid_signature))

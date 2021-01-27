@@ -27,7 +27,8 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.web_client = WebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888",
+            token="xoxb-api_test",
+            base_url="http://localhost:8888",
         )
 
     def tearDown(self):

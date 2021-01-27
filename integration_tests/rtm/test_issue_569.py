@@ -9,9 +9,10 @@ import unittest
 import psutil
 import pytest
 
-from integration_tests.env_variable_names import \
-    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN, \
-    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID
+from integration_tests.env_variable_names import (
+    SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN,
+    SLACK_SDK_TEST_RTM_TEST_CHANNEL_ID,
+)
 from integration_tests.helpers import async_test, is_not_specified
 from slack_sdk.rtm import RTMClient
 from slack_sdk.web import WebClient
@@ -31,6 +32,7 @@ class TestRTMClient(unittest.TestCase):
             self.bot_token = os.environ[SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN]
 
         if not hasattr(self, "cpu_monitor") or not TestRTMClient.cpu_monitor.is_alive():
+
             def run_cpu_monitor(self):
                 self.logger.debug("Starting CPU monitor in another thread...")
                 TestRTMClient.cpu_usage = 0
@@ -41,7 +43,9 @@ class TestRTMClient(unittest.TestCase):
                     if current_cpu_usage > TestRTMClient.cpu_usage:
                         TestRTMClient.cpu_usage = current_cpu_usage
 
-            TestRTMClient.cpu_monitor = threading.Thread(target=run_cpu_monitor, args=[self])
+            TestRTMClient.cpu_monitor = threading.Thread(
+                target=run_cpu_monitor, args=[self]
+            )
             TestRTMClient.cpu_monitor.setDaemon(True)
             TestRTMClient.cpu_monitor.start()
 
@@ -55,9 +59,13 @@ class TestRTMClient(unittest.TestCase):
         if hasattr(self, "rtm_client") and not self.rtm_client._stopped:
             self.rtm_client.stop()
 
-    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate_limited errors")
+    @pytest.mark.skipif(
+        condition=is_not_specified(), reason="To avoid rate_limited errors"
+    )
     def test_cpu_usage(self):
-        self.rtm_client = RTMClient(token=self.bot_token, run_async=False, loop=asyncio.new_event_loop())
+        self.rtm_client = RTMClient(
+            token=self.bot_token, run_async=False, loop=asyncio.new_event_loop()
+        )
         self.web_client = WebClient(token=self.bot_token)
 
         self.call_count = 0
@@ -73,7 +81,7 @@ class TestRTMClient(unittest.TestCase):
                     for i in range(0, 3):
                         new_message = web_client.chat_postMessage(
                             channel=event["channel"],
-                            text=f"Current CPU usage: {TestRTMClient.cpu_usage} % (test_cpu_usage)"
+                            text=f"Current CPU usage: {TestRTMClient.cpu_usage} % (test_cpu_usage)",
                         )
                         self.logger.debug(new_message)
                         self.call_count += 1
@@ -89,7 +97,9 @@ class TestRTMClient(unittest.TestCase):
         time.sleep(5)
 
         text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_cpu_usage)"
-        new_message = self.web_client.chat_postMessage(channel=self.channel_id, text=text)
+        new_message = self.web_client.chat_postMessage(
+            channel=self.channel_id, text=text
+        )
         self.assertFalse("error" in new_message)
 
         time.sleep(5)
@@ -119,7 +129,7 @@ class TestRTMClient(unittest.TestCase):
                     for i in range(0, 3):
                         new_message = await web_client.chat_postMessage(
                             channel=event["channel"],
-                            text=f"Current CPU usage: {TestRTMClient.cpu_usage} % (test_cpu_usage_async)"
+                            text=f"Current CPU usage: {TestRTMClient.cpu_usage} % (test_cpu_usage_async)",
                         )
                         self.logger.debug(new_message)
                         self.call_count += 1
@@ -130,7 +140,9 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(5)
 
         text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_cpu_usage_async)"
-        new_message = await self.web_client.chat_postMessage(channel=self.channel_id, text=text)
+        new_message = await self.web_client.chat_postMessage(
+            channel=self.channel_id, text=text
+        )
         self.assertFalse("error" in new_message)
 
         await asyncio.sleep(5)

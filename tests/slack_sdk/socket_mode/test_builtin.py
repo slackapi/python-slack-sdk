@@ -29,7 +29,8 @@ class TestBuiltin(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
         self.web_client = WebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888",
+            token="xoxb-api_test",
+            base_url="http://localhost:8888",
         )
 
     def tearDown(self):
@@ -52,7 +53,8 @@ class TestBuiltin(unittest.TestCase):
 
     def test_issue_new_wss_url(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
         )
         url = client.issue_new_wss_url()
         self.assertTrue(url.startswith("wss://"))
@@ -65,7 +67,8 @@ class TestBuiltin(unittest.TestCase):
 
     def test_connect_to_new_endpoint(self):
         client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", web_client=self.web_client,
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
         )
         client.connect_to_new_endpoint()
         self.assertFalse(client.is_connected())

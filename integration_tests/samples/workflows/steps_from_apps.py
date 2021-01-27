@@ -28,6 +28,7 @@ client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 # ---------------------
 
 from concurrent.futures.thread import ThreadPoolExecutor
+
 executor = ThreadPoolExecutor(max_workers=5)
 
 # pip3 install flask
@@ -35,6 +36,7 @@ from flask import Flask, request, make_response
 
 app = Flask(__name__)
 app.debug = True
+
 
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
@@ -54,14 +56,20 @@ def slack_app():
                         workflow_step_execute_id=step["workflow_step_execute_id"],
                         outputs={
                             "taskName": step["inputs"]["taskName"]["value"],
-                            "taskDescription": step["inputs"]["taskDescription"]["value"],
-                            "taskAuthorEmail": step["inputs"]["taskAuthorEmail"]["value"],
+                            "taskDescription": step["inputs"]["taskDescription"][
+                                "value"
+                            ],
+                            "taskAuthorEmail": step["inputs"]["taskAuthorEmail"][
+                                "value"
+                            ],
                         },
                     )
                 except Exception as err:
                     client.workflows_stepFailed(
                         workflow_step_execute_id=step["workflow_step_execute_id"],
-                        error={"message": f"Something went wrong! ({err})", }
+                        error={
+                            "message": f"Something went wrong! ({err})",
+                        },
                     )
 
             executor.submit(handle_step)
@@ -130,8 +138,10 @@ def slack_app():
             )
             return make_response("", 200)
 
-        if body["type"] == "view_submission" \
-            and body["view"]["callback_id"] == "copy_review_view":
+        if (
+            body["type"] == "view_submission"
+            and body["view"]["callback_id"] == "copy_review_view"
+        ):
             state_values = body["view"]["state"]["values"]
 
             client.workflows_updateStep(
@@ -141,16 +151,22 @@ def slack_app():
                         "value": state_values["task_name_input"]["task_name"]["value"],
                     },
                     "taskDescription": {
-                        "value": state_values["task_description_input"]["task_description"][
+                        "value": state_values["task_description_input"][
+                            "task_description"
+                        ]["value"],
+                    },
+                    "taskAuthorEmail": {
+                        "value": state_values["task_author_input"]["task_author"][
                             "value"
                         ],
                     },
-                    "taskAuthorEmail": {
-                        "value": state_values["task_author_input"]["task_author"]["value"],
-                    },
                 },
                 outputs=[
-                    {"name": "taskName", "type": "text", "label": "Task Name", },
+                    {
+                        "name": "taskName",
+                        "type": "text",
+                        "label": "Task Name",
+                    },
                     {
                         "name": "taskDescription",
                         "type": "text",

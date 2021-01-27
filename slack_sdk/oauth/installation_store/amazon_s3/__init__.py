@@ -147,7 +147,8 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
         workspace_path = f"{self.client_id}/{e_id}-{t_id}"
         try:
             fetch_response = self.s3_client.get_object(
-                Bucket=self.bucket_name, Key=f"{workspace_path}/bot-latest",
+                Bucket=self.bucket_name,
+                Key=f"{workspace_path}/bot-latest",
             )
             self.logger.debug(f"S3 get_object response: {fetch_response}")
             body = fetch_response["Body"].read().decode("utf-8")
@@ -194,7 +195,8 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                 else f"{workspace_path}/installer-latest"
             )
             fetch_response = self.s3_client.get_object(
-                Bucket=self.bucket_name, Key=key,
+                Bucket=self.bucket_name,
+                Key=key,
             )
             self.logger.debug(f"S3 get_object response: {fetch_response}")
             body = fetch_response["Body"].read().decode("utf-8")
