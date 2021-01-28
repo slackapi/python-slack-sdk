@@ -60,6 +60,7 @@ class Connection:
         on_message_listener: Optional[Callable[[str], None]] = None,
         on_error_listener: Optional[Callable[[Exception], None]] = None,
         on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
+        connection_type_name: str = "Socket Mode",
     ):
         self.url = url
         self.logger = logger
@@ -84,6 +85,7 @@ class Connection:
         self.on_message_listener = on_message_listener
         self.on_error_listener = on_error_listener
         self.on_close_listener = on_close_listener
+        self.connection_type_name = connection_type_name
 
     def connect(self) -> None:
         try:
@@ -121,20 +123,20 @@ class Connection:
                 req: str = "\r\n".join([line.lstrip() for line in message.split("\n")])
                 if self.trace_enabled:
                     self.logger.debug(
-                        f"Socket Mode handshake request (session id: {self.session_id}):\n{req}"
+                        f"{self.connection_type_name} handshake request (session id: {self.session_id}):\n{req}"
                     )
                 sock.send(req.encode("utf-8"))
                 sock.settimeout(self.receive_timeout)
                 status, headers, text = _parse_handshake_response(sock)
                 if self.trace_enabled:
                     self.logger.debug(
-                        f"Socket Mode handshake response (session id: {self.session_id}):\n{text}"
+                        f"{self.connection_type_name} handshake response (session id: {self.session_id}):\n{text}"
                     )
                 # HTTP/1.1 101 Switching Protocols
                 if status == 101:
                     if not _validate_sec_websocket_accept(sec_websocket_key, headers):
                         raise SlackClientNotConnectedError(
-                            "Invalid response header detected in Socket Mode handshake response"
+                            f"Invalid response header detected in {self.connection_type_name} handshake response"
                             f" (session id: {self.session_id})"
                         )
                     # set this successfully connected socket
