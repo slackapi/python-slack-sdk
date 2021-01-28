@@ -124,7 +124,7 @@ def _receive_messages(
         )
         received_bytes = sock.recv(size)
         if all_message_trace_enabled:
-            if len(received_bytes):
+            if len(received_bytes) > 0:
                 logger.debug(f"Received bytes: {received_bytes}")
         return received_bytes
 
