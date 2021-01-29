@@ -28,7 +28,6 @@ class TestRTMClient(unittest.TestCase):
         def fn2(client, payload):
             pass
 
-        # TODO fix
         self.assertIsNotNone(fn1)
         self.assertIsNotNone(fn2)
         self.assertEqual(fn2.__name__, "fn2")
