@@ -42,5 +42,5 @@ def _debug_log_response(logger, resp: AuditLogsResponse) -> None:
             "Received the following response - "
             f"status: {resp.status_code}, "
             f"headers: {(dict(resp.headers))}, "
-            f"body: {resp.body}"
+            f"body: {resp.raw_body}"
         )
