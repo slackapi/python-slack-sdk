@@ -71,7 +71,9 @@ class AuditLogsClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """
-        Returns information about the kind of objects which the Audit Logs API returns as a list of all objects and a short description. Authentication not required.
+        Returns information about the kind of objects which the Audit Logs API
+        returns as a list of all objects and a short description.
+        Authentication not required.
 
         :param query_params: Set any values if you want to add query params
         :param headers: additional request headers
@@ -90,7 +92,9 @@ class AuditLogsClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """
-        Returns information about the kind of actions that the Audit Logs API returns as a list of all actions and a short description of each. Authentication not required.
+        Returns information about the kind of actions that the Audit Logs API
+        returns as a list of all actions and a short description of each.
+        Authentication not required.
 
         :param query_params: Set any values if you want to add query params
         :param headers: additional request headers
@@ -115,12 +119,18 @@ class AuditLogsClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """
-        This is the primary endpoint for retrieving actual audit events from your organization. It will return a list of actions that have occurred on the installed workspace or grid organization. Authentication required.
+        This is the primary endpoint for retrieving actual audit events from your organization.
+        It will return a list of actions that have occurred on the installed workspace or grid organization.
+        Authentication required.
 
-        The following filters can be applied in order to narrow the range of actions returned. Filters are added as query string parameters and can be combined together. Multiple filter parameters are additive (a boolean AND) and are separated with an ampersand (&) in the query string. Filtering is entirely optional.
+        The following filters can be applied in order to narrow the range of actions returned.
+        Filters are added as query string parameters and can be combined together.
+        Multiple filter parameters are additive (a boolean AND) and are separated
+        with an ampersand (&) in the query string. Filtering is entirely optional.
 
         :param latest: Unix timestamp of the most recent audit event to include (inclusive).
-        :param oldest: Unix timestamp of the least recent audit event to include (inclusive). Data is not available prior to March 2018.
+        :param oldest: Unix timestamp of the least recent audit event to include (inclusive).
+            Data is not available prior to March 2018.
         :param limit: Number of results to optimistically return, maximum 9999.
         :param action: Name of the action.
         :param actor: User ID who initiated the action.
