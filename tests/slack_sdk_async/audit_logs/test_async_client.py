@@ -1,7 +1,7 @@
 import unittest
 
 from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
-from slack_sdk.audit_logs.response import AuditLogsResponse
+from slack_sdk.audit_logs import AuditLogsResponse
 from tests.helpers import async_test
 from tests.slack_sdk.audit_logs.mock_web_api_server import (
     cleanup_mock_web_api_server,
