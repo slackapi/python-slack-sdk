@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from slack_sdk.audit_logs.v1.logs import LogsResponse
 
