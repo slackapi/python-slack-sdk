@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 from slack_sdk.scim.v1.group import Group
 from slack_sdk.scim.v1.internal_utils import _to_snake_cased
@@ -26,7 +26,7 @@ class SCIMResponse:
     body: Dict[str, Any]
     snake_cased_body: Dict[str, Any]
 
-    errors: Errors
+    errors: Optional[Errors]
 
     @property
     def snake_cased_body(self) -> Dict[str, Any]:
@@ -35,8 +35,11 @@ class SCIMResponse:
         return self._snake_cased_body
 
     @property
-    def errors(self) -> Errors:
-        return Errors(**self.snake_cased_body.get("errors"))
+    def errors(self) -> Optional[Errors]:
+        errors = self.snake_cased_body.get("errors")
+        if errors is None:
+            return None
+        return Errors(**errors)
 
     def __init__(
         self,

@@ -1,20 +1,20 @@
 import json
 import logging
-import urllib
-from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Optional, Union, Any
-from urllib.error import HTTPError
+from typing import Any, Union
+from typing import Dict, Optional
 from urllib.parse import quote
-from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
-from slack_sdk.errors import SlackRequestError
+import aiohttp
+from aiohttp import BasicAuth, ClientSession
+
+from slack_sdk.errors import SlackApiError
 from .internal_utils import (
-    _build_query,
     _build_request_headers,
     _debug_log_response,
     get_user_agent,
     _to_dict_without_not_given,
+    _build_query,
 )
 from .response import (
     SCIMResponse,
@@ -35,7 +35,7 @@ from .user import User
 from .group import Group
 
 
-class SCIMClient:
+class AsyncSCIMClient:
     BASE_URL = "https://api.slack.com/scim/v1/"
 
     token: str
@@ -43,6 +43,9 @@ class SCIMClient:
     ssl: Optional[SSLContext]
     proxy: Optional[str]
     base_url: str
+    session: Optional[ClientSession]
+    trust_env_in_session: bool
+    auth: Optional[BasicAuth]
     default_headers: Dict[str, str]
     logger: logging.Logger
 
@@ -53,6 +56,9 @@ class SCIMClient:
         ssl: Optional[SSLContext] = None,
         proxy: Optional[str] = None,
         base_url: str = BASE_URL,
+        session: Optional[ClientSession] = None,
+        trust_env_in_session: bool = False,
+        auth: Optional[BasicAuth] = None,
         default_headers: Optional[Dict[str, str]] = None,
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
@@ -65,6 +71,9 @@ class SCIMClient:
         :param ssl: ssl.SSLContext to use for requests
         :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
         :param base_url: the base URL for API calls
+        :param session: a complete aiohttp.ClientSession
+        :param trust_env_in_session: True/False for aiohttp.ClientSession
+        :param auth: Basic auth info for aiohttp.ClientSession
         :param default_headers: request headers to add to all requests
         :param user_agent_prefix: prefix for User-Agent header value
         :param user_agent_suffix: suffix for User-Agent header value
@@ -75,6 +84,9 @@ class SCIMClient:
         self.ssl = ssl
         self.proxy = proxy
         self.base_url = base_url
+        self.session = session
+        self.trust_env_in_session = trust_env_in_session
+        self.auth = auth
         self.default_headers = default_headers if default_headers else {}
         self.default_headers["User-Agent"] = get_user_agent(
             user_agent_prefix, user_agent_suffix
@@ -85,7 +97,7 @@ class SCIMClient:
     # Users
     # -------------------------
 
-    def search_users(
+    async def search_users(
         self,
         *,
         # Pagination required as of August 30, 2019.
@@ -94,7 +106,7 @@ class SCIMClient:
         filter: Optional[str] = None,
     ) -> SearchUsersResponse:
         return SearchUsersResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="GET",
                 path="Users",
                 query_params={
@@ -105,14 +117,16 @@ class SCIMClient:
             )
         )
 
-    def read_user(self, id: str) -> ReadUserResponse:
+    async def read_user(self, id: str) -> ReadUserResponse:
         return ReadUserResponse(
-            self.api_call(http_verb="GET", path=f"Users/{quote(id)}")
+            await self.api_call(http_verb="GET", path=f"Users/{quote(id)}")
         )
 
-    def create_user(self, user: Union[Dict[str, Any], User]) -> UserCreateResponse:
+    async def create_user(
+        self, user: Union[Dict[str, Any], User]
+    ) -> UserCreateResponse:
         return UserCreateResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="POST",
                 path="Users",
                 body_params=user.to_dict()
@@ -121,11 +135,11 @@ class SCIMClient:
             )
         )
 
-    def patch_user(
+    async def patch_user(
         self, id: str, partial_user: Union[Dict[str, Any], User]
     ) -> UserPatchResponse:
         return UserPatchResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="PATCH",
                 path=f"Users/{quote(id)}",
                 body_params=partial_user.to_dict()
@@ -134,9 +148,11 @@ class SCIMClient:
             )
         )
 
-    def update_user(self, user: Union[Dict[str, Any], User]) -> UserUpdateResponse:
+    async def update_user(
+        self, user: Union[Dict[str, Any], User]
+    ) -> UserUpdateResponse:
         return UserUpdateResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="PUT",
                 path=f"Users/{quote(user.id)}",
                 body_params=user.to_dict()
@@ -145,9 +161,9 @@ class SCIMClient:
             )
         )
 
-    def delete_user(self, id: str) -> UserDeleteResponse:
+    async def delete_user(self, id: str) -> UserDeleteResponse:
         return UserDeleteResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="DELETE",
                 path=f"Users/{quote(id)}",
             )
@@ -157,7 +173,7 @@ class SCIMClient:
     # Groups
     # -------------------------
 
-    def search_groups(
+    async def search_groups(
         self,
         *,
         # Pagination required as of August 30, 2019.
@@ -166,7 +182,7 @@ class SCIMClient:
         filter: Optional[str] = None,
     ) -> SearchGroupsResponse:
         return SearchGroupsResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="GET",
                 path="Groups",
                 query_params={
@@ -177,14 +193,16 @@ class SCIMClient:
             )
         )
 
-    def read_group(self, id: str) -> ReadGroupResponse:
+    async def read_group(self, id: str) -> ReadGroupResponse:
         return ReadGroupResponse(
-            self.api_call(http_verb="GET", path=f"Groups/{quote(id)}")
+            await self.api_call(http_verb="GET", path=f"Groups/{quote(id)}")
         )
 
-    def create_group(self, group: Union[Dict[str, Any], Group]) -> GroupCreateResponse:
+    async def create_group(
+        self, group: Union[Dict[str, Any], Group]
+    ) -> GroupCreateResponse:
         return GroupCreateResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="POST",
                 path="Groups",
                 body_params=group.to_dict()
@@ -193,11 +211,11 @@ class SCIMClient:
             )
         )
 
-    def patch_group(
+    async def patch_group(
         self, id: str, partial_group: Union[Dict[str, Any], Group]
     ) -> GroupPatchResponse:
         return GroupPatchResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="PATCH",
                 path=f"Groups/{quote(id)}",
                 body_params=partial_group.to_dict()
@@ -206,9 +224,11 @@ class SCIMClient:
             )
         )
 
-    def update_group(self, group: Union[Dict[str, Any], Group]) -> GroupUpdateResponse:
+    async def update_group(
+        self, group: Union[Dict[str, Any], Group]
+    ) -> GroupUpdateResponse:
         return GroupUpdateResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="PUT",
                 path=f"Groups/{quote(group.id)}",
                 body_params=group.to_dict()
@@ -217,9 +237,9 @@ class SCIMClient:
             )
         )
 
-    def delete_group(self, id: str) -> GroupDeleteResponse:
+    async def delete_group(self, id: str) -> GroupDeleteResponse:
         return GroupDeleteResponse(
-            self.api_call(
+            await self.api_call(
                 http_verb="DELETE",
                 path=f"Groups/{quote(id)}",
             )
@@ -227,22 +247,20 @@ class SCIMClient:
 
     # -------------------------
 
-    def api_call(
+    async def api_call(
         self,
         *,
         http_verb: str,
         path: str,
-        query_params: Optional[Dict[str, Any]] = None,
-        body_params: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, any]] = None,
+        body_params: Optional[Dict[str, any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> SCIMResponse:
-        """Performs a Slack API request and returns the result."""
         url = f"{self.base_url}{path}"
         query = _build_query(query_params)
         if len(query) > 0:
             url += f"?{query}"
-
-        return self._perform_http_request(
+        return await self._perform_http_request(
             http_verb=http_verb,
             url=url,
             body_params=body_params,
@@ -253,12 +271,12 @@ class SCIMClient:
             ),
         )
 
-    def _perform_http_request(
+    async def _perform_http_request(
         self,
         *,
-        http_verb: str = "GET",
+        http_verb: str,
         url: str,
-        body_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]],
         headers: Dict[str, str],
     ) -> SCIMResponse:
         if body_params is not None:
@@ -273,68 +291,48 @@ class SCIMClient:
                 for k, v in headers.items()
             }
             self.logger.debug(
-                f"Sending a request - {http_verb} url: {url}, body: {body_params}, headers: {headers_for_logging}"
+                f"Sending a request - url: {url}, params: {body_params}, headers: {headers_for_logging}"
             )
+        session: Optional[ClientSession] = None
+        use_running_session = self.session and not self.session.closed
+        if use_running_session:
+            session = self.session
+        else:
+            session = aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=self.timeout),
+                auth=self.auth,
+                trust_env=self.trust_env_in_session,
+            )
+
+        resp: SCIMResponse
         try:
-            opener: Optional[OpenerDirector] = None
-            # for security (BAN-B310)
-            if url.lower().startswith("http"):
-                req = Request(
-                    method=http_verb,
+            request_kwargs = {
+                "headers": headers,
+                "data": body_params,
+                "ssl": self.ssl,
+                "proxy": self.proxy,
+            }
+            async with session.request(http_verb, url, **request_kwargs) as res:
+                response_body = {}
+                try:
+                    response_body = await res.text()
+                except aiohttp.ContentTypeError:
+                    self.logger.debug(
+                        f"No response data returned from the following API call: {url}."
+                    )
+                except json.decoder.JSONDecodeError as e:
+                    message = f"Failed to parse the response body: {str(e)}"
+                    raise SlackApiError(message, res)
+
+                resp = SCIMResponse(
                     url=url,
-                    data=body_params.encode("utf-8")
-                    if body_params is not None
-                    else None,
-                    headers=headers,
+                    status_code=res.status,
+                    raw_body=response_body,
+                    headers=res.headers,
                 )
-                if self.proxy is not None:
-                    if isinstance(self.proxy, str):
-                        opener = urllib.request.build_opener(
-                            ProxyHandler({"http": self.proxy, "https": self.proxy}),
-                            HTTPSHandler(context=self.ssl),
-                        )
-                    else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
-                        )
-            else:
-                raise SlackRequestError(f"Invalid URL detected: {url}")
+                _debug_log_response(self.logger, resp)
+        finally:
+            if not use_running_session:
+                await session.close()
 
-            # NOTE: BAN-B310 is already checked above
-            resp: Optional[HTTPResponse] = None
-            if opener:
-                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
-            else:
-                resp = urlopen(  # skipcq: BAN-B310
-                    req, context=self.ssl, timeout=self.timeout
-                )
-            charset: str = resp.headers.get_content_charset() or "utf-8"
-            response_body: str = resp.read().decode(charset)
-            resp = SCIMResponse(
-                url=url,
-                status_code=resp.status,
-                raw_body=response_body,
-                headers=resp.headers,
-            )
-            _debug_log_response(self.logger, resp)
-            return resp
-
-        except HTTPError as e:
-            # read the response body here
-            charset = e.headers.get_content_charset() or "utf-8"
-            body_params: str = e.read().decode(charset)
-            resp = SCIMResponse(
-                url=url,
-                status_code=e.code,
-                raw_body=body_params,
-                headers=e.headers,
-            )
-            if e.code == 429:
-                # for backward-compatibility with WebClient (v.2.5.0 or older)
-                resp.headers["Retry-After"] = resp.headers["retry-after"]
-            _debug_log_response(self.logger, resp)
-            return resp
-
-        except Exception as err:
-            self.logger.error(f"Failed to send a request to Slack API server: {err}")
-            raise err
+        return resp

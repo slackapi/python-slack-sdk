@@ -22,12 +22,6 @@ def _build_query(params: Optional[Dict[str, Any]]) -> str:
     return ""
 
 
-def _build_body(original_body: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    if original_body:
-        return {k: v for k, v in original_body.items() if v is not None}
-    return None
-
-
 def _is_iterable(obj: Union[Optional[Any], DefaultArg]) -> bool:
     return obj is not None and obj is not NotGiven
 
@@ -152,7 +146,7 @@ def _build_request_headers(
     return request_headers
 
 
-def _debug_log_response(logger, resp: "SCIMResponse") -> None:
+def _debug_log_response(logger, resp: "SCIMResponse") -> None:  # noqa: F821
     if logger.level <= logging.DEBUG:
         logger.debug(
             "Received the following response - "
