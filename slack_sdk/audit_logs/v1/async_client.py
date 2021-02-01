@@ -203,8 +203,16 @@ class AsyncAuditLogsClient:
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
+            headers_for_logging = {
+                k: "(redacted)" if k.lower() == "authorization" else v
+                for k, v in headers.items()
+            }
             self.logger.debug(
-                f"Sending a request - url: {url}, params: {query_params}, body: {body_params}, headers: {headers}"
+                f"Sending a request - "
+                f"url: {url}, "
+                f"params: {query_params}, "
+                f"body: {body_params}, "
+                f"headers: {headers_for_logging}"
             )
         session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed

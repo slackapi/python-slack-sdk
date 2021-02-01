@@ -195,8 +195,12 @@ class AuditLogsClient:
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
+            headers_for_logging = {
+                k: "(redacted)" if k.lower() == "authorization" else v
+                for k, v in headers.items()
+            }
             self.logger.debug(
-                f"Sending a request - url: {url}, body: {body_params}, headers: {headers}"
+                f"Sending a request - url: {url}, body: {body_params}, headers: {headers_for_logging}"
             )
         try:
             opener: Optional[OpenerDirector] = None
