@@ -4,7 +4,7 @@ import unittest
 from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN,
 )
-from slack_sdk.audit_logs.client import AuditLogsClient
+from slack_sdk.audit_logs import AuditLogsClient
 
 
 class TestAuditLogsClient(unittest.TestCase):

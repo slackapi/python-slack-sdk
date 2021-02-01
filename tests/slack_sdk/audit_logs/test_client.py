@@ -1,7 +1,6 @@
 import unittest
 
-from slack_sdk.audit_logs.client import AuditLogsClient
-from slack_sdk.audit_logs.response import AuditLogsResponse
+from slack_sdk.audit_logs import AuditLogsClient, AuditLogsResponse
 from tests.slack_sdk.audit_logs.mock_web_api_server import (
     cleanup_mock_web_api_server,
     setup_mock_web_api_server,
