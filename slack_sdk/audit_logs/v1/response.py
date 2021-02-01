@@ -1,5 +1,7 @@
 import json
-from typing import Dict, Any
+from typing import Dict, Any, List
+
+from slack_sdk.audit_logs.v1.logs import LogsResponse
 
 
 class AuditLogsResponse:
@@ -8,6 +10,11 @@ class AuditLogsResponse:
     headers: Dict[str, Any]
     raw_body: str
     body: Dict[str, Any]
+    typed_body: LogsResponse
+
+    @property
+    def typed_body(self) -> LogsResponse:
+        return LogsResponse(**self.body)
 
     def __init__(
         self,

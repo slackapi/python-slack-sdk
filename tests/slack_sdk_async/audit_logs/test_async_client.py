@@ -25,6 +25,8 @@ class TestAsyncAuditLogsClient(unittest.TestCase):
         self.assertEqual(200, resp.status_code)
         self.assertIsNotNone(resp.body.get("entries"))
 
+        self.assertEqual(resp.typed_body.entries[0].id, "xxx-yyy-zzz-111")
+
     @async_test
     async def test_actions(self):
         resp: AuditLogsResponse = await self.client.actions()
