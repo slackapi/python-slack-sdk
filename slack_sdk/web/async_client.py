@@ -150,6 +150,76 @@ class AsyncWebClient(AsyncBaseClient):
             "admin.apps.restricted.list", http_verb="GET", params=kwargs
         )
 
+    async def admin_barriers_create(
+        self,
+        *,
+        barriered_from_usergroup_ids: Union[str, Sequence[str]],
+        primary_usergroup_id: str,
+        restricted_subjects: Union[str, Sequence[str]],
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Create an Information Barrier"""
+        kwargs.update({"primary_usergroup_id": primary_usergroup_id})
+        if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
+            kwargs.update(
+                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
+            )
+        else:
+            kwargs.update(
+                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
+            )
+        if isinstance(restricted_subjects, (list, Tuple)):
+            kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
+        else:
+            kwargs.update({"restricted_subjects": restricted_subjects})
+        return await self.api_call(
+            "admin.barriers.create", http_verb="POST", params=kwargs
+        )
+
+    async def admin_barriers_delete(
+        self, *, barrier_id: str, **kwargs
+    ) -> AsyncSlackResponse:
+        """Delete an existing Information Barrier"""
+        kwargs.update({"barrier_id": barrier_id})
+        return await self.api_call(
+            "admin.barriers.delete", http_verb="POST", params=kwargs
+        )
+
+    async def admin_barriers_update(
+        self,
+        *,
+        barrier_id: str,
+        barriered_from_usergroup_ids: Union[str, Sequence[str]],
+        primary_usergroup_id: str,
+        restricted_subjects: Union[str, Sequence[str]],
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Update an existing Information Barrier"""
+        kwargs.update(
+            {"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id}
+        )
+        if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
+            kwargs.update(
+                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
+            )
+        else:
+            kwargs.update(
+                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
+            )
+        if isinstance(restricted_subjects, (list, Tuple)):
+            kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
+        else:
+            kwargs.update({"restricted_subjects": restricted_subjects})
+        return await self.api_call(
+            "admin.barriers.update", http_verb="POST", params=kwargs
+        )
+
+    async def admin_barriers_list(self, **kwargs) -> AsyncSlackResponse:
+        """Get all Information Barriers for your organization"""
+        return await self.api_call(
+            "admin.barriers.list", http_verb="GET", params=kwargs
+        )
+
     async def admin_conversations_create(
         self, *, is_private: bool, name: str, **kwargs
     ) -> AsyncSlackResponse:
