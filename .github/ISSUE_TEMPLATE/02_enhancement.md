@@ -15,7 +15,9 @@ assignees: ""
 - [ ] **slack_sdk.models** (UI component builders)
 - [ ] **slack_sdk.oauth** (OAuth Flow Utilities)
 - [ ] **slack_sdk.socket_mode** (Socket Mode client)
-- [ ] **slack_sdk.rtm.RTMClient** (RTM client)
+- [ ] **slack_sdk.audit_logs** (Audit Logs API client)
+- [ ] **slack_sdk.scim** (SCIM API client)
+- [ ] **slack_sdk.rtm** (RTM client)
 - [ ] **slack_sdk.signature** (Request Signature Verifier)
 
 ### Requirements
