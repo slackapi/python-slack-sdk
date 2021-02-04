@@ -12,6 +12,7 @@ class UserAddress:
     primary: Union[Optional[bool], DefaultArg]
     region: Union[Optional[str], DefaultArg]
     street_address: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -22,6 +23,7 @@ class UserAddress:
         primary: Union[Optional[bool], DefaultArg] = NotGiven,
         region: Union[Optional[str], DefaultArg] = NotGiven,
         street_address: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.country = country
         self.locality = locality
@@ -29,6 +31,7 @@ class UserAddress:
         self.primary = primary
         self.region = region
         self.street_address = street_address
+        self.unknown_fields = kwargs
 
     def to_dict(self) -> dict:
         return _to_dict_without_not_given(self)
@@ -49,15 +52,18 @@ class UserRole(TypeAndValue):
 class UserGroup:
     display: Union[Optional[str], DefaultArg]
     value: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         *,
         display: Union[Optional[str], DefaultArg] = NotGiven,
         value: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.display = display
         self.value = value
+        self.unknown_fields = kwargs
 
     def to_dict(self) -> dict:
         return _to_dict_without_not_given(self)
@@ -66,14 +72,17 @@ class UserGroup:
 class UserMeta:
     created: Union[Optional[str], DefaultArg]
     location: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         created: Union[Optional[str], DefaultArg] = NotGiven,
         location: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.created = created
         self.location = location
+        self.unknown_fields = kwargs
 
     def to_dict(self) -> dict:
         return _to_dict_without_not_given(self)
@@ -82,14 +91,17 @@ class UserMeta:
 class UserName:
     family_name: Union[Optional[str], DefaultArg]
     given_name: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         family_name: Union[Optional[str], DefaultArg] = NotGiven,
         given_name: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.family_name = family_name
         self.given_name = given_name
+        self.unknown_fields = kwargs
 
     def to_dict(self) -> dict:
         return _to_dict_without_not_given(self)
@@ -98,14 +110,17 @@ class UserName:
 class UserPhoto:
     type: Union[Optional[str], DefaultArg]
     value: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         type: Union[Optional[str], DefaultArg] = NotGiven,
         value: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.type = type
         self.value = value
+        self.unknown_fields = kwargs
 
     def to_dict(self) -> dict:
         return _to_dict_without_not_given(self)
@@ -130,7 +145,7 @@ class User:
     timezone: Union[Optional[str], DefaultArg]
     title: Union[Optional[str], DefaultArg]
     user_name: Union[Optional[str], DefaultArg]
-    additional_fields: Union[Dict[str, Any], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -165,7 +180,7 @@ class User:
         timezone: Union[Optional[str], DefaultArg] = NotGiven,
         title: Union[Optional[str], DefaultArg] = NotGiven,
         user_name: Union[Optional[str], DefaultArg] = NotGiven,
-        additional_fields: Union[Dict[str, Any], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.active = active
         self.addresses = (
@@ -217,7 +232,7 @@ class User:
         self.title = title
         self.user_name = user_name
 
-        self._additional_fields = additional_fields
+        self.unknown_fields = kwargs
 
     def to_dict(self):
         return _to_dict_without_not_given(self)

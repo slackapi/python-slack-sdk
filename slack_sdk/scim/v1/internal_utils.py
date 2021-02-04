@@ -30,7 +30,7 @@ def _to_dict_without_not_given(obj: Any) -> dict:
     dict_value = {}
     given_dict = obj if isinstance(obj, dict) else vars(obj)
     for key, value in given_dict.items():
-        if key == "_additional_fields":
+        if key == "unknown_fields":
             if value is not None:
                 converted = _to_dict_without_not_given(value)
                 dict_value.update(converted)

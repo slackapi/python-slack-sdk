@@ -1,4 +1,4 @@
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict, Any
 
 from .default_arg import DefaultArg, NotGiven
 from .internal_utils import _to_dict_without_not_given, _is_iterable
@@ -7,15 +7,18 @@ from .internal_utils import _to_dict_without_not_given, _is_iterable
 class GroupMember:
     display: Union[Optional[str], DefaultArg]
     value: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         *,
         display: Union[Optional[str], DefaultArg] = NotGiven,
         value: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.display = display
         self.value = value
+        self.unknown_fields = kwargs
 
     def to_dict(self):
         return _to_dict_without_not_given(self)
@@ -24,15 +27,18 @@ class GroupMember:
 class GroupMeta:
     created: Union[Optional[str], DefaultArg]
     location: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
         *,
         created: Union[Optional[str], DefaultArg] = NotGiven,
         location: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.created = created
         self.location = location
+        self.unknown_fields = kwargs
 
     def to_dict(self):
         return _to_dict_without_not_given(self)
@@ -44,6 +50,7 @@ class Group:
     members: Union[Optional[List[GroupMember]], DefaultArg]
     meta: Union[Optional[GroupMeta], DefaultArg]
     schemas: Union[Optional[List[str]], DefaultArg]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -53,6 +60,7 @@ class Group:
         members: Union[Optional[List[GroupMember]], DefaultArg] = NotGiven,
         meta: Union[Optional[GroupMeta], DefaultArg] = NotGiven,
         schemas: Union[Optional[List[str]], DefaultArg] = NotGiven,
+        **kwargs,
     ) -> None:
         self.display_name = display_name
         self.id = id
@@ -65,6 +73,7 @@ class Group:
             GroupMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
         )
         self.schemas = schemas
+        self.unknown_fields = kwargs
 
     def to_dict(self):
         return _to_dict_without_not_given(self)
