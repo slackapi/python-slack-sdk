@@ -35,7 +35,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Audit Logs API                 | Receive audit logs API data.                                                                  | ``slack_sdk.audit_logs``           |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| SCIM API                       | Utilize the SCIM APIs for provisioning and managing user accounts and groups                  | ``slack_sdk.scim``                 |
+| SCIM API                       | Utilize the SCIM APIs for provisioning and managing user accounts and groups.                 | ``slack_sdk.scim``                 |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm.v2``               |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+

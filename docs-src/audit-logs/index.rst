@@ -13,7 +13,9 @@ AuditLogsClient
 
 An OAuth token with `the admin scope <https://api.slack.com/scopes/admin>`_ is required to access this API.
 
-Probably, you are going to use the ``/logs`` endpoint. To learn available parameters for the endpoint, check `the guide <https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api>`_. Also, you can check the data structure of ``api_response.typed_body`` `here <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py>`_.
+You will likely use the ``/logs`` endpoint as it's the essential part of this API.
+
+To learn about the available parameters for this endpoint, check out `this guide <https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api>`_. You can also learn more about the data structure of ``api_response.typed_body`` `here <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py>`_.
 
 .. code-block:: python
 
