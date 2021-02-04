@@ -226,8 +226,8 @@
 <span class="n">response</span><span class="o">.</span><span class="n">users</span>  <span class="c1"># List[User]</span>
 </pre></div>
 </div>
-<p>Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py">the class source code</a> to know the structure of the <code class="docutils literal notranslate"><span class="pre">user</span></code> in the <code class="docutils literal notranslate"><span class="pre">response.users</span></code>.</p>
-<p>Similarly, <code class="docutils literal notranslate"><span class="pre">search_groups</span></code> method is available and the <code class="docutils literal notranslate"><span class="pre">Group</span></code> object can be <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py">like this</a>.</p>
+<p>Check out <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py">the class source code</a> to learn more about the structure of the <code class="docutils literal notranslate"><span class="pre">user</span></code> in <code class="docutils literal notranslate"><span class="pre">response.users</span></code>.</p>
+<p>Similarly, the <code class="docutils literal notranslate"><span class="pre">search_groups</span></code> method is available and the shape of the <code class="docutils literal notranslate"><span class="pre">Group</span></code> object can be <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py">found here</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_groups</span><span class="p">(</span>
     <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">count</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -235,10 +235,10 @@
 <span class="n">response</span><span class="o">.</span><span class="n">groups</span>  <span class="c1"># List[Group]</span>
 </pre></div>
 </div>
-<p>For creating, updating, and deleting users/groups,</p>
+<p>For creating, updating, and deleting users/groups:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># POST /Users</span>
-<span class="c1"># Creates a user. Must include the userName attribute and at least one email address.</span>
-<span class="c1"># You may provide an email address in the userName field,</span>
+<span class="c1"># Creates a user. Must include the user_name argument and at least one email address.</span>
+<span class="c1"># You may provide an email address as the user_name value,</span>
 <span class="c1"># but it will be automatically converted to a Slack-appropriate username.</span>
 <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span>
     <span class="n">user_name</span><span class="o">=</span><span class="s2">&quot;cal&quot;</span><span class="p">,</span>

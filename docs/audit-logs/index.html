@@ -208,11 +208,12 @@
 <h1>Audit Logs API Client<a class="headerlink" href="#audit-logs-api-client" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://api.slack.com/admins/audit-logs">Audit Logs API</a> is a set of APIs for monitoring what’s happening in your <a class="reference external" href="https://api.slack.com/enterprise/grid">Enterprise Grid</a> organization.</p>
 <p>The Audit Logs API can be used by security information and event management (SIEM) tools to provide an analysis of how your Slack organization is being accessed. You can also use this API to write your own applications to see how members of your organization are using Slack.</p>
-<p>Follow the instructions in <a class="reference external" href="https://api.slack.com/admins/audit-logs">the API document</a> to get a valid token for using Audit Logs API. Your Slack app for Audit Logs API needs to be installed on the Enterprise Grid Organization, not an individual workspace within the organization.</p>
+<p>Follow the instructions in <a class="reference external" href="https://api.slack.com/admins/audit-logs">the API document</a> to get a valid token for using Audit Logs API. The Slack app using the Audit Logs API needs to be installed in the Enterprise Grid Organization, not an individual workspace within the organization.</p>
 <div class="section" id="auditlogsclient">
 <h2>AuditLogsClient<a class="headerlink" href="#auditlogsclient" title="Permalink to this headline">¶</a></h2>
 <p>An OAuth token with <a class="reference external" href="https://api.slack.com/scopes/admin">the admin scope</a> is required to access this API.</p>
-<p>Probably, you are going to use the <code class="docutils literal notranslate"><span class="pre">/logs</span></code> endpoint. To learn available parameters for the endpoint, check <a class="reference external" href="https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api">the guide</a>. Also, you can check the data structure of <code class="docutils literal notranslate"><span class="pre">api_response.typed_body</span></code> <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py">here</a>.</p>
+<p>You will likely use the <code class="docutils literal notranslate"><span class="pre">/logs</span></code> endpoint as it’s the essential part of this API.</p>
+<p>To learn about the available parameters for this endpoint, check out <a class="reference external" href="https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api">this guide</a>. You can also learn more about the data structure of <code class="docutils literal notranslate"><span class="pre">api_response.typed_body</span></code> <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py">here</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack_sdk.audit_logs</span> <span class="kn">import</span> <span class="n">AuditLogsClient</span>
 
@@ -222,7 +223,7 @@
 <span class="n">api_response</span><span class="o">.</span><span class="n">typed_body</span>  <span class="c1"># slack_sdk.audit_logs.v1.LogsResponse</span>
 </pre></div>
 </div>
-<p>If you would like to access <code class="docutils literal notranslate"><span class="pre">/schemes</span></code> or <code class="docutils literal notranslate"><span class="pre">/actions</span></code>, You can use the following methods.</p>
+<p>If you would like to access <code class="docutils literal notranslate"><span class="pre">/schemes</span></code> or <code class="docutils literal notranslate"><span class="pre">/actions</span></code>, you can use the following methods:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">schemas</span><span class="p">()</span>
 <span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">()</span>
 </pre></div>
