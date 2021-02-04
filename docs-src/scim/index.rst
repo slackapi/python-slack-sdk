@@ -4,7 +4,7 @@ SCIM API Client
 
 `SCIM API <https://api.slack.com/scim>`_ is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.
 
-`SCIM (System for Cross-domain Identity Management) <http://www.simplecloud.info/>`_ is supported by myriad services. It behaves slightly differently than other Slack APIs.
+`SCIM (System for Cross-domain Identity Management) <http://www.simplecloud.info/>`_ is supported by a myriad of services. It behaves slightly differently from other Slack APIs.
 
 Refer to `the API document <https://api.slack.com/scim>`_ for more details.
 
