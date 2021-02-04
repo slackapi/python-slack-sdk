@@ -154,9 +154,18 @@
 <li class="toctree-l2"><a class="reference internal" href="oauth/index.html#token-lookup">Token Lookup</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="audit-logs/index.html">Audit Logs API Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="audit-logs/index.html#auditlogsclient">AuditLogsClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audit-logs/index.html#asyncauditlogsclient">AsyncAuditLogsClient</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scim/index.html">SCIM API Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scim/index.html#scimclient">SCIMClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scim/index.html#asyncscimclient">AsyncSCIMClient</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">RTM Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#real-time-messaging-rtm">Real Time Messaging (RTM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="real_time_messaging.html#rtm-events">RTM Events</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
@@ -229,9 +238,17 @@
 <td><p>Setup the authentication flow using V2 OAuth for Slack apps.</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.oauth</span></code></p></td>
 </tr>
+<tr class="row-even"><td><p>Audit Logs API</p></td>
+<td><p>Receive audit logs API data.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.audit_logs</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>SCIM API</p></td>
+<td><p>Utilize the SCIM APIs for provisioning and managing user accounts and groups</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.scim</span></code></p></td>
+</tr>
 <tr class="row-even"><td><p>RTM API</p></td>
 <td><p>Listen for incoming messages and a limited set of events happening in Slack, using WebSocket.</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.rtm`</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.rtm.v2</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Request Signature Verification</p></td>
 <td><p>Verify incoming requests from the Slack API servers.</p></td>
