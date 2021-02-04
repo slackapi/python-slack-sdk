@@ -8,6 +8,8 @@
      webhook/index
      socket-mode/index
      oauth/index
+     audit-logs/index
+     scim/index
      real_time_messaging
      faq
      about
@@ -31,7 +33,11 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | OAuth                          | Setup the authentication flow using V2 OAuth for Slack apps.                                  | ``slack_sdk.oauth``                |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm```                 |
+| Audit Logs API                 | Receive audit logs API data.                                                                  | ``slack_sdk.audit_logs``           |
++--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
+| SCIM API                       | Utilize the SCIM APIs for provisioning and managing user accounts and groups                  | ``slack_sdk.scim``                 |
++--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
+| RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm.v2``               |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Request Signature Verification | Verify incoming requests from the Slack API servers.                                          | ``slack_sdk.signature``            |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
