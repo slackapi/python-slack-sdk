@@ -6,6 +6,7 @@ class User:
     name: Optional[str]
     email: Optional[str]
     team: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -14,20 +15,29 @@ class User:
         name: Optional[str] = None,
         email: Optional[str] = None,
         team: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.id = id
         self.name = name
         self.email = email
         self.team = team
+        self.unknown_fields = kwargs
 
 
 class Actor:
     type: Optional[str]
     user: Optional[User]
+    unknown_fields: Dict[str, Any]
 
-    def __init__(self, type: Optional[str] = None, user: Optional[User] = None) -> None:
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        user: Optional[User] = None,
+        **kwargs,
+    ) -> None:
         self.type = type
         self.user = User(**user) if isinstance(user, dict) else user
+        self.unknown_fields = kwargs
 
 
 class Location:
@@ -35,6 +45,7 @@ class Location:
     id: Optional[str]
     name: Optional[str]
     domain: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -43,11 +54,13 @@ class Location:
         id: Optional[str] = None,
         name: Optional[str] = None,
         domain: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.type = type
         self.id = id
         self.name = name
         self.domain = domain
+        self.unknown_fields = kwargs
 
 
 class Context:
@@ -55,6 +68,7 @@ class Context:
     ua: Optional[str]
     ip_address: Optional[str]
     session_id: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -63,11 +77,13 @@ class Context:
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
+        self.unknown_fields = kwargs
 
 
 class Details:
@@ -96,6 +112,7 @@ class Details:
     app_previously_resolved: Optional[bool]
     admin_app_id: Optional[str]
     bot_id: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -125,6 +142,7 @@ class Details:
         app_previously_resolved: Optional[bool] = None,
         admin_app_id: Optional[str] = None,
         bot_id: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.name = name
         self.new_value = new_value
@@ -151,6 +169,7 @@ class Details:
         self.app_previously_resolved = app_previously_resolved
         self.admin_app_id = admin_app_id
         self.bot_id = bot_id
+        self.unknown_fields = kwargs
 
 
 class App:
@@ -160,6 +179,7 @@ class App:
     is_directory_approved: Optional[bool]
     is_workflow_app: Optional[bool]
     scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -170,6 +190,7 @@ class App:
         is_directory_approved: Optional[bool] = None,
         is_workflow_app: Optional[bool] = None,
         scopes: Optional[List[str]] = None,
+        **kwargs,
     ) -> None:
         self.id = id
         self.name = name
@@ -177,6 +198,7 @@ class App:
         self.is_directory_approved = is_directory_approved
         self.is_workflow_app = is_workflow_app
         self.scopes = scopes
+        self.unknown_fields = kwargs
 
 
 class Channel:
@@ -187,6 +209,7 @@ class Channel:
     is_org_shared: Optional[bool]
     teams_shared_with: Optional[List[str]]
     original_connected_channel_id: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -198,6 +221,7 @@ class Channel:
         is_org_shared: Optional[bool] = None,
         teams_shared_with: Optional[List[str]] = None,
         original_connected_channel_id: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.id = id
         self.privacy = privacy
@@ -206,6 +230,7 @@ class Channel:
         self.is_org_shared = is_org_shared
         self.teams_shared_with = teams_shared_with
         self.original_connected_channel_id = original_connected_channel_id
+        self.unknown_fields = kwargs
 
 
 class File:
@@ -213,6 +238,7 @@ class File:
     name: Optional[str]
     filetype: Optional[str]
     title: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -221,11 +247,13 @@ class File:
         name: Optional[str] = None,
         filetype: Optional[str] = None,
         title: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.id = id
         self.name = name
         self.filetype = filetype
         self.title = title
+        self.unknown_fields = kwargs
 
 
 class Entity:
@@ -236,6 +264,7 @@ class Entity:
     channel: Optional[Channel]
     file: Optional[File]
     app: Optional[App]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -247,6 +276,7 @@ class Entity:
         channel: Optional[Union[Channel, dict]] = None,
         file: Optional[Union[File, dict]] = None,
         app: Optional[Union[App, dict]] = None,
+        **kwargs,
     ) -> None:
         self.type = type
         self.user = User(**user) if isinstance(user, dict) else user
@@ -259,6 +289,7 @@ class Entity:
         self.channel = Channel(**channel) if isinstance(channel, dict) else channel
         self.file = File(**file) if isinstance(file, dict) else file
         self.app = App(**app) if isinstance(app, dict) else app
+        self.unknown_fields = kwargs
 
 
 class Entry:
@@ -269,6 +300,7 @@ class Entry:
     entity: Optional[Entity]
     context: Optional[Context]
     details: Optional[Details]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -280,6 +312,7 @@ class Entry:
         entity: Optional[Entity] = None,
         context: Optional[Context] = None,
         details: Optional[Details] = None,
+        **kwargs,
     ) -> None:
         self.id = id
         self.date_create = date_create
@@ -288,13 +321,21 @@ class Entry:
         self.entity = Entity(**entity) if isinstance(entity, dict) else entity
         self.context = Context(**context) if isinstance(context, dict) else context
         self.details = Details(**details) if isinstance(details, dict) else details
+        self.unknown_fields = kwargs
 
 
 class ResponseMetadata:
     next_cursor: Optional[str]
+    unknown_fields: Dict[str, Any]
 
-    def __init__(self, *, next_cursor: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        *,
+        next_cursor: Optional[str] = None,
+        **kwargs,
+    ) -> None:
         self.next_cursor = next_cursor
+        self.unknown_fields = kwargs
 
 
 class LogsResponse:
@@ -304,6 +345,7 @@ class LogsResponse:
     error: Optional[str]
     needed: Optional[str]
     provided: Optional[str]
+    unknown_fields: Dict[str, Any]
 
     def __init__(
         self,
@@ -314,6 +356,7 @@ class LogsResponse:
         error: Optional[str] = None,
         needed: Optional[str] = None,
         provided: Optional[str] = None,
+        **kwargs,
     ) -> None:
         self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
         self.response_metadata = (
@@ -325,3 +368,4 @@ class LogsResponse:
         self.error = error
         self.needed = needed
         self.provided = provided
+        self.unknown_fields = kwargs
