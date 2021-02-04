@@ -6,7 +6,7 @@ Audit Logs API Client
 
 The Audit Logs API can be used by security information and event management (SIEM) tools to provide an analysis of how your Slack organization is being accessed. You can also use this API to write your own applications to see how members of your organization are using Slack.
 
-Follow the instructions in `the API document <https://api.slack.com/admins/audit-logs>`_ to get a valid token for using Audit Logs API. Your Slack app for Audit Logs API needs to be installed on the Enterprise Grid Organization, not an individual workspace within the organization.
+Follow the instructions in `the API document <https://api.slack.com/admins/audit-logs>`_ to get a valid token for using Audit Logs API. The Slack app using the Audit Logs API needs to be installed in the Enterprise Grid Organization, not an individual workspace within the organization.
 
 AuditLogsClient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -25,7 +25,7 @@ Probably, you are going to use the ``/logs`` endpoint. To learn available parame
     api_response = self.client.logs(action="user_login", limit=1)
     api_response.typed_body  # slack_sdk.audit_logs.v1.LogsResponse
 
-If you would like to access ``/schemes`` or ``/actions``, You can use the following methods.
+If you would like to access ``/schemes`` or ``/actions``, you can use the following methods:
 
 .. code-block:: python
 
