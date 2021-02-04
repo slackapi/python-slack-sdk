@@ -29,9 +29,9 @@ To fetch provisioned user data, you can use the ``search_users`` method in the c
     )
     response.users  # List[User]
 
-Check `the class source code <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py>`_ to know the structure of the ``user`` in the ``response.users``.
+Check out `the class source code <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py>`_ to learn more about the structure of the ``user`` in ``response.users``.
 
-Similarly, ``search_groups`` method is available and the ``Group`` object can be `like this <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py>`_.
+Similarly, the ``search_groups`` method is available and the shape of the ``Group`` object can be `found here <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py>`_.
 
 .. code-block:: python
 
@@ -41,13 +41,13 @@ Similarly, ``search_groups`` method is available and the ``Group`` object can be
     )
     response.groups  # List[Group]
 
-For creating, updating, and deleting users/groups,
+For creating, updating, and deleting users/groups:
 
 .. code-block:: python
 
     # POST /Users
-    # Creates a user. Must include the userName attribute and at least one email address.
-    # You may provide an email address in the userName field,
+    # Creates a user. Must include the user_name argument and at least one email address.
+    # You may provide an email address as the user_name value,
     # but it will be automatically converted to a Slack-appropriate username.
     user = User(
         user_name="cal",

@@ -55,7 +55,7 @@ Note that the import here is not ``from slack_sdk.rtm import RTMClient`` but ``f
 
 **Connecting to the RTM API (v1 client)**
 
-Here is a code snippet using the legacy version of ``RTMClient``. For new app development, we do not recommend using this one as it still has a few issues resolved by v2. Check `the list of the issues <https://github.com/slackapi/python-slack-sdk/issues?q=is%3Aissue+is%3Aclosed+milestone%3A3.3.0+label%3Artm-client>`_ for details.
+Below is a code snippet that uses the legacy version of ``RTMClient``. For new app development, we **do not recommend** using it as it contains issues that have been resolved in v2. Please refer to the `list of these issues <https://github.com/slackapi/python-slack-sdk/issues?q=is%3Aissue+is%3Aclosed+milestone%3A3.3.0+label%3Artm-client>`_ for more details.
 
 .. code-block:: python
 
