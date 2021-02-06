@@ -207,7 +207,7 @@
   <div class="section" id="scim-api-client">
 <h1>SCIM API Client<a class="headerlink" href="#scim-api-client" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://api.slack.com/scim">SCIM API</a> is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.</p>
-<p><a class="reference external" href="http://www.simplecloud.info/">SCIM (System for Cross-domain Identity Management)</a> is supported by myriad services. It behaves slightly differently than other Slack APIs.</p>
+<p><a class="reference external" href="http://www.simplecloud.info/">SCIM (System for Cross-domain Identity Management)</a> is supported by a myriad of services. It behaves slightly differently from other Slack APIs.</p>
 <p>Refer to <a class="reference external" href="https://api.slack.com/scim">the API document</a> for more details.</p>
 <div class="section" id="scimclient">
 <h2>SCIMClient<a class="headerlink" href="#scimclient" title="Permalink to this headline">¶</a></h2>
@@ -245,11 +245,11 @@
     <span class="n">name</span><span class="o">=</span><span class="n">UserName</span><span class="p">(</span><span class="n">given_name</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">family_name</span><span class="o">=</span><span class="s2">&quot;Henderson&quot;</span><span class="p">),</span>
     <span class="n">emails</span><span class="o">=</span><span class="p">[</span><span class="n">UserEmail</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;your-unique-name@example.com&quot;</span><span class="p">)],</span>
 <span class="p">)</span>
-<span class="n">creation_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="n">creation_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 
 <span class="c1"># PATCH /Users/{user_id}</span>
 <span class="c1"># Updates an existing user resource, overwriting values for specified attributes.</span>
-<span class="n">patch_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch_user</span><span class="p">(</span>
+<span class="n">patch_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">patch_user</span><span class="p">(</span>
     <span class="nb">id</span><span class="o">=</span><span class="n">creation_result</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
     <span class="n">partial_user</span><span class="o">=</span><span class="n">User</span><span class="p">(</span><span class="n">user_name</span><span class="o">=</span><span class="s2">&quot;chenderson&quot;</span><span class="p">),</span>
 <span class="p">)</span>
@@ -259,12 +259,12 @@
 <span class="c1"># even if an attribute is empty or not provided.</span>
 <span class="n">user_to_update</span> <span class="o">=</span> <span class="n">patch_result</span><span class="o">.</span><span class="n">user</span>
 <span class="n">user_to_update</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">UserName</span><span class="p">(</span><span class="n">given_name</span><span class="o">=</span><span class="s2">&quot;Cal&quot;</span><span class="p">,</span> <span class="n">family_name</span><span class="o">=</span><span class="s2">&quot;Henderson&quot;</span><span class="p">)</span>
-<span class="n">update_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user_to_update</span><span class="p">)</span>
+<span class="n">update_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user_to_update</span><span class="p">)</span>
 
 <span class="c1"># DELETE /Users/{user_id}</span>
 <span class="c1"># Sets a Slack user to deactivated. The value of the {id}</span>
 <span class="c1"># should be the user&#39;s corresponding Slack ID, beginning with either U or W.</span>
-<span class="n">delete_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete_user</span><span class="p">(</span><span class="n">user_to_update</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="n">delete_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">delete_user</span><span class="p">(</span><span class="n">user_to_update</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

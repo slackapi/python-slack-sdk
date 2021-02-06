@@ -54,11 +54,11 @@ For creating, updating, and deleting users/groups:
         name=UserName(given_name="C", family_name="Henderson"),
         emails=[UserEmail(value="your-unique-name@example.com")],
     )
-    creation_result = self.client.create_user(user)
+    creation_result = client.create_user(user)
 
     # PATCH /Users/{user_id}
     # Updates an existing user resource, overwriting values for specified attributes.
-    patch_result = self.client.patch_user(
+    patch_result = client.patch_user(
         id=creation_result.user.id,
         partial_user=User(user_name="chenderson"),
     )
@@ -68,12 +68,12 @@ For creating, updating, and deleting users/groups:
     # even if an attribute is empty or not provided.
     user_to_update = patch_result.user
     user_to_update.name = UserName(given_name="Cal", family_name="Henderson")
-    update_result = self.client.update_user(user=user_to_update)
+    update_result = client.update_user(user=user_to_update)
 
     # DELETE /Users/{user_id}
     # Sets a Slack user to deactivated. The value of the {id}
     # should be the user's corresponding Slack ID, beginning with either U or W.
-    delete_result = self.client.delete_user(user_to_update.id)
+    delete_result = client.delete_user(user_to_update.id)
 
 AsyncSCIMClient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

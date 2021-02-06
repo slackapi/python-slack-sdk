@@ -213,19 +213,19 @@
 <h2>AuditLogsClient<a class="headerlink" href="#auditlogsclient" title="Permalink to this headline">¶</a></h2>
 <p>An OAuth token with <a class="reference external" href="https://api.slack.com/scopes/admin">the admin scope</a> is required to access this API.</p>
 <p>You will likely use the <code class="docutils literal notranslate"><span class="pre">/logs</span></code> endpoint as it’s the essential part of this API.</p>
-<p>To learn about the available parameters for this endpoint, check out <a class="reference external" href="https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api">this guide</a>. You can also learn more about the data structure of <code class="docutils literal notranslate"><span class="pre">api_response.typed_body</span></code> <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py">here</a>.</p>
+<p>To learn about the available parameters for this endpoint, check out <a class="reference external" href="https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api">this guide</a>. You can also learn more about the data structure of <code class="docutils literal notranslate"><span class="pre">api_response.typed_body</span></code> from <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py">the class source code</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack_sdk.audit_logs</span> <span class="kn">import</span> <span class="n">AuditLogsClient</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">AuditLogsClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_ORG_ADMIN_USER_TOKEN&quot;</span><span class="p">])</span>
 
-<span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;user_login&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;user_login&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">api_response</span><span class="o">.</span><span class="n">typed_body</span>  <span class="c1"># slack_sdk.audit_logs.v1.LogsResponse</span>
 </pre></div>
 </div>
 <p>If you would like to access <code class="docutils literal notranslate"><span class="pre">/schemes</span></code> or <code class="docutils literal notranslate"><span class="pre">/actions</span></code>, you can use the following methods:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">schemas</span><span class="p">()</span>
-<span class="n">api_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">schemas</span><span class="p">()</span>
+<span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">actions</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -235,7 +235,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.audit_logs.async_client</span> <span class="kn">import</span> <span class="n">AsyncAuditLogsClient</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">AsyncAuditLogsClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_ORG_ADMIN_USER_TOKEN&quot;</span><span class="p">])</span>
 
-<span class="n">api_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;user_login&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">api_response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;user_login&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">api_response</span><span class="o">.</span><span class="n">typed_body</span>  <span class="c1"># slack_sdk.audit_logs.v1.LogsResponse</span>
 </pre></div>
 </div>

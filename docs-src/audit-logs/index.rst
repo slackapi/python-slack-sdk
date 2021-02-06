@@ -24,15 +24,15 @@ To learn about the available parameters for this endpoint, check out `this guide
 
     client = AuditLogsClient(token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"])
 
-    api_response = self.client.logs(action="user_login", limit=1)
+    api_response = client.logs(action="user_login", limit=1)
     api_response.typed_body  # slack_sdk.audit_logs.v1.LogsResponse
 
 If you would like to access ``/schemes`` or ``/actions``, you can use the following methods:
 
 .. code-block:: python
 
-    api_response = self.client.schemas()
-    api_response = self.client.actions()
+    api_response = client.schemas()
+    api_response = client.actions()
 
 AsyncAuditLogsClient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,7 +44,7 @@ If you are keen to use asyncio for SCIM API calls, we offer AsyncSCIMClient for 
     from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
     client = AsyncAuditLogsClient(token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"])
 
-    api_response = await self.client.logs(action="user_login", limit=1)
+    api_response = await client.logs(action="user_login", limit=1)
     api_response.typed_body  # slack_sdk.audit_logs.v1.LogsResponse
 
 
