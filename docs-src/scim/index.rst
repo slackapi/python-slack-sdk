@@ -45,6 +45,8 @@ For creating, updating, and deleting users/groups:
 
 .. code-block:: python
 
+    from slack_sdk.scim.v1.user import User, UserName, UserEmail
+
     # POST /Users
     # Creates a user. Must include the user_name argument and at least one email address.
     # You may provide an email address as the user_name value,

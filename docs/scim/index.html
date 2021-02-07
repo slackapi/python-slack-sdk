@@ -236,7 +236,9 @@
 </pre></div>
 </div>
 <p>For creating, updating, and deleting users/groups:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># POST /Users</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.scim.v1.user</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserName</span><span class="p">,</span> <span class="n">UserEmail</span>
+
+<span class="c1"># POST /Users</span>
 <span class="c1"># Creates a user. Must include the user_name argument and at least one email address.</span>
 <span class="c1"># You may provide an email address as the user_name value,</span>
 <span class="c1"># but it will be automatically converted to a Slack-appropriate username.</span>
