@@ -43,6 +43,8 @@ def _to_dict_without_not_given(obj: Any) -> dict:
             dict_value[dict_key] = [
                 elem.to_dict() if hasattr(elem, "to_dict") else elem for elem in value
             ]
+        elif isinstance(value, dict):
+            dict_value[dict_key] = _to_dict_without_not_given(value)
         else:
             dict_value[dict_key] = (
                 value.to_dict() if hasattr(value, "to_dict") else value
