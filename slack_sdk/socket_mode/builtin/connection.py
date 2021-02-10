@@ -3,14 +3,13 @@ import ssl
 import struct
 import time
 from logging import Logger
-from typing import Optional, Callable, Union, List, Tuple
+from typing import Optional, Callable, Union, List, Tuple, Dict
 from urllib.parse import urlparse
 from uuid import uuid4
 
 from slack_sdk.errors import SlackClientNotConnectedError, SlackClientConfigurationError
 from .frame_header import FrameHeader
 from .internals import (
-    _open_new_socket,
     _parse_handshake_response,
     _validate_sec_websocket_accept,
     _generate_sec_websocket_key,
@@ -18,6 +17,7 @@ from .internals import (
     _receive_messages,
     _build_data_frame_for_sending,
     _parse_text_payload,
+    _establish_new_socket_connection,
 )
 
 
@@ -34,6 +34,7 @@ class Connection:
     url: str
     logger: Logger
     proxy: Optional[str]
+    proxy_headers: Optional[Dict[str, str]]
 
     trace_enabled: bool
     ping_pong_trace_enabled: bool
@@ -51,6 +52,7 @@ class Connection:
         url: str,
         logger: Logger,
         proxy: Optional[str] = None,
+        proxy_headers: Optional[Dict[str, str]] = None,
         ping_interval: float = 10,  # seconds
         receive_timeout: float = 5,
         receive_buffer_size: int = 1024,
@@ -65,6 +67,7 @@ class Connection:
         self.url = url
         self.logger = logger
         self.proxy = proxy
+        self.proxy_headers = proxy_headers
 
         self.ping_interval = ping_interval
         self.receive_timeout = receive_timeout
@@ -89,24 +92,24 @@ class Connection:
 
     def connect(self) -> None:
         try:
-            url = (self.proxy or self.url).strip()
-            parsed_url = urlparse(url)
-
+            parsed_url = urlparse(self.url.strip())
             hostname: str = parsed_url.hostname
-            port: int = parsed_url.port or (
-                443 if url.startswith("https://") or url.startswith("wss://") else 80
-            )
+            port: int = parsed_url.port or (443 if parsed_url.scheme == "wss" else 80)
             if self.trace_enabled:
                 self.logger.debug(
                     f"Connecting to the address for handshake: {hostname}:{port} "
                     f"(session id: {self.session_id})"
                 )
-            sock: Union[ssl.SSLSocket, socket] = _open_new_socket(
-                server_hostname=parsed_url.hostname,
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(
+                session_id=self.session_id,
+                server_hostname=hostname,
                 server_port=port,
                 logger=self.logger,
+                receive_timeout=self.receive_timeout,
+                proxy=self.proxy,
+                proxy_headers=self.proxy_headers,
+                trace_enabled=self.trace_enabled,
             )
-            sock.connect((hostname, port))
 
             # WebSocket handshake
             try:

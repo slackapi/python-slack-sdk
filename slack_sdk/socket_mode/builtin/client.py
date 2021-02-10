@@ -3,7 +3,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue
 from threading import Lock
-from typing import Union, Optional, List, Callable
+from typing import Union, Optional, List, Callable, Dict
 
 from slack_sdk.socket_mode.client import BaseSocketModeClient
 from slack_sdk.socket_mode.listeners import (
@@ -70,6 +70,7 @@ class SocketModeClient(BaseSocketModeClient):
         receive_buffer_size: int = 1024,
         concurrency: int = 10,
         proxy: Optional[str] = None,
+        proxy_headers: Optional[Dict[str, str]] = None,
         on_message_listeners: Optional[List[Callable[[str], None]]] = None,
         on_error_listeners: Optional[List[Callable[[Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None,
@@ -112,6 +113,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.message_workers = ThreadPoolExecutor(max_workers=concurrency)
 
         self.proxy = proxy
+        self.proxy_headers = proxy_headers
 
         self.on_message_listeners = on_message_listeners or []
         self.on_error_listeners = on_error_listeners or []
@@ -140,6 +142,7 @@ class SocketModeClient(BaseSocketModeClient):
             ping_pong_trace_enabled=self.ping_pong_trace_enabled,
             receive_buffer_size=self.receive_buffer_size,
             proxy=self.proxy,
+            proxy_headers=self.proxy_headers,
             on_message_listener=self._on_message,
             on_error_listener=self._on_error,
             on_close_listener=self._on_close,
