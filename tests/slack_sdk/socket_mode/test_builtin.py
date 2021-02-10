@@ -2,19 +2,15 @@ import logging
 import time
 import unittest
 from threading import Thread
-from typing import Optional, List, Tuple
 
 from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.builtin.connection import Connection, ConnectionState
 from slack_sdk.socket_mode.builtin.frame_header import FrameHeader
 from slack_sdk.socket_mode.builtin.internals import (
-    _open_new_socket,
     _generate_sec_websocket_key,
     _to_readable_opcode,
     _build_data_frame_for_sending,
-    _parse_text_payload,
-    _fetch_messages,
 )
 from slack_sdk.web.legacy_client import LegacyWebClient
 from .mock_web_api_server import (
@@ -115,10 +111,6 @@ class TestBuiltin(unittest.TestCase):
 
     # ----------------------------------
     # internals
-
-    def test_open_new_socket(self):
-        soc = _open_new_socket("0.0.0.0", 3456, self.logger)
-        soc.close()
 
     def test_generate_sec_websocket_key(self):
         key = _generate_sec_websocket_key()
