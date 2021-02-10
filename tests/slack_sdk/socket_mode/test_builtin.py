@@ -1,4 +1,5 @@
 import logging
+import socket
 import time
 import unittest
 from threading import Thread
@@ -11,6 +12,7 @@ from slack_sdk.socket_mode.builtin.internals import (
     _generate_sec_websocket_key,
     _to_readable_opcode,
     _build_data_frame_for_sending,
+    _parse_connect_response,
 )
 from slack_sdk.web.legacy_client import LegacyWebClient
 from .mock_web_api_server import (
@@ -123,3 +125,14 @@ class TestBuiltin(unittest.TestCase):
     def test_build_data_frame_for_sending(self):
         res = _build_data_frame_for_sending("hello!", FrameHeader.OPCODE_TEXT)
         self.assertIsNotNone(res)
+
+    def test_parse_connect_response(self):
+        sock = socket.socket()
+        try:
+            sock.connect(("localhost", 8888))
+            sock.send("""CONNECT localhost:8888 HTTP/1.0\r\n\r\n""".encode("utf-8"))
+            status, text = _parse_connect_response(sock)
+            self.assertEqual(status, 200)
+            self.assertEqual(text, "HTTP/1.1 200 Connection established")
+        finally:
+            sock.close()

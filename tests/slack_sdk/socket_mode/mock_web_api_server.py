@@ -120,6 +120,10 @@ class MockHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
         self._handle()
 
+    def do_CONNECT(self):
+        self.wfile.write("HTTP/1.1 200 Connection established\r\n\r\n".encode("utf-8"))
+        self.wfile.close()
+
 
 class MockServerProcessTarget:
     def __init__(self, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
