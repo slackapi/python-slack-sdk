@@ -21,8 +21,8 @@ client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),
     web_client=WebClient(token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")),
     trace_enabled=True,
-    # export SLACK_API_TOKEN=xoxb-***
-    # python3 integration_tests/samples/readme/proxy.py
+    # pip3 install proxy.py
+    # proxy --port 9000 --log-level d
     http_proxy_host="localhost",
     http_proxy_port=9000,
     http_proxy_auth=("user", "pass"),

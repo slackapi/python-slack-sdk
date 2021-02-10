@@ -21,8 +21,8 @@ from slack_sdk.socket_mode.response import SocketModeResponse
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode import SocketModeClient
 
-# export SLACK_API_TOKEN=xoxb-***
-# python3 integration_tests/samples/readme/proxy.py
+# pip3 install proxy.py
+# proxy --port 9000 --log-level d
 proxy_url = "http://localhost:9000"
 
 client = SocketModeClient(
