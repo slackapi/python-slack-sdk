@@ -229,7 +229,7 @@ class RTMClient:
 
     def disconnect(self):
         """Disconnects the current session."""
-        self.connection.disconnect()
+        self.current_session.disconnect()
 
     def close(self) -> None:
         """
@@ -238,7 +238,7 @@ class RTMClient:
         """
         self.closed = True
         self.disconnect()
-        self.connection.close()
+        self.current_session.close()
 
     def start(self) -> None:
         """Establishes an RTM connection and blocks the current thread."""
