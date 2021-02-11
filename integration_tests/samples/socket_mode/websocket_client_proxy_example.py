@@ -19,7 +19,12 @@ from slack_sdk.socket_mode.websocket_client import SocketModeClient
 
 client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),
-    web_client=WebClient(token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")),
+    web_client=WebClient(
+        token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN"),
+        # pip3 install proxy.py
+        # proxy --port 9000 --log-level d
+        proxy="http://localhost:9000",
+    ),
     trace_enabled=True,
     # pip3 install proxy.py
     # proxy --port 9000 --log-level d
