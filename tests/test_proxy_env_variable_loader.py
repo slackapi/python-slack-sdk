@@ -10,6 +10,7 @@ class TestProxyEnvVariableLoader(unittest.TestCase):
         self.old_env = remove_os_env_temporarily()
 
     def tearDown(self):
+        os.environ.clear()
         restore_os_env(self.old_env)
 
     def test_load_lower_case(self):
