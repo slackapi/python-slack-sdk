@@ -9,6 +9,7 @@ from threading import Lock, Event
 from typing import Optional, Callable, List, Union
 
 from slack_sdk.errors import SlackApiError, SlackClientError
+from slack_sdk.proxy_env_variable_loader import load_http_proxy_from_env
 from slack_sdk.socket_mode.builtin.connection import Connection, ConnectionState
 from slack_sdk.socket_mode.interval_runner import IntervalRunner
 from slack_sdk.web import WebClient
@@ -75,6 +76,10 @@ class RTMClient:
         self.headers = headers
         self.ping_interval = ping_interval
         self.logger = logger or logging.getLogger(__name__)
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self.logger)
+            if env_variable is not None:
+                self.proxy = env_variable
 
         self.web_client = web_client or WebClient(
             token=self.token,

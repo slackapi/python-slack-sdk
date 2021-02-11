@@ -1,4 +1,5 @@
 import logging
+import os
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue
@@ -15,6 +16,7 @@ from slack_sdk.web import WebClient
 from .connection import Connection, ConnectionState
 from ..interval_runner import IntervalRunner
 from ...errors import SlackClientConfigurationError
+from ...proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class SocketModeClient(BaseSocketModeClient):
@@ -113,6 +115,10 @@ class SocketModeClient(BaseSocketModeClient):
         self.message_workers = ThreadPoolExecutor(max_workers=concurrency)
 
         self.proxy = proxy
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self.logger)
+            if env_variable is not None:
+                self.proxy = env_variable
         self.proxy_headers = proxy_headers
 
         self.on_message_listeners = on_message_listeners or []

@@ -8,6 +8,7 @@ from typing import Union, Optional, List, Callable, Awaitable
 import aiohttp
 from aiohttp import ClientWebSocketResponse, WSMessage, WSMsgType, ClientConnectionError
 
+from slack_sdk.proxy_env_variable_loader import load_http_proxy_from_env
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
 from slack_sdk.socket_mode.async_listeners import (
     AsyncWebSocketMessageListener,
@@ -72,6 +73,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
         self.proxy = proxy
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self.logger)
+            if env_variable is not None:
+                self.proxy = env_variable
+
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
