@@ -29,6 +29,7 @@ from .internal_utils import (
     _build_req_args,
 )
 from .slack_response import SlackResponse
+from ..proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class BaseClient:
@@ -61,6 +62,11 @@ class BaseClient:
         if team_id is not None:
             self.default_params["team_id"] = team_id
         self._logger = logger if logger is not None else logging.getLogger(__name__)
+
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self._logger)
+            if env_variable is not None:
+                self.proxy = env_variable
 
     def api_call(  # skipcq: PYL-R1710
         self,

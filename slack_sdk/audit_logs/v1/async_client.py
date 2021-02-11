@@ -14,6 +14,7 @@ from .internal_utils import (
     get_user_agent,
 )
 from .response import AuditLogsResponse
+from ...proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class AsyncAuditLogsClient:
@@ -74,6 +75,11 @@ class AsyncAuditLogsClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
+
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self.logger)
+            if env_variable is not None:
+                self.proxy = env_variable
 
     async def schemas(
         self,
