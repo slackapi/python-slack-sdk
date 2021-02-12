@@ -21,9 +21,9 @@ from slack_sdk.socket_mode.response import SocketModeResponse
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode import SocketModeClient
 
-# pip3 install proxy.py
-# proxy --port 9000 --log-level d
-proxy_url = "http://localhost:9000"
+# https://github.com/seratch/my-proxy-server
+# go build && ./my-proxy-sever -a
+proxy_url = "http://user:pass@localhost:9000"
 
 client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),
@@ -32,6 +32,8 @@ client = SocketModeClient(
         proxy=proxy_url,
     ),
     proxy=proxy_url,
+    # proxy="http://localhost:9000",
+    # proxy_headers={"Proxy-Authorization": "Basic dXNlcjpwYXNz"},
     trace_enabled=True,
     all_message_trace_enabled=True,
 )
