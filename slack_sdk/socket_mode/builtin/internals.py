@@ -6,7 +6,7 @@ import socket
 from socket import socket as Socket
 import ssl
 import struct
-from base64 import encodebytes
+from base64 import encodebytes, b64encode
 from hmac import compare_digest
 from logging import Logger
 from typing import Tuple, Optional, Union, List, Callable, Dict
@@ -59,6 +59,11 @@ def _establish_new_socket_connection(
         sock.settimeout(receive_timeout)
         sock.connect(proxy_addr[4])  # proxy address
         message = [f"CONNECT {server_hostname}:{server_port} HTTP/1.0"]
+        if parsed_proxy.username is not None and parsed_proxy.password is not None:
+            # In the case where the proxy is "http://{username}:{password}@{hostname}:{port}"
+            raw_value = f"{parsed_proxy.username}:{parsed_proxy.password}"
+            auth = b64encode(raw_value.encode("utf-8")).decode("ascii")
+            message.append(f"Proxy-Authorization: Basic {auth}")
         if proxy_headers is not None:
             for k, v in proxy_headers.items():
                 message.append(f"{k}: {v}")
@@ -69,11 +74,11 @@ def _establish_new_socket_connection(
             logger.debug(f"Proxy connect request (session id: {session_id}):\n{req}")
         sock.send(req.encode("utf-8"))
         status, text = _parse_connect_response(sock)
-        if status != 200:
-            raise Exception(f"Failed to connect to the proxy (proxy: {proxy})")
         if trace_enabled:
             log_message = f"Proxy connect response (session id: {session_id}):\n{text}"
             logger.debug(log_message)
+        if status != 200:
+            raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
 
         sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
             sock,
