@@ -16,6 +16,8 @@ Messaging
 
 One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the ``channel`` parameter.
 
+Note that your app's bot user needs to be in the channel (otherwise, you will get either ``not_in_channel`` or ``channel_not_found`` error code). If your app has `chat:write.public <https://api.slack.com/scopes/chat:write.public>`_ scope, your app can post messages without joining a channel as long as the channel is public. See `chat.postMessage <https://api.slack.com/methods/chat.postMessage>`_ for more info.
+
 .. code-block:: python
 
     import logging
@@ -167,7 +169,7 @@ See `chat.delete <https://api.slack.com/methods/chat.delete>`_ for more info.
 
 You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.
 
-This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``channel message``, ``group message``, or ``direct message``). One of file, file_comment, or the combination of channel and timestamp must be specified.
+This method adds a reaction (emoji) to an item (``file``, ``file comment``, ``channel message``, ``group message``, or ``direct message``). One of file, file_comment, or the combination of channel and timestamp must be specified. Also, note that your app's bot user needs to be in the channel (otherwise, you will get either ``not_in_channel`` or ``channel_not_found`` error code).
 
 .. code-block:: python
 
@@ -197,7 +199,7 @@ Files
 
 **Uploading files**
 
-You can upload files onto Slack and share the file with people in channels.
+You can upload files onto Slack and share the file with people in channels. Note that your app's bot user needs to be in the channel (otherwise, you will get either ``not_in_channel`` or ``channel_not_found`` error code).
 
 .. code-block:: python
 
