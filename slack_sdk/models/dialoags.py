@@ -8,7 +8,8 @@ from slack_sdk.models.dialogs import DialogTextComponent  # noqa
 from slack_sdk.models.dialogs import DialogTextField  # noqa
 from slack_sdk.models.dialogs import DialogUserSelector  # noqa
 from slack_sdk.models.dialogs import TextElementSubtypes  # noqa
+from slack_sdk.models.dialogs import DialogBuilder  # noqa
 
 from slack import deprecation
 
-deprecation.show_message(__name__, "slack_sdk.models.blocks")
+deprecation.show_message(__name__, "slack_sdk.models.dialogs")

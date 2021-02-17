@@ -1,4 +1,4 @@
-from slack_sdk.models.dialoags import DialogBuilder  # noqa
+from slack_sdk.models.dialogs import DialogBuilder  # noqa
 
 from slack import deprecation
 

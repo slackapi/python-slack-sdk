@@ -78,7 +78,9 @@ def _establish_new_socket_connection(
             log_message = f"Proxy connect response (session id: {session_id}):\n{text}"
             logger.debug(log_message)
         if status != 200:
-            raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
+            raise Exception(
+                f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})"
+            )
 
         sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
             sock,

@@ -1,4 +1,6 @@
 import logging
+import os
+import warnings
 from typing import Optional, Sequence
 
 from slack_sdk.models import extract_json
@@ -10,6 +12,14 @@ from slack_sdk.models.basic_objects import (
 from slack_sdk.models.blocks import Block
 
 LOGGER = logging.getLogger(__name__)
+
+skip_warn = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
+if not skip_warn:
+    message = (
+        "This class is no longer actively maintained. "
+        "Please use a dict object for building message data instead."
+    )
+    warnings.warn(message)
 
 
 class Message(JsonObject):
@@ -61,13 +71,16 @@ class Message(JsonObject):
             LOGGER.error(
                 "Messages over 40,000 characters are automatically truncated by Slack"
             )
-        if self.text and self.blocks:
-            #  Slack doesn't render the text property if there are blocks, so:
-            LOGGER.info(
-                "text attribute is treated as fallback text if blocks are attached to "
-                "a message - insert text as a new SectionBlock if you want it to be "
-                "displayed "
-            )
+        # The following limitation used to be true in the past.
+        # As of Feb 2021, having both is recommended
+        # -----------------
+        # if self.text and self.blocks:
+        #     #  Slack doesn't render the text property if there are blocks, so:
+        #     LOGGER.info(q
+        #         "text attribute is treated as fallback text if blocks are attached to "
+        #         "a message - insert text as a new SectionBlock if you want it to be "
+        #         "displayed "
+        #     )
         json["attachments"] = extract_json(self.attachments)
         json["blocks"] = extract_json(self.blocks)
         json["mrkdwn"] = self.markdown
