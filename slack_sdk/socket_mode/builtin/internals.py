@@ -1,3 +1,4 @@
+import errno
 import hashlib
 import itertools
 import os
@@ -9,6 +10,7 @@ import struct
 from base64 import encodebytes, b64encode
 from hmac import compare_digest
 from logging import Logger
+from threading import Lock
 from typing import Tuple, Optional, Union, List, Callable, Dict
 from urllib.parse import urlparse
 
@@ -40,6 +42,7 @@ def _establish_new_socket_connection(
     server_hostname: str,
     server_port: int,
     logger: Logger,
+    sock_send_lock: Lock,
     receive_timeout: float,
     proxy: Optional[str],
     proxy_headers: Optional[Dict[str, str]],
@@ -56,6 +59,10 @@ def _establish_new_socket_connection(
             socket.SOL_TCP,
         )[0]
         sock = socket.socket(proxy_addr[0], proxy_addr[1], proxy_addr[2])
+        if hasattr(socket, "TCP_NODELAY"):
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        if hasattr(socket, "SO_KEEPALIVE"):
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         sock.settimeout(receive_timeout)
         sock.connect(proxy_addr[4])  # proxy address
         message = [f"CONNECT {server_hostname}:{server_port} HTTP/1.0"]
@@ -72,7 +79,8 @@ def _establish_new_socket_connection(
         req: str = "\r\n".join([line.lstrip() for line in message])
         if trace_enabled:
             logger.debug(f"Proxy connect request (session id: {session_id}):\n{req}")
-        sock.send(req.encode("utf-8"))
+        with sock_send_lock:
+            sock.send(req.encode("utf-8"))
         status, text = _parse_connect_response(sock)
         if trace_enabled:
             log_message = f"Proxy connect response (session id: {session_id}):\n{text}"
@@ -190,6 +198,7 @@ def _parse_text_payload(data: Optional[bytes], logger: Logger) -> str:
 
 def _receive_messages(
     sock: ssl.SSLSocket,
+    sock_receive_lock: Lock,
     logger: Logger,
     receive_buffer_size: int = 1024,
     all_message_trace_enabled: bool = False,
@@ -200,11 +209,18 @@ def _receive_messages(
             if specific_buffer_size is not None
             else receive_buffer_size
         )
-        received_bytes = sock.recv(size)
-        if all_message_trace_enabled:
-            if len(received_bytes) > 0:
-                logger.debug(f"Received bytes: {received_bytes}")
-        return received_bytes
+        with sock_receive_lock:
+            try:
+                received_bytes = sock.recv(size)
+                if all_message_trace_enabled:
+                    if len(received_bytes) > 0:
+                        logger.debug(f"Received bytes: {received_bytes}")
+                return received_bytes
+            except OSError as e:
+                if e.errno == errno.EBADF:
+                    logger.debug("The connection seems to be already closed.")
+                    return bytes()
+                raise e
 
     return _fetch_messages(
         messages=[],

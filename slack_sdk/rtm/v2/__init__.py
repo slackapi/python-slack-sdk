@@ -1,6 +1,7 @@
 import inspect
 import json
 import logging
+import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue, Empty
@@ -30,6 +31,7 @@ class RTMClient:
 
     current_session: Optional[Connection]
     current_session_state: Optional[ConnectionState]
+    wss_uri: Optional[str]
 
     message_queue: Queue
     message_listeners: List[Callable[["RTMClient", dict], None]]
@@ -54,7 +56,7 @@ class RTMClient:
         timeout: int = 30,
         base_url: str = WebClient.BASE_URL,
         headers: Optional[dict] = None,
-        ping_interval: int = 10,
+        ping_interval: int = 5,
         concurrency: int = 10,
         logger: Optional[logging.Logger] = None,
         on_message_listeners: Optional[List[Callable[[str], None]]] = None,
@@ -108,6 +110,7 @@ class RTMClient:
         self.current_session_runner = IntervalRunner(
             self._run_current_session, 0.5
         ).start()
+        self.wss_uri = None
 
         self.current_app_monitor_started = False
         self.current_app_monitor = IntervalRunner(
@@ -181,20 +184,25 @@ class RTMClient:
             api_response = self.web_client.rtm_connect()
             return api_response["url"]
         except SlackApiError as e:
-            self.logger.error(f"Failed to retrieve WSS URL: {e}")
-            raise e
+            if e.response["error"] == "ratelimited":
+                delay = int(e.response.headers.get("Retry-After", "30"))  # Tier1
+                self.logger.info(f"Rate limited. Retrying in {delay} seconds...")
+                time.sleep(delay)
+                # Retry to issue a new WSS URL
+                return self.issue_new_wss_url()
+            else:
+                # other errors
+                self.logger.error(f"Failed to retrieve WSS URL: {e}")
+                raise e
 
     def connect_to_new_endpoint(self, force: bool = False):
         """Acquires a new WSS URL and tries to connect to the endpoint."""
-        try:
-            self.connect_operation_lock.acquire(blocking=True, timeout=5)
+        with self.connect_operation_lock:
             if force or not self.is_connected():
                 self.logger.info("Connecting to a new endpoint...")
                 self.wss_uri = self.issue_new_wss_url()
                 self.connect()
                 self.logger.info("Connected to a new endpoint...")
-        finally:
-            self.connect_operation_lock.release()
 
     def connect(self):
         """Starts talking to the RTM server through a WebSocket connection"""
@@ -203,8 +211,11 @@ class RTMClient:
 
         old_session: Optional[Connection] = self.current_session
 
+        if self.wss_uri is None:
+            self.wss_uri = self.issue_new_wss_url()
+
         self.current_session = Connection(
-            url=self.issue_new_wss_url(),
+            url=self.wss_uri,
             logger=self.logger,
             ping_interval=self.ping_interval,
             trace_enabled=self.trace_enabled,

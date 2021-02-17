@@ -3,6 +3,7 @@ import ssl
 import struct
 import time
 from logging import Logger
+from threading import Lock
 from typing import Optional, Callable, Union, List, Tuple, Dict
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -53,8 +54,8 @@ class Connection:
         logger: Logger,
         proxy: Optional[str] = None,
         proxy_headers: Optional[Dict[str, str]] = None,
-        ping_interval: float = 10,  # seconds
-        receive_timeout: float = 5,
+        ping_interval: float = 5,  # seconds
+        receive_timeout: float = 3,
         receive_buffer_size: int = 1024,
         trace_enabled: bool = False,
         all_message_trace_enabled: bool = False,
@@ -84,6 +85,9 @@ class Connection:
         self.last_ping_pong_time = None
         self.consecutive_check_state_error_count = 0
         self.sock = None
+        # To avoid ssl.SSLError: [SSL: BAD_LENGTH] bad length
+        self.sock_receive_lock = Lock()
+        self.sock_send_lock = Lock()
 
         self.on_message_listener = on_message_listener
         self.on_error_listener = on_error_listener
@@ -105,6 +109,7 @@ class Connection:
                 server_hostname=hostname,
                 server_port=port,
                 logger=self.logger,
+                sock_send_lock=self.sock_send_lock,
                 receive_timeout=self.receive_timeout,
                 proxy=self.proxy,
                 proxy_headers=self.proxy_headers,
@@ -128,8 +133,9 @@ class Connection:
                     self.logger.debug(
                         f"{self.connection_type_name} handshake request (session id: {self.session_id}):\n{req}"
                     )
-                sock.send(req.encode("utf-8"))
-                sock.settimeout(self.receive_timeout)
+                with self.sock_send_lock:
+                    sock.send(req.encode("utf-8"))
+
                 status, headers, text = _parse_handshake_response(sock)
                 if self.trace_enabled:
                     self.logger.debug(
@@ -191,7 +197,8 @@ class Connection:
                 f"(session id: {self.session_id}, payload: {payload})"
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
-        self.sock.send(data)
+        with self.sock_send_lock:
+            self.sock.send(data)
 
     def pong(self, payload: Union[str, bytes] = "") -> None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
@@ -202,7 +209,8 @@ class Connection:
                 f"(session id: {self.session_id}, payload: {payload})"
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
-        self.sock.send(data)
+        with self.sock_send_lock:
+            self.sock.send(data)
 
     def send(self, payload: str) -> None:
         if self.trace_enabled:
@@ -213,23 +221,41 @@ class Connection:
                 f"(session id: {self.session_id}, payload: {payload})"
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
-        self.sock.send(data)
+        with self.sock_send_lock:
+            self.sock.send(data)
 
     def check_state(self) -> None:
         try:
             if self.sock is not None:
-                is_stale = (
-                    self.last_ping_pong_time is not None
-                    and time.time() - self.last_ping_pong_time > self.ping_interval * 2
-                )
-                if is_stale:
+                try:
+                    self.ping(f"{self.session_id}:{time.time()}")
+                except ssl.SSLZeroReturnError as e:
                     self.logger.info(
-                        "The connection seems to be stale. Disconnecting..."
-                        f" (session id: {self.session_id})"
+                        "Unable to send a ping message. Closing the connection..."
+                        f" (session id: {self.session_id}, reason: {e})"
                     )
                     self.disconnect()
-                else:
-                    self.ping(f"{self.session_id}:{time.time()}")
+                    return
+
+                if self.last_ping_pong_time is not None:
+                    disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                    if self.trace_enabled and disconnected_seconds > self.ping_interval:
+                        message = (
+                            f"{disconnected_seconds} seconds have passed "
+                            f"since this client last received a pong response from the server "
+                            f"(session id: {self.session_id})"
+                        )
+                        self.logger.debug(message)
+
+                    is_stale = disconnected_seconds > self.ping_interval * 4
+                    if is_stale:
+                        self.logger.info(
+                            "The connection seems to be stale. Disconnecting..."
+                            f" (session id: {self.session_id},"
+                            f" reason: disconnected for {disconnected_seconds}+ seconds)"
+                        )
+                        self.disconnect()
+                        return
             else:
                 self.logger.debug(
                     "This connection is already closed."
@@ -257,6 +283,7 @@ class Connection:
                         Tuple[Optional[FrameHeader], bytes]
                     ] = _receive_messages(
                         sock=self.sock,
+                        sock_receive_lock=self.sock_receive_lock,
                         logger=self.logger,
                         receive_buffer_size=self.receive_buffer_size,
                         all_message_trace_enabled=self.all_message_trace_enabled,
