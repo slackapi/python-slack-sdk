@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from queue import Queue, Empty
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -47,8 +48,17 @@ class BaseSocketModeClient:
             response = self.web_client.apps_connections_open(app_token=self.app_token)
             return response["url"]
         except SlackApiError as e:
-            self.logger.error(f"Failed to retrieve Socket Mode URL: {e}")
-            raise e
+            if e.response["error"] == "ratelimited":
+                # NOTE: ratelimited errors rarely occur with this endpoint
+                delay = int(e.response.headers.get("Retry-After", "30"))  # Tier1
+                self.logger.info(f"Rate limited. Retrying in {delay} seconds...")
+                time.sleep(delay)
+                # Retry to issue a new WSS URL
+                return self.issue_new_wss_url()
+            else:
+                # other errors
+                self.logger.error(f"Failed to retrieve WSS URL: {e}")
+                raise e
 
     def is_connected(self) -> bool:
         return False

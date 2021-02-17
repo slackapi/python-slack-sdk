@@ -67,7 +67,7 @@ class SocketModeClient(BaseSocketModeClient):
         trace_enabled: bool = False,
         all_message_trace_enabled: bool = False,
         ping_pong_trace_enabled: bool = False,
-        ping_interval: float = 10,
+        ping_interval: float = 5,
         receive_buffer_size: int = 1024,
         concurrency: int = 10,
         proxy: Optional[str] = None,
