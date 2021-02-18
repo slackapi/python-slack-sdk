@@ -94,6 +94,7 @@ class RTMClient:
         )
 
         self.on_message_listeners = on_message_listeners or []
+
         self.on_error_listeners = on_error_listeners or []
         self.on_close_listeners = on_close_listeners or []
 
@@ -102,7 +103,14 @@ class RTMClient:
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
 
         self.message_queue = Queue()
-        self.message_listeners = []
+
+        def goodbye_listener(_self, event: dict):
+            if event.get("type") == "goodbye":
+                message = "Got a goodbye message. Reconnecting to the server ..."
+                self.logger.info(message)
+                self.connect_to_new_endpoint(force=True)
+
+        self.message_listeners = [goodbye_listener]
         self.socket_mode_request_listeners = []
 
         self.current_session = None
