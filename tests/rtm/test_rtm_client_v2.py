@@ -37,14 +37,14 @@ class TestRTMClient(unittest.TestCase):
         def say_run_on(client, payload):
             pass
 
-        self.assertTrue(len(self.rtm.message_listeners) == 1)
+        self.assertTrue(len(self.rtm.message_listeners) == 2)
 
     def test_on_sets_callbacks(self):
         def say_on(client, payload):
             pass
 
         self.rtm.on("message")(say_on)
-        self.assertTrue(len(self.rtm.message_listeners) == 1)
+        self.assertTrue(len(self.rtm.message_listeners) == 2)
 
     def test_on_accepts_a_list_of_callbacks(self):
         def say_on(client, payload):
@@ -55,7 +55,7 @@ class TestRTMClient(unittest.TestCase):
 
         self.rtm.on("message")(say_on)
         self.rtm.on("message")(say_off)
-        self.assertEqual(len(self.rtm.message_listeners), 2)
+        self.assertEqual(len(self.rtm.message_listeners), 3)
 
     def test_on_raises_when_not_callable(self):
         invalid_callback = "a"
