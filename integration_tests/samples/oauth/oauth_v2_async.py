@@ -1,12 +1,3 @@
-# ------------------
-# Only for running this script here
-import logging
-import sys
-from os.path import dirname
-
-sys.path.insert(1, f"{dirname(__file__)}/../../..")
-# ------------------
-
 # ---------------------
 # Sanic App for Slack OAuth flow
 # ---------------------

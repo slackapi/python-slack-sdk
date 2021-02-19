@@ -1,11 +1,3 @@
-# ------------------
-# Only for running this script here
-import sys
-from os.path import dirname
-
-sys.path.insert(1, f"{dirname(__file__)}/../../..")
-# ------------------
-
 import logging
 
 logging.basicConfig(level=logging.DEBUG)

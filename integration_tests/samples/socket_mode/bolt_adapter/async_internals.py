@@ -1,11 +1,3 @@
-# ------------------
-# Only for running this script here
-import sys
-from os.path import dirname
-
-sys.path.insert(1, f"{dirname(__file__)}/../../../..")
-# ------------------
-
 import json
 import logging
 from time import time

@@ -12,8 +12,7 @@ from integration_tests.env_variable_names import (
 )
 from integration_tests.helpers import async_test
 from slack_sdk.rtm import RTMClient
-from slack_sdk.web import WebClient
-from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.web.legacy_client import LegacyWebClient
 
 
 class TestRTMClient(unittest.TestCase):
@@ -39,7 +38,7 @@ class TestRTMClient(unittest.TestCase):
             run_async=False,
             loop=asyncio.new_event_loop(),  # TODO: this doesn't work without this
         )
-        self.web_client = WebClient(token=self.bot_token)
+        self.web_client = LegacyWebClient(token=self.bot_token)
 
         @RTMClient.run_on(event="message")
         def send_reply(**payload):
@@ -73,7 +72,7 @@ class TestRTMClient(unittest.TestCase):
     async def test_basic_operations_async(self):
         self.sent_text: str = None
         self.rtm_client = RTMClient(token=self.bot_token, run_async=True)
-        self.async_web_client = AsyncWebClient(token=self.bot_token)
+        self.async_web_client = LegacyWebClient(token=self.bot_token, run_async=True)
 
         @RTMClient.run_on(event="message")
         async def send_reply(**payload):

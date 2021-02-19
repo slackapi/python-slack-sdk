@@ -1,11 +1,3 @@
-# ------------------
-# Only for running this script here
-import sys
-from os.path import dirname
-
-sys.path.insert(1, f"{dirname(__file__)}/../../..")
-# ------------------
-
 # export SLACK_SDK_TEST_CLASSIC_APP_BOT_TOKEN=xoxb-***
 # python3 integration_tests/samples/issues/issue_522.py
 

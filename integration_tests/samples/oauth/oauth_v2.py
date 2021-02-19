@@ -1,13 +1,3 @@
-# ------------------
-# Only for running this script here
-import logging
-import sys
-from os.path import dirname
-
-sys.path.insert(1, f"{dirname(__file__)}/../../..")
-logging.basicConfig(level=logging.DEBUG)
-# ------------------
-
 # ---------------------
 # Flask App for Slack OAuth flow
 # ---------------------

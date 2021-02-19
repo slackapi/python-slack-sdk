@@ -8,6 +8,7 @@ cd ${script_dir}/..
 
 test_target="$1"
 python_version=`python --version | awk '{print $2}'`
+pip install -e .
 
 if [[ $test_target != "" ]]
 then
