@@ -99,7 +99,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.current_session = None
         self.current_session_state = ConnectionState()
         self.current_session_runner = IntervalRunner(
-            self._run_current_session, 0.5
+            self._run_current_session, 0.1
         ).start()
 
         self.current_app_monitor_started = False
@@ -134,11 +134,12 @@ class SocketModeClient(BaseSocketModeClient):
 
     def connect(self) -> None:
         old_session: Optional[Connection] = self.current_session
+        old_current_session_state: ConnectionState = self.current_session_state
 
         if self.wss_uri is None:
             self.wss_uri = self.issue_new_wss_url()
 
-        self.current_session = Connection(
+        current_session = Connection(
             url=self.wss_uri,
             logger=self.logger,
             ping_interval=self.ping_interval,
@@ -152,12 +153,16 @@ class SocketModeClient(BaseSocketModeClient):
             on_error_listener=self._on_error,
             on_close_listener=self._on_close,
         )
-        self.current_session.connect()
-        self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
+        current_session.connect()
 
+        if old_current_session_state is not None:
+            old_current_session_state.terminated = True
         if old_session is not None:
             old_session.close()
-            self.current_session_state.terminated = True
+
+        self.current_session = current_session
+        self.current_session_state = ConnectionState()
+        self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
         if not self.current_app_monitor_started:
             self.current_app_monitor_started = True
@@ -216,23 +221,24 @@ class SocketModeClient(BaseSocketModeClient):
             listener(code, reason)
 
     def _run_current_session(self):
-        try:
-            if self.current_session is not None and self.current_session.is_active():
+        if self.current_session is not None and self.current_session.is_active():
+            session_id = self.session_id()
+            try:
                 self.logger.info(
                     "Starting to receive messages from a new connection"
-                    f" (session id: {self.session_id()})"
+                    f" (session id: {session_id})"
                 )
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
                 self.logger.info(
                     "Stopped receiving messages from a connection"
-                    f" (session id: {self.session_id()})"
+                    f" (session id: {session_id})"
                 )
-        except Exception as e:
-            self.logger.exception(
-                "Failed to start or stop the current session"
-                f" (session id: {self.session_id()}, error: {e})"
-            )
+            except Exception as e:
+                self.logger.exception(
+                    "Failed to start or stop the current session"
+                    f" (session id: {session_id}, error: {e})"
+                )
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
