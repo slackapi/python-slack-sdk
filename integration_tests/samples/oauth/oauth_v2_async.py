@@ -2,9 +2,10 @@
 # Sanic App for Slack OAuth flow
 # ---------------------
 
+import logging
 import os
 from slack_sdk.web.async_client import AsyncWebClient
-from slack_sdk.oauth import AuthorizeUrlGenerator
+from slack_sdk.oauth import AuthorizeUrlGenerator, RedirectUriPageRenderer
 from slack_sdk.oauth.installation_store import FileInstallationStore, Installation
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
@@ -22,6 +23,10 @@ authorization_url_generator = AuthorizeUrlGenerator(
     client_id=client_id,
     scopes=scopes,
     user_scopes=user_scopes,
+)
+redirect_page_renderer = RedirectUriPageRenderer(
+    install_path="/slack/install",
+    redirect_uri_path="/slack/oauth_redirect",
 )
 
 # https://sanicframework.org/
@@ -86,11 +91,29 @@ async def oauth_callback(req: Request):
                 ),
             )
             installation_store.save(installation)
-            return HTTPResponse(status=200, body="Thanks for installing this app!")
+            html = redirect_page_renderer.render_success_page(
+                app_id=installation.app_id,
+                team_id=installation.team_id,
+                is_enterprise_install=installation.is_enterprise_install,
+                enterprise_url=installation.enterprise_url,
+            )
+            return HTTPResponse(
+                status=200,
+                headers={
+                    "Content-Type": "text/html; charset=utf-8",
+                },
+                body=html,
+            )
         else:
+            html = redirect_page_renderer.render_failure_page(
+                "the state value is already expired"
+            )
             return HTTPResponse(
                 status=400,
-                body="Try the installation again (the state value is already expired)",
+                headers={
+                    "Content-Type": "text/html; charset=utf-8",
+                },
+                body=html,
             )
 
     error = req.args["error"] if "error" in req.args else ""
