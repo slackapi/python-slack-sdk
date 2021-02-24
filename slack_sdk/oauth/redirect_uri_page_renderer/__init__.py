@@ -34,6 +34,8 @@ class RedirectUriPageRenderer:
                 url = "slack://open"
             else:
                 url = f"slack://app?team={team_id}&id={app_id}"
+        browser_url = f"https://app.slack.com/client/{team_id}"
+
         return f"""
 <html>
 <head>
@@ -48,10 +50,10 @@ body {{
 </head>
 <body>
 <h2>Thank you!</h2>
-<p>Redirecting to the Slack App... click <a href="{url}">here</a></p>
+<p>Redirecting to the Slack App... click <a href="{url}">here</a>. If you use the browser version of Slack, click <a href="{browser_url}" target="_blank">this link</a> instead.</p>
 </body>
 </html>
-"""
+"""  # noqa: E501
 
     def render_failure_page(self, reason: str) -> str:
         return f"""

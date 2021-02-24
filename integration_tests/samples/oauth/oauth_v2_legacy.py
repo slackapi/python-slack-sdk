@@ -8,6 +8,7 @@ from flask import Flask, request, make_response
 app = Flask(__name__)
 app.debug = True
 
+import logging
 import os
 from uuid import uuid4
 from slack_sdk import WebClient

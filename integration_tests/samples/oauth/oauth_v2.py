@@ -8,9 +8,10 @@ from flask import Flask, request, make_response
 app = Flask(__name__)
 app.debug = True
 
+import logging
 import os
 from slack_sdk.web import WebClient
-from slack_sdk.oauth import AuthorizeUrlGenerator
+from slack_sdk.oauth import AuthorizeUrlGenerator, RedirectUriPageRenderer
 from slack_sdk.oauth.installation_store import FileInstallationStore, Installation
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 
@@ -28,6 +29,10 @@ authorization_url_generator = AuthorizeUrlGenerator(
     client_id=client_id,
     scopes=scopes,
     user_scopes=user_scopes,
+)
+redirect_page_renderer = RedirectUriPageRenderer(
+    install_path="/slack/install",
+    redirect_uri_path="/slack/oauth_redirect",
 )
 
 
@@ -94,10 +99,15 @@ def oauth_callback():
                 token_type=oauth_response.get("token_type"),
             )
             installation_store.save(installation)
-            return "Thanks for installing this app!"
+            return redirect_page_renderer.render_success_page(
+                app_id=installation.app_id,
+                team_id=installation.team_id,
+                is_enterprise_install=installation.is_enterprise_install,
+                enterprise_url=installation.enterprise_url,
+            )
         else:
-            return make_response(
-                f"Try the installation again (the state value is already expired)", 400
+            return redirect_page_renderer.render_failure_page(
+                "the state value is already expired"
             )
 
     error = request.args["error"] if "error" in request.args else ""
