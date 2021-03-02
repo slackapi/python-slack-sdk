@@ -27,13 +27,6 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_legacy(self):
-        client = self.legacy_client
-
-        response = client.admin_analytics_getFile(date="2020-10-20", type="member")
-        self.assertTrue(isinstance(response.data, bytes))
-        self.assertIsNotNone(response.data)
-
     def test_sync(self):
         client = self.sync_client
 
@@ -49,6 +42,24 @@ class TestWebClient(unittest.TestCase):
         except SlackApiError as e:
             self.assertFalse(e.response["ok"])
             self.assertEqual("file_not_yet_available", e.response["error"])
+
+    def test_sync_public_channel(self):
+        client = self.sync_client
+
+        response = client.admin_analytics_getFile(
+            date="2020-10-20", type="public_channel"
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
+
+    def test_sync_public_channel_medata_only(self):
+        client = self.sync_client
+
+        response = client.admin_analytics_getFile(
+            type="public_channel", metadata_only=True
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
 
     @async_test
     async def test_async(self):
@@ -69,3 +80,49 @@ class TestWebClient(unittest.TestCase):
         except SlackApiError as e:
             self.assertFalse(e.response["ok"])
             self.assertEqual("file_not_yet_available", e.response["error"])
+
+    @async_test
+    async def test_async_public_channel(self):
+        client = self.async_client
+
+        response = await client.admin_analytics_getFile(
+            date="2020-10-20", type="public_channel"
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
+
+    @async_test
+    async def test_async_public_channel_metadata_only(self):
+        client = self.async_client
+
+        response = await client.admin_analytics_getFile(
+            type="public_channel",
+            metadata_only=True,
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
+
+    def test_legacy(self):
+        client = self.legacy_client
+
+        response = client.admin_analytics_getFile(date="2020-10-20", type="member")
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
+
+    def test_legacy_public_channel(self):
+        client = self.legacy_client
+
+        response = client.admin_analytics_getFile(
+            date="2020-10-20", type="public_channel"
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)
+
+    def test_legacy_public_channel_metadata_only(self):
+        client = self.legacy_client
+
+        response = client.admin_analytics_getFile(
+            type="public_channel", metadata_only=True
+        )
+        self.assertTrue(isinstance(response.data, bytes))
+        self.assertIsNotNone(response.data)

@@ -76,7 +76,12 @@ class AsyncWebClient(AsyncBaseClient):
     """
 
     async def admin_analytics_getFile(
-        self, *, date: str, type: str, **kwargs
+        self,
+        *,
+        type: str,
+        date: Optional[str] = None,
+        metadata_only: Optional[bool] = None,
+        **kwargs
     ) -> AsyncSlackResponse:
         """Retrieve analytics data for a given date, presented as a compressed JSON file
 
@@ -86,7 +91,11 @@ class AsyncWebClient(AsyncBaseClient):
             type (str): The type of analytics to retrieve.
                 The options are currently limited to member.
         """
-        kwargs.update({"date": date, "type": type})
+        kwargs.update({"type": type})
+        if date is not None:
+            kwargs.update({"date": date})
+        if metadata_only is not None:
+            kwargs.update({"metadata_only": metadata_only})
         return await self.api_call("admin.analytics.getFile", params=kwargs)
 
     async def admin_apps_approve(
