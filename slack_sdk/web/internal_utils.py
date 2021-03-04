@@ -232,7 +232,7 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
 
 def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
     attachments = kwargs.get("attachments")
-    if attachments:
+    if attachments and isinstance(attachments, list):
         if all(
             [
                 attachment.get("fallback")
