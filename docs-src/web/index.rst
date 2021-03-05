@@ -387,7 +387,7 @@ Modals use the same blocks that compose messages with the addition of an `input`
     from slack_sdk.signature import SignatureVerifier
     signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
-    from flask import Flask, request, make_response
+    from flask import Flask, request, make_response, jsonify
     app = Flask(__name__)
 
     @app.route("/slack/events", methods=["POST"])
@@ -397,9 +397,7 @@ Modals use the same blocks that compose messages with the addition of an `input`
 
         if "payload" in request.form:
             payload = json.loads(request.form["payload"])
-
-            if payload["type"] == "shortcut" \
-                and payload["callback_id"] == "open-modal-shortcut":
+            if payload["type"] == "shortcut" and payload["callback_id"] == "test-shortcut":
                 # Open a new modal by a global shortcut
                 try:
                     api_response = client.views_open(
@@ -436,11 +434,15 @@ Modals use the same blocks that compose messages with the addition of an `input`
                     code = e.response["error"]
                     return make_response(f"Failed to open a modal due to {code}", 200)
 
-            if payload["type"] == "view_submission" \
-                and payload["view"]["callback_id"] == "modal-id":
+            if (
+                payload["type"] == "view_submission"
+                and payload["view"]["callback_id"] == "modal-id"
+            ):
                 # Handle a data submission request from the modal
                 submitted_data = payload["view"]["state"]["values"]
                 print(submitted_data)    # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+
+                # Close this modal with an empty response body
                 return make_response("", 200)
 
         return make_response("", 404)
@@ -461,7 +463,43 @@ Also, to run the above example, the following `Slack app configurations <https:/
 
 **Updating and pushing modals**
 
-You can dynamically update a view inside of a modal by calling `views.update` and passing the view ID returned in the previous `views.open` call.
+In response to `view_submission` requests, you can tell Slack to update the current modal view by having `"response_action": "update"` and an updated view. Also, there are other response_action types such as `errors` and `push`. Refer to `the API document <https://api.slack.com/surfaces/modals/using#updating_response>`_ for more details.
+
+.. code-block:: python
+
+    if (
+        payload["type"] == "view_submission"
+        and payload["view"]["callback_id"] == "modal-id"
+    ):
+        # Handle a data submission request from the modal
+        submitted_data = payload["view"]["state"]["values"]
+        print(submitted_data)    # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+
+        # Update the modal with a new view
+        return make_response(
+            jsonify(
+                {
+                    "response_action": "update",
+                    "view": {
+                        "type": "modal",
+                        "title": {"type": "plain_text", "text": "Accepted"},
+                        "close": {"type": "plain_text", "text": "Close"},
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": "Thanks for submitting the data!",
+                                },
+                            }
+                        ],
+                    },
+                }
+            ),
+            200,
+        )
+
+If your app modify the current modal view when receiving `block_actions` requests from Slack, you can call `views.update` API method with the given view ID.
 
 .. code-block:: python
 
