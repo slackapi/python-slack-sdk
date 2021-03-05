@@ -231,22 +231,29 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
 
 
 def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
+    missing = "text"
     attachments = kwargs.get("attachments")
-    if attachments and isinstance(attachments, list):
+    # Note that this method does not verify attachments
+    # if the value is already serialized as a single str value.
+    if attachments is not None and isinstance(attachments, list):
+        # https://api.slack.com/reference/messaging/attachments
+        # Check if the fallback field exists for all the attachments
         if all(
             [
-                attachment.get("fallback")
-                and len(attachment.get("fallback").strip()) != 0
+                isinstance(attachment, dict)
+                and len(attachment.get("fallback", "").strip()) > 0
                 for attachment in attachments
             ]
         ):
+            # The attachments are all good
             return
         missing = "fallback"
     else:
         text = kwargs.get("text")
-        if text and len(text.strip()) != 0:
+        if text and len(text.strip()) > 0:
+            # Note that this is applicable only for blocks.
             return
-        missing = "text"
+
     message = (
         f"The `{missing}` argument is missing in the request payload for a {endpoint} call - "
         f"It's a best practice to always provide a `{missing}` argument when posting a message. "
