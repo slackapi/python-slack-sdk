@@ -12,12 +12,12 @@ import os
 from slack_sdk.web import WebClient
 from slack_sdk.errors import SlackApiError
 from slack_sdk.signature import SignatureVerifier
-from slack_sdk.models.blocks import InputBlock
+from slack_sdk.models.blocks import InputBlock, SectionBlock
 from slack_sdk.models.blocks.block_elements import PlainTextInputElement
 from slack_sdk.models.blocks.basic_components import PlainTextObject
 from slack_sdk.models.views import View
 
-client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
 # ---------------------
@@ -25,7 +25,7 @@ signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 # ---------------------
 
 # pip3 install flask
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 
 app = Flask(__name__)
 
@@ -37,10 +37,7 @@ def slack_app():
 
     if "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if (
-            payload["type"] == "shortcut"
-            and payload["callback_id"] == "open-modal-shortcut"
-        ):
+        if payload["type"] == "shortcut" and payload["callback_id"] == "test-shortcut":
             # Open a new modal by a global shortcut
             try:
                 view = View(
@@ -75,7 +72,28 @@ def slack_app():
             print(
                 submitted_data
             )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
-            return make_response("", 200)
+            return make_response(
+                jsonify(
+                    {
+                        "response_action": "update",
+                        "view": View(
+                            type="modal",
+                            callback_id="modal-id",
+                            title=PlainTextObject(text="Accepted"),
+                            close=PlainTextObject(text="Close"),
+                            blocks=[
+                                SectionBlock(
+                                    block_id="b-id",
+                                    text=PlainTextObject(
+                                        text="Thanks for submitting the data!"
+                                    ),
+                                )
+                            ],
+                        ).to_dict(),
+                    }
+                ),
+                200,
+            )
 
     return make_response("", 404)
 

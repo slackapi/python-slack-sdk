@@ -492,7 +492,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
 <span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
 
-<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">make_response</span><span class="p">,</span> <span class="n">jsonify</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/slack/events&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
@@ -502,9 +502,7 @@ deletion of threaded replies works the same as regular messages.</p>
 
     <span class="k">if</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">:</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span> \
-            <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;open-modal-shortcut&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span> <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;test-shortcut&quot;</span><span class="p">:</span>
             <span class="c1"># Open a new modal by a global shortcut</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">api_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
@@ -541,11 +539,15 @@ deletion of threaded replies works the same as regular messages.</p>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
                 <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to open a modal due to </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span> \
-            <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span>
+            <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span>
+        <span class="p">):</span>
             <span class="c1"># Handle a data submission request from the modal</span>
             <span class="n">submitted_data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">submitted_data</span><span class="p">)</span>    <span class="c1"># {&#39;b-id&#39;: {&#39;a-id&#39;: {&#39;type&#39;: &#39;plain_text_input&#39;, &#39;value&#39;: &#39;your input&#39;}}}</span>
+
+            <span class="c1"># Close this modal with an empty response body</span>
             <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
@@ -565,7 +567,41 @@ deletion of threaded replies works the same as regular messages.</p>
 <li><p>Add a global shortcut with the Callback ID: <code class="docutils literal notranslate"><span class="pre">open-modal-shortcut</span></code></p></li>
 </ul>
 <p><strong>Updating and pushing modals</strong></p>
-<p>You can dynamically update a view inside of a modal by calling <cite>views.update</cite> and passing the view ID returned in the previous <cite>views.open</cite> call.</p>
+<p>In response to <cite>view_submission</cite> requests, you can tell Slack to update the current modal view by having <cite>“response_action”: “update”</cite> and an updated view. Also, there are other response_action types such as <cite>errors</cite> and <cite>push</cite>. Refer to <a class="reference external" href="https://api.slack.com/surfaces/modals/using#updating_response">the API document</a> for more details.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span>
+    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span>
+    <span class="ow">and</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;modal-id&quot;</span>
+<span class="p">):</span>
+    <span class="c1"># Handle a data submission request from the modal</span>
+    <span class="n">submitted_data</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;state&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">submitted_data</span><span class="p">)</span>    <span class="c1"># {&#39;b-id&#39;: {&#39;a-id&#39;: {&#39;type&#39;: &#39;plain_text_input&#39;, &#39;value&#39;: &#39;your input&#39;}}}</span>
+
+    <span class="c1"># Update the modal with a new view</span>
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span>
+        <span class="n">jsonify</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;response_action&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Accepted&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;close&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Close&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Thanks for submitting the data!&quot;</span><span class="p">,</span>
+                            <span class="p">},</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+        <span class="mi">200</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>If your app modify the current modal view when receiving <cite>block_actions</cite> requests from Slack, you can call <cite>views.update</cite> API method with the given view ID.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">private_metadata</span> <span class="o">=</span> <span class="s2">&quot;any str data you want to store&quot;</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
     <span class="n">view_id</span><span class="o">=</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>

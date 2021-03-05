@@ -20,7 +20,7 @@ from slack_sdk.models.blocks.block_elements import (
 from slack_sdk.models.blocks.basic_components import PlainTextObject
 from slack_sdk.models.views import View
 
-client = WebClient(token=os.environ["SLACK_API_TOKEN"])
+client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 signature_verifier = SignatureVerifier(os.environ["SLACK_SIGNING_SECRET"])
 
 # ---------------------
@@ -80,10 +80,7 @@ def slack_app():
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
 
-        if (
-            payload["type"] == "shortcut"
-            and payload["callback_id"] == "open-modal-shortcut"
-        ):
+        if payload["type"] == "shortcut" and payload["callback_id"] == "test-shortcut":
             # Open a new modal by a global shortcut
             return open_modal(payload["trigger_id"])
 
