@@ -68,13 +68,13 @@ This SDK offers its own simple WebSocket client covering only required features 
    * - PyPI Project
      - SocketModeClient
    * - `slack_sdk <https://pypi.org/project/slack-sdk/>`_
-     - `slack_sdk.socket_mode.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/builtin/client.py>`_
+     - `slack_sdk.socket_mode.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/builtin>`_
    * - `websocket_client <https://pypi.org/project/websocket_client/>`_
-     - `slack_sdk.socket_mode.websocket_client.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/websocket_client/client.py>`_
+     - `slack_sdk.socket_mode.websocket_client.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/websocket_client>`_
    * - `aiohttp <https://pypi.org/project/aiohttp/>`_ (asyncio-based)
-     - `slack_sdk.socket_mode.aiohttp.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/aiohttp/client.py>`_
+     - `slack_sdk.socket_mode.aiohttp.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/aiohttp>`_
    * - `websockets <https://pypi.org/project/websockets/>`_ (asyncio-based)
-     - `slack_sdk.socket_mode.websockets.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/websockets/client.py>`_
+     - `slack_sdk.socket_mode.websockets.SocketModeClient <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/websockets>`_
 
 
 To use the `websocket_client <https://pypi.org/project/websocket_client/>`_ based one, all you need to do are to add `websocket_client <https://pypi.org/project/websocket_client/>`_ dependency and to change the import as below.
