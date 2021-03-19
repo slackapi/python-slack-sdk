@@ -433,24 +433,33 @@ class Attachment(JsonObject):
 
 
 class BlockAttachment(Attachment):
-    attributes = {"color"}
     blocks: List[Block]
 
-    def __init__(self, *, blocks: Sequence[Block], color: Optional[str] = None):
+    @property
+    def attributes(self):
+        return super().attributes.union({"blocks", "color"})
+
+    def __init__(
+        self,
+        *,
+        blocks: Sequence[Block],
+        color: Optional[str] = None,
+        fallback: Optional[str] = None,
+    ):
         """
-        A bridge between legacy attachments and blockkit formatting - pass a list of
+        A bridge between legacy attachments and Block Kit formatting - pass a list of
         Block objects directly to this attachment.
 
         https://api.slack.com/reference/messaging/attachments#fields
 
         Args:
             blocks: a sequence of Block objects
-
             color: Changes the color of the border on the left side of this
                 attachment from the default gray. Can either be one of "good" (green),
                 "warning" (yellow), "danger" (red), or any hex color code (eg. #439FE0)
+            fallback: fallback text
         """
-        super().__init__(text="", color=color)
+        super().__init__(text="", fallback=fallback, color=color)
         self.blocks = list(blocks)
 
     @JsonValidator("fields attribute cannot be populated on BlockAttachment")

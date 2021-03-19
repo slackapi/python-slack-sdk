@@ -218,6 +218,6 @@ class BlockAttachmentTests(unittest.TestCase):
         ]
 
         self.assertDictEqual(
-            BlockAttachment(blocks=blocks).to_dict(),
-            {"blocks": [b.to_dict() for b in blocks]},
+            BlockAttachment(fallback="foo", blocks=blocks).to_dict(),
+            {"fallback": "foo", "blocks": [b.to_dict() for b in blocks]},
         )
