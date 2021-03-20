@@ -44,15 +44,16 @@ class AuditLogsClient:
         """API client for Audit Logs API
         See https://api.slack.com/admins/audit-logs for more details
 
-        :param token: An admin user's token, which starts with xoxp-
-        :param timeout: request timeout (in seconds)
-        :param ssl: ssl.SSLContext to use for requests
-        :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
-        :param base_url: the base URL for API calls
-        :param default_headers: request headers to add to all requests
-        :param user_agent_prefix: prefix for User-Agent header value
-        :param user_agent_suffix: suffix for User-Agent header value
-        :param logger: custom logger
+        Args:
+            token: An admin user's token, which starts with `xoxp-`
+            timeout: Request timeout (in seconds)
+            ssl: `ssl.SSLContext` to use for requests
+            proxy: Proxy URL (e.g., `localhost:9000`, `http://localhost:9000`)
+            base_url: The base URL for API calls
+            default_headers: Request headers to add to all requests
+            user_agent_prefix: Prefix for User-Agent header value
+            user_agent_suffix: Suffix for User-Agent header value
+            logger: Custom logger
         """
         self.token = token
         self.timeout = timeout
@@ -76,14 +77,15 @@ class AuditLogsClient:
         query_params: Optional[Dict[str, any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """
-        Returns information about the kind of objects which the Audit Logs API
+        """Returns information about the kind of objects which the Audit Logs API
         returns as a list of all objects and a short description.
         Authentication not required.
 
-        :param query_params: Set any values if you want to add query params
-        :param headers: additional request headers
-        :return: API response
+        Args:
+            query_params: Set any values if you want to add query params
+            headers: Additional request headers
+        Returns:
+            API response
         """
         return self.api_call(
             path="schemas",
@@ -97,14 +99,16 @@ class AuditLogsClient:
         query_params: Optional[Dict[str, any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """
-        Returns information about the kind of actions that the Audit Logs API
+        """Returns information about the kind of actions that the Audit Logs API
         returns as a list of all actions and a short description of each.
         Authentication not required.
 
-        :param query_params: Set any values if you want to add query params
-        :param headers: additional request headers
-        :return: API response
+        Args:
+            query_params: Set any values if you want to add query params
+            headers: Additional request headers
+
+        Returns:
+            API response
         """
         return self.api_call(
             path="actions",
@@ -124,8 +128,7 @@ class AuditLogsClient:
         additional_query_params: Optional[Dict[str, any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """
-        This is the primary endpoint for retrieving actual audit events from your organization.
+        """This is the primary endpoint for retrieving actual audit events from your organization.
         It will return a list of actions that have occurred on the installed workspace or grid organization.
         Authentication required.
 
@@ -134,16 +137,19 @@ class AuditLogsClient:
         Multiple filter parameters are additive (a boolean AND) and are separated
         with an ampersand (&) in the query string. Filtering is entirely optional.
 
-        :param latest: Unix timestamp of the most recent audit event to include (inclusive).
-        :param oldest: Unix timestamp of the least recent audit event to include (inclusive).
-            Data is not available prior to March 2018.
-        :param limit: Number of results to optimistically return, maximum 9999.
-        :param action: Name of the action.
-        :param actor: User ID who initiated the action.
-        :param entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
-        :param additional_query_params: Add anything else if you need to use the ones this library does not support
-        :param headers: additional request headers
-        :return: API response
+        Args:
+            latest: Unix timestamp of the most recent audit event to include (inclusive).
+            oldest: Unix timestamp of the least recent audit event to include (inclusive).
+                Data is not available prior to March 2018.
+            limit: Number of results to optimistically return, maximum 9999.
+            action: Name of the action.
+            actor: User ID who initiated the action.
+            entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
+            additional_query_params: Add anything else if you need to use the ones this library does not support
+            headers: Additional request headers
+
+        Returns:
+            API response
         """
         query_params = {
             "latest": latest,

@@ -137,8 +137,11 @@ def _read_http_response_line(sock: ssl.SSLSocket) -> str:
 def _parse_handshake_response(sock: ssl.SSLSocket) -> (int, dict, str):
     """Parses the handshake response.
 
-    :param sock: the current socket
-    :return: (http status, headers, whole response as a str)
+    Args:
+        sock: The current active socket
+
+    Returns:
+        (http status, headers, whole response as a str)
     """
     lines = []
     status = None

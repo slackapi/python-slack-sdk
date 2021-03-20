@@ -44,18 +44,20 @@ class AsyncWebhookClient:
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
     ):
-        """API client for Incoming Webhooks and response_url
-        :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
-        :param timeout: request timeout (in seconds)
-        :param ssl: ssl.SSLContext to use for requests
-        :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
-        :param session: a complete aiohttp.ClientSession
-        :param trust_env_in_session: True/False for aiohttp.ClientSession
-        :param auth: Basic auth info for aiohttp.ClientSession
-        :param default_headers: request headers to add to all requests
-        :param user_agent_prefix: prefix for User-Agent header value
-        :param user_agent_suffix: suffix for User-Agent header value
-        :param logger: custom logger
+        """API client for Incoming Webhooks and `response_url`
+
+        Args:
+            url: Complete URL to send data (e.g., `https://hooks.slack.com/XXX`)
+            timeout: Request timeout (in seconds)
+            ssl: `ssl.SSLContext` to use for requests
+            proxy: Proxy URL (e.g., `localhost:9000`, `http://localhost:9000`)
+            session: `aiohttp.ClientSession` instance
+            trust_env_in_session: True/False for `aiohttp.ClientSession`
+            auth: Basic auth info for `aiohttp.ClientSession`
+            default_headers: Request headers to add to all requests
+            user_agent_prefix: Prefix for User-Agent header value
+            user_agent_suffix: Suffix for User-Agent header value
+            logger: Custom logger
         """
         self.url = url
         self.timeout = timeout
@@ -87,14 +89,18 @@ class AsyncWebhookClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
-        :param text: the text message (even when having blocks, setting this as well is recommended as it works as fallback)
-        :param attachments: a collection of attachments
-        :param blocks: a collection of Block Kit UI components
-        :param response_type: the type of message (either 'in_channel' or 'ephemeral')
-        :param replace_original: True if you use this option for response_url requests
-        :param delete_original: True if you use this option for response_url requests
-        :param headers: request headers to append only for this request
-        :return: API response
+
+        Args:
+            text: The text message (even when having blocks, setting this as well is recommended as it works as fallback)
+            attachments: A collection of attachments
+            blocks: A collection of Block Kit UI components
+            response_type: The type of message (either 'in_channel' or 'ephemeral')
+            replace_original: True if you use this option for response_url requests
+            delete_original: True if you use this option for response_url requests
+            headers: Request headers to append only for this request
+
+        Returns:
+            Webhook response
         """
         return await self.send_dict(
             # It's fine to have None value elements here
@@ -114,10 +120,13 @@ class AsyncWebhookClient:
         self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
-        :param body: json data structure (it's still a dict at this point),
-            if you give this argument, body_params and files will be skipped
-        :param headers: request headers to append only for this request
-        :return: API response
+
+        Args:
+            body: JSON data structure (it's still a dict at this point),
+                if you give this argument, body_params and files will be skipped
+            headers: Request headers to append only for this request
+        Returns:
+            Webhook response
         """
         return await self._perform_http_request(
             body=_build_body(body),
@@ -127,12 +136,6 @@ class AsyncWebhookClient:
     async def _perform_http_request(
         self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -> WebhookResponse:
-        """Performs an HTTP request and parses the response.
-        :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
-        :param body: request body data
-        :param headers: complete set of request headers
-        :return: API response
-        """
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 

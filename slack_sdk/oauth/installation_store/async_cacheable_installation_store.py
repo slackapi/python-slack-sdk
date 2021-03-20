@@ -15,7 +15,8 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     def __init__(self, installation_store: AsyncInstallationStore):
         """A simple memory cache wrapper for any installation stores.
 
-        :param installation_store: the installation store to wrap
+        Args:
+            installation_store: The installation store to wrap
         """
         self.underlying = installation_store
         self.cached_bots = {}
