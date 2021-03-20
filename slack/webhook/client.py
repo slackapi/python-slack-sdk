@@ -25,13 +25,6 @@ class WebhookClient:
         proxy: Optional[str] = None,
         default_headers: Optional[Dict[str, str]] = None,
     ):
-        """API client for Incoming Webhooks and response_url
-        :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
-        :param timeout: request timeout (in seconds)
-        :param ssl: ssl.SSLContext to use for requests
-        :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
-        :param default_headers: request headers to add to all requests
-        """
         self.url = url
         self.timeout = timeout
         self.ssl = ssl
@@ -47,14 +40,6 @@ class WebhookClient:
         response_type: Optional[str] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
-        """Performs a Slack API request and returns the result.
-        :param text: the text message (even when having blocks, setting this as well is recommended as it works as fallback)
-        :param attachments: a collection of attachments
-        :param blocks: a collection of Block Kit UI components
-        :param response_type: the type of message (either 'in_channel' or 'ephemeral')
-        :param headers: request headers to append only for this request
-        :return: API response
-        """
         return self.send_dict(
             body={
                 "text": text,
@@ -68,12 +53,6 @@ class WebhookClient:
     def send_dict(
         self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
     ) -> WebhookResponse:
-        """Performs a Slack API request and returns the result.
-        :param body: json data structure (it's still a dict at this point),
-            if you give this argument, body_params and files will be skipped
-        :param headers: request headers to append only for this request
-        :return: API response
-        """
         return self._perform_http_request(
             body=_build_body(body),
             headers=_build_request_headers(self.default_headers, headers),
@@ -82,12 +61,6 @@ class WebhookClient:
     def _perform_http_request(
         self, *, body: Dict[str, any], headers: Dict[str, str]
     ) -> WebhookResponse:
-        """Performs an HTTP request and parses the response.
-        :param url: a complete URL to send data (e.g., https://hooks.slack.com/XXX)
-        :param body: request body data
-        :param headers: complete set of request headers
-        :return: API response
-        """
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 

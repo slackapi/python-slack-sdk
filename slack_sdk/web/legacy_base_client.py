@@ -285,17 +285,19 @@ class LegacyBaseClient:
         additional_headers: Dict[str, str] = {},
     ) -> SlackResponse:
         """Performs a Slack API request and returns the result.
-        :param token: Slack API Token (either bot token or user token)
-        :param url: a complete URL (e.g., https://www.slack.com/api/chat.postMessage)
-        :param query_params: query string
-        :param json_body: json data structure (it's still a dict at this point),
-            if you give this argument, body_params and files will be skipped
-        :param body_params: form params
-        :param files: files to upload
-        :param additional_headers: request headers to append
-        :return: API response
-        """
 
+        Args:
+            token: Slack API Token (either bot token or user token)
+            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            query_params: Query string
+            json_body: JSON data structure (it's still a dict at this point),
+                if you give this argument, body_params and files will be skipped
+            body_params: Form body params
+            files: Files to upload
+            additional_headers: Request headers to append
+        Returns:
+            API response
+        """
         files_to_close: List[BinaryIO] = []
         try:
             # True/False -> "1"/"0"
@@ -394,13 +396,17 @@ class LegacyBaseClient:
         self, *, url: str, args: Dict[str, Dict[str, any]]
     ) -> Dict[str, any]:
         """Performs an HTTP request and parses the response.
-        :param url: a complete URL (e.g., https://www.slack.com/api/chat.postMessage)
-        :param args: args has "headers", "data", "params", and "json"
-            "headers": Dict[str, str]
-            "data": Dict[str, any]
-            "params": Dict[str, str],
-            "json": Dict[str, any],
-        :return: dict {status: int, headers: Headers, body: str}
+
+        Args:
+            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            args: args has "headers", "data", "params", and "json"
+                "headers": Dict[str, str]
+                "data": Dict[str, any]
+                "params": Dict[str, str],
+                "json": Dict[str, any],
+
+        Returns:
+            dict {status: int, headers: Headers, body: str}
         """
         headers = args["headers"]
         if args["json"]:

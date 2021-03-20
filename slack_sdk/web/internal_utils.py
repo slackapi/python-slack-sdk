@@ -22,8 +22,11 @@ def convert_bool_to_0_or_1(
     Using True/False (bool in Python) doesn't work with aiohttp.
     This method converts only the bool values in top-level of a given dict.
 
-    :param params: params as a dict
-    :return: return modified dict
+    Args:
+        params: params as a dict
+
+    Returns:
+        Modified dict
     """
     if params:
         return {k: _to_0_or_1_if_bool(v) for k, v in params.items()}

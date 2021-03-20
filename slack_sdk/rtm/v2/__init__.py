@@ -139,7 +139,8 @@ class RTMClient:
     def on(self, event_type: str) -> Callable:
         """Registers a new event listener.
 
-        :param event_type: str representing an event's type (e.g., message, reaction_added)
+        Args:
+            event_type: str representing an event's type (e.g., message, reaction_added)
         """
 
         def __call__(*args, **kwargs):

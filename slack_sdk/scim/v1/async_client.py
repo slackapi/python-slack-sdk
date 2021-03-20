@@ -67,18 +67,20 @@ class AsyncSCIMClient:
     ):
         """API client for SCIM API
         See https://api.slack.com/scim for more details
-        :param token: An admin user's token, which starts with xoxp-
-        :param timeout: request timeout (in seconds)
-        :param ssl: ssl.SSLContext to use for requests
-        :param proxy: proxy URL (e.g., localhost:9000, http://localhost:9000)
-        :param base_url: the base URL for API calls
-        :param session: a complete aiohttp.ClientSession
-        :param trust_env_in_session: True/False for aiohttp.ClientSession
-        :param auth: Basic auth info for aiohttp.ClientSession
-        :param default_headers: request headers to add to all requests
-        :param user_agent_prefix: prefix for User-Agent header value
-        :param user_agent_suffix: suffix for User-Agent header value
-        :param logger: custom logger
+
+        Args:
+            token: An admin user's token, which starts with `xoxp-`
+            timeout: Request timeout (in seconds)
+            ssl: `ssl.SSLContext` to use for requests
+            proxy: Proxy URL (e.g., `localhost:9000`, `http://localhost:9000`)
+            base_url: The base URL for API calls
+            session: `aiohttp.ClientSession` instance
+            trust_env_in_session: True/False for `aiohttp.ClientSession`
+            auth: Basic auth info for `aiohttp.ClientSession`
+            default_headers: Request headers to add to all requests
+            user_agent_prefix: Prefix for User-Agent header value
+            user_agent_suffix: Suffix for User-Agent header value
+            logger: Custom logger
         """
         self.token = token
         self.timeout = timeout
