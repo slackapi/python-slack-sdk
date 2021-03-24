@@ -1,3 +1,5 @@
+"""Classes for constructing Slack-specific data strtucture"""
+
 import logging
 from typing import Union, Dict, Any, Sequence, List
 

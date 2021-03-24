@@ -1,3 +1,9 @@
+"""The built-in Socket Mode client
+
+* https://api.slack.com/apis/connections/socket
+* https://slack.dev/python-slack-sdk/socket-mode/
+
+"""
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -76,6 +82,25 @@ class SocketModeClient(BaseSocketModeClient):
         on_error_listeners: Optional[List[Callable[[Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None,
     ):
+        """Socket Mode client
+
+        Args:
+            app_token: App-level token
+            logger: Custom logger
+            web_client: Web API client
+            auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
+            trace_enabled: True if more detailed debug-logging is enabled (default: False)
+            all_message_trace_enabled: True if all message dump in debug logs is enabled (default: False)
+            ping_pong_trace_enabled: True if trace logging for all ping-pong communications is enabled (default: False)
+            ping_interval: interval for ping-pong with Slack servers (seconds)
+            receive_buffer_size: the chunk size of a single socket recv operation (default: 1024)
+            concurrency: the size of thread pool (default: 10)
+            proxy: the HTTP proxy URL
+            proxy_headers: additional HTTP header for proxy connection
+            on_message_listeners: listener functions for on_message
+            on_error_listeners: listener functions for on_error
+            on_close_listeners: listener functions for on_close
+        """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or WebClient()

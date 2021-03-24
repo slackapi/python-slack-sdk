@@ -8,6 +8,8 @@ SCIM API Client
 
 Refer to `the API document <https://api.slack.com/scim>`_ for more details.
 
+The Python document for this module is available at https://slack.dev/python-slack-sdk/api-docs/
+
 SCIMClient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

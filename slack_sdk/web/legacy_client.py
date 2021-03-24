@@ -27,6 +27,8 @@ from .internal_utils import (
 class LegacyWebClient(LegacyBaseClient):
     """A WebClient allows apps to communicate with the Slack Platform's Web API.
 
+    https://api.slack.com/methods
+
     The Slack Web API is an interface for querying information from
     and enacting change in a Slack workspace.
 

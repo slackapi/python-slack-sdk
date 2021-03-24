@@ -1,3 +1,10 @@
+"""websocket-client bassd Socket Mode client
+
+* https://api.slack.com/apis/connections/socket
+* https://slack.dev/python-slack-sdk/socket-mode/
+* https://pypi.org/project/websocket-client/
+
+"""
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -78,6 +85,24 @@ class SocketModeClient(BaseSocketModeClient):
         ] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
+        """
+
+        Args:
+            app_token: App-level token
+            logger: Custom logger
+            web_client: Web API client
+            auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
+            ping_interval: interval for ping-pong with Slack servers (seconds)
+            concurrency: the size of thread pool (default: 10)
+            http_proxy_host: the HTTP proxy host
+            http_proxy_port: the HTTP proxy port
+            http_proxy_auth: the HTTP proxy username & password
+            proxy_type: the HTTP proxy type
+            on_open_listeners: listener functions for on_open
+            on_message_listeners: listener functions for on_message
+            on_error_listeners: listener functions for on_error
+            on_close_listeners: listener functions for on_close
+        """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or WebClient()
