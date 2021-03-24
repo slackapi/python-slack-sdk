@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>slack_sdk.scim.v1.internal_utils API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.scim.v1.internal_utils</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import copy
+import logging
+import re
+import sys
+from typing import Dict, Callable
+from typing import Union, Optional, Any
+from urllib.parse import quote
+
+from .default_arg import DefaultArg, NotGiven
+from slack_sdk.web.internal_utils import get_user_agent
+
+
+def _build_query(params: Optional[Dict[str, Any]]) -&gt; str:
+    if params is not None and len(params) &gt; 0:
+        return &#34;&amp;&#34;.join(
+            {
+                f&#34;{quote(str(k))}={quote(str(v))}&#34;
+                for k, v in params.items()
+                if v is not None
+            }
+        )
+    return &#34;&#34;
+
+
+def _is_iterable(obj: Union[Optional[Any], DefaultArg]) -&gt; bool:
+    return obj is not None and obj is not NotGiven
+
+
+def _to_dict_without_not_given(obj: Any) -&gt; dict:
+    dict_value = {}
+    given_dict = obj if isinstance(obj, dict) else vars(obj)
+    for key, value in given_dict.items():
+        if key == &#34;unknown_fields&#34;:
+            if value is not None:
+                converted = _to_dict_without_not_given(value)
+                dict_value.update(converted)
+            continue
+
+        dict_key = _to_camel_case_key(key)
+        if value is NotGiven:
+            continue
+        if isinstance(value, list):
+            dict_value[dict_key] = [
+                elem.to_dict() if hasattr(elem, &#34;to_dict&#34;) else elem for elem in value
+            ]
+        elif isinstance(value, dict):
+            dict_value[dict_key] = _to_dict_without_not_given(value)
+        else:
+            dict_value[dict_key] = (
+                value.to_dict() if hasattr(value, &#34;to_dict&#34;) else value
+            )
+    return dict_value
+
+
+def _create_copy(original: Any) -&gt; Any:
+    if sys.version_info.major == 3 and sys.version_info.minor &lt;= 6:
+        return copy.copy(original)
+    else:
+        return copy.deepcopy(original)
+
+
+def _to_camel_case_key(key: str) -&gt; str:
+    next_to_capital = False
+    result = &#34;&#34;
+    for c in key:
+        if c == &#34;_&#34;:
+            next_to_capital = True
+        elif next_to_capital:
+            result += c.upper()
+            next_to_capital = False
+        else:
+            result += c
+    return result
+
+
+def _to_snake_cased(original: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
+    return _convert_dict_keys(
+        original,
+        {},
+        lambda s: re.sub(
+            &#34;^_&#34;,
+            &#34;&#34;,
+            &#34;&#34;.join([&#34;_&#34; + c.lower() if c.isupper() else c for c in s]),
+        ),
+    )
+
+
+def _to_camel_cased(original: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
+    return _convert_dict_keys(
+        original,
+        {},
+        _to_camel_case_key,
+    )
+
+
+def _convert_dict_keys(
+    original_dict: Optional[Dict[str, Any]],
+    result_dict: Dict[str, Any],
+    convert: Callable[[str], str],
+) -&gt; Optional[Dict[str, Any]]:
+    if original_dict is None:
+        return result_dict
+
+    for original_key, original_value in original_dict.items():
+        new_key = convert(original_key)
+        if isinstance(original_value, dict):
+            result_dict[new_key] = {}
+            new_value = _convert_dict_keys(
+                original_value, result_dict[new_key], convert
+            )
+            result_dict[new_key] = new_value
+        elif isinstance(original_value, list):
+            result_dict[new_key] = []
+            is_dict = len(original_value) &gt; 0 and isinstance(original_value[0], dict)
+            for element in original_value:
+                if is_dict:
+                    if isinstance(element, dict):
+                        new_element = {}
+                        for elem_key, elem_value in element.items():
+                            new_element[convert(elem_key)] = (
+                                _convert_dict_keys(elem_value, {}, convert)
+                                if isinstance(elem_value, dict)
+                                else _create_copy(elem_value)
+                            )
+                        result_dict[new_key].append(new_element)
+                else:
+                    result_dict[new_key].append(_create_copy(original_value))
+        else:
+            result_dict[new_key] = _create_copy(original_value)
+    return result_dict
+
+
+def _build_request_headers(
+    token: str,
+    default_headers: Dict[str, str],
+    additional_headers: Optional[Dict[str, str]],
+) -&gt; Dict[str, str]:
+    request_headers = {
+        &#34;Content-Type&#34;: &#34;application/json;charset=utf-8&#34;,
+        &#34;Authorization&#34;: f&#34;Bearer {token}&#34;,
+    }
+    if default_headers is None or &#34;User-Agent&#34; not in default_headers:
+        request_headers[&#34;User-Agent&#34;] = get_user_agent()
+    if default_headers is not None:
+        request_headers.update(default_headers)
+    if additional_headers is not None:
+        request_headers.update(additional_headers)
+    return request_headers
+
+
+def _debug_log_response(logger, resp: &#34;SCIMResponse&#34;) -&gt; None:  # noqa: F821
+    if logger.level &lt;= logging.DEBUG:
+        logger.debug(
+            &#34;Received the following response - &#34;
+            f&#34;status: {resp.status_code}, &#34;
+            f&#34;headers: {(dict(resp.headers))}, &#34;
+            f&#34;body: {resp.raw_body}&#34;
+        )</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.scim.v1" href="index.html">slack_sdk.scim.v1</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

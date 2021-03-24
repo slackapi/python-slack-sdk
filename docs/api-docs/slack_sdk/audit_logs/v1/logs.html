@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>slack_sdk.audit_logs.v1.logs API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.audit_logs.v1.logs</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from typing import Optional, List, Union, Any, Dict
+
+
+class User:
+    id: Optional[str]
+    name: Optional[str]
+    email: Optional[str]
+    team: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        email: Optional[str] = None,
+        team: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.email = email
+        self.team = team
+        self.unknown_fields = kwargs
+
+
+class Actor:
+    type: Optional[str]
+    user: Optional[User]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        user: Optional[User] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.unknown_fields = kwargs
+
+
+class Location:
+    type: Optional[str]
+    id: Optional[str]
+    name: Optional[str]
+    domain: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        domain: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.id = id
+        self.name = name
+        self.domain = domain
+        self.unknown_fields = kwargs
+
+
+class Context:
+    location: Optional[Location]
+    ua: Optional[str]
+    ip_address: Optional[str]
+    session_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        location: Optional[Location] = None,
+        ua: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        session_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.location = Location(**location) if isinstance(location, dict) else location
+        self.ua = ua
+        self.ip_address = ip_address
+        self.session_id = session_id
+        self.unknown_fields = kwargs
+
+
+class Details:
+    name: Optional[str]
+    new_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    previous_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    expires_on: Optional[int]
+    mobile_only: Optional[bool]
+    web_only: Optional[bool]
+    type: Optional[str]
+    is_workflow: Optional[bool]
+    inviter: Optional[User]
+    kicker: Optional[User]
+    shared_to: Optional[str]
+    reason: Optional[str]
+    origin_team: Optional[str]
+    target_team: Optional[str]
+    is_internal_integration: Optional[bool]
+    app_owner_id: Optional[str]
+    bot_scopes: Optional[List[str]]
+    new_scopes: Optional[List[str]]
+    previous_scopes: Optional[List[str]]
+    granular_bot_token: Optional[bool]
+    scopes: Optional[List[str]]
+    resolution: Optional[str]
+    app_previously_resolved: Optional[bool]
+    admin_app_id: Optional[str]
+    bot_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        new_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        previous_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        expires_on: Optional[int] = None,
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        type: Optional[str] = None,
+        is_workflow: Optional[bool] = None,
+        inviter: Optional[User] = None,
+        kicker: Optional[User] = None,
+        shared_to: Optional[str] = None,
+        reason: Optional[str] = None,
+        origin_team: Optional[str] = None,
+        target_team: Optional[str] = None,
+        is_internal_integration: Optional[bool] = None,
+        app_owner_id: Optional[str] = None,
+        bot_scopes: Optional[List[str]] = None,
+        new_scopes: Optional[List[str]] = None,
+        previous_scopes: Optional[List[str]] = None,
+        granular_bot_token: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        resolution: Optional[str] = None,
+        app_previously_resolved: Optional[bool] = None,
+        admin_app_id: Optional[str] = None,
+        bot_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.new_value = new_value
+        self.previous_value = previous_value
+        self.expires_on = expires_on
+        self.mobile_only = mobile_only
+        self.web_only = web_only
+        self.type = type
+        self.is_workflow = is_workflow
+        self.inviter = inviter
+        self.kicker = kicker
+        self.shared_to = shared_to
+        self.reason = reason
+        self.origin_team = origin_team
+        self.target_team = target_team
+        self.is_internal_integration = is_internal_integration
+        self.app_owner_id = app_owner_id
+        self.bot_scopes = bot_scopes
+        self.new_scopes = new_scopes
+        self.previous_scopes = previous_scopes
+        self.granular_bot_token = granular_bot_token
+        self.scopes = scopes
+        self.resolution = resolution
+        self.app_previously_resolved = app_previously_resolved
+        self.admin_app_id = admin_app_id
+        self.bot_id = bot_id
+        self.unknown_fields = kwargs
+
+
+class App:
+    id: Optional[str]
+    name: Optional[str]
+    is_distributed: Optional[bool]
+    is_directory_approved: Optional[bool]
+    is_workflow_app: Optional[bool]
+    scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_distributed: Optional[bool] = None,
+        is_directory_approved: Optional[bool] = None,
+        is_workflow_app: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.is_distributed = is_distributed
+        self.is_directory_approved = is_directory_approved
+        self.is_workflow_app = is_workflow_app
+        self.scopes = scopes
+        self.unknown_fields = kwargs
+
+
+class Channel:
+    id: Optional[str]
+    privacy: Optional[str]
+    name: Optional[str]
+    is_shared: Optional[bool]
+    is_org_shared: Optional[bool]
+    teams_shared_with: Optional[List[str]]
+    original_connected_channel_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        privacy: Optional[str] = None,
+        name: Optional[str] = None,
+        is_shared: Optional[bool] = None,
+        is_org_shared: Optional[bool] = None,
+        teams_shared_with: Optional[List[str]] = None,
+        original_connected_channel_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.privacy = privacy
+        self.name = name
+        self.is_shared = is_shared
+        self.is_org_shared = is_org_shared
+        self.teams_shared_with = teams_shared_with
+        self.original_connected_channel_id = original_connected_channel_id
+        self.unknown_fields = kwargs
+
+
+class File:
+    id: Optional[str]
+    name: Optional[str]
+    filetype: Optional[str]
+    title: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        filetype: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.filetype = filetype
+        self.title = title
+        self.unknown_fields = kwargs
+
+
+class Entity:
+    type: Optional[str]
+    user: Optional[User]
+    workspace: Optional[Location]
+    enterprise: Optional[Location]
+    channel: Optional[Channel]
+    file: Optional[File]
+    app: Optional[App]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        user: Optional[Union[User, dict]] = None,
+        workspace: Optional[Union[Location, dict]] = None,
+        enterprise: Optional[Union[Location, dict]] = None,
+        channel: Optional[Union[Channel, dict]] = None,
+        file: Optional[Union[File, dict]] = None,
+        app: Optional[Union[App, dict]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.workspace = (
+            Location(**workspace) if isinstance(workspace, dict) else workspace
+        )
+        self.enterprise = (
+            Location(**enterprise) if isinstance(enterprise, dict) else enterprise
+        )
+        self.channel = Channel(**channel) if isinstance(channel, dict) else channel
+        self.file = File(**file) if isinstance(file, dict) else file
+        self.app = App(**app) if isinstance(app, dict) else app
+        self.unknown_fields = kwargs
+
+
+class Entry:
+    id: Optional[str]
+    date_create: Optional[int]
+    action: Optional[str]
+    actor: Optional[Actor]
+    entity: Optional[Entity]
+    context: Optional[Context]
+    details: Optional[Details]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        date_create: Optional[int] = None,
+        action: Optional[str] = None,
+        actor: Optional[Actor] = None,
+        entity: Optional[Entity] = None,
+        context: Optional[Context] = None,
+        details: Optional[Details] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.date_create = date_create
+        self.action = action
+        self.actor = Actor(**actor) if isinstance(actor, dict) else actor
+        self.entity = Entity(**entity) if isinstance(entity, dict) else entity
+        self.context = Context(**context) if isinstance(context, dict) else context
+        self.details = Details(**details) if isinstance(details, dict) else details
+        self.unknown_fields = kwargs
+
+
+class ResponseMetadata:
+    next_cursor: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        next_cursor: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.next_cursor = next_cursor
+        self.unknown_fields = kwargs
+
+
+class LogsResponse:
+    entries: Optional[List[Entry]]
+    response_metadata: Optional[ResponseMetadata]
+    ok: Optional[bool]
+    error: Optional[str]
+    needed: Optional[str]
+    provided: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        entries: Optional[List[Union[Entry, dict]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, dict]] = None,
+        ok: Optional[bool] = None,
+        error: Optional[str] = None,
+        needed: Optional[str] = None,
+        provided: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
+        self.response_metadata = (
+            ResponseMetadata(**response_metadata)
+            if isinstance(response_metadata, dict)
+            else response_metadata
+        )
+        self.ok = ok
+        self.error = error
+        self.needed = needed
+        self.provided = provided
+        self.unknown_fields = kwargs</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor"><code class="flex name class">
+<span>class <span class="ident">Actor</span></span>
+<span>(</span><span>type: Optional[str] = None, user: Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Actor:
+    type: Optional[str]
+    user: Optional[User]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        user: Optional[User] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.user"><code class="name">var <span class="ident">user</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App"><code class="flex name class">
+<span>class <span class="ident">App</span></span>
+<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, is_distributed: Optional[bool] = None, is_directory_approved: Optional[bool] = None, is_workflow_app: Optional[bool] = None, scopes: Optional[List[str]] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class App:
+    id: Optional[str]
+    name: Optional[str]
+    is_distributed: Optional[bool]
+    is_directory_approved: Optional[bool]
+    is_workflow_app: Optional[bool]
+    scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_distributed: Optional[bool] = None,
+        is_directory_approved: Optional[bool] = None,
+        is_workflow_app: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.is_distributed = is_distributed
+        self.is_directory_approved = is_directory_approved
+        self.is_workflow_app = is_workflow_app
+        self.scopes = scopes
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.App.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_directory_approved"><code class="name">var <span class="ident">is_directory_approved</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_distributed"><code class="name">var <span class="ident">is_distributed</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_workflow_app"><code class="name">var <span class="ident">is_workflow_app</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.scopes"><code class="name">var <span class="ident">scopes</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel"><code class="flex name class">
+<span>class <span class="ident">Channel</span></span>
+<span>(</span><span>*, id: Optional[str] = None, privacy: Optional[str] = None, name: Optional[str] = None, is_shared: Optional[bool] = None, is_org_shared: Optional[bool] = None, teams_shared_with: Optional[List[str]] = None, original_connected_channel_id: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Channel:
+    id: Optional[str]
+    privacy: Optional[str]
+    name: Optional[str]
+    is_shared: Optional[bool]
+    is_org_shared: Optional[bool]
+    teams_shared_with: Optional[List[str]]
+    original_connected_channel_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        privacy: Optional[str] = None,
+        name: Optional[str] = None,
+        is_shared: Optional[bool] = None,
+        is_org_shared: Optional[bool] = None,
+        teams_shared_with: Optional[List[str]] = None,
+        original_connected_channel_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.privacy = privacy
+        self.name = name
+        self.is_shared = is_shared
+        self.is_org_shared = is_org_shared
+        self.teams_shared_with = teams_shared_with
+        self.original_connected_channel_id = original_connected_channel_id
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared"><code class="name">var <span class="ident">is_org_shared</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_shared"><code class="name">var <span class="ident">is_shared</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id"><code class="name">var <span class="ident">original_connected_channel_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.privacy"><code class="name">var <span class="ident">privacy</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with"><code class="name">var <span class="ident">teams_shared_with</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context"><code class="flex name class">
+<span>class <span class="ident">Context</span></span>
+<span>(</span><span>*, location: Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Context:
+    location: Optional[Location]
+    ua: Optional[str]
+    ip_address: Optional[str]
+    session_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        location: Optional[Location] = None,
+        ua: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        session_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.location = Location(**location) if isinstance(location, dict) else location
+        self.ua = ua
+        self.ip_address = ip_address
+        self.session_id = session_id
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ip_address"><code class="name">var <span class="ident">ip_address</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.location"><code class="name">var <span class="ident">location</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.session_id"><code class="name">var <span class="ident">session_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ua"><code class="name">var <span class="ident">ua</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
+<span>class <span class="ident">Details</span></span>
+<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], NoneType] = None, previous_value: Union[str, List[str], Dict[str, Any], NoneType] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>] = None, kicker: Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Details:
+    name: Optional[str]
+    new_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    previous_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    expires_on: Optional[int]
+    mobile_only: Optional[bool]
+    web_only: Optional[bool]
+    type: Optional[str]
+    is_workflow: Optional[bool]
+    inviter: Optional[User]
+    kicker: Optional[User]
+    shared_to: Optional[str]
+    reason: Optional[str]
+    origin_team: Optional[str]
+    target_team: Optional[str]
+    is_internal_integration: Optional[bool]
+    app_owner_id: Optional[str]
+    bot_scopes: Optional[List[str]]
+    new_scopes: Optional[List[str]]
+    previous_scopes: Optional[List[str]]
+    granular_bot_token: Optional[bool]
+    scopes: Optional[List[str]]
+    resolution: Optional[str]
+    app_previously_resolved: Optional[bool]
+    admin_app_id: Optional[str]
+    bot_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        new_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        previous_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        expires_on: Optional[int] = None,
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        type: Optional[str] = None,
+        is_workflow: Optional[bool] = None,
+        inviter: Optional[User] = None,
+        kicker: Optional[User] = None,
+        shared_to: Optional[str] = None,
+        reason: Optional[str] = None,
+        origin_team: Optional[str] = None,
+        target_team: Optional[str] = None,
+        is_internal_integration: Optional[bool] = None,
+        app_owner_id: Optional[str] = None,
+        bot_scopes: Optional[List[str]] = None,
+        new_scopes: Optional[List[str]] = None,
+        previous_scopes: Optional[List[str]] = None,
+        granular_bot_token: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        resolution: Optional[str] = None,
+        app_previously_resolved: Optional[bool] = None,
+        admin_app_id: Optional[str] = None,
+        bot_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.new_value = new_value
+        self.previous_value = previous_value
+        self.expires_on = expires_on
+        self.mobile_only = mobile_only
+        self.web_only = web_only
+        self.type = type
+        self.is_workflow = is_workflow
+        self.inviter = inviter
+        self.kicker = kicker
+        self.shared_to = shared_to
+        self.reason = reason
+        self.origin_team = origin_team
+        self.target_team = target_team
+        self.is_internal_integration = is_internal_integration
+        self.app_owner_id = app_owner_id
+        self.bot_scopes = bot_scopes
+        self.new_scopes = new_scopes
+        self.previous_scopes = previous_scopes
+        self.granular_bot_token = granular_bot_token
+        self.scopes = scopes
+        self.resolution = resolution
+        self.app_previously_resolved = app_previously_resolved
+        self.admin_app_id = admin_app_id
+        self.bot_id = bot_id
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.admin_app_id"><code class="name">var <span class="ident">admin_app_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_owner_id"><code class="name">var <span class="ident">app_owner_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved"><code class="name">var <span class="ident">app_previously_resolved</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_id"><code class="name">var <span class="ident">bot_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.expires_on"><code class="name">var <span class="ident">expires_on</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token"><code class="name">var <span class="ident">granular_bot_token</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.inviter"><code class="name">var <span class="ident">inviter</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration"><code class="name">var <span class="ident">is_internal_integration</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_workflow"><code class="name">var <span class="ident">is_workflow</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.kicker"><code class="name">var <span class="ident">kicker</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.mobile_only"><code class="name">var <span class="ident">mobile_only</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_scopes"><code class="name">var <span class="ident">new_scopes</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_value"><code class="name">var <span class="ident">new_value</span> : Union[str, List[str], Dict[str, Any], NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.origin_team"><code class="name">var <span class="ident">origin_team</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_scopes"><code class="name">var <span class="ident">previous_scopes</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_value"><code class="name">var <span class="ident">previous_value</span> : Union[str, List[str], Dict[str, Any], NoneType]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.reason"><code class="name">var <span class="ident">reason</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.resolution"><code class="name">var <span class="ident">resolution</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes"><code class="name">var <span class="ident">scopes</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_to"><code class="name">var <span class="ident">shared_to</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.web_only"><code class="name">var <span class="ident">web_only</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity"><code class="flex name class">
+<span>class <span class="ident">Entity</span></span>
+<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, dict, NoneType] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, dict, NoneType] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, dict, NoneType] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, dict, NoneType] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, dict, NoneType] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, dict, NoneType] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Entity:
+    type: Optional[str]
+    user: Optional[User]
+    workspace: Optional[Location]
+    enterprise: Optional[Location]
+    channel: Optional[Channel]
+    file: Optional[File]
+    app: Optional[App]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        user: Optional[Union[User, dict]] = None,
+        workspace: Optional[Union[Location, dict]] = None,
+        enterprise: Optional[Union[Location, dict]] = None,
+        channel: Optional[Union[Channel, dict]] = None,
+        file: Optional[Union[File, dict]] = None,
+        app: Optional[Union[App, dict]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.workspace = (
+            Location(**workspace) if isinstance(workspace, dict) else workspace
+        )
+        self.enterprise = (
+            Location(**enterprise) if isinstance(enterprise, dict) else enterprise
+        )
+        self.channel = Channel(**channel) if isinstance(channel, dict) else channel
+        self.file = File(**file) if isinstance(file, dict) else file
+        self.app = App(**app) if isinstance(app, dict) else app
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.app"><code class="name">var <span class="ident">app</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.channel"><code class="name">var <span class="ident">channel</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.enterprise"><code class="name">var <span class="ident">enterprise</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.file"><code class="name">var <span class="ident">file</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.user"><code class="name">var <span class="ident">user</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workspace"><code class="name">var <span class="ident">workspace</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry"><code class="flex name class">
+<span>class <span class="ident">Entry</span></span>
+<span>(</span><span>*, id: Optional[str] = None, date_create: Optional[int] = None, action: Optional[str] = None, actor: Optional[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>] = None, entity: Optional[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>] = None, context: Optional[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>] = None, details: Optional[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Entry:
+    id: Optional[str]
+    date_create: Optional[int]
+    action: Optional[str]
+    actor: Optional[Actor]
+    entity: Optional[Entity]
+    context: Optional[Context]
+    details: Optional[Details]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        date_create: Optional[int] = None,
+        action: Optional[str] = None,
+        actor: Optional[Actor] = None,
+        entity: Optional[Entity] = None,
+        context: Optional[Context] = None,
+        details: Optional[Details] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.date_create = date_create
+        self.action = action
+        self.actor = Actor(**actor) if isinstance(actor, dict) else actor
+        self.entity = Entity(**entity) if isinstance(entity, dict) else entity
+        self.context = Context(**context) if isinstance(context, dict) else context
+        self.details = Details(**details) if isinstance(details, dict) else details
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.action"><code class="name">var <span class="ident">action</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.actor"><code class="name">var <span class="ident">actor</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.context"><code class="name">var <span class="ident">context</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.date_create"><code class="name">var <span class="ident">date_create</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.details"><code class="name">var <span class="ident">details</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.entity"><code class="name">var <span class="ident">entity</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File"><code class="flex name class">
+<span>class <span class="ident">File</span></span>
+<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, filetype: Optional[str] = None, title: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class File:
+    id: Optional[str]
+    name: Optional[str]
+    filetype: Optional[str]
+    title: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        filetype: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.filetype = filetype
+        self.title = title
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.File.filetype"><code class="name">var <span class="ident">filetype</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.title"><code class="name">var <span class="ident">title</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location"><code class="flex name class">
+<span>class <span class="ident">Location</span></span>
+<span>(</span><span>*, type: Optional[str] = None, id: Optional[str] = None, name: Optional[str] = None, domain: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Location:
+    type: Optional[str]
+    id: Optional[str]
+    name: Optional[str]
+    domain: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        domain: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.id = id
+        self.name = name
+        self.domain = domain
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.domain"><code class="name">var <span class="ident">domain</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse"><code class="flex name class">
+<span>class <span class="ident">LogsResponse</span></span>
+<span>(</span><span>*, entries: Optional[List[Union[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>, dict]]] = None, response_metadata: Union[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>, dict, NoneType] = None, ok: Optional[bool] = None, error: Optional[str] = None, needed: Optional[str] = None, provided: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LogsResponse:
+    entries: Optional[List[Entry]]
+    response_metadata: Optional[ResponseMetadata]
+    ok: Optional[bool]
+    error: Optional[str]
+    needed: Optional[str]
+    provided: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        entries: Optional[List[Union[Entry, dict]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, dict]] = None,
+        ok: Optional[bool] = None,
+        error: Optional[str] = None,
+        needed: Optional[str] = None,
+        provided: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
+        self.response_metadata = (
+            ResponseMetadata(**response_metadata)
+            if isinstance(response_metadata, dict)
+            else response_metadata
+        )
+        self.ok = ok
+        self.error = error
+        self.needed = needed
+        self.provided = provided
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.entries"><code class="name">var <span class="ident">entries</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.error"><code class="name">var <span class="ident">error</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.needed"><code class="name">var <span class="ident">needed</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.ok"><code class="name">var <span class="ident">ok</span> : Optional[bool]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.provided"><code class="name">var <span class="ident">provided</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata"><code class="name">var <span class="ident">response_metadata</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata"><code class="flex name class">
+<span>class <span class="ident">ResponseMetadata</span></span>
+<span>(</span><span>*, next_cursor: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ResponseMetadata:
+    next_cursor: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        next_cursor: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.next_cursor = next_cursor
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor"><code class="name">var <span class="ident">next_cursor</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User"><code class="flex name class">
+<span>class <span class="ident">User</span></span>
+<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, email: Optional[str] = None, team: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class User:
+    id: Optional[str]
+    name: Optional[str]
+    email: Optional[str]
+    team: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        email: Optional[str] = None,
+        team: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.email = email
+        self.team = team
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.User.email"><code class="name">var <span class="ident">email</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.team"><code class="name">var <span class="ident">team</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.audit_logs.v1" href="index.html">slack_sdk.audit_logs.v1</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.type" href="#slack_sdk.audit_logs.v1.logs.Actor.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Actor.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.user" href="#slack_sdk.audit_logs.v1.logs.Actor.user">user</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.id" href="#slack_sdk.audit_logs.v1.logs.App.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_directory_approved" href="#slack_sdk.audit_logs.v1.logs.App.is_directory_approved">is_directory_approved</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_distributed" href="#slack_sdk.audit_logs.v1.logs.App.is_distributed">is_distributed</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_workflow_app" href="#slack_sdk.audit_logs.v1.logs.App.is_workflow_app">is_workflow_app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.name" href="#slack_sdk.audit_logs.v1.logs.App.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.scopes" href="#slack_sdk.audit_logs.v1.logs.App.scopes">scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.App.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.id" href="#slack_sdk.audit_logs.v1.logs.Channel.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared" href="#slack_sdk.audit_logs.v1.logs.Channel.is_org_shared">is_org_shared</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.is_shared" href="#slack_sdk.audit_logs.v1.logs.Channel.is_shared">is_shared</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.name" href="#slack_sdk.audit_logs.v1.logs.Channel.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id" href="#slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id">original_connected_channel_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.privacy" href="#slack_sdk.audit_logs.v1.logs.Channel.privacy">privacy</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with" href="#slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with">teams_shared_with</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Channel.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.ip_address" href="#slack_sdk.audit_logs.v1.logs.Context.ip_address">ip_address</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.location" href="#slack_sdk.audit_logs.v1.logs.Context.location">location</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.session_id" href="#slack_sdk.audit_logs.v1.logs.Context.session_id">session_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.ua" href="#slack_sdk.audit_logs.v1.logs.Context.ua">ua</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Context.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.admin_app_id" href="#slack_sdk.audit_logs.v1.logs.Details.admin_app_id">admin_app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_owner_id" href="#slack_sdk.audit_logs.v1.logs.Details.app_owner_id">app_owner_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved">app_previously_resolved</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_id" href="#slack_sdk.audit_logs.v1.logs.Details.bot_id">bot_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.bot_scopes">bot_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.expires_on" href="#slack_sdk.audit_logs.v1.logs.Details.expires_on">expires_on</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token" href="#slack_sdk.audit_logs.v1.logs.Details.granular_bot_token">granular_bot_token</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.inviter" href="#slack_sdk.audit_logs.v1.logs.Details.inviter">inviter</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration" href="#slack_sdk.audit_logs.v1.logs.Details.is_internal_integration">is_internal_integration</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_workflow" href="#slack_sdk.audit_logs.v1.logs.Details.is_workflow">is_workflow</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.kicker" href="#slack_sdk.audit_logs.v1.logs.Details.kicker">kicker</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.mobile_only" href="#slack_sdk.audit_logs.v1.logs.Details.mobile_only">mobile_only</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.name" href="#slack_sdk.audit_logs.v1.logs.Details.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.new_scopes">new_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_value" href="#slack_sdk.audit_logs.v1.logs.Details.new_value">new_value</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.origin_team" href="#slack_sdk.audit_logs.v1.logs.Details.origin_team">origin_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.previous_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.previous_scopes">previous_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.previous_value" href="#slack_sdk.audit_logs.v1.logs.Details.previous_value">previous_value</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.reason" href="#slack_sdk.audit_logs.v1.logs.Details.reason">reason</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.resolution" href="#slack_sdk.audit_logs.v1.logs.Details.resolution">resolution</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.scopes" href="#slack_sdk.audit_logs.v1.logs.Details.scopes">scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_to" href="#slack_sdk.audit_logs.v1.logs.Details.shared_to">shared_to</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_team" href="#slack_sdk.audit_logs.v1.logs.Details.target_team">target_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.type" href="#slack_sdk.audit_logs.v1.logs.Details.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Details.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.web_only" href="#slack_sdk.audit_logs.v1.logs.Details.web_only">web_only</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.app" href="#slack_sdk.audit_logs.v1.logs.Entity.app">app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.channel" href="#slack_sdk.audit_logs.v1.logs.Entity.channel">channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.enterprise" href="#slack_sdk.audit_logs.v1.logs.Entity.enterprise">enterprise</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.file" href="#slack_sdk.audit_logs.v1.logs.Entity.file">file</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.type" href="#slack_sdk.audit_logs.v1.logs.Entity.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Entity.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.user" href="#slack_sdk.audit_logs.v1.logs.Entity.user">user</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.workspace" href="#slack_sdk.audit_logs.v1.logs.Entity.workspace">workspace</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.action" href="#slack_sdk.audit_logs.v1.logs.Entry.action">action</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.actor" href="#slack_sdk.audit_logs.v1.logs.Entry.actor">actor</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.context" href="#slack_sdk.audit_logs.v1.logs.Entry.context">context</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.date_create" href="#slack_sdk.audit_logs.v1.logs.Entry.date_create">date_create</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.details" href="#slack_sdk.audit_logs.v1.logs.Entry.details">details</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.entity" href="#slack_sdk.audit_logs.v1.logs.Entry.entity">entity</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.id" href="#slack_sdk.audit_logs.v1.logs.Entry.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Entry.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.filetype" href="#slack_sdk.audit_logs.v1.logs.File.filetype">filetype</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.id" href="#slack_sdk.audit_logs.v1.logs.File.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.name" href="#slack_sdk.audit_logs.v1.logs.File.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.title" href="#slack_sdk.audit_logs.v1.logs.File.title">title</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.File.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.domain" href="#slack_sdk.audit_logs.v1.logs.Location.domain">domain</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.id" href="#slack_sdk.audit_logs.v1.logs.Location.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.name" href="#slack_sdk.audit_logs.v1.logs.Location.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.type" href="#slack_sdk.audit_logs.v1.logs.Location.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Location.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.entries" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.entries">entries</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.error" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.error">error</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.needed" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.needed">needed</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.ok" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.ok">ok</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.provided" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.provided">provided</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata">response_metadata</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor">next_cursor</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.email" href="#slack_sdk.audit_logs.v1.logs.User.email">email</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.id" href="#slack_sdk.audit_logs.v1.logs.User.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.name" href="#slack_sdk.audit_logs.v1.logs.User.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.team" href="#slack_sdk.audit_logs.v1.logs.User.team">team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.User.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

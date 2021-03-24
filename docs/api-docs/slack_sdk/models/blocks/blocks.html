@@ -1,0 +1,1626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>slack_sdk.models.blocks.blocks API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.models.blocks.blocks</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import copy
+import logging
+import warnings
+from typing import Dict, Sequence, Optional, Set, Union, Any, List
+
+from slack_sdk.models import show_unknown_key_warning
+from slack_sdk.models.basic_objects import (
+    JsonObject,
+    JsonValidator,
+)
+from .basic_components import MarkdownTextObject
+from .basic_components import PlainTextObject
+from .basic_components import TextObject
+from .block_elements import BlockElement
+from .block_elements import InputInteractiveElement
+from .block_elements import InteractiveElement
+
+
+# -------------------------------------------------
+# Base Classes
+# -------------------------------------------------
+
+
+class Block(JsonObject):
+    &#34;&#34;&#34;Blocks are a series of components that can be combined
+    to create visually rich and compellingly interactive messages.
+    https://api.slack.com/reference/block-kit/blocks
+    &#34;&#34;&#34;
+
+    attributes = {&#34;block_id&#34;, &#34;type&#34;}
+    block_id_max_length = 255
+    logger = logging.getLogger(__name__)
+
+    def _subtype_warning(self):  # skipcq: PYL-R0201
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,  # deprecated
+        block_id: Optional[str] = None,
+    ):
+        if subtype:
+            self._subtype_warning()
+        self.type = type if type else subtype
+        self.block_id = block_id
+        self.color = None
+
+    @JsonValidator(f&#34;block_id cannot exceed {block_id_max_length} characters&#34;)
+    def _validate_block_id_length(self):
+        return self.block_id is None or len(self.block_id) &lt;= self.block_id_max_length
+
+    @classmethod
+    def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#34;]:
+        if block is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(block, Block):
+            return block
+        else:
+            if &#34;type&#34; in block:
+                type = block[&#34;type&#34;]  # skipcq: PYL-W0622
+                if type == SectionBlock.type:  # skipcq: PYL-R1705
+                    return SectionBlock(**block)
+                elif type == DividerBlock.type:
+                    return DividerBlock(**block)
+                elif type == ImageBlock.type:
+                    return ImageBlock(**block)
+                elif type == ActionsBlock.type:
+                    return ActionsBlock(**block)
+                elif type == ContextBlock.type:
+                    return ContextBlock(**block)
+                elif type == InputBlock.type:
+                    return InputBlock(**block)
+                elif type == FileBlock.type:
+                    return FileBlock(**block)
+                elif type == CallBlock.type:
+                    return CallBlock(**block)
+                elif type == HeaderBlock.type:
+                    return HeaderBlock(**block)
+                else:
+                    cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+                    return None
+            else:
+                cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+                return None
+
+    @classmethod
+    def parse_all(
+        cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
+    ) -&gt; List[&#34;Block&#34;]:
+        return [cls.parse(b) for b in blocks or []]
+
+
+# -------------------------------------------------
+# Block Classes
+# -------------------------------------------------
+
+
+class SectionBlock(Block):
+    type = &#34;section&#34;
+    fields_max_length = 10
+    text_max_length = 3000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Union[str, dict, TextObject] = None,
+        fields: Sequence[Union[str, dict, TextObject]] = None,
+        accessory: Optional[Union[dict, BlockElement]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A section is one of the most flexible blocks available.
+        https://api.slack.com/reference/block-kit/blocks#section
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        field_objects = []
+        for f in fields or []:
+            if isinstance(f, str):
+                field_objects.append(MarkdownTextObject.from_str(f))
+            elif isinstance(f, TextObject):
+                field_objects.append(f)
+            elif isinstance(f, dict) and &#34;type&#34; in f:
+                d = copy.copy(f)
+                t = d.pop(&#34;type&#34;)
+                if t == MarkdownTextObject.type:
+                    field_objects.append(MarkdownTextObject(**d))
+                else:
+                    field_objects.append(PlainTextObject(**d))
+            else:
+                self.logger.warning(f&#34;Unsupported filed detected and skipped {f}&#34;)
+        self.fields = field_objects
+        self.accessory = BlockElement.parse(accessory)
+
+    @JsonValidator(&#34;text or fields attribute must be specified&#34;)
+    def _validate_text_or_fields_populated(self):
+        return self.text is not None or self.fields
+
+    @JsonValidator(f&#34;fields attribute cannot exceed {fields_max_length} items&#34;)
+    def _validate_fields_length(self):
+        return self.fields is None or len(self.fields) &lt;= self.fields_max_length
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) &lt;= self.text_max_length
+
+
+class DividerBlock(Block):
+    type = &#34;divider&#34;
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A content divider, like an &lt;hr&gt;, to split up different blocks inside of a message.
+        https://api.slack.com/reference/block-kit/blocks#divider
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+
+class ImageBlock(Block):
+    type = &#34;image&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;})
+
+    image_url_max_length = 3000
+    alt_text_max_length = 2000
+    title_max_length = 2000
+
+    def __init__(
+        self,
+        *,
+        image_url: str,
+        alt_text: str,
+        title: Optional[Union[str, dict, TextObject]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A simple image block, designed to make those cat photos really pop.
+        https://api.slack.com/reference/block-kit/blocks#image
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.image_url = image_url
+        self.alt_text = alt_text
+        self.title = TextObject.parse(title)
+
+    @JsonValidator(
+        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
+    )
+    def _validate_image_url_length(self):
+        return len(self.image_url) &lt;= self.image_url_max_length
+
+    @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return len(self.alt_text) &lt;= self.alt_text_max_length
+
+    @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+    def _validate_title_length(self):
+        return (
+            self.title is None
+            or self.title.text is None
+            or len(self.title.text) &lt;= self.title_max_length
+        )
+
+
+class ActionsBlock(Block):
+    type = &#34;actions&#34;
+    elements_max_length = 5
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, InteractiveElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A block that is used to hold interactive elements.
+        https://api.slack.com/reference/block-kit/blocks#actions
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} elements&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length
+
+
+class ContextBlock(Block):
+    type = &#34;context&#34;
+    elements_max_length = 10
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, ImageBlock, TextObject]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays message context, which can include both images and text.
+        https://api.slack.com/reference/block-kit/blocks#context
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} elements&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length
+
+
+class InputBlock(Block):
+    type = &#34;input&#34;
+    label_max_length = 2000
+    hint_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        label: Union[str, dict, PlainTextObject],
+        element: Union[str, dict, InputInteractiveElement],
+        block_id: Optional[str] = None,
+        hint: Optional[Union[str, dict, PlainTextObject]] = None,
+        dispatch_action: Optional[bool] = None,
+        optional: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A block that collects information from users - it can hold a plain-text input element,
+        a select menu element, a multi-select menu element, or a datepicker.
+        Important Note: Input blocks are only available in modals.
+        https://api.slack.com/reference/block-kit/blocks#input
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.label = TextObject.parse(label, default_type=PlainTextObject.type)
+        self.element = BlockElement.parse(element)
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
+        self.dispatch_action = dispatch_action
+        self.optional = optional
+
+    @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+    def _validate_label_length(self):
+        return (
+            self.label is None
+            or self.label.text is None
+            or len(self.label.text) &lt;= self.label_max_length
+        )
+
+    @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
+    def _validate_hint_length(self):
+        return (
+            self.hint is None
+            or self.hint.text is None
+            or len(self.hint.text) &lt;= self.label_max_length
+        )
+
+    @JsonValidator(
+        (
+            &#34;element attribute must be a string, select element, multi-select element, &#34;
+            &#34;or a datepicker. (Sub-classes of InputInteractiveElement)&#34;
+        )
+    )
+    def _validate_element_type(self):
+        return self.element is None or isinstance(
+            self.element, (str, InputInteractiveElement)
+        )
+
+
+class FileBlock(Block):
+    type = &#34;file&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;external_id&#34;, &#34;source&#34;})
+
+    def __init__(
+        self,
+        *,
+        external_id: str,
+        source: str = &#34;remote&#34;,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays a remote file.
+        https://api.slack.com/reference/block-kit/blocks#file
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.external_id = external_id
+        self.source = source
+
+
+class CallBlock(Block):
+    type = &#34;call&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})
+
+    def __init__(
+        self,
+        *,
+        call_id: str,
+        api_decoration_available: Optional[bool] = None,
+        call: Optional[Dict[str, Dict[str, Any]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays a call information
+        https://api.slack.com/reference/block-kit/blocks#call
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.call_id = call_id
+        self.api_decoration_available = api_decoration_available
+        self.call = call
+
+
+class HeaderBlock(Block):
+    type = &#34;header&#34;
+    text_max_length = 150
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Union[str, dict, TextObject] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A header is a plain-text block that displays in a larger, bold font.
+        https://api.slack.com/reference/block-kit/blocks#header
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+
+    @JsonValidator(&#34;text attribute must be specified&#34;)
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ActionsBlock"><code class="flex name class">
+<span>class <span class="ident">ActionsBlock</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>]], block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A block that is used to hold interactive elements.
+<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ActionsBlock(Block):
+    type = &#34;actions&#34;
+    elements_max_length = 5
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, InteractiveElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A block that is used to hold interactive elements.
+        https://api.slack.com/reference/block-kit/blocks#actions
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} elements&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ActionsBlock.elements_max_length"><code class="name">var <span class="ident">elements_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ActionsBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ActionsBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.Block"><code class="flex name class">
+<span>class <span class="ident">Block</span></span>
+<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, block_id: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Block(JsonObject):
+    &#34;&#34;&#34;Blocks are a series of components that can be combined
+    to create visually rich and compellingly interactive messages.
+    https://api.slack.com/reference/block-kit/blocks
+    &#34;&#34;&#34;
+
+    attributes = {&#34;block_id&#34;, &#34;type&#34;}
+    block_id_max_length = 255
+    logger = logging.getLogger(__name__)
+
+    def _subtype_warning(self):  # skipcq: PYL-R0201
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,  # deprecated
+        block_id: Optional[str] = None,
+    ):
+        if subtype:
+            self._subtype_warning()
+        self.type = type if type else subtype
+        self.block_id = block_id
+        self.color = None
+
+    @JsonValidator(f&#34;block_id cannot exceed {block_id_max_length} characters&#34;)
+    def _validate_block_id_length(self):
+        return self.block_id is None or len(self.block_id) &lt;= self.block_id_max_length
+
+    @classmethod
+    def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#34;]:
+        if block is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(block, Block):
+            return block
+        else:
+            if &#34;type&#34; in block:
+                type = block[&#34;type&#34;]  # skipcq: PYL-W0622
+                if type == SectionBlock.type:  # skipcq: PYL-R1705
+                    return SectionBlock(**block)
+                elif type == DividerBlock.type:
+                    return DividerBlock(**block)
+                elif type == ImageBlock.type:
+                    return ImageBlock(**block)
+                elif type == ActionsBlock.type:
+                    return ActionsBlock(**block)
+                elif type == ContextBlock.type:
+                    return ContextBlock(**block)
+                elif type == InputBlock.type:
+                    return InputBlock(**block)
+                elif type == FileBlock.type:
+                    return FileBlock(**block)
+                elif type == CallBlock.type:
+                    return CallBlock(**block)
+                elif type == HeaderBlock.type:
+                    return HeaderBlock(**block)
+                else:
+                    cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+                    return None
+            else:
+                cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+                return None
+
+    @classmethod
+    def parse_all(
+        cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
+    ) -&gt; List[&#34;Block&#34;]:
+        return [cls.parse(b) for b in blocks or []]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.ActionsBlock" href="#slack_sdk.models.blocks.blocks.ActionsBlock">ActionsBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.CallBlock" href="#slack_sdk.models.blocks.blocks.CallBlock">CallBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.ContextBlock" href="#slack_sdk.models.blocks.blocks.ContextBlock">ContextBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.DividerBlock" href="#slack_sdk.models.blocks.blocks.DividerBlock">DividerBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.FileBlock" href="#slack_sdk.models.blocks.blocks.FileBlock">FileBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.HeaderBlock" href="#slack_sdk.models.blocks.blocks.HeaderBlock">HeaderBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.ImageBlock" href="#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.InputBlock" href="#slack_sdk.models.blocks.blocks.InputBlock">InputBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.SectionBlock" href="#slack_sdk.models.blocks.blocks.SectionBlock">SectionBlock</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.Block.block_id_max_length"><code class="name">var <span class="ident">block_id_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.Block.logger"><code class="name">var <span class="ident">logger</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>block: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')]) ‑> Optional[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#34;]:
+    if block is None:  # skipcq: PYL-R1705
+        return None
+    elif isinstance(block, Block):
+        return block
+    else:
+        if &#34;type&#34; in block:
+            type = block[&#34;type&#34;]  # skipcq: PYL-W0622
+            if type == SectionBlock.type:  # skipcq: PYL-R1705
+                return SectionBlock(**block)
+            elif type == DividerBlock.type:
+                return DividerBlock(**block)
+            elif type == ImageBlock.type:
+                return ImageBlock(**block)
+            elif type == ActionsBlock.type:
+                return ActionsBlock(**block)
+            elif type == ContextBlock.type:
+                return ContextBlock(**block)
+            elif type == InputBlock.type:
+                return InputBlock(**block)
+            elif type == FileBlock.type:
+                return FileBlock(**block)
+            elif type == CallBlock.type:
+                return CallBlock(**block)
+            elif type == HeaderBlock.type:
+                return HeaderBlock(**block)
+            else:
+                cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+                return None
+        else:
+            cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
+            return None</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')]]]) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_all(
+    cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
+) -&gt; List[&#34;Block&#34;]:
+    return [cls.parse(b) for b in blocks or []]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.Block.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def subtype(self) -&gt; Optional[str]:
+    return self.type</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CallBlock"><code class="flex name class">
+<span>class <span class="ident">CallBlock</span></span>
+<span>(</span><span>*, call_id: str, api_decoration_available: Optional[bool] = None, call: Optional[Dict[str, Dict[str, Any]]] = None, block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays a call information
+<a href="https://api.slack.com/reference/block-kit/blocks#call">https://api.slack.com/reference/block-kit/blocks#call</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CallBlock(Block):
+    type = &#34;call&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})
+
+    def __init__(
+        self,
+        *,
+        call_id: str,
+        api_decoration_available: Optional[bool] = None,
+        call: Optional[Dict[str, Dict[str, Any]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays a call information
+        https://api.slack.com/reference/block-kit/blocks#call
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.call_id = call_id
+        self.api_decoration_available = api_decoration_available
+        self.call = call</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CallBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CallBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ContextBlock"><code class="flex name class">
+<span>class <span class="ident">ContextBlock</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.blocks.ImageBlock" href="#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays message context, which can include both images and text.
+<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ContextBlock(Block):
+    type = &#34;context&#34;
+    elements_max_length = 10
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, ImageBlock, TextObject]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays message context, which can include both images and text.
+        https://api.slack.com/reference/block-kit/blocks#context
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} elements&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ContextBlock.elements_max_length"><code class="name">var <span class="ident">elements_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ContextBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ContextBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.DividerBlock"><code class="flex name class">
+<span>class <span class="ident">DividerBlock</span></span>
+<span>(</span><span>*, block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A content divider, like an <hr>, to split up different blocks inside of a message.
+<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DividerBlock(Block):
+    type = &#34;divider&#34;
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A content divider, like an &lt;hr&gt;, to split up different blocks inside of a message.
+        https://api.slack.com/reference/block-kit/blocks#divider
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.DividerBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.FileBlock"><code class="flex name class">
+<span>class <span class="ident">FileBlock</span></span>
+<span>(</span><span>*, external_id: str, source: str = 'remote', block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays a remote file.
+<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileBlock(Block):
+    type = &#34;file&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;external_id&#34;, &#34;source&#34;})
+
+    def __init__(
+        self,
+        *,
+        external_id: str,
+        source: str = &#34;remote&#34;,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays a remote file.
+        https://api.slack.com/reference/block-kit/blocks#file
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.external_id = external_id
+        self.source = source</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.FileBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.FileBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;external_id&#34;, &#34;source&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.HeaderBlock"><code class="flex name class">
+<span>class <span class="ident">HeaderBlock</span></span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A header is a plain-text block that displays in a larger, bold font.
+<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HeaderBlock(Block):
+    type = &#34;header&#34;
+    text_max_length = 150
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Union[str, dict, TextObject] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A header is a plain-text block that displays in a larger, bold font.
+        https://api.slack.com/reference/block-kit/blocks#header
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+
+    @JsonValidator(&#34;text attribute must be specified&#34;)
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.HeaderBlock.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.HeaderBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.HeaderBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;text&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock"><code class="flex name class">
+<span>class <span class="ident">ImageBlock</span></span>
+<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, block_id: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A simple image block, designed to make those cat photos really pop.
+<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ImageBlock(Block):
+    type = &#34;image&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;})
+
+    image_url_max_length = 3000
+    alt_text_max_length = 2000
+    title_max_length = 2000
+
+    def __init__(
+        self,
+        *,
+        image_url: str,
+        alt_text: str,
+        title: Optional[Union[str, dict, TextObject]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A simple image block, designed to make those cat photos really pop.
+        https://api.slack.com/reference/block-kit/blocks#image
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.image_url = image_url
+        self.alt_text = alt_text
+        self.title = TextObject.parse(title)
+
+    @JsonValidator(
+        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
+    )
+    def _validate_image_url_length(self):
+        return len(self.image_url) &lt;= self.image_url_max_length
+
+    @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return len(self.alt_text) &lt;= self.alt_text_max_length
+
+    @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+    def _validate_title_length(self):
+        return (
+            self.title is None
+            or self.title.text is None
+            or len(self.title.text) &lt;= self.title_max_length
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock.alt_text_max_length"><code class="name">var <span class="ident">alt_text_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock.image_url_max_length"><code class="name">var <span class="ident">image_url_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock.title_max_length"><code class="name">var <span class="ident">title_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ImageBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.InputBlock"><code class="flex name class">
+<span>class <span class="ident">InputBlock</span></span>
+<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, NoneType] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A block that collects information from users - it can hold a plain-text input element,
+a select menu element, a multi-select menu element, or a datepicker.
+Important Note: Input blocks are only available in modals.
+<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputBlock(Block):
+    type = &#34;input&#34;
+    label_max_length = 2000
+    hint_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        label: Union[str, dict, PlainTextObject],
+        element: Union[str, dict, InputInteractiveElement],
+        block_id: Optional[str] = None,
+        hint: Optional[Union[str, dict, PlainTextObject]] = None,
+        dispatch_action: Optional[bool] = None,
+        optional: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A block that collects information from users - it can hold a plain-text input element,
+        a select menu element, a multi-select menu element, or a datepicker.
+        Important Note: Input blocks are only available in modals.
+        https://api.slack.com/reference/block-kit/blocks#input
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.label = TextObject.parse(label, default_type=PlainTextObject.type)
+        self.element = BlockElement.parse(element)
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
+        self.dispatch_action = dispatch_action
+        self.optional = optional
+
+    @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+    def _validate_label_length(self):
+        return (
+            self.label is None
+            or self.label.text is None
+            or len(self.label.text) &lt;= self.label_max_length
+        )
+
+    @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
+    def _validate_hint_length(self):
+        return (
+            self.hint is None
+            or self.hint.text is None
+            or len(self.hint.text) &lt;= self.label_max_length
+        )
+
+    @JsonValidator(
+        (
+            &#34;element attribute must be a string, select element, multi-select element, &#34;
+            &#34;or a datepicker. (Sub-classes of InputInteractiveElement)&#34;
+        )
+    )
+    def _validate_element_type(self):
+        return self.element is None or isinstance(
+            self.element, (str, InputInteractiveElement)
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.InputBlock.hint_max_length"><code class="name">var <span class="ident">hint_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.InputBlock.label_max_length"><code class="name">var <span class="ident">label_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.InputBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.InputBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
+    )</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.SectionBlock"><code class="flex name class">
+<span>class <span class="ident">SectionBlock</span></span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, fields: Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A section is one of the most flexible blocks available.
+<a href="https://api.slack.com/reference/block-kit/blocks#section">https://api.slack.com/reference/block-kit/blocks#section</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SectionBlock(Block):
+    type = &#34;section&#34;
+    fields_max_length = 10
+    text_max_length = 3000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Union[str, dict, TextObject] = None,
+        fields: Sequence[Union[str, dict, TextObject]] = None,
+        accessory: Optional[Union[dict, BlockElement]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A section is one of the most flexible blocks available.
+        https://api.slack.com/reference/block-kit/blocks#section
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        field_objects = []
+        for f in fields or []:
+            if isinstance(f, str):
+                field_objects.append(MarkdownTextObject.from_str(f))
+            elif isinstance(f, TextObject):
+                field_objects.append(f)
+            elif isinstance(f, dict) and &#34;type&#34; in f:
+                d = copy.copy(f)
+                t = d.pop(&#34;type&#34;)
+                if t == MarkdownTextObject.type:
+                    field_objects.append(MarkdownTextObject(**d))
+                else:
+                    field_objects.append(PlainTextObject(**d))
+            else:
+                self.logger.warning(f&#34;Unsupported filed detected and skipped {f}&#34;)
+        self.fields = field_objects
+        self.accessory = BlockElement.parse(accessory)
+
+    @JsonValidator(&#34;text or fields attribute must be specified&#34;)
+    def _validate_text_or_fields_populated(self):
+        return self.text is not None or self.fields
+
+    @JsonValidator(f&#34;fields attribute cannot exceed {fields_max_length} items&#34;)
+    def _validate_fields_length(self):
+        return self.fields is None or len(self.fields) &lt;= self.fields_max_length
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.SectionBlock.fields_max_length"><code class="name">var <span class="ident">fields_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.SectionBlock.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.SectionBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.SectionBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.models.blocks" href="index.html">slack_sdk.models.blocks</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.ActionsBlock" href="#slack_sdk.models.blocks.blocks.ActionsBlock">ActionsBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.ActionsBlock.attributes" href="#slack_sdk.models.blocks.blocks.ActionsBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ActionsBlock.elements_max_length" href="#slack_sdk.models.blocks.blocks.ActionsBlock.elements_max_length">elements_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ActionsBlock.type" href="#slack_sdk.models.blocks.blocks.ActionsBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.parse" href="#slack_sdk.models.blocks.blocks.Block.parse">parse</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.parse_all" href="#slack_sdk.models.blocks.blocks.Block.parse_all">parse_all</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.subtype" href="#slack_sdk.models.blocks.blocks.Block.subtype">subtype</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.CallBlock" href="#slack_sdk.models.blocks.blocks.CallBlock">CallBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.attributes" href="#slack_sdk.models.blocks.blocks.CallBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.type" href="#slack_sdk.models.blocks.blocks.CallBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.ContextBlock" href="#slack_sdk.models.blocks.blocks.ContextBlock">ContextBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextBlock.attributes" href="#slack_sdk.models.blocks.blocks.ContextBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextBlock.elements_max_length" href="#slack_sdk.models.blocks.blocks.ContextBlock.elements_max_length">elements_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextBlock.type" href="#slack_sdk.models.blocks.blocks.ContextBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.DividerBlock" href="#slack_sdk.models.blocks.blocks.DividerBlock">DividerBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.DividerBlock.type" href="#slack_sdk.models.blocks.blocks.DividerBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.FileBlock" href="#slack_sdk.models.blocks.blocks.FileBlock">FileBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.FileBlock.attributes" href="#slack_sdk.models.blocks.blocks.FileBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.FileBlock.type" href="#slack_sdk.models.blocks.blocks.FileBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.HeaderBlock" href="#slack_sdk.models.blocks.blocks.HeaderBlock">HeaderBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.HeaderBlock.attributes" href="#slack_sdk.models.blocks.blocks.HeaderBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.HeaderBlock.text_max_length" href="#slack_sdk.models.blocks.blocks.HeaderBlock.text_max_length">text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.HeaderBlock.type" href="#slack_sdk.models.blocks.blocks.HeaderBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.ImageBlock" href="#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.ImageBlock.alt_text_max_length" href="#slack_sdk.models.blocks.blocks.ImageBlock.alt_text_max_length">alt_text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ImageBlock.attributes" href="#slack_sdk.models.blocks.blocks.ImageBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ImageBlock.image_url_max_length" href="#slack_sdk.models.blocks.blocks.ImageBlock.image_url_max_length">image_url_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ImageBlock.title_max_length" href="#slack_sdk.models.blocks.blocks.ImageBlock.title_max_length">title_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ImageBlock.type" href="#slack_sdk.models.blocks.blocks.ImageBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.InputBlock" href="#slack_sdk.models.blocks.blocks.InputBlock">InputBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.attributes" href="#slack_sdk.models.blocks.blocks.InputBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.hint_max_length" href="#slack_sdk.models.blocks.blocks.InputBlock.hint_max_length">hint_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.label_max_length" href="#slack_sdk.models.blocks.blocks.InputBlock.label_max_length">label_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.type" href="#slack_sdk.models.blocks.blocks.InputBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.SectionBlock" href="#slack_sdk.models.blocks.blocks.SectionBlock">SectionBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.attributes" href="#slack_sdk.models.blocks.blocks.SectionBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.fields_max_length" href="#slack_sdk.models.blocks.blocks.SectionBlock.fields_max_length">fields_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.text_max_length" href="#slack_sdk.models.blocks.blocks.SectionBlock.text_max_length">text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.type" href="#slack_sdk.models.blocks.blocks.SectionBlock.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

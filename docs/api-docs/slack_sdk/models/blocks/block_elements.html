@@ -1,0 +1,3527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>slack_sdk.models.blocks.block_elements API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.models.blocks.block_elements</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import copy
+import logging
+import re
+import warnings
+from abc import ABCMeta
+from typing import List, Optional, Set, Union, Sequence
+
+from slack_sdk.models import show_unknown_key_warning
+from slack_sdk.models.basic_objects import (
+    JsonObject,
+    JsonValidator,
+    EnumValidator,
+)
+from .basic_components import ButtonStyles
+from .basic_components import ConfirmObject
+from .basic_components import DispatchActionConfig
+from .basic_components import MarkdownTextObject
+from .basic_components import Option
+from .basic_components import OptionGroup
+from .basic_components import PlainTextObject
+from .basic_components import TextObject
+
+
+# -------------------------------------------------
+# Block Elements
+# -------------------------------------------------
+
+
+class BlockElement(JsonObject, metaclass=ABCMeta):
+    &#34;&#34;&#34;Block Elements are things that exists inside of your Blocks.
+    https://api.slack.com/reference/block-kit/block-elements
+    &#34;&#34;&#34;
+
+    attributes = {&#34;type&#34;}
+    logger = logging.getLogger(__name__)
+
+    def _subtype_warning(self):  # skipcq: PYL-R0201
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        **others: dict,
+    ):
+        if subtype:
+            self._subtype_warning()
+        self.type = type if type else subtype
+        show_unknown_key_warning(self, others)
+
+    @classmethod
+    def parse(
+        cls, block_element: Union[dict, &#34;BlockElement&#34;]
+    ) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
+        if block_element is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(block_element, dict):
+            if &#34;type&#34; in block_element:
+                d = copy.copy(block_element)
+                t = d.pop(&#34;type&#34;)
+                if t == PlainTextObject.type:  # skipcq: PYL-R1705
+                    return PlainTextObject(**d)
+                elif t == MarkdownTextObject.type:
+                    return MarkdownTextObject(**d)
+                elif t == ImageElement.type:
+                    return ImageElement(**d)
+                elif t == ButtonElement.type:
+                    return ButtonElement(**d)
+                elif t == StaticSelectElement.type:
+                    return StaticSelectElement(**d)
+                elif t == StaticMultiSelectElement.type:
+                    return StaticMultiSelectElement(**d)
+                elif t == ExternalDataSelectElement.type:
+                    return ExternalDataSelectElement(**d)
+                elif t == ExternalDataMultiSelectElement.type:
+                    return ExternalDataMultiSelectElement(**d)
+                elif t == UserSelectElement.type:
+                    return UserSelectElement(**d)
+                elif t == UserMultiSelectElement.type:
+                    return UserMultiSelectElement(**d)
+                elif t == ConversationSelectElement.type:
+                    return ConversationSelectElement(**d)
+                elif t == ConversationMultiSelectElement.type:
+                    return ConversationMultiSelectElement(**d)
+                elif t == ChannelSelectElement.type:
+                    return ChannelSelectElement(**d)
+                elif t == ChannelMultiSelectElement.type:
+                    return ChannelMultiSelectElement(**d)
+                elif t == PlainTextInputElement.type:
+                    return PlainTextInputElement(**d)
+                elif t == RadioButtonsElement.type:
+                    return RadioButtonsElement(**d)
+                elif t == CheckboxesElement.type:
+                    return CheckboxesElement(**d)
+                elif t == OverflowMenuElement.type:
+                    return OverflowMenuElement(**d)
+                elif t == DatePickerElement.type:
+                    return DatePickerElement(**d)
+                else:
+                    cls.logger.warning(
+                        f&#34;Unknown element detected and skipped ({block_element})&#34;
+                    )
+                    return None
+            else:
+                cls.logger.warning(
+                    f&#34;Unknown element detected and skipped ({block_element})&#34;
+                )
+                return None
+        elif isinstance(block_element, (TextObject, BlockElement)):
+            return block_element
+        else:
+            cls.logger.warning(
+                f&#34;Unknown element detected and skipped ({block_element})&#34;
+            )
+            return None
+
+    @classmethod
+    def parse_all(
+        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]
+    ) -&gt; List[&#34;BlockElement&#34;]:
+        return [cls.parse(e) for e in block_elements or []]
+
+
+# -------------------------------------------------
+# Interactive Block Elements
+# -------------------------------------------------
+
+
+class InteractiveElement(BlockElement):
+    action_id_max_length = 255
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;action_id&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        **others: dict,
+    ):
+        if subtype:
+            self._subtype_warning()
+        super().__init__(type=type or subtype)
+        show_unknown_key_warning(self, others)
+
+        self.action_id = action_id
+
+    @JsonValidator(
+        f&#34;action_id attribute cannot exceed {action_id_max_length} characters&#34;
+    )
+    def _validate_action_id_length(self):
+        return (
+            self.action_id is None or len(self.action_id) &lt;= self.action_id_max_length
+        )
+
+
+class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
+    placeholder_max_length = 150
+
+    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;}
+
+    def _subtype_warning(self):
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Union[str, TextObject] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;InteractiveElement that is usable in input blocks&#34;&#34;&#34;
+        if subtype:
+            self._subtype_warning()
+        super().__init__(action_id=action_id, type=type or subtype)
+        show_unknown_key_warning(self, others)
+
+        self.placeholder = TextObject.parse(placeholder)
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(
+        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+    )
+    def _validate_placeholder_length(self):
+        return (
+            self.placeholder is None
+            or self.placeholder.text is None
+            or len(self.placeholder.text) &lt;= self.placeholder_max_length
+        )
+
+
+# -------------------------------------------------
+# Button
+# -------------------------------------------------
+
+
+class ButtonElement(InteractiveElement):
+    type = &#34;button&#34;
+    text_max_length = 75
+    url_max_length = 3000
+    value_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        action_id: Optional[str] = None,
+        url: Optional[str] = None,
+        value: Optional[str] = None,
+        style: Optional[str] = None,  # primary, danger
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;An interactive element that inserts a button. The button can be a trigger for
+        anything from opening a simple link to starting a complex workflow.
+        https://api.slack.com/reference/block-kit/block-elements#button
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        # NOTE: default_type=PlainTextObject.type here is only for backward-compatibility with version 2.5.0
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.url = url
+        self.value = value
+        self.style = style
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_text_length(self):
+        return (
+            self.text is None
+            or self.text.text is None
+            or len(self.text.text) &lt;= self.text_max_length
+        )
+
+    @JsonValidator(f&#34;url attribute cannot exceed {url_max_length} characters&#34;)
+    def _validate_url_length(self):
+        return self.url is None or len(self.url) &lt;= self.url_max_length
+
+    @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
+    def _validate_value_length(self):
+        return self.value is None or len(self.value) &lt;= self.value_max_length
+
+    @EnumValidator(&#34;style&#34;, ButtonStyles)
+    def _validate_style_valid(self):
+        return self.style is None or self.style in ButtonStyles
+
+
+class LinkButtonElement(ButtonElement):
+    def __init__(
+        self,
+        *,
+        text: str,
+        url: str,
+        action_id: Optional[str] = None,
+        style: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A simple button that simply opens a given URL. You will still receive an
+        interaction payload and will need to send an acknowledgement response.
+        This is a helper class that makes creating links simpler.
+        https://api.slack.com/reference/block-kit/block-elements#button
+        &#34;&#34;&#34;
+        super().__init__(
+            # NOTE: value must be always absent
+            text=text,
+            url=url,
+            action_id=action_id,
+            value=None,
+            style=style,
+        )
+        show_unknown_key_warning(self, others)
+
+
+# -------------------------------------------------
+# Checkboxes
+# -------------------------------------------------
+
+
+class CheckboxesElement(InputInteractiveElement):
+    type = &#34;checkboxes&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;initial_options&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[str] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A checkbox group that allows a user to choose multiple items from a list of possible options.
+        https://api.slack.com/reference/block-kit/block-elements#checkboxes
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = Option.parse_all(options)
+        self.initial_options = Option.parse_all(initial_options)
+
+
+# -------------------------------------------------
+# DatePicker
+# -------------------------------------------------
+
+
+class DatePickerElement(InputInteractiveElement):
+    type = &#34;datepicker&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_date&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_date: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        An element which lets users easily select a date from a calendar style UI.
+        Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
+        https://api.slack.com/reference/block-kit/block-elements#datepicker
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_date = initial_date
+
+    @JsonValidator(&#34;initial_date attribute must be in format &#39;YYYY-MM-DD&#39;&#34;)
+    def _validate_initial_date_valid(self):
+        return self.initial_date is None or re.match(
+            r&#34;\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])&#34;, self.initial_date
+        )
+
+
+# -------------------------------------------------
+# Image
+# -------------------------------------------------
+
+
+class ImageElement(BlockElement):
+    type = &#34;image&#34;
+    image_url_max_length = 3000
+    alt_text_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;})
+
+    def __init__(
+        self,
+        *,
+        image_url: Optional[str] = None,
+        alt_text: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;An element to insert an image - this element can be used in section and
+        context blocks only. If you want a block with only an image in it,
+        you&#39;re looking for the image block.
+        https://api.slack.com/reference/block-kit/block-elements#image
+        &#34;&#34;&#34;
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.image_url = image_url
+        self.alt_text = alt_text
+
+    @JsonValidator(
+        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
+    )
+    def _validate_image_url_length(self):
+        return len(self.image_url) &lt;= self.image_url_max_length
+
+    @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return len(self.alt_text) &lt;= self.alt_text_max_length
+
+
+# -------------------------------------------------
+# Static Select
+# -------------------------------------------------
+
+
+class StaticSelectElement(InputInteractiveElement):
+    type = &#34;static_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
+        initial_option: Optional[Union[dict, Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        ps://api.slack.com/reference/block-kit/block-elements#static_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.option_groups = option_groups
+        self.initial_option = initial_option
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return not (self.options is not None and self.option_groups is not None)
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None
+
+
+class StaticMultiSelectElement(InputInteractiveElement):
+    type = &#34;multiassets_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
+        initial_options: Optional[Sequence[Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        https://api.slack.com/reference/block-kit/block-elements#static_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = Option.parse_all(options)
+        self.option_groups = OptionGroup.parse_all(option_groups)
+        self.initial_options = Option.parse_all(initial_options)
+        self.max_selected_items = max_selected_items
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return self.options is None or self.option_groups is None
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None
+
+
+# SelectElement will be deprecated in version 3, use StaticSelectElement instead
+class SelectElement(InputInteractiveElement):
+    type = &#34;static_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[str] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
+        initial_option: Optional[Option] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        https://api.slack.com/reference/block-kit/block-elements#static_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.option_groups = option_groups
+        self.initial_option = initial_option
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return not (self.options is not None and self.option_groups is not None)
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None
+
+
+# -------------------------------------------------
+# External Data Source Select
+# -------------------------------------------------
+
+
+class ExternalDataSelectElement(InputInteractiveElement):
+    type = &#34;external_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;min_query_length&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Union[str, TextObject] = None,
+        initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
+        min_query_length: Optional[int] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will load its options from an external data source, allowing
+        for a dynamic list of options.
+        https://api.slack.com/reference/block-kit/block-elements#external_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.min_query_length = min_query_length
+        self.initial_option = initial_option
+
+
+class ExternalDataMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_external_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;min_query_length&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        min_query_length: Optional[int] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will load its options from an external data source, allowing
+        for a dynamic list of options.
+        https://api.slack.com/reference/block-kit/block-elements#external-select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.min_query_length = min_query_length
+        self.initial_options = Option.parse_all(initial_options)
+        self.max_selected_items = max_selected_items
+
+
+# -------------------------------------------------
+# Users Select
+# -------------------------------------------------
+
+
+class UserSelectElement(InputInteractiveElement):
+    type = &#34;users_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_user&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_user: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of Slack users visible to
+        the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#users_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_user = initial_user
+
+
+class UserMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_users_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_users&#34;, &#34;max_selected_items&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_users: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of Slack users visible to
+        the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#users_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_users = initial_users
+        self.max_selected_items = max_selected_items
+
+
+# -------------------------------------------------
+# Conversations Select
+# -------------------------------------------------
+
+
+class ConversationFilter(JsonObject):
+    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;}
+    logger = logging.getLogger(__name__)
+
+    def __init__(
+        self,
+        *,
+        include: Optional[Sequence[str]] = None,
+        exclude_bot_users: Optional[bool] = None,
+    ):
+        self.include = include
+        self.exclude_bot_users = exclude_bot_users
+
+    @classmethod
+    def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
+        if filter is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(filter, ConversationFilter):
+            return filter
+        elif isinstance(filter, dict):
+            d = copy.copy(filter)
+            return ConversationFilter(**d)
+        else:
+            cls.logger.warning(
+                f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;
+            )
+            return None
+
+
+class ConversationSelectElement(InputInteractiveElement):
+    type = &#34;conversations_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_conversation&#34;,
+                &#34;response_url_enabled&#34;,
+                &#34;filter&#34;,
+                &#34;default_to_current_conversation&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_conversation: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        response_url_enabled: Optional[bool] = None,
+        default_to_current_conversation: Optional[bool] = None,
+        filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of public and private
+        channels, DMs, and MPIMs visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#conversation_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_conversation = initial_conversation
+        self.response_url_enabled = response_url_enabled
+        self.default_to_current_conversation = default_to_current_conversation
+        self.filter = filter
+
+
+class ConversationMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_conversations_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_conversations&#34;,
+                &#34;max_selected_items&#34;,
+                &#34;default_to_current_conversation&#34;,
+                &#34;filter&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_conversations: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        default_to_current_conversation: Optional[bool] = None,
+        filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This multi-select menu will populate its options with a list of public and private channels,
+        DMs, and MPIMs visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_conversations = initial_conversations
+        self.max_selected_items = max_selected_items
+        self.default_to_current_conversation = default_to_current_conversation
+        self.filter = ConversationFilter.parse(filter)
+
+
+# -------------------------------------------------
+# Channels Select
+# -------------------------------------------------
+
+
+class ChannelSelectElement(InputInteractiveElement):
+    type = &#34;channels_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_channel&#34;, &#34;response_url_enabled&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_channel: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        response_url_enabled: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of public channels
+        visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#channel_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_channel = initial_channel
+        self.response_url_enabled = response_url_enabled
+
+
+class ChannelMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_channels_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_channels&#34;, &#34;max_selected_items&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_channels: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This multi-select menu will populate its options with a list of public channels visible
+        to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#channel_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_channels = initial_channels
+        self.max_selected_items = max_selected_items
+
+
+# -------------------------------------------------
+# Input Elements
+# -------------------------------------------------
+
+
+class PlainTextInputElement(InputInteractiveElement):
+    type = &#34;plain_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;multiline&#34;,
+                &#34;min_length&#34;,
+                &#34;max_length&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        initial_value: Optional[str] = None,
+        multiline: Optional[bool] = None,
+        min_length: Optional[int] = None,
+        max_length: Optional[int] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        A plain-text input, similar to the HTML &lt;input&gt; tag, creates a field
+        where a user can enter freeform data. It can appear as a single-line
+        field or a larger textarea using the multiline flag. Plain-text input
+        elements can be used inside of SectionBlocks and ActionsBlocks.
+        https://api.slack.com/reference/block-kit/block-elements#input
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.multiline = multiline
+        self.min_length = min_length
+        self.max_length = max_length
+        self.dispatch_action_config = dispatch_action_config
+
+
+# -------------------------------------------------
+# Radio Buttons Select
+# -------------------------------------------------
+
+
+class RadioButtonsElement(InputInteractiveElement):
+    type = &#34;radio_buttons&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        initial_option: Optional[Union[dict, Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A radio button group that allows a user to choose one item from a list of possible options.
+        https://api.slack.com/reference/block-kit/block-elements#radio
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.initial_option = initial_option
+
+
+# -------------------------------------------------
+# Overflow Menu Select
+# -------------------------------------------------
+
+
+class OverflowMenuElement(InteractiveElement):
+    type = &#34;overflow&#34;
+    options_min_length = 2
+    options_max_length = 5
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;confirm&#34;, &#34;options&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        options: Sequence[Union[Option]],
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This is like a cross between a button and a select menu - when a user clicks
+        on this overflow button, they will be presented with a list of options to
+        choose from. Unlike the select menu, there is no typeahead field, and the
+        button always appears with an ellipsis (&#34;…&#34;) rather than customisable text.
+
+        As such, it is usually used if you want a more compact layout than a select
+        menu, or to supply a list of less visually important actions after a row of
+        buttons. You can also specify simple URL links as overflow menu options,
+        instead of actions.
+
+        https://api.slack.com/reference/block-kit/block-elements#overflow
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(
+        f&#34;options attribute must have between {options_min_length} &#34;
+        f&#34;and {options_max_length} items&#34;
+    )
+    def _validate_options_length(self):
+        return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement"><code class="flex name class">
+<span>class <span class="ident">BlockElement</span></span>
+<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BlockElement(JsonObject, metaclass=ABCMeta):
+    &#34;&#34;&#34;Block Elements are things that exists inside of your Blocks.
+    https://api.slack.com/reference/block-kit/block-elements
+    &#34;&#34;&#34;
+
+    attributes = {&#34;type&#34;}
+    logger = logging.getLogger(__name__)
+
+    def _subtype_warning(self):  # skipcq: PYL-R0201
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        **others: dict,
+    ):
+        if subtype:
+            self._subtype_warning()
+        self.type = type if type else subtype
+        show_unknown_key_warning(self, others)
+
+    @classmethod
+    def parse(
+        cls, block_element: Union[dict, &#34;BlockElement&#34;]
+    ) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
+        if block_element is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(block_element, dict):
+            if &#34;type&#34; in block_element:
+                d = copy.copy(block_element)
+                t = d.pop(&#34;type&#34;)
+                if t == PlainTextObject.type:  # skipcq: PYL-R1705
+                    return PlainTextObject(**d)
+                elif t == MarkdownTextObject.type:
+                    return MarkdownTextObject(**d)
+                elif t == ImageElement.type:
+                    return ImageElement(**d)
+                elif t == ButtonElement.type:
+                    return ButtonElement(**d)
+                elif t == StaticSelectElement.type:
+                    return StaticSelectElement(**d)
+                elif t == StaticMultiSelectElement.type:
+                    return StaticMultiSelectElement(**d)
+                elif t == ExternalDataSelectElement.type:
+                    return ExternalDataSelectElement(**d)
+                elif t == ExternalDataMultiSelectElement.type:
+                    return ExternalDataMultiSelectElement(**d)
+                elif t == UserSelectElement.type:
+                    return UserSelectElement(**d)
+                elif t == UserMultiSelectElement.type:
+                    return UserMultiSelectElement(**d)
+                elif t == ConversationSelectElement.type:
+                    return ConversationSelectElement(**d)
+                elif t == ConversationMultiSelectElement.type:
+                    return ConversationMultiSelectElement(**d)
+                elif t == ChannelSelectElement.type:
+                    return ChannelSelectElement(**d)
+                elif t == ChannelMultiSelectElement.type:
+                    return ChannelMultiSelectElement(**d)
+                elif t == PlainTextInputElement.type:
+                    return PlainTextInputElement(**d)
+                elif t == RadioButtonsElement.type:
+                    return RadioButtonsElement(**d)
+                elif t == CheckboxesElement.type:
+                    return CheckboxesElement(**d)
+                elif t == OverflowMenuElement.type:
+                    return OverflowMenuElement(**d)
+                elif t == DatePickerElement.type:
+                    return DatePickerElement(**d)
+                else:
+                    cls.logger.warning(
+                        f&#34;Unknown element detected and skipped ({block_element})&#34;
+                    )
+                    return None
+            else:
+                cls.logger.warning(
+                    f&#34;Unknown element detected and skipped ({block_element})&#34;
+                )
+                return None
+        elif isinstance(block_element, (TextObject, BlockElement)):
+            return block_element
+        else:
+            cls.logger.warning(
+                f&#34;Unknown element detected and skipped ({block_element})&#34;
+            )
+            return None
+
+    @classmethod
+    def parse_all(
+        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]
+    ) -&gt; List[&#34;BlockElement&#34;]:
+        return [cls.parse(e) for e in block_elements or []]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.ImageElement" href="#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement.logger"><code class="name">var <span class="ident">logger</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>block_element: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>')]) ‑> Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse(
+    cls, block_element: Union[dict, &#34;BlockElement&#34;]
+) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
+    if block_element is None:  # skipcq: PYL-R1705
+        return None
+    elif isinstance(block_element, dict):
+        if &#34;type&#34; in block_element:
+            d = copy.copy(block_element)
+            t = d.pop(&#34;type&#34;)
+            if t == PlainTextObject.type:  # skipcq: PYL-R1705
+                return PlainTextObject(**d)
+            elif t == MarkdownTextObject.type:
+                return MarkdownTextObject(**d)
+            elif t == ImageElement.type:
+                return ImageElement(**d)
+            elif t == ButtonElement.type:
+                return ButtonElement(**d)
+            elif t == StaticSelectElement.type:
+                return StaticSelectElement(**d)
+            elif t == StaticMultiSelectElement.type:
+                return StaticMultiSelectElement(**d)
+            elif t == ExternalDataSelectElement.type:
+                return ExternalDataSelectElement(**d)
+            elif t == ExternalDataMultiSelectElement.type:
+                return ExternalDataMultiSelectElement(**d)
+            elif t == UserSelectElement.type:
+                return UserSelectElement(**d)
+            elif t == UserMultiSelectElement.type:
+                return UserMultiSelectElement(**d)
+            elif t == ConversationSelectElement.type:
+                return ConversationSelectElement(**d)
+            elif t == ConversationMultiSelectElement.type:
+                return ConversationMultiSelectElement(**d)
+            elif t == ChannelSelectElement.type:
+                return ChannelSelectElement(**d)
+            elif t == ChannelMultiSelectElement.type:
+                return ChannelMultiSelectElement(**d)
+            elif t == PlainTextInputElement.type:
+                return PlainTextInputElement(**d)
+            elif t == RadioButtonsElement.type:
+                return RadioButtonsElement(**d)
+            elif t == CheckboxesElement.type:
+                return CheckboxesElement(**d)
+            elif t == OverflowMenuElement.type:
+                return OverflowMenuElement(**d)
+            elif t == DatePickerElement.type:
+                return DatePickerElement(**d)
+            else:
+                cls.logger.warning(
+                    f&#34;Unknown element detected and skipped ({block_element})&#34;
+                )
+                return None
+        else:
+            cls.logger.warning(
+                f&#34;Unknown element detected and skipped ({block_element})&#34;
+            )
+            return None
+    elif isinstance(block_element, (TextObject, BlockElement)):
+        return block_element
+    else:
+        cls.logger.warning(
+            f&#34;Unknown element detected and skipped ({block_element})&#34;
+        )
+        return None</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement.parse_all"><code class="name flex">
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>')]]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse_all(
+    cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]
+) -&gt; List[&#34;BlockElement&#34;]:
+    return [cls.parse(e) for e in block_elements or []]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def subtype(self) -&gt; Optional[str]:
+    return self.type</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ButtonElement"><code class="flex name class">
+<span>class <span class="ident">ButtonElement</span></span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, url: Optional[str] = None, value: Optional[str] = None, style: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>An interactive element that inserts a button. The button can be a trigger for
+anything from opening a simple link to starting a complex workflow.
+<a href="https://api.slack.com/reference/block-kit/block-elements#button">https://api.slack.com/reference/block-kit/block-elements#button</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ButtonElement(InteractiveElement):
+    type = &#34;button&#34;
+    text_max_length = 75
+    url_max_length = 3000
+    value_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        action_id: Optional[str] = None,
+        url: Optional[str] = None,
+        value: Optional[str] = None,
+        style: Optional[str] = None,  # primary, danger
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;An interactive element that inserts a button. The button can be a trigger for
+        anything from opening a simple link to starting a complex workflow.
+        https://api.slack.com/reference/block-kit/block-elements#button
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        # NOTE: default_type=PlainTextObject.type here is only for backward-compatibility with version 2.5.0
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.url = url
+        self.value = value
+        self.style = style
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_text_length(self):
+        return (
+            self.text is None
+            or self.text.text is None
+            or len(self.text.text) &lt;= self.text_max_length
+        )
+
+    @JsonValidator(f&#34;url attribute cannot exceed {url_max_length} characters&#34;)
+    def _validate_url_length(self):
+        return self.url is None or len(self.url) &lt;= self.url_max_length
+
+    @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
+    def _validate_value_length(self):
+        return self.value is None or len(self.value) &lt;= self.value_max_length
+
+    @EnumValidator(&#34;style&#34;, ButtonStyles)
+    def _validate_style_valid(self):
+        return self.style is None or self.style in ButtonStyles</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.LinkButtonElement" href="#slack_sdk.models.blocks.block_elements.LinkButtonElement">LinkButtonElement</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ButtonElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length"><code class="name">var <span class="ident">url_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length"><code class="name">var <span class="ident">value_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement"><code class="flex name class">
+<span>class <span class="ident">ChannelMultiSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, initial_channels: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This multi-select menu will populate its options with a list of public channels visible
+to the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#channel_multi_select">https://api.slack.com/reference/block-kit/block-elements#channel_multi_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ChannelMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_channels_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_channels&#34;, &#34;max_selected_items&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_channels: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This multi-select menu will populate its options with a list of public channels visible
+        to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#channel_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_channels = initial_channels
+        self.max_selected_items = max_selected_items</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelSelectElement"><code class="flex name class">
+<span>class <span class="ident">ChannelSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, initial_channel: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, response_url_enabled: Optional[bool] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will populate its options with a list of public channels
+visible to the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#channel_select">https://api.slack.com/reference/block-kit/block-elements#channel_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ChannelSelectElement(InputInteractiveElement):
+    type = &#34;channels_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_channel&#34;, &#34;response_url_enabled&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_channel: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        response_url_enabled: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of public channels
+        visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#channel_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_channel = initial_channel
+        self.response_url_enabled = response_url_enabled</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.CheckboxesElement"><code class="flex name class">
+<span>class <span class="ident">CheckboxesElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>A checkbox group that allows a user to choose multiple items from a list of possible options.
+<a href="https://api.slack.com/reference/block-kit/block-elements#checkboxes">https://api.slack.com/reference/block-kit/block-elements#checkboxes</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CheckboxesElement(InputInteractiveElement):
+    type = &#34;checkboxes&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;initial_options&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[str] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A checkbox group that allows a user to choose multiple items from a list of possible options.
+        https://api.slack.com/reference/block-kit/block-elements#checkboxes
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = Option.parse_all(options)
+        self.initial_options = Option.parse_all(initial_options)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.CheckboxesElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationFilter"><code class="flex name class">
+<span>class <span class="ident">ConversationFilter</span></span>
+<span>(</span><span>*, include: Optional[Sequence[str]] = None, exclude_bot_users: Optional[bool] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConversationFilter(JsonObject):
+    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;}
+    logger = logging.getLogger(__name__)
+
+    def __init__(
+        self,
+        *,
+        include: Optional[Sequence[str]] = None,
+        exclude_bot_users: Optional[bool] = None,
+    ):
+        self.include = include
+        self.exclude_bot_users = exclude_bot_users
+
+    @classmethod
+    def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
+        if filter is None:  # skipcq: PYL-R1705
+            return None
+        elif isinstance(filter, ConversationFilter):
+            return filter
+        elif isinstance(filter, dict):
+            d = copy.copy(filter)
+            return ConversationFilter(**d)
+        else:
+            cls.logger.warning(
+                f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;
+            )
+            return None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationFilter.logger"><code class="name">var <span class="ident">logger</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationFilter.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>filter: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>')])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
+    if filter is None:  # skipcq: PYL-R1705
+        return None
+    elif isinstance(filter, ConversationFilter):
+        return filter
+    elif isinstance(filter, dict):
+        d = copy.copy(filter)
+        return ConversationFilter(**d)
+    else:
+        cls.logger.warning(
+            f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;
+        )
+        return None</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement"><code class="flex name class">
+<span>class <span class="ident">ConversationMultiSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, initial_conversations: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, max_selected_items: Optional[int] = None, default_to_current_conversation: Optional[bool] = None, filter: Union[dict, <a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This multi-select menu will populate its options with a list of public and private channels,
+DMs, and MPIMs visible to the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select">https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConversationMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_conversations_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_conversations&#34;,
+                &#34;max_selected_items&#34;,
+                &#34;default_to_current_conversation&#34;,
+                &#34;filter&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_conversations: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        default_to_current_conversation: Optional[bool] = None,
+        filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This multi-select menu will populate its options with a list of public and private channels,
+        DMs, and MPIMs visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_conversations = initial_conversations
+        self.max_selected_items = max_selected_items
+        self.default_to_current_conversation = default_to_current_conversation
+        self.filter = ConversationFilter.parse(filter)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationSelectElement"><code class="flex name class">
+<span>class <span class="ident">ConversationSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, initial_conversation: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, response_url_enabled: Optional[bool] = None, default_to_current_conversation: Optional[bool] = None, filter: Optional[<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will populate its options with a list of public and private
+channels, DMs, and MPIMs visible to the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#conversation_select">https://api.slack.com/reference/block-kit/block-elements#conversation_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConversationSelectElement(InputInteractiveElement):
+    type = &#34;conversations_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_conversation&#34;,
+                &#34;response_url_enabled&#34;,
+                &#34;filter&#34;,
+                &#34;default_to_current_conversation&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_conversation: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        response_url_enabled: Optional[bool] = None,
+        default_to_current_conversation: Optional[bool] = None,
+        filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of public and private
+        channels, DMs, and MPIMs visible to the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#conversation_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_conversation = initial_conversation
+        self.response_url_enabled = response_url_enabled
+        self.default_to_current_conversation = default_to_current_conversation
+        self.filter = filter</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.DatePickerElement"><code class="flex name class">
+<span>class <span class="ident">DatePickerElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, initial_date: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>An element which lets users easily select a date from a calendar style UI.
+Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements#datepicker">https://api.slack.com/reference/block-kit/block-elements#datepicker</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DatePickerElement(InputInteractiveElement):
+    type = &#34;datepicker&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_date&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_date: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        An element which lets users easily select a date from a calendar style UI.
+        Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
+        https://api.slack.com/reference/block-kit/block-elements#datepicker
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_date = initial_date
+
+    @JsonValidator(&#34;initial_date attribute must be in format &#39;YYYY-MM-DD&#39;&#34;)
+    def _validate_initial_date_valid(self):
+        return self.initial_date is None or re.match(
+            r&#34;\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])&#34;, self.initial_date
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.DatePickerElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement"><code class="flex name class">
+<span>class <span class="ident">ExternalDataMultiSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, min_query_length: Optional[int] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will load its options from an external data source, allowing
+for a dynamic list of options.
+<a href="https://api.slack.com/reference/block-kit/block-elements#external-select">https://api.slack.com/reference/block-kit/block-elements#external-select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ExternalDataMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_external_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;min_query_length&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        min_query_length: Optional[int] = None,
+        initial_options: Optional[Sequence[Union[dict, Option]]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will load its options from an external data source, allowing
+        for a dynamic list of options.
+        https://api.slack.com/reference/block-kit/block-elements#external-select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.min_query_length = min_query_length
+        self.initial_options = Option.parse_all(initial_options)
+        self.max_selected_items = max_selected_items</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement"><code class="flex name class">
+<span>class <span class="ident">ExternalDataSelectElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, initial_option: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, NoneType, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] = None, min_query_length: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will load its options from an external data source, allowing
+for a dynamic list of options.
+<a href="https://api.slack.com/reference/block-kit/block-elements#external_select">https://api.slack.com/reference/block-kit/block-elements#external_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ExternalDataSelectElement(InputInteractiveElement):
+    type = &#34;external_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;min_query_length&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Union[str, TextObject] = None,
+        initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
+        min_query_length: Optional[int] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will load its options from an external data source, allowing
+        for a dynamic list of options.
+        https://api.slack.com/reference/block-kit/block-elements#external_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.min_query_length = min_query_length
+        self.initial_option = initial_option</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ImageElement"><code class="flex name class">
+<span>class <span class="ident">ImageElement</span></span>
+<span>(</span><span>*, image_url: Optional[str] = None, alt_text: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>An element to insert an image - this element can be used in section and
+context blocks only. If you want a block with only an image in it,
+you're looking for the image block.
+<a href="https://api.slack.com/reference/block-kit/block-elements#image">https://api.slack.com/reference/block-kit/block-elements#image</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ImageElement(BlockElement):
+    type = &#34;image&#34;
+    image_url_max_length = 3000
+    alt_text_max_length = 2000
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;})
+
+    def __init__(
+        self,
+        *,
+        image_url: Optional[str] = None,
+        alt_text: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;An element to insert an image - this element can be used in section and
+        context blocks only. If you want a block with only an image in it,
+        you&#39;re looking for the image block.
+        https://api.slack.com/reference/block-kit/block-elements#image
+        &#34;&#34;&#34;
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.image_url = image_url
+        self.alt_text = alt_text
+
+    @JsonValidator(
+        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
+    )
+    def _validate_image_url_length(self):
+        return len(self.image_url) &lt;= self.image_url_max_length
+
+    @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return len(self.alt_text) &lt;= self.alt_text_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ImageElement.alt_text_max_length"><code class="name">var <span class="ident">alt_text_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ImageElement.image_url_max_length"><code class="name">var <span class="ident">image_url_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.ImageElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ImageElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement"><code class="flex name class">
+<span>class <span class="ident">InputInteractiveElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, type: Optional[str] = None, subtype: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>InteractiveElement that is usable in input blocks</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
+    placeholder_max_length = 150
+
+    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;}
+
+    def _subtype_warning(self):
+        warnings.warn(
+            &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
+            DeprecationWarning,
+        )
+
+    @property
+    def subtype(self) -&gt; Optional[str]:
+        return self.type
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Union[str, TextObject] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;InteractiveElement that is usable in input blocks&#34;&#34;&#34;
+        if subtype:
+            self._subtype_warning()
+        super().__init__(action_id=action_id, type=type or subtype)
+        show_unknown_key_warning(self, others)
+
+        self.placeholder = TextObject.parse(placeholder)
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(
+        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+    )
+    def _validate_placeholder_length(self):
+        return (
+            self.placeholder is None
+            or self.placeholder.text is None
+            or len(self.placeholder.text) &lt;= self.placeholder_max_length
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement">ChannelMultiSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement">ChannelSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement">CheckboxesElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement">ConversationMultiSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement">ConversationSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.DatePickerElement" href="#slack_sdk.models.blocks.block_elements.DatePickerElement">DatePickerElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement">ExternalDataMultiSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.SelectElement" href="#slack_sdk.models.blocks.block_elements.SelectElement">SelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement">StaticMultiSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement">StaticSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement">UserMultiSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.UserSelectElement" href="#slack_sdk.models.blocks.block_elements.UserSelectElement">UserSelectElement</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length"><code class="name">var <span class="ident">placeholder_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def subtype(self) -&gt; Optional[str]:
+    return self.type</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.InteractiveElement"><code class="flex name class">
+<span>class <span class="ident">InteractiveElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InteractiveElement(BlockElement):
+    action_id_max_length = 255
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;alt_text&#34;, &#34;action_id&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        type: Optional[str] = None,  # skipcq: PYL-W0622
+        subtype: Optional[str] = None,
+        **others: dict,
+    ):
+        if subtype:
+            self._subtype_warning()
+        super().__init__(type=type or subtype)
+        show_unknown_key_warning(self, others)
+
+        self.action_id = action_id
+
+    @JsonValidator(
+        f&#34;action_id attribute cannot exceed {action_id_max_length} characters&#34;
+    )
+    def _validate_action_id_length(self):
+        return (
+            self.action_id is None or len(self.action_id) &lt;= self.action_id_max_length
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement">OverflowMenuElement</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length"><code class="name">var <span class="ident">action_id_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;alt_text&#34;, &#34;action_id&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.LinkButtonElement"><code class="flex name class">
+<span>class <span class="ident">LinkButtonElement</span></span>
+<span>(</span><span>*, text: str, url: str, action_id: Optional[str] = None, style: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>A simple button that simply opens a given URL. You will still receive an
+interaction payload and will need to send an acknowledgement response.
+This is a helper class that makes creating links simpler.
+<a href="https://api.slack.com/reference/block-kit/block-elements#button">https://api.slack.com/reference/block-kit/block-elements#button</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LinkButtonElement(ButtonElement):
+    def __init__(
+        self,
+        *,
+        text: str,
+        url: str,
+        action_id: Optional[str] = None,
+        style: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A simple button that simply opens a given URL. You will still receive an
+        interaction payload and will need to send an acknowledgement response.
+        This is a helper class that makes creating links simpler.
+        https://api.slack.com/reference/block-kit/block-elements#button
+        &#34;&#34;&#34;
+        super().__init__(
+            # NOTE: value must be always absent
+            text=text,
+            url=url,
+            action_id=action_id,
+            value=None,
+            style=style,
+        )
+        show_unknown_key_warning(self, others)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement"><code class="flex name class">
+<span>class <span class="ident">OverflowMenuElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This is like a cross between a button and a select menu - when a user clicks
+on this overflow button, they will be presented with a list of options to
+choose from. Unlike the select menu, there is no typeahead field, and the
+button always appears with an ellipsis ("…") rather than customisable text.</p>
+<p>As such, it is usually used if you want a more compact layout than a select
+menu, or to supply a list of less visually important actions after a row of
+buttons. You can also specify simple URL links as overflow menu options,
+instead of actions.</p>
+<p><a href="https://api.slack.com/reference/block-kit/block-elements#overflow">https://api.slack.com/reference/block-kit/block-elements#overflow</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OverflowMenuElement(InteractiveElement):
+    type = &#34;overflow&#34;
+    options_min_length = 2
+    options_max_length = 5
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;confirm&#34;, &#34;options&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        options: Sequence[Union[Option]],
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This is like a cross between a button and a select menu - when a user clicks
+        on this overflow button, they will be presented with a list of options to
+        choose from. Unlike the select menu, there is no typeahead field, and the
+        button always appears with an ellipsis (&#34;…&#34;) rather than customisable text.
+
+        As such, it is usually used if you want a more compact layout than a select
+        menu, or to supply a list of less visually important actions after a row of
+        buttons. You can also specify simple URL links as overflow menu options,
+        instead of actions.
+
+        https://api.slack.com/reference/block-kit/block-elements#overflow
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.confirm = ConfirmObject.parse(confirm)
+
+    @JsonValidator(
+        f&#34;options attribute must have between {options_min_length} &#34;
+        f&#34;and {options_max_length} items&#34;
+    )
+    def _validate_options_length(self):
+        return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_min_length"><code class="name">var <span class="ident">options_min_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.PlainTextInputElement"><code class="flex name class">
+<span>class <span class="ident">PlainTextInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, initial_value: Optional[str] = None, multiline: Optional[bool] = None, min_length: Optional[int] = None, max_length: Optional[int] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>A plain-text input, similar to the HTML <input> tag, creates a field
+where a user can enter freeform data. It can appear as a single-line
+field or a larger textarea using the multiline flag. Plain-text input
+elements can be used inside of SectionBlocks and ActionsBlocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements#input">https://api.slack.com/reference/block-kit/block-elements#input</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PlainTextInputElement(InputInteractiveElement):
+    type = &#34;plain_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;multiline&#34;,
+                &#34;min_length&#34;,
+                &#34;max_length&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        initial_value: Optional[str] = None,
+        multiline: Optional[bool] = None,
+        min_length: Optional[int] = None,
+        max_length: Optional[int] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        A plain-text input, similar to the HTML &lt;input&gt; tag, creates a field
+        where a user can enter freeform data. It can appear as a single-line
+        field or a larger textarea using the multiline flag. Plain-text input
+        elements can be used inside of SectionBlocks and ActionsBlocks.
+        https://api.slack.com/reference/block-kit/block-elements#input
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.multiline = multiline
+        self.min_length = min_length
+        self.max_length = max_length
+        self.dispatch_action_config = dispatch_action_config</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.PlainTextInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement"><code class="flex name class">
+<span>class <span class="ident">RadioButtonsElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, NoneType] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>A radio button group that allows a user to choose one item from a list of possible options.
+<a href="https://api.slack.com/reference/block-kit/block-elements#radio">https://api.slack.com/reference/block-kit/block-elements#radio</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RadioButtonsElement(InputInteractiveElement):
+    type = &#34;radio_buttons&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        initial_option: Optional[Union[dict, Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A radio button group that allows a user to choose one item from a list of possible options.
+        https://api.slack.com/reference/block-kit/block-elements#radio
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.initial_option = initial_option</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.SelectElement"><code class="flex name class">
+<span>class <span class="ident">SelectElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_option: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
+<a href="https://api.slack.com/reference/block-kit/block-elements#static_select">https://api.slack.com/reference/block-kit/block-elements#static_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SelectElement(InputInteractiveElement):
+    type = &#34;static_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[str] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
+        initial_option: Optional[Option] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        https://api.slack.com/reference/block-kit/block-elements#static_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.option_groups = option_groups
+        self.initial_option = initial_option
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return not (self.options is not None and self.option_groups is not None)
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.SelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.SelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement"><code class="flex name class">
+<span>class <span class="ident">StaticMultiSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
+<a href="https://api.slack.com/reference/block-kit/block-elements#static_multi_select">https://api.slack.com/reference/block-kit/block-elements#static_multi_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StaticMultiSelectElement(InputInteractiveElement):
+    type = &#34;multiassets_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
+        )
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        options: Optional[Sequence[Option]] = None,
+        option_groups: Optional[Sequence[OptionGroup]] = None,
+        initial_options: Optional[Sequence[Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        https://api.slack.com/reference/block-kit/block-elements#static_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = Option.parse_all(options)
+        self.option_groups = OptionGroup.parse_all(option_groups)
+        self.initial_options = Option.parse_all(initial_options)
+        self.max_selected_items = max_selected_items
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return self.options is None or self.option_groups is None
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement"><code class="flex name class">
+<span>class <span class="ident">StaticSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, option_groups: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, NoneType] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
+ps://api.slack.com/reference/block-kit/block-elements#static_select</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StaticSelectElement(InputInteractiveElement):
+    type = &#34;static_select&#34;
+    options_max_length = 100
+    option_groups_max_length = 100
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        options: Optional[Sequence[Union[dict, Option]]] = None,
+        option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
+        initial_option: Optional[Union[dict, Option]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        ps://api.slack.com/reference/block-kit/block-elements#static_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.options = options
+        self.option_groups = option_groups
+        self.initial_option = initial_option
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} elements&#34;)
+    def _validate_options_length(self):
+        return self.options is None or len(self.options) &lt;= self.options_max_length
+
+    @JsonValidator(
+        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
+    )
+    def _validate_option_groups_length(self):
+        return (
+            self.option_groups is None
+            or len(self.option_groups) &lt;= self.option_groups_max_length
+        )
+
+    @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
+    def _validate_options_and_option_groups_both_specified(self):
+        return not (self.options is not None and self.option_groups is not None)
+
+    @JsonValidator(&#34;options or option_groups must be specified&#34;)
+    def _validate_neither_options_or_option_groups_is_specified(self):
+        return self.options is not None or self.option_groups is not None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.UserMultiSelectElement"><code class="flex name class">
+<span>class <span class="ident">UserMultiSelectElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will populate its options with a list of Slack users visible to
+the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#users_multi_select">https://api.slack.com/reference/block-kit/block-elements#users_multi_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserMultiSelectElement(InputInteractiveElement):
+    type = &#34;multi_users_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_users&#34;, &#34;max_selected_items&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_users: Optional[Sequence[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        max_selected_items: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of Slack users visible to
+        the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#users_multi_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_users = initial_users
+        self.max_selected_items = max_selected_items</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.UserSelectElement"><code class="flex name class">
+<span>class <span class="ident">UserSelectElement</span></span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, action_id: Optional[str] = None, initial_user: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, NoneType] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>This select menu will populate its options with a list of Slack users visible to
+the current user in the active workspace.
+<a href="https://api.slack.com/reference/block-kit/block-elements#users_select">https://api.slack.com/reference/block-kit/block-elements#users_select</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserSelectElement(InputInteractiveElement):
+    type = &#34;users_select&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_user&#34;})
+
+    def __init__(
+        self,
+        *,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        action_id: Optional[str] = None,
+        initial_user: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        This select menu will populate its options with a list of Slack users visible to
+        the current user in the active workspace.
+        https://api.slack.com/reference/block-kit/block-elements#users_select
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_user = initial_user</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.UserSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.models.blocks" href="index.html">slack_sdk.models.blocks</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.parse" href="#slack_sdk.models.blocks.block_elements.BlockElement.parse">parse</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.parse_all" href="#slack_sdk.models.blocks.block_elements.BlockElement.parse_all">parse_all</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.subtype" href="#slack_sdk.models.blocks.block_elements.BlockElement.subtype">subtype</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length">text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.type" href="#slack_sdk.models.blocks.block_elements.ButtonElement.type">type</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length">url_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length">value_max_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement">ChannelMultiSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement">ChannelSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement">CheckboxesElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement.type" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter.logger" href="#slack_sdk.models.blocks.block_elements.ConversationFilter.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter.parse" href="#slack_sdk.models.blocks.block_elements.ConversationFilter.parse">parse</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement">ConversationMultiSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement">ConversationSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.DatePickerElement" href="#slack_sdk.models.blocks.block_elements.DatePickerElement">DatePickerElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.DatePickerElement.type" href="#slack_sdk.models.blocks.block_elements.DatePickerElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement">ExternalDataMultiSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.ImageElement" href="#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ImageElement.alt_text_max_length" href="#slack_sdk.models.blocks.block_elements.ImageElement.alt_text_max_length">alt_text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ImageElement.attributes" href="#slack_sdk.models.blocks.block_elements.ImageElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ImageElement.image_url_max_length" href="#slack_sdk.models.blocks.block_elements.ImageElement.image_url_max_length">image_url_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ImageElement.type" href="#slack_sdk.models.blocks.block_elements.ImageElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.subtype" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.subtype">subtype</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.LinkButtonElement" href="#slack_sdk.models.blocks.block_elements.LinkButtonElement">LinkButtonElement</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement">OverflowMenuElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_max_length">options_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_min_length" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_min_length">options_min_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement.type" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement.type" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.SelectElement" href="#slack_sdk.models.blocks.block_elements.SelectElement">SelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.SelectElement.options_max_length">options_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.type" href="#slack_sdk.models.blocks.block_elements.SelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement">StaticMultiSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length">options_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement">StaticSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length">options_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.type" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement">UserMultiSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement" href="#slack_sdk.models.blocks.block_elements.UserSelectElement">UserSelectElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement.type" href="#slack_sdk.models.blocks.block_elements.UserSelectElement.type">type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
