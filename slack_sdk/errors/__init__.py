@@ -1,3 +1,6 @@
+"""Errors that can be raised by this SDK"""
+
+
 class SlackClientError(Exception):
     """Base class for Client errors"""
 

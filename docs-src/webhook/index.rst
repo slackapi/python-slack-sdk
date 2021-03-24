@@ -4,6 +4,8 @@ Webhook Client
 
 You can use ``slack_sdk.webhook.WebhookClient`` for `Incoming Webhooks <https://api.slack.com/messaging/webhooks>`_ and message responses using `response_url in payloads <https://api.slack.com/interactivity/handling#message_responses>`_.
 
+The Python document for this module is available at https://slack.dev/python-slack-sdk/api-docs/
+
 Incoming Webhooks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

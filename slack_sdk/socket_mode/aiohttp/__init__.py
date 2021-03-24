@@ -1,3 +1,10 @@
+"""aiohttp bassd Socket Mode client
+
+* https://api.slack.com/apis/connections/socket
+* https://slack.dev/python-slack-sdk/socket-mode/
+* https://pypi.org/project/aiohttp/
+
+"""
 import asyncio
 import logging
 from asyncio import Future
@@ -68,6 +75,19 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         on_error_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
     ):
+        """Socket Mode client
+
+        Args:
+            app_token: App-level token
+            logger: Custom logger
+            web_client: Web API client
+            auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
+            ping_interval: interval for ping-pong with Slack servers (seconds)
+            proxy: the HTTP proxy URL
+            on_message_listeners: listener functions for on_message
+            on_error_listeners: listener functions for on_error
+            on_close_listeners: listener functions for on_close
+        """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()

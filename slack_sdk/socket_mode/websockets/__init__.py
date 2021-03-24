@@ -1,3 +1,10 @@
+"""websockets bassd Socket Mode client
+
+* https://api.slack.com/apis/connections/socket
+* https://slack.dev/python-slack-sdk/socket-mode/
+* https://pypi.org/project/websockets/
+
+"""
 import asyncio
 import logging
 from asyncio import Future
@@ -58,6 +65,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 10,
     ):
+        """Socket Mode client
+
+        Args:
+            app_token: App-level token
+            logger: Custom logger
+            web_client: Web API client
+            auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
+            ping_interval: interval for ping-pong with Slack servers (seconds)
+        """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()

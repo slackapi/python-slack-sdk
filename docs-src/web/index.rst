@@ -8,6 +8,7 @@ Access Slack's API methods requires an OAuth token -- see the `Tokens & Authenti
 
 `Each of these API methods <https://api.slack.com/methods>`_ is fully documented on our developer site at https://api.slack.com/
 
+The Python document for this module is available at https://slack.dev/python-slack-sdk/api-docs/
 
 Messaging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

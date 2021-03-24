@@ -46,6 +46,8 @@ class AsyncWebhookClient:
     ):
         """API client for Incoming Webhooks and `response_url`
 
+        https://api.slack.com/messaging/webhooks
+
         Args:
             url: Complete URL to send data (e.g., `https://hooks.slack.com/XXX`)
             timeout: Request timeout (in seconds)
