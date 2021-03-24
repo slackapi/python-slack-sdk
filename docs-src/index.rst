@@ -44,7 +44,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 | UI Builders                    | Construct UI components using easy-to-use builders.                                           | ``slack_sdk.models``               |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 
-The Python module documents are available at https://slack.dev/python-slack-sdk/api-docs/
+The Python module documents are available at https://slack.dev/python-slack-sdk/api-docs/slack_sdk/
 
 Installation
 ************

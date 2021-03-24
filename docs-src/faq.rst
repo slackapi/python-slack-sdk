@@ -2,10 +2,10 @@
 FAQ
 ==============================================
 
-Python Module Documents
+Python Documents
 *********************************
 
-The Python module documents are available at https://slack.dev/python-slack-sdk/api-docs/
+The Python module documents are available at https://slack.dev/python-slack-sdk/api-docs/slack_sdk/
 
 Installation Issues
 *********************************

@@ -4,7 +4,7 @@ Socket Mode Client
 
 Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP. You can use  ``slack_sdk.socket_mode.SocketModeClient`` for managing `Socket Mode <https://api.slack.com/apis/connections/socket>`_ connections and performing interactions with Slack.
 
-The Python document for this module is available at https://slack.dev/python-slack-sdk/api-docs/
+The Python document for this module is available at https://slack.dev/python-slack-sdk/api-docs/slack_sdk/
 
 SocketModeClient
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
