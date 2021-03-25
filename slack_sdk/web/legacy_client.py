@@ -492,6 +492,71 @@ class LegacyWebClient(LegacyBaseClient):
         """Lists all active user sessions for an organization"""
         return self.api_call("admin.users.session.list", params=kwargs)
 
+    def admin_teams_settings_setDefaultChannels(
+        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Set the default channels of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            channel_ids (str or list): A list of channel_ids.
+                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
+        """
+        kwargs.update({"team_id": team_id})
+        if isinstance(channel_ids, (list, Tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call(
+            "admin.teams.settings.setDefaultChannels", http_verb="GET", params=kwargs
+        )
+
+    def admin_users_session_getSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Get user-specific session settings—the session duration
+        and what happens when the client closes—given a list of users.
+
+        Args:
+            user_ids (str or list): The IDs of users you'd like to fetch session settings for.
+                Note: if a user does not have any active sessions, they will not be returned in the response.
+        """
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return self.api_call("admin.users.session.getSettings", json=kwargs)
+
+    def admin_users_session_setSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Configure the user-level session settings—the session duration
+        and what happens when the client closes—for one or more users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        """
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return self.api_call("admin.users.session.setSettings", json=kwargs)
+
+    def admin_users_session_clearSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Clear user-specific session settings—the session duration
+        and what happens when the client closes—for a list of users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        """
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return self.api_call("admin.users.session.clearSettings", json=kwargs)
+
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -> Union[Future, SlackResponse]:
@@ -580,25 +645,6 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"team_id": team_id})
         return self.api_call("admin.teams.settings.info", json=kwargs)
-
-    def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
-    ) -> Union[Future, SlackResponse]:
-        """Set the default channels of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            channel_ids (str or list): A list of channel_ids.
-                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
-        """
-        kwargs.update({"team_id": team_id})
-        if isinstance(channel_ids, (list, Tuple)):
-            kwargs.update({"channel_ids": ",".join(channel_ids)})
-        else:
-            kwargs.update({"channel_ids": channel_ids})
-        return self.api_call(
-            "admin.teams.settings.setDefaultChannels", http_verb="GET", params=kwargs
-        )
 
     def admin_teams_settings_setDescription(
         self, *, team_id: str, description: str, **kwargs
