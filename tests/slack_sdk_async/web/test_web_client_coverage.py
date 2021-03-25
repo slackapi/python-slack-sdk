@@ -47,10 +47,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 "admin.conversations.getCustomRetention",
                 "admin.conversations.removeCustomRetention",
                 "admin.conversations.setCustomRetention",
-                # TODO: https://github.com/slackapi/python-slack-sdk/issues/982
-                "admin.users.session.clearSettings",
-                "admin.users.session.getSettings",
-                "admin.users.session.setSettings",
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
@@ -293,6 +289,15 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "admin_users_session_reset":
                 self.api_methods_to_call.remove(method(user_id="W123")["method"])
                 await async_method(user_id="W123")
+            elif method_name == "admin_users_session_getSettings":
+                self.api_methods_to_call.remove(method(user_ids=["W111"])["method"])
+                await async_method(user_ids=["W111"])
+            elif method_name == "admin_users_session_setSettings":
+                self.api_methods_to_call.remove(method(user_ids=["W111"])["method"])
+                await async_method(user_ids=["W111"])
+            elif method_name == "admin_users_session_clearSettings":
+                self.api_methods_to_call.remove(method(user_ids=["W111"])["method"])
+                await async_method(user_ids=["W111"])
             elif method_name == "apps_event_authorizations_list":
                 self.api_methods_to_call.remove(method(event_context="xxx")["method"])
                 await async_method(event_context="xxx")
