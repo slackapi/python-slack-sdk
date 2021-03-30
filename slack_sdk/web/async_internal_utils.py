@@ -9,6 +9,7 @@ import aiohttp
 from aiohttp import ClientSession
 
 from slack_sdk.errors import SlackApiError
+from slack_sdk.web.internal_utils import _build_unexpected_body_error_message
 
 
 def _get_event_loop() -> AbstractEventLoop:
@@ -95,9 +96,16 @@ async def _request_with_session(
                     logger.debug(
                         f"No response data returned from the following API call: {api_url}."
                     )
-                except json.decoder.JSONDecodeError as e:
-                    message = f"Failed to parse the response body: {str(e)}"
-                    raise SlackApiError(message, res)
+                except json.decoder.JSONDecodeError:
+                    try:
+                        body: str = await res.text()
+                        message = _build_unexpected_body_error_message(body)
+                        raise SlackApiError(message, res)
+                    except Exception as e:
+                        raise SlackApiError(
+                            f"Unexpectedly failed to read the response body: {str(e)}",
+                            res,
+                        )
 
             response = {
                 "data": data,

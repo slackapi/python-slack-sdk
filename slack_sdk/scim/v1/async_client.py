@@ -8,7 +8,6 @@ from urllib.parse import quote
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
 
-from slack_sdk.errors import SlackApiError
 from .internal_utils import (
     _build_request_headers,
     _debug_log_response,
@@ -321,16 +320,13 @@ class AsyncSCIMClient:
                 "proxy": self.proxy,
             }
             async with session.request(http_verb, url, **request_kwargs) as res:
-                response_body = {}
+                response_body: str = ""
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
                     self.logger.debug(
                         f"No response data returned from the following API call: {url}."
                     )
-                except json.decoder.JSONDecodeError as e:
-                    message = f"Failed to parse the response body: {str(e)}"
-                    raise SlackApiError(message, res)
 
                 resp = SCIMResponse(
                     url=url,

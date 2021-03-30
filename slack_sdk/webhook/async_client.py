@@ -6,7 +6,6 @@ from typing import Dict, Union, Optional, Any, Sequence
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
 
-from slack_sdk.errors import SlackApiError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
 from .internal_utils import (
@@ -165,16 +164,13 @@ class AsyncWebhookClient:
                 "proxy": self.proxy,
             }
             async with session.request("POST", self.url, **request_kwargs) as res:
-                response_body = {}
+                response_body: str = ""
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
                     self.logger.debug(
-                        f"No response data returned from the following API call: {self.url}."
+                        f"No response data returned from the following API call: {self.url}"
                     )
-                except json.decoder.JSONDecodeError as e:
-                    message = f"Failed to parse the response body: {str(e)}"
-                    raise SlackApiError(message, res)
 
                 resp = WebhookResponse(
                     url=self.url,
