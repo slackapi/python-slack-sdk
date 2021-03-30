@@ -268,3 +268,13 @@ def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
     if skip_deprecation:
         return
     warnings.warn(message, UserWarning)
+
+
+def _build_unexpected_body_error_message(body: str) -> str:
+    body_for_logging = "".join(
+        [line.strip() for line in body.replace("\r", "\n").split("\n")]
+    )
+    if len(body_for_logging) > 100:
+        body_for_logging = body_for_logging[:100] + "..."
+    message = f"Received a response in a non-JSON format: {body_for_logging}"
+    return message

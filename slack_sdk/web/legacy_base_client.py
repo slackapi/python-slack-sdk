@@ -31,6 +31,7 @@ from .internal_utils import (
     get_user_agent,
     _get_url,
     _build_req_args,
+    _build_unexpected_body_error_message,
 )
 from .legacy_slack_response import LegacySlackResponse as SlackResponse
 from ..proxy_env_variable_loader import load_http_proxy_from_env
@@ -366,8 +367,10 @@ class LegacyBaseClient:
             if body is not None and not isinstance(body, bytes):
                 try:
                     response_body_data = json.loads(response["body"])
-                except json.decoder.JSONDecodeError as e:
-                    message = f"Failed to parse the response body: {str(e)}"
+                except json.decoder.JSONDecodeError:
+                    message = _build_unexpected_body_error_message(
+                        response.get("body", "")
+                    )
                     raise err.SlackApiError(message, response)
 
             if query_params:

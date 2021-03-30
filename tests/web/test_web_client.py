@@ -273,9 +273,7 @@ class TestWebClient(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertTrue(
-                str(e).startswith(
-                    "Failed to parse the response body: Expecting value: line 1 column 1 (char 0)"
-                ),
+                str(e).startswith("Received a response in a non-JSON format: "),
                 e,
             )
 
