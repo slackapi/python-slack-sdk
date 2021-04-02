@@ -231,8 +231,13 @@ class ViewStateValue(JsonObject):
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
-        if selected_options:
-            if isinstance(selected_options, dict):
-                self.selected_options = [Option(**d) for d in selected_options]
-            else:
-                self.selected_options = selected_options
+
+        if isinstance(selected_options, list):
+            self.selected_options = []
+            for option in selected_options:
+                if isinstance(option, Option):
+                    self.selected_options.append(option)
+                elif isinstance(option, dict):
+                    self.selected_options.append(Option(**option))
+        else:
+            self.selected_options = selected_options
