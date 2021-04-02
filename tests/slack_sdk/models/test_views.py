@@ -351,6 +351,44 @@ class ViewTests(unittest.TestCase):
         self.assertDictEqual(expected, ViewState(**expected).to_dict())
         self.assertDictEqual(expected, state.to_dict())
 
+    def test_view_state_value_empty_selected_options(self):
+        input = {
+            'type': 'checkboxes',
+            'selected_options': []
+        }
+
+        view_state_value = ViewStateValue(**input)
+        assert view_state_value.selected_options == []
+
+    def test_view_state_value_with_selected_options(self):
+        expected = {
+            "type": "checkboxes",
+            "selected_options": [
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "test_option_text"
+                    },
+                    "value": "test_option_value"
+                }
+            ],
+        }
+
+        input = {
+            "type": "checkboxes",
+            "selected_options": [
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "test_option_text"
+                    },
+                    "value": "test_option_value"
+                }
+            ]
+        }
+
+        self.assertDictEqual(expected, ViewStateValue(**input).to_dict())
+
     def test_load_modal_view_001(self):
         with open("tests/slack_sdk_fixture/view_modal_001.json") as file:
             self.verify_loaded_view_object(file)
