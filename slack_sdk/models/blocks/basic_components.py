@@ -158,7 +158,7 @@ class Option(JsonObject):
         value: str,
         label: Optional[str] = None,
         text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[str] = None,
+        description: Optional[Union[str, dict, TextObject]] = None,
         url: Optional[str] = None,
         **others: dict,
     ):
@@ -198,7 +198,21 @@ class Option(JsonObject):
         self.label: Optional[str] = self._label
 
         self.value: str = value
-        self.description: Optional[str] = description
+
+        # for backward-compatibility with version 2.0-2.5, the following fields return str values
+        if isinstance(description, str):
+            self.description = description
+            self._block_description = PlainTextObject.from_str(description)
+        elif isinstance(description, dict):
+            self.description = description["text"]
+            self._block_description = TextObject.parse(description)
+        elif isinstance(description, TextObject):
+            self.description = description.text
+            self._block_description = description
+        else:
+            self.description = None
+            self._block_description = None
+
         # A URL to load in the user's browser when the option is clicked.
         # The url attribute is only available in overflow menus.
         # Maximum length for this field is 3000 characters.
@@ -249,7 +263,9 @@ class Option(JsonObject):
         self.validate_json()
         if option_type == "dialog":  # skipcq: PYL-R1705
             return {"label": self.label, "value": self.value}
-        elif option_type == "action":
+        elif option_type == "action" or option_type == "attachment":
+            # "action" can be confusing but it means a legacy message action in attachments
+            # we don't remove the type name for backward compatibility though
             json = {"text": self.label, "value": self.value}
             if self.description is not None:
                 json["description"] = self.description
@@ -260,8 +276,8 @@ class Option(JsonObject):
                 "text": text.to_dict(),
                 "value": self.value,
             }
-            if self.description:
-                json["description"] = self.description
+            if self._block_description:
+                json["description"] = self._block_description.to_dict()
             if self.url:
                 json["url"] = self.url
             return json

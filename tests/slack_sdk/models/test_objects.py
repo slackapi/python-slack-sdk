@@ -414,6 +414,63 @@ class OptionTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             Option(label="option_1", value=STRING_301_CHARS).to_dict("text")
 
+    def test_valid_description_for_blocks(self):
+        option = Option(label="label", value="v", description="this is an option")
+        self.assertDictEqual(
+            option.to_dict(),
+            {
+                "text": {
+                    "type": "plain_text",
+                    "text": "label",
+                    "emoji": True,
+                },
+                "value": "v",
+                "description": {
+                    "type": "plain_text",
+                    "text": "this is an option",
+                    "emoji": True,
+                },
+            },
+        )
+        option = Option(
+            # Note that mrkdwn type is not allowed for this (as of April 2021)
+            text=PlainTextObject(text="label"),
+            value="v",
+            description="this is an option",
+        )
+        self.assertDictEqual(
+            option.to_dict(),
+            {
+                "text": {"type": "plain_text", "text": "label"},
+                "value": "v",
+                "description": {
+                    "type": "plain_text",
+                    "text": "this is an option",
+                    "emoji": True,
+                },
+            },
+        )
+
+    def test_valid_description_for_attachments(self):
+        option = Option(label="label", value="v", description="this is an option")
+        # legacy message actions in attachments
+        self.assertDictEqual(
+            option.to_dict("action"),
+            {
+                "text": "label",
+                "value": "v",
+                "description": "this is an option",
+            },
+        )
+        self.assertDictEqual(
+            option.to_dict("attachment"),
+            {
+                "text": "label",
+                "value": "v",
+                "description": "this is an option",
+            },
+        )
+
 
 class OptionGroupTests(unittest.TestCase):
     maxDiff = None
