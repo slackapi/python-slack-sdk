@@ -352,10 +352,7 @@ class ViewTests(unittest.TestCase):
         self.assertDictEqual(expected, state.to_dict())
 
     def test_view_state_value_empty_selected_options(self):
-        input = {
-            'type': 'checkboxes',
-            'selected_options': []
-        }
+        input = {"type": "checkboxes", "selected_options": []}
 
         view_state_value = ViewStateValue(**input)
         assert view_state_value.selected_options == []
@@ -365,11 +362,8 @@ class ViewTests(unittest.TestCase):
             "type": "checkboxes",
             "selected_options": [
                 {
-                    "text": {
-                        "type": "plain_text",
-                        "text": "test_option_text"
-                    },
-                    "value": "test_option_value"
+                    "text": {"type": "plain_text", "text": "test_option_text"},
+                    "value": "test_option_value",
                 }
             ],
         }
@@ -378,13 +372,10 @@ class ViewTests(unittest.TestCase):
             "type": "checkboxes",
             "selected_options": [
                 {
-                    "text": {
-                        "type": "plain_text",
-                        "text": "test_option_text"
-                    },
-                    "value": "test_option_value"
+                    "text": {"type": "plain_text", "text": "test_option_text"},
+                    "value": "test_option_value",
                 }
-            ]
+            ],
         }
 
         self.assertDictEqual(expected, ViewStateValue(**input).to_dict())

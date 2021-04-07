@@ -960,7 +960,7 @@ class ActionStaticSelector(AbstractActionSelector):
 <span>(</span><span>*, name: str, label: str, optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str] = None, placeholder: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1292,7 +1292,8 @@ def options_length(self):
 <span>class <span class="ident">DialogBuilder</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create a DialogBuilder to more easily construct the JSON required to submit a
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Create a DialogBuilder to more easily construct the JSON required to submit a
 dialog to Slack</p></div>
 <details class="source">
 <summary>
@@ -2557,7 +2558,8 @@ completing the element. 150 character maximum.</dd>
 <span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>You can also provide a select menu with a list of channels. Specify your
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>You can also provide a select menu with a list of channels. Specify your
 data_source as channels to limit only to public channels</p>
 <p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
 <h2 id="args">Args</h2>
@@ -2648,7 +2650,8 @@ completing the element. 150 character maximum.</dd>
 <span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>You can also provide a select menu with a list of conversations - including
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>You can also provide a select menu with a list of conversations - including
 private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
 <p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
@@ -2741,7 +2744,8 @@ completing the element. 150 character maximum.</dd>
 <span>(</span><span>*, name: str, label: str, value: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, min_query_length: Optional[int] = None, optional: Optional[bool] = False, placeholder: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Use the select element for multiple choice selections allowing users to pick
 a single item from a list. True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
@@ -3078,7 +3082,7 @@ max_length you have set or the default, 3000.</p>
 <span>(</span><span>*, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: Optional[int] = None, subtype: Optional[str] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3475,7 +3479,8 @@ def value_length(self):
 <span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Now you can easily populate a select menu with a list of users. For example,
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Now you can easily populate a select menu with a list of users. For example,
 when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>

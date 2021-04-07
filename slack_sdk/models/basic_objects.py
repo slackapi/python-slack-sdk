@@ -6,11 +6,15 @@ from slack_sdk.errors import SlackObjectFormationError
 
 
 class BaseObject:
+    """The base class for all model objects in this module"""
+
     def __str__(self):
         return f"<slack_sdk.{self.__class__.__name__}>"
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
+    """The base class for JSON serializable class objects"""
+
     @property
     @abstractmethod
     def attributes(self) -> Set[str]:

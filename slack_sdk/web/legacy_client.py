@@ -1223,7 +1223,7 @@ class LegacyWebClient(LegacyBaseClient):
             user (str): The id of user who should see the message. e.g. 'U0BPQUNTA'
             text (str): The message you'd like to share. e.g. 'Hello world'
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
@@ -1241,7 +1241,7 @@ class LegacyWebClient(LegacyBaseClient):
             channel (str): The channel id. e.g. 'C1234567890'
             text (str): The message you'd like to share. e.g. 'Hello world'
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """
@@ -1289,7 +1289,7 @@ class LegacyWebClient(LegacyBaseClient):
             ts (str): Timestamp of the message to be updated. e.g. '1234567890.123456'
             text (str): The message you'd like to share. e.g. 'Hello world'
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
         """

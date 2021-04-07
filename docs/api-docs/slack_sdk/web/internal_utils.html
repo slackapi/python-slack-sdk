@@ -295,7 +295,17 @@ def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -&gt; None:
     skip_deprecation = os.environ.get(&#34;SKIP_SLACK_SDK_WARNING&#34;)
     if skip_deprecation:
         return
-    warnings.warn(message, UserWarning)</code></pre>
+    warnings.warn(message, UserWarning)
+
+
+def _build_unexpected_body_error_message(body: str) -&gt; str:
+    body_for_logging = &#34;&#34;.join(
+        [line.strip() for line in body.replace(&#34;\r&#34;, &#34;\n&#34;).split(&#34;\n&#34;)]
+    )
+    if len(body_for_logging) &gt; 100:
+        body_for_logging = body_for_logging[:100] + &#34;...&#34;
+    message = f&#34;Received a response in a non-JSON format: {body_for_logging}&#34;
+    return message</code></pre>
 </details>
 </section>
 <section>

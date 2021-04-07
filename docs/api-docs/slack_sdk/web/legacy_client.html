@@ -520,6 +520,71 @@ class LegacyWebClient(LegacyBaseClient):
         &#34;&#34;&#34;Lists all active user sessions for an organization&#34;&#34;&#34;
         return self.api_call(&#34;admin.users.session.list&#34;, params=kwargs)
 
+    def admin_teams_settings_setDefaultChannels(
+        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Set the default channels of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            channel_ids (str or list): A list of channel_ids.
+                At least one channel is required. e.g. [&#39;C1A2B3C4D&#39;, &#39;C26Z25Y24&#39;]
+        &#34;&#34;&#34;
+        kwargs.update({&#34;team_id&#34;: team_id})
+        if isinstance(channel_ids, (list, Tuple)):
+            kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
+        else:
+            kwargs.update({&#34;channel_ids&#34;: channel_ids})
+        return self.api_call(
+            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
+
+    def admin_users_session_getSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Get user-specific session settings—the session duration
+        and what happens when the client closes—given a list of users.
+
+        Args:
+            user_ids (str or list): The IDs of users you&#39;d like to fetch session settings for.
+                Note: if a user does not have any active sessions, they will not be returned in the response.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.getSettings&#34;, json=kwargs)
+
+    def admin_users_session_setSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Configure the user-level session settings—the session duration
+        and what happens when the client closes—for one or more users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.setSettings&#34;, json=kwargs)
+
+    def admin_users_session_clearSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Clear user-specific session settings—the session duration
+        and what happens when the client closes—for a list of users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.clearSettings&#34;, json=kwargs)
+
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -&gt; Union[Future, SlackResponse]:
@@ -608,25 +673,6 @@ class LegacyWebClient(LegacyBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id})
         return self.api_call(&#34;admin.teams.settings.info&#34;, json=kwargs)
-
-    def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
-    ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Set the default channels of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            channel_ids (str or list): A list of channel_ids.
-                At least one channel is required. e.g. [&#39;C1A2B3C4D&#39;, &#39;C26Z25Y24&#39;]
-        &#34;&#34;&#34;
-        kwargs.update({&#34;team_id&#34;: team_id})
-        if isinstance(channel_ids, (list, Tuple)):
-            kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
-        else:
-            kwargs.update({&#34;channel_ids&#34;: channel_ids})
-        return self.api_call(
-            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
 
     def admin_teams_settings_setDescription(
         self, *, team_id: str, description: str, **kwargs
@@ -1205,7 +1251,7 @@ class LegacyWebClient(LegacyBaseClient):
             user (str): The id of user who should see the message. e.g. &#39;U0BPQUNTA&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -1223,7 +1269,7 @@ class LegacyWebClient(LegacyBaseClient):
             channel (str): The channel id. e.g. &#39;C1234567890&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -1271,7 +1317,7 @@ class LegacyWebClient(LegacyBaseClient):
             ts (str): Timestamp of the message to be updated. e.g. &#39;1234567890.123456&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -3099,6 +3145,71 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Lists all active user sessions for an organization&#34;&#34;&#34;
         return self.api_call(&#34;admin.users.session.list&#34;, params=kwargs)
 
+    def admin_teams_settings_setDefaultChannels(
+        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Set the default channels of a workspace.
+
+        Args:
+            team_id (str): ID of the team.
+            channel_ids (str or list): A list of channel_ids.
+                At least one channel is required. e.g. [&#39;C1A2B3C4D&#39;, &#39;C26Z25Y24&#39;]
+        &#34;&#34;&#34;
+        kwargs.update({&#34;team_id&#34;: team_id})
+        if isinstance(channel_ids, (list, Tuple)):
+            kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
+        else:
+            kwargs.update({&#34;channel_ids&#34;: channel_ids})
+        return self.api_call(
+            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
+
+    def admin_users_session_getSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Get user-specific session settings—the session duration
+        and what happens when the client closes—given a list of users.
+
+        Args:
+            user_ids (str or list): The IDs of users you&#39;d like to fetch session settings for.
+                Note: if a user does not have any active sessions, they will not be returned in the response.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.getSettings&#34;, json=kwargs)
+
+    def admin_users_session_setSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Configure the user-level session settings—the session duration
+        and what happens when the client closes—for one or more users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.setSettings&#34;, json=kwargs)
+
+    def admin_users_session_clearSettings(
+        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Clear user-specific session settings—the session duration
+        and what happens when the client closes—for a list of users.
+
+        Args:
+            user_ids (str or list): The list of user IDs to apply the session settings for.
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.users.session.clearSettings&#34;, json=kwargs)
+
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
     ) -&gt; Union[Future, SlackResponse]:
@@ -3187,25 +3298,6 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id})
         return self.api_call(&#34;admin.teams.settings.info&#34;, json=kwargs)
-
-    def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
-    ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Set the default channels of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            channel_ids (str or list): A list of channel_ids.
-                At least one channel is required. e.g. [&#39;C1A2B3C4D&#39;, &#39;C26Z25Y24&#39;]
-        &#34;&#34;&#34;
-        kwargs.update({&#34;team_id&#34;: team_id})
-        if isinstance(channel_ids, (list, Tuple)):
-            kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
-        else:
-            kwargs.update({&#34;channel_ids&#34;: channel_ids})
-        return self.api_call(
-            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
 
     def admin_teams_settings_setDescription(
         self, *, team_id: str, description: str, **kwargs
@@ -3784,7 +3876,7 @@ removed at anytime.</p></div>
             user (str): The id of user who should see the message. e.g. &#39;U0BPQUNTA&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -3802,7 +3894,7 @@ removed at anytime.</p></div>
             channel (str): The channel id. e.g. &#39;C1234567890&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -3850,7 +3942,7 @@ removed at anytime.</p></div>
             ts (str): Timestamp of the message to be updated. e.g. &#39;1234567890.123456&#39;
             text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
                 text is not required when presenting blocks.
-            blocks (list): A dictionary list of blocks.
+            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
                 Blocks are required when not presenting text.
                 e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
         &#34;&#34;&#34;
@@ -6649,6 +6741,70 @@ At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']</dd>
     return self.api_call(&#34;admin.users.remove&#34;, json=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_clearSettings"><code class="name flex">
+<span>def <span class="ident">admin_users_session_clearSettings</span></span>(<span>self, *, user_ids: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Clear user-specific session settings—the session duration
+and what happens when the client closes—for a list of users.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>user_ids</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>The list of user IDs to apply the session settings for.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_users_session_clearSettings(
+    self, *, user_ids: Union[str, Sequence[str]], **kwargs
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Clear user-specific session settings—the session duration
+    and what happens when the client closes—for a list of users.
+
+    Args:
+        user_ids (str or list): The list of user IDs to apply the session settings for.
+    &#34;&#34;&#34;
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return self.api_call(&#34;admin.users.session.clearSettings&#34;, json=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_getSettings"><code class="name flex">
+<span>def <span class="ident">admin_users_session_getSettings</span></span>(<span>self, *, user_ids: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get user-specific session settings—the session duration
+and what happens when the client closes—given a list of users.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>user_ids</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>The IDs of users you'd like to fetch session settings for.
+Note: if a user does not have any active sessions, they will not be returned in the response.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_users_session_getSettings(
+    self, *, user_ids: Union[str, Sequence[str]], **kwargs
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Get user-specific session settings—the session duration
+    and what happens when the client closes—given a list of users.
+
+    Args:
+        user_ids (str or list): The IDs of users you&#39;d like to fetch session settings for.
+            Note: if a user does not have any active sessions, they will not be returned in the response.
+    &#34;&#34;&#34;
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return self.api_call(&#34;admin.users.session.getSettings&#34;, json=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_invalidate"><code class="name flex">
 <span>def <span class="ident">admin_users_session_invalidate</span></span>(<span>self, *, session_id: str, team_id: str, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
@@ -6715,6 +6871,37 @@ At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']</dd>
     &#34;&#34;&#34;
     kwargs.update({&#34;user_id&#34;: user_id})
     return self.api_call(&#34;admin.users.session.reset&#34;, json=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_setSettings"><code class="name flex">
+<span>def <span class="ident">admin_users_session_setSettings</span></span>(<span>self, *, user_ids: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configure the user-level session settings—the session duration
+and what happens when the client closes—for one or more users.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>user_ids</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>The list of user IDs to apply the session settings for.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_users_session_setSettings(
+    self, *, user_ids: Union[str, Sequence[str]], **kwargs
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Configure the user-level session settings—the session duration
+    and what happens when the client closes—for one or more users.
+
+    Args:
+        user_ids (str or list): The list of user IDs to apply the session settings for.
+    &#34;&#34;&#34;
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return self.api_call(&#34;admin.users.session.setSettings&#34;, json=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setAdmin"><code class="name flex">
@@ -7678,7 +7865,7 @@ e.g. '1234567890.123456'</dd>
 <dd>The message you'd like to share. e.g. 'Hello world'
 text is not required when presenting blocks.</dd>
 <dt><strong><code>blocks</code></strong> :&ensp;<code>list</code></dt>
-<dd>A dictionary list of blocks.
+<dd>A list of either dict values or <code>slack_sdk.models.blocks.Block</code> objects.
 Blocks are required when not presenting text.
 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]</dd>
 </dl></div>
@@ -7696,7 +7883,7 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
         user (str): The id of user who should see the message. e.g. &#39;U0BPQUNTA&#39;
         text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
             text is not required when presenting blocks.
-        blocks (list): A dictionary list of blocks.
+        blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
             Blocks are required when not presenting text.
             e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
     &#34;&#34;&#34;
@@ -7719,7 +7906,7 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
 <dd>The message you'd like to share. e.g. 'Hello world'
 text is not required when presenting blocks.</dd>
 <dt><strong><code>blocks</code></strong> :&ensp;<code>list</code></dt>
-<dd>A dictionary list of blocks.
+<dd>A list of either dict values or <code>slack_sdk.models.blocks.Block</code> objects.
 Blocks are required when not presenting text.
 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]</dd>
 </dl></div>
@@ -7736,7 +7923,7 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
         channel (str): The channel id. e.g. &#39;C1234567890&#39;
         text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
             text is not required when presenting blocks.
-        blocks (list): A dictionary list of blocks.
+        blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
             Blocks are required when not presenting text.
             e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
     &#34;&#34;&#34;
@@ -7843,7 +8030,7 @@ e.g. {"https://example.com/": {"text": "Every day is the test."}}</dd>
 <dd>The message you'd like to share. e.g. 'Hello world'
 text is not required when presenting blocks.</dd>
 <dt><strong><code>blocks</code></strong> :&ensp;<code>list</code></dt>
-<dd>A dictionary list of blocks.
+<dd>A list of either dict values or <code>slack_sdk.models.blocks.Block</code> objects.
 Blocks are required when not presenting text.
 e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]</dd>
 </dl></div>
@@ -7861,7 +8048,7 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
         ts (str): Timestamp of the message to be updated. e.g. &#39;1234567890.123456&#39;
         text (str): The message you&#39;d like to share. e.g. &#39;Hello world&#39;
             text is not required when presenting blocks.
-        blocks (list): A dictionary list of blocks.
+        blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
             Blocks are required when not presenting text.
             e.g. [{&#34;type&#34;: &#34;section&#34;, &#34;text&#34;: {&#34;type&#34;: &#34;plain_text&#34;, &#34;text&#34;: &#34;Hello world&#34;}}]
     &#34;&#34;&#34;
@@ -11061,9 +11248,12 @@ e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]</dd>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_invite" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_invite">admin_users_invite</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_list">admin_users_list</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_remove" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_remove">admin_users_remove</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_clearSettings" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_clearSettings">admin_users_session_clearSettings</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_getSettings" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_getSettings">admin_users_session_getSettings</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_invalidate" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_invalidate">admin_users_session_invalidate</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_list">admin_users_session_list</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_reset" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_reset">admin_users_session_reset</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_setSettings" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_session_setSettings">admin_users_session_setSettings</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setAdmin" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setAdmin">admin_users_setAdmin</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setExpiration" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setExpiration">admin_users_setExpiration</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setOwner" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_users_setOwner">admin_users_setOwner</a></code></li>

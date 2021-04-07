@@ -34,11 +34,15 @@ from slack_sdk.errors import SlackObjectFormationError
 
 
 class BaseObject:
+    &#34;&#34;&#34;The base class for all model objects in this module&#34;&#34;&#34;
+
     def __str__(self):
         return f&#34;&lt;slack_sdk.{self.__class__.__name__}&gt;&#34;
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
+    &#34;&#34;&#34;The base class for JSON serializable class objects&#34;&#34;&#34;
+
     @property
     @abstractmethod
     def attributes(self) -&gt; Set[str]:
@@ -154,12 +158,14 @@ class EnumValidator(JsonValidator):
 <span>class <span class="ident">BaseObject</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for all model objects in this module</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BaseObject:
+    &#34;&#34;&#34;The base class for all model objects in this module&#34;&#34;&#34;
+
     def __str__(self):
         return f&#34;&lt;slack_sdk.{self.__class__.__name__}&gt;&#34;</code></pre>
 </details>
@@ -201,12 +207,14 @@ functions should return true if valid, false if not.</p>
 <span>class <span class="ident">JsonObject</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class JsonObject(BaseObject, metaclass=ABCMeta):
+    &#34;&#34;&#34;The base class for JSON serializable class objects&#34;&#34;&#34;
+
     @property
     @abstractmethod
     def attributes(self) -&gt; Set[str]:

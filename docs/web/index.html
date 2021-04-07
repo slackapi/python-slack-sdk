@@ -254,7 +254,7 @@ as sending a regular message, but with an additional <code class="docutils liter
 <p>See <a class="reference external" href="https://api.slack.com/methods/chat.postEphemeral">chat.postEphemeral</a> for more info.</p>
 <p><strong>Formatting with Block Kit</strong></p>
 <p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/block-kit">blocks</a>.</p>
-<p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.</p>
+<p>The chat.postMessage method takes an optional <code class="docutils literal notranslate"><span class="pre">blocks</span></code> argument that allows you to customize the layout of a message. Blocks can be specified in a single array of either dict values or <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html">slack_sdk.models.blocks.Block</a> objects.</p>
 <p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
     <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
@@ -490,7 +490,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <h2>Modals<a class="headerlink" href="#modals" title="Permalink to this headline">¶</a></h2>
 <p><strong>Opening a modal</strong></p>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
-<p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
+<p>Modals use the same <code class="docutils literal notranslate"><span class="pre">blocks</span></code> that compose messages with the addition of an <code class="docutils literal notranslate"><span class="pre">input</span></code> block.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.signature</span> <span class="kn">import</span> <span class="n">SignatureVerifier</span>
 <span class="n">signature_verifier</span> <span class="o">=</span> <span class="n">SignatureVerifier</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_SIGNING_SECRET&quot;</span><span class="p">])</span>
 
