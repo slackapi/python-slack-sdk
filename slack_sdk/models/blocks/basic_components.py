@@ -249,7 +249,9 @@ class Option(JsonObject):
         self.validate_json()
         if option_type == "dialog":  # skipcq: PYL-R1705
             return {"label": self.label, "value": self.value}
-        elif option_type == "action":
+        elif option_type == "action" or option_type == "attachment":
+            # "action" can be confusing but it means a legacy message action in attachments
+            # we don't remove the type name for backward compatibility though
             json = {"text": self.label, "value": self.value}
             if self.description is not None:
                 json["description"] = self.description
@@ -261,7 +263,9 @@ class Option(JsonObject):
                 "value": self.value,
             }
             if self.description:
-                json["description"] = self.description
+                # self.description is always a str value
+                description = PlainTextObject.from_str(self.description)
+                json["description"] = description.to_dict()
             if self.url:
                 json["url"] = self.url
             return json
