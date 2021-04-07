@@ -1,4 +1,4 @@
-"""Classes for constructing Slack-specific data strtucture"""
+"""Classes for constructing Slack-specific data structure"""
 
 import logging
 from typing import Union, Dict, Any, Sequence, List
@@ -47,5 +47,5 @@ def show_unknown_key_warning(name: Union[str, object], others: dict):
         logger.debug(
             f"!!! {name}'s constructor args ({keys}) were ignored."
             f"If they should be supported by this library, report this issue to the project :bow: "
-            f"https://github.com/slackapi/python-slackclient/issues"
+            f"https://github.com/slackapi/python-slack-sdk/issues"
         )

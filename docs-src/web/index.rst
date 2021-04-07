@@ -63,7 +63,7 @@ See `chat.postEphemeral <https://api.slack.com/methods/chat.postEphemeral>`_ for
 
 Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of `blocks <https://api.slack.com/block-kit>`_.
 
-The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.
+The chat.postMessage method takes an optional ``blocks`` argument that allows you to customize the layout of a message. Blocks can be specified in a single array of either dict values or `slack_sdk.models.blocks.Block <https://slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html>`_ objects.
 
 To send a message to a channel, use the channel's ID. For IMs, use the user's ID.
 
@@ -381,7 +381,7 @@ Modals
 
 Modals allow you to collect data from users and display dynamic information in a focused surface.
 
-Modals use the same blocks that compose messages with the addition of an `input` block.
+Modals use the same ``blocks`` that compose messages with the addition of an ``input`` block.
 
 .. code-block:: python
 

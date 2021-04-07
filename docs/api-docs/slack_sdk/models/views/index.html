@@ -259,11 +259,16 @@ class ViewStateValue(JsonObject):
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
-        if selected_options:
-            if isinstance(selected_options, dict):
-                self.selected_options = [Option(**d) for d in selected_options]
-            else:
-                self.selected_options = selected_options</code></pre>
+
+        if isinstance(selected_options, list):
+            self.selected_options = []
+            for option in selected_options:
+                if isinstance(option, Option):
+                    self.selected_options.append(option)
+                elif isinstance(option, dict):
+                    self.selected_options.append(Option(**option))
+        else:
+            self.selected_options = selected_options</code></pre>
 </details>
 </section>
 <section>
@@ -468,7 +473,7 @@ class ViewStateValue(JsonObject):
 <span>(</span><span>*, values: Dict[str, Dict[str, Union[dict, ForwardRef('<a title="slack_sdk.models.views.ViewStateValue" href="#slack_sdk.models.views.ViewStateValue">ViewStateValue</a>')]]])</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -556,7 +561,7 @@ class ViewStateValue(JsonObject):
 <span>(</span><span>*, type: Optional[str] = None, value: Optional[str] = None, selected_date: Optional[str] = None, selected_conversation: Optional[str] = None, selected_channel: Optional[str] = None, selected_user: Optional[str] = None, selected_option: Optional[str] = None, selected_conversations: Optional[Sequence[str]] = None, selected_channels: Optional[Sequence[str]] = None, selected_users: Optional[Sequence[str]] = None, selected_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -601,11 +606,16 @@ class ViewStateValue(JsonObject):
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
-        if selected_options:
-            if isinstance(selected_options, dict):
-                self.selected_options = [Option(**d) for d in selected_options]
-            else:
-                self.selected_options = selected_options</code></pre>
+
+        if isinstance(selected_options, list):
+            self.selected_options = []
+            for option in selected_options:
+                if isinstance(option, Option):
+                    self.selected_options.append(option)
+                elif isinstance(option, dict):
+                    self.selected_options.append(Option(**option))
+        else:
+            self.selected_options = selected_options</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

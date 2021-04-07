@@ -1,3 +1,11 @@
+"""Block Kit data model objects
+
+To learn more about Block Kit, please check the following resources and tools:
+
+* https://api.slack.com/block-kit
+* https://api.slack.com/reference/block-kit/blocks
+* https://app.slack.com/block-kit-builder
+"""
 from .basic_components import ButtonStyles  # noqa
 from .basic_components import ConfirmObject  # noqa
 from .basic_components import DynamicSelectElementTypes  # noqa

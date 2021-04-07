@@ -34,7 +34,6 @@ from typing import Dict, Union, Optional, Any, Sequence
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
 
-from slack_sdk.errors import SlackApiError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
 from .internal_utils import (
@@ -193,16 +192,13 @@ class AsyncWebhookClient:
                 &#34;proxy&#34;: self.proxy,
             }
             async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:
-                response_body = {}
+                response_body: str = &#34;&#34;
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
                     self.logger.debug(
-                        f&#34;No response data returned from the following API call: {self.url}.&#34;
+                        f&#34;No response data returned from the following API call: {self.url}&#34;
                     )
-                except json.decoder.JSONDecodeError as e:
-                    message = f&#34;Failed to parse the response body: {str(e)}&#34;
-                    raise SlackApiError(message, res)
 
                 resp = WebhookResponse(
                     url=self.url,
@@ -409,16 +405,13 @@ class AsyncWebhookClient:
                 &#34;proxy&#34;: self.proxy,
             }
             async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:
-                response_body = {}
+                response_body: str = &#34;&#34;
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
                     self.logger.debug(
-                        f&#34;No response data returned from the following API call: {self.url}.&#34;
+                        f&#34;No response data returned from the following API call: {self.url}&#34;
                     )
-                except json.decoder.JSONDecodeError as e:
-                    message = f&#34;Failed to parse the response body: {str(e)}&#34;
-                    raise SlackApiError(message, res)
 
                 resp = WebhookResponse(
                     url=self.url,

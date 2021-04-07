@@ -43,6 +43,8 @@ DynamicSelectElementTypes = {&#34;channels&#34;, &#34;conversations&#34;, &#34;u
 
 
 class TextObject(JsonObject):
+    &#34;&#34;&#34;The interface for text objects (types: plain_text, mrkdwn)&#34;&#34;&#34;
+
     attributes = {&#34;text&#34;, &#34;type&#34;, &#34;emoji&#34;}
     logger = logging.getLogger(__name__)
 
@@ -100,6 +102,8 @@ class TextObject(JsonObject):
 
 
 class PlainTextObject(TextObject):
+    &#34;&#34;&#34;plain_text typed text object&#34;&#34;&#34;
+
     type = &#34;plain_text&#34;
 
     @property
@@ -125,6 +129,8 @@ class PlainTextObject(TextObject):
 
 
 class MarkdownTextObject(TextObject):
+    &#34;&#34;&#34;mrkdwn typed text object&#34;&#34;&#34;
+
     type = &#34;mrkdwn&#34;
 
     @property
@@ -169,8 +175,8 @@ class MarkdownTextObject(TextObject):
 
 
 class Option(JsonObject):
-    &#34;&#34;&#34;Option object used in dialogs, legacy message actions, and blocks
-    JSON must be retrieved with an explicit option_type - the Slack API has
+    &#34;&#34;&#34;Option object used in dialogs, legacy message actions (interactivity in attachments),
+    and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     &#34;&#34;&#34;
 
@@ -543,7 +549,8 @@ class DispatchActionConfig(JsonObject):
 <span>(</span><span>*, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: str = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>An object that defines a dialog that provides a confirmation step to any
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>An object that defines a dialog that provides a confirmation step to any
 interactive element. This dialog will ask the user to confirm their action by
 offering a confirm and deny button.
 <a href="https://api.slack.com/reference/block-kit/composition-objects#confirm">https://api.slack.com/reference/block-kit/composition-objects#confirm</a></p></div>
@@ -781,7 +788,8 @@ def title_length(self):
 <span>(</span><span>*, trigger_actions_on: Optional[list] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Determines when a plain-text input element will return a block_actions interaction payload.
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Determines when a plain-text input element will return a block_actions interaction payload.
 <a href="https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config">https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config</a></p></div>
 <details class="source">
 <summary>
@@ -867,7 +875,8 @@ def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, dict]):
 <span>(</span><span>*, text: str, verbatim: Optional[bool] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A Markdown text object, meaning markdown characters will be parsed as
+<div class="desc"><p>mrkdwn typed text object</p>
+<p>A Markdown text object, meaning markdown characters will be parsed as
 formatting information.
 <a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p></div>
 <details class="source">
@@ -875,6 +884,8 @@ formatting information.
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MarkdownTextObject(TextObject):
+    &#34;&#34;&#34;mrkdwn typed text object&#34;&#34;&#34;
+
     type = &#34;mrkdwn&#34;
 
     @property
@@ -1036,8 +1047,8 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, description: Optional[str] = None, url: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Option object used in dialogs, legacy message actions, and blocks
-JSON must be retrieved with an explicit option_type - the Slack API has
+<div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments),
+and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
 different required formats in different situations</p>
 <p>An object that represents a single selectable item in a block element (
 SelectElement, OverflowMenuElement) or dialog element
@@ -1067,8 +1078,8 @@ dialogs.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Option(JsonObject):
-    &#34;&#34;&#34;Option object used in dialogs, legacy message actions, and blocks
-    JSON must be retrieved with an explicit option_type - the Slack API has
+    &#34;&#34;&#34;Option object used in dialogs, legacy message actions (interactivity in attachments),
+    and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     &#34;&#34;&#34;
 
@@ -1499,7 +1510,8 @@ def parse_all(
 <span>(</span><span>*, text: str, emoji: Optional[bool] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A plain text object, meaning markdown characters will not be parsed as
+<div class="desc"><p>plain_text typed text object</p>
+<p>A plain text object, meaning markdown characters will not be parsed as
 formatting information.
 <a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p></div>
 <details class="source">
@@ -1507,6 +1519,8 @@ formatting information.
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PlainTextObject(TextObject):
+    &#34;&#34;&#34;plain_text typed text object&#34;&#34;&#34;
+
     type = &#34;plain_text&#34;
 
     @property
@@ -1608,12 +1622,15 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>text: str, type: Optional[str] = None, subtype: Optional[str] = None, emoji: Optional[bool] = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Super class for new text "objects" used in Block kit</p></div>
+<div class="desc"><p>The interface for text objects (types: plain_text, mrkdwn)</p>
+<p>Super class for new text "objects" used in Block kit</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TextObject(JsonObject):
+    &#34;&#34;&#34;The interface for text objects (types: plain_text, mrkdwn)&#34;&#34;&#34;
+
     attributes = {&#34;text&#34;, &#34;type&#34;, &#34;emoji&#34;}
     logger = logging.getLogger(__name__)
 

@@ -15,6 +15,8 @@ DynamicSelectElementTypes = {"channels", "conversations", "users"}
 
 
 class TextObject(JsonObject):
+    """The interface for text objects (types: plain_text, mrkdwn)"""
+
     attributes = {"text", "type", "emoji"}
     logger = logging.getLogger(__name__)
 
@@ -72,6 +74,8 @@ class TextObject(JsonObject):
 
 
 class PlainTextObject(TextObject):
+    """plain_text typed text object"""
+
     type = "plain_text"
 
     @property
@@ -97,6 +101,8 @@ class PlainTextObject(TextObject):
 
 
 class MarkdownTextObject(TextObject):
+    """mrkdwn typed text object"""
+
     type = "mrkdwn"
 
     @property
@@ -141,8 +147,8 @@ class MarkdownTextObject(TextObject):
 
 
 class Option(JsonObject):
-    """Option object used in dialogs, legacy message actions, and blocks
-    JSON must be retrieved with an explicit option_type - the Slack API has
+    """Option object used in dialogs, legacy message actions (interactivity in attachments),
+    and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
 

@@ -1391,7 +1391,8 @@ value.</dd>
 <span>(</span><span>*, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A supplemental object that will display after the rest of the message.
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>A supplemental object that will display after the rest of the message.
 Considered legacy - recommended replacement is to use message blocks instead.</p>
 <p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
 <h2 id="args">Args</h2>
@@ -1789,7 +1790,7 @@ def ts_without_footer(self):
 <span>(</span><span>*, title: Optional[str] = None, value: Optional[str] = None, short: bool = True)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1830,7 +1831,8 @@ def ts_without_footer(self):
 <span>(</span><span>*, blocks: Sequence[<a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>], color: Optional[str] = None, fallback: Optional[str] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A bridge between legacy attachments and Block Kit formatting - pass a list of
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>A bridge between legacy attachments and Block Kit formatting - pass a list of
 Block objects directly to this attachment.</p>
 <p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
 <h2 id="args">Args</h2>
@@ -1951,7 +1953,8 @@ def fields_attribute_absent(self):
 <span>(</span><span>*, actions: Sequence[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>], callback_id: str, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>An Attachment, but designed to contain interactive Actions
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>An Attachment, but designed to contain interactive Actions
 Considered legacy - recommended replacement is to use message blocks instead.</p>
 <p><a href="https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields">https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields</a>
 <a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
