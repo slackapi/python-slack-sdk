@@ -232,3 +232,48 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     installed_at=row["installed_at"],
                 )
             return None
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        table = self.bots
+        c = table.c
+        with self.engine.begin() as conn:
+            deletion = table.delete().where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                )
+            )
+            conn.execute(deletion)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        table = self.installations
+        c = table.c
+        with self.engine.begin() as conn:
+            if user_id is not None:
+                deletion = table.delete().where(
+                    and_(
+                        c.client_id == self.client_id,
+                        c.enterprise_id == enterprise_id,
+                        c.team_id == team_id,
+                        c.user_id == user_id,
+                    )
+                )
+                conn.execute(deletion)
+            else:
+                deletion = table.delete().where(
+                    and_(
+                        c.client_id == self.client_id,
+                        c.enterprise_id == enterprise_id,
+                        c.team_id == team_id,
+                    )
+                )
+                conn.execute(deletion)

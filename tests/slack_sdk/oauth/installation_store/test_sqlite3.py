@@ -36,6 +36,7 @@ class TestSQLite3(unittest.TestCase):
         )
         store.save(installation)
 
+        # find bots
         bot = store.find_bot(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(bot)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
@@ -43,6 +44,12 @@ class TestSQLite3(unittest.TestCase):
         bot = store.find_bot(enterprise_id=None, team_id="T111")
         self.assertIsNone(bot)
 
+        # delete bots
+        store.delete_bot(enterprise_id="E111", team_id="T222")
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+
+        # find installations
         i = store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(i)
         i = store.find_installation(enterprise_id="E111", team_id="T222")
@@ -63,6 +70,28 @@ class TestSQLite3(unittest.TestCase):
         )
         self.assertIsNone(i)
 
+        # delete installations
+        store.delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        i = store.find_installation(
+            enterprise_id="E111", team_id="T111", user_id="U111"
+        )
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+
+        # delete all
+        store.save(installation)
+        store.delete_all(enterprise_id="E111", team_id="T111")
+
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+        i = store.find_installation(
+            enterprise_id="E111", team_id="T111", user_id="U111"
+        )
+        self.assertIsNone(i)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+
     def test_org_installation(self):
         store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
         installation = Installation(
@@ -77,6 +106,7 @@ class TestSQLite3(unittest.TestCase):
         )
         store.save(installation)
 
+        # find bots
         bot = store.find_bot(enterprise_id="EO111", team_id=None)
         self.assertIsNotNone(bot)
         bot = store.find_bot(
@@ -88,6 +118,16 @@ class TestSQLite3(unittest.TestCase):
         bot = store.find_bot(enterprise_id=None, team_id="TO111")
         self.assertIsNone(bot)
 
+        # delete bots
+        store.delete_bot(enterprise_id="EO111", team_id="TO222")
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(bot)
+
+        store.delete_bot(enterprise_id="EO111", team_id=None)
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNone(bot)
+
+        # find installations
         i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNotNone(i)
         i = store.find_installation(
@@ -112,3 +152,19 @@ class TestSQLite3(unittest.TestCase):
         self.assertIsNone(i)
         i = store.find_installation(enterprise_id=None, team_id="T222", user_id="U111")
         self.assertIsNone(i)
+
+        # delete installations
+        store.delete_installation(enterprise_id="E111", team_id=None)
+        i = store.find_installation(enterprise_id="E111", team_id=None)
+        self.assertIsNone(i)
+
+        # delete all
+        store.save(installation)
+        store.delete_all(enterprise_id="E111", team_id=None)
+
+        i = store.find_installation(enterprise_id="E111", team_id=None)
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id=None, user_id="U111")
+        self.assertIsNone(i)
+        bot = store.find_bot(enterprise_id=None, team_id="T222")
+        self.assertIsNone(bot)
