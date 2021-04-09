@@ -38,7 +38,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     ) -> Optional[Bot]:
         if is_enterprise_install or team_id is None:
             team_id = ""
-        key = f"{enterprise_id}-{team_id}"
+        key = f"{enterprise_id or ''}-{team_id or ''}"
         if key in self.cached_bots:
             return self.cached_bots[key]
         bot = await self.underlying.async_find_bot(
@@ -60,7 +60,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     ) -> Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = ""
-        key = f"{enterprise_id}-{team_id}-{user_id}"
+        key = f"{enterprise_id or ''}-{team_id or ''}-{user_id or ''}"
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = await self.underlying.async_find_installation(
@@ -72,3 +72,49 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
         if installation:
             self.cached_installations[key] = installation
         return installation
+
+    async def async_delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -> None:
+        await self.underlying.async_delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key = f"{enterprise_id or ''}-{team_id or ''}"
+        self.cached_bots.pop(key)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        await self.underlying.async_delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+        key = f"{enterprise_id or ''}-{team_id or ''}={user_id or ''}"
+        self.cached_installations.pop(key)
+
+    async def async_delete_all(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ):
+        await self.underlying.async_delete_all(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key_prefix = f"{enterprise_id or ''}-{team_id or ''}"
+        for key in self.cached_bots.keys():
+            if key.startswith(key_prefix):
+                self.cached_bots.pop(key)
+        for key in self.cached_installations.keys():
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)

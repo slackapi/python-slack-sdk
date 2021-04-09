@@ -206,3 +206,76 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
+
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        return self.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f"{self.client_id}/{e_id}-{t_id}"
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f"{workspace_path}/bot-",
+        )
+        for content in objects.get("Contents", []):
+            key = content.get("Key")
+            if key is not None:
+                self.logger.info(f"Going to delete bot installation ({key})")
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get("Key"),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
+                    self.logger.warning(message)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f"{self.client_id}/{e_id}-{t_id}"
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f"{workspace_path}/installer-{user_id or ''}",
+        )
+        for content in objects.get("Contents", []):
+            key = content.get("Key")
+            if key is not None:
+                self.logger.info(f"Going to delete installation ({key})")
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get("Key"),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
+                    self.logger.warning(message)

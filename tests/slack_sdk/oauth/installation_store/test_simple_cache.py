@@ -37,3 +37,20 @@ class TestCacheable(unittest.TestCase):
         self.assertIsNone(bot)
         bot = store.find_bot(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(bot)
+
+        # delete and find
+        sqlite3_store = SQLite3InstallationStore(
+            database="logs/cacheable.db", client_id="111.222"
+        )
+        sqlite3_store.init()
+        store = CacheableInstallationStore(sqlite3_store)
+
+        store.save(installation)
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+
+        os.remove("logs/cacheable.db")
+        bot = sqlite3_store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)

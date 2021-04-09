@@ -1,5 +1,7 @@
+import glob
 import json
 import logging
+import os
 from logging import Logger
 from pathlib import Path
 from typing import Optional, Union
@@ -158,6 +160,55 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
+
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        filepath_glob = f"{self.base_dir}/{e_id}-{t_id}/bot-*"
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id, team_id=team_id, user_id=user_id
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        none = "none"
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if user_id is not None:
+            filepath_glob = f"{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-*"
+        else:
+            filepath_glob = f"{self.base_dir}/{e_id}-{t_id}/installer-*"
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    def _delete_by_glob(self, e_id: str, t_id: str, filepath_glob: str):
+        for filepath in glob.glob(filepath_glob):
+            try:
+                os.remove(filepath)
+            except FileNotFoundError as e:
+                message = f"Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}"
+                self.logger.warning(message)
 
     @staticmethod
     def _mkdir(path: Union[str, Path]):

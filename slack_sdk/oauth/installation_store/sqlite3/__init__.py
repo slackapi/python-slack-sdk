@@ -456,3 +456,73 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             message = f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             self.logger.warning(message)
             return None
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -> None:
+        try:
+            with self.connect() as conn:
+                conn.execute(
+                    """
+                    delete
+                    from
+                        slack_bots
+                    where
+                        client_id = ?
+                        and
+                        enterprise_id = ?
+                        and
+                        team_id = ?
+                    """,
+                    [self.client_id, enterprise_id or "", team_id or ""],
+                )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f"Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
+            self.logger.warning(message)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        try:
+            with self.connect() as conn:
+                if user_id is None:
+                    conn.execute(
+                        """
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                        """,
+                        [self.client_id, enterprise_id or "", team_id],
+                    )
+                else:
+                    conn.execute(
+                        """
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                            and
+                            user_id = ?
+                        """,
+                        [self.client_id, enterprise_id or "", team_id, user_id],
+                    )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
+            self.logger.warning(message)

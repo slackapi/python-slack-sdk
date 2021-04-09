@@ -36,7 +36,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -> Optional[Bot]:
         if is_enterprise_install or team_id is None:
             team_id = ""
-        key = f"{enterprise_id}-{team_id}"
+        key = f"{enterprise_id or ''}-{team_id or ''}"
         if key in self.cached_bots:
             return self.cached_bots[key]
         bot = self.underlying.find_bot(
@@ -58,7 +58,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -> Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = ""
-        key = f"{enterprise_id}-{team_id}={user_id}"
+        key = f"{enterprise_id or ''}-{team_id or ''}={user_id or ''}"
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = self.underlying.find_installation(
@@ -70,3 +70,49 @@ class CacheableInstallationStore(InstallationStore):
         if installation:
             self.cached_installations[key] = installation
         return installation
+
+    def delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -> None:
+        self.underlying.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key = f"{enterprise_id or ''}-{team_id or ''}"
+        self.cached_bots.pop(key)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        self.underlying.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+        key = f"{enterprise_id or ''}-{team_id or ''}={user_id or ''}"
+        self.cached_installations.pop(key)
+
+    def delete_all(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ):
+        self.underlying.delete_all(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key_prefix = f"{enterprise_id or ''}-{team_id or ''}"
+        for key in self.cached_bots.keys():
+            if key.startswith(key_prefix):
+                self.cached_bots.pop(key)
+        for key in self.cached_installations.keys():
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
