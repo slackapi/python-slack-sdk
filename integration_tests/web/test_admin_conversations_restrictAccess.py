@@ -32,12 +32,13 @@ class TestWebClient(unittest.TestCase):
                 SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN
             ]
             client = WebClient(token=team_admin_token)
-            # Only fetching private channels since admin.conversations.restrictAccess methods do not work for public channels
+            # Only fetching private channels since admin.conversations.restrictAccess methods
+            # do not work for public channels
             convs = client.conversations_list(
                 exclude_archived=True, limit=100, types="private_channel"
             )
             self.channel_id = next(
-                (c["id"] for c in convs["channels"] if c["name"] != "general"), None
+                (c["id"] for c in convs["channels"] if c["name"] != "general" and not c["is_ext_shared"]), None
             )
             if self.channel_id is None:
                 millis = int(round(time.time() * 1000))
