@@ -28,12 +28,12 @@ Also, even if the Slack app configuration pages encourage you to upgrade to the 
 
 **Connecting to the RTM API**
 
-Note that the import here is not ``from slack_sdk.rtm import RTMClient`` but ``from slack_sdk.rtm.v2 import RTMClient`` (``v2`` is added in the latter one). If you would like to use the legacy version of the client, go to the next section.
+Note that the import here is not ``from slack_sdk.rtm import RTMClient`` but ``from slack_sdk.rtm_v2 import RTMClient`` (``_v2`` is added in the latter one). If you would like to use the legacy version of the client, go to the next section.
 
 .. code-block:: python
 
     import os
-    from slack_sdk.rtm.v2 import RTMClient
+    from slack_sdk.rtm_v2 import RTMClient
 
     rtm = RTMClient(token=os.environ["SLACK_BOT_TOKEN"])
 
@@ -115,7 +115,7 @@ If you'd rather use ``rtm.start`` to establish the connection, which provides mo
     )
     rtm_client.start()
 
-Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ for more details. Also, note that ``slack.rtm.v2.RTMClient`` does not support ``rtm.start``.
+Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ for more details. Also, note that ``slack.rtm_v2.RTMClient`` does not support ``rtm.start``.
 
 **RTM Events**
 
