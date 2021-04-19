@@ -13,7 +13,7 @@ class IntervalRunner:
         self.target = target
         self.interval_seconds = interval_seconds
         self.thread = threading.Thread(target=self._run)
-        self.thread.setDaemon(True)
+        self.thread.daemon = True
 
     def _run(self) -> None:
         while not self.event.is_set():
