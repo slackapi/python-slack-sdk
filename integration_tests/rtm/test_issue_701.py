@@ -50,7 +50,7 @@ class TestRTMClient(unittest.TestCase):
             self.rtm_client.start()
 
         rtm = threading.Thread(target=connect)
-        rtm.setDaemon(True)
+        rtm.daemon = True
 
         rtm.start()
         time.sleep(3)
@@ -70,7 +70,7 @@ class TestRTMClient(unittest.TestCase):
         senders = []
         for sender_num in range(num_of_senders):
             sender = threading.Thread(target=sent_bulk_message)
-            sender.setDaemon(True)
+            sender.daemon = True
             sender.start()
             senders.append(sender)
 
@@ -127,7 +127,7 @@ class TestRTMClient(unittest.TestCase):
         senders = []
         for sender_num in range(num_of_senders):
             sender = threading.Thread(target=sent_bulk_message)
-            sender.setDaemon(True)
+            sender.daemon = True
             sender.start()
             senders.append(sender)
 

@@ -50,7 +50,7 @@ class TestRTMClient(unittest.TestCase):
             self.rtm_client.start()
 
         t = threading.Thread(target=connect)
-        t.setDaemon(True)
+        t.daemon = True
         t.start()
 
         try:

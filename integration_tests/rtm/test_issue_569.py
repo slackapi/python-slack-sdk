@@ -46,7 +46,7 @@ class TestRTMClient(unittest.TestCase):
             TestRTMClient.cpu_monitor = threading.Thread(
                 target=run_cpu_monitor, args=[self]
             )
-            TestRTMClient.cpu_monitor.setDaemon(True)
+            TestRTMClient.cpu_monitor.daemon = True
             TestRTMClient.cpu_monitor.start()
 
         self.rtm_client = None
@@ -91,7 +91,7 @@ class TestRTMClient(unittest.TestCase):
             self.rtm_client.start()
 
         rtm = threading.Thread(target=connect)
-        rtm.setDaemon(True)
+        rtm.daemon = True
 
         rtm.start()
         time.sleep(5)
