@@ -756,7 +756,7 @@ class UserMultiSelectElement(InputInteractiveElement):
 
 
 class ConversationFilter(JsonObject):
-    attributes = {"include", "exclude_bot_users"}
+    attributes = {"include", "exclude_bot_users", "exclude_external_shared_channels"}
     logger = logging.getLogger(__name__)
 
     def __init__(
@@ -764,9 +764,11 @@ class ConversationFilter(JsonObject):
         *,
         include: Optional[Sequence[str]] = None,
         exclude_bot_users: Optional[bool] = None,
+        exclude_external_shared_channels: Optional[bool] = None,
     ):
         self.include = include
         self.exclude_bot_users = exclude_bot_users
+        self.exclude_external_shared_channels = exclude_external_shared_channels
 
     @classmethod
     def parse(cls, filter: Union[dict, "ConversationFilter"]):  # skipcq: PYL-W0622
