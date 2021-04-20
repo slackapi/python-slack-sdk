@@ -64,7 +64,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -&gt; Optional[Bot]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id}-{team_id}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             return self.cached_bots[key]
         bot = self.underlying.find_bot(
@@ -86,7 +86,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -&gt; Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id}-{team_id}={user_id}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = self.underlying.find_installation(
@@ -97,7 +97,53 @@ class CacheableInstallationStore(InstallationStore):
         )
         if installation:
             self.cached_installations[key] = installation
-        return installation</code></pre>
+        return installation
+
+    def delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -&gt; None:
+        self.underlying.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        self.cached_bots.pop(key)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        self.underlying.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
+        self.cached_installations.pop(key)
+
+    def delete_all(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ):
+        self.underlying.delete_all(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        for key in self.cached_bots.keys():
+            if key.startswith(key_prefix):
+                self.cached_bots.pop(key)
+        for key in self.cached_installations.keys():
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)</code></pre>
 </details>
 </section>
 <section>
@@ -114,7 +160,26 @@ class CacheableInstallationStore(InstallationStore):
 <span>(</span><span>installation_store: <a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A simple memory cache wrapper for any installation stores.</p>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>A simple memory cache wrapper for any installation stores.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>installation_store</code></strong></dt>
@@ -155,7 +220,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -&gt; Optional[Bot]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id}-{team_id}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             return self.cached_bots[key]
         bot = self.underlying.find_bot(
@@ -177,7 +242,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -&gt; Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id}-{team_id}={user_id}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = self.underlying.find_installation(
@@ -188,7 +253,53 @@ class CacheableInstallationStore(InstallationStore):
         )
         if installation:
             self.cached_installations[key] = installation
-        return installation</code></pre>
+        return installation
+
+    def delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -&gt; None:
+        self.underlying.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        self.cached_bots.pop(key)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        self.underlying.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
+        self.cached_installations.pop(key)
+
+    def delete_all(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ):
+        self.underlying.delete_all(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+        key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        for key in self.cached_bots.keys():
+            if key.startswith(key_prefix):
+                self.cached_bots.pop(key)
+        for key in self.cached_installations.keys():
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -224,86 +335,19 @@ def logger(self) -&gt; Logger:
 </details>
 </dd>
 </dl>
-<h3>Methods</h3>
-<dl>
-<dt id="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_bot"><code class="name flex">
-<span>def <span class="ident">find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    if is_enterprise_install or team_id is None:
-        team_id = &#34;&#34;
-    key = f&#34;{enterprise_id}-{team_id}&#34;
-    if key in self.cached_bots:
-        return self.cached_bots[key]
-    bot = self.underlying.find_bot(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        is_enterprise_install=is_enterprise_install,
-    )
-    if bot:
-        self.cached_bots[key] = bot
-    return bot</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_installation"><code class="name flex">
-<span>def <span class="ident">find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    if is_enterprise_install or team_id is None:
-        team_id = &#34;&#34;
-    key = f&#34;{enterprise_id}-{team_id}={user_id}&#34;
-    if key in self.cached_installations:
-        return self.cached_installations[key]
-    installation = self.underlying.find_installation(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        user_id=user_id,
-        is_enterprise_install=is_enterprise_install,
-    )
-    if installation:
-        self.cached_installations[key] = installation
-    return installation</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.save"><code class="name flex">
-<span>def <span class="ident">save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save(self, installation: Installation):
-    return self.underlying.save(installation)</code></pre>
-</details>
-</dd>
-</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -326,10 +370,7 @@ def logger(self) -&gt; Logger:
 <ul class="">
 <li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.cached_bots" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.cached_bots">cached_bots</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.cached_installations" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.cached_installations">cached_installations</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_bot" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_bot">find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.logger" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.logger">logger</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.save" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.save">save</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.underlying" href="#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore.underlying">underlying</a></code></li>
 </ul>
 </li>

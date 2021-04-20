@@ -233,7 +233,80 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
             self.logger.warning(message)
-            return None</code></pre>
+            return None
+
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        return self.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/bot-&#34;,
+        )
+        for content in objects.get(&#34;Contents&#34;, []):
+            key = content.get(&#34;Key&#34;)
+            if key is not None:
+                self.logger.info(f&#34;Going to delete bot installation ({key})&#34;)
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get(&#34;Key&#34;),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    self.logger.warning(message)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/installer-{user_id or &#39;&#39;}&#34;,
+        )
+        for content in objects.get(&#34;Contents&#34;, []):
+            key = content.get(&#34;Key&#34;)
+            if key is not None:
+                self.logger.info(f&#34;Going to delete installation ({key})&#34;)
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get(&#34;Key&#34;),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    self.logger.warning(message)</code></pre>
 </details>
 </section>
 <section>
@@ -250,7 +323,25 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 <span>(</span><span>*, s3_client: botocore.client.BaseClient, bucket_name: str, client_id: str, historical_data_enabled: bool = True, logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.amazon_s3 (WARNING)&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -447,7 +538,80 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
             self.logger.warning(message)
-            return None</code></pre>
+            return None
+
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        return self.delete_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+        )
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/bot-&#34;,
+        )
+        for content in objects.get(&#34;Contents&#34;, []):
+            key = content.get(&#34;Key&#34;)
+            if key is not None:
+                self.logger.info(f&#34;Going to delete bot installation ({key})&#34;)
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get(&#34;Key&#34;),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    self.logger.warning(message)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/installer-{user_id or &#39;&#39;}&#34;,
+        )
+        for content in objects.get(&#34;Contents&#34;, []):
+            key = content.get(&#34;Key&#34;)
+            if key is not None:
+                self.logger.info(f&#34;Going to delete installation ({key})&#34;)
+                try:
+                    self.s3_client.delete_object(
+                        Bucket=self.bucket_name,
+                        Key=content.get(&#34;Key&#34;),
+                    )
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    self.logger.warning(message)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -471,241 +635,65 @@ def logger(self) -&gt; Logger:
 </details>
 </dd>
 </dl>
-<h3>Methods</h3>
-<dl>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_bot"><code class="name flex">
-<span>async def <span class="ident">async_find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    return self.find_bot(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_installation"><code class="name flex">
-<span>async def <span class="ident">async_find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    return self.find_installation(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        user_id=user_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_save"><code class="name flex">
-<span>async def <span class="ident">async_save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_save(self, installation: Installation):
-    return self.save(installation)</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_bot"><code class="name flex">
-<span>def <span class="ident">find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    none = &#34;none&#34;
-    e_id = enterprise_id or none
-    t_id = team_id or none
-    if is_enterprise_install:
-        t_id = none
-    workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
-    try:
-        fetch_response = self.s3_client.get_object(
-            Bucket=self.bucket_name,
-            Key=f&#34;{workspace_path}/bot-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 get_object response: {fetch_response}&#34;)
-        body = fetch_response[&#34;Body&#34;].read().decode(&#34;utf-8&#34;)
-        data = json.loads(body)
-        return Bot(**data)
-    except Exception as e:  # skipcq: PYL-W0703
-        message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_installation"><code class="name flex">
-<span>def <span class="ident">find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    none = &#34;none&#34;
-    e_id = enterprise_id or none
-    t_id = team_id or none
-    if is_enterprise_install:
-        t_id = none
-    workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
-    try:
-        key = (
-            f&#34;{workspace_path}/installer-{user_id}-latest&#34;
-            if user_id
-            else f&#34;{workspace_path}/installer-latest&#34;
-        )
-        fetch_response = self.s3_client.get_object(
-            Bucket=self.bucket_name,
-            Key=key,
-        )
-        self.logger.debug(f&#34;S3 get_object response: {fetch_response}&#34;)
-        body = fetch_response[&#34;Body&#34;].read().decode(&#34;utf-8&#34;)
-        data = json.loads(body)
-        return Installation(**data)
-    except Exception as e:  # skipcq: PYL-W0703
-        message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.save"><code class="name flex">
-<span>def <span class="ident">save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save(self, installation: Installation):
-    none = &#34;none&#34;
-    e_id = installation.enterprise_id or none
-    t_id = installation.team_id or none
-    workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
-
-    if self.historical_data_enabled:
-        history_version: str = str(installation.installed_at)
-        entity: str = json.dumps(installation.to_bot().__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/bot-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/bot-{history_version}&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
-        # per workspace
-        entity: str = json.dumps(installation.__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-{history_version}&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
-        # per workspace per user
-        u_id = installation.user_id or none
-        entity: str = json.dumps(installation.__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-{u_id}-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-{u_id}-{history_version}&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
-    else:
-        entity: str = json.dumps(installation.to_bot().__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/bot-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
-        # per workspace
-        entity: str = json.dumps(installation.__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
-        # per workspace per user
-        u_id = installation.user_id or none
-        entity: str = json.dumps(installation.__dict__)
-        response = self.s3_client.put_object(
-            Bucket=self.bucket_name,
-            Body=entity,
-            Key=f&#34;{workspace_path}/installer-{u_id}-latest&#34;,
-        )
-        self.logger.debug(f&#34;S3 put_object response: {response}&#34;)</code></pre>
-</details>
-</dd>
-</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -726,13 +714,7 @@ def logger(self) -&gt; Logger:
 <li>
 <h4><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore">AmazonS3InstallationStore</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_bot" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_bot">async_find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_installation" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_find_installation">async_find_installation</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_save" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.async_save">async_save</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_bot" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_bot">find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.logger" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.logger">logger</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.save" href="#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore.save">save</a></code></li>
 </ul>
 </li>
 </ul>

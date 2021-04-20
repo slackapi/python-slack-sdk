@@ -192,7 +192,7 @@ class Option(JsonObject):
         value: str,
         label: Optional[str] = None,
         text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[str] = None,
+        description: Optional[Union[str, dict, TextObject]] = None,
         url: Optional[str] = None,
         **others: dict,
     ):
@@ -232,7 +232,21 @@ class Option(JsonObject):
         self.label: Optional[str] = self._label
 
         self.value: str = value
-        self.description: Optional[str] = description
+
+        # for backward-compatibility with version 2.0-2.5, the following fields return str values
+        if isinstance(description, str):
+            self.description = description
+            self._block_description = PlainTextObject.from_str(description)
+        elif isinstance(description, dict):
+            self.description = description[&#34;text&#34;]
+            self._block_description = TextObject.parse(description)
+        elif isinstance(description, TextObject):
+            self.description = description.text
+            self._block_description = description
+        else:
+            self.description = None
+            self._block_description = None
+
         # A URL to load in the user&#39;s browser when the option is clicked.
         # The url attribute is only available in overflow menus.
         # Maximum length for this field is 3000 characters.
@@ -283,7 +297,9 @@ class Option(JsonObject):
         self.validate_json()
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
             return {&#34;label&#34;: self.label, &#34;value&#34;: self.value}
-        elif option_type == &#34;action&#34;:
+        elif option_type == &#34;action&#34; or option_type == &#34;attachment&#34;:
+            # &#34;action&#34; can be confusing but it means a legacy message action in attachments
+            # we don&#39;t remove the type name for backward compatibility though
             json = {&#34;text&#34;: self.label, &#34;value&#34;: self.value}
             if self.description is not None:
                 json[&#34;description&#34;] = self.description
@@ -294,8 +310,8 @@ class Option(JsonObject):
                 &#34;text&#34;: text.to_dict(),
                 &#34;value&#34;: self.value,
             }
-            if self.description:
-                json[&#34;description&#34;] = self.description
+            if self._block_description:
+                json[&#34;description&#34;] = self._block_description.to_dict()
             if self.url:
                 json[&#34;url&#34;] = self.url
             return json
@@ -1044,7 +1060,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.Option"><code class="flex name class">
 <span>class <span class="ident">Option</span></span>
-<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, description: Optional[str] = None, url: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, url: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments),
@@ -1095,7 +1111,7 @@ dialogs.</dd>
         value: str,
         label: Optional[str] = None,
         text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[str] = None,
+        description: Optional[Union[str, dict, TextObject]] = None,
         url: Optional[str] = None,
         **others: dict,
     ):
@@ -1135,7 +1151,21 @@ dialogs.</dd>
         self.label: Optional[str] = self._label
 
         self.value: str = value
-        self.description: Optional[str] = description
+
+        # for backward-compatibility with version 2.0-2.5, the following fields return str values
+        if isinstance(description, str):
+            self.description = description
+            self._block_description = PlainTextObject.from_str(description)
+        elif isinstance(description, dict):
+            self.description = description[&#34;text&#34;]
+            self._block_description = TextObject.parse(description)
+        elif isinstance(description, TextObject):
+            self.description = description.text
+            self._block_description = description
+        else:
+            self.description = None
+            self._block_description = None
+
         # A URL to load in the user&#39;s browser when the option is clicked.
         # The url attribute is only available in overflow menus.
         # Maximum length for this field is 3000 characters.
@@ -1186,7 +1216,9 @@ dialogs.</dd>
         self.validate_json()
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
             return {&#34;label&#34;: self.label, &#34;value&#34;: self.value}
-        elif option_type == &#34;action&#34;:
+        elif option_type == &#34;action&#34; or option_type == &#34;attachment&#34;:
+            # &#34;action&#34; can be confusing but it means a legacy message action in attachments
+            # we don&#39;t remove the type name for backward compatibility though
             json = {&#34;text&#34;: self.label, &#34;value&#34;: self.value}
             if self.description is not None:
                 json[&#34;description&#34;] = self.description
@@ -1197,8 +1229,8 @@ dialogs.</dd>
                 &#34;text&#34;: text.to_dict(),
                 &#34;value&#34;: self.value,
             }
-            if self.description:
-                json[&#34;description&#34;] = self.description
+            if self._block_description:
+                json[&#34;description&#34;] = self._block_description.to_dict()
             if self.url:
                 json[&#34;url&#34;] = self.url
             return json
@@ -1295,7 +1327,9 @@ correct shape.</p></div>
     self.validate_json()
     if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
         return {&#34;label&#34;: self.label, &#34;value&#34;: self.value}
-    elif option_type == &#34;action&#34;:
+    elif option_type == &#34;action&#34; or option_type == &#34;attachment&#34;:
+        # &#34;action&#34; can be confusing but it means a legacy message action in attachments
+        # we don&#39;t remove the type name for backward compatibility though
         json = {&#34;text&#34;: self.label, &#34;value&#34;: self.value}
         if self.description is not None:
             json[&#34;description&#34;] = self.description
@@ -1306,8 +1340,8 @@ correct shape.</p></div>
             &#34;text&#34;: text.to_dict(),
             &#34;value&#34;: self.value,
         }
-        if self.description:
-            json[&#34;description&#34;] = self.description
+        if self._block_description:
+            json[&#34;description&#34;] = self._block_description.to_dict()
         if self.url:
             json[&#34;url&#34;] = self.url
         return json</code></pre>

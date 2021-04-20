@@ -483,7 +483,77 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
             self.logger.warning(message)
-            return None</code></pre>
+            return None
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        try:
+            with self.connect() as conn:
+                conn.execute(
+                    &#34;&#34;&#34;
+                    delete
+                    from
+                        slack_bots
+                    where
+                        client_id = ?
+                        and
+                        enterprise_id = ?
+                        and
+                        team_id = ?
+                    &#34;&#34;&#34;,
+                    [self.client_id, enterprise_id or &#34;&#34;, team_id or &#34;&#34;],
+                )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f&#34;Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
+            self.logger.warning(message)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        try:
+            with self.connect() as conn:
+                if user_id is None:
+                    conn.execute(
+                        &#34;&#34;&#34;
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                        &#34;&#34;&#34;,
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id],
+                    )
+                else:
+                    conn.execute(
+                        &#34;&#34;&#34;
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                            and
+                            user_id = ?
+                        &#34;&#34;&#34;,
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id, user_id],
+                    )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f&#34;Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
+            self.logger.warning(message)</code></pre>
 </details>
 </section>
 <section>
@@ -500,7 +570,25 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 <span>(</span><span>*, database: str, client_id: str, logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.sqlite3 (WARNING)&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -948,7 +1036,77 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
             self.logger.warning(message)
-            return None</code></pre>
+            return None
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        try:
+            with self.connect() as conn:
+                conn.execute(
+                    &#34;&#34;&#34;
+                    delete
+                    from
+                        slack_bots
+                    where
+                        client_id = ?
+                        and
+                        enterprise_id = ?
+                        and
+                        team_id = ?
+                    &#34;&#34;&#34;,
+                    [self.client_id, enterprise_id or &#34;&#34;, team_id or &#34;&#34;],
+                )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f&#34;Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
+            self.logger.warning(message)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        try:
+            with self.connect() as conn:
+                if user_id is None:
+                    conn.execute(
+                        &#34;&#34;&#34;
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                        &#34;&#34;&#34;,
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id],
+                    )
+                else:
+                    conn.execute(
+                        &#34;&#34;&#34;
+                        delete
+                        from
+                            slack_installations
+                        where
+                            client_id = ?
+                            and
+                            enterprise_id = ?
+                            and
+                            team_id = ?
+                            and
+                            user_id = ?
+                        &#34;&#34;&#34;,
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id, user_id],
+                    )
+                conn.commit()
+        except Exception as e:  # skipcq: PYL-W0703
+            message = f&#34;Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
+            self.logger.warning(message)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -974,67 +1132,6 @@ def logger(self) -&gt; Logger:
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_bot"><code class="name flex">
-<span>async def <span class="ident">async_find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    return self.find_bot(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_installation"><code class="name flex">
-<span>async def <span class="ident">async_find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    return self.find_installation(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        user_id=user_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_save"><code class="name flex">
-<span>async def <span class="ident">async_save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_save(self, installation: Installation):
-    return self.save(installation)</code></pre>
-</details>
-</dd>
 <dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.connect"><code class="name flex">
 <span>def <span class="ident">connect</span></span>(<span>self) ‑> sqlite3.Connection</span>
 </code></dt>
@@ -1133,207 +1230,6 @@ def logger(self) -&gt; Logger:
         conn.commit()</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_bot"><code class="name flex">
-<span>def <span class="ident">find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    if is_enterprise_install or team_id is None:
-        team_id = &#34;&#34;
-
-    try:
-        with self.connect() as conn:
-            cur = conn.execute(
-                &#34;&#34;&#34;
-                select
-                    app_id,
-                    enterprise_id,
-                    enterprise_name,
-                    team_id,
-                    team_name,
-                    bot_token,
-                    bot_id,
-                    bot_user_id,
-                    bot_scopes,
-                    is_enterprise_install,
-                    installed_at
-                from
-                    slack_bots
-                where
-                    client_id = ?
-                    and
-                    enterprise_id = ?
-                    and
-                    team_id = ?
-                order by installed_at desc
-                limit 1
-                &#34;&#34;&#34;,
-                [self.client_id, enterprise_id or &#34;&#34;, team_id or &#34;&#34;],
-            )
-            row = cur.fetchone()
-            result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-            self.logger.debug(
-                f&#34;find_bot&#39;s query result: {result} (database: {self.database})&#34;
-            )
-            if row and len(row) &gt; 0:
-                bot = Bot(
-                    app_id=row[0],
-                    enterprise_id=row[1],
-                    enterprise_name=row[2],
-                    team_id=row[3],
-                    team_name=row[4],
-                    bot_token=row[5],
-                    bot_id=row[6],
-                    bot_user_id=row[7],
-                    bot_scopes=row[8],
-                    is_enterprise_install=row[9],
-                    installed_at=row[10],
-                )
-                return bot
-            return None
-
-    except Exception as e:  # skipcq: PYL-W0703
-        message = f&#34;Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_installation"><code class="name flex">
-<span>def <span class="ident">find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    if is_enterprise_install or team_id is None:
-        team_id = &#34;&#34;
-
-    try:
-        with self.connect() as conn:
-            row = None
-            columns = &#34;&#34;&#34;
-                app_id,
-                enterprise_id,
-                enterprise_name,
-                enterprise_url,
-                team_id,
-                team_name,
-                bot_token,
-                bot_id,
-                bot_user_id,
-                bot_scopes,
-                user_id,
-                user_token,
-                user_scopes,
-                incoming_webhook_url,
-                incoming_webhook_channel,
-                incoming_webhook_channel_id,
-                incoming_webhook_configuration_url,
-                is_enterprise_install,
-                token_type,
-                installed_at
-            &#34;&#34;&#34;
-            if user_id is None:
-                cur = conn.execute(
-                    f&#34;&#34;&#34;
-                    select
-                        {columns}
-                    from
-                        slack_installations
-                    where
-                        client_id = ?
-                        and
-                        enterprise_id = ?
-                        and
-                        team_id = ?
-                    order by installed_at desc
-                    limit 1
-                    &#34;&#34;&#34;,
-                    [self.client_id, enterprise_id or &#34;&#34;, team_id],
-                )
-                row = cur.fetchone()
-            else:
-                cur = conn.execute(
-                    f&#34;&#34;&#34;
-                    select
-                        {columns}
-                    from
-                        slack_installations
-                    where
-                        client_id = ?
-                        and
-                        enterprise_id = ?
-                        and
-                        team_id = ?
-                        and
-                        user_id = ?
-                    order by installed_at desc
-                    limit 1
-                    &#34;&#34;&#34;,
-                    [self.client_id, enterprise_id or &#34;&#34;, team_id, user_id],
-                )
-                row = cur.fetchone()
-
-            if row is None:
-                return None
-
-            result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-            self.logger.debug(
-                f&#34;find_installation&#39;s query result: {result} (database: {self.database})&#34;
-            )
-            if row and len(row) &gt; 0:
-                installation = Installation(
-                    app_id=row[0],
-                    enterprise_id=row[1],
-                    enterprise_name=row[2],
-                    enterprise_url=row[3],
-                    team_id=row[4],
-                    team_name=row[5],
-                    bot_token=row[6],
-                    bot_id=row[7],
-                    bot_user_id=row[8],
-                    bot_scopes=row[9],
-                    user_id=row[10],
-                    user_token=row[11],
-                    user_scopes=row[12],
-                    incoming_webhook_url=row[13],
-                    incoming_webhook_channel=row[14],
-                    incoming_webhook_channel_id=row[15],
-                    incoming_webhook_configuration_url=row[16],
-                    is_enterprise_install=row[17],
-                    token_type=row[18],
-                    installed_at=row[19],
-                )
-                return installation
-            return None
-
-    except Exception as e:  # skipcq: PYL-W0703
-        message = f&#34;Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
 <dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.init"><code class="name flex">
 <span>def <span class="ident">init</span></span>(<span>self)</span>
 </code></dt>
@@ -1356,141 +1252,50 @@ def logger(self) -&gt; Logger:
     self.init_called = True</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.save"><code class="name flex">
-<span>def <span class="ident">save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save(self, installation: Installation):
-    with self.connect() as conn:
-        conn.execute(
-            &#34;&#34;&#34;
-            insert into slack_bots (
-                client_id,
-                app_id,
-                enterprise_id,
-                enterprise_name,
-                team_id,
-                team_name,
-                bot_token,
-                bot_id,
-                bot_user_id,
-                bot_scopes,
-                is_enterprise_install
-            )
-            values
-            (
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?
-            );
-            &#34;&#34;&#34;,
-            [
-                self.client_id,
-                installation.app_id,
-                installation.enterprise_id or &#34;&#34;,
-                installation.enterprise_name,
-                installation.team_id or &#34;&#34;,
-                installation.team_name,
-                installation.bot_token,
-                installation.bot_id,
-                installation.bot_user_id,
-                &#34;,&#34;.join(installation.bot_scopes),
-                installation.is_enterprise_install,
-            ],
-        )
-        conn.execute(
-            &#34;&#34;&#34;
-            insert into slack_installations (
-                client_id,
-                app_id,
-                enterprise_id,
-                enterprise_name,
-                enterprise_url,
-                team_id,
-                team_name,
-                bot_token,
-                bot_id,
-                bot_user_id,
-                bot_scopes,
-                user_id,
-                user_token,
-                user_scopes,
-                incoming_webhook_url,
-                incoming_webhook_channel,
-                incoming_webhook_channel_id,
-                incoming_webhook_configuration_url,
-                is_enterprise_install,
-                token_type
-            )
-            values
-            (
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?
-            );
-            &#34;&#34;&#34;,
-            [
-                self.client_id,
-                installation.app_id,
-                installation.enterprise_id or &#34;&#34;,
-                installation.enterprise_name,
-                installation.enterprise_url,
-                installation.team_id or &#34;&#34;,
-                installation.team_name,
-                installation.bot_token,
-                installation.bot_id,
-                installation.bot_user_id,
-                &#34;,&#34;.join(installation.bot_scopes),
-                installation.user_id,
-                installation.user_token,
-                &#34;,&#34;.join(installation.user_scopes)
-                if installation.user_scopes
-                else None,
-                installation.incoming_webhook_url,
-                installation.incoming_webhook_channel,
-                installation.incoming_webhook_channel_id,
-                installation.incoming_webhook_configuration_url,
-                1 if installation.is_enterprise_install else 0,
-                installation.token_type,
-            ],
-        )
-        self.logger.debug(
-            f&#34;New rows in slack_bots and slack_installations have been created (database: {self.database})&#34;
-        )
-        conn.commit()</code></pre>
-</details>
-</dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -1511,16 +1316,10 @@ def logger(self) -&gt; Logger:
 <li>
 <h4><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore">SQLite3InstallationStore</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_bot" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_bot">async_find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_installation" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_find_installation">async_find_installation</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_save" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.async_save">async_save</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.connect" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.connect">connect</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.create_tables" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.create_tables">create_tables</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_bot" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_bot">find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.init" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.init">init</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.logger" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.logger">logger</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.save" href="#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore.save">save</a></code></li>
 </ul>
 </li>
 </ul>
