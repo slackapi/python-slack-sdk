@@ -305,7 +305,6 @@ class InputBlock(Block):
     ):
         """A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
-        Important Note: Input blocks are only available in modals.
         https://api.slack.com/reference/block-kit/blocks#input
         """
         super().__init__(type=self.type, block_id=block_id)
