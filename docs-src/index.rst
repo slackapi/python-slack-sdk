@@ -37,7 +37,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | SCIM API                       | Utilize the SCIM APIs for provisioning and managing user accounts and groups.                 | ``slack_sdk.scim``                 |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm.v2``               |
+| RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm_v2``               |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Request Signature Verification | Verify incoming requests from the Slack API servers.                                          | ``slack_sdk.signature``            |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
