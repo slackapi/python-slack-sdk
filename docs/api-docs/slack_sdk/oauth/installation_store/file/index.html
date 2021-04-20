@@ -26,8 +26,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import json
+<pre><code class="python">import glob
+import json
 import logging
+import os
 from logging import Logger
 from pathlib import Path
 from typing import Optional, Union
@@ -187,6 +189,55 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.warning(message)
             return None
 
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/bot-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id, team_id=team_id, user_id=user_id
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if user_id is not None:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-*&#34;
+        else:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    def _delete_by_glob(self, e_id: str, t_id: str, filepath_glob: str):
+        for filepath in glob.glob(filepath_glob):
+            try:
+                os.remove(filepath)
+            except FileNotFoundError as e:
+                message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                self.logger.warning(message)
+
     @staticmethod
     def _mkdir(path: Union[str, Path]):
         if isinstance(path, str):
@@ -208,7 +259,25 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
 <span>(</span><span>*, base_dir: str = '/Users/ksera/.bolt-app-installation', historical_data_enabled: bool = True, client_id: Optional[str] = None, logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.file (WARNING)&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -360,6 +429,55 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.warning(message)
             return None
 
+    async def async_delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
+    def delete_bot(
+        self, *, enterprise_id: Optional[str], team_id: Optional[str]
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/bot-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(
+            enterprise_id=enterprise_id, team_id=team_id, user_id=user_id
+        )
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if user_id is not None:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-*&#34;
+        else:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    def _delete_by_glob(self, e_id: str, t_id: str, filepath_glob: str):
+        for filepath in glob.glob(filepath_glob):
+            try:
+                os.remove(filepath)
+            except FileNotFoundError as e:
+                message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                self.logger.warning(message)
+
     @staticmethod
     def _mkdir(path: Union[str, Path]):
         if isinstance(path, str):
@@ -388,194 +506,65 @@ def logger(self) -&gt; Logger:
 </details>
 </dd>
 </dl>
-<h3>Methods</h3>
-<dl>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_bot"><code class="name flex">
-<span>async def <span class="ident">async_find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    return self.find_bot(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_installation"><code class="name flex">
-<span>async def <span class="ident">async_find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    return self.find_installation(
-        enterprise_id=enterprise_id,
-        team_id=team_id,
-        user_id=user_id,
-        is_enterprise_install=is_enterprise_install,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_save"><code class="name flex">
-<span>async def <span class="ident">async_save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def async_save(self, installation: Installation):
-    return self.save(installation)</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.find_bot"><code class="name flex">
-<span>def <span class="ident">find_bot</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_bot(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Bot]:
-    none = &#34;none&#34;
-    e_id = enterprise_id or none
-    t_id = team_id or none
-    if is_enterprise_install:
-        t_id = none
-    bot_filepath = f&#34;{self.base_dir}/{e_id}-{t_id}/bot-latest&#34;
-    try:
-        with open(bot_filepath) as f:
-            data = json.loads(f.read())
-            return Bot(**data)
-    except FileNotFoundError as e:
-        message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.find_installation"><code class="name flex">
-<span>def <span class="ident">find_installation</span></span>(<span>self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None, is_enterprise_install: Optional[bool] = False) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_installation(
-    self,
-    *,
-    enterprise_id: Optional[str],
-    team_id: Optional[str],
-    user_id: Optional[str] = None,
-    is_enterprise_install: Optional[bool] = False,
-) -&gt; Optional[Installation]:
-    none = &#34;none&#34;
-    e_id = enterprise_id or none
-    t_id = team_id or none
-    if is_enterprise_install:
-        t_id = none
-    installation_filepath = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-latest&#34;
-    if user_id is not None:
-        installation_filepath = (
-            f&#34;{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-latest&#34;
-        )
-
-    try:
-        with open(installation_filepath) as f:
-            data = json.loads(f.read())
-            return Installation(**data)
-    except FileNotFoundError as e:
-        message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-        self.logger.warning(message)
-        return None</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.oauth.installation_store.file.FileInstallationStore.save"><code class="name flex">
-<span>def <span class="ident">save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save(self, installation: Installation):
-    none = &#34;none&#34;
-    e_id = installation.enterprise_id or none
-    t_id = installation.team_id or none
-    team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
-    self._mkdir(team_installation_dir)
-
-    if self.historical_data_enabled:
-        history_version: str = str(installation.installed_at)
-
-        entity: str = json.dumps(installation.to_bot().__dict__)
-        with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-            f.write(entity)
-        with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
-            f.write(entity)
-
-        # per workspace
-        entity: str = json.dumps(installation.__dict__)
-        with open(f&#34;{team_installation_dir}/installer-latest&#34;, &#34;w&#34;) as f:
-            f.write(entity)
-        with open(f&#34;{team_installation_dir}/installer-{history_version}&#34;, &#34;w&#34;) as f:
-            f.write(entity)
-
-        # per workspace per user
-        u_id = installation.user_id or none
-        entity: str = json.dumps(installation.__dict__)
-        with open(f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;, &#34;w&#34;) as f:
-            f.write(entity)
-        with open(
-            f&#34;{team_installation_dir}/installer-{u_id}-{history_version}&#34;, &#34;w&#34;
-        ) as f:
-            f.write(entity)
-
-    else:
-        with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            f.write(entity)
-
-        u_id = installation.user_id or none
-        installer_filepath = f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;
-        with open(installer_filepath, &#34;w&#34;) as f:
-            entity: str = json.dumps(installation.__dict__)
-            f.write(entity)</code></pre>
-</details>
-</dd>
-</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -596,13 +585,7 @@ def logger(self) -&gt; Logger:
 <li>
 <h4><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore">FileInstallationStore</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_bot" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_bot">async_find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_installation" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.async_find_installation">async_find_installation</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.async_save" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.async_save">async_save</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.find_bot" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.find_bot">find_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.logger" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.logger">logger</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore.save" href="#slack_sdk.oauth.installation_store.file.FileInstallationStore.save">save</a></code></li>
 </ul>
 </li>
 </ul>

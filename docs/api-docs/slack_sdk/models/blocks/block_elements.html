@@ -784,7 +784,7 @@ class UserMultiSelectElement(InputInteractiveElement):
 
 
 class ConversationFilter(JsonObject):
-    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;}
+    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;, &#34;exclude_external_shared_channels&#34;}
     logger = logging.getLogger(__name__)
 
     def __init__(
@@ -792,9 +792,11 @@ class ConversationFilter(JsonObject):
         *,
         include: Optional[Sequence[str]] = None,
         exclude_bot_users: Optional[bool] = None,
+        exclude_external_shared_channels: Optional[bool] = None,
     ):
         self.include = include
         self.exclude_bot_users = exclude_bot_users
+        self.exclude_external_shared_channels = exclude_external_shared_channels
 
     @classmethod
     def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
@@ -1721,7 +1723,7 @@ visible to the current user in the active workspace.
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationFilter"><code class="flex name class">
 <span>class <span class="ident">ConversationFilter</span></span>
-<span>(</span><span>*, include: Optional[Sequence[str]] = None, exclude_bot_users: Optional[bool] = None)</span>
+<span>(</span><span>*, include: Optional[Sequence[str]] = None, exclude_bot_users: Optional[bool] = None, exclude_external_shared_channels: Optional[bool] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p></div>
@@ -1730,7 +1732,7 @@ visible to the current user in the active workspace.
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ConversationFilter(JsonObject):
-    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;}
+    attributes = {&#34;include&#34;, &#34;exclude_bot_users&#34;, &#34;exclude_external_shared_channels&#34;}
     logger = logging.getLogger(__name__)
 
     def __init__(
@@ -1738,9 +1740,11 @@ visible to the current user in the active workspace.
         *,
         include: Optional[Sequence[str]] = None,
         exclude_bot_users: Optional[bool] = None,
+        exclude_external_shared_channels: Optional[bool] = None,
     ):
         self.include = include
         self.exclude_bot_users = exclude_bot_users
+        self.exclude_external_shared_channels = exclude_external_shared_channels
 
     @classmethod
     def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
