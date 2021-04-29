@@ -305,7 +305,7 @@ setup(
             "SQLAlchemy>=1,<2",
             # Socket Mode
             "websockets>=8,<9",
-            "websocket-client>=0.57<1",
+            "websocket-client>=0.57,<1",
         ],
     },
     setup_requires=pytest_runner,
