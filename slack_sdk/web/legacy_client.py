@@ -159,6 +159,25 @@ class LegacyWebClient(LegacyBaseClient):
             "admin.apps.restricted.list", http_verb="GET", params=kwargs
         )
 
+    def admin_apps_uninstall(
+        self,
+        *,
+        app_id: str,
+        enterprise_id: Optional[str] = None,
+        team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs
+    ) -> Union[Future, SlackResponse]:
+        """Uninstall an app from one or many workspaces, or an entire enterprise organization."""
+        kwargs.update({"app_id": app_id})
+        if enterprise_id is not None:
+            kwargs.update({"enterprise_id": enterprise_id})
+        if team_ids is not None:
+            if isinstance(team_ids, (list, Tuple)):
+                kwargs.update({"team_ids": ",".join(team_ids)})
+            else:
+                kwargs.update({"team_ids": team_ids})
+        return self.api_call("admin.apps.uninstall", http_verb="POST", params=kwargs)
+
     def admin_barriers_create(
         self,
         *,
