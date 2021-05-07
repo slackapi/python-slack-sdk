@@ -378,6 +378,48 @@ class DatePickerElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
+# TimePicker
+# -------------------------------------------------
+
+
+class TimePickerElement(InputInteractiveElement):
+    type = "timepicker"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"initial_time"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_time: Optional[str] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        """
+        An element which allows selection of a time of day.
+        https://api.slack.com/reference/block-kit/block-elements#timepicker
+        """
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            confirm=ConfirmObject.parse(confirm),
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_time = initial_time
+
+    @JsonValidator("initial_time attribute must be in format 'HH:mm'")
+    def _validate_initial_time_valid(self):
+        return self.initial_time is None or re.match(
+            r"([0-1][0-9]|2[0-3]):([0-5][0-9])", self.initial_time
+        )
+
+
+# -------------------------------------------------
 # Image
 # -------------------------------------------------
 
