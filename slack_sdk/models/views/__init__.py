@@ -73,6 +73,8 @@ class View(JsonObject):
         self.blocks = Block.parse_all(blocks)
         self.private_metadata = private_metadata
         self.state = state
+        if self.state is not None and isinstance(self.state, dict):
+            self.state = ViewState(**self.state)
         self.hash = hash
         self.clear_on_close = clear_on_close
         self.notify_on_close = notify_on_close
@@ -155,29 +157,30 @@ class ViewState(JsonObject):
     ):
         value_objects: Dict[str, Dict[str, ViewStateValue]] = {}
         new_state_values = copy.copy(values)
-        for block_id, actions in new_state_values.items():
-            if actions is None:  # skipcq: PYL-R1724
-                continue
-            elif isinstance(actions, dict):
-                new_actions = copy.copy(actions)
-                for action_id, v in actions.items():
-                    if isinstance(v, dict):
-                        d = copy.copy(v)
-                        value_object = ViewStateValue(**d)
-                    elif isinstance(v, ViewStateValue):
-                        value_object = v
-                    else:
-                        self._show_warning_about_unknown(v)
-                        continue
-                    new_actions[action_id] = value_object
-                value_objects[block_id] = new_actions
-            else:
-                self._show_warning_about_unknown(v)
+        if isinstance(new_state_values, dict):  # just in case
+            for block_id, actions in new_state_values.items():
+                if actions is None:  # skipcq: PYL-R1724
+                    continue
+                elif isinstance(actions, dict):
+                    new_actions = copy.copy(actions)
+                    for action_id, v in actions.items():
+                        if isinstance(v, dict):
+                            d = copy.copy(v)
+                            value_object = ViewStateValue(**d)
+                        elif isinstance(v, ViewStateValue):
+                            value_object = v
+                        else:
+                            self._show_warning_about_unknown(v)
+                            continue
+                        new_actions[action_id] = value_object
+                    value_objects[block_id] = new_actions
+                else:
+                    self._show_warning_about_unknown(v)
         self.values = value_objects
 
     def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:  # type: ignore
         self.validate_json()
-        if self.values:  # skipcq: PYL-R1705
+        if self.values is not None:
             dict_values: Dict[str, Dict[str, dict]] = {}
             for block_id, actions in self.values.items():
                 if actions:

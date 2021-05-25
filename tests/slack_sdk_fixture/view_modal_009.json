@@ -35,7 +35,7 @@
   "callback_id": "view_4",
   "external_id": "some-unique-id",
   "state": {
-    "values": []
+    "values": {}
   },
   "hash": "1569362015.55b5e41b",
   "clear_on_close": true,

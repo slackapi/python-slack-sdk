@@ -30,6 +30,7 @@ class ViewTests(unittest.TestCase):
     def verify_loaded_view_object(self, file):
         input = json.load(file)
         view = View(**input)
+        self.assertTrue(view.state is None or isinstance(view.state, ViewState))
         self.assertDictEqual(input, view.to_dict())
 
     # --------------------------------
@@ -110,6 +111,18 @@ class ViewTests(unittest.TestCase):
                     ),
                 ),
             ],
+            state=ViewState(
+                values={
+                    "b1": {
+                        "a1": ViewStateValue(type="plain_text_input", value="Title")
+                    },
+                    "b2": {
+                        "a2": ViewStateValue(
+                            type="plain_text_input", value="Description"
+                        )
+                    },
+                }
+            ),
         )
         modal_view.validate_json()
 

@@ -30,7 +30,7 @@
   "callback_id": "identify_your_modals",
   "external_id": "some-unique-id",
   "state": {
-    "values": []
+    "values": {}
   },
   "hash": "156772938.1827394",
   "clear_on_close": false,
