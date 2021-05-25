@@ -207,6 +207,7 @@ class TestAsyncWebhook(unittest.TestCase):
         )
         self.assertEqual("ok", resp.body)
 
+    @async_test
     async def test_if_it_uses_custom_logger_issue_921(self):
         logger = CustomLogger("test-logger")
         client = AsyncWebhookClient(url="http://localhost:8888", logger=logger)
