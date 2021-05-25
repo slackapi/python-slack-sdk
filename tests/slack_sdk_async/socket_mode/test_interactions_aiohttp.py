@@ -12,6 +12,7 @@ from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
 
 from slack_sdk.socket_mode.aiohttp import SocketModeClient
 from slack_sdk.web.async_client import AsyncWebClient
+from tests.helpers import is_ci_unstable_test_skip_enabled
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
@@ -39,6 +40,8 @@ class TestInteractionsAiohttp(unittest.TestCase):
 
     @async_test
     async def test_interactions(self):
+        if is_ci_unstable_test_skip_enabled():
+            return
         t = Thread(target=start_socket_mode_server(self, 3001))
         t.daemon = True
         t.start()

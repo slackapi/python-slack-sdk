@@ -16,6 +16,7 @@ jobs:
         python-version: ['3.6', '3.7', '3.8', '3.9']
     env:
       PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
+      CI_UNSTABLE_TESTS_SKIP_ENABLED: '1'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}

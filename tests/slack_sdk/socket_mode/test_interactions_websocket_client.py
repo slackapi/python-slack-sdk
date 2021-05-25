@@ -10,6 +10,7 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 
 from slack_sdk import WebClient
 from slack_sdk.socket_mode.websocket_client import SocketModeClient
+from tests.helpers import is_ci_unstable_test_skip_enabled
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
@@ -35,6 +36,8 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
         cleanup_mock_web_api_server(self)
 
     def test_interactions(self):
+        if is_ci_unstable_test_skip_enabled():
+            return
         t = Thread(target=start_socket_mode_server(self, 3012))
         t.daemon = True
         t.start()

@@ -39,3 +39,7 @@ def get_mock_server_mode() -> str:
         return "threading"
     else:
         return mode
+
+
+def is_ci_unstable_test_skip_enabled() -> bool:
+    return os.environ.get("CI_UNSTABLE_TESTS_SKIP_ENABLED") == "1"
