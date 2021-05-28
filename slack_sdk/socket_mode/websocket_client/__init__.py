@@ -167,9 +167,15 @@ class SocketModeClient(BaseSocketModeClient):
             for listener in self.on_error_listeners:
                 listener(ws, error)
 
-        def on_close(ws: WebSocketApp):
+        def on_close(
+            ws: WebSocketApp,
+            close_status_code: Optional[int] = None,
+            close_msg: Optional[str] = None,
+        ):
             if self.logger.level <= logging.DEBUG:
-                self.logger.debug("on_close invoked")
+                self.logger.debug(
+                    f"on_close invoked: (code: {close_status_code}, message: {close_msg})"
+                )
             if self.auto_reconnect_enabled:
                 self.logger.info("Received CLOSE event. Going to reconnect...")
                 self.connect_to_new_endpoint()
