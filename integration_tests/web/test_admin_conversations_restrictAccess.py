@@ -38,7 +38,12 @@ class TestWebClient(unittest.TestCase):
                 exclude_archived=True, limit=100, types="private_channel"
             )
             self.channel_id = next(
-                (c["id"] for c in convs["channels"] if c["name"] != "general" and not c["is_ext_shared"]), None
+                (
+                    c["id"]
+                    for c in convs["channels"]
+                    if c["name"] != "general" and not c["is_ext_shared"]
+                ),
+                None,
             )
             if self.channel_id is None:
                 millis = int(round(time.time() * 1000))

@@ -23,12 +23,12 @@ validate_dependencies = [
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=3,<4",
-    "black==20.8b1",
+    "black==21.5b1",
     "psutil>=5,<6",
     "databases>=0.3",
 ]
 codegen_dependencies = [
-    "black==20.8b1",
+    "black==21.5b1",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)

@@ -39,7 +39,7 @@ class TestWebClient(unittest.TestCase):
         creation = client.admin_barriers_create(
             primary_usergroup_id=self.idp_usergroup_id1,
             barriered_from_usergroup_ids=[self.idp_usergroup_id2],
-            restricted_subjects=["call", "im", "mpim"]
+            restricted_subjects=["call", "im", "mpim"],
         )
         self.assertIsNotNone(creation)
 
@@ -47,7 +47,7 @@ class TestWebClient(unittest.TestCase):
             barrier_id=creation["barrier"]["id"],
             primary_usergroup_id=self.idp_usergroup_id2,
             barriered_from_usergroup_ids=[self.idp_usergroup_id1],
-            restricted_subjects=["call", "im", "mpim"]
+            restricted_subjects=["call", "im", "mpim"],
         )
         self.assertIsNotNone(modification)
 
@@ -64,7 +64,7 @@ class TestWebClient(unittest.TestCase):
         creation = await client.admin_barriers_create(
             primary_usergroup_id=self.idp_usergroup_id1,
             barriered_from_usergroup_ids=[self.idp_usergroup_id2],
-            restricted_subjects=["call", "im", "mpim"]
+            restricted_subjects=["call", "im", "mpim"],
         )
         self.assertIsNotNone(creation)
 
@@ -72,6 +72,6 @@ class TestWebClient(unittest.TestCase):
             barrier_id=creation["barrier"]["id"],
             primary_usergroup_id=self.idp_usergroup_id2,
             barriered_from_usergroup_ids=[self.idp_usergroup_id1],
-            restricted_subjects=["call", "im", "mpim"]
+            restricted_subjects=["call", "im", "mpim"],
         )
         self.assertIsNotNone(modification)
