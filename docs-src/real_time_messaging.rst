@@ -82,7 +82,7 @@ Below is a code snippet that uses the legacy version of ``RTMClient``. For new a
     rtm_client = RTMClient(token=slack_token)
     rtm_client.start()
 
-**rtm.start vs rtm.connect**
+**rtm.start vs rtm.connect (v1 client)**
 
 By default, the RTM client uses ``rtm.connect`` to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.
 
@@ -91,7 +91,7 @@ If you'd rather use ``rtm.start`` to establish the connection, which provides mo
 .. code-block:: python
 
     import os
-    from slack_sdk import RTMClient
+    from slack_sdk.rtm import RTMClient
 
     @RTMClient.run_on(event="message")
     def say_hello(**payload):
