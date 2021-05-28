@@ -10,7 +10,9 @@ from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
 
 class TestAuditLogsClient(unittest.TestCase):
     def setUp(self):
-        self.client = AsyncAuditLogsClient(token=os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN])
+        self.client = AsyncAuditLogsClient(
+            token=os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
+        )
 
     def tearDown(self):
         pass

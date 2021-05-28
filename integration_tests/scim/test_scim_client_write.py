@@ -52,25 +52,31 @@ class TestSCIMClient(unittest.TestCase):
 
         # Patch using dict
         # snake_cased keys will be automatically converted to camelCase
-        patch_result_2 = self.client.patch_user(id=creation.user.id, partial_user={
-            "user_name": f"user_{now}_3",
-            "name": {
-                "given_name": "Kaz",
-                "family_name": "Sera",
-            }
-        })
+        patch_result_2 = self.client.patch_user(
+            id=creation.user.id,
+            partial_user={
+                "user_name": f"user_{now}_3",
+                "name": {
+                    "given_name": "Kaz",
+                    "family_name": "Sera",
+                },
+            },
+        )
         self.assertEqual(patch_result_2.status_code, 200)
         self.assertEqual(patch_result_2.user.user_name, f"user_{now}_3")
         self.assertEqual(patch_result_2.user.name.given_name, "Kaz")
 
         # using camelCase also works
-        patch_result_3 = self.client.patch_user(id=creation.user.id, partial_user={
-            "userName": f"user_{now}_4",
-            "name": {
-                "givenName": "Kazuhiro",
-                "familyName": "Sera",
-            }
-        })
+        patch_result_3 = self.client.patch_user(
+            id=creation.user.id,
+            partial_user={
+                "userName": f"user_{now}_4",
+                "name": {
+                    "givenName": "Kazuhiro",
+                    "familyName": "Sera",
+                },
+            },
+        )
         self.assertEqual(patch_result_3.status_code, 200)
         self.assertEqual(patch_result_3.user.user_name, f"user_{now}_4")
         self.assertEqual(patch_result_3.user.name.given_name, "Kazuhiro")
