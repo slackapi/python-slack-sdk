@@ -304,7 +304,7 @@ setup(
             # InstallationStore/OAuthStateStore
             "SQLAlchemy>=1,<2",
             # Socket Mode
-            "websockets>=8,<9",
+            "websockets>=9.1,<10",
             "websocket-client>=0.57,<1",
         ],
     },
