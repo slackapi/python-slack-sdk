@@ -175,6 +175,25 @@ class WebClient(BaseClient):
             &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
         )
 
+    def admin_apps_uninstall(
+        self,
+        *,
+        app_id: str,
+        enterprise_id: Optional[str] = None,
+        team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id})
+        if enterprise_id is not None:
+            kwargs.update({&#34;enterprise_id&#34;: enterprise_id})
+        if team_ids is not None:
+            if isinstance(team_ids, (list, Tuple)):
+                kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+            else:
+                kwargs.update({&#34;team_ids&#34;: team_ids})
+        return self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
     def admin_barriers_create(
         self,
         *,
@@ -2668,6 +2687,25 @@ removed at anytime.</p></div>
             &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
         )
 
+    def admin_apps_uninstall(
+        self,
+        *,
+        app_id: str,
+        enterprise_id: Optional[str] = None,
+        team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id})
+        if enterprise_id is not None:
+            kwargs.update({&#34;enterprise_id&#34;: enterprise_id})
+        if team_ids is not None:
+            if isinstance(team_ids, (list, Tuple)):
+                kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+            else:
+                kwargs.update({&#34;team_ids&#34;: team_ids})
+        return self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
     def admin_barriers_create(
         self,
         *,
@@ -5143,6 +5181,35 @@ or by the admin.apps.requests.list method.</p>
     return self.api_call(
         &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
     )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.admin_apps_uninstall"><code class="name flex">
+<span>def <span class="ident">admin_apps_uninstall</span></span>(<span>self, *, app_id: str, enterprise_id: Optional[str] = None, team_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uninstall an app from one or many workspaces, or an entire enterprise organization.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_apps_uninstall(
+    self,
+    *,
+    app_id: str,
+    enterprise_id: Optional[str] = None,
+    team_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
+    kwargs.update({&#34;app_id&#34;: app_id})
+    if enterprise_id is not None:
+        kwargs.update({&#34;enterprise_id&#34;: enterprise_id})
+    if team_ids is not None:
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+        else:
+            kwargs.update({&#34;team_ids&#34;: team_ids})
+    return self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.admin_barriers_create"><code class="name flex">
@@ -10793,6 +10860,7 @@ e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]</dd>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_apps_requests_list" href="#slack_sdk.web.client.WebClient.admin_apps_requests_list">admin_apps_requests_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_apps_restrict" href="#slack_sdk.web.client.WebClient.admin_apps_restrict">admin_apps_restrict</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_apps_restricted_list" href="#slack_sdk.web.client.WebClient.admin_apps_restricted_list">admin_apps_restricted_list</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_apps_uninstall" href="#slack_sdk.web.client.WebClient.admin_apps_uninstall">admin_apps_uninstall</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_barriers_create" href="#slack_sdk.web.client.WebClient.admin_barriers_create">admin_barriers_create</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_barriers_delete" href="#slack_sdk.web.client.WebClient.admin_barriers_delete">admin_barriers_delete</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_barriers_list" href="#slack_sdk.web.client.WebClient.admin_barriers_list">admin_barriers_list</a></code></li>
