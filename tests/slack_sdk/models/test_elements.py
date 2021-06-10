@@ -23,6 +23,8 @@ from slack_sdk.models.blocks import (
     ChannelSelectElement,
     ConfirmObject,
     Option,
+    InputInteractiveElement,
+    InteractiveElement,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -30,6 +32,26 @@ from . import STRING_3001_CHARS, STRING_301_CHARS
 # -------------------------------------------------
 # Interactive Elements
 # -------------------------------------------------
+
+
+class InteractiveElementTests(unittest.TestCase):
+    def test_with_interactive_element(self):
+        input = {
+            "type": "plain_text_input",
+            "action_id": "plain_input",
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+        }
+        # Any properties should be lost
+        self.assertDictEqual(input, InteractiveElement(**input).to_dict())
+
+    def test_with_input_interactive_element(self):
+        input = {
+            "type": "plain_text_input",
+            "action_id": "plain_input",
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+        }
+        # Any properties should be lost
+        self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
 
 
 class InteractiveElementTests(unittest.TestCase):

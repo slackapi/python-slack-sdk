@@ -149,10 +149,17 @@ class InteractiveElement(BlockElement):
         subtype: Optional[str] = None,
         **others: dict,
     ):
+        """An interactive block element.
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        """
         if subtype:
             self._subtype_warning()
         super().__init__(type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don't intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It's fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.action_id = action_id
 
@@ -190,11 +197,17 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
-        """InteractiveElement that is usable in input blocks"""
+        """InteractiveElement that is usable in input blocks
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        """
         if subtype:
             self._subtype_warning()
         super().__init__(action_id=action_id, type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don't intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It's fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
