@@ -41,7 +41,7 @@ class InteractiveElementTests(unittest.TestCase):
             "action_id": "plain_input",
             "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
         }
-        # Any properties should be lost
+        # Any properties should not be lost
         self.assertDictEqual(input, InteractiveElement(**input).to_dict())
 
     def test_with_input_interactive_element(self):
@@ -50,7 +50,7 @@ class InteractiveElementTests(unittest.TestCase):
             "action_id": "plain_input",
             "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
         }
-        # Any properties should be lost
+        # Any properties should not be lost
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
 
 
