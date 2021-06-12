@@ -38,7 +38,6 @@ Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The we
 * [Basic Usage of the Web Client](#basic-usage-of-the-web-client)
   * [Sending a message to Slack](#sending-a-message-to-slack)
   * [Uploading files to Slack](#uploading-files-to-slack)
-* [Basic Usage of the RTM Client](#basic-usage-of-the-rtm-client)
 * [Async usage](#async-usage)
   * [WebClient as a script](#asyncwebclient-in-a-script)
   * [WebClient in a framework](#asyncwebclient-in-a-framework)
