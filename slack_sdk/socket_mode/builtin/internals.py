@@ -81,7 +81,7 @@ def _establish_new_socket_connection(
                 f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})"
             )
 
-        sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
+        sock = ssl.create_default_context().wrap_socket(
             sock,
             do_handshake_on_connect=True,
             suppress_ragged_eofs=True,
@@ -98,7 +98,7 @@ def _establish_new_socket_connection(
         return sock
 
     sock = socket.create_connection((server_hostname, server_port), receive_timeout)
-    sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
+    sock = ssl.create_default_context().wrap_socket(
         sock,
         do_handshake_on_connect=True,
         suppress_ragged_eofs=True,
