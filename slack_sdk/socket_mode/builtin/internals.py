@@ -51,20 +51,11 @@ def _establish_new_socket_connection(
     if proxy is not None:
         parsed_proxy = urlparse(proxy)
         proxy_host, proxy_port = parsed_proxy.hostname, parsed_proxy.port or 80
-        proxy_addr = socket.getaddrinfo(
-            proxy_host,
-            proxy_port,
-            0,
-            socket.SOCK_STREAM,
-            socket.SOL_TCP,
-        )[0]
-        sock = socket.socket(proxy_addr[0], proxy_addr[1], proxy_addr[2])
+        sock = socket.create_connection((proxy_host, proxy_port), receive_timeout)
         if hasattr(socket, "TCP_NODELAY"):
             sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         if hasattr(socket, "SO_KEEPALIVE"):
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-        sock.settimeout(receive_timeout)
-        sock.connect(proxy_addr[4])  # proxy address
         message = [f"CONNECT {server_hostname}:{server_port} HTTP/1.0"]
         if parsed_proxy.username is not None and parsed_proxy.password is not None:
             # In the case where the proxy is "http://{username}:{password}@{hostname}:{port}"
@@ -99,27 +90,20 @@ def _establish_new_socket_connection(
         return sock
 
     if server_port != 443:
-        addr = socket.getaddrinfo(
-            server_hostname, server_port, 0, socket.SOCK_STREAM, socket.SOL_TCP
-        )[0]
         # only for library testing
         logger.info(
             f"Using non-ssl socket to connect ({server_hostname}:{server_port})"
         )
-        sock = Socket(addr[0], addr[1], addr[2])
-        sock.settimeout(3)
-        sock.connect((server_hostname, server_port))
+        sock = socket.create_connection((server_hostname, server_port), timeout=3)
         return sock
 
-    sock = Socket(type=ssl.SOCK_STREAM)
+    sock = socket.create_connection((server_hostname, server_port), receive_timeout)
     sock = ssl.SSLContext(ssl.PROTOCOL_SSLv23).wrap_socket(
         sock,
         do_handshake_on_connect=True,
         suppress_ragged_eofs=True,
         server_hostname=server_hostname,
     )
-    sock.settimeout(receive_timeout)
-    sock.connect((server_hostname, server_port))
     return sock
 
 
