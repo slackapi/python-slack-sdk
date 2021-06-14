@@ -1,5 +1,4 @@
 import threading
-import time
 from threading import Thread, Event
 from typing import Callable
 
@@ -18,7 +17,7 @@ class IntervalRunner:
     def _run(self) -> None:
         while not self.event.is_set():
             self.target()
-            time.sleep(self.interval_seconds)
+            self.event.wait(self.interval_seconds)
 
     def start(self) -> "IntervalRunner":
         self.thread.start()
