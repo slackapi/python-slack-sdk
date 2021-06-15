@@ -25,7 +25,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
             metadata,
             metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
-            Column("state", String, nullable=False),
+            Column("state", String(200), nullable=False),
             Column("expire_at", DateTime, nullable=False),
         )
 
