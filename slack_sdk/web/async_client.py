@@ -182,6 +182,65 @@ class AsyncWebClient(AsyncBaseClient):
             "admin.apps.uninstall", http_verb="POST", params=kwargs
         )
 
+    async def admin_auth_policy_getEntities(
+        self,
+        *,
+        policy_name: str,
+        cursor: Optional[str] = None,
+        entity_type: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Fetch all the entities assigned to a particular authentication policy by name."""
+        kwargs.update({"policy_name": policy_name})
+        if cursor is not None:
+            kwargs.update({"cursor": cursor})
+        if entity_type is not None:
+            kwargs.update({"entity_type": entity_type})
+        if limit is not None:
+            kwargs.update({"limit": limit})
+        return await self.api_call(
+            "admin.auth.policy.getEntities", http_verb="POST", params=kwargs
+        )
+
+    async def admin_auth_policy_assignEntities(
+        self,
+        *,
+        entity_ids: Union[str, Sequence[str]],
+        policy_name: str,
+        entity_type: str,
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Assign entities to a particular authentication policy."""
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({"entity_ids": ",".join(entity_ids)})
+        else:
+            kwargs.update({"entity_ids": entity_ids})
+        kwargs.update({"policy_name": policy_name})
+        kwargs.update({"entity_type": entity_type})
+        return await self.api_call(
+            "admin.auth.policy.assignEntities", http_verb="POST", params=kwargs
+        )
+
+    async def admin_auth_policy_removeEntities(
+        self,
+        *,
+        entity_ids: Union[str, Sequence[str]],
+        policy_name: str,
+        entity_type: str,
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Remove specified entities from a specified authentication policy."""
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({"entity_ids": ",".join(entity_ids)})
+        else:
+            kwargs.update({"entity_ids": entity_ids})
+        kwargs.update({"policy_name": policy_name})
+        kwargs.update({"entity_type": entity_type})
+        return await self.api_call(
+            "admin.auth.policy.removeEntities", http_verb="POST", params=kwargs
+        )
+
     async def admin_barriers_create(
         self,
         *,
