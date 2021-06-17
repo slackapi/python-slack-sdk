@@ -80,7 +80,7 @@ def start_onboarding(user_id: str, channel: str):
 
 ### Responding to events in Slack
 
-When events occur in Slack there are two primary ways to be notified about them. We can send you an HTTP Request through our Events API (preferred) by way of or you can stream events through a websocket connection with our RTM API. The RTM API is only recommended if you're behind a firewall and cannot receive incoming web requests from Slack.
+When events occur in Slack there are two primary ways to be notified about them. We can send you an HTTP Request through our Events API (preferred) or you can stream events through a websocket connection with our RTM API. The RTM API is only recommended if you're behind a firewall and cannot receive incoming web requests from Slack.
 
 > ⚠️ The RTM API isn't available for default Slack apps. If you need to use RTM (possibly due to corporate firewall limitations), you can do so by creating a [classic Slack app](https://api.slack.com/apps?new_classic_app=1). If you have an existing RTM app, you can continue to use its associated tokens. You can read more [in the documentation](https://slack.dev/python-slack-sdk/real_time_messaging.html).
 
