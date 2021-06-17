@@ -1,5 +1,6 @@
 import logging
 from slack_bolt import App
+from slack_sdk.web import WebClient
 from onboarding_tutorial import OnboardingTutorial
 
 # Initalize a Bolt for Python app
@@ -10,7 +11,7 @@ app = App()
 onboarding_tutorials_sent = {}
 
 
-def start_onboarding(user_id: str, channel: str):
+def start_onboarding(user_id: str, channel: str, client: WebClient):
     # Create a new onboarding tutorial.
     onboarding_tutorial = OnboardingTutorial(channel)
 
@@ -18,7 +19,7 @@ def start_onboarding(user_id: str, channel: str):
     message = onboarding_tutorial.get_message_payload()
 
     # Post the onboarding message in Slack
-    response = app.client.chat_postMessage(**message)
+    response = client.chat_postMessage(**message)
 
     # Capture the timestamp of the message we've just posted so
     # we can use it to update the message after a user
@@ -34,8 +35,12 @@ def start_onboarding(user_id: str, channel: str):
 # ================ Team Join Event =============== #
 # When the user first joins a team, the type of the event will be 'team_join'.
 # Here we'll link the onboarding_message callback to the 'team_join' event.
+
+# Note: Bolt provides a WebClient instance as an argument to the listener function
+# we've defined here, which we then use to access Slack Web API methods like conversations_open.
+# For more info, checkout: https://slack.dev/bolt-python/concepts#message-listening
 @app.event("team_join")
-def onboarding_message(event):
+def onboarding_message(event, client):
     """Create and send an onboarding welcome message to new users. Save the
     time stamp of this message so we can update this message in the future.
     """
@@ -43,11 +48,11 @@ def onboarding_message(event):
     user_id = event.get("user", {}).get("id")
 
     # Open a DM with the new user.
-    response = app.client.conversations_open(users=user_id)
+    response = client.conversations_open(users=user_id)
     channel = response["channel"]["id"]
 
     # Post the onboarding message.
-    start_onboarding(user_id, channel)
+    start_onboarding(user_id, channel, client)
 
 
 # ============= Reaction Added Events ============= #
@@ -55,7 +60,7 @@ def onboarding_message(event):
 # the type of the event will be 'reaction_added'.
 # Here we'll link the update_emoji callback to the 'reaction_added' event.
 @app.event("reaction_added")
-def update_emoji(event):
+def update_emoji(event, client):
     """Update the onboarding welcome message after receiving a "reaction_added"
     event from Slack. Update timestamp for welcome message as well.
     """
@@ -76,14 +81,14 @@ def update_emoji(event):
     message = onboarding_tutorial.get_message_payload()
 
     # Post the updated message in Slack
-    updated_message = app.client.chat_update(**message)
+    updated_message = client.chat_update(**message)
 
 
 # =============== Pin Added Events ================ #
 # When a users pins a message the type of the event will be 'pin_added'.
 # Here we'll link the update_pin callback to the 'pin_added' event.
 @app.event("pin_added")
-def update_pin(event):
+def update_pin(event, client):
     """Update the onboarding welcome message after receiving a "pin_added"
     event from Slack. Update timestamp for welcome message as well.
     """
@@ -101,14 +106,14 @@ def update_pin(event):
     message = onboarding_tutorial.get_message_payload()
 
     # Post the updated message in Slack
-    updated_message = app.client.chat_update(**message)
+    updated_message = client.chat_update(**message)
 
 
 # ============== Message Events ============= #
 # When a user sends a DM, the event type will be 'message'.
 # Here we'll link the message callback to the 'message' event.
 @app.event("message")
-def message(event):
+def message(event, client):
     """Display the onboarding welcome message after receiving a message
     that contains "start".
     """
@@ -117,7 +122,7 @@ def message(event):
     text = event.get("text")
 
     if text and text.lower() == "start":
-        return start_onboarding(user_id, channel_id)
+        return start_onboarding(user_id, channel_id, client)
 
 
 if __name__ == "__main__":
