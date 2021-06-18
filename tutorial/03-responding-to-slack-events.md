@@ -4,7 +4,7 @@ The code for this step is available [here](PythOnBoardingBot).
 
 ## Install the dependencies
 
-> 💡 **[“Requirements files”](https://pip.pypa.io/en/stable/user_guide/#id12)** are files containing a list of items to be installed using pip install. Details on the format of the files are here: [Requirements File Format](https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format).
+> 💡 **["Requirements files"](https://pip.pypa.io/en/stable/user_guide/#id12)** are files containing a list of items to be installed using pip install. Details on the format of the files are here: [Requirements File Format](https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format).
 
 - In the root directory create a "requirements.txt" file.
 - Add the following contents to that file and save the file.
@@ -81,11 +81,9 @@ def start_onboarding(user_id: str, channel: str, client: WebClient):
 
 ### Responding to events in Slack
 
-When events occur in Slack there are two primary ways to be notified about them. We can send you an HTTP Request through our Events API (preferred) or you can stream events through a websocket connection with our RTM API. The RTM API is only recommended if you're behind a firewall and cannot receive incoming web requests from Slack.
+When events occur in Slack there are two primary ways to be notified about them. We can send you an [HTTP Request through our Events API](https://api.slack.com/apis/connections/events-api), or you can stream events through a WebSocket connection with our [Socket Mode](https://api.slack.com/apis/connections/socket) API. If you're behind a firewall and cannot receive incoming web requests from Slack, we recommend going with Socket Mode.
 
-> ⚠️ The RTM API isn't available for default Slack apps. If you need to use RTM (possibly due to corporate firewall limitations), you can do so by creating a [classic Slack app](https://api.slack.com/apps?new_classic_app=1). If you have an existing RTM app, you can continue to use its associated tokens. You can read more [in the documentation](https://slack.dev/python-slack-sdk/real_time_messaging.html).
-
-In this tutorial we'll be using the Events API and the [Bolt for Python](https://github.com/slackapi/bolt-python). If you need access to the RTM API, you can access it [via the `RTMClient`](https://slack.dev/python-slack-sdk/real_time_messaging.html).
+In this tutorial we'll be using the Events API and the [Bolt for Python](https://github.com/slackapi/bolt-python).
 
 Back to our application, it's time to link our onboarding functionality to Slack events.
 
@@ -205,8 +203,6 @@ import certifi
 
 ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
 ```
-
-**Final Note:** If you're interested in learning how to modify this app to run asynchronously I've adapted this code as such [here](PythOnBoardingBot/async_app.py).
 
 ---
 
