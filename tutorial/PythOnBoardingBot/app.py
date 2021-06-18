@@ -3,7 +3,7 @@ from slack_bolt import App
 from slack_sdk.web import WebClient
 from onboarding_tutorial import OnboardingTutorial
 
-# Initalize a Bolt for Python app
+# Initialize a Bolt for Python app
 app = App()
 
 # For simplicity we'll store our app data in-memory with the following data structure.
