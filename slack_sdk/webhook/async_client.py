@@ -100,6 +100,8 @@ class AsyncWebhookClient:
             response_type: The type of message (either 'in_channel' or 'ephemeral')
             replace_original: True if you use this option for response_url requests
             delete_original: True if you use this option for response_url requests
+            unfurl_links: Option to indicate whether text url should unfurl
+            unfurl_media: Option to indicate whether media url should unfurl
             headers: Request headers to append only for this request
 
         Returns:
