@@ -77,6 +77,8 @@ class WebhookClient:
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
@@ -104,6 +106,8 @@ class WebhookClient:
                 "response_type": response_type,
                 "replace_original": replace_original,
                 "delete_original": delete_original,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
             },
             headers=headers,
         )
