@@ -227,7 +227,7 @@ def _next_cursor_is_present(data) -> bool:
     return present
 
 
-def _to_0_or_1_if_bool(v: Any) -> Union[Any, int]:
+def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
     if isinstance(v, bool):
         return "1" if v else "0"
     return v
