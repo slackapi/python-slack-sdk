@@ -1,5 +1,6 @@
 import os
 import unittest
+import time
 
 from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_INCOMING_WEBHOOK_URL,
@@ -20,6 +21,22 @@ class TestWebhook(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def __get_channel_id(self):
+        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace(
+            "#", ""
+        )
+        client = WebClient(token=token)
+        channel_id = None
+        for resp in client.conversations_list(limit=10):
+            for c in resp["channels"]:
+                if c["name"] == channel_name:
+                    channel_id = c["id"]
+                    break
+            if channel_id is not None:
+                break
+        return channel_id
 
     def test_webhook(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
@@ -46,6 +63,44 @@ class TestWebhook(unittest.TestCase):
         self.assertIsNotNone(history)
         actual_text = history["messages"][0]["text"]
         self.assertEqual("Hello!", actual_text)
+
+    def test_with_unfurls_off(self):
+        url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
+        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        webhook = WebhookClient(url)
+        client = WebClient(token=token)
+        # send message that does not unfurl
+        response = webhook.send(
+            text="<https://imgs.xkcd.com/comics/desert_golfing_2x.png|Desert Golfing>",
+            unfurl_links=False,
+            unfurl_media=False,
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ok", response.body)
+        # wait in order to allow Slack API to edit message with attachments
+        time.sleep(2)
+        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
+        self.assertIsNotNone(history)
+        self.assertTrue("attachments" not in history["messages"][0])
+
+    def test_with_unfurls_on(self):
+        url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
+        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        webhook = WebhookClient(url)
+        client = WebClient(token=token)
+        # send message that does unfurl
+        response = webhook.send(
+            text="<https://imgs.xkcd.com/comics/red_spiders_small.jpg|Spiders>",
+            unfurl_links=True,
+            unfurl_media=True,
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ok", response.body)
+        # wait in order to allow Slack API to edit message with attachments
+        time.sleep(2)
+        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
+        self.assertIsNotNone(history)
+        self.assertTrue("attachments" in history["messages"][0])
 
     def test_with_blocks(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
