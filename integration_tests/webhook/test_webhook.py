@@ -46,20 +46,8 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual("ok", response.body)
 
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace(
-            "#", ""
-        )
         client = WebClient(token=token)
-        channel_id = None
-        for resp in client.conversations_list(limit=10):
-            for c in resp["channels"]:
-                if c["name"] == channel_name:
-                    channel_id = c["id"]
-                    break
-            if channel_id is not None:
-                break
-
-        history = client.conversations_history(channel=channel_id, limit=1)
+        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
         self.assertIsNotNone(history)
         actual_text = history["messages"][0]["text"]
         self.assertEqual("Hello!", actual_text)
