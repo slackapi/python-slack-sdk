@@ -60,10 +60,10 @@ You can rely on Travis CI builds for running the tests on a variety of Python ru
 This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
 ```bash
-python setup.py run_integration_tests # run all
+python setup.py integration_tests # run all
 
 # run a single test
-python setup.py run_integration_tests \
+python setup.py integration_tests \
   --test-target integration_tests/web/test_web_client.py
 ```
 
