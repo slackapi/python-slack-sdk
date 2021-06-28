@@ -65,13 +65,16 @@ class TestWebhook(unittest.TestCase):
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
-        # wait in order to allow Slack API to edit message with attachments
+        # wait to allow Slack API to edit message with attachments
         time.sleep(2)
         history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
         self.assertIsNotNone(history)
         self.assertTrue("attachments" not in history["messages"][0])
 
     def test_with_unfurls_on(self):
+        # Slack API rate limits unfurls of unique links so test will
+        # fail when repeated. For testing, either use a different URL
+        # for text option or delete existing attachments in  webhook channel.
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
         webhook = WebhookClient(url)
@@ -84,7 +87,7 @@ class TestWebhook(unittest.TestCase):
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
-        # wait in order to allow Slack API to edit message with attachments
+        # wait to allow Slack API to edit message with attachments
         time.sleep(2)
         history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
         self.assertIsNotNone(history)
