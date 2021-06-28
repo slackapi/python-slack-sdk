@@ -17,26 +17,24 @@ from slack_sdk.models.blocks.basic_components import MarkdownTextObject, PlainTe
 
 class TestWebhook(unittest.TestCase):
     def setUp(self):
-        pass
+        if not hasattr(self, "channel_id"):
+            token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+            channel_name = os.environ[
+                SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME
+            ].replace("#", "")
+            client = WebClient(token=token)
+            self.channel_id = None
+            for resp in client.conversations_list(limit=10):
+                for c in resp["channels"]:
+                    if c["name"] == channel_name:
+                        self.channel_id = c["id"]
+                        break
+                if self.channel_id is not None:
+                    break
+            return self.channel_id
 
     def tearDown(self):
         pass
-
-    def __get_channel_id(self):
-        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace(
-            "#", ""
-        )
-        client = WebClient(token=token)
-        channel_id = None
-        for resp in client.conversations_list(limit=10):
-            for c in resp["channels"]:
-                if c["name"] == channel_name:
-                    channel_id = c["id"]
-                    break
-            if channel_id is not None:
-                break
-        return channel_id
 
     def test_webhook(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
@@ -47,7 +45,7 @@ class TestWebhook(unittest.TestCase):
 
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
         client = WebClient(token=token)
-        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
         self.assertIsNotNone(history)
         actual_text = history["messages"][0]["text"]
         self.assertEqual("Hello!", actual_text)
@@ -67,7 +65,7 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual("ok", response.body)
         # wait to allow Slack API to edit message with attachments
         time.sleep(2)
-        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
         self.assertIsNotNone(history)
         self.assertTrue("attachments" not in history["messages"][0])
 
@@ -89,7 +87,7 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual("ok", response.body)
         # wait to allow Slack API to edit message with attachments
         time.sleep(2)
-        history = client.conversations_history(channel=self.__get_channel_id(), limit=1)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
         self.assertIsNotNone(history)
         self.assertTrue("attachments" in history["messages"][0])
 
