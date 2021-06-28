@@ -28,6 +28,16 @@ class TestWebhook(unittest.TestCase):
         resp = client.send(text="hello!", response_type="in_channel")
         self.assertEqual("ok", resp.body)
 
+    def test_send_with_url_unfurl_opts_issue_1045(self):
+        client = WebhookClient("http://localhost:8888")
+        resp: WebhookResponse = client.send(
+            text="<https://imgs.xkcd.com/comics/1991_and_2021_2x.png|XKCD>",
+            unfurl_links=False,
+            unfurl_media=False,
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual("ok", resp.body)
+
     def test_send_blocks(self):
         client = WebhookClient("http://localhost:8888")
 

@@ -1,7 +1,4 @@
-import asyncio
 import unittest
-
-import aiohttp
 
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
@@ -13,14 +10,13 @@ from tests.webhook.mock_web_api_server import (
 )
 
 
-class TestAsyncWebhook(unittest.TestCase):
+class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
 
-    @async_test
     async def test_send(self):
         client = AsyncWebhookClient("http://localhost:8888")
 
@@ -31,7 +27,16 @@ class TestAsyncWebhook(unittest.TestCase):
         resp = await client.send(text="hello!", response_type="in_channel")
         self.assertEqual("ok", resp.body)
 
-    @async_test
+    async def test_send_with_url_unfurl_opts_issue_1045(self):
+        client = AsyncWebhookClient("http://localhost:8888")
+        resp: WebhookResponse = await client.send(
+            text="<https://imgs.xkcd.com/comics/1991_and_2021_2x.png|XKCD>",
+            unfurl_links=False,
+            unfurl_media=False,
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual("ok", resp.body)
+
     async def test_send_blocks(self):
         client = AsyncWebhookClient("http://localhost:8888")
 
@@ -83,7 +88,6 @@ class TestAsyncWebhook(unittest.TestCase):
         )
         self.assertEqual("ok", resp.body)
 
-    @async_test
     async def test_send_attachments(self):
         client = AsyncWebhookClient("http://localhost:8888")
 
@@ -153,20 +157,17 @@ class TestAsyncWebhook(unittest.TestCase):
         )
         self.assertEqual("ok", resp.body)
 
-    @async_test
     async def test_send_dict(self):
         client = AsyncWebhookClient("http://localhost:8888")
         resp: WebhookResponse = await client.send_dict({"text": "hello!"})
         self.assertEqual(200, resp.status_code)
         self.assertEqual("ok", resp.body)
 
-    @async_test
     async def test_timeout_issue_712(self):
         client = AsyncWebhookClient(url="http://localhost:8888/timeout", timeout=1)
         with self.assertRaises(Exception):
             await client.send_dict({"text": "hello!"})
 
-    @async_test
     async def test_proxy_issue_714(self):
         client = AsyncWebhookClient(
             url="http://localhost:8888", proxy="http://invalid-host:9999"
@@ -174,7 +175,6 @@ class TestAsyncWebhook(unittest.TestCase):
         with self.assertRaises(Exception):
             await client.send_dict({"text": "hello!"})
 
-    @async_test
     async def test_user_agent_customization_issue_769(self):
         client = AsyncWebhookClient(
             url="http://localhost:8888/user-agent-this_is-test",
