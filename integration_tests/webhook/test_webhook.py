@@ -31,7 +31,6 @@ class TestWebhook(unittest.TestCase):
                         break
                 if self.channel_id is not None:
                     break
-            return self.channel_id
 
     def tearDown(self):
         pass
