@@ -3,7 +3,6 @@ import unittest
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
 from slack.webhook import AsyncWebhookClient, WebhookResponse
-from tests.helpers import async_test
 from tests.webhook.mock_web_api_server import (
     cleanup_mock_web_api_server,
     setup_mock_web_api_server,
