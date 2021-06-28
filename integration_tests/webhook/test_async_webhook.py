@@ -1,4 +1,5 @@
 import os
+from tests.helpers import async_test
 import unittest
 import time
 
@@ -15,8 +16,9 @@ from slack_sdk.models.blocks.block_elements import ButtonElement
 from slack_sdk.models.blocks.basic_components import MarkdownTextObject, PlainTextObject
 
 
-class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestAsyncWebhook(unittest.TestCase):
+    @async_test
+    async def setUp(self):
         if not hasattr(self, "channel_id"):
             token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
             channel_name = os.environ[
@@ -35,6 +37,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
     def tearDown(self):
         pass
 
+    @async_test
     async def test_webhook(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         webhook = AsyncWebhookClient(url)
@@ -49,6 +52,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         actual_text = history["messages"][0]["text"]
         self.assertEqual("Hello!", actual_text)
 
+    @async_test
     async def test_with_unfurls_off(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
@@ -68,6 +72,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(history)
         self.assertTrue("attachments" not in history["messages"][0])
 
+    @async_test
     async def test_with_unfurls_on(self):
         # Slack API rate limits unfurls of unique links so test will
         # fail when repeated. For testing, either use a different URL
@@ -90,6 +95,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(history)
         self.assertTrue("attachments" in history["messages"][0])
 
+    @async_test
     async def test_with_blocks(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         webhook = AsyncWebhookClient(url)
@@ -130,6 +136,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
 
+    @async_test
     async def test_with_blocks_dict(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         webhook = AsyncWebhookClient(url)
@@ -198,6 +205,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
 
+    @async_test
     async def test_with_attachments(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         webhook = AsyncWebhookClient(url)
@@ -231,6 +239,7 @@ class TestAsyncWebhook(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
 
+    @async_test
     async def test_with_attachments_dict(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
         webhook = AsyncWebhookClient(url)
