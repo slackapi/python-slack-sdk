@@ -1,12 +1,9 @@
-import asyncio
+from tests.helpers import async_test
 import unittest
-
-import aiohttp
 
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
 from slack.webhook import AsyncWebhookClient, WebhookResponse
-from tests.helpers import async_test
 from tests.webhook.mock_web_api_server import (
     cleanup_mock_web_api_server,
     setup_mock_web_api_server,
@@ -29,6 +26,17 @@ class TestAsyncWebhook(unittest.TestCase):
         self.assertEqual("ok", resp.body)
 
         resp = await client.send(text="hello!", response_type="in_channel")
+        self.assertEqual("ok", resp.body)
+
+    @async_test
+    async def test_send_with_url_unfurl_opts_issue_1045(self):
+        client = AsyncWebhookClient("http://localhost:8888")
+        resp: WebhookResponse = await client.send(
+            text="<https://imgs.xkcd.com/comics/1991_and_2021_2x.png|XKCD>",
+            unfurl_links=False,
+            unfurl_media=False,
+        )
+        self.assertEqual(200, resp.status_code)
         self.assertEqual("ok", resp.body)
 
     @async_test

@@ -1,5 +1,6 @@
 import os
 import unittest
+import time
 
 from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_INCOMING_WEBHOOK_URL,
@@ -16,7 +17,20 @@ from slack_sdk.models.blocks.basic_components import MarkdownTextObject, PlainTe
 
 class TestWebhook(unittest.TestCase):
     def setUp(self):
-        pass
+        if not hasattr(self, "channel_id"):
+            token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+            channel_name = os.environ[
+                SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME
+            ].replace("#", "")
+            client = WebClient(token=token)
+            self.channel_id = None
+            for resp in client.conversations_list(limit=10):
+                for c in resp["channels"]:
+                    if c["name"] == channel_name:
+                        self.channel_id = c["id"]
+                        break
+                if self.channel_id is not None:
+                    break
 
     def tearDown(self):
         pass
@@ -29,23 +43,52 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual("ok", response.body)
 
         token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-        channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace(
-            "#", ""
-        )
         client = WebClient(token=token)
-        channel_id = None
-        for resp in client.conversations_list(limit=10):
-            for c in resp["channels"]:
-                if c["name"] == channel_name:
-                    channel_id = c["id"]
-                    break
-            if channel_id is not None:
-                break
-
-        history = client.conversations_history(channel=channel_id, limit=1)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
         self.assertIsNotNone(history)
         actual_text = history["messages"][0]["text"]
         self.assertEqual("Hello!", actual_text)
+
+    def test_with_unfurls_off(self):
+        url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
+        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        webhook = WebhookClient(url)
+        client = WebClient(token=token)
+        # send message that does not unfurl
+        response = webhook.send(
+            text="<https://imgs.xkcd.com/comics/desert_golfing_2x.png|Desert Golfing>",
+            unfurl_links=False,
+            unfurl_media=False,
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ok", response.body)
+        # wait to allow Slack API to edit message with attachments
+        time.sleep(2)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
+        self.assertIsNotNone(history)
+        self.assertTrue("attachments" not in history["messages"][0])
+
+    def test_with_unfurls_on(self):
+        # Slack API rate limits unfurls of unique links so test will
+        # fail when repeated. For testing, either use a different URL
+        # for text option or delete existing attachments in  webhook channel.
+        url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
+        token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
+        webhook = WebhookClient(url)
+        client = WebClient(token=token)
+        # send message that does unfurl
+        response = webhook.send(
+            text="<https://imgs.xkcd.com/comics/red_spiders_small.jpg|Spiders>",
+            unfurl_links=True,
+            unfurl_media=True,
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ok", response.body)
+        # wait to allow Slack API to edit message with attachments
+        time.sleep(2)
+        history = client.conversations_history(channel=self.channel_id, limit=1)
+        self.assertIsNotNone(history)
+        self.assertTrue("attachments" in history["messages"][0])
 
     def test_with_blocks(self):
         url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
