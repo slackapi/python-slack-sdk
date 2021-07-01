@@ -24,7 +24,7 @@ class TestWebhook(unittest.TestCase):
             ].replace("#", "")
             client = WebClient(token=token)
             self.channel_id = None
-            for resp in client.conversations_list(limit=10):
+            for resp in client.conversations_list(limit=1000):
                 for c in resp["channels"]:
                     if c["name"] == channel_name:
                         self.channel_id = c["id"]
