@@ -603,7 +603,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return self.api_call("admin.users.session.getSettings", json=kwargs)
+        return self.api_call("admin.users.session.getSettings", params=kwargs)
 
     def admin_users_session_setSettings(
         self, *, user_ids: Union[str, Sequence[str]], **kwargs
@@ -618,7 +618,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return self.api_call("admin.users.session.setSettings", json=kwargs)
+        return self.api_call("admin.users.session.setSettings", params=kwargs)
 
     def admin_users_session_clearSettings(
         self, *, user_ids: Union[str, Sequence[str]], **kwargs
@@ -633,7 +633,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return self.api_call("admin.users.session.clearSettings", json=kwargs)
+        return self.api_call("admin.users.session.clearSettings", params=kwargs)
 
     def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
@@ -795,7 +795,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return self.api_call("admin.usergroups.addChannels", json=kwargs)
+        return self.api_call("admin.usergroups.addChannels", params=kwargs)
 
     def admin_usergroups_addTeams(
         self, *, usergroup_id: str, team_ids: Union[str, Sequence[str]], **kwargs
@@ -813,7 +813,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
-        return self.api_call("admin.usergroups.addTeams", json=kwargs)
+        return self.api_call("admin.usergroups.addTeams", params=kwargs)
 
     def admin_usergroups_listChannels(
         self, *, usergroup_id: str, **kwargs
@@ -840,7 +840,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return self.api_call("admin.usergroups.removeChannels", json=kwargs)
+        return self.api_call("admin.usergroups.removeChannels", params=kwargs)
 
     def admin_users_assign(
         self, *, team_id: str, user_id: str, **kwargs
@@ -875,7 +875,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return self.api_call("admin.users.invite", json=kwargs)
+        return self.api_call("admin.users.invite", params=kwargs)
 
     def admin_users_list(
         self, *, team_id: str, **kwargs
@@ -1449,7 +1449,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return self.api_call("conversations.invite", json=kwargs)
+        return self.api_call("conversations.invite", params=kwargs)
 
     def conversations_join(
         self, *, channel: str, **kwargs
@@ -2075,7 +2075,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return self.api_call("mpim.open", json=kwargs)
+        return self.api_call("mpim.open", params=kwargs)
 
     def mpim_replies(
         self, *, channel: str, thread_ts: str, **kwargs
@@ -2425,7 +2425,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return self.api_call("usergroups.users.update", json=kwargs)
+        return self.api_call("usergroups.users.update", params=kwargs)
 
     def users_conversations(self, **kwargs) -> Union[Future, SlackResponse]:
         """List conversations the calling user may access."""

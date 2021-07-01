@@ -621,7 +621,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return await self.api_call("admin.users.session.getSettings", json=kwargs)
+        return await self.api_call("admin.users.session.getSettings", params=kwargs)
 
     async def admin_users_session_setSettings(
         self, *, user_ids: Union[str, Sequence[str]], **kwargs
@@ -636,7 +636,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return await self.api_call("admin.users.session.setSettings", json=kwargs)
+        return await self.api_call("admin.users.session.setSettings", params=kwargs)
 
     async def admin_users_session_clearSettings(
         self, *, user_ids: Union[str, Sequence[str]], **kwargs
@@ -651,7 +651,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return await self.api_call("admin.users.session.clearSettings", json=kwargs)
+        return await self.api_call("admin.users.session.clearSettings", params=kwargs)
 
     async def admin_inviteRequests_approve(
         self, *, invite_request_id: str, **kwargs
@@ -815,7 +815,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return await self.api_call("admin.usergroups.addChannels", json=kwargs)
+        return await self.api_call("admin.usergroups.addChannels", params=kwargs)
 
     async def admin_usergroups_addTeams(
         self, *, usergroup_id: str, team_ids: Union[str, Sequence[str]], **kwargs
@@ -833,7 +833,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
-        return await self.api_call("admin.usergroups.addTeams", json=kwargs)
+        return await self.api_call("admin.usergroups.addTeams", params=kwargs)
 
     async def admin_usergroups_listChannels(
         self, *, usergroup_id: str, **kwargs
@@ -860,7 +860,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return await self.api_call("admin.usergroups.removeChannels", json=kwargs)
+        return await self.api_call("admin.usergroups.removeChannels", params=kwargs)
 
     async def admin_users_assign(
         self, *, team_id: str, user_id: str, **kwargs
@@ -895,7 +895,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return await self.api_call("admin.users.invite", json=kwargs)
+        return await self.api_call("admin.users.invite", params=kwargs)
 
     async def admin_users_list(self, *, team_id: str, **kwargs) -> AsyncSlackResponse:
         """List users on a workspace
@@ -1461,7 +1461,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return await self.api_call("conversations.invite", json=kwargs)
+        return await self.api_call("conversations.invite", params=kwargs)
 
     async def conversations_join(self, *, channel: str, **kwargs) -> AsyncSlackResponse:
         """Joins an existing conversation.
@@ -2081,7 +2081,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return await self.api_call("mpim.open", json=kwargs)
+        return await self.api_call("mpim.open", params=kwargs)
 
     async def mpim_replies(
         self, *, channel: str, thread_ts: str, **kwargs
@@ -2431,7 +2431,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        return await self.api_call("usergroups.users.update", json=kwargs)
+        return await self.api_call("usergroups.users.update", params=kwargs)
 
     async def users_conversations(self, **kwargs) -> AsyncSlackResponse:
         """List conversations the calling user may access."""

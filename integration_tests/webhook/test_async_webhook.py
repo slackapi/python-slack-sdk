@@ -26,7 +26,7 @@ class TestAsyncWebhook(unittest.TestCase):
             ].replace("#", "")
             client = AsyncWebClient(token=token)
             self.channel_id = None
-            async for resp in await client.conversations_list(limit=10):
+            async for resp in await client.conversations_list(limit=1000):
                 for c in resp["channels"]:
                     if c["name"] == channel_name:
                         self.channel_id = c["id"]
