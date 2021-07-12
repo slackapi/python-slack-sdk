@@ -56,6 +56,28 @@ class MockHandler(SimpleHTTPRequestHandler):
         "error": "test_data_not_found",
     }
 
+    token_refresh = {
+        "ok": True,
+        "app_id": "A111",
+        "authed_user": {
+            "id": "W111",
+            "scope": "search:read",
+            "access_token": "xoxe.xoxp-1-xxx",
+            "token_type": "user",
+            "refresh_token": "xoxe-1-xxx",
+            "expires_in": 43200,
+        },
+        "scope": "app_mentions:read,chat:write,commands",
+        "token_type": "bot",
+        "access_token": "xoxe.xoxb-1-yyy",
+        "bot_user_id": "UB111",
+        "refresh_token": "xoxe-1-yyy",
+        "expires_in": 43201,
+        "team": {"id": "T111", "name": "Testing Workspace"},
+        "enterprise": {"id": "E111", "name": "Sandbox Org"},
+        "is_enterprise_install": False,
+    }
+
     def _handle(self):
         try:
             if self.path == "/received_requests.json":
@@ -69,6 +91,12 @@ class MockHandler(SimpleHTTPRequestHandler):
                 self.set_common_headers()
                 if self.headers["authorization"] == "Basic MTExLjIyMjpzZWNyZXQ=":
                     self.wfile.write("""{"ok":true}""".encode("utf-8"))
+                    return
+                elif (
+                    self.headers["authorization"]
+                    == "Basic MTExLjIyMjp0b2tlbl9yb3RhdGlvbl9zZWNyZXQ="
+                ):
+                    self.wfile.write(json.dumps(self.token_refresh).encode("utf-8"))
                     return
                 else:
                     self.wfile.write(

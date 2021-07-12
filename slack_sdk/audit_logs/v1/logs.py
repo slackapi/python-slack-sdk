@@ -139,6 +139,7 @@ class Details:
     channel_id: Optional[str]
     added_team_id: Optional[str]
     unknown_fields: Dict[str, Any]
+    is_token_rotation_enabled_app: Optional[bool]
 
     def __init__(
         self,
@@ -194,6 +195,7 @@ class Details:
         external_user_email: Optional[str] = None,
         channel_id: Optional[str] = None,
         added_team_id: Optional[str] = None,
+        is_token_rotation_enabled_app: Optional[bool] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -248,6 +250,7 @@ class Details:
         self.external_user_email = external_user_email
         self.channel_id = channel_id
         self.added_team_id = added_team_id
+        self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
 
 
 class App:
