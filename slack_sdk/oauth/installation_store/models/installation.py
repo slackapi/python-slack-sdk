@@ -1,7 +1,11 @@
+import re
 from datetime import datetime
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
+from slack_sdk.oauth.installation_store.internals import (
+    _from_iso_format_to_unix_timestamp,
+)
 from slack_sdk.oauth.installation_store.models.bot import Bot
 
 
@@ -16,9 +20,16 @@ class Installation:
     bot_id: Optional[str]
     bot_user_id: Optional[str]
     bot_scopes: Optional[Sequence[str]]
+    bot_refresh_token: Optional[str]  # only when token rotation is enabled
+    # only when token rotation is enabled
+    # Unix time (seconds): only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
     user_id: str
     user_token: Optional[str]
     user_scopes: Optional[Sequence[str]]
+    user_refresh_token: Optional[str]  # only when token rotation is enabled
+    # Unix time (seconds): only when token rotation is enabled
+    user_token_expires_at: Optional[int]
     incoming_webhook_url: Optional[str]
     incoming_webhook_channel: Optional[str]
     incoming_webhook_channel_id: Optional[str]
@@ -44,10 +55,22 @@ class Installation:
         bot_id: Optional[str] = None,
         bot_user_id: Optional[str] = None,
         bot_scopes: Union[str, Sequence[str]] = "",
+        bot_refresh_token: Optional[str] = None,  # only when token rotation is enabled
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
         # installer
         user_id: str,
         user_token: Optional[str] = None,
         user_scopes: Union[str, Sequence[str]] = "",
+        user_refresh_token: Optional[str] = None,  # only when token rotation is enabled
+        # only when token rotation is enabled
+        user_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        user_token_expires_at: Optional[Union[int, datetime, str]] = None,
         # incoming webhook
         incoming_webhook_url: Optional[str] = None,
         incoming_webhook_channel: Optional[str] = None,
@@ -57,9 +80,11 @@ class Installation:
         is_enterprise_install: Optional[bool] = False,
         token_type: Optional[str] = None,
         # timestamps
-        installed_at: Optional[float] = None,
+        # The expected value type is float but the internals handle other types too
+        # for str values, we supports only ISO datetime format.
+        installed_at: Optional[Union[float, datetime, str]] = None,
         # custom values
-        custom_values: Optional[Dict[str, Any]] = None
+        custom_values: Optional[Dict[str, Any]] = None,
     ):
         self.app_id = app_id
         self.enterprise_id = enterprise_id
@@ -74,6 +99,22 @@ class Installation:
             self.bot_scopes = bot_scopes.split(",") if len(bot_scopes) > 0 else []
         else:
             self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+        if bot_token_expires_at is not None:
+            if type(bot_token_expires_at) == datetime:
+                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+            elif type(bot_token_expires_at) == str and not re.match(
+                "^\\d+$", bot_token_expires_at
+            ):
+                self.bot_token_expires_at = int(
+                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
+                )
+            else:
+                self.bot_token_expires_at = bot_token_expires_at
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
 
         self.user_id = user_id
         self.user_token = user_token
@@ -81,6 +122,22 @@ class Installation:
             self.user_scopes = user_scopes.split(",") if len(user_scopes) > 0 else []
         else:
             self.user_scopes = user_scopes
+        self.user_refresh_token = user_refresh_token
+        if user_token_expires_at is not None:
+            if type(user_token_expires_at) == datetime:
+                self.user_token_expires_at = int(user_token_expires_at.timestamp())
+            elif type(user_token_expires_at) == str and not re.match(
+                "^\\d+$", user_token_expires_at
+            ):
+                self.user_token_expires_at = int(
+                    _from_iso_format_to_unix_timestamp(user_token_expires_at)
+                )
+            else:
+                self.user_token_expires_at = user_token_expires_at
+        elif user_token_expires_in is not None:
+            self.user_token_expires_at = int(time()) + user_token_expires_in
+        else:
+            self.user_token_expires_at = None
 
         self.incoming_webhook_url = incoming_webhook_url
         self.incoming_webhook_channel = incoming_webhook_channel
@@ -90,7 +147,20 @@ class Installation:
         self.is_enterprise_install = is_enterprise_install or False
         self.token_type = token_type
 
-        self.installed_at = time() if installed_at is None else installed_at
+        if installed_at is None:
+            self.installed_at = datetime.now().timestamp()
+        elif type(installed_at) == float:
+            self.installed_at = installed_at
+        elif type(installed_at) == datetime:
+            self.installed_at = installed_at.timestamp()
+        elif type(installed_at) == str:
+            if re.match("^\\d+.\\d+$", installed_at):
+                self.installed_at = float(installed_at)
+            else:
+                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
+        else:
+            raise ValueError(f"Unsupported data format for installed_at {installed_at}")
+
         self.custom_values = custom_values if custom_values is not None else {}
 
     def to_bot(self) -> Bot:
@@ -104,6 +174,8 @@ class Installation:
             bot_id=self.bot_id,
             bot_user_id=self.bot_user_id,
             bot_scopes=self.bot_scopes,
+            bot_refresh_token=self.bot_refresh_token,
+            bot_token_expires_at=self.bot_token_expires_at,
             is_enterprise_install=self.is_enterprise_install,
             installed_at=self.installed_at,
             custom_values=self.custom_values,
@@ -127,9 +199,19 @@ class Installation:
             "bot_id": self.bot_id,
             "bot_user_id": self.bot_user_id,
             "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
+            "bot_refresh_token": self.bot_refresh_token,
+            "bot_token_expires_at": datetime.utcfromtimestamp(self.bot_token_expires_at)
+            if self.bot_token_expires_at is not None
+            else None,
             "user_id": self.user_id,
             "user_token": self.user_token,
             "user_scopes": ",".join(self.user_scopes) if self.user_scopes else None,
+            "user_refresh_token": self.user_refresh_token,
+            "user_token_expires_at": datetime.utcfromtimestamp(
+                self.user_token_expires_at
+            )
+            if self.user_token_expires_at is not None
+            else None,
             "incoming_webhook_url": self.incoming_webhook_url,
             "incoming_webhook_channel": self.incoming_webhook_channel,
             "incoming_webhook_channel_id": self.incoming_webhook_channel_id,

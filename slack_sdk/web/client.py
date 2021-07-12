@@ -1976,8 +1976,14 @@ class WebClient(BaseClient):
         *,
         client_id: str,
         client_secret: str,
-        code: str,
+        # This field is required when processing the OAuth redirect URL requests
+        # while it's absent for token rotation
+        code: Optional[str] = None,
         redirect_uri: Optional[str] = None,
+        # This field is required for token rotation
+        grant_type: Optional[str] = None,
+        # This field is required for token rotation
+        refresh_token: Optional[str] = None,
         **kwargs
     ) -> SlackResponse:
         """Exchanges a temporary OAuth verifier code for an access token.
@@ -1988,10 +1994,17 @@ class WebClient(BaseClient):
             code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
             redirect_uri (optional str): Must match the originally submitted URI
                 (if one was sent). e.g. 'https://example.com'
+            grant_type: The grant type. The possible value is only 'refresh_token' as of July 2021.
+            refresh_token: The refresh token for token rotation.
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
-        kwargs.update({"code": code})
+        if code is not None:
+            kwargs.update({"code": code})
+        if grant_type is not None:
+            kwargs.update({"grant_type": grant_type})
+        if refresh_token is not None:
+            kwargs.update({"refresh_token": refresh_token})
         return self.api_call(
             "oauth.v2.access",
             data=kwargs,
@@ -2024,6 +2037,21 @@ class WebClient(BaseClient):
             data=kwargs,
             auth={"client_id": client_id, "client_secret": client_secret},
         )
+
+    def oauth_v2_exchange(
+        self, *, token: str, client_id: str, client_secret: str, **kwargs
+    ) -> SlackResponse:
+        """Exchanges a legacy access token for a new expiring access token and refresh token
+
+        Args:
+            token: The legacy xoxb or xoxp token being migrated to use token rotation.
+            client_id: Issued when you created your application.
+            client_secret:Issued when you created your application.
+        """
+        kwargs.update(
+            {"client_id": client_id, "client_secret": client_secret, "token": token}
+        )
+        return self.api_call("oauth.v2.exchange", params=kwargs)
 
     def pins_add(self, *, channel: str, **kwargs) -> SlackResponse:
         """Pins an item to a channel.

@@ -116,7 +116,7 @@ async def oauth_callback(req: Request):
                 body=html,
             )
 
-    error = req.args["error"] if "error" in req.args else ""
+    error = req.args.get("error") if "error" in req.args else ""
     return HTTPResponse(
         status=400, body=f"Something is wrong with the installation (error: {error})"
     )
@@ -143,10 +143,10 @@ async def slack_app(req: Request):
     ):
         return HTTPResponse(status=403, body="invalid request")
 
-    if "command" in req.form and req.form["command"] == "/open-modal":
+    if "command" in req.form and req.form.get("command") == "/open-modal":
         try:
             enterprise_id = req.form.get("enterprise_id")
-            team_id = req.form["team_id"]
+            team_id = req.form.get("team_id")
             bot = installation_store.find_bot(
                 enterprise_id=enterprise_id,
                 team_id=team_id,
@@ -157,7 +157,7 @@ async def slack_app(req: Request):
 
             client = AsyncWebClient(token=bot_token)
             await client.views_open(
-                trigger_id=req.form["trigger_id"],
+                trigger_id=req.form.get("trigger_id"),
                 view={
                     "type": "modal",
                     "callback_id": "modal-id",
@@ -188,12 +188,12 @@ async def slack_app(req: Request):
             )
 
     elif "payload" in req.form:
-        payload = json.loads(req.form["payload"])
+        payload = json.loads(req.form.get("payload"))
         if (
-            payload["type"] == "view_submission"
-            and payload["view"]["callback_id"] == "modal-id"
+            payload.get("type") == "view_submission"
+            and payload.get("view").get("callback_id") == "modal-id"
         ):
-            submitted_data = payload["view"]["state"]["values"]
+            submitted_data = payload.get("view").get("state").get("values")
             print(
                 submitted_data
             )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
@@ -203,9 +203,8 @@ async def slack_app(req: Request):
 
 
 if __name__ == "__main__":
-    # export SLACK_TEST_CLIENT_ID=123.123
-    # export SLACK_TEST_CLIENT_SECRET=xxx
-    # export SLACK_TEST_REDIRECT_URI=https://{yours}.ngrok.io/slack/oauth/callback
+    # export SLACK_CLIENT_ID=123.123
+    # export SLACK_CLIENT_SECRET=xxx
     # export SLACK_SIGNING_SECRET=***
 
     app.run(host="0.0.0.0", port=3000)

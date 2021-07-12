@@ -604,6 +604,12 @@ class TestWebClientCoverage(unittest.TestCase):
                 await async_method(
                     client_id="123.123", client_secret="secret", code="123456"
                 )
+            elif method_name == "oauth_v2_exchange":
+                method = getattr(self.no_token_client, method_name, None)
+                method(client_id="123.123", client_secret="secret", token="xoxb-")
+                await async_method(
+                    client_id="123.123", client_secret="secret", token="xoxb-"
+                )
             elif method_name == "pins_add":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")

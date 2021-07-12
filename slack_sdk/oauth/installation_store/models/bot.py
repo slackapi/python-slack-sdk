@@ -1,5 +1,11 @@
+import re
 from datetime import datetime
+from time import time
 from typing import Optional, Union, Dict, Any, Sequence
+
+from slack_sdk.oauth.installation_store.internals import (
+    _from_iso_format_to_unix_timestamp,
+)
 
 
 class Bot:
@@ -12,6 +18,10 @@ class Bot:
     bot_id: str
     bot_user_id: str
     bot_scopes: Sequence[str]
+    # only when token rotation is enabled
+    bot_refresh_token: Optional[str]
+    # only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
     is_enterprise_install: bool
     installed_at: float
 
@@ -31,11 +41,20 @@ class Bot:
         bot_id: str,
         bot_user_id: str,
         bot_scopes: Union[str, Sequence[str]] = "",
+        # only when token rotation is enabled
+        bot_refresh_token: Optional[str] = None,
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
         is_enterprise_install: Optional[bool] = False,
         # timestamps
-        installed_at: float,
+        # The expected value type is float but the internals handle other types too
+        # for str values, we supports only ISO datetime format.
+        installed_at: Union[float, datetime, str],
         # custom values
-        custom_values: Optional[Dict[str, Any]] = None
+        custom_values: Optional[Dict[str, Any]] = None,
     ):
         self.app_id = app_id
         self.enterprise_id = enterprise_id
@@ -50,8 +69,36 @@ class Bot:
             self.bot_scopes = bot_scopes.split(",") if len(bot_scopes) > 0 else []
         else:
             self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+        if bot_token_expires_at is not None:
+            if type(bot_token_expires_at) == datetime:
+                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+            elif type(bot_token_expires_at) == str and not re.match(
+                "^\\d+$", bot_token_expires_at
+            ):
+                self.bot_token_expires_at = int(
+                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
+                )
+            else:
+                self.bot_token_expires_at = int(bot_token_expires_at)
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
         self.is_enterprise_install = is_enterprise_install or False
-        self.installed_at = installed_at
+
+        if type(installed_at) == float:
+            self.installed_at = installed_at
+        elif type(installed_at) == datetime:
+            self.installed_at = installed_at.timestamp()
+        elif type(installed_at) == str:
+            if re.match("^\\d+.\\d+$", installed_at):
+                self.installed_at = float(installed_at)
+            else:
+                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
+        else:
+            raise ValueError(f"Unsupported data format for installed_at {installed_at}")
+
         self.custom_values = custom_values if custom_values is not None else {}
 
     def set_custom_value(self, name: str, value: Any):
@@ -71,6 +118,10 @@ class Bot:
             "bot_id": self.bot_id,
             "bot_user_id": self.bot_user_id,
             "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
+            "bot_refresh_token": self.bot_refresh_token,
+            "bot_token_expires_at": datetime.utcfromtimestamp(self.bot_token_expires_at)
+            if self.bot_token_expires_at is not None
+            else None,
             "is_enterprise_install": self.is_enterprise_install,
             "installed_at": datetime.utcfromtimestamp(self.installed_at),
         }

@@ -65,9 +65,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 user_id text not null,
                 user_token text,
                 user_scopes text,
+                user_refresh_token text,  -- since v3.8
+                user_token_expires_at datetime,  -- since v3.8
                 incoming_webhook_url text,
                 incoming_webhook_channel text,
                 incoming_webhook_channel_id text,
@@ -103,6 +107,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
@@ -139,10 +145,14 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     is_enterprise_install
                 )
                 values
                 (
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -167,6 +177,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_id,
                     installation.bot_user_id,
                     ",".join(installation.bot_scopes),
+                    installation.bot_refresh_token,
+                    installation.bot_token_expires_at,
                     installation.is_enterprise_install,
                 ],
             )
@@ -184,9 +196,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -196,6 +212,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 )
                 values
                 (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -230,11 +250,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_id,
                     installation.bot_user_id,
                     ",".join(installation.bot_scopes),
+                    installation.bot_refresh_token,
+                    installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
                     ",".join(installation.user_scopes)
                     if installation.user_scopes
                     else None,
+                    installation.user_refresh_token,
+                    installation.user_token_expires_at,
                     installation.incoming_webhook_url,
                     installation.incoming_webhook_channel,
                     installation.incoming_webhook_channel_id,
@@ -285,6 +309,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id,
                         bot_user_id,
                         bot_scopes,
+                        bot_refresh_token,  -- since v3.8
+                        bot_token_expires_at,  -- since v3.8
                         is_enterprise_install,
                         installed_at
                     from
@@ -316,15 +342,20 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id=row[6],
                         bot_user_id=row[7],
                         bot_scopes=row[8],
-                        is_enterprise_install=row[9],
-                        installed_at=row[10],
+                        bot_refresh_token=row[9],
+                        bot_token_expires_at=row[10],
+                        is_enterprise_install=row[11],
+                        installed_at=row[12],
                     )
                     return bot
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            self.logger.warning(message)
+            if self.logger.level <= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     async def async_find_installation(
@@ -367,9 +398,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -438,23 +473,30 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id=row[7],
                         bot_user_id=row[8],
                         bot_scopes=row[9],
-                        user_id=row[10],
-                        user_token=row[11],
-                        user_scopes=row[12],
-                        incoming_webhook_url=row[13],
-                        incoming_webhook_channel=row[14],
-                        incoming_webhook_channel_id=row[15],
-                        incoming_webhook_configuration_url=row[16],
-                        is_enterprise_install=row[17],
-                        token_type=row[18],
-                        installed_at=row[19],
+                        bot_refresh_token=row[10],
+                        bot_token_expires_at=row[11],
+                        user_id=row[12],
+                        user_token=row[13],
+                        user_scopes=row[14],
+                        user_refresh_token=row[15],
+                        user_token_expires_at=row[16],
+                        incoming_webhook_url=row[17],
+                        incoming_webhook_channel=row[18],
+                        incoming_webhook_channel_id=row[19],
+                        incoming_webhook_configuration_url=row[20],
+                        is_enterprise_install=row[21],
+                        token_type=row[22],
+                        installed_at=row[23],
                     )
                     return installation
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            self.logger.warning(message)
+            if self.logger.level <= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     def delete_bot(
@@ -479,7 +521,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            self.logger.warning(message)
+            if self.logger.level <= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
 
     def delete_installation(
         self,
@@ -525,4 +570,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            self.logger.warning(message)
+            if self.logger.level <= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)

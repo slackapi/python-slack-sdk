@@ -33,6 +33,15 @@ class SlackApiError(SlackClientError):
         super(SlackApiError, self).__init__(msg)
 
 
+class SlackTokenRotationError(SlackClientError):
+    """Error raised when the oauth.v2.access call for token rotation fails"""
+
+    api_error: SlackApiError
+
+    def __init__(self, api_error: SlackApiError):
+        self.api_error = api_error
+
+
 class SlackClientNotConnectedError(SlackClientError):
     """Error raised when attempting to send messages over the websocket when the
     connection is closed."""

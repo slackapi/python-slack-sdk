@@ -48,9 +48,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
             Column("bot_id", String(32)),
             Column("bot_user_id", String(32)),
             Column("bot_scopes", String(1000)),
+            Column("bot_refresh_token", String(200)),  # added in v3.8.0
+            Column("bot_token_expires_at", DateTime),  # added in v3.8.0
             Column("user_id", String(32), nullable=False),
             Column("user_token", String(200)),
             Column("user_scopes", String(1000)),
+            Column("user_refresh_token", String(200)),  # added in v3.8.0
+            Column("user_token_expires_at", DateTime),  # added in v3.8.0
             Column("incoming_webhook_url", String(200)),
             Column("incoming_webhook_channel", String(200)),
             Column("incoming_webhook_channel_id", String(200)),
@@ -89,6 +93,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
             Column("bot_id", String(32)),
             Column("bot_user_id", String(32)),
             Column("bot_scopes", String(1000)),
+            Column("bot_refresh_token", String(200)),  # added in v3.8.0
+            Column("bot_token_expires_at", DateTime),  # added in v3.8.0
             Column("is_enterprise_install", Boolean, default=False, nullable=False),
             Column(
                 "installed_at",
@@ -135,10 +141,60 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.begin() as conn:
             i = installation.to_dict()
             i["client_id"] = self.client_id
-            conn.execute(self.installations.insert(), i)
+
+            i_column = self.installations.c
+            installations_rows = conn.execute(
+                sqlalchemy.select([i_column.id])
+                .where(
+                    and_(
+                        i_column.client_id == self.client_id,
+                        i_column.enterprise_id == installation.enterprise_id,
+                        i_column.team_id == installation.team_id,
+                        i_column.installed_at == i.get("installed_at"),
+                    )
+                )
+                .limit(1)
+            )
+            installations_row_id: Optional[str] = None
+            for row in installations_rows:
+                installations_row_id = row["id"]
+            if installations_row_id is None:
+                conn.execute(self.installations.insert(), i)
+            else:
+                update_statement = (
+                    self.installations.update()
+                    .where(i_column.id == installations_row_id)
+                    .values(**i)
+                )
+                conn.execute(update_statement, i)
+
+            # bots
             b = installation.to_bot().to_dict()
             b["client_id"] = self.client_id
-            conn.execute(self.bots.insert(), b)
+
+            b_column = self.bots.c
+            bots_rows = conn.execute(
+                sqlalchemy.select([b_column.id])
+                .where(
+                    and_(
+                        b_column.client_id == self.client_id,
+                        b_column.enterprise_id == installation.enterprise_id,
+                        b_column.team_id == installation.team_id,
+                        b_column.installed_at == b.get("installed_at"),
+                    )
+                )
+                .limit(1)
+            )
+            bots_row_id: Optional[str] = None
+            for row in bots_rows:
+                bots_row_id = row["id"]
+            if bots_row_id is None:
+                conn.execute(self.bots.insert(), b)
+            else:
+                update_statement = (
+                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
+                )
+                conn.execute(update_statement, b)
 
     def find_bot(
         self,
@@ -153,7 +209,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
         c = self.bots.c
         query = (
             self.bots.select()
-            .where(and_(c.enterprise_id == enterprise_id, c.team_id == team_id))
+            .where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                )
+            )
             .order_by(desc(c.installed_at))
             .limit(1)
         )
@@ -171,6 +233,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     bot_id=row["bot_id"],
                     bot_user_id=row["bot_user_id"],
                     bot_scopes=row["bot_scopes"],
+                    bot_refresh_token=row["bot_refresh_token"],
+                    bot_token_expires_at=row["bot_token_expires_at"],
                     is_enterprise_install=row["is_enterprise_install"],
                     installed_at=row["installed_at"],
                 )
@@ -191,6 +255,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         where_clause = and_(c.enterprise_id == enterprise_id, c.team_id == team_id)
         if user_id is not None:
             where_clause = and_(
+                c.client_id == self.client_id,
                 c.enterprise_id == enterprise_id,
                 c.team_id == team_id,
                 c.user_id == user_id,
@@ -217,9 +282,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     bot_id=row["bot_id"],
                     bot_user_id=row["bot_user_id"],
                     bot_scopes=row["bot_scopes"],
+                    bot_refresh_token=row["bot_refresh_token"],
+                    bot_token_expires_at=row["bot_token_expires_at"],
                     user_id=row["user_id"],
                     user_token=row["user_token"],
                     user_scopes=row["user_scopes"],
+                    user_refresh_token=row["user_refresh_token"],
+                    user_token_expires_at=row["user_token_expires_at"],
                     # Only the incoming webhook issued in the latest installation is set in this logic
                     incoming_webhook_url=row["incoming_webhook_url"],
                     incoming_webhook_channel=row["incoming_webhook_channel"],
