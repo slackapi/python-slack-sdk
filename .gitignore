@@ -40,3 +40,5 @@ tmp.txt
 logs/
 
 .pytype/
+*.db
+.env*

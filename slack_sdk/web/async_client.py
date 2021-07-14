@@ -393,7 +393,7 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def admin_conversations_search(self, **kwargs) -> AsyncSlackResponse:
         """Search for public or private channels in an Enterprise organization."""
-        return await self.api_call("admin.conversations.search", json=kwargs)
+        return await self.api_call("admin.conversations.search", params=kwargs)
 
     async def admin_conversations_convertToPrivate(
         self, *, channel_id: str, **kwargs
@@ -538,7 +538,7 @@ class AsyncWebClient(AsyncBaseClient):
 
         """
         kwargs.update({"channel_id": channel_id})
-        return await self.api_call("admin.conversations.getTeams", json=kwargs)
+        return await self.api_call("admin.conversations.getTeams", params=kwargs)
 
     async def admin_emoji_add(self, **kwargs) -> AsyncSlackResponse:
         """Add an emoji."""
@@ -668,11 +668,11 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def admin_inviteRequests_approved_list(self, **kwargs) -> AsyncSlackResponse:
         """List all approved workspace invite requests."""
-        return await self.api_call("admin.inviteRequests.approved.list", json=kwargs)
+        return await self.api_call("admin.inviteRequests.approved.list", params=kwargs)
 
     async def admin_inviteRequests_denied_list(self, **kwargs) -> AsyncSlackResponse:
         """List all denied workspace invite requests."""
-        return await self.api_call("admin.inviteRequests.denied.list", json=kwargs)
+        return await self.api_call("admin.inviteRequests.denied.list", params=kwargs)
 
     async def admin_inviteRequests_deny(
         self, *, invite_request_id: str, **kwargs
@@ -687,7 +687,7 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def admin_inviteRequests_list(self, **kwargs) -> AsyncSlackResponse:
         """List all pending workspace invite requests."""
-        return await self.api_call("admin.inviteRequests.list", json=kwargs)
+        return await self.api_call("admin.inviteRequests.list", params=kwargs)
 
     async def admin_teams_admins_list(
         self, *, team_id: str, **kwargs
@@ -716,7 +716,7 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def admin_teams_list(self, **kwargs) -> AsyncSlackResponse:
         """List all teams on an Enterprise organization."""
-        return await self.api_call("admin.teams.list", json=kwargs)
+        return await self.api_call("admin.teams.list", params=kwargs)
 
     async def admin_teams_owners_list(
         self, *, team_id: str, **kwargs
@@ -904,7 +904,7 @@ class AsyncWebClient(AsyncBaseClient):
             team_id (str): ID of the team. e.g. 'T1234'
         """
         kwargs.update({"team_id": team_id})
-        return await self.api_call("admin.users.list", json=kwargs)
+        return await self.api_call("admin.users.list", params=kwargs)
 
     async def admin_users_remove(
         self, *, team_id: str, user_id: str, **kwargs
@@ -1392,7 +1392,7 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def chat_scheduledMessages_list(self, **kwargs) -> AsyncSlackResponse:
         """Lists all scheduled messages."""
-        return await self.api_call("chat.scheduledMessages.list", json=kwargs)
+        return await self.api_call("chat.scheduledMessages.list", params=kwargs)
 
     async def conversations_archive(
         self, *, channel: str, **kwargs
