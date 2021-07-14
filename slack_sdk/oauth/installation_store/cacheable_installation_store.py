@@ -35,6 +35,13 @@ class CacheableInstallationStore(InstallationStore):
 
         return self.underlying.save(installation)
 
+    def save_bot(self, bot: Bot):
+        # Invalidate cache data for update operations
+        key = f"{bot.enterprise_id or ''}-{bot.team_id or ''}"
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        return self.underlying.save_bot(bot)
+
     def find_bot(
         self,
         *,

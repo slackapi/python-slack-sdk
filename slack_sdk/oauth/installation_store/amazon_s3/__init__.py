@@ -38,27 +38,19 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = "none"
         e_id = installation.enterprise_id or none
         t_id = installation.team_id or none
         workspace_path = f"{self.client_id}/{e_id}-{t_id}"
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f"{workspace_path}/bot-latest",
-            )
-            self.logger.debug(f"S3 put_object response: {response}")
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f"{workspace_path}/bot-{history_version}",
-            )
-            self.logger.debug(f"S3 put_object response: {response}")
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -92,14 +84,6 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f"S3 put_object response: {response}")
 
         else:
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f"{workspace_path}/bot-latest",
-            )
-            self.logger.debug(f"S3 put_object response: {response}")
-
             # per workspace
             entity: str = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
@@ -116,6 +100,37 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                 Bucket=self.bucket_name,
                 Body=entity,
                 Key=f"{workspace_path}/installer-{u_id}-latest",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+
+    def save_bot(self, bot: Bot):
+        none = "none"
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        workspace_path = f"{self.client_id}/{e_id}-{t_id}"
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/bot-latest",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/bot-{history_version}",
+            )
+            self.logger.debug(f"S3 put_object response: {response}")
+
+        else:
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f"{workspace_path}/bot-latest",
             )
             self.logger.debug(f"S3 put_object response: {response}")
 

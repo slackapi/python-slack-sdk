@@ -32,7 +32,11 @@ class AsyncInstallationStore:
         raise NotImplementedError()
 
     async def async_save(self, installation: Installation):
-        """Saves a new installation data"""
+        """Saves an installation data"""
+        raise NotImplementedError()
+
+    async def async_save_bot(self, bot: Bot):
+        """Saves a bot installation data"""
         raise NotImplementedError()
 
     async def async_find_bot(

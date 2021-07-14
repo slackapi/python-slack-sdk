@@ -36,6 +36,13 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             self.cached_installations.pop(key)
         return await self.underlying.async_save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        # Invalidate cache data for update operations
+        key = f"{bot.enterprise_id or ''}-{bot.team_id or ''}"
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        return await self.underlying.async_save_bot(bot)
+
     async def async_find_bot(
         self,
         *,

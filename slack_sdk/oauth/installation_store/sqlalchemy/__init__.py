@@ -168,8 +168,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 )
                 conn.execute(update_statement, i)
 
+        # bots
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.engine.begin() as conn:
             # bots
-            b = installation.to_bot().to_dict()
+            b = bot.to_dict()
             b["client_id"] = self.client_id
 
             b_column = self.bots.c
@@ -178,8 +183,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 .where(
                     and_(
                         b_column.client_id == self.client_id,
-                        b_column.enterprise_id == installation.enterprise_id,
-                        b_column.team_id == installation.team_id,
+                        b_column.enterprise_id == bot.enterprise_id,
+                        b_column.team_id == bot.team_id,
                         b_column.installed_at == b.get("installed_at"),
                     )
                 )
