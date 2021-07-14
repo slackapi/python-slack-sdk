@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "conversations": [
+    {
+      "id": "C013T0FTKU3",
+      "name": "random",
+      "purpose": "test",
+      "member_count": 11,
+      "created": 1589700571,
+      "creator_id": "W111",
+      "is_private": false,
+      "is_archived": false,
+      "is_general": false,
+      "last_activity_ts": 1599130434000900,
+      "is_ext_shared": false,
+      "is_global_shared": false,
+      "is_org_default": false,
+      "is_org_mandatory": false,
+      "is_org_shared": false,
+      "is_frozen": false,
+      "internal_team_ids_count": 1,
+      "internal_team_ids_sample_team": "T111",
+      "pending_connected_team_ids": [],
+      "is_pending_ext_shared": false
+    }
+  ],
+  "next_cursor": "1"
+}
