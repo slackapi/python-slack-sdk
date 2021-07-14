@@ -2046,7 +2046,7 @@ class WebClient(BaseClient):
         Args:
             token: The legacy xoxb or xoxp token being migrated to use token rotation.
             client_id: Issued when you created your application.
-            client_secret:Issued when you created your application.
+            client_secret: Issued when you created your application.
         """
         kwargs.update(
             {"client_id": client_id, "client_secret": client_secret, "token": token}
