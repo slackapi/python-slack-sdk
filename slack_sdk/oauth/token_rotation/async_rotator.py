@@ -38,6 +38,8 @@ class AsyncTokenRotator:
             None if no rotation is necessary for now.
         """
 
+        # TODO: make the following two calls in parallel for better performance
+
         # bot
         rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(
             bot=installation.to_bot(),
@@ -96,9 +98,9 @@ class AsyncTokenRotator:
             refreshed_bot = Bot(**bot.to_dict())
             refreshed_bot.bot_token = refresh_response.get("access_token")
             refreshed_bot.bot_refresh_token = refresh_response.get("refresh_token")
-            refreshed_bot.bot_token_expires_at = int(time()) + refresh_response.get(
+            refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response.get(
                 "expires_in"
-            )
+            ))
             return refreshed_bot
 
         except SlackApiError as e:
@@ -131,8 +133,6 @@ class AsyncTokenRotator:
                 grant_type="refresh_token",
                 refresh_token=installation.user_refresh_token,
             )
-            # TODO: error handling
-
             if refresh_response.get("token_type") != "user":
                 return None
 
@@ -143,7 +143,7 @@ class AsyncTokenRotator:
             )
             refreshed_installation.user_token_expires_at = int(
                 time()
-            ) + refresh_response.get("expires_in")
+            ) + int(refresh_response.get("expires_in"))
             return refreshed_installation
 
         except SlackApiError as e:

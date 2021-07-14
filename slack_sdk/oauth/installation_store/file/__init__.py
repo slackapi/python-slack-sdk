@@ -39,6 +39,9 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = "none"
         e_id = installation.enterprise_id or none
@@ -46,14 +49,10 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
         team_installation_dir = f"{self.base_dir}/{e_id}-{t_id}"
         self._mkdir(team_installation_dir)
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            with open(f"{team_installation_dir}/bot-latest", "w") as f:
-                f.write(entity)
-            with open(f"{team_installation_dir}/bot-{history_version}", "w") as f:
-                f.write(entity)
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -73,14 +72,30 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 f.write(entity)
 
         else:
-            with open(f"{team_installation_dir}/bot-latest", "w") as f:
-                entity: str = json.dumps(installation.to_bot().__dict__)
-                f.write(entity)
-
             u_id = installation.user_id or none
             installer_filepath = f"{team_installation_dir}/installer-{u_id}-latest"
             with open(installer_filepath, "w") as f:
                 entity: str = json.dumps(installation.__dict__)
+                f.write(entity)
+
+    def save_bot(self, bot: Bot):
+        none = "none"
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        team_installation_dir = f"{self.base_dir}/{e_id}-{t_id}"
+        self._mkdir(team_installation_dir)
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+
+            entity: str = json.dumps(bot.__dict__)
+            with open(f"{team_installation_dir}/bot-latest", "w") as f:
+                f.write(entity)
+            with open(f"{team_installation_dir}/bot-{history_version}", "w") as f:
+                f.write(entity)
+        else:
+            with open(f"{team_installation_dir}/bot-latest", "w") as f:
+                entity: str = json.dumps(bot.__dict__)
                 f.write(entity)
 
     async def async_find_bot(

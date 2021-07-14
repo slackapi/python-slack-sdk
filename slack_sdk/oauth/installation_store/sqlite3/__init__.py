@@ -130,58 +130,11 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         with self.connect() as conn:
-            conn.execute(
-                """
-                insert into slack_bots (
-                    client_id,
-                    app_id,
-                    enterprise_id,
-                    enterprise_name,
-                    team_id,
-                    team_name,
-                    bot_token,
-                    bot_id,
-                    bot_user_id,
-                    bot_scopes,
-                    bot_refresh_token,  -- since v3.8
-                    bot_token_expires_at,  -- since v3.8
-                    is_enterprise_install
-                )
-                values
-                (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
-                );
-                """,
-                [
-                    self.client_id,
-                    installation.app_id,
-                    installation.enterprise_id or "",
-                    installation.enterprise_name,
-                    installation.team_id or "",
-                    installation.team_name,
-                    installation.bot_token,
-                    installation.bot_id,
-                    installation.bot_user_id,
-                    ",".join(installation.bot_scopes),
-                    installation.bot_refresh_token,
-                    installation.bot_token_expires_at,
-                    installation.is_enterprise_install,
-                ],
-            )
             conn.execute(
                 """
                 insert into slack_installations (
@@ -269,6 +222,62 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             self.logger.debug(
                 f"New rows in slack_bots and slack_installations have been created (database: {self.database})"
+            )
+            conn.commit()
+
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.connect() as conn:
+            conn.execute(
+                """
+                insert into slack_bots (
+                    client_id,
+                    app_id,
+                    enterprise_id,
+                    enterprise_name,
+                    team_id,
+                    team_name,
+                    bot_token,
+                    bot_id,
+                    bot_user_id,
+                    bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
+                    is_enterprise_install
+                )
+                values
+                (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                );
+                """,
+                [
+                    self.client_id,
+                    bot.app_id,
+                    bot.enterprise_id or "",
+                    bot.enterprise_name,
+                    bot.team_id or "",
+                    bot.team_name,
+                    bot.bot_token,
+                    bot.bot_id,
+                    bot.bot_user_id,
+                    ",".join(bot.bot_scopes),
+                    bot.bot_refresh_token,
+                    bot.bot_token_expires_at,
+                    bot.is_enterprise_install,
+                ],
             )
             conn.commit()
 

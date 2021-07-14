@@ -36,7 +36,11 @@ class InstallationStore:
         raise NotImplementedError()
 
     def save(self, installation: Installation):
-        """Saves a new installation data"""
+        """Saves an installation data"""
+        raise NotImplementedError()
+
+    def save_bot(self, bot: Bot):
+        """Saves a bot installation data"""
         raise NotImplementedError()
 
     def find_bot(
