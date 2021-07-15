@@ -105,6 +105,8 @@ class WebhookClient:
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; WebhookResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.
@@ -117,6 +119,8 @@ class WebhookClient:
             response_type: The type of message (either &#39;in_channel&#39; or &#39;ephemeral&#39;)
             replace_original: True if you use this option for response_url requests
             delete_original: True if you use this option for response_url requests
+            unfurl_links: Option to indicate whether text url should unfurl
+            unfurl_media: Option to indicate whether media url should unfurl
             headers: Request headers to append only for this request
 
         Returns:
@@ -132,6 +136,8 @@ class WebhookClient:
                 &#34;response_type&#34;: response_type,
                 &#34;replace_original&#34;: replace_original,
                 &#34;delete_original&#34;: delete_original,
+                &#34;unfurl_links&#34;: unfurl_links,
+                &#34;unfurl_media&#34;: unfurl_media,
             },
             headers=headers,
         )
@@ -320,6 +326,8 @@ class WebhookClient:
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; WebhookResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.
@@ -332,6 +340,8 @@ class WebhookClient:
             response_type: The type of message (either &#39;in_channel&#39; or &#39;ephemeral&#39;)
             replace_original: True if you use this option for response_url requests
             delete_original: True if you use this option for response_url requests
+            unfurl_links: Option to indicate whether text url should unfurl
+            unfurl_media: Option to indicate whether media url should unfurl
             headers: Request headers to append only for this request
 
         Returns:
@@ -347,6 +357,8 @@ class WebhookClient:
                 &#34;response_type&#34;: response_type,
                 &#34;replace_original&#34;: replace_original,
                 &#34;delete_original&#34;: delete_original,
+                &#34;unfurl_links&#34;: unfurl_links,
+                &#34;unfurl_media&#34;: unfurl_media,
             },
             headers=headers,
         )
@@ -468,7 +480,7 @@ class WebhookClient:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.webhook.client.WebhookClient.send"><code class="name flex">
-<span>def <span class="ident">send</span></span>(<span>self, *, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, response_type: Optional[str] = None, replace_original: Optional[bool] = None, delete_original: Optional[bool] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
+<span>def <span class="ident">send</span></span>(<span>self, *, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, response_type: Optional[str] = None, replace_original: Optional[bool] = None, delete_original: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
@@ -487,6 +499,10 @@ class WebhookClient:
 <dd>True if you use this option for response_url requests</dd>
 <dt><strong><code>delete_original</code></strong></dt>
 <dd>True if you use this option for response_url requests</dd>
+<dt><strong><code>unfurl_links</code></strong></dt>
+<dd>Option to indicate whether text url should unfurl</dd>
+<dt><strong><code>unfurl_media</code></strong></dt>
+<dd>Option to indicate whether media url should unfurl</dd>
 <dt><strong><code>headers</code></strong></dt>
 <dd>Request headers to append only for this request</dd>
 </dl>
@@ -505,6 +521,8 @@ class WebhookClient:
     response_type: Optional[str] = None,
     replace_original: Optional[bool] = None,
     delete_original: Optional[bool] = None,
+    unfurl_links: Optional[bool] = None,
+    unfurl_media: Optional[bool] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; WebhookResponse:
     &#34;&#34;&#34;Performs a Slack API request and returns the result.
@@ -517,6 +535,8 @@ class WebhookClient:
         response_type: The type of message (either &#39;in_channel&#39; or &#39;ephemeral&#39;)
         replace_original: True if you use this option for response_url requests
         delete_original: True if you use this option for response_url requests
+        unfurl_links: Option to indicate whether text url should unfurl
+        unfurl_media: Option to indicate whether media url should unfurl
         headers: Request headers to append only for this request
 
     Returns:
@@ -532,6 +552,8 @@ class WebhookClient:
             &#34;response_type&#34;: response_type,
             &#34;replace_original&#34;: replace_original,
             &#34;delete_original&#34;: delete_original,
+            &#34;unfurl_links&#34;: unfurl_links,
+            &#34;unfurl_media&#34;: unfurl_media,
         },
         headers=headers,
     )</code></pre>

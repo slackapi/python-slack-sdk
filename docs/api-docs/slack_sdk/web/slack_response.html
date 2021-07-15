@@ -171,7 +171,10 @@ class SlackResponse:
             params = self.req_args.get(&#34;params&#34;, {})
             if params is None:
                 params = {}
-            params.update({&#34;cursor&#34;: self.data[&#34;response_metadata&#34;][&#34;next_cursor&#34;]})
+            next_cursor = self.data.get(&#34;response_metadata&#34;, {}).get(
+                &#34;next_cursor&#34;
+            ) or self.data.get(&#34;next_cursor&#34;)
+            params.update({&#34;cursor&#34;: next_cursor})
             self.req_args.update({&#34;params&#34;: params})
 
             # This method sends a request in a synchronous way
@@ -421,7 +424,10 @@ removed at anytime.</p></div>
             params = self.req_args.get(&#34;params&#34;, {})
             if params is None:
                 params = {}
-            params.update({&#34;cursor&#34;: self.data[&#34;response_metadata&#34;][&#34;next_cursor&#34;]})
+            next_cursor = self.data.get(&#34;response_metadata&#34;, {}).get(
+                &#34;next_cursor&#34;
+            ) or self.data.get(&#34;next_cursor&#34;)
+            params.update({&#34;cursor&#34;: next_cursor})
             self.req_args.update({&#34;params&#34;: params})
 
             # This method sends a request in a synchronous way

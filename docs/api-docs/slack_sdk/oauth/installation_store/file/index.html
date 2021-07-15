@@ -67,6 +67,9 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = &#34;none&#34;
         e_id = installation.enterprise_id or none
@@ -74,14 +77,10 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
         team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
         self._mkdir(team_installation_dir)
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-                f.write(entity)
-            with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
-                f.write(entity)
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -101,14 +100,30 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 f.write(entity)
 
         else:
-            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-                entity: str = json.dumps(installation.to_bot().__dict__)
-                f.write(entity)
-
             u_id = installation.user_id or none
             installer_filepath = f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;
             with open(installer_filepath, &#34;w&#34;) as f:
                 entity: str = json.dumps(installation.__dict__)
+                f.write(entity)
+
+    def save_bot(self, bot: Bot):
+        none = &#34;none&#34;
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
+        self._mkdir(team_installation_dir)
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+
+            entity: str = json.dumps(bot.__dict__)
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+            with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+        else:
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                entity: str = json.dumps(bot.__dict__)
                 f.write(entity)
 
     async def async_find_bot(
@@ -307,6 +322,9 @@ the following methods should be implemented.</p>
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = &#34;none&#34;
         e_id = installation.enterprise_id or none
@@ -314,14 +332,10 @@ the following methods should be implemented.</p>
         team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
         self._mkdir(team_installation_dir)
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-                f.write(entity)
-            with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
-                f.write(entity)
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -341,14 +355,30 @@ the following methods should be implemented.</p>
                 f.write(entity)
 
         else:
-            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
-                entity: str = json.dumps(installation.to_bot().__dict__)
-                f.write(entity)
-
             u_id = installation.user_id or none
             installer_filepath = f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;
             with open(installer_filepath, &#34;w&#34;) as f:
                 entity: str = json.dumps(installation.__dict__)
+                f.write(entity)
+
+    def save_bot(self, bot: Bot):
+        none = &#34;none&#34;
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
+        self._mkdir(team_installation_dir)
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+
+            entity: str = json.dumps(bot.__dict__)
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+            with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+        else:
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                entity: str = json.dumps(bot.__dict__)
                 f.write(entity)
 
     async def async_find_bot(
@@ -511,6 +541,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
@@ -537,6 +568,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:

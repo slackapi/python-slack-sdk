@@ -66,27 +66,19 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = &#34;none&#34;
         e_id = installation.enterprise_id or none
         t_id = installation.team_id or none
         workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-latest&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-{history_version}&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -120,14 +112,6 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
         else:
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-latest&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
             # per workspace
             entity: str = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
@@ -144,6 +128,37 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                 Bucket=self.bucket_name,
                 Body=entity,
                 Key=f&#34;{workspace_path}/installer-{u_id}-latest&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+
+    def save_bot(self, bot: Bot):
+        none = &#34;none&#34;
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-latest&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-{history_version}&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+
+        else:
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-latest&#34;,
             )
             self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
@@ -371,27 +386,19 @@ the following methods should be implemented.</p>
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         none = &#34;none&#34;
         e_id = installation.enterprise_id or none
         t_id = installation.team_id or none
         workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
 
+        self.save_bot(installation.to_bot())
+
         if self.historical_data_enabled:
             history_version: str = str(installation.installed_at)
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-latest&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-{history_version}&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
             # per workspace
             entity: str = json.dumps(installation.__dict__)
@@ -425,14 +432,6 @@ the following methods should be implemented.</p>
             self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
         else:
-            entity: str = json.dumps(installation.to_bot().__dict__)
-            response = self.s3_client.put_object(
-                Bucket=self.bucket_name,
-                Body=entity,
-                Key=f&#34;{workspace_path}/bot-latest&#34;,
-            )
-            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
-
             # per workspace
             entity: str = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
@@ -449,6 +448,37 @@ the following methods should be implemented.</p>
                 Bucket=self.bucket_name,
                 Body=entity,
                 Key=f&#34;{workspace_path}/installer-{u_id}-latest&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+
+    def save_bot(self, bot: Bot):
+        none = &#34;none&#34;
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-latest&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-{history_version}&#34;,
+            )
+            self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
+
+        else:
+            entity: str = json.dumps(bot.__dict__)
+            response = self.s3_client.put_object(
+                Bucket=self.bucket_name,
+                Body=entity,
+                Key=f&#34;{workspace_path}/bot-latest&#34;,
             )
             self.logger.debug(f&#34;S3 put_object response: {response}&#34;)
 
@@ -640,6 +670,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
@@ -666,6 +697,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:

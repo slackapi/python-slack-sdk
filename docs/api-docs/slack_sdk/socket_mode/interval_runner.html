@@ -27,7 +27,6 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import threading
-import time
 from threading import Thread, Event
 from typing import Callable
 
@@ -46,7 +45,7 @@ class IntervalRunner:
     def _run(self) -&gt; None:
         while not self.event.is_set():
             self.target()
-            time.sleep(self.interval_seconds)
+            self.event.wait(self.interval_seconds)
 
     def start(self) -&gt; &#34;IntervalRunner&#34;:
         self.thread.start()
@@ -95,7 +94,7 @@ class IntervalRunner:
     def _run(self) -&gt; None:
         while not self.event.is_set():
             self.target()
-            time.sleep(self.interval_seconds)
+            self.event.wait(self.interval_seconds)
 
     def start(self) -&gt; &#34;IntervalRunner&#34;:
         self.thread.start()

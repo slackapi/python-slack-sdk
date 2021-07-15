@@ -53,7 +53,22 @@ class CacheableInstallationStore(InstallationStore):
         return self.underlying.logger
 
     def save(self, installation: Installation):
+        # Invalidate cache data for update operations
+        key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}-{installation.user_id or &#39;&#39;}&#34;
+        if key in self.cached_installations:
+            self.cached_installations.pop(key)
+
         return self.underlying.save(installation)
+
+    def save_bot(self, bot: Bot):
+        # Invalidate cache data for update operations
+        key = f&#34;{bot.enterprise_id or &#39;&#39;}-{bot.team_id or &#39;&#39;}&#34;
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        return self.underlying.save_bot(bot)
 
     def find_bot(
         self,
@@ -86,7 +101,7 @@ class CacheableInstallationStore(InstallationStore):
     ) -&gt; Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}-{user_id or &#39;&#39;}&#34;
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = self.underlying.find_installation(
@@ -110,7 +125,8 @@ class CacheableInstallationStore(InstallationStore):
             team_id=team_id,
         )
         key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
-        self.cached_bots.pop(key)
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
 
     def delete_installation(
         self,
@@ -124,8 +140,10 @@ class CacheableInstallationStore(InstallationStore):
             team_id=team_id,
             user_id=user_id,
         )
-        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
-        self.cached_installations.pop(key)
+        key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        for key in list(self.cached_installations.keys()):
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
 
     def delete_all(
         self,
@@ -138,10 +156,10 @@ class CacheableInstallationStore(InstallationStore):
             team_id=team_id,
         )
         key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
-        for key in self.cached_bots.keys():
+        for key in list(self.cached_bots.keys()):
             if key.startswith(key_prefix):
                 self.cached_bots.pop(key)
-        for key in self.cached_installations.keys():
+        for key in list(self.cached_installations.keys()):
             if key.startswith(key_prefix):
                 self.cached_installations.pop(key)</code></pre>
 </details>
@@ -209,7 +227,22 @@ the following methods should be implemented.</p>
         return self.underlying.logger
 
     def save(self, installation: Installation):
+        # Invalidate cache data for update operations
+        key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}-{installation.user_id or &#39;&#39;}&#34;
+        if key in self.cached_installations:
+            self.cached_installations.pop(key)
+
         return self.underlying.save(installation)
+
+    def save_bot(self, bot: Bot):
+        # Invalidate cache data for update operations
+        key = f&#34;{bot.enterprise_id or &#39;&#39;}-{bot.team_id or &#39;&#39;}&#34;
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
+        return self.underlying.save_bot(bot)
 
     def find_bot(
         self,
@@ -242,7 +275,7 @@ the following methods should be implemented.</p>
     ) -&gt; Optional[Installation]:
         if is_enterprise_install or team_id is None:
             team_id = &#34;&#34;
-        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
+        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}-{user_id or &#39;&#39;}&#34;
         if key in self.cached_installations:
             return self.cached_installations[key]
         installation = self.underlying.find_installation(
@@ -266,7 +299,8 @@ the following methods should be implemented.</p>
             team_id=team_id,
         )
         key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
-        self.cached_bots.pop(key)
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
 
     def delete_installation(
         self,
@@ -280,8 +314,10 @@ the following methods should be implemented.</p>
             team_id=team_id,
             user_id=user_id,
         )
-        key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}={user_id or &#39;&#39;}&#34;
-        self.cached_installations.pop(key)
+        key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
+        for key in list(self.cached_installations.keys()):
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
 
     def delete_all(
         self,
@@ -294,10 +330,10 @@ the following methods should be implemented.</p>
             team_id=team_id,
         )
         key_prefix = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
-        for key in self.cached_bots.keys():
+        for key in list(self.cached_bots.keys()):
             if key.startswith(key_prefix):
                 self.cached_bots.pop(key)
-        for key in self.cached_installations.keys():
+        for key in list(self.cached_installations.keys()):
             if key.startswith(key_prefix):
                 self.cached_installations.pop(key)</code></pre>
 </details>
@@ -345,6 +381,7 @@ def logger(self) -&gt; Logger:
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 </ul>
