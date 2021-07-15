@@ -26,8 +26,14 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from datetime import datetime
+<pre><code class="python">import re
+from datetime import datetime
+from time import time
 from typing import Optional, Union, Dict, Any, Sequence
+
+from slack_sdk.oauth.installation_store.internals import (
+    _from_iso_format_to_unix_timestamp,
+)
 
 
 class Bot:
@@ -40,6 +46,10 @@ class Bot:
     bot_id: str
     bot_user_id: str
     bot_scopes: Sequence[str]
+    # only when token rotation is enabled
+    bot_refresh_token: Optional[str]
+    # only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
     is_enterprise_install: bool
     installed_at: float
 
@@ -59,11 +69,20 @@ class Bot:
         bot_id: str,
         bot_user_id: str,
         bot_scopes: Union[str, Sequence[str]] = &#34;&#34;,
+        # only when token rotation is enabled
+        bot_refresh_token: Optional[str] = None,
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
         is_enterprise_install: Optional[bool] = False,
         # timestamps
-        installed_at: float,
+        # The expected value type is float but the internals handle other types too
+        # for str values, we supports only ISO datetime format.
+        installed_at: Union[float, datetime, str],
         # custom values
-        custom_values: Optional[Dict[str, Any]] = None
+        custom_values: Optional[Dict[str, Any]] = None,
     ):
         self.app_id = app_id
         self.enterprise_id = enterprise_id
@@ -78,8 +97,36 @@ class Bot:
             self.bot_scopes = bot_scopes.split(&#34;,&#34;) if len(bot_scopes) &gt; 0 else []
         else:
             self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+        if bot_token_expires_at is not None:
+            if type(bot_token_expires_at) == datetime:
+                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+            elif type(bot_token_expires_at) == str and not re.match(
+                &#34;^\\d+$&#34;, bot_token_expires_at
+            ):
+                self.bot_token_expires_at = int(
+                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
+                )
+            else:
+                self.bot_token_expires_at = int(bot_token_expires_at)
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
         self.is_enterprise_install = is_enterprise_install or False
-        self.installed_at = installed_at
+
+        if type(installed_at) == float:
+            self.installed_at = installed_at
+        elif type(installed_at) == datetime:
+            self.installed_at = installed_at.timestamp()
+        elif type(installed_at) == str:
+            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
+                self.installed_at = float(installed_at)
+            else:
+                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
+        else:
+            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+
         self.custom_values = custom_values if custom_values is not None else {}
 
     def set_custom_value(self, name: str, value: Any):
@@ -99,6 +146,10 @@ class Bot:
             &#34;bot_id&#34;: self.bot_id,
             &#34;bot_user_id&#34;: self.bot_user_id,
             &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
+            &#34;bot_refresh_token&#34;: self.bot_refresh_token,
+            &#34;bot_token_expires_at&#34;: datetime.utcfromtimestamp(self.bot_token_expires_at)
+            if self.bot_token_expires_at is not None
+            else None,
             &#34;is_enterprise_install&#34;: self.is_enterprise_install,
             &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
         }
@@ -118,7 +169,7 @@ class Bot:
 <dl>
 <dt id="slack_sdk.oauth.installation_store.models.bot.Bot"><code class="flex name class">
 <span>class <span class="ident">Bot</span></span>
-<span>(</span><span>*, app_id: Optional[str] = None, enterprise_id: Optional[str] = None, enterprise_name: Optional[str] = None, team_id: Optional[str] = None, team_name: Optional[str] = None, bot_token: str, bot_id: str, bot_user_id: str, bot_scopes: Union[str, Sequence[str]] = '', is_enterprise_install: Optional[bool] = False, installed_at: float, custom_values: Optional[Dict[str, Any]] = None)</span>
+<span>(</span><span>*, app_id: Optional[str] = None, enterprise_id: Optional[str] = None, enterprise_name: Optional[str] = None, team_id: Optional[str] = None, team_name: Optional[str] = None, bot_token: str, bot_id: str, bot_user_id: str, bot_scopes: Union[str, Sequence[str]] = '', bot_refresh_token: Optional[str] = None, bot_token_expires_in: Optional[int] = None, bot_token_expires_at: Union[int, datetime.datetime, str, NoneType] = None, is_enterprise_install: Optional[bool] = False, installed_at: Union[float, datetime.datetime, str], custom_values: Optional[Dict[str, Any]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -136,6 +187,10 @@ class Bot:
     bot_id: str
     bot_user_id: str
     bot_scopes: Sequence[str]
+    # only when token rotation is enabled
+    bot_refresh_token: Optional[str]
+    # only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
     is_enterprise_install: bool
     installed_at: float
 
@@ -155,11 +210,20 @@ class Bot:
         bot_id: str,
         bot_user_id: str,
         bot_scopes: Union[str, Sequence[str]] = &#34;&#34;,
+        # only when token rotation is enabled
+        bot_refresh_token: Optional[str] = None,
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
         is_enterprise_install: Optional[bool] = False,
         # timestamps
-        installed_at: float,
+        # The expected value type is float but the internals handle other types too
+        # for str values, we supports only ISO datetime format.
+        installed_at: Union[float, datetime, str],
         # custom values
-        custom_values: Optional[Dict[str, Any]] = None
+        custom_values: Optional[Dict[str, Any]] = None,
     ):
         self.app_id = app_id
         self.enterprise_id = enterprise_id
@@ -174,8 +238,36 @@ class Bot:
             self.bot_scopes = bot_scopes.split(&#34;,&#34;) if len(bot_scopes) &gt; 0 else []
         else:
             self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+        if bot_token_expires_at is not None:
+            if type(bot_token_expires_at) == datetime:
+                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+            elif type(bot_token_expires_at) == str and not re.match(
+                &#34;^\\d+$&#34;, bot_token_expires_at
+            ):
+                self.bot_token_expires_at = int(
+                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
+                )
+            else:
+                self.bot_token_expires_at = int(bot_token_expires_at)
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
         self.is_enterprise_install = is_enterprise_install or False
-        self.installed_at = installed_at
+
+        if type(installed_at) == float:
+            self.installed_at = installed_at
+        elif type(installed_at) == datetime:
+            self.installed_at = installed_at.timestamp()
+        elif type(installed_at) == str:
+            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
+                self.installed_at = float(installed_at)
+            else:
+                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
+        else:
+            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+
         self.custom_values = custom_values if custom_values is not None else {}
 
     def set_custom_value(self, name: str, value: Any):
@@ -195,6 +287,10 @@ class Bot:
             &#34;bot_id&#34;: self.bot_id,
             &#34;bot_user_id&#34;: self.bot_user_id,
             &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
+            &#34;bot_refresh_token&#34;: self.bot_refresh_token,
+            &#34;bot_token_expires_at&#34;: datetime.utcfromtimestamp(self.bot_token_expires_at)
+            if self.bot_token_expires_at is not None
+            else None,
             &#34;is_enterprise_install&#34;: self.is_enterprise_install,
             &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
         }
@@ -212,11 +308,19 @@ class Bot:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.oauth.installation_store.models.bot.Bot.bot_refresh_token"><code class="name">var <span class="ident">bot_refresh_token</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.oauth.installation_store.models.bot.Bot.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : Sequence[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.oauth.installation_store.models.bot.Bot.bot_token"><code class="name">var <span class="ident">bot_token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.models.bot.Bot.bot_token_expires_at"><code class="name">var <span class="ident">bot_token_expires_at</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -301,6 +405,10 @@ class Bot:
         &#34;bot_id&#34;: self.bot_id,
         &#34;bot_user_id&#34;: self.bot_user_id,
         &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
+        &#34;bot_refresh_token&#34;: self.bot_refresh_token,
+        &#34;bot_token_expires_at&#34;: datetime.utcfromtimestamp(self.bot_token_expires_at)
+        if self.bot_token_expires_at is not None
+        else None,
         &#34;is_enterprise_install&#34;: self.is_enterprise_install,
         &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
     }
@@ -332,8 +440,10 @@ class Bot:
 <ul class="">
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.app_id" href="#slack_sdk.oauth.installation_store.models.bot.Bot.app_id">app_id</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_id" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_id">bot_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_refresh_token" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_refresh_token">bot_refresh_token</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_scopes" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_scopes">bot_scopes</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_token" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_token">bot_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_token_expires_at" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_token_expires_at">bot_token_expires_at</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.bot_user_id" href="#slack_sdk.oauth.installation_store.models.bot.Bot.bot_user_id">bot_user_id</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.custom_values" href="#slack_sdk.oauth.installation_store.models.bot.Bot.custom_values">custom_values</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.models.bot.Bot.enterprise_id" href="#slack_sdk.oauth.installation_store.models.bot.Bot.enterprise_id">enterprise_id</a></code></li>

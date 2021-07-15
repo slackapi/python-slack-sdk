@@ -93,9 +93,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 user_id text not null,
                 user_token text,
                 user_scopes text,
+                user_refresh_token text,  -- since v3.8
+                user_token_expires_at datetime,  -- since v3.8
                 incoming_webhook_url text,
                 incoming_webhook_channel text,
                 incoming_webhook_channel_id text,
@@ -131,6 +135,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
@@ -152,52 +158,11 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         with self.connect() as conn:
-            conn.execute(
-                &#34;&#34;&#34;
-                insert into slack_bots (
-                    client_id,
-                    app_id,
-                    enterprise_id,
-                    enterprise_name,
-                    team_id,
-                    team_name,
-                    bot_token,
-                    bot_id,
-                    bot_user_id,
-                    bot_scopes,
-                    is_enterprise_install
-                )
-                values
-                (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
-                );
-                &#34;&#34;&#34;,
-                [
-                    self.client_id,
-                    installation.app_id,
-                    installation.enterprise_id or &#34;&#34;,
-                    installation.enterprise_name,
-                    installation.team_id or &#34;&#34;,
-                    installation.team_name,
-                    installation.bot_token,
-                    installation.bot_id,
-                    installation.bot_user_id,
-                    &#34;,&#34;.join(installation.bot_scopes),
-                    installation.is_enterprise_install,
-                ],
-            )
             conn.execute(
                 &#34;&#34;&#34;
                 insert into slack_installations (
@@ -212,9 +177,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -224,6 +193,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 )
                 values
                 (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -258,11 +231,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_id,
                     installation.bot_user_id,
                     &#34;,&#34;.join(installation.bot_scopes),
+                    installation.bot_refresh_token,
+                    installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
                     &#34;,&#34;.join(installation.user_scopes)
                     if installation.user_scopes
                     else None,
+                    installation.user_refresh_token,
+                    installation.user_token_expires_at,
                     installation.incoming_webhook_url,
                     installation.incoming_webhook_channel,
                     installation.incoming_webhook_channel_id,
@@ -273,6 +250,62 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             )
             self.logger.debug(
                 f&#34;New rows in slack_bots and slack_installations have been created (database: {self.database})&#34;
+            )
+            conn.commit()
+
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.connect() as conn:
+            conn.execute(
+                &#34;&#34;&#34;
+                insert into slack_bots (
+                    client_id,
+                    app_id,
+                    enterprise_id,
+                    enterprise_name,
+                    team_id,
+                    team_name,
+                    bot_token,
+                    bot_id,
+                    bot_user_id,
+                    bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
+                    is_enterprise_install
+                )
+                values
+                (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                );
+                &#34;&#34;&#34;,
+                [
+                    self.client_id,
+                    bot.app_id,
+                    bot.enterprise_id or &#34;&#34;,
+                    bot.enterprise_name,
+                    bot.team_id or &#34;&#34;,
+                    bot.team_name,
+                    bot.bot_token,
+                    bot.bot_id,
+                    bot.bot_user_id,
+                    &#34;,&#34;.join(bot.bot_scopes),
+                    bot.bot_refresh_token,
+                    bot.bot_token_expires_at,
+                    bot.is_enterprise_install,
+                ],
             )
             conn.commit()
 
@@ -313,6 +346,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id,
                         bot_user_id,
                         bot_scopes,
+                        bot_refresh_token,  -- since v3.8
+                        bot_token_expires_at,  -- since v3.8
                         is_enterprise_install,
                         installed_at
                     from
@@ -344,15 +379,20 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id=row[6],
                         bot_user_id=row[7],
                         bot_scopes=row[8],
-                        is_enterprise_install=row[9],
-                        installed_at=row[10],
+                        bot_refresh_token=row[9],
+                        bot_token_expires_at=row[10],
+                        is_enterprise_install=row[11],
+                        installed_at=row[12],
                     )
                     return bot
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     async def async_find_installation(
@@ -395,9 +435,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -466,23 +510,30 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         bot_id=row[7],
                         bot_user_id=row[8],
                         bot_scopes=row[9],
-                        user_id=row[10],
-                        user_token=row[11],
-                        user_scopes=row[12],
-                        incoming_webhook_url=row[13],
-                        incoming_webhook_channel=row[14],
-                        incoming_webhook_channel_id=row[15],
-                        incoming_webhook_configuration_url=row[16],
-                        is_enterprise_install=row[17],
-                        token_type=row[18],
-                        installed_at=row[19],
+                        bot_refresh_token=row[10],
+                        bot_token_expires_at=row[11],
+                        user_id=row[12],
+                        user_token=row[13],
+                        user_scopes=row[14],
+                        user_refresh_token=row[15],
+                        user_token_expires_at=row[16],
+                        incoming_webhook_url=row[17],
+                        incoming_webhook_channel=row[18],
+                        incoming_webhook_channel_id=row[19],
+                        incoming_webhook_configuration_url=row[20],
+                        is_enterprise_install=row[21],
+                        token_type=row[22],
+                        installed_at=row[23],
                     )
                     return installation
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     def delete_bot(
@@ -507,7 +558,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
 
     def delete_installation(
         self,
@@ -553,7 +607,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)</code></pre>
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)</code></pre>
 </details>
 </section>
 <section>
@@ -646,9 +703,13 @@ the following methods should be implemented.</p>
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 user_id text not null,
                 user_token text,
                 user_scopes text,
+                user_refresh_token text,  -- since v3.8
+                user_token_expires_at datetime,  -- since v3.8
                 incoming_webhook_url text,
                 incoming_webhook_channel text,
                 incoming_webhook_channel_id text,
@@ -684,6 +745,8 @@ the following methods should be implemented.</p>
                 bot_id text not null,
                 bot_user_id text not null,
                 bot_scopes text,
+                bot_refresh_token text,  -- since v3.8
+                bot_token_expires_at datetime,  -- since v3.8
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
@@ -705,52 +768,11 @@ the following methods should be implemented.</p>
     async def async_save(self, installation: Installation):
         return self.save(installation)
 
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
     def save(self, installation: Installation):
         with self.connect() as conn:
-            conn.execute(
-                &#34;&#34;&#34;
-                insert into slack_bots (
-                    client_id,
-                    app_id,
-                    enterprise_id,
-                    enterprise_name,
-                    team_id,
-                    team_name,
-                    bot_token,
-                    bot_id,
-                    bot_user_id,
-                    bot_scopes,
-                    is_enterprise_install
-                )
-                values
-                (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
-                );
-                &#34;&#34;&#34;,
-                [
-                    self.client_id,
-                    installation.app_id,
-                    installation.enterprise_id or &#34;&#34;,
-                    installation.enterprise_name,
-                    installation.team_id or &#34;&#34;,
-                    installation.team_name,
-                    installation.bot_token,
-                    installation.bot_id,
-                    installation.bot_user_id,
-                    &#34;,&#34;.join(installation.bot_scopes),
-                    installation.is_enterprise_install,
-                ],
-            )
             conn.execute(
                 &#34;&#34;&#34;
                 insert into slack_installations (
@@ -765,9 +787,13 @@ the following methods should be implemented.</p>
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -777,6 +803,10 @@ the following methods should be implemented.</p>
                 )
                 values
                 (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -811,11 +841,15 @@ the following methods should be implemented.</p>
                     installation.bot_id,
                     installation.bot_user_id,
                     &#34;,&#34;.join(installation.bot_scopes),
+                    installation.bot_refresh_token,
+                    installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
                     &#34;,&#34;.join(installation.user_scopes)
                     if installation.user_scopes
                     else None,
+                    installation.user_refresh_token,
+                    installation.user_token_expires_at,
                     installation.incoming_webhook_url,
                     installation.incoming_webhook_channel,
                     installation.incoming_webhook_channel_id,
@@ -826,6 +860,62 @@ the following methods should be implemented.</p>
             )
             self.logger.debug(
                 f&#34;New rows in slack_bots and slack_installations have been created (database: {self.database})&#34;
+            )
+            conn.commit()
+
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.connect() as conn:
+            conn.execute(
+                &#34;&#34;&#34;
+                insert into slack_bots (
+                    client_id,
+                    app_id,
+                    enterprise_id,
+                    enterprise_name,
+                    team_id,
+                    team_name,
+                    bot_token,
+                    bot_id,
+                    bot_user_id,
+                    bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
+                    is_enterprise_install
+                )
+                values
+                (
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                );
+                &#34;&#34;&#34;,
+                [
+                    self.client_id,
+                    bot.app_id,
+                    bot.enterprise_id or &#34;&#34;,
+                    bot.enterprise_name,
+                    bot.team_id or &#34;&#34;,
+                    bot.team_name,
+                    bot.bot_token,
+                    bot.bot_id,
+                    bot.bot_user_id,
+                    &#34;,&#34;.join(bot.bot_scopes),
+                    bot.bot_refresh_token,
+                    bot.bot_token_expires_at,
+                    bot.is_enterprise_install,
+                ],
             )
             conn.commit()
 
@@ -866,6 +956,8 @@ the following methods should be implemented.</p>
                         bot_id,
                         bot_user_id,
                         bot_scopes,
+                        bot_refresh_token,  -- since v3.8
+                        bot_token_expires_at,  -- since v3.8
                         is_enterprise_install,
                         installed_at
                     from
@@ -897,15 +989,20 @@ the following methods should be implemented.</p>
                         bot_id=row[6],
                         bot_user_id=row[7],
                         bot_scopes=row[8],
-                        is_enterprise_install=row[9],
-                        installed_at=row[10],
+                        bot_refresh_token=row[9],
+                        bot_token_expires_at=row[10],
+                        is_enterprise_install=row[11],
+                        installed_at=row[12],
                     )
                     return bot
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     async def async_find_installation(
@@ -948,9 +1045,13 @@ the following methods should be implemented.</p>
                     bot_id,
                     bot_user_id,
                     bot_scopes,
+                    bot_refresh_token,  -- since v3.8
+                    bot_token_expires_at,  -- since v3.8
                     user_id,
                     user_token,
                     user_scopes,
+                    user_refresh_token,  -- since v3.8
+                    user_token_expires_at,  -- since v3.8
                     incoming_webhook_url,
                     incoming_webhook_channel,
                     incoming_webhook_channel_id,
@@ -1019,23 +1120,30 @@ the following methods should be implemented.</p>
                         bot_id=row[7],
                         bot_user_id=row[8],
                         bot_scopes=row[9],
-                        user_id=row[10],
-                        user_token=row[11],
-                        user_scopes=row[12],
-                        incoming_webhook_url=row[13],
-                        incoming_webhook_channel=row[14],
-                        incoming_webhook_channel_id=row[15],
-                        incoming_webhook_configuration_url=row[16],
-                        is_enterprise_install=row[17],
-                        token_type=row[18],
-                        installed_at=row[19],
+                        bot_refresh_token=row[10],
+                        bot_token_expires_at=row[11],
+                        user_id=row[12],
+                        user_token=row[13],
+                        user_scopes=row[14],
+                        user_refresh_token=row[15],
+                        user_token_expires_at=row[16],
+                        incoming_webhook_url=row[17],
+                        incoming_webhook_channel=row[18],
+                        incoming_webhook_channel_id=row[19],
+                        incoming_webhook_configuration_url=row[20],
+                        is_enterprise_install=row[21],
+                        token_type=row[22],
+                        installed_at=row[23],
                     )
                     return installation
                 return None
 
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
             return None
 
     def delete_bot(
@@ -1060,7 +1168,10 @@ the following methods should be implemented.</p>
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)
 
     def delete_installation(
         self,
@@ -1106,7 +1217,10 @@ the following methods should be implemented.</p>
                 conn.commit()
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}&#34;
-            self.logger.warning(message)</code></pre>
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.exception(message)
+            else:
+                self.logger.warning(message)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1173,9 +1287,13 @@ def logger(self) -&gt; Logger:
             bot_id text not null,
             bot_user_id text not null,
             bot_scopes text,
+            bot_refresh_token text,  -- since v3.8
+            bot_token_expires_at datetime,  -- since v3.8
             user_id text not null,
             user_token text,
             user_scopes text,
+            user_refresh_token text,  -- since v3.8
+            user_token_expires_at datetime,  -- since v3.8
             incoming_webhook_url text,
             incoming_webhook_channel text,
             incoming_webhook_channel_id text,
@@ -1211,6 +1329,8 @@ def logger(self) -&gt; Logger:
             bot_id text not null,
             bot_user_id text not null,
             bot_scopes text,
+            bot_refresh_token text,  -- since v3.8
+            bot_token_expires_at datetime,  -- since v3.8
             is_enterprise_install boolean not null default 0,
             installed_at datetime not null default current_timestamp
         );
@@ -1258,6 +1378,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
@@ -1276,6 +1397,7 @@ def logger(self) -&gt; Logger:
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:

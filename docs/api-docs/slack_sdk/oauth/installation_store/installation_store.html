@@ -66,7 +66,11 @@ class InstallationStore:
         raise NotImplementedError()
 
     def save(self, installation: Installation):
-        &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def save_bot(self, bot: Bot):
+        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
         raise NotImplementedError()
 
     def find_bot(
@@ -185,7 +189,11 @@ the following methods should be implemented.</p>
         raise NotImplementedError()
 
     def save(self, installation: Installation):
-        &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def save_bot(self, bot: Bot):
+        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
         raise NotImplementedError()
 
     def find_bot(
@@ -372,13 +380,27 @@ If the user_id is absent, this method may return the latest installation in the 
 <span>def <span class="ident">save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Saves a new installation data</p></div>
+<div class="desc"><p>Saves an installation data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def save(self, installation: Installation):
-    &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+    &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot"><code class="name flex">
+<span>def <span class="ident">save_bot</span></span>(<span>self, bot: <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Saves a bot installation data</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_bot(self, bot: Bot):
+    &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
 </dd>
@@ -410,6 +432,7 @@ If the user_id is absent, this method may return the latest installation in the 
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.logger" href="#slack_sdk.oauth.installation_store.installation_store.InstallationStore.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 </ul>

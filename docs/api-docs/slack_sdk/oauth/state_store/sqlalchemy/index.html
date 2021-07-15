@@ -53,7 +53,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
             metadata,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;state&#34;, String, nullable=False),
+            Column(&#34;state&#34;, String(200), nullable=False),
             Column(&#34;expire_at&#34;, DateTime, nullable=False),
         )
 
@@ -139,7 +139,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
             metadata,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;state&#34;, String, nullable=False),
+            Column(&#34;state&#34;, String(200), nullable=False),
             Column(&#34;expire_at&#34;, DateTime, nullable=False),
         )
 
@@ -235,7 +235,7 @@ def build_oauth_states_table(cls, metadata: MetaData, table_name: str) -&gt; Tab
         metadata,
         metadata,
         Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-        Column(&#34;state&#34;, String, nullable=False),
+        Column(&#34;state&#34;, String(200), nullable=False),
         Column(&#34;expire_at&#34;, DateTime, nullable=False),
     )</code></pre>
 </details>

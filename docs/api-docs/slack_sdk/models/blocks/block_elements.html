@@ -177,10 +177,17 @@ class InteractiveElement(BlockElement):
         subtype: Optional[str] = None,
         **others: dict,
     ):
+        &#34;&#34;&#34;An interactive block element.
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        &#34;&#34;&#34;
         if subtype:
             self._subtype_warning()
         super().__init__(type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don&#39;t intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It&#39;s fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.action_id = action_id
 
@@ -218,11 +225,17 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;InteractiveElement that is usable in input blocks&#34;&#34;&#34;
+        &#34;&#34;&#34;InteractiveElement that is usable in input blocks
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        &#34;&#34;&#34;
         if subtype:
             self._subtype_warning()
         super().__init__(action_id=action_id, type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don&#39;t intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It&#39;s fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
@@ -2383,7 +2396,8 @@ def attributes(self) -&gt; Set[str]:
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
-<p>InteractiveElement that is usable in input blocks</p></div>
+<p>InteractiveElement that is usable in input blocks</p>
+<p>We generally recommend using the concrete subclasses for better supports of available properties.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2413,11 +2427,17 @@ def attributes(self) -&gt; Set[str]:
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;InteractiveElement that is usable in input blocks&#34;&#34;&#34;
+        &#34;&#34;&#34;InteractiveElement that is usable in input blocks
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        &#34;&#34;&#34;
         if subtype:
             self._subtype_warning()
         super().__init__(action_id=action_id, type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don&#39;t intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It&#39;s fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
@@ -2498,7 +2518,9 @@ def subtype(self) -&gt; Optional[str]:
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
-<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>An interactive block element.</p>
+<p>We generally recommend using the concrete subclasses for better supports of available properties.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2518,10 +2540,17 @@ def subtype(self) -&gt; Optional[str]:
         subtype: Optional[str] = None,
         **others: dict,
     ):
+        &#34;&#34;&#34;An interactive block element.
+
+        We generally recommend using the concrete subclasses for better supports of available properties.
+        &#34;&#34;&#34;
         if subtype:
             self._subtype_warning()
         super().__init__(type=type or subtype)
-        show_unknown_key_warning(self, others)
+
+        # Note that we don&#39;t intentionally have show_unknown_key_warning for the unknown key warnings here.
+        # It&#39;s fine to pass any kwargs to the held dict here although the class does not do any validation.
+        # show_unknown_key_warning(self, others)
 
         self.action_id = action_id
 

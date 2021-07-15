@@ -65,26 +65,30 @@ class SQLAlchemyInstallationStore(InstallationStore):
             table_name,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;client_id&#34;, String, nullable=False),
-            Column(&#34;app_id&#34;, String, nullable=False),
-            Column(&#34;enterprise_id&#34;, String),
-            Column(&#34;enterprise_name&#34;, String),
-            Column(&#34;enterprise_url&#34;, String),
-            Column(&#34;team_id&#34;, String),
-            Column(&#34;team_name&#34;, String),
-            Column(&#34;bot_token&#34;, String),
-            Column(&#34;bot_id&#34;, String),
-            Column(&#34;bot_user_id&#34;, String),
-            Column(&#34;bot_scopes&#34;, String),
-            Column(&#34;user_id&#34;, String, nullable=False),
-            Column(&#34;user_token&#34;, String),
-            Column(&#34;user_scopes&#34;, String),
-            Column(&#34;incoming_webhook_url&#34;, String),
-            Column(&#34;incoming_webhook_channel&#34;, String),
-            Column(&#34;incoming_webhook_channel_id&#34;, String),
-            Column(&#34;incoming_webhook_configuration_url&#34;, String),
+            Column(&#34;client_id&#34;, String(32), nullable=False),
+            Column(&#34;app_id&#34;, String(32), nullable=False),
+            Column(&#34;enterprise_id&#34;, String(32)),
+            Column(&#34;enterprise_name&#34;, String(200)),
+            Column(&#34;enterprise_url&#34;, String(200)),
+            Column(&#34;team_id&#34;, String(32)),
+            Column(&#34;team_name&#34;, String(200)),
+            Column(&#34;bot_token&#34;, String(200)),
+            Column(&#34;bot_id&#34;, String(32)),
+            Column(&#34;bot_user_id&#34;, String(32)),
+            Column(&#34;bot_scopes&#34;, String(1000)),
+            Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
+            Column(&#34;user_id&#34;, String(32), nullable=False),
+            Column(&#34;user_token&#34;, String(200)),
+            Column(&#34;user_scopes&#34;, String(1000)),
+            Column(&#34;user_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;user_token_expires_at&#34;, DateTime),  # added in v3.8.0
+            Column(&#34;incoming_webhook_url&#34;, String(200)),
+            Column(&#34;incoming_webhook_channel&#34;, String(200)),
+            Column(&#34;incoming_webhook_channel_id&#34;, String(200)),
+            Column(&#34;incoming_webhook_configuration_url&#34;, String(200)),
             Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
-            Column(&#34;token_type&#34;, String),
+            Column(&#34;token_type&#34;, String(32)),
             Column(
                 &#34;installed_at&#34;,
                 DateTime,
@@ -107,16 +111,18 @@ class SQLAlchemyInstallationStore(InstallationStore):
             table_name,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;client_id&#34;, String, nullable=False),
-            Column(&#34;app_id&#34;, String, nullable=False),
-            Column(&#34;enterprise_id&#34;, String),
-            Column(&#34;enterprise_name&#34;, String),
-            Column(&#34;team_id&#34;, String),
-            Column(&#34;team_name&#34;, String),
-            Column(&#34;bot_token&#34;, String),
-            Column(&#34;bot_id&#34;, String),
-            Column(&#34;bot_user_id&#34;, String),
-            Column(&#34;bot_scopes&#34;, String),
+            Column(&#34;client_id&#34;, String(32), nullable=False),
+            Column(&#34;app_id&#34;, String(32), nullable=False),
+            Column(&#34;enterprise_id&#34;, String(32)),
+            Column(&#34;enterprise_name&#34;, String(200)),
+            Column(&#34;team_id&#34;, String(32)),
+            Column(&#34;team_name&#34;, String(200)),
+            Column(&#34;bot_token&#34;, String(32)),
+            Column(&#34;bot_id&#34;, String(32)),
+            Column(&#34;bot_user_id&#34;, String(32)),
+            Column(&#34;bot_scopes&#34;, String(1000)),
+            Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
             Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
             Column(
                 &#34;installed_at&#34;,
@@ -163,10 +169,65 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.begin() as conn:
             i = installation.to_dict()
             i[&#34;client_id&#34;] = self.client_id
-            conn.execute(self.installations.insert(), i)
-            b = installation.to_bot().to_dict()
+
+            i_column = self.installations.c
+            installations_rows = conn.execute(
+                sqlalchemy.select([i_column.id])
+                .where(
+                    and_(
+                        i_column.client_id == self.client_id,
+                        i_column.enterprise_id == installation.enterprise_id,
+                        i_column.team_id == installation.team_id,
+                        i_column.installed_at == i.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            installations_row_id: Optional[str] = None
+            for row in installations_rows:
+                installations_row_id = row[&#34;id&#34;]
+            if installations_row_id is None:
+                conn.execute(self.installations.insert(), i)
+            else:
+                update_statement = (
+                    self.installations.update()
+                    .where(i_column.id == installations_row_id)
+                    .values(**i)
+                )
+                conn.execute(update_statement, i)
+
+        # bots
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.engine.begin() as conn:
+            # bots
+            b = bot.to_dict()
             b[&#34;client_id&#34;] = self.client_id
-            conn.execute(self.bots.insert(), b)
+
+            b_column = self.bots.c
+            bots_rows = conn.execute(
+                sqlalchemy.select([b_column.id])
+                .where(
+                    and_(
+                        b_column.client_id == self.client_id,
+                        b_column.enterprise_id == bot.enterprise_id,
+                        b_column.team_id == bot.team_id,
+                        b_column.installed_at == b.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            bots_row_id: Optional[str] = None
+            for row in bots_rows:
+                bots_row_id = row[&#34;id&#34;]
+            if bots_row_id is None:
+                conn.execute(self.bots.insert(), b)
+            else:
+                update_statement = (
+                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
+                )
+                conn.execute(update_statement, b)
 
     def find_bot(
         self,
@@ -181,7 +242,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
         c = self.bots.c
         query = (
             self.bots.select()
-            .where(and_(c.enterprise_id == enterprise_id, c.team_id == team_id))
+            .where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                )
+            )
             .order_by(desc(c.installed_at))
             .limit(1)
         )
@@ -199,6 +266,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     bot_id=row[&#34;bot_id&#34;],
                     bot_user_id=row[&#34;bot_user_id&#34;],
                     bot_scopes=row[&#34;bot_scopes&#34;],
+                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
                     is_enterprise_install=row[&#34;is_enterprise_install&#34;],
                     installed_at=row[&#34;installed_at&#34;],
                 )
@@ -219,6 +288,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         where_clause = and_(c.enterprise_id == enterprise_id, c.team_id == team_id)
         if user_id is not None:
             where_clause = and_(
+                c.client_id == self.client_id,
                 c.enterprise_id == enterprise_id,
                 c.team_id == team_id,
                 c.user_id == user_id,
@@ -245,9 +315,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     bot_id=row[&#34;bot_id&#34;],
                     bot_user_id=row[&#34;bot_user_id&#34;],
                     bot_scopes=row[&#34;bot_scopes&#34;],
+                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
                     user_id=row[&#34;user_id&#34;],
                     user_token=row[&#34;user_token&#34;],
                     user_scopes=row[&#34;user_scopes&#34;],
+                    user_refresh_token=row[&#34;user_refresh_token&#34;],
+                    user_token_expires_at=row[&#34;user_token_expires_at&#34;],
                     # Only the incoming webhook issued in the latest installation is set in this logic
                     incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
                     incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
@@ -359,26 +433,30 @@ the following methods should be implemented.</p>
             table_name,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;client_id&#34;, String, nullable=False),
-            Column(&#34;app_id&#34;, String, nullable=False),
-            Column(&#34;enterprise_id&#34;, String),
-            Column(&#34;enterprise_name&#34;, String),
-            Column(&#34;enterprise_url&#34;, String),
-            Column(&#34;team_id&#34;, String),
-            Column(&#34;team_name&#34;, String),
-            Column(&#34;bot_token&#34;, String),
-            Column(&#34;bot_id&#34;, String),
-            Column(&#34;bot_user_id&#34;, String),
-            Column(&#34;bot_scopes&#34;, String),
-            Column(&#34;user_id&#34;, String, nullable=False),
-            Column(&#34;user_token&#34;, String),
-            Column(&#34;user_scopes&#34;, String),
-            Column(&#34;incoming_webhook_url&#34;, String),
-            Column(&#34;incoming_webhook_channel&#34;, String),
-            Column(&#34;incoming_webhook_channel_id&#34;, String),
-            Column(&#34;incoming_webhook_configuration_url&#34;, String),
+            Column(&#34;client_id&#34;, String(32), nullable=False),
+            Column(&#34;app_id&#34;, String(32), nullable=False),
+            Column(&#34;enterprise_id&#34;, String(32)),
+            Column(&#34;enterprise_name&#34;, String(200)),
+            Column(&#34;enterprise_url&#34;, String(200)),
+            Column(&#34;team_id&#34;, String(32)),
+            Column(&#34;team_name&#34;, String(200)),
+            Column(&#34;bot_token&#34;, String(200)),
+            Column(&#34;bot_id&#34;, String(32)),
+            Column(&#34;bot_user_id&#34;, String(32)),
+            Column(&#34;bot_scopes&#34;, String(1000)),
+            Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
+            Column(&#34;user_id&#34;, String(32), nullable=False),
+            Column(&#34;user_token&#34;, String(200)),
+            Column(&#34;user_scopes&#34;, String(1000)),
+            Column(&#34;user_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;user_token_expires_at&#34;, DateTime),  # added in v3.8.0
+            Column(&#34;incoming_webhook_url&#34;, String(200)),
+            Column(&#34;incoming_webhook_channel&#34;, String(200)),
+            Column(&#34;incoming_webhook_channel_id&#34;, String(200)),
+            Column(&#34;incoming_webhook_configuration_url&#34;, String(200)),
             Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
-            Column(&#34;token_type&#34;, String),
+            Column(&#34;token_type&#34;, String(32)),
             Column(
                 &#34;installed_at&#34;,
                 DateTime,
@@ -401,16 +479,18 @@ the following methods should be implemented.</p>
             table_name,
             metadata,
             Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-            Column(&#34;client_id&#34;, String, nullable=False),
-            Column(&#34;app_id&#34;, String, nullable=False),
-            Column(&#34;enterprise_id&#34;, String),
-            Column(&#34;enterprise_name&#34;, String),
-            Column(&#34;team_id&#34;, String),
-            Column(&#34;team_name&#34;, String),
-            Column(&#34;bot_token&#34;, String),
-            Column(&#34;bot_id&#34;, String),
-            Column(&#34;bot_user_id&#34;, String),
-            Column(&#34;bot_scopes&#34;, String),
+            Column(&#34;client_id&#34;, String(32), nullable=False),
+            Column(&#34;app_id&#34;, String(32), nullable=False),
+            Column(&#34;enterprise_id&#34;, String(32)),
+            Column(&#34;enterprise_name&#34;, String(200)),
+            Column(&#34;team_id&#34;, String(32)),
+            Column(&#34;team_name&#34;, String(200)),
+            Column(&#34;bot_token&#34;, String(32)),
+            Column(&#34;bot_id&#34;, String(32)),
+            Column(&#34;bot_user_id&#34;, String(32)),
+            Column(&#34;bot_scopes&#34;, String(1000)),
+            Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+            Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
             Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
             Column(
                 &#34;installed_at&#34;,
@@ -457,10 +537,65 @@ the following methods should be implemented.</p>
         with self.engine.begin() as conn:
             i = installation.to_dict()
             i[&#34;client_id&#34;] = self.client_id
-            conn.execute(self.installations.insert(), i)
-            b = installation.to_bot().to_dict()
+
+            i_column = self.installations.c
+            installations_rows = conn.execute(
+                sqlalchemy.select([i_column.id])
+                .where(
+                    and_(
+                        i_column.client_id == self.client_id,
+                        i_column.enterprise_id == installation.enterprise_id,
+                        i_column.team_id == installation.team_id,
+                        i_column.installed_at == i.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            installations_row_id: Optional[str] = None
+            for row in installations_rows:
+                installations_row_id = row[&#34;id&#34;]
+            if installations_row_id is None:
+                conn.execute(self.installations.insert(), i)
+            else:
+                update_statement = (
+                    self.installations.update()
+                    .where(i_column.id == installations_row_id)
+                    .values(**i)
+                )
+                conn.execute(update_statement, i)
+
+        # bots
+        self.save_bot(installation.to_bot())
+
+    def save_bot(self, bot: Bot):
+        with self.engine.begin() as conn:
+            # bots
+            b = bot.to_dict()
             b[&#34;client_id&#34;] = self.client_id
-            conn.execute(self.bots.insert(), b)
+
+            b_column = self.bots.c
+            bots_rows = conn.execute(
+                sqlalchemy.select([b_column.id])
+                .where(
+                    and_(
+                        b_column.client_id == self.client_id,
+                        b_column.enterprise_id == bot.enterprise_id,
+                        b_column.team_id == bot.team_id,
+                        b_column.installed_at == b.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            bots_row_id: Optional[str] = None
+            for row in bots_rows:
+                bots_row_id = row[&#34;id&#34;]
+            if bots_row_id is None:
+                conn.execute(self.bots.insert(), b)
+            else:
+                update_statement = (
+                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
+                )
+                conn.execute(update_statement, b)
 
     def find_bot(
         self,
@@ -475,7 +610,13 @@ the following methods should be implemented.</p>
         c = self.bots.c
         query = (
             self.bots.select()
-            .where(and_(c.enterprise_id == enterprise_id, c.team_id == team_id))
+            .where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                )
+            )
             .order_by(desc(c.installed_at))
             .limit(1)
         )
@@ -493,6 +634,8 @@ the following methods should be implemented.</p>
                     bot_id=row[&#34;bot_id&#34;],
                     bot_user_id=row[&#34;bot_user_id&#34;],
                     bot_scopes=row[&#34;bot_scopes&#34;],
+                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
                     is_enterprise_install=row[&#34;is_enterprise_install&#34;],
                     installed_at=row[&#34;installed_at&#34;],
                 )
@@ -513,6 +656,7 @@ the following methods should be implemented.</p>
         where_clause = and_(c.enterprise_id == enterprise_id, c.team_id == team_id)
         if user_id is not None:
             where_clause = and_(
+                c.client_id == self.client_id,
                 c.enterprise_id == enterprise_id,
                 c.team_id == team_id,
                 c.user_id == user_id,
@@ -539,9 +683,13 @@ the following methods should be implemented.</p>
                     bot_id=row[&#34;bot_id&#34;],
                     bot_user_id=row[&#34;bot_user_id&#34;],
                     bot_scopes=row[&#34;bot_scopes&#34;],
+                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
                     user_id=row[&#34;user_id&#34;],
                     user_token=row[&#34;user_token&#34;],
                     user_scopes=row[&#34;user_scopes&#34;],
+                    user_refresh_token=row[&#34;user_refresh_token&#34;],
+                    user_token_expires_at=row[&#34;user_token_expires_at&#34;],
                     # Only the incoming webhook issued in the latest installation is set in this logic
                     incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
                     incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
@@ -648,16 +796,18 @@ def build_bots_table(cls, metadata: MetaData, table_name: str) -&gt; Table:
         table_name,
         metadata,
         Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-        Column(&#34;client_id&#34;, String, nullable=False),
-        Column(&#34;app_id&#34;, String, nullable=False),
-        Column(&#34;enterprise_id&#34;, String),
-        Column(&#34;enterprise_name&#34;, String),
-        Column(&#34;team_id&#34;, String),
-        Column(&#34;team_name&#34;, String),
-        Column(&#34;bot_token&#34;, String),
-        Column(&#34;bot_id&#34;, String),
-        Column(&#34;bot_user_id&#34;, String),
-        Column(&#34;bot_scopes&#34;, String),
+        Column(&#34;client_id&#34;, String(32), nullable=False),
+        Column(&#34;app_id&#34;, String(32), nullable=False),
+        Column(&#34;enterprise_id&#34;, String(32)),
+        Column(&#34;enterprise_name&#34;, String(200)),
+        Column(&#34;team_id&#34;, String(32)),
+        Column(&#34;team_name&#34;, String(200)),
+        Column(&#34;bot_token&#34;, String(32)),
+        Column(&#34;bot_id&#34;, String(32)),
+        Column(&#34;bot_user_id&#34;, String(32)),
+        Column(&#34;bot_scopes&#34;, String(1000)),
+        Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+        Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
         Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
         Column(
             &#34;installed_at&#34;,
@@ -690,26 +840,30 @@ def build_installations_table(cls, metadata: MetaData, table_name: str) -&gt; Ta
         table_name,
         metadata,
         Column(&#34;id&#34;, Integer, primary_key=True, autoincrement=True),
-        Column(&#34;client_id&#34;, String, nullable=False),
-        Column(&#34;app_id&#34;, String, nullable=False),
-        Column(&#34;enterprise_id&#34;, String),
-        Column(&#34;enterprise_name&#34;, String),
-        Column(&#34;enterprise_url&#34;, String),
-        Column(&#34;team_id&#34;, String),
-        Column(&#34;team_name&#34;, String),
-        Column(&#34;bot_token&#34;, String),
-        Column(&#34;bot_id&#34;, String),
-        Column(&#34;bot_user_id&#34;, String),
-        Column(&#34;bot_scopes&#34;, String),
-        Column(&#34;user_id&#34;, String, nullable=False),
-        Column(&#34;user_token&#34;, String),
-        Column(&#34;user_scopes&#34;, String),
-        Column(&#34;incoming_webhook_url&#34;, String),
-        Column(&#34;incoming_webhook_channel&#34;, String),
-        Column(&#34;incoming_webhook_channel_id&#34;, String),
-        Column(&#34;incoming_webhook_configuration_url&#34;, String),
+        Column(&#34;client_id&#34;, String(32), nullable=False),
+        Column(&#34;app_id&#34;, String(32), nullable=False),
+        Column(&#34;enterprise_id&#34;, String(32)),
+        Column(&#34;enterprise_name&#34;, String(200)),
+        Column(&#34;enterprise_url&#34;, String(200)),
+        Column(&#34;team_id&#34;, String(32)),
+        Column(&#34;team_name&#34;, String(200)),
+        Column(&#34;bot_token&#34;, String(200)),
+        Column(&#34;bot_id&#34;, String(32)),
+        Column(&#34;bot_user_id&#34;, String(32)),
+        Column(&#34;bot_scopes&#34;, String(1000)),
+        Column(&#34;bot_refresh_token&#34;, String(200)),  # added in v3.8.0
+        Column(&#34;bot_token_expires_at&#34;, DateTime),  # added in v3.8.0
+        Column(&#34;user_id&#34;, String(32), nullable=False),
+        Column(&#34;user_token&#34;, String(200)),
+        Column(&#34;user_scopes&#34;, String(1000)),
+        Column(&#34;user_refresh_token&#34;, String(200)),  # added in v3.8.0
+        Column(&#34;user_token_expires_at&#34;, DateTime),  # added in v3.8.0
+        Column(&#34;incoming_webhook_url&#34;, String(200)),
+        Column(&#34;incoming_webhook_channel&#34;, String(200)),
+        Column(&#34;incoming_webhook_channel_id&#34;, String(200)),
+        Column(&#34;incoming_webhook_configuration_url&#34;, String(200)),
         Column(&#34;is_enterprise_install&#34;, Boolean, default=False, nullable=False),
-        Column(&#34;token_type&#34;, String),
+        Column(&#34;token_type&#34;, String(32)),
         Column(
             &#34;installed_at&#34;,
             DateTime,
@@ -769,6 +923,7 @@ def logger(self) -&gt; Logger:
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
 </ul>
 </li>
 </ul>

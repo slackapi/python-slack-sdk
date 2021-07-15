@@ -60,7 +60,11 @@ class AsyncInstallationStore:
         raise NotImplementedError()
 
     async def async_save(self, installation: Installation):
-        &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    async def async_save_bot(self, bot: Bot):
+        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
         raise NotImplementedError()
 
     async def async_find_bot(
@@ -181,7 +185,11 @@ the following methods should be implemented.</p>
         raise NotImplementedError()
 
     async def async_save(self, installation: Installation):
-        &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    async def async_save_bot(self, bot: Bot):
+        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
         raise NotImplementedError()
 
     async def async_find_bot(
@@ -371,13 +379,27 @@ If the user_id is absent, this method may return the latest installation in the 
 <span>async def <span class="ident">async_save</span></span>(<span>self, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Saves a new installation data</p></div>
+<div class="desc"><p>Saves an installation data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def async_save(self, installation: Installation):
-    &#34;&#34;&#34;Saves a new installation data&#34;&#34;&#34;
+    &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot"><code class="name flex">
+<span>async def <span class="ident">async_save_bot</span></span>(<span>self, bot: <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Saves a bot installation data</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def async_save_bot(self, bot: Bot):
+    &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
 </dd>
@@ -408,6 +430,7 @@ If the user_id is absent, this method may return the latest installation in the 
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.logger" href="#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.logger">logger</a></code></li>
 </ul>
 </li>
