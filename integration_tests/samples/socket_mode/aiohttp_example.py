@@ -23,12 +23,12 @@ async def main():
         if req.type == "events_api":
             response = SocketModeResponse(envelope_id=req.envelope_id)
             await client.send_socket_mode_response(response)
-
-            await client.web_client.reactions_add(
-                name="eyes",
-                channel=req.payload["event"]["channel"],
-                timestamp=req.payload["event"]["ts"],
-            )
+            if req.payload["event"]["type"] == "message":
+                await client.web_client.reactions_add(
+                    name="eyes",
+                    channel=req.payload["event"]["channel"],
+                    timestamp=req.payload["event"]["ts"],
+                )
 
     client.socket_mode_request_listeners.append(process)
     await client.connect()
