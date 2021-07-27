@@ -64,7 +64,7 @@ our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/ma
 When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests by running the command. The `validate` command runs Flake8 (static code analyzer), Black (code formatter), and unit tests in the `tests` directory for you.
 
 ```bash
-PYTHON_SLACK_SDK_MOCK_SERVER_MODE="threading" CI_UNSTABLE_TESTS_SKIP_ENABLED="1" python setup.py validate # run all
+python setup.py validate # run all
 
 # run a single test
 python setup.py validate \
