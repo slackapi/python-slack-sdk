@@ -1,7 +1,7 @@
 import asyncio
 import json
 import logging
-from asyncio import Queue
+from asyncio import Queue, Lock
 from asyncio.futures import Future
 from logging import Logger
 from typing import Dict, Union, Any, Optional, List, Callable, Awaitable
@@ -23,6 +23,8 @@ class AsyncBaseSocketModeClient:
     wss_uri: str
     auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
+
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -58,15 +60,24 @@ class AsyncBaseSocketModeClient:
                 self.logger.error(f"Failed to retrieve WSS URL: {e}")
                 raise e
 
+    async def is_connected(self) -> bool:
+        return False
+
     async def connect(self):
         raise NotImplementedError()
 
     async def disconnect(self):
         raise NotImplementedError()
 
-    async def connect_to_new_endpoint(self):
-        self.wss_uri = await self.issue_new_wss_url()
-        await self.connect()
+    async def connect_to_new_endpoint(self, force: bool = False):
+        try:
+            await self.connect_operation_lock.acquire()
+            if force or not await self.is_connected():
+                self.wss_uri = await self.issue_new_wss_url()
+                await self.connect()
+        finally:
+            if self.connect_operation_lock.locked() is True:
+                self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
@@ -116,7 +127,7 @@ class AsyncBaseSocketModeClient:
             )
         try:
             if message.get("type") == "disconnect":
-                await self.connect_to_new_endpoint()
+                await self.connect_to_new_endpoint(force=True)
                 return
 
             for listener in self.message_listeners:
