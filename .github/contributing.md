@@ -39,7 +39,7 @@ Issues labelled `good first contribution`.
 For your contribution to be accepted:
 
 - [x] You must have signed the [Contributor License Agreement (CLA)](https://cla-assistant.io/slackapi/python-slack-sdk).
-- [x] The test suite must be complete and pass.
+- [x] The test suite must be complete and pass (see the [Maintainer's Guide](./maintainers_guide.md) for details on how to run the tests).
 - [x] The changes must be approved by code review.
 - [x] Commits should be atomic and messages must be descriptive. Related issues should be mentioned by Issue number.
 

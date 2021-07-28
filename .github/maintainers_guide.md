@@ -15,29 +15,47 @@ $ brew update
 $ brew install pyenv
 ```
 
-Install necessary Python runtimes for development/testing. You can rely on Travis CI builds for testing with various major versions. https://github.com/slackapi/python-slack-sdk/blob/main/.travis.yml
+You can hook `pyenv` into your shell automatically by running `pyenv init` and following the instructions.
+
+Install necessary Python runtimes for development/testing. It is not necessary
+to install all the various Python versions we test in [continuous integration on
+GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml),
+but make sure you are running at least one version that we execute our tests in
+locally so that you can run the tests yourself.
 
 ```bash
 $ pyenv install -l | grep -v "-e[conda|stackless|pypy]"
 
-$ pyenv install 3.8.5 # select the latest patch version
-$ pyenv local 3.8.5
+$ pyenv install 3.9.6 # select the latest patch version
+$ pyenv local 3.9.6
 
 $ pyenv versions
   system
   3.6.10
   3.7.7
-* 3.8.5 (set by /path-to-python-slack-sdk/.python-version)
+* 3.9.6 (set by /path-to-python-slack-sdk/.python-version)
 
 $ pyenv rehash
 ```
 
-Then, you can create a new Virtual Environment this way:
+Then, you can create a new [Virtual Environment](https://docs.python.org/3/tutorial/venv.html) specific to the Python version you just installed by running:
 
 ```
-$ python -m venv env_3.8.5
-$ source env_3.8.5/bin/activate
+$ python -m venv env_3.9.6
+$ source env_3.9.6/bin/activate
 ```
+
+At this point you have a clean, Python-version-specific environment "activated" for
+use just for this project. All `python` and `pip` commands run in your shell
+from this point on run in the context of this virtual environment. You can
+deactivate the virtual environment by running `deactivate`; it is recommended to
+do so after you are done working in this project. To come back to development
+work for this project again in the future, `cd` into this project directory and
+run `source env_3.9.6/bin/activate` again.
+
+The last step is to install this project's dependencies; to do so, check out [how
+we configure GitHub Actions to install dependencies for this project for use in
+our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml#L26-L30). You can also run `./scripts/run_validation.sh` to install the dependencies and run the unit tests in one command!
 
 ## Tasks
 
@@ -53,7 +71,7 @@ python setup.py validate \
   --test-target tests/web/test_web_client.py
 ```
 
-You can rely on Travis CI builds for running the tests on a variety of Python runtimes.
+You can rely on GitHub Actions builds for running the tests on a variety of Python runtimes.
 
 ### Testing (Integration Tests with Real Slack APIs)
 
