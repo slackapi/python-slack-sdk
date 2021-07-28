@@ -7,7 +7,7 @@
 """
 import asyncio
 import logging
-from asyncio import Future
+from asyncio import Future, Lock
 from logging import Logger
 from asyncio import Queue
 from typing import Union, Optional, List, Callable, Awaitable
@@ -56,6 +56,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
 
     def __init__(
         self,
@@ -78,6 +79,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.connect_operation_lock = Lock()
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
@@ -129,6 +131,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     await asyncio.sleep(self.ping_interval)
                 else:
                     await asyncio.sleep(consecutive_error_count)
+
+    async def is_connected(self) -> bool:
+        return (
+            not self.closed
+            and self.current_session is not None
+            and not self.current_session.closed
+        )
 
     async def connect(self):
         if self.wss_uri is None:

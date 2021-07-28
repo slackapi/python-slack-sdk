@@ -7,7 +7,7 @@
 """
 import asyncio
 import logging
-from asyncio import Future
+from asyncio import Future, Lock
 from asyncio import Queue
 from logging import Logger
 from typing import Union, Optional, List, Callable, Awaitable
@@ -58,6 +58,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
 
     on_message_listeners: List[Callable[[WSMessage], Awaitable[None]]]
     on_error_listeners: List[Callable[[WSMessage], Awaitable[None]]]
@@ -92,6 +93,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.connect_operation_lock = Lock()
         self.proxy = proxy
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -184,6 +186,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     await asyncio.sleep(self.ping_interval)
                 else:
                     await asyncio.sleep(consecutive_error_count)
+
+    async def is_connected(self) -> bool:
+        return (
+            not self.closed
+            and self.current_session is not None
+            and not self.current_session.closed
+        )
 
     async def connect(self):
         old_session = None if self.current_session is None else self.current_session
