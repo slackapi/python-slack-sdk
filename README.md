@@ -48,6 +48,7 @@ Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The we
   * [Example](#example)
 * [Migrating from v1](#migrating-from-v1)
 * [Support](#support)
+* [Development](#development)
 
 ### Requirements
 
@@ -138,7 +139,7 @@ except SlackApiError as e:
 
 #### AsyncWebClient in a script
 
-```python 
+```python
 import asyncio
 import os
 from slack_sdk.web.async_client import AsyncWebClient
@@ -265,6 +266,12 @@ If you get stuck, we’re here to help. The following are the best ways to get a
 
 Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
 Visit the [Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+
+### Contributing
+
+We welcome contributions from everyone! Please check out our
+[Contributor's Guide](.github/contributing.md) for how to contribute in a
+helpful and collaborative way.
 
 <!-- Markdown links -->
 
