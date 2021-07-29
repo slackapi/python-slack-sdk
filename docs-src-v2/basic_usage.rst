@@ -478,7 +478,7 @@ Here's a very basic example of how one might deal with rate limited requests.
     try:
       response = send_slack_message(channel, message)
     except SlackApiError as e:
-      if e.response["error"] == "ratelimited":
+      if e.response.status_code == 429:
         # The `Retry-After` header will tell you how long to wait before retrying
         delay = int(e.response.headers['Retry-After'])
         print(f"Rate limited. Retrying in {delay} seconds")
@@ -491,4 +491,3 @@ Here's a very basic example of how one might deal with rate limited requests.
 See the documentation on `Rate Limiting <https://api.slack.com/docs/rate-limits>`_ for more info.
 
 .. include:: metadata.rst
-
