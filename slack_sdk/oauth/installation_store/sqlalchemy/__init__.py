@@ -89,7 +89,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             Column("enterprise_name", String(200)),
             Column("team_id", String(32)),
             Column("team_name", String(200)),
-            Column("bot_token", String(32)),
+            Column("bot_token", String(200)),
             Column("bot_id", String(32)),
             Column("bot_user_id", String(32)),
             Column("bot_scopes", String(1000)),
