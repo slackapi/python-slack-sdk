@@ -20,6 +20,8 @@ validate_dependencies = [
     "pytest>=5.4,<6",
     "pytest-asyncio<1",  # for async
     "Flask-Sockets>=0.2,<1",
+    "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
+    "Werkzeug<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=3,<4",
