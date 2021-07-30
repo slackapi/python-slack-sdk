@@ -1,0 +1,5 @@
+slack-sdk
+Flask>=2,<3
+pyjwt>=2.1,<3
+cryptography>=3.4,<4
+Sanic>=21.3
