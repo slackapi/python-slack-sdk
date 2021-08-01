@@ -1,4 +1,5 @@
 import unittest
+from urllib.error import URLError
 
 from slack_sdk.audit_logs import AuditLogsClient, AuditLogsResponse
 from tests.slack_sdk.audit_logs.mock_web_api_server import (
@@ -31,3 +32,14 @@ class TestAuditLogsClient(unittest.TestCase):
         resp: AuditLogsResponse = self.client.schemas()
         self.assertEqual(200, resp.status_code)
         self.assertIsNotNone(resp.body.get("schemas"))
+
+    def test_url_error(self):
+        invalid_url = "http://localhost:9999/"
+        client = AuditLogsClient(token="xoxp-", base_url=invalid_url)
+        with self.assertRaises(URLError):
+            client.logs(limit=1, action="user_login")
+
+    def test_http_error(self):
+        resp: AuditLogsResponse = self.client.api_call(path="error")
+        self.assertEqual(500, resp.status_code)
+        self.assertEqual("unexpected response body", resp.raw_body)

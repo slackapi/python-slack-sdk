@@ -34,6 +34,7 @@ class AuthorizeUrlGenerator:
 
 class OpenIDConnectAuthorizeUrlGenerator:
     """Refer to https://openid.net/specs/openid-connect-core-1_0.html"""
+
     def __init__(
         self,
         *,
