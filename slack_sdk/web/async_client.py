@@ -2180,6 +2180,44 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("oauth.v2.exchange", params=kwargs)
 
+    async def openid_connect_token(
+        self,
+        client_id: str,
+        client_secret: str,
+        code: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        grant_type: Optional[str] = None,
+        refresh_token: Optional[str] = None,
+        **kwargs
+    ) -> AsyncSlackResponse:
+        """Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
+
+        Args:
+            client_id (str): Issued when you created your application.
+            client_secret (str): Issued when you created your application.
+            code (str): The code param returned via the OAuth callback.
+            redirect_uri (optional str): This must match the originally submitted URI (if one was sent).
+            grant_type: The grant_type param as described in the OAuth spec.
+            refresh_token: The refresh_token param as described in the OAuth spec.
+        """
+        if redirect_uri is not None:
+            kwargs.update({"redirect_uri": redirect_uri})
+        if code is not None:
+            kwargs.update({"code": code})
+        if grant_type is not None:
+            kwargs.update({"grant_type": grant_type})
+        if refresh_token is not None:
+            kwargs.update({"refresh_token": refresh_token})
+        return await self.api_call(
+            "openid.connect.token",
+            data=kwargs,
+            auth={"client_id": client_id, "client_secret": client_secret},
+        )
+
+    async def openid_connect_userInfo(self, **kwargs) -> AsyncSlackResponse:
+        """Get the identity of a user who has authorized Sign in with Slack."""
+        return await self.api_call("openid.connect.userInfo", params=kwargs)
+
     async def pins_add(self, *, channel: str, **kwargs) -> AsyncSlackResponse:
         """Pins an item to a channel.
 
