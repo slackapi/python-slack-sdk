@@ -1,6 +1,5 @@
 import unittest
 
-from aiohttp import ServerDisconnectedError
 from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
 from tests.helpers import async_test
 from tests.slack_sdk.audit_logs.mock_web_api_server import (
@@ -28,7 +27,7 @@ class TestAsyncAuditLogsClient_HttpRetries(unittest.TestCase):
         try:
             await client.actions()
             self.fail("An exception is expected")
-        except ServerDisconnectedError as _:
+        except Exception as _:
             pass
 
         self.assertEqual(2, retry_handler.call_count)

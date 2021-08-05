@@ -1,5 +1,4 @@
 import unittest
-from aiohttp import ClientOSError
 
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
@@ -28,7 +27,7 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
         try:
             await client.auth_test()
             self.fail("An exception is expected")
-        except ClientOSError as _:
+        except Exception as _:
             pass
 
         self.assertEqual(2, retry_handler.call_count)

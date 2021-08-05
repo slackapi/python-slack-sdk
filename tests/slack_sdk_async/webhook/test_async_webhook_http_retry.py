@@ -1,5 +1,5 @@
 import unittest
-from aiohttp import ClientOSError
+
 from slack_sdk.webhook.async_client import AsyncWebhookClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.webhook.mock_web_api_server import (
@@ -26,7 +26,7 @@ class TestAsyncWebhook_HttpRetries(unittest.TestCase):
         try:
             await client.send(text="hello!")
             self.fail("An exception is expected")
-        except ClientOSError as _:
+        except Exception as _:
             pass
 
         self.assertEqual(2, retry_handler.call_count)
