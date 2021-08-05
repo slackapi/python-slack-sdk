@@ -22,7 +22,7 @@ class ConnectionErrorRetryHandler(RetryHandler):
         super().__init__(max_retry_count, interval_calculator)
         self.error_types_to_do_retries = error_types
 
-    def can_retry_custom(
+    def _can_retry(
         self,
         *,
         state: RetryState,
@@ -42,7 +42,7 @@ class ConnectionErrorRetryHandler(RetryHandler):
 class ServerErrorRetryHandler(RetryHandler):
     """RetryHandler that does retries for server-side errors."""
 
-    def can_retry_custom(
+    def _can_retry(
         self,
         *,
         state: RetryState,
@@ -56,7 +56,7 @@ class ServerErrorRetryHandler(RetryHandler):
 class RateLimitErrorRetryHandler(RetryHandler):
     """RetryHandler that does retries for rate limited errors."""
 
-    def can_retry_custom(
+    def _can_retry(
         self,
         *,
         state: RetryState,

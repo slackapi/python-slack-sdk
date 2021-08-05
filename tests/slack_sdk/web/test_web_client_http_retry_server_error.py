@@ -21,7 +21,7 @@ class ServerErrorRetryHandler(RetryHandler):
         super().__init__(max_retry_count, interval_calculator)
         self.call_count = 0
 
-    def can_retry_custom(
+    def _can_retry(
         self,
         *,
         state,

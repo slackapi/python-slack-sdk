@@ -44,14 +44,14 @@ class RetryHandler:
     ) -> bool:
         if state.current_attempt >= self.max_retry_count:
             return False
-        return self.can_retry_custom(
+        return self._can_retry(
             state=state,
             request=request,
             response=response,
             error=error,
         )
 
-    def can_retry_custom(
+    def _can_retry(
         self,
         *,
         state: RetryState,
