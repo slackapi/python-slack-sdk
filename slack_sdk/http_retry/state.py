@@ -4,7 +4,7 @@ from typing import Optional, Any, Dict
 class RetryState:
     next_attempt_requested: bool
     current_attempt: int  # zero-origin
-    custom_values: Optional[dict[str, Any]]
+    custom_values: Optional[Dict[str, Any]]
 
     def __init__(
         self,
