@@ -308,7 +308,7 @@ class AsyncAuditLogsClient:
                                             f"A retry handler found: {type(handler).__name__} "
                                             f"for {http_verb} {url} - rate_limited"
                                         )
-                                    handler.prepare_for_next_retry(
+                                    handler.prepare_for_next_attempt(
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
@@ -339,7 +339,7 @@ class AsyncAuditLogsClient:
                                     f"A retry handler found: {type(handler).__name__} "
                                     f"for {http_verb} {url} - {e}"
                                 )
-                            handler.prepare_for_next_retry(
+                            handler.prepare_for_next_attempt(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,

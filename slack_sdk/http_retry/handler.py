@@ -61,7 +61,7 @@ class RetryHandler:
     ) -> bool:
         raise NotImplementedError()
 
-    def prepare_for_next_retry(
+    def prepare_for_next_attempt(
         self,
         *,
         state: RetryState,

@@ -359,7 +359,7 @@ class SCIMClient:
                             self.logger.info(
                                 f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
                             )
-                        handler.prepare_for_next_retry(
+                        handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
@@ -389,7 +389,7 @@ class SCIMClient:
                             self.logger.info(
                                 f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
                             )
-                        handler.prepare_for_next_retry(
+                        handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
                             response=None,

@@ -155,7 +155,7 @@ async def _request_with_session(
                                         f"A retry handler found: {type(handler).__name__} "
                                         f"for {http_verb} {api_url} - rate_limited"
                                     )
-                                handler.prepare_for_next_retry(
+                                handler.prepare_for_next_attempt(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
@@ -184,7 +184,7 @@ async def _request_with_session(
                                 f"A retry handler found: {type(handler).__name__} "
                                 f"for {http_verb} {api_url} - {e}"
                             )
-                        handler.prepare_for_next_retry(
+                        handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
