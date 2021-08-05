@@ -40,6 +40,14 @@ class MockHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(self.received_requests).encode("utf-8"))
             return
 
+        header = self.headers["Authorization"]
+        if header is not None and "xoxp-" in header:
+            pattern = str(header).split("xoxp-", 1)[1]
+            if "remote_disconnected" in pattern:
+                # http.client.RemoteDisconnected
+                self.finish()
+                return
+
         try:
             if self.path == "/error":
                 self.send_response(500)

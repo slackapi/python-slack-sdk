@@ -1,7 +1,7 @@
 import json
 import logging
 from ssl import SSLContext
-from typing import Any, Union
+from typing import Any, Union, List
 from typing import Dict, Optional
 from urllib.parse import quote
 
@@ -34,6 +34,12 @@ from .user import User
 from .group import Group
 from ...proxy_env_variable_loader import load_http_proxy_from_env
 
+from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
+from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
+from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
+from slack_sdk.http_retry.state import RetryState
+
 
 class AsyncSCIMClient:
     BASE_URL = "https://api.slack.com/scim/v1/"
@@ -48,6 +54,7 @@ class AsyncSCIMClient:
     auth: Optional[BasicAuth]
     default_headers: Dict[str, str]
     logger: logging.Logger
+    retry_handlers: List[RetryHandler]
 
     def __init__(
         self,
@@ -63,6 +70,7 @@ class AsyncSCIMClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
+        retry_handlers: List[RetryHandler] = async_default_handlers,
     ):
         """API client for SCIM API
         See https://api.slack.com/scim for more details
@@ -80,6 +88,7 @@ class AsyncSCIMClient:
             user_agent_prefix: Prefix for User-Agent header value
             user_agent_suffix: Suffix for User-Agent header value
             logger: Custom logger
+            retry_handlers: Retry handlers
         """
         self.token = token
         self.timeout = timeout
@@ -94,6 +103,7 @@ class AsyncSCIMClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = retry_handlers
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -292,14 +302,6 @@ class AsyncSCIMClient:
             body_params = json.dumps(body_params)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
-        if self.logger.level <= logging.DEBUG:
-            headers_for_logging = {
-                k: "(redacted)" if k.lower() == "authorization" else v
-                for k, v in headers.items()
-            }
-            self.logger.debug(
-                f"Sending a request - url: {url}, params: {body_params}, headers: {headers_for_logging}"
-            )
         session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed
         if use_running_session:
@@ -311,7 +313,8 @@ class AsyncSCIMClient:
                 trust_env=self.trust_env_in_session,
             )
 
-        resp: SCIMResponse
+        last_error: Optional[Exception] = None
+        resp: Optional[SCIMResponse] = None
         try:
             request_kwargs = {
                 "headers": headers,
@@ -319,22 +322,105 @@ class AsyncSCIMClient:
                 "ssl": self.ssl,
                 "proxy": self.proxy,
             }
-            async with session.request(http_verb, url, **request_kwargs) as res:
-                response_body: str = ""
-                try:
-                    response_body = await res.text()
-                except aiohttp.ContentTypeError:
+            retry_request = RetryHttpRequest(
+                method=http_verb,
+                url=url,
+                headers=headers,
+                body_params=body_params,
+            )
+
+            retry_state = RetryState()
+            counter_for_safety = 0
+            while counter_for_safety < 100:
+                counter_for_safety += 1
+                # If this is a retry, the next try started here. We can reset the flag.
+                retry_state.next_attempt_requested = False
+                retry_response: Optional[RetryHttpResponse] = None
+                response_body = ""
+
+                if self.logger.level <= logging.DEBUG:
+                    headers_for_logging = {
+                        k: "(redacted)" if k.lower() == "authorization" else v
+                        for k, v in headers.items()
+                    }
                     self.logger.debug(
-                        f"No response data returned from the following API call: {url}."
+                        f"Sending a request - url: {url}, params: {body_params}, headers: {headers_for_logging}"
                     )
 
-                resp = SCIMResponse(
-                    url=url,
-                    status_code=res.status,
-                    raw_body=response_body,
-                    headers=res.headers,
-                )
-                _debug_log_response(self.logger, resp)
+                try:
+                    async with session.request(http_verb, url, **request_kwargs) as res:
+                        try:
+                            response_body = await res.text()
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                                data=response_body.encode("utf-8")
+                                if response_body is not None
+                                else None,
+                            )
+                        except aiohttp.ContentTypeError:
+                            self.logger.debug(
+                                f"No response data returned from the following API call: {url}."
+                            )
+
+                        if res.status == 429:
+                            for handler in self.retry_handlers:
+                                if handler.can_retry(
+                                    state=retry_state,
+                                    request=retry_request,
+                                    response=retry_response,
+                                ):
+                                    if self.logger.level <= logging.DEBUG:
+                                        self.logger.info(
+                                            f"A retry handler found: {type(handler).__name__} "
+                                            f"for {http_verb} {url} - rate_limited"
+                                        )
+                                    handler.prepare_for_next_retry(
+                                        state=retry_state,
+                                        request=retry_request,
+                                        response=retry_response,
+                                    )
+                                    break
+
+                        if retry_state.next_attempt_requested is False:
+                            resp = SCIMResponse(
+                                url=url,
+                                status_code=res.status,
+                                raw_body=response_body,
+                                headers=res.headers,
+                            )
+                            _debug_log_response(self.logger, resp)
+                            return resp
+
+                except Exception as e:
+                    last_error = e
+                    for handler in self.retry_handlers:
+                        if handler.can_retry(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        ):
+                            if self.logger.level <= logging.DEBUG:
+                                self.logger.info(
+                                    f"A retry handler found: {type(handler).__name__} "
+                                    f"for {http_verb} {url} - {e}"
+                                )
+                            handler.prepare_for_next_retry(
+                                state=retry_state,
+                                request=retry_request,
+                                response=retry_response,
+                                error=e,
+                            )
+                            break
+
+                    if retry_state.next_attempt_requested is False:
+                        raise last_error
+
+            if resp is not None:
+                return resp
+            raise last_error
+
         finally:
             if not use_running_session:
                 await session.close()

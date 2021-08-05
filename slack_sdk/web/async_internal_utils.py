@@ -3,13 +3,18 @@ import json
 import logging
 from asyncio import AbstractEventLoop
 from logging import Logger
-from typing import Optional, BinaryIO, Dict, Sequence, Union
+from typing import Optional, BinaryIO, Dict, Sequence, Union, List
 
 import aiohttp
 from aiohttp import ClientSession
 
 from slack_sdk.errors import SlackApiError
 from slack_sdk.web.internal_utils import _build_unexpected_body_error_message
+
+from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
+from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
+from slack_sdk.http_retry.state import RetryState
 
 
 def _get_event_loop() -> AbstractEventLoop:
@@ -44,6 +49,8 @@ async def _request_with_session(
     http_verb: str,
     api_url: str,
     req_args: dict,
+    # set the default to an empty array for legacy clients
+    retry_handlers: List[RetryHandler] = [],
 ) -> Dict[str, any]:
     """Submit the HTTP request with the running session or a new session.
     Returns:
@@ -59,60 +66,141 @@ async def _request_with_session(
             auth=req_args.pop("auth", None),
         )
 
-    if logger.level <= logging.DEBUG:
-
-        def convert_params(values: dict) -> dict:
-            if not values or not isinstance(values, dict):
-                return {}
-            return {
-                k: ("(bytes)" if isinstance(v, bytes) else v) for k, v in values.items()
-            }
-
-        headers = {
-            k: "(redacted)" if k.lower() == "authorization" else v
-            for k, v in req_args.get("headers", {}).items()
-        }
-        logger.debug(
-            f"Sending a request - url: {http_verb} {api_url}, "
-            f"params: {convert_params(req_args.get('params'))}, "
-            f"files: {convert_params(req_args.get('files'))}, "
-            f"data: {convert_params(req_args.get('data'))}, "
-            f"json: {convert_params(req_args.get('json'))}, "
-            f"proxy: {convert_params(req_args.get('proxy'))}, "
-            f"headers: {headers}"
+    last_error: Optional[Exception] = None
+    resp: Optional[Dict[str, any]] = None
+    try:
+        retry_request = RetryHttpRequest(
+            method=http_verb,
+            url=api_url,
+            headers=req_args.get("headers", {}),
+            body_params=req_args.get("params"),
+            data=req_args.get("data"),
         )
 
-    response = None
-    try:
-        async with session.request(http_verb, api_url, **req_args) as res:
-            data: Union[dict, bytes] = {}
-            if res.content_type == "application/gzip":
-                # admin.analytics.getFile
-                data = await res.read()
-            else:
-                try:
-                    data = await res.json()
-                except aiohttp.ContentTypeError:
-                    logger.debug(
-                        f"No response data returned from the following API call: {api_url}."
-                    )
-                except json.decoder.JSONDecodeError:
-                    try:
-                        body: str = await res.text()
-                        message = _build_unexpected_body_error_message(body)
-                        raise SlackApiError(message, res)
-                    except Exception as e:
-                        raise SlackApiError(
-                            f"Unexpectedly failed to read the response body: {str(e)}",
-                            res,
-                        )
+        retry_state = RetryState()
+        counter_for_safety = 0
+        while counter_for_safety < 100:
+            counter_for_safety += 1
+            # If this is a retry, the next try started here. We can reset the flag.
+            retry_state.next_attempt_requested = False
+            retry_response: Optional[RetryHttpResponse] = None
 
-            response = {
-                "data": data,
-                "headers": res.headers,
-                "status_code": res.status,
-            }
+            if logger.level <= logging.DEBUG:
+
+                def convert_params(values: dict) -> dict:
+                    if not values or not isinstance(values, dict):
+                        return {}
+                    return {
+                        k: ("(bytes)" if isinstance(v, bytes) else v)
+                        for k, v in values.items()
+                    }
+
+                headers = {
+                    k: "(redacted)" if k.lower() == "authorization" else v
+                    for k, v in req_args.get("headers", {}).items()
+                }
+                logger.debug(
+                    f"Sending a request - url: {http_verb} {api_url}, "
+                    f"params: {convert_params(req_args.get('params'))}, "
+                    f"files: {convert_params(req_args.get('files'))}, "
+                    f"data: {convert_params(req_args.get('data'))}, "
+                    f"json: {convert_params(req_args.get('json'))}, "
+                    f"proxy: {convert_params(req_args.get('proxy'))}, "
+                    f"headers: {headers}"
+                )
+
+            try:
+                async with session.request(http_verb, api_url, **req_args) as res:
+                    data: Union[dict, bytes] = {}
+                    if res.content_type == "application/gzip":
+                        # admin.analytics.getFile
+                        data = await res.read()
+                        retry_response = RetryHttpResponse(
+                            status_code=res.status,
+                            headers=res.headers,
+                            data=data,
+                        )
+                    else:
+                        try:
+                            data = await res.json()
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                                body=data,
+                            )
+                        except aiohttp.ContentTypeError:
+                            logger.debug(
+                                f"No response data returned from the following API call: {api_url}."
+                            )
+                        except json.decoder.JSONDecodeError:
+                            try:
+                                body: str = await res.text()
+                                message = _build_unexpected_body_error_message(body)
+                                raise SlackApiError(message, res)
+                            except Exception as e:
+                                raise SlackApiError(
+                                    f"Unexpectedly failed to read the response body: {str(e)}",
+                                    res,
+                                )
+
+                    if res.status == 429:
+                        for handler in retry_handlers:
+                            if handler.can_retry(
+                                state=retry_state,
+                                request=retry_request,
+                                response=retry_response,
+                            ):
+                                if logger.level <= logging.DEBUG:
+                                    logger.info(
+                                        f"A retry handler found: {type(handler).__name__} "
+                                        f"for {http_verb} {api_url} - rate_limited"
+                                    )
+                                handler.prepare_for_next_retry(
+                                    state=retry_state,
+                                    request=retry_request,
+                                    response=retry_response,
+                                )
+                                break
+
+                    if retry_state.next_attempt_requested is False:
+                        response = {
+                            "data": data,
+                            "headers": res.headers,
+                            "status_code": res.status,
+                        }
+                        return response
+
+            except Exception as e:
+                last_error = e
+                for handler in retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=retry_response,
+                        error=e,
+                    ):
+                        if logger.level <= logging.DEBUG:
+                            logger.info(
+                                f"A retry handler found: {type(handler).__name__} "
+                                f"for {http_verb} {api_url} - {e}"
+                            )
+                        handler.prepare_for_next_retry(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        )
+                        break
+
+                if retry_state.next_attempt_requested is False:
+                    raise last_error
+
+        if resp is not None:
+            return resp
+        raise last_error
+
     finally:
         if not use_running_session:
             await session.close()
+
     return response

@@ -45,6 +45,11 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         try:
+            if self.path == "/remote_disconnected":
+                # http.client.RemoteDisconnected
+                self.finish()
+                return
+
             if self.path == "/timeout":
                 time.sleep(2)
 
