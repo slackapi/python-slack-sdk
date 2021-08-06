@@ -52,5 +52,7 @@ class SlackObjectFormationError(SlackClientError):
 
 
 class SlackClientConfigurationError(SlackClientError):
-    """Error raised when attempting to send messages over the websocket when the
-    connection is closed."""
+    """Error raised because of invalid configuration on the client side:
+    * when attempting to send messages over the websocket when the connection is closed.
+    * when external system (e.g., Amazon S3) configuration / credentials are not correct
+    """

@@ -607,7 +607,7 @@ This library covers all the public endpoints as the methods in ``WebClient``. Th
     client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
     response = client.api_call(
         api_method='chat.postMessage',
-        json={'channel': '#random','text': "Hello world!"}
+        params={'channel': '#random','text': "Hello world!"}
     )
     assert response["message"]["text"] == "Hello world!"
 
