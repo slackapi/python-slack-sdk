@@ -1555,7 +1555,7 @@ class WebClient(BaseClient):
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     def files_comments_delete(
-        self, *, file: str, id: str  # skipcq: PYL-W0622
+        self, *, file: str, id: str, **kwargs  # skipcq: PYL-W0622
     ) -> SlackResponse:
         """Deletes an existing comment on a file.
 
@@ -1563,15 +1563,17 @@ class WebClient(BaseClient):
             file (str): The file id. e.g. 'F1234467890'
             id (str): The file comment id. e.g. 'Fc1234567890'
         """
-        return self.api_call("files.comments.delete", json={"file": file, "id": id})
+        kwargs.update({"file": file, "id": id})
+        return self.api_call("files.comments.delete", json=kwargs)
 
-    def files_delete(self, *, file: str) -> SlackResponse:
+    def files_delete(self, *, file: str, **kwargs) -> SlackResponse:
         """Deletes a file.
 
         Args:
             file (str): The file id. e.g. 'F1234467890'
         """
-        return self.api_call("files.delete", json={"file": file})
+        kwargs.update({"file": file})
+        return self.api_call("files.delete", json=kwargs)
 
     def files_info(
         self,
@@ -1580,7 +1582,8 @@ class WebClient(BaseClient):
         count: Optional[int] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        page: Optional[int] = None
+        page: Optional[int] = None,
+        **kwargs
     ) -> SlackResponse:
         """Gets information about a team file.
 
@@ -1591,17 +1594,8 @@ class WebClient(BaseClient):
             limit (int): An optional parameter defining the maximum number of items to return, defaulting to 0
             page (int): An optional parameter defining the page number of results to return, defaulting to 1
         """
-        return self.api_call(
-            "files.info",
-            http_verb="GET",
-            params={
-                "file": file,
-                "count": count,
-                "cursor": cursor,
-                "limit": limit,
-                "page": page,
-            },
-        )
+        kwargs.update({"file": file, "count": count, "cursor": cursor, "page": page})
+        return self.api_call("files.info", http_verb="GET", params=kwargs)
 
     def files_list(self, **kwargs) -> SlackResponse:
         """Lists & filters team files."""
