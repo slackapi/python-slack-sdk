@@ -1589,12 +1589,20 @@ class WebClient(BaseClient):
 
         Args:
             file (str): The file id. e.g. 'F1234467890'
-            count (int): An optional number of items to return per page, defaulting to 100
+            count (int): An optional number of items to return per page
             cursor (str): An optional parameter for pagination
-            limit (int): An optional parameter defining the maximum number of items to return, defaulting to 0
-            page (int): An optional parameter defining the page number of results to return, defaulting to 1
+            limit (int): An optional parameter defining the maximum number of items to return
+            page (int): An optional parameter defining the page number of results to return,
         """
-        kwargs.update({"file": file, "count": count, "cursor": cursor, "page": page})
+        kwargs.update(
+            {
+                "file": file,
+                "count": count,
+                "cursor": cursor,
+                "limit": limit,
+                "page": page,
+            }
+        )
         return self.api_call("files.info", http_verb="GET", params=kwargs)
 
     def files_list(self, **kwargs) -> SlackResponse:
