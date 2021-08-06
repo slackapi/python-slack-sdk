@@ -695,7 +695,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SLACK_BOT_TOKEN&#39;</span><span class="p">])</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
     <span class="n">api_method</span><span class="o">=</span><span class="s1">&#39;chat.postMessage&#39;</span><span class="p">,</span>
-    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
 </pre></div>
