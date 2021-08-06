@@ -1697,7 +1697,7 @@ class AsyncWebClient(AsyncBaseClient):
             count (int): An optional number of items to return per page
             cursor (str): An optional parameter for pagination
             limit (int): An optional parameter defining the maximum number of items to return
-            page (int): An optional parameter defining the page number of results to return,
+            page (int): An optional parameter defining the page number of results to return
         """
         kwargs.update(
             {
