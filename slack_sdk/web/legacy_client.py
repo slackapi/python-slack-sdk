@@ -1668,13 +1668,34 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"file": file})
         return self.api_call("files.delete", json=kwargs)
 
-    def files_info(self, *, file: str, **kwargs) -> Union[Future, SlackResponse]:
+    def files_info(
+        self,
+        *,
+        file: str,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        page: Optional[int] = None,
+        **kwargs
+    ) -> Union[Future, SlackResponse]:
         """Gets information about a team file.
 
         Args:
             file (str): The file id. e.g. 'F1234467890'
+            count (int): An optional number of items to return per page
+            cursor (str): An optional parameter for pagination
+            limit (int): An optional parameter defining the maximum number of items to return
+            page (int): An optional parameter defining the page number of results to return
         """
-        kwargs.update({"file": file})
+        kwargs.update(
+            {
+                "file": file,
+                "count": count,
+                "cursor": cursor,
+                "limit": limit,
+                "page": page,
+            }
+        )
         return self.api_call("files.info", http_verb="GET", params=kwargs)
 
     def files_list(self, **kwargs) -> Union[Future, SlackResponse]:
