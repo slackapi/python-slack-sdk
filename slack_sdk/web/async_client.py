@@ -1660,7 +1660,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     async def files_comments_delete(
-        self, *, file: str, id: str, **kwargs  # skipcq: PYL-W0622
+        self, *, file: str, id: str  # skipcq: PYL-W0622
     ) -> AsyncSlackResponse:
         """Deletes an existing comment on a file.
 
@@ -1668,26 +1668,47 @@ class AsyncWebClient(AsyncBaseClient):
             file (str): The file id. e.g. 'F1234467890'
             id (str): The file comment id. e.g. 'Fc1234567890'
         """
-        kwargs.update({"file": file, "id": id})
-        return await self.api_call("files.comments.delete", json=kwargs)
+        return await self.api_call(
+            "files.comments.delete", json={"file": file, "id": id}
+        )
 
-    async def files_delete(self, *, file: str, **kwargs) -> AsyncSlackResponse:
+    async def files_delete(self, *, file: str) -> AsyncSlackResponse:
         """Deletes a file.
 
         Args:
             file (str): The file id. e.g. 'F1234467890'
         """
-        kwargs.update({"file": file})
-        return await self.api_call("files.delete", json=kwargs)
+        return await self.api_call("files.delete", json={"file": file})
 
-    async def files_info(self, *, file: str, **kwargs) -> AsyncSlackResponse:
+    async def files_info(
+        self,
+        *,
+        file: str,
+        count: int = 100,
+        cursor: Optional[str] = None,
+        limit: int = 0,
+        page: int = 1
+    ) -> AsyncSlackResponse:
         """Gets information about a team file.
 
         Args:
             file (str): The file id. e.g. 'F1234467890'
+            count (int): An optional number of items to return per page, defaulting to 100
+            cursor (str): An optional parameter for pagination
+            limit (int): An optional parameter defining the maximum number of items to return, defaulting to 0
+            page (int): An optional parameter defining the page number of results to return, defaulting to 1
         """
-        kwargs.update({"file": file})
-        return await self.api_call("files.info", http_verb="GET", params=kwargs)
+        return await self.api_call(
+            "files.info",
+            http_verb="GET",
+            params={
+                "file": file,
+                "count": count,
+                "cursor": cursor,
+                "limit": limit,
+                "page": page,
+            },
+        )
 
     async def files_list(self, **kwargs) -> AsyncSlackResponse:
         """Lists & filters team files."""
