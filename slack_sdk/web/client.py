@@ -1577,10 +1577,10 @@ class WebClient(BaseClient):
         self,
         *,
         file: str,
-        count: int = 100,
+        count: Optional[int] = None,
         cursor: Optional[str] = None,
-        limit: int = 0,
-        page: int = 1
+        limit: Optional[int] = None,
+        page: Optional[int] = None
     ) -> SlackResponse:
         """Gets information about a team file.
 
