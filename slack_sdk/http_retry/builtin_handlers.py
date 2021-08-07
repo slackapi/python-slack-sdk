@@ -33,8 +33,8 @@ class ConnectionErrorRetryHandler(RetryHandler):
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> bool:
         if error is None:
             return False
@@ -45,20 +45,6 @@ class ConnectionErrorRetryHandler(RetryHandler):
         return False
 
 
-class ServerErrorRetryHandler(RetryHandler):
-    """RetryHandler that does retries for server-side errors."""
-
-    def _can_retry(
-        self,
-        *,
-        state: RetryState,
-        request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
-    ) -> bool:
-        return response is not None and response.status_code >= 500
-
-
 class RateLimitErrorRetryHandler(RetryHandler):
     """RetryHandler that does retries for rate limited errors."""
 
@@ -67,19 +53,18 @@ class RateLimitErrorRetryHandler(RetryHandler):
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> bool:
-        if response.status_code == 429:
-            return True
+        return response.status_code == 429
 
     def prepare_for_next_attempt(
         self,
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> None:
         if response is None:
             raise error

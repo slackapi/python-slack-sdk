@@ -1,5 +1,6 @@
 import unittest
 
+from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler
 from slack_sdk.webhook.async_client import AsyncWebhookClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.webhook.mock_web_api_server import (
@@ -30,3 +31,13 @@ class TestAsyncWebhook_HttpRetries(unittest.TestCase):
             pass
 
         self.assertEqual(2, retry_handler.call_count)
+
+    @async_test
+    async def test_ratelimited(self):
+        client = AsyncWebhookClient(
+            "http://localhost:8888/ratelimited",
+            retry_handlers=[AsyncRateLimitErrorRetryHandler()],
+        )
+        response = await client.send(text="hello!")
+        # Just running retries; no assertions for call count so far
+        self.assertEqual(429, response.status_code)

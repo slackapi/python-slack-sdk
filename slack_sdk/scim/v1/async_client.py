@@ -34,8 +34,8 @@ from .user import User
 from .group import Group
 from ...proxy_env_variable_loader import load_http_proxy_from_env
 
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
-from slack_sdk.http_retry.handler import RetryHandler
 from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
 from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
 from slack_sdk.http_retry.state import RetryState
@@ -54,7 +54,7 @@ class AsyncSCIMClient:
     auth: Optional[BasicAuth]
     default_headers: Dict[str, str]
     logger: logging.Logger
-    retry_handlers: List[RetryHandler]
+    retry_handlers: List[AsyncRetryHandler]
 
     def __init__(
         self,
@@ -70,7 +70,7 @@ class AsyncSCIMClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = async_default_handlers,
+        retry_handlers: List[AsyncRetryHandler] = async_default_handlers,
     ):
         """API client for SCIM API
         See https://api.slack.com/scim for more details
@@ -365,7 +365,7 @@ class AsyncSCIMClient:
 
                         if res.status == 429:
                             for handler in self.retry_handlers:
-                                if handler.can_retry(
+                                if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
@@ -375,7 +375,7 @@ class AsyncSCIMClient:
                                             f"A retry handler found: {type(handler).__name__} "
                                             f"for {http_verb} {url} - rate_limited"
                                         )
-                                    handler.prepare_for_next_attempt(
+                                    await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
@@ -395,7 +395,7 @@ class AsyncSCIMClient:
                 except Exception as e:
                     last_error = e
                     for handler in self.retry_handlers:
-                        if handler.can_retry(
+                        if await handler.can_retry_async(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
@@ -406,7 +406,7 @@ class AsyncSCIMClient:
                                     f"A retry handler found: {type(handler).__name__} "
                                     f"for {http_verb} {url} - {e}"
                                 )
-                            handler.prepare_for_next_attempt(
+                            await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,

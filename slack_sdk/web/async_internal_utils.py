@@ -11,7 +11,7 @@ from aiohttp import ClientSession
 from slack_sdk.errors import SlackApiError
 from slack_sdk.web.internal_utils import _build_unexpected_body_error_message
 
-from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
 from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
 from slack_sdk.http_retry.state import RetryState
@@ -50,7 +50,7 @@ async def _request_with_session(
     api_url: str,
     req_args: dict,
     # set the default to an empty array for legacy clients
-    retry_handlers: List[RetryHandler] = [],
+    retry_handlers: List[AsyncRetryHandler] = [],
 ) -> Dict[str, any]:
     """Submit the HTTP request with the running session or a new session.
     Returns:
@@ -145,7 +145,7 @@ async def _request_with_session(
 
                     if res.status == 429:
                         for handler in retry_handlers:
-                            if handler.can_retry(
+                            if await handler.can_retry_async(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
@@ -155,7 +155,7 @@ async def _request_with_session(
                                         f"A retry handler found: {type(handler).__name__} "
                                         f"for {http_verb} {api_url} - rate_limited"
                                     )
-                                handler.prepare_for_next_attempt(
+                                await handler.prepare_for_next_attempt_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
@@ -173,7 +173,7 @@ async def _request_with_session(
             except Exception as e:
                 last_error = e
                 for handler in retry_handlers:
-                    if handler.can_retry(
+                    if await handler.can_retry_async(
                         state=retry_state,
                         request=retry_request,
                         response=retry_response,
@@ -184,7 +184,7 @@ async def _request_with_session(
                                 f"A retry handler found: {type(handler).__name__} "
                                 f"for {http_verb} {api_url} - {e}"
                             )
-                        handler.prepare_for_next_attempt(
+                        await handler.prepare_for_next_attempt_async(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,

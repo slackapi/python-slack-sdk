@@ -1,8 +1,8 @@
-"""RetryHandler interface.
+"""asyncio compatible RetryHandler interface.
 You can pass an array of handlers to customize retry logics in supported API clients.
 """
 
-import time
+import asyncio
 from typing import Optional
 
 from slack_sdk.http_retry.state import RetryState
@@ -16,9 +16,8 @@ from slack_sdk.http_retry.builtin_interval_calculators import (
 default_interval_calculator = BackoffRetryIntervalCalculator()
 
 
-# Note that you cannot add aiohttp to this class as the external dependency is optional
-class RetryHandler:
-    """RetryHandler interface.
+class AsyncRetryHandler:
+    """asyncio compatible RetryHandler interface.
     You can pass an array of handlers to customize retry logics in supported API clients.
     """
 
@@ -39,7 +38,7 @@ class RetryHandler:
         self.max_retry_count = max_retry_count
         self.interval_calculator = interval_calculator
 
-    def can_retry(
+    async def can_retry_async(
         self,
         *,
         state: RetryState,
@@ -49,14 +48,14 @@ class RetryHandler:
     ) -> bool:
         if state.current_attempt >= self.max_retry_count:
             return False
-        return self._can_retry(
+        return await self._can_retry_async(
             state=state,
             request=request,
             response=response,
             error=error,
         )
 
-    def _can_retry(
+    async def _can_retry_async(
         self,
         *,
         state: RetryState,
@@ -64,9 +63,14 @@ class RetryHandler:
         response: Optional[HttpResponse] = None,
         error: Optional[Exception] = None,
     ) -> bool:
-        raise NotImplementedError()
+        return self._can_retry(
+            state=state,
+            request=request,
+            response=response,
+            error=error,
+        )
 
-    def prepare_for_next_attempt(
+    async def prepare_for_next_attempt_async(
         self,
         *,
         state: RetryState,
@@ -78,5 +82,5 @@ class RetryHandler:
         duration = self.interval_calculator.calculate_sleep_duration(
             state.current_attempt
         )
-        time.sleep(duration)
+        await asyncio.sleep(duration)
         state.increment_current_attempt()

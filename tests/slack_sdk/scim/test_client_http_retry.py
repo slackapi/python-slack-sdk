@@ -1,5 +1,6 @@
 import unittest
 
+from slack_sdk.http_retry import RateLimitErrorRetryHandler
 from slack_sdk.scim import SCIMClient
 from tests.slack_sdk.scim.mock_web_api_server import (
     setup_mock_web_api_server,
@@ -30,3 +31,14 @@ class TestSCIMClient(unittest.TestCase):
             pass
 
         self.assertEqual(2, retry_handler.call_count)
+
+    def test_ratelimited(self):
+        client = SCIMClient(
+            base_url="http://localhost:8888/",
+            token="xoxp-ratelimited",
+            retry_handlers=[RateLimitErrorRetryHandler()],
+        )
+
+        response = client.search_users(start_index=0, count=1)
+        # Just running retries; no assertions for call count so far
+        self.assertEqual(429, response.status_code)

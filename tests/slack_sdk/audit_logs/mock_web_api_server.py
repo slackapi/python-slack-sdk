@@ -47,6 +47,14 @@ class MockHandler(SimpleHTTPRequestHandler):
                 # http.client.RemoteDisconnected
                 self.finish()
                 return
+            if "ratelimited" in pattern:
+                self.send_response(429)
+                self.send_header("Retry-After", 1)
+                self.set_common_headers()
+                self.wfile.write(
+                    """{"ok": false, "error": "ratelimited"}""".encode("utf-8")
+                )
+                return
 
         try:
             if self.path == "/error":

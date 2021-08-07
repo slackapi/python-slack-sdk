@@ -113,6 +113,14 @@ class MockHandler(SimpleHTTPRequestHandler):
                     # http.client.RemoteDisconnected
                     self.finish()
                     return
+                if "ratelimited" in pattern:
+                    self.send_response(429)
+                    self.send_header("Retry-After", 1)
+                    self.set_common_headers()
+                    self.wfile.write(
+                        """{"ok": false, "error": "ratelimited"}""".encode("utf-8")
+                    )
+                    return
 
             if self.is_valid_token() and self.is_valid_user_agent():
                 parsed_path = urlparse(self.path)

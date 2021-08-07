@@ -1,5 +1,6 @@
 import unittest
 
+from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler
 from slack_sdk.scim.v1.async_client import AsyncSCIMClient
 from tests.helpers import async_test
 from tests.slack_sdk.scim.mock_web_api_server import (
@@ -32,3 +33,15 @@ class TestSCIMClient_HttpRetries(unittest.TestCase):
             pass
 
         self.assertEqual(2, retry_handler.call_count)
+
+    @async_test
+    async def test_ratelimited(self):
+        client = AsyncSCIMClient(
+            base_url="http://localhost:8888/",
+            token="xoxp-ratelimited",
+            retry_handlers=[AsyncRateLimitErrorRetryHandler()],
+        )
+
+        response = await client.search_users(start_index=0, count=1)
+        # Just running retries; no assertions for call count so far
+        self.assertEqual(429, response.status_code)

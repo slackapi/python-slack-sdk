@@ -1,6 +1,7 @@
 import unittest
 
 from slack_sdk.audit_logs import AuditLogsClient
+from slack_sdk.http_retry import RateLimitErrorRetryHandler
 from tests.slack_sdk.audit_logs.mock_web_api_server import (
     cleanup_mock_web_api_server,
     setup_mock_web_api_server,
@@ -29,3 +30,14 @@ class TestAuditLogsClient_HttpRetries(unittest.TestCase):
             pass
 
         self.assertEqual(2, retry_handler.call_count)
+
+    def test_rate_limited(self):
+        client = AuditLogsClient(
+            token="xoxp-ratelimited",
+            base_url="http://localhost:8888/",
+            retry_handlers=[RateLimitErrorRetryHandler()],
+        )
+
+        response = client.actions()
+        # Just running retries; no assertions for call count so far
+        self.assertEqual(429, response.status_code)
