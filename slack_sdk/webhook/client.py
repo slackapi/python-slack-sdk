@@ -3,7 +3,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Union, Sequence, Optional
+from typing import Dict, Union, Sequence, Optional, List
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -17,6 +17,11 @@ from .internal_utils import (
     get_user_agent,
 )
 from .webhook_response import WebhookResponse
+from slack_sdk.http_retry import default_retry_handlers
+from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
+from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
+from slack_sdk.http_retry.state import RetryState
 from ..proxy_env_variable_loader import load_http_proxy_from_env
 
 
@@ -27,6 +32,7 @@ class WebhookClient:
     proxy: Optional[str]
     default_headers: Dict[str, str]
     logger: logging.Logger
+    retry_handlers: List[RetryHandler]
 
     def __init__(
         self,
@@ -38,6 +44,7 @@ class WebhookClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
+        retry_handlers: List[RetryHandler] = default_retry_handlers,
     ):
         """API client for Incoming Webhooks and `response_url`
 
@@ -52,6 +59,7 @@ class WebhookClient:
             user_agent_prefix: Prefix for User-Agent header value
             user_agent_suffix: Suffix for User-Agent header value
             logger: Custom logger
+            retry_handlers: Retry handlers
         """
         self.url = url
         self.timeout = timeout
@@ -62,6 +70,7 @@ class WebhookClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = retry_handlers
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -141,62 +150,143 @@ class WebhookClient:
             self.logger.debug(
                 f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
             )
-        try:
-            url = self.url
-            opener: Optional[OpenerDirector] = None
-            # for security (BAN-B310)
-            if url.lower().startswith("http"):
-                req = Request(
-                    method="POST", url=url, data=body.encode("utf-8"), headers=headers
+
+        url = self.url
+        # NOTE: Intentionally ignore the `http_verb` here
+        # Slack APIs accepts any API method requests with POST methods
+        req = Request(
+            method="POST", url=url, data=body.encode("utf-8"), headers=headers
+        )
+        resp = None
+        last_error = None
+
+        retry_state = RetryState()
+        counter_for_safety = 0
+        while counter_for_safety < 100:
+            counter_for_safety += 1
+            # If this is a retry, the next try started here. We can reset the flag.
+            retry_state.next_attempt_requested = False
+
+            try:
+                resp = self._perform_http_request_internal(url, req)
+                # The resp is a 200 OK response
+                return resp
+
+            except HTTPError as e:
+                # read the response body here
+                charset = e.headers.get_content_charset() or "utf-8"
+                response_body: str = e.read().decode(charset)
+                resp = WebhookResponse(
+                    url=url,
+                    status_code=e.code,
+                    body=response_body,
+                    headers=e.headers,
                 )
-                if self.proxy is not None:
-                    if isinstance(self.proxy, str):
-                        opener = urllib.request.build_opener(
-                            ProxyHandler({"http": self.proxy, "https": self.proxy}),
-                            HTTPSHandler(context=self.ssl),
-                        )
-                    else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
-                        )
-            else:
-                raise SlackRequestError(f"Invalid URL detected: {url}")
+                if e.code == 429:
+                    # for backward-compatibility with WebClient (v.2.5.0 or older)
+                    resp.headers["Retry-After"] = resp.headers["retry-after"]
+                _debug_log_response(self.logger, resp)
 
-            # NOTE: BAN-B310 is already checked above
-            resp: Optional[HTTPResponse] = None
-            if opener:
-                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
-            else:
-                resp = urlopen(  # skipcq: BAN-B310
-                    req, context=self.ssl, timeout=self.timeout
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                retry_response = RetryHttpResponse(
+                    status_code=e.code,
+                    headers={k: [v] for k, v in e.headers.items()},
+                    data=response_body.encode("utf-8")
+                    if response_body is not None
+                    else None,
                 )
-            charset: str = resp.headers.get_content_charset() or "utf-8"
-            response_body: str = resp.read().decode(charset)
-            resp = WebhookResponse(
-                url=url,
-                status_code=resp.status,
-                body=response_body,
-                headers=resp.headers,
-            )
-            _debug_log_response(self.logger, resp)
-            return resp
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=retry_response,
+                        error=e,
+                    ):
+                        if self.logger.level <= logging.DEBUG:
+                            self.logger.info(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        )
+                        break
 
-        except HTTPError as e:
-            # read the response body here
-            charset = e.headers.get_content_charset() or "utf-8"
-            body: str = e.read().decode(charset)
-            resp = WebhookResponse(
-                url=url,
-                status_code=e.code,
-                body=body,
-                headers=e.headers,
-            )
-            if e.code == 429:
-                # for backward-compatibility with WebClient (v.2.5.0 or older)
-                resp.headers["Retry-After"] = resp.headers["retry-after"]
-            _debug_log_response(self.logger, resp)
-            return resp
+                if retry_state.next_attempt_requested is False:
+                    return resp
 
-        except Exception as err:
-            self.logger.error(f"Failed to send a request to Slack API server: {err}")
-            raise err
+            except Exception as err:
+                last_error = err
+                self.logger.error(
+                    f"Failed to send a request to Slack API server: {err}"
+                )
+
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=None,
+                        error=err,
+                    ):
+                        if self.logger.level <= logging.DEBUG:
+                            self.logger.info(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=None,
+                            error=err,
+                        )
+                        self.logger.info(
+                            f"Going to retry the same request: {req.method} {req.full_url}"
+                        )
+                        break
+
+                if retry_state.next_attempt_requested is False:
+                    raise err
+
+        if resp is not None:
+            return resp
+        raise last_error
+
+    def _perform_http_request_internal(self, url: str, req: Request):
+        opener: Optional[OpenerDirector] = None
+        # for security (BAN-B310)
+        if url.lower().startswith("http"):
+            if self.proxy is not None:
+                if isinstance(self.proxy, str):
+                    opener = urllib.request.build_opener(
+                        ProxyHandler({"http": self.proxy, "https": self.proxy}),
+                        HTTPSHandler(context=self.ssl),
+                    )
+                else:
+                    raise SlackRequestError(
+                        f"Invalid proxy detected: {self.proxy} must be a str value"
+                    )
+        else:
+            raise SlackRequestError(f"Invalid URL detected: {url}")
+
+        # NOTE: BAN-B310 is already checked above
+        resp: Optional[HTTPResponse] = None
+        if opener:
+            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+        else:
+            resp = urlopen(  # skipcq: BAN-B310
+                req, context=self.ssl, timeout=self.timeout
+            )
+        charset: str = resp.headers.get_content_charset() or "utf-8"
+        response_body: str = resp.read().decode(charset)
+        resp = WebhookResponse(
+            url=url,
+            status_code=resp.status,
+            body=response_body,
+            headers=resp.headers,
+        )
+        _debug_log_response(self.logger, resp)
+        return resp

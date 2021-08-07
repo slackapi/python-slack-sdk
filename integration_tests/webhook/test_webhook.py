@@ -2,6 +2,8 @@ import os
 import unittest
 import time
 
+import pytest
+
 from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_INCOMING_WEBHOOK_URL,
     SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME,
@@ -68,6 +70,9 @@ class TestWebhook(unittest.TestCase):
         self.assertIsNotNone(history)
         self.assertTrue("attachments" not in history["messages"][0])
 
+
+    # FIXME: This test started failing as of August 5, 2021
+    @pytest.mark.skip()
     def test_with_unfurls_on(self):
         # Slack API rate limits unfurls of unique links so test will
         # fail when repeated. For testing, either use a different URL
