@@ -63,12 +63,7 @@ class AsyncRetryHandler:
         response: Optional[HttpResponse] = None,
         error: Optional[Exception] = None,
     ) -> bool:
-        return self._can_retry(
-            state=state,
-            request=request,
-            response=response,
-            error=error,
-        )
+        raise NotImplementedError()
 
     async def prepare_for_next_attempt_async(
         self,
