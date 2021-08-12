@@ -2,6 +2,7 @@ import os
 import unittest
 
 import slack_sdk
+import slack_sdk.errors as e
 from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.views import View
 from slack_sdk.web.async_client import AsyncWebClient
@@ -476,6 +477,10 @@ class TestWebClientCoverage(unittest.TestCase):
                         "method"
                     ]
                 )
+                method(channel_name="test-channel-name", invite_id="123")
+                self.assertRaises(
+                    e.SlackRequestError, method, channel_name="test-channel-name"
+                )
                 await async_method(channel_name="test-channel-name", channel_id="C123")
             elif method_name == "conversations_approveSharedInvite":
                 self.api_methods_to_call.remove(method(invite_id="123")["method"])
@@ -510,6 +515,8 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(
                     method(channel="C123", emails="test@example.com")["method"]
                 )
+                method(channel="C123", user_ids="U2345678901")
+                self.assertRaises(e.SlackRequestError, method, channel="C123")
                 await async_method(channel="C123", emails="test@example.com")
             elif method_name == "conversations_join":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
