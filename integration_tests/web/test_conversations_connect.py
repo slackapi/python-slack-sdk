@@ -7,9 +7,9 @@ import unittest
 from slack_sdk.web.slack_response import SlackResponse
 from slack_sdk.errors import SlackApiError
 from integration_tests.env_variable_names import (
-    SLACK_SDK_TEST_SENDER_BOT_TOKEN,
-    SLACK_SDK_TEST_RECEIVER_BOT_TOKEN,
-    SLACK_SDK_TEST_RECEIVER_BOT_USER_ID,
+    SLACK_SDK_TEST_CONNECT_INVITE_SENDER_BOT_TOKEN,
+    SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_TOKEN,
+    SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_USER_ID,
 )
 from integration_tests.helpers import async_test
 from slack_sdk.web import WebClient
@@ -29,8 +29,12 @@ class TestWebClient(unittest.TestCase):
 
     def setUp(self):
         self.logger = logging.getLogger(__name__)
-        self.sender_bot_token = os.environ[SLACK_SDK_TEST_SENDER_BOT_TOKEN]
-        self.receiver_bot_token = os.environ[SLACK_SDK_TEST_RECEIVER_BOT_TOKEN]
+        self.sender_bot_token = os.environ[
+            SLACK_SDK_TEST_CONNECT_INVITE_SENDER_BOT_TOKEN
+        ]
+        self.receiver_bot_token = os.environ[
+            SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_TOKEN
+        ]
         self.sender_sync_client: WebClient = WebClient(token=self.sender_bot_token)
         self.sender_async_client: AsyncWebClient = AsyncWebClient(
             token=self.sender_bot_token
@@ -46,7 +50,7 @@ class TestWebClient(unittest.TestCase):
     def test_sync(self):
         sender = self.sender_sync_client
         receiver = self.receiver_sync_client
-        channel_id: Optional[str]
+        channel_id: Optional[str] = None
 
         try:
             # list senders pending connect invites
@@ -65,7 +69,7 @@ class TestWebClient(unittest.TestCase):
             # send an invite for sender's intended shared channel to receiver's bot user id
             invite: SlackResponse = sender.conversations_inviteShared(
                 channel=new_channel["channel"]["id"],
-                user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
+                user_ids=os.environ[SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_USER_ID],
             )
             self.assertIsNotNone(invite["invite_id"])
 
@@ -94,7 +98,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         sender = self.sender_async_client
         receiver = self.receiver_async_client
-        channel_id: Optional[str]
+        channel_id: Optional[str] = None
 
         try:
             # list senders pending connect invites
@@ -115,7 +119,7 @@ class TestWebClient(unittest.TestCase):
             # send an invite for sender's intended shared channel to receiver's bot user id
             invite: SlackResponse = await sender.conversations_inviteShared(
                 channel=new_channel["channel"]["id"],
-                user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
+                user_ids=os.environ[SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_USER_ID],
             )
             self.assertIsNotNone(invite["invite_id"])
 
