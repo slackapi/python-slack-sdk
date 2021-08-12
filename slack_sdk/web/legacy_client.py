@@ -1767,7 +1767,7 @@ class LegacyWebClient(LegacyBaseClient):
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         page: Optional[int] = None,
-        **kwargs
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a team file.
 
@@ -2217,7 +2217,7 @@ class LegacyWebClient(LegacyBaseClient):
         grant_type: Optional[str] = None,
         # This field is required for token rotation
         refresh_token: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
 
@@ -2294,7 +2294,7 @@ class LegacyWebClient(LegacyBaseClient):
         redirect_uri: Optional[str] = None,
         grant_type: Optional[str] = None,
         refresh_token: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
 

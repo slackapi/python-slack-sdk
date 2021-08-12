@@ -50,12 +50,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 "admin.conversations.getCustomRetention",
                 "admin.conversations.removeCustomRetention",
                 "admin.conversations.setCustomRetention",
-                # TODO: Slack Connect APIs
-                "conversations.acceptSharedInvite",
-                "conversations.approveSharedInvite",
-                "conversations.declineSharedInvite",
-                "conversations.inviteShared",
-                "conversations.listConnectInvites",
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
