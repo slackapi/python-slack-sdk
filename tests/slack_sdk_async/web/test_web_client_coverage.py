@@ -478,10 +478,14 @@ class TestWebClientCoverage(unittest.TestCase):
                     ]
                 )
                 method(channel_name="test-channel-name", invite_id="123")
+                # either invite_id or channel_id supplied or exception
                 self.assertRaises(
                     e.SlackRequestError, method, channel_name="test-channel-name"
                 )
                 await async_method(channel_name="test-channel-name", channel_id="C123")
+                await async_method(channel_name="test-channel-name", invite_id="123")
+                with self.assertRaises(e.SlackRequestError):
+                    await async_method(channel_name="test-channel-name")
             elif method_name == "conversations_approveSharedInvite":
                 self.api_methods_to_call.remove(method(invite_id="123")["method"])
                 await async_method(invite_id="123")
@@ -515,9 +519,15 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(
                     method(channel="C123", emails="test@example.com")["method"]
                 )
+                method(
+                    channel="C123", emails=["test2@example.com", "test3@example.com"]
+                )
                 method(channel="C123", user_ids="U2345678901")
+                method(channel="C123", user_ids=["U2345678901", "U3456789012"])
                 self.assertRaises(e.SlackRequestError, method, channel="C123")
                 await async_method(channel="C123", emails="test@example.com")
+                with self.assertRaises(e.SlackRequestError):
+                    await async_method(channel="C123")
             elif method_name == "conversations_join":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
