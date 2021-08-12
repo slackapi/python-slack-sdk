@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from typing import Optional
 import unittest
 
 from slack_sdk.web.slack_response import SlackResponse
@@ -45,85 +46,95 @@ class TestWebClient(unittest.TestCase):
     def test_sync(self):
         sender = self.sender_sync_client
         receiver = self.receiver_sync_client
+        channel_id: Optional[str]
 
-        # list senders pending connect invites
-        connect_invites: SlackResponse = sender.conversations_listConnectInvites()
-        self.assertIsNotNone(connect_invites["invites"])
+        try:
+            # list senders pending connect invites
+            connect_invites: SlackResponse = sender.conversations_listConnectInvites()
+            self.assertIsNotNone(connect_invites["invites"])
 
-        # creates channel in sender workspace to share
-        unique_channel_name = str(int(time.time())) + "-shared"
-        new_channel: SlackResponse = sender.conversations_create(
-            name=unique_channel_name
-        )
-        self.assertIsNotNone(new_channel["channel"])
-        self.assertIsNotNone(new_channel["channel"]["id"])
+            # creates channel in sender workspace to share
+            unique_channel_name = str(int(time.time())) + "-shared"
+            new_channel: SlackResponse = sender.conversations_create(
+                name=unique_channel_name
+            )
+            self.assertIsNotNone(new_channel["channel"])
+            self.assertIsNotNone(new_channel["channel"]["id"])
+            channel_id = new_channel["channel"]["id"]
 
-        # send an invite for sender's intended shared channel to receiver's bot user id
-        invite: SlackResponse = sender.conversations_inviteShared(
-            channel=new_channel["channel"]["id"],
-            user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
-        )
-        self.assertIsNotNone(invite["invite_id"])
+            # send an invite for sender's intended shared channel to receiver's bot user id
+            invite: SlackResponse = sender.conversations_inviteShared(
+                channel=new_channel["channel"]["id"],
+                user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
+            )
+            self.assertIsNotNone(invite["invite_id"])
 
-        # reciever accept conversations invite via invite id
-        accepted: SlackResponse = receiver.conversations_acceptSharedInvite(
-            channel_name=unique_channel_name,
-            invite_id=invite["invite_id"],
-        )
-        self.assertIsNone(accepted["error"])
+            # reciever accept conversations invite via invite id
+            accepted: SlackResponse = receiver.conversations_acceptSharedInvite(
+                channel_name=unique_channel_name,
+                invite_id=invite["invite_id"],
+            )
+            self.assertIsNone(accepted["error"])
 
-        # receiver attempt to approve invite already accepted by an admin level token should fail
-        self.assertRaises(
-            SlackApiError,
-            receiver.conversations_approveSharedInvite,
-            invite_id=invite["invite_id"],
-        )
-
-        # clean up created channel
-        delete_channel: SlackResponse = sender.conversations_archive(
-            channel=new_channel["channel"]["id"]
-        )
-        self.assertIsNotNone(delete_channel)
+            # receiver attempt to approve invite already accepted by an admin level token should fail
+            self.assertRaises(
+                SlackApiError,
+                receiver.conversations_approveSharedInvite,
+                invite_id=invite["invite_id"],
+            )
+        finally:
+            if channel_id is not None:
+                # clean up created channel
+                delete_channel: SlackResponse = sender.conversations_archive(
+                    channel=new_channel["channel"]["id"]
+                )
+                self.assertIsNotNone(delete_channel)
 
     @async_test
     async def test_async(self):
         sender = self.sender_async_client
         receiver = self.receiver_async_client
+        channel_id: Optional[str]
 
-        # list senders pending connect invites
-        connect_invites: SlackResponse = await sender.conversations_listConnectInvites()
-        self.assertIsNotNone(connect_invites["invites"])
-
-        # creates channel in sender workspace to share
-        unique_channel_name = str(int(time.time())) + "-shared"
-        new_channel: SlackResponse = await sender.conversations_create(
-            name=unique_channel_name
-        )
-        self.assertIsNotNone(new_channel["channel"])
-        self.assertIsNotNone(new_channel["channel"]["id"])
-
-        # send an invite for sender's intended shared channel to receiver's bot user id
-        invite: SlackResponse = await sender.conversations_inviteShared(
-            channel=new_channel["channel"]["id"],
-            user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
-        )
-        self.assertIsNotNone(invite["invite_id"])
-
-        # reciever accept conversations invite via invite id
-        accepted: SlackResponse = await receiver.conversations_acceptSharedInvite(
-            channel_name=unique_channel_name,
-            invite_id=invite["invite_id"],
-        )
-        self.assertIsNone(accepted["error"])
-
-        # receiver attempt to approve invite already accepted by an admin level token should fail
-        with self.assertRaises(SlackApiError):
-            await receiver.conversations_approveSharedInvite(
-                invite_id=invite["invite_id"]
+        try:
+            # list senders pending connect invites
+            connect_invites: SlackResponse = (
+                await sender.conversations_listConnectInvites()
             )
+            self.assertIsNotNone(connect_invites["invites"])
 
-        # clean up created channel
-        delete_channel: SlackResponse = await sender.conversations_archive(
-            channel=new_channel["channel"]["id"]
-        )
-        self.assertIsNotNone(delete_channel)
+            # creates channel in sender workspace to share
+            unique_channel_name = str(int(time.time())) + "-shared"
+            new_channel: SlackResponse = await sender.conversations_create(
+                name=unique_channel_name
+            )
+            self.assertIsNotNone(new_channel["channel"])
+            self.assertIsNotNone(new_channel["channel"]["id"])
+            channel_id = new_channel["channel"]["id"]
+
+            # send an invite for sender's intended shared channel to receiver's bot user id
+            invite: SlackResponse = await sender.conversations_inviteShared(
+                channel=new_channel["channel"]["id"],
+                user_ids=os.environ[SLACK_SDK_TEST_RECEIVER_BOT_USER_ID],
+            )
+            self.assertIsNotNone(invite["invite_id"])
+
+            # reciever accept conversations invite via invite id
+            accepted: SlackResponse = await receiver.conversations_acceptSharedInvite(
+                channel_name=unique_channel_name,
+                invite_id=invite["invite_id"],
+            )
+            self.assertIsNone(accepted["error"])
+
+            # receiver attempt to approve invite already accepted by an admin level token should fail
+            with self.assertRaises(SlackApiError):
+                await receiver.conversations_approveSharedInvite(
+                    invite_id=invite["invite_id"]
+                )
+        finally:
+            if channel_id is not None:
+                # clean up created channel
+                delete_channel: SlackResponse = await sender.conversations_archive(
+                    channel=new_channel["channel"]["id"]
+                )
+                self.assertIsNotNone(delete_channel)

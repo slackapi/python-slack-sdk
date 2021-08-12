@@ -92,7 +92,11 @@ class WebClient(BaseClient):
         return self.api_call("admin.analytics.getFile", params=kwargs)
 
     def admin_apps_approve(
-        self, *, app_id: str = None, request_id: str = None, **kwargs
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_id: Optional[str] = None,
+        **kwargs,
     ) -> SlackResponse:
         """Approve an app for installation on a workspace.
 
@@ -1319,8 +1323,8 @@ class WebClient(BaseClient):
         self,
         *,
         channel_name: str,
-        channel_id: str = None,
-        invite_id: str = None,
+        channel_id: Optional[str] = None,
+        invite_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Accepts an invitation to a Slack Connect channel.
@@ -1342,7 +1346,9 @@ class WebClient(BaseClient):
             kwargs.update({"channel_id": channel_id})
         else:
             kwargs.update({"invite_id": invite_id})
-        return self.api_call("conversations.acceptSharedInvite", json=kwargs)
+        return self.api_call(
+            "conversations.acceptSharedInvite", http_verb="POST", params=kwargs
+        )
 
     def conversations_approveSharedInvite(
         self, *, invite_id: str, **kwargs
@@ -1353,7 +1359,9 @@ class WebClient(BaseClient):
             invite_id (str): ID of the shared channel invite to approve
         """
         kwargs.update({"invite_id": invite_id})
-        return self.api_call("conversations.approveSharedInvite", json=kwargs)
+        return self.api_call(
+            "conversations.approveSharedInvite", http_verb="POST", params=kwargs
+        )
 
     def conversations_archive(self, *, channel: str, **kwargs) -> SlackResponse:
         """Archives a conversation.
@@ -1433,8 +1441,8 @@ class WebClient(BaseClient):
         self,
         *,
         channel: str,
-        emails: Union[str, Sequence[str]] = None,
-        user_ids: Union[str, Sequence[str]] = None,
+        emails: Optional[Union[str, Sequence[str]]] = None,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends an invitation to a Slack Connect channel.
@@ -1774,7 +1782,11 @@ class WebClient(BaseClient):
         return self.api_call("files.sharedPublicURL", json=kwargs)
 
     def files_upload(
-        self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
+        self,
+        *,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: str = None,
+        **kwargs,
     ) -> SlackResponse:
         """Uploads or creates a file.
 
@@ -2584,8 +2596,8 @@ class WebClient(BaseClient):
         self,
         *,
         view: Union[dict, View],
-        external_id: str = None,
-        view_id: str = None,
+        external_id: Optional[str] = None,
+        view_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Update an existing view.
@@ -2638,7 +2650,7 @@ class WebClient(BaseClient):
         return self.api_call("views.publish", json=kwargs)
 
     def workflows_stepCompleted(
-        self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
+        self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs
     ) -> SlackResponse:
         """Indicate a successful outcome of a workflow step's execution.
         Args:
@@ -2672,8 +2684,8 @@ class WebClient(BaseClient):
         self,
         *,
         workflow_step_edit_id: str,
-        inputs: dict = None,
-        outputs: list = None,
+        inputs: Optional[dict] = None,
+        outputs: Optional[list] = None,
         **kwargs,
     ) -> SlackResponse:
         """Update the configuration for a workflow extension step.
