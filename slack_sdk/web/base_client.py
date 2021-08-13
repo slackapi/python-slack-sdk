@@ -54,7 +54,7 @@ class BaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = default_retry_handlers(),
+        retry_handlers: Optional[List[RetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -70,7 +70,9 @@ class BaseClient:
             self.default_params["team_id"] = team_id
         self._logger = logger if logger is not None else logging.getLogger(__name__)
 
-        self.retry_handlers = retry_handlers
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else default_retry_handlers()
+        )
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self._logger)

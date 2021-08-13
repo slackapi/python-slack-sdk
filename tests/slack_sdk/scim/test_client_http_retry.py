@@ -36,8 +36,8 @@ class TestSCIMClient(unittest.TestCase):
         client = SCIMClient(
             base_url="http://localhost:8888/",
             token="xoxp-ratelimited",
-            retry_handlers=[RateLimitErrorRetryHandler()],
         )
+        client.retry_handlers.append(RateLimitErrorRetryHandler())
 
         response = client.search_users(start_index=0, count=1)
         # Just running retries; no assertions for call count so far
