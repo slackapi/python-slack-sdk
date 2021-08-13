@@ -135,12 +135,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="web/index.html#asyncwebclient">AsyncWebClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="webhook/index.html">Webhook Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="webhook/index.html#id1">Incoming Webhooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="webhook/index.html#response-url">response_url</a></li>
 <li class="toctree-l2"><a class="reference internal" href="webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webhook/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="socket-mode/index.html">Socket Mode Client</a><ul>
@@ -152,16 +154,19 @@
 <li class="toctree-l1"><a class="reference internal" href="oauth/index.html">OAuth Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="oauth/index.html#app-installation-flow">App Installation Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="oauth/index.html#token-lookup">Token Lookup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oauth/index.html#sign-in-with-slack">Sign in with Slack</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="audit-logs/index.html">Audit Logs API Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="audit-logs/index.html#auditlogsclient">AuditLogsClient</a></li>
 <li class="toctree-l2"><a class="reference internal" href="audit-logs/index.html#asyncauditlogsclient">AsyncAuditLogsClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audit-logs/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scim/index.html">SCIM API Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scim/index.html#scimclient">SCIMClient</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scim/index.html#asyncscimclient">AsyncSCIMClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scim/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="real_time_messaging.html">RTM Client</a><ul>
@@ -236,7 +241,7 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.socket_mode</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>OAuth</p></td>
-<td><p>Setup the authentication flow using V2 OAuth for Slack apps.</p></td>
+<td><p>Setup the authentication flow using V2 OAuth, OpenID Connect for Slack apps.</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">slack_sdk.oauth</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Audit Logs API</p></td>
@@ -270,13 +275,16 @@
 </div>
 <p>Of course, you can always pull the source code directly into your project:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/slackapi/python-slack-sdk.git
+<span class="nb">cd</span> python-slack-sdk
+python3 -m venv .venv
+<span class="nb">source</span> .venv/bin/activate
+pip install -U pip
+pip install -e .  <span class="c1"># install the SDK project into the virtual env</span>
 </pre></div>
 </div>
 <p>And then, save a few lines of code as <code class="docutils literal notranslate"><span class="pre">./test.py</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># test.py</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="c1"># Load the local source directly</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;./python-slack-sdk&quot;</span><span class="p">)</span>
 <span class="c1"># Enable debug logging</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
