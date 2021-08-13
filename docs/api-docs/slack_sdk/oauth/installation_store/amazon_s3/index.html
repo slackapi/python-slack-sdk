@@ -33,6 +33,7 @@ from typing import Optional
 
 from botocore.client import BaseClient
 
+from slack_sdk.errors import SlackClientConfigurationError
 from slack_sdk.oauth.installation_store.async_installation_store import (
     AsyncInstallationStore,
 )
@@ -280,7 +281,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                     )
                 except Exception as e:  # skipcq: PYL-W0703
                     message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-                    self.logger.warning(message)
+                    raise SlackClientConfigurationError(message)
 
     async def async_delete_installation(
         self,
@@ -310,6 +311,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             Bucket=self.bucket_name,
             Prefix=f&#34;{workspace_path}/installer-{user_id or &#39;&#39;}&#34;,
         )
+        deleted_keys = []
         for content in objects.get(&#34;Contents&#34;, []):
             key = content.get(&#34;Key&#34;)
             if key is not None:
@@ -317,11 +319,47 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                 try:
                     self.s3_client.delete_object(
                         Bucket=self.bucket_name,
-                        Key=content.get(&#34;Key&#34;),
+                        Key=key,
                     )
+                    deleted_keys.append(key)
                 except Exception as e:  # skipcq: PYL-W0703
                     message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-                    self.logger.warning(message)</code></pre>
+                    raise SlackClientConfigurationError(message)
+
+                try:
+                    no_user_id_key = key.replace(f&#34;-{user_id}&#34;, &#34;&#34;)
+                    if not no_user_id_key.endswith(&#34;installer-latest&#34;):
+                        self.s3_client.delete_object(
+                            Bucket=self.bucket_name,
+                            Key=no_user_id_key,
+                        )
+                        deleted_keys.append(no_user_id_key)
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    raise SlackClientConfigurationError(message)
+
+        # Check the remaining installation data
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/installer-&#34;,
+            MaxKeys=10,  # the small number would be enough for this purpose
+        )
+        keys = [
+            c.get(&#34;Key&#34;)
+            for c in objects.get(&#34;Contents&#34;, [])
+            if c.get(&#34;Key&#34;) not in deleted_keys
+        ]
+        # If only installer-latest remains, we should delete the one as well
+        if len(keys) == 1 and keys[0].endswith(&#34;installer-latest&#34;):
+            content = objects.get(&#34;Contents&#34;, [])[0]
+            try:
+                self.s3_client.delete_object(
+                    Bucket=self.bucket_name,
+                    Key=content.get(&#34;Key&#34;),
+                )
+            except Exception as e:  # skipcq: PYL-W0703
+                message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                raise SlackClientConfigurationError(message)</code></pre>
 </details>
 </section>
 <section>
@@ -600,7 +638,7 @@ the following methods should be implemented.</p>
                     )
                 except Exception as e:  # skipcq: PYL-W0703
                     message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-                    self.logger.warning(message)
+                    raise SlackClientConfigurationError(message)
 
     async def async_delete_installation(
         self,
@@ -630,6 +668,7 @@ the following methods should be implemented.</p>
             Bucket=self.bucket_name,
             Prefix=f&#34;{workspace_path}/installer-{user_id or &#39;&#39;}&#34;,
         )
+        deleted_keys = []
         for content in objects.get(&#34;Contents&#34;, []):
             key = content.get(&#34;Key&#34;)
             if key is not None:
@@ -637,11 +676,47 @@ the following methods should be implemented.</p>
                 try:
                     self.s3_client.delete_object(
                         Bucket=self.bucket_name,
-                        Key=content.get(&#34;Key&#34;),
+                        Key=key,
                     )
+                    deleted_keys.append(key)
                 except Exception as e:  # skipcq: PYL-W0703
                     message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
-                    self.logger.warning(message)</code></pre>
+                    raise SlackClientConfigurationError(message)
+
+                try:
+                    no_user_id_key = key.replace(f&#34;-{user_id}&#34;, &#34;&#34;)
+                    if not no_user_id_key.endswith(&#34;installer-latest&#34;):
+                        self.s3_client.delete_object(
+                            Bucket=self.bucket_name,
+                            Key=no_user_id_key,
+                        )
+                        deleted_keys.append(no_user_id_key)
+                except Exception as e:  # skipcq: PYL-W0703
+                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    raise SlackClientConfigurationError(message)
+
+        # Check the remaining installation data
+        objects = self.s3_client.list_objects(
+            Bucket=self.bucket_name,
+            Prefix=f&#34;{workspace_path}/installer-&#34;,
+            MaxKeys=10,  # the small number would be enough for this purpose
+        )
+        keys = [
+            c.get(&#34;Key&#34;)
+            for c in objects.get(&#34;Contents&#34;, [])
+            if c.get(&#34;Key&#34;) not in deleted_keys
+        ]
+        # If only installer-latest remains, we should delete the one as well
+        if len(keys) == 1 and keys[0].endswith(&#34;installer-latest&#34;):
+            content = objects.get(&#34;Contents&#34;, [])[0]
+            try:
+                self.s3_client.delete_object(
+                    Bucket=self.bucket_name,
+                    Key=content.get(&#34;Key&#34;),
+                )
+            except Exception as e:  # skipcq: PYL-W0703
+                message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                raise SlackClientConfigurationError(message)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

@@ -81,8 +81,10 @@ class SlackObjectFormationError(SlackClientError):
 
 
 class SlackClientConfigurationError(SlackClientError):
-    &#34;&#34;&#34;Error raised when attempting to send messages over the websocket when the
-    connection is closed.&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Error raised because of invalid configuration on the client side:
+    * when attempting to send messages over the websocket when the connection is closed.
+    * when external system (e.g., Amazon S3) configuration / credentials are not correct
+    &#34;&#34;&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -165,15 +167,18 @@ i.e. str(SlackApiError("This text will be sent as a string."))</p></div>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Error raised when attempting to send messages over the websocket when the
-connection is closed.</p></div>
+<div class="desc"><p>Error raised because of invalid configuration on the client side:
+* when attempting to send messages over the websocket when the connection is closed.
+* when external system (e.g., Amazon S3) configuration / credentials are not correct</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackClientConfigurationError(SlackClientError):
-    &#34;&#34;&#34;Error raised when attempting to send messages over the websocket when the
-    connection is closed.&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Error raised because of invalid configuration on the client side:
+    * when attempting to send messages over the websocket when the connection is closed.
+    * when external system (e.g., Amazon S3) configuration / credentials are not correct
+    &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

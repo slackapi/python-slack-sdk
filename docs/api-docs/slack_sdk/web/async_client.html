@@ -112,7 +112,7 @@ class AsyncWebClient(AsyncBaseClient):
         type: str,
         date: Optional[str] = None,
         metadata_only: Optional[bool] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Retrieve analytics data for a given date, presented as a compressed JSON file
 
@@ -130,7 +130,11 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call(&#34;admin.analytics.getFile&#34;, params=kwargs)
 
     async def admin_apps_approve(
-        self, *, app_id: str = None, request_id: str = None, **kwargs
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_id: Optional[str] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Approve an app for installation on a workspace.
 
@@ -196,7 +200,7 @@ class AsyncWebClient(AsyncBaseClient):
         app_id: str,
         enterprise_id: Optional[str] = None,
         team_ids: Optional[Union[str, Sequence[str]]] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
         kwargs.update({&#34;app_id&#34;: app_id})
@@ -218,7 +222,7 @@ class AsyncWebClient(AsyncBaseClient):
         cursor: Optional[str] = None,
         entity_type: Optional[str] = None,
         limit: Optional[int] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Fetch all the entities assigned to a particular authentication policy by name.&#34;&#34;&#34;
         kwargs.update({&#34;policy_name&#34;: policy_name})
@@ -238,7 +242,7 @@ class AsyncWebClient(AsyncBaseClient):
         entity_ids: Union[str, Sequence[str]],
         policy_name: str,
         entity_type: str,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Assign entities to a particular authentication policy.&#34;&#34;&#34;
         if isinstance(entity_ids, (list, Tuple)):
@@ -257,7 +261,7 @@ class AsyncWebClient(AsyncBaseClient):
         entity_ids: Union[str, Sequence[str]],
         policy_name: str,
         entity_type: str,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Remove specified entities from a specified authentication policy.&#34;&#34;&#34;
         if isinstance(entity_ids, (list, Tuple)):
@@ -276,7 +280,7 @@ class AsyncWebClient(AsyncBaseClient):
         barriered_from_usergroup_ids: Union[str, Sequence[str]],
         primary_usergroup_id: str,
         restricted_subjects: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Create an Information Barrier&#34;&#34;&#34;
         kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
@@ -312,7 +316,7 @@ class AsyncWebClient(AsyncBaseClient):
         barriered_from_usergroup_ids: Union[str, Sequence[str]],
         primary_usergroup_id: str,
         restricted_subjects: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update an existing Information Barrier&#34;&#34;&#34;
         kwargs.update(
@@ -830,7 +834,7 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: str,
         usergroup_id: str,
         channel_ids: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Add one or more default channels to an IDP group.
 
@@ -909,7 +913,7 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: str,
         email: str,
         channel_ids: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Invite a user to a workspace.
 
@@ -1090,7 +1094,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         id: str,  # skipcq: PYL-W0622
         users: Union[str, Sequence[Dict[str, str]]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Registers new participants added to a Call.
 
@@ -1109,7 +1113,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         id: str,  # skipcq: PYL-W0622
         users: Union[str, Sequence[Dict[str, str]]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Registers participants removed from a Call.
 
@@ -1423,6 +1427,50 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Lists all scheduled messages.&#34;&#34;&#34;
         return await self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
 
+    async def conversations_acceptSharedInvite(
+        self,
+        *,
+        channel_name: str,
+        channel_id: Optional[str] = None,
+        invite_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Accepts an invitation to a Slack Connect channel.
+
+        Args:
+            channel_name (str): The name of a channel, e.g. &#39;connectedchannel&#39;
+            channel_id (str): Optional ID of the channel you&#39;d like to accept
+            invite_id (str): Optional ID of the shared channel invitation
+
+            While both fields are optional, either channel_id or invite_id must be provided.
+
+        &#34;&#34;&#34;
+        if channel_id is None and invite_id is None:
+            raise e.SlackRequestError(
+                &#34;Either channel_id or invite_id must be provided.&#34;
+            )
+        kwargs.update({&#34;channel_name&#34;: channel_name})
+        if channel_id:
+            kwargs.update({&#34;channel_id&#34;: channel_id})
+        else:
+            kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
+    async def conversations_approveSharedInvite(
+        self, *, invite_id: str, **kwargs
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Approves an invitation to a Slack Connect channel.
+
+        Args:
+            invite_id (str): ID of the shared channel invite to approve
+        &#34;&#34;&#34;
+        kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
     async def conversations_archive(
         self, *, channel: str, **kwargs
     ) -&gt; AsyncSlackResponse:
@@ -1453,6 +1501,19 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name})
         return await self.api_call(&#34;conversations.create&#34;, json=kwargs)
+
+    async def conversations_declineSharedInvite(
+        self, *, invite_id: str, **kwargs
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Declines a Slack Connect channel invite.
+
+        Args:
+            invite_id (str): ID of the Slack Connect invite to decline.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
 
     async def conversations_history(
         self, *, channel: str, **kwargs
@@ -1492,6 +1553,38 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;users&#34;: users})
         return await self.api_call(&#34;conversations.invite&#34;, params=kwargs)
 
+    async def conversations_inviteShared(
+        self,
+        *,
+        channel: str,
+        emails: Optional[Union[str, Sequence[str]]] = None,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Sends an invitation to a Slack Connect channel.
+
+        Args:
+            channel (str): id of the channel on your team you&#39;d like to share. e.g. &#39;C1234567890&#39;
+            emails (str or list): Optional email or list of emails to receive this invite.
+            user_ids (str or list): Optional user id or list of user ids to receive this invite.
+
+            While both fields are optional, either emails or user ids must be provided.
+        &#34;&#34;&#34;
+        if emails is None and user_ids is None:
+            raise e.SlackRequestError(&#34;Either emails or user ids must be provided.&#34;)
+        kwargs.update({&#34;channel&#34;: channel})
+        if isinstance(emails, (list, Tuple)):
+            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(emails)})
+        else:
+            kwargs.update({&#34;emails&#34;: emails})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return await self.api_call(
+            &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
+
     async def conversations_join(self, *, channel: str, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Joins an existing conversation.
 
@@ -1527,6 +1620,10 @@ class AsyncWebClient(AsyncBaseClient):
     async def conversations_list(self, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Lists all channels in a Slack team.&#34;&#34;&#34;
         return await self.api_call(&#34;conversations.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def conversations_listConnectInvites(self, **kwargs) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List shared channel invites that have been generated or received but have not yet been approved by all parties.&#34;&#34;&#34;
+        return await self.api_call(&#34;conversations.listConnectInvites&#34;, json=kwargs)
 
     async def conversations_mark(
         self, *, channel: str, ts: str, **kwargs
@@ -1709,13 +1806,34 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({&#34;file&#34;: file})
         return await self.api_call(&#34;files.delete&#34;, json=kwargs)
 
-    async def files_info(self, *, file: str, **kwargs) -&gt; AsyncSlackResponse:
+    async def files_info(
+        self,
+        *,
+        file: str,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        page: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets information about a team file.
 
         Args:
             file (str): The file id. e.g. &#39;F1234467890&#39;
+            count (int): An optional number of items to return per page
+            cursor (str): An optional parameter for pagination
+            limit (int): An optional parameter defining the maximum number of items to return
+            page (int): An optional parameter defining the page number of results to return
         &#34;&#34;&#34;
-        kwargs.update({&#34;file&#34;: file})
+        kwargs.update(
+            {
+                &#34;file&#34;: file,
+                &#34;count&#34;: count,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;page&#34;: page,
+            }
+        )
         return await self.api_call(&#34;files.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def files_list(self, **kwargs) -&gt; AsyncSlackResponse:
@@ -1802,7 +1920,11 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call(&#34;files.sharedPublicURL&#34;, json=kwargs)
 
     async def files_upload(
-        self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
+        self,
+        *,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: str = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Uploads or creates a file.
 
@@ -2140,7 +2262,7 @@ class AsyncWebClient(AsyncBaseClient):
         grant_type: Optional[str] = None,
         # This field is required for token rotation
         refresh_token: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -2174,7 +2296,7 @@ class AsyncWebClient(AsyncBaseClient):
         client_secret: str,
         code: str,
         redirect_uri: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -2208,6 +2330,44 @@ class AsyncWebClient(AsyncBaseClient):
             {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
         )
         return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)
+
+    async def openid_connect_token(
+        self,
+        client_id: str,
+        client_secret: str,
+        code: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        grant_type: Optional[str] = None,
+        refresh_token: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
+
+        Args:
+            client_id (str): Issued when you created your application.
+            client_secret (str): Issued when you created your application.
+            code (str): The code param returned via the OAuth callback.
+            redirect_uri (optional str): This must match the originally submitted URI (if one was sent).
+            grant_type: The grant_type param as described in the OAuth spec.
+            refresh_token: The refresh_token param as described in the OAuth spec.
+        &#34;&#34;&#34;
+        if redirect_uri is not None:
+            kwargs.update({&#34;redirect_uri&#34;: redirect_uri})
+        if code is not None:
+            kwargs.update({&#34;code&#34;: code})
+        if grant_type is not None:
+            kwargs.update({&#34;grant_type&#34;: grant_type})
+        if refresh_token is not None:
+            kwargs.update({&#34;refresh_token&#34;: refresh_token})
+        return await self.api_call(
+            &#34;openid.connect.token&#34;,
+            data=kwargs,
+            auth={&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret},
+        )
+
+    async def openid_connect_userInfo(self, **kwargs) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get the identity of a user who has authorized Sign in with Slack.&#34;&#34;&#34;
+        return await self.api_call(&#34;openid.connect.userInfo&#34;, params=kwargs)
 
     async def pins_add(self, *, channel: str, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Pins an item to a channel.
@@ -2616,9 +2776,9 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         view: Union[dict, View],
-        external_id: str = None,
-        view_id: str = None,
-        **kwargs
+        external_id: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update an existing view.
 
@@ -2670,7 +2830,7 @@ class AsyncWebClient(AsyncBaseClient):
         return await self.api_call(&#34;views.publish&#34;, json=kwargs)
 
     async def workflows_stepCompleted(
-        self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
+        self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Indicate a successful outcome of a workflow step&#39;s execution.
         Args:
@@ -2704,9 +2864,9 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         workflow_step_edit_id: str,
-        inputs: dict = None,
-        outputs: list = None,
-        **kwargs
+        inputs: Optional[dict] = None,
+        outputs: Optional[list] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update the configuration for a workflow extension step.
         Args:
@@ -2738,7 +2898,7 @@ class AsyncWebClient(AsyncBaseClient):
 <dl>
 <dt id="slack_sdk.web.async_client.AsyncWebClient"><code class="flex name class">
 <span>class <span class="ident">AsyncWebClient</span></span>
-<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None)</span>
+<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A WebClient allows apps to communicate with the Slack Platform's Web API.</p>
@@ -2853,7 +3013,7 @@ removed at anytime.</p></div>
         type: str,
         date: Optional[str] = None,
         metadata_only: Optional[bool] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Retrieve analytics data for a given date, presented as a compressed JSON file
 
@@ -2871,7 +3031,11 @@ removed at anytime.</p></div>
         return await self.api_call(&#34;admin.analytics.getFile&#34;, params=kwargs)
 
     async def admin_apps_approve(
-        self, *, app_id: str = None, request_id: str = None, **kwargs
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_id: Optional[str] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Approve an app for installation on a workspace.
 
@@ -2937,7 +3101,7 @@ removed at anytime.</p></div>
         app_id: str,
         enterprise_id: Optional[str] = None,
         team_ids: Optional[Union[str, Sequence[str]]] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
         kwargs.update({&#34;app_id&#34;: app_id})
@@ -2959,7 +3123,7 @@ removed at anytime.</p></div>
         cursor: Optional[str] = None,
         entity_type: Optional[str] = None,
         limit: Optional[int] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Fetch all the entities assigned to a particular authentication policy by name.&#34;&#34;&#34;
         kwargs.update({&#34;policy_name&#34;: policy_name})
@@ -2979,7 +3143,7 @@ removed at anytime.</p></div>
         entity_ids: Union[str, Sequence[str]],
         policy_name: str,
         entity_type: str,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Assign entities to a particular authentication policy.&#34;&#34;&#34;
         if isinstance(entity_ids, (list, Tuple)):
@@ -2998,7 +3162,7 @@ removed at anytime.</p></div>
         entity_ids: Union[str, Sequence[str]],
         policy_name: str,
         entity_type: str,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Remove specified entities from a specified authentication policy.&#34;&#34;&#34;
         if isinstance(entity_ids, (list, Tuple)):
@@ -3017,7 +3181,7 @@ removed at anytime.</p></div>
         barriered_from_usergroup_ids: Union[str, Sequence[str]],
         primary_usergroup_id: str,
         restricted_subjects: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Create an Information Barrier&#34;&#34;&#34;
         kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
@@ -3053,7 +3217,7 @@ removed at anytime.</p></div>
         barriered_from_usergroup_ids: Union[str, Sequence[str]],
         primary_usergroup_id: str,
         restricted_subjects: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update an existing Information Barrier&#34;&#34;&#34;
         kwargs.update(
@@ -3571,7 +3735,7 @@ removed at anytime.</p></div>
         team_id: str,
         usergroup_id: str,
         channel_ids: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Add one or more default channels to an IDP group.
 
@@ -3650,7 +3814,7 @@ removed at anytime.</p></div>
         team_id: str,
         email: str,
         channel_ids: Union[str, Sequence[str]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Invite a user to a workspace.
 
@@ -3831,7 +3995,7 @@ removed at anytime.</p></div>
         *,
         id: str,  # skipcq: PYL-W0622
         users: Union[str, Sequence[Dict[str, str]]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Registers new participants added to a Call.
 
@@ -3850,7 +4014,7 @@ removed at anytime.</p></div>
         *,
         id: str,  # skipcq: PYL-W0622
         users: Union[str, Sequence[Dict[str, str]]],
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Registers participants removed from a Call.
 
@@ -4164,6 +4328,50 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Lists all scheduled messages.&#34;&#34;&#34;
         return await self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
 
+    async def conversations_acceptSharedInvite(
+        self,
+        *,
+        channel_name: str,
+        channel_id: Optional[str] = None,
+        invite_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Accepts an invitation to a Slack Connect channel.
+
+        Args:
+            channel_name (str): The name of a channel, e.g. &#39;connectedchannel&#39;
+            channel_id (str): Optional ID of the channel you&#39;d like to accept
+            invite_id (str): Optional ID of the shared channel invitation
+
+            While both fields are optional, either channel_id or invite_id must be provided.
+
+        &#34;&#34;&#34;
+        if channel_id is None and invite_id is None:
+            raise e.SlackRequestError(
+                &#34;Either channel_id or invite_id must be provided.&#34;
+            )
+        kwargs.update({&#34;channel_name&#34;: channel_name})
+        if channel_id:
+            kwargs.update({&#34;channel_id&#34;: channel_id})
+        else:
+            kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
+    async def conversations_approveSharedInvite(
+        self, *, invite_id: str, **kwargs
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Approves an invitation to a Slack Connect channel.
+
+        Args:
+            invite_id (str): ID of the shared channel invite to approve
+        &#34;&#34;&#34;
+        kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
     async def conversations_archive(
         self, *, channel: str, **kwargs
     ) -&gt; AsyncSlackResponse:
@@ -4194,6 +4402,19 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name})
         return await self.api_call(&#34;conversations.create&#34;, json=kwargs)
+
+    async def conversations_declineSharedInvite(
+        self, *, invite_id: str, **kwargs
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Declines a Slack Connect channel invite.
+
+        Args:
+            invite_id (str): ID of the Slack Connect invite to decline.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;invite_id&#34;: invite_id})
+        return await self.api_call(
+            &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
 
     async def conversations_history(
         self, *, channel: str, **kwargs
@@ -4233,6 +4454,38 @@ removed at anytime.</p></div>
             kwargs.update({&#34;users&#34;: users})
         return await self.api_call(&#34;conversations.invite&#34;, params=kwargs)
 
+    async def conversations_inviteShared(
+        self,
+        *,
+        channel: str,
+        emails: Optional[Union[str, Sequence[str]]] = None,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Sends an invitation to a Slack Connect channel.
+
+        Args:
+            channel (str): id of the channel on your team you&#39;d like to share. e.g. &#39;C1234567890&#39;
+            emails (str or list): Optional email or list of emails to receive this invite.
+            user_ids (str or list): Optional user id or list of user ids to receive this invite.
+
+            While both fields are optional, either emails or user ids must be provided.
+        &#34;&#34;&#34;
+        if emails is None and user_ids is None:
+            raise e.SlackRequestError(&#34;Either emails or user ids must be provided.&#34;)
+        kwargs.update({&#34;channel&#34;: channel})
+        if isinstance(emails, (list, Tuple)):
+            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(emails)})
+        else:
+            kwargs.update({&#34;emails&#34;: emails})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return await self.api_call(
+            &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
+        )
+
     async def conversations_join(self, *, channel: str, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Joins an existing conversation.
 
@@ -4268,6 +4521,10 @@ removed at anytime.</p></div>
     async def conversations_list(self, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Lists all channels in a Slack team.&#34;&#34;&#34;
         return await self.api_call(&#34;conversations.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def conversations_listConnectInvites(self, **kwargs) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List shared channel invites that have been generated or received but have not yet been approved by all parties.&#34;&#34;&#34;
+        return await self.api_call(&#34;conversations.listConnectInvites&#34;, json=kwargs)
 
     async def conversations_mark(
         self, *, channel: str, ts: str, **kwargs
@@ -4450,13 +4707,34 @@ removed at anytime.</p></div>
         kwargs.update({&#34;file&#34;: file})
         return await self.api_call(&#34;files.delete&#34;, json=kwargs)
 
-    async def files_info(self, *, file: str, **kwargs) -&gt; AsyncSlackResponse:
+    async def files_info(
+        self,
+        *,
+        file: str,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        page: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets information about a team file.
 
         Args:
             file (str): The file id. e.g. &#39;F1234467890&#39;
+            count (int): An optional number of items to return per page
+            cursor (str): An optional parameter for pagination
+            limit (int): An optional parameter defining the maximum number of items to return
+            page (int): An optional parameter defining the page number of results to return
         &#34;&#34;&#34;
-        kwargs.update({&#34;file&#34;: file})
+        kwargs.update(
+            {
+                &#34;file&#34;: file,
+                &#34;count&#34;: count,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;page&#34;: page,
+            }
+        )
         return await self.api_call(&#34;files.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def files_list(self, **kwargs) -&gt; AsyncSlackResponse:
@@ -4543,7 +4821,11 @@ removed at anytime.</p></div>
         return await self.api_call(&#34;files.sharedPublicURL&#34;, json=kwargs)
 
     async def files_upload(
-        self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
+        self,
+        *,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: str = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Uploads or creates a file.
 
@@ -4881,7 +5163,7 @@ removed at anytime.</p></div>
         grant_type: Optional[str] = None,
         # This field is required for token rotation
         refresh_token: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -4915,7 +5197,7 @@ removed at anytime.</p></div>
         client_secret: str,
         code: str,
         redirect_uri: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -4949,6 +5231,44 @@ removed at anytime.</p></div>
             {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
         )
         return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)
+
+    async def openid_connect_token(
+        self,
+        client_id: str,
+        client_secret: str,
+        code: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        grant_type: Optional[str] = None,
+        refresh_token: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
+
+        Args:
+            client_id (str): Issued when you created your application.
+            client_secret (str): Issued when you created your application.
+            code (str): The code param returned via the OAuth callback.
+            redirect_uri (optional str): This must match the originally submitted URI (if one was sent).
+            grant_type: The grant_type param as described in the OAuth spec.
+            refresh_token: The refresh_token param as described in the OAuth spec.
+        &#34;&#34;&#34;
+        if redirect_uri is not None:
+            kwargs.update({&#34;redirect_uri&#34;: redirect_uri})
+        if code is not None:
+            kwargs.update({&#34;code&#34;: code})
+        if grant_type is not None:
+            kwargs.update({&#34;grant_type&#34;: grant_type})
+        if refresh_token is not None:
+            kwargs.update({&#34;refresh_token&#34;: refresh_token})
+        return await self.api_call(
+            &#34;openid.connect.token&#34;,
+            data=kwargs,
+            auth={&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret},
+        )
+
+    async def openid_connect_userInfo(self, **kwargs) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get the identity of a user who has authorized Sign in with Slack.&#34;&#34;&#34;
+        return await self.api_call(&#34;openid.connect.userInfo&#34;, params=kwargs)
 
     async def pins_add(self, *, channel: str, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Pins an item to a channel.
@@ -5357,9 +5677,9 @@ removed at anytime.</p></div>
         self,
         *,
         view: Union[dict, View],
-        external_id: str = None,
-        view_id: str = None,
-        **kwargs
+        external_id: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update an existing view.
 
@@ -5411,7 +5731,7 @@ removed at anytime.</p></div>
         return await self.api_call(&#34;views.publish&#34;, json=kwargs)
 
     async def workflows_stepCompleted(
-        self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
+        self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Indicate a successful outcome of a workflow step&#39;s execution.
         Args:
@@ -5445,9 +5765,9 @@ removed at anytime.</p></div>
         self,
         *,
         workflow_step_edit_id: str,
-        inputs: dict = None,
-        outputs: list = None,
-        **kwargs
+        inputs: Optional[dict] = None,
+        outputs: Optional[list] = None,
+        **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Update the configuration for a workflow extension step.
         Args:
@@ -5497,7 +5817,7 @@ The options are currently limited to member.</dd>
     type: str,
     date: Optional[str] = None,
     metadata_only: Optional[bool] = None,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Retrieve analytics data for a given date, presented as a compressed JSON file
 
@@ -5516,7 +5836,7 @@ The options are currently limited to member.</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve"><code class="name flex">
-<span>async def <span class="ident">admin_apps_approve</span></span>(<span>self, *, app_id: str = None, request_id: str = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">admin_apps_approve</span></span>(<span>self, *, app_id: Optional[str] = None, request_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Approve an app for installation on a workspace.</p>
@@ -5540,7 +5860,11 @@ or by the admin.apps.requests.list method.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def admin_apps_approve(
-    self, *, app_id: str = None, request_id: str = None, **kwargs
+    self,
+    *,
+    app_id: Optional[str] = None,
+    request_id: Optional[str] = None,
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Approve an app for installation on a workspace.
 
@@ -5671,7 +5995,7 @@ or by the admin.apps.requests.list method.</p>
     app_id: str,
     enterprise_id: Optional[str] = None,
     team_ids: Optional[Union[str, Sequence[str]]] = None,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Uninstall an app from one or many workspaces, or an entire enterprise organization.&#34;&#34;&#34;
     kwargs.update({&#34;app_id&#34;: app_id})
@@ -5702,7 +6026,7 @@ or by the admin.apps.requests.list method.</p>
     entity_ids: Union[str, Sequence[str]],
     policy_name: str,
     entity_type: str,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Assign entities to a particular authentication policy.&#34;&#34;&#34;
     if isinstance(entity_ids, (list, Tuple)):
@@ -5732,7 +6056,7 @@ or by the admin.apps.requests.list method.</p>
     cursor: Optional[str] = None,
     entity_type: Optional[str] = None,
     limit: Optional[int] = None,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Fetch all the entities assigned to a particular authentication policy by name.&#34;&#34;&#34;
     kwargs.update({&#34;policy_name&#34;: policy_name})
@@ -5762,7 +6086,7 @@ or by the admin.apps.requests.list method.</p>
     entity_ids: Union[str, Sequence[str]],
     policy_name: str,
     entity_type: str,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Remove specified entities from a specified authentication policy.&#34;&#34;&#34;
     if isinstance(entity_ids, (list, Tuple)):
@@ -5791,7 +6115,7 @@ or by the admin.apps.requests.list method.</p>
     barriered_from_usergroup_ids: Union[str, Sequence[str]],
     primary_usergroup_id: str,
     restricted_subjects: Union[str, Sequence[str]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Create an Information Barrier&#34;&#34;&#34;
     kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
@@ -5863,7 +6187,7 @@ or by the admin.apps.requests.list method.</p>
     barriered_from_usergroup_ids: Union[str, Sequence[str]],
     primary_usergroup_id: str,
     restricted_subjects: Union[str, Sequence[str]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Update an existing Information Barrier&#34;&#34;&#34;
     kwargs.update(
@@ -6872,7 +7196,7 @@ It must be set to one of open, invite_only, closed, or unlisted.</dd>
     team_id: str,
     usergroup_id: str,
     channel_ids: Union[str, Sequence[str]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Add one or more default channels to an IDP group.
 
@@ -7039,7 +7363,7 @@ At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']</dd>
     team_id: str,
     email: str,
     channel_ids: Union[str, Sequence[str]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Invite a user to a workspace.
 
@@ -7635,7 +7959,7 @@ e.g. 'https://example.com/calls/1234567890'</dd>
     *,
     id: str,  # skipcq: PYL-W0622
     users: Union[str, Sequence[Dict[str, str]]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Registers new participants added to a Call.
 
@@ -7671,7 +7995,7 @@ e.g. 'https://example.com/calls/1234567890'</dd>
     *,
     id: str,  # skipcq: PYL-W0622
     users: Union[str, Sequence[Dict[str, str]]],
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Registers participants removed from a Call.
 
@@ -8423,6 +8747,85 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
     return await self.api_call(&#34;chat.update&#34;, json=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_acceptSharedInvite"><code class="name flex">
+<span>async def <span class="ident">conversations_acceptSharedInvite</span></span>(<span>self, *, channel_name: str, channel_id: Optional[str] = None, invite_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Accepts an invitation to a Slack Connect channel.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>channel_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of a channel, e.g. 'connectedchannel'</dd>
+<dt><strong><code>channel_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>Optional ID of the channel you'd like to accept</dd>
+<dt><strong><code>invite_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>Optional ID of the shared channel invitation</dd>
+</dl>
+<p>While both fields are optional, either channel_id or invite_id must be provided.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def conversations_acceptSharedInvite(
+    self,
+    *,
+    channel_name: str,
+    channel_id: Optional[str] = None,
+    invite_id: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Accepts an invitation to a Slack Connect channel.
+
+    Args:
+        channel_name (str): The name of a channel, e.g. &#39;connectedchannel&#39;
+        channel_id (str): Optional ID of the channel you&#39;d like to accept
+        invite_id (str): Optional ID of the shared channel invitation
+
+        While both fields are optional, either channel_id or invite_id must be provided.
+
+    &#34;&#34;&#34;
+    if channel_id is None and invite_id is None:
+        raise e.SlackRequestError(
+            &#34;Either channel_id or invite_id must be provided.&#34;
+        )
+    kwargs.update({&#34;channel_name&#34;: channel_name})
+    if channel_id:
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+    else:
+        kwargs.update({&#34;invite_id&#34;: invite_id})
+    return await self.api_call(
+        &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_approveSharedInvite"><code class="name flex">
+<span>async def <span class="ident">conversations_approveSharedInvite</span></span>(<span>self, *, invite_id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Approves an invitation to a Slack Connect channel.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>invite_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>ID of the shared channel invite to approve</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def conversations_approveSharedInvite(
+    self, *, invite_id: str, **kwargs
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Approves an invitation to a Slack Connect channel.
+
+    Args:
+        invite_id (str): ID of the shared channel invite to approve
+    &#34;&#34;&#34;
+    kwargs.update({&#34;invite_id&#34;: invite_id})
+    return await self.api_call(
+        &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
+    )</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_archive"><code class="name flex">
 <span>async def <span class="ident">conversations_archive</span></span>(<span>self, *, channel: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -8497,6 +8900,34 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
     &#34;&#34;&#34;
     kwargs.update({&#34;name&#34;: name})
     return await self.api_call(&#34;conversations.create&#34;, json=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_declineSharedInvite"><code class="name flex">
+<span>async def <span class="ident">conversations_declineSharedInvite</span></span>(<span>self, *, invite_id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Declines a Slack Connect channel invite.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>invite_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>ID of the Slack Connect invite to decline.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def conversations_declineSharedInvite(
+    self, *, invite_id: str, **kwargs
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Declines a Slack Connect channel invite.
+
+    Args:
+        invite_id (str): ID of the Slack Connect invite to decline.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;invite_id&#34;: invite_id})
+    return await self.api_call(
+        &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
+    )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_history"><code class="name flex">
@@ -8582,6 +9013,58 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
     else:
         kwargs.update({&#34;users&#34;: users})
     return await self.api_call(&#34;conversations.invite&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_inviteShared"><code class="name flex">
+<span>async def <span class="ident">conversations_inviteShared</span></span>(<span>self, *, channel: str, emails: Union[str, Sequence[str], NoneType] = None, user_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sends an invitation to a Slack Connect channel.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>channel</code></strong> :&ensp;<code>str</code></dt>
+<dd>id of the channel on your team you'd like to share. e.g. 'C1234567890'</dd>
+<dt><strong><code>emails</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>Optional email or list of emails to receive this invite.</dd>
+<dt><strong><code>user_ids</code></strong> :&ensp;<code>str</code> or <code>list</code></dt>
+<dd>Optional user id or list of user ids to receive this invite.</dd>
+</dl>
+<p>While both fields are optional, either emails or user ids must be provided.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def conversations_inviteShared(
+    self,
+    *,
+    channel: str,
+    emails: Optional[Union[str, Sequence[str]]] = None,
+    user_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Sends an invitation to a Slack Connect channel.
+
+    Args:
+        channel (str): id of the channel on your team you&#39;d like to share. e.g. &#39;C1234567890&#39;
+        emails (str or list): Optional email or list of emails to receive this invite.
+        user_ids (str or list): Optional user id or list of user ids to receive this invite.
+
+        While both fields are optional, either emails or user ids must be provided.
+    &#34;&#34;&#34;
+    if emails is None and user_ids is None:
+        raise e.SlackRequestError(&#34;Either emails or user ids must be provided.&#34;)
+    kwargs.update({&#34;channel&#34;: channel})
+    if isinstance(emails, (list, Tuple)):
+        kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(emails)})
+    else:
+        kwargs.update({&#34;emails&#34;: emails})
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return await self.api_call(
+        &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
+    )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_join"><code class="name flex">
@@ -8675,6 +9158,20 @@ e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}
 <pre><code class="python">async def conversations_list(self, **kwargs) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Lists all channels in a Slack team.&#34;&#34;&#34;
     return await self.api_call(&#34;conversations.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_listConnectInvites"><code class="name flex">
+<span>async def <span class="ident">conversations_listConnectInvites</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>List shared channel invites that have been generated or received but have not yet been approved by all parties.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def conversations_listConnectInvites(self, **kwargs) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;List shared channel invites that have been generated or received but have not yet been approved by all parties.&#34;&#34;&#34;
+    return await self.api_call(&#34;conversations.listConnectInvites&#34;, json=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_mark"><code class="name flex">
@@ -9122,7 +9619,7 @@ e.g. '12345.98765.abcd2358fdea'</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_info"><code class="name flex">
-<span>async def <span class="ident">files_info</span></span>(<span>self, *, file: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">files_info</span></span>(<span>self, *, file: str, count: Optional[int] = None, cursor: Optional[str] = None, limit: Optional[int] = None, page: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets information about a team file.</p>
@@ -9130,18 +9627,47 @@ e.g. '12345.98765.abcd2358fdea'</dd>
 <dl>
 <dt><strong><code>file</code></strong> :&ensp;<code>str</code></dt>
 <dd>The file id. e.g. 'F1234467890'</dd>
+<dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
+<dd>An optional number of items to return per page</dd>
+<dt><strong><code>cursor</code></strong> :&ensp;<code>str</code></dt>
+<dd>An optional parameter for pagination</dd>
+<dt><strong><code>limit</code></strong> :&ensp;<code>int</code></dt>
+<dd>An optional parameter defining the maximum number of items to return</dd>
+<dt><strong><code>page</code></strong> :&ensp;<code>int</code></dt>
+<dd>An optional parameter defining the page number of results to return</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def files_info(self, *, file: str, **kwargs) -&gt; AsyncSlackResponse:
+<pre><code class="python">async def files_info(
+    self,
+    *,
+    file: str,
+    count: Optional[int] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    page: Optional[int] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Gets information about a team file.
 
     Args:
         file (str): The file id. e.g. &#39;F1234467890&#39;
+        count (int): An optional number of items to return per page
+        cursor (str): An optional parameter for pagination
+        limit (int): An optional parameter defining the maximum number of items to return
+        page (int): An optional parameter defining the page number of results to return
     &#34;&#34;&#34;
-    kwargs.update({&#34;file&#34;: file})
+    kwargs.update(
+        {
+            &#34;file&#34;: file,
+            &#34;count&#34;: count,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+            &#34;page&#34;: page,
+        }
+    )
     return await self.api_call(&#34;files.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -9344,7 +9870,7 @@ e.g. ['C1234567890', 'C2345678901']</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_upload"><code class="name flex">
-<span>async def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase] = None, content: str = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase, NoneType] = None, content: str = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Uploads or creates a file.</p>
@@ -9367,7 +9893,11 @@ editable text file containing the specified text. e.g. 'launch plan'</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def files_upload(
-    self, *, file: Union[str, bytes, IOBase] = None, content: str = None, **kwargs
+    self,
+    *,
+    file: Optional[Union[str, bytes, IOBase]] = None,
+    content: str = None,
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Uploads or creates a file.
 
@@ -10173,7 +10703,7 @@ e.g. '1234567890.123456'</dd>
     client_secret: str,
     code: str,
     redirect_uri: Optional[str] = None,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -10232,7 +10762,7 @@ e.g. '1234567890.123456'</dd>
     grant_type: Optional[str] = None,
     # This field is required for token rotation
     refresh_token: Optional[str] = None,
-    **kwargs
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token.
 
@@ -10292,6 +10822,79 @@ e.g. '1234567890.123456'</dd>
         {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
     )
     return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.openid_connect_token"><code class="name flex">
+<span>async def <span class="ident">openid_connect_token</span></span>(<span>self, client_id: str, client_secret: str, code: Optional[str] = None, redirect_uri: Optional[str] = None, grant_type: Optional[str] = None, refresh_token: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>client_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>Issued when you created your application.</dd>
+<dt><strong><code>client_secret</code></strong> :&ensp;<code>str</code></dt>
+<dd>Issued when you created your application.</dd>
+<dt><strong><code>code</code></strong> :&ensp;<code>str</code></dt>
+<dd>The code param returned via the OAuth callback.</dd>
+<dt><strong><code>redirect_uri</code></strong> :&ensp;<code>optional str</code></dt>
+<dd>This must match the originally submitted URI (if one was sent).</dd>
+<dt><strong><code>grant_type</code></strong></dt>
+<dd>The grant_type param as described in the OAuth spec.</dd>
+<dt><strong><code>refresh_token</code></strong></dt>
+<dd>The refresh_token param as described in the OAuth spec.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def openid_connect_token(
+    self,
+    client_id: str,
+    client_secret: str,
+    code: Optional[str] = None,
+    redirect_uri: Optional[str] = None,
+    grant_type: Optional[str] = None,
+    refresh_token: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
+
+    Args:
+        client_id (str): Issued when you created your application.
+        client_secret (str): Issued when you created your application.
+        code (str): The code param returned via the OAuth callback.
+        redirect_uri (optional str): This must match the originally submitted URI (if one was sent).
+        grant_type: The grant_type param as described in the OAuth spec.
+        refresh_token: The refresh_token param as described in the OAuth spec.
+    &#34;&#34;&#34;
+    if redirect_uri is not None:
+        kwargs.update({&#34;redirect_uri&#34;: redirect_uri})
+    if code is not None:
+        kwargs.update({&#34;code&#34;: code})
+    if grant_type is not None:
+        kwargs.update({&#34;grant_type&#34;: grant_type})
+    if refresh_token is not None:
+        kwargs.update({&#34;refresh_token&#34;: refresh_token})
+    return await self.api_call(
+        &#34;openid.connect.token&#34;,
+        data=kwargs,
+        auth={&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret},
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.openid_connect_userInfo"><code class="name flex">
+<span>async def <span class="ident">openid_connect_userInfo</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the identity of a user who has authorized Sign in with Slack.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def openid_connect_userInfo(self, **kwargs) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Get the identity of a user who has authorized Sign in with Slack.&#34;&#34;&#34;
+    return await self.api_call(&#34;openid.connect.userInfo&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.pins_add"><code class="name flex">
@@ -11388,7 +11991,7 @@ e.g. '12345.98765.abcd2358fdea'</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.views_update"><code class="name flex">
-<span>async def <span class="ident">views_update</span></span>(<span>self, *, view: Union[dict, <a title="slack_sdk.models.views.View" href="../models/views/index.html#slack_sdk.models.views.View">View</a>], external_id: str = None, view_id: str = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">views_update</span></span>(<span>self, *, view: Union[dict, <a title="slack_sdk.models.views.View" href="../models/views/index.html#slack_sdk.models.views.View">View</a>], external_id: Optional[str] = None, view_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Update an existing view.</p>
@@ -11420,9 +12023,9 @@ e.g. 'VMM512F2U'</dd>
     self,
     *,
     view: Union[dict, View],
-    external_id: str = None,
-    view_id: str = None,
-    **kwargs
+    external_id: Optional[str] = None,
+    view_id: Optional[str] = None,
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Update an existing view.
 
@@ -11456,7 +12059,7 @@ e.g. 'VMM512F2U'</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_stepCompleted"><code class="name flex">
-<span>async def <span class="ident">workflows_stepCompleted</span></span>(<span>self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">workflows_stepCompleted</span></span>(<span>self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Indicate a successful outcome of a workflow step's execution.</p>
@@ -11474,7 +12077,7 @@ e.g. { 'task_name': 'Task Name' }</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def workflows_stepCompleted(
-    self, *, workflow_step_execute_id: str, outputs: dict = None, **kwargs
+    self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Indicate a successful outcome of a workflow step&#39;s execution.
     Args:
@@ -11525,7 +12128,7 @@ e.g. { message: 'Step failed to execute.' }</dd>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_updateStep"><code class="name flex">
-<span>async def <span class="ident">workflows_updateStep</span></span>(<span>self, *, workflow_step_edit_id: str, inputs: dict = None, outputs: list = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">workflows_updateStep</span></span>(<span>self, *, workflow_step_edit_id: str, inputs: Optional[dict] = None, outputs: Optional[list] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Update the configuration for a workflow extension step.</p>
@@ -11549,9 +12152,9 @@ e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]</dd>
     self,
     *,
     workflow_step_edit_id: str,
-    inputs: dict = None,
-    outputs: list = None,
-    **kwargs
+    inputs: Optional[dict] = None,
+    outputs: Optional[list] = None,
+    **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Update the configuration for a workflow extension step.
     Args:
@@ -11709,16 +12312,21 @@ e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]</dd>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_scheduledMessages_list" href="#slack_sdk.web.async_client.AsyncWebClient.chat_scheduledMessages_list">chat_scheduledMessages_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl" href="#slack_sdk.web.async_client.AsyncWebClient.chat_unfurl">chat_unfurl</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_update" href="#slack_sdk.web.async_client.AsyncWebClient.chat_update">chat_update</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_acceptSharedInvite" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_acceptSharedInvite">conversations_acceptSharedInvite</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_approveSharedInvite" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_approveSharedInvite">conversations_approveSharedInvite</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_archive" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_archive">conversations_archive</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_close" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_close">conversations_close</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_create" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_create">conversations_create</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_declineSharedInvite" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_declineSharedInvite">conversations_declineSharedInvite</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_history" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_history">conversations_history</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_info" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_info">conversations_info</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_invite" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_invite">conversations_invite</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_inviteShared" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_inviteShared">conversations_inviteShared</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_join" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_join">conversations_join</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_kick" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_kick">conversations_kick</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_leave" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_leave">conversations_leave</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_list" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_list">conversations_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_listConnectInvites" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_listConnectInvites">conversations_listConnectInvites</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_mark" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_mark">conversations_mark</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_members" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_members">conversations_members</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_open" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_open">conversations_open</a></code></li>
@@ -11779,6 +12387,8 @@ e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]</dd>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.oauth_access" href="#slack_sdk.web.async_client.AsyncWebClient.oauth_access">oauth_access</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.oauth_v2_access" href="#slack_sdk.web.async_client.AsyncWebClient.oauth_v2_access">oauth_v2_access</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.oauth_v2_exchange" href="#slack_sdk.web.async_client.AsyncWebClient.oauth_v2_exchange">oauth_v2_exchange</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.openid_connect_token" href="#slack_sdk.web.async_client.AsyncWebClient.openid_connect_token">openid_connect_token</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.openid_connect_userInfo" href="#slack_sdk.web.async_client.AsyncWebClient.openid_connect_userInfo">openid_connect_userInfo</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.pins_add" href="#slack_sdk.web.async_client.AsyncWebClient.pins_add">pins_add</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.pins_list" href="#slack_sdk.web.async_client.AsyncWebClient.pins_list">pins_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.pins_remove" href="#slack_sdk.web.async_client.AsyncWebClient.pins_remove">pins_remove</a></code></li>

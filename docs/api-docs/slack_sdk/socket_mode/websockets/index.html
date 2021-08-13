@@ -41,7 +41,7 @@
 &#34;&#34;&#34;
 import asyncio
 import logging
-from asyncio import Future
+from asyncio import Future, Lock
 from logging import Logger
 from asyncio import Queue
 from typing import Union, Optional, List, Callable, Awaitable
@@ -90,6 +90,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
 
     def __init__(
         self,
@@ -112,6 +113,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.connect_operation_lock = Lock()
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
@@ -163,6 +165,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     await asyncio.sleep(self.ping_interval)
                 else:
                     await asyncio.sleep(consecutive_error_count)
+
+    async def is_connected(self) -&gt; bool:
+        return (
+            not self.closed
+            and self.current_session is not None
+            and not self.current_session.closed
+        )
 
     async def connect(self):
         if self.wss_uri is None:
@@ -274,6 +283,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
 
     def __init__(
         self,
@@ -296,6 +306,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.connect_operation_lock = Lock()
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
@@ -347,6 +358,13 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     await asyncio.sleep(self.ping_interval)
                 else:
                     await asyncio.sleep(consecutive_error_count)
+
+    async def is_connected(self) -&gt; bool:
+        return (
+            not self.closed
+            and self.current_session is not None
+            and not self.current_session.closed
+        )
 
     async def connect(self):
         if self.wss_uri is None:
@@ -408,6 +426,10 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.closed"><code class="name">var <span class="ident">closed</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock"><code class="name">var <span class="ident">connect_operation_lock</span> : asyncio.locks.Lock</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -532,6 +554,23 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         await self.current_session.close()</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.is_connected"><code class="name flex">
+<span>async def <span class="ident">is_connected</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def is_connected(self) -&gt; bool:
+    return (
+        not self.closed
+        and self.current_session is not None
+        and not self.current_session.closed
+    )</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.monitor_current_session"><code class="name flex">
 <span>async def <span class="ident">monitor_current_session</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
@@ -632,10 +671,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.close" href="#slack_sdk.socket_mode.websockets.SocketModeClient.close">close</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.closed" href="#slack_sdk.socket_mode.websockets.SocketModeClient.closed">closed</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.connect" href="#slack_sdk.socket_mode.websockets.SocketModeClient.connect">connect</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock" href="#slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock">connect_operation_lock</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.current_session" href="#slack_sdk.socket_mode.websockets.SocketModeClient.current_session">current_session</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.current_session_monitor" href="#slack_sdk.socket_mode.websockets.SocketModeClient.current_session_monitor">current_session_monitor</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.default_auto_reconnect_enabled" href="#slack_sdk.socket_mode.websockets.SocketModeClient.default_auto_reconnect_enabled">default_auto_reconnect_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.disconnect" href="#slack_sdk.socket_mode.websockets.SocketModeClient.disconnect">disconnect</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.is_connected" href="#slack_sdk.socket_mode.websockets.SocketModeClient.is_connected">is_connected</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.logger" href="#slack_sdk.socket_mode.websockets.SocketModeClient.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners">message_listeners</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_processor" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_processor">message_processor</a></code></li>

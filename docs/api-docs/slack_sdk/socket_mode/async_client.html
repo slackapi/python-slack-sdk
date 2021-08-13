@@ -29,7 +29,7 @@
 <pre><code class="python">import asyncio
 import json
 import logging
-from asyncio import Queue
+from asyncio import Queue, Lock
 from asyncio.futures import Future
 from logging import Logger
 from typing import Dict, Union, Any, Optional, List, Callable, Awaitable
@@ -51,6 +51,8 @@ class AsyncBaseSocketModeClient:
     wss_uri: str
     auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
+
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -86,15 +88,24 @@ class AsyncBaseSocketModeClient:
                 self.logger.error(f&#34;Failed to retrieve WSS URL: {e}&#34;)
                 raise e
 
+    async def is_connected(self) -&gt; bool:
+        return False
+
     async def connect(self):
         raise NotImplementedError()
 
     async def disconnect(self):
         raise NotImplementedError()
 
-    async def connect_to_new_endpoint(self):
-        self.wss_uri = await self.issue_new_wss_url()
-        await self.connect()
+    async def connect_to_new_endpoint(self, force: bool = False):
+        try:
+            await self.connect_operation_lock.acquire()
+            if force or not await self.is_connected():
+                self.wss_uri = await self.issue_new_wss_url()
+                await self.connect()
+        finally:
+            if self.connect_operation_lock.locked() is True:
+                self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
@@ -144,7 +155,7 @@ class AsyncBaseSocketModeClient:
             )
         try:
             if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
-                await self.connect_to_new_endpoint()
+                await self.connect_to_new_endpoint(force=True)
                 return
 
             for listener in self.message_listeners:
@@ -197,6 +208,8 @@ class AsyncBaseSocketModeClient:
     wss_uri: str
     auto_reconnect_enabled: bool
     closed: bool
+    connect_operation_lock: Lock
+
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -232,15 +245,24 @@ class AsyncBaseSocketModeClient:
                 self.logger.error(f&#34;Failed to retrieve WSS URL: {e}&#34;)
                 raise e
 
+    async def is_connected(self) -&gt; bool:
+        return False
+
     async def connect(self):
         raise NotImplementedError()
 
     async def disconnect(self):
         raise NotImplementedError()
 
-    async def connect_to_new_endpoint(self):
-        self.wss_uri = await self.issue_new_wss_url()
-        await self.connect()
+    async def connect_to_new_endpoint(self, force: bool = False):
+        try:
+            await self.connect_operation_lock.acquire()
+            if force or not await self.is_connected():
+                self.wss_uri = await self.issue_new_wss_url()
+                await self.connect()
+        finally:
+            if self.connect_operation_lock.locked() is True:
+                self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
@@ -290,7 +312,7 @@ class AsyncBaseSocketModeClient:
             )
         try:
             if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
-                await self.connect_to_new_endpoint()
+                await self.connect_to_new_endpoint(force=True)
                 return
 
             for listener in self.message_listeners:
@@ -333,6 +355,10 @@ class AsyncBaseSocketModeClient:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.closed"><code class="name">var <span class="ident">closed</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_operation_lock"><code class="name">var <span class="ident">connect_operation_lock</span> : asyncio.locks.Lock</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -391,7 +417,7 @@ class AsyncBaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_to_new_endpoint"><code class="name flex">
-<span>async def <span class="ident">connect_to_new_endpoint</span></span>(<span>self)</span>
+<span>async def <span class="ident">connect_to_new_endpoint</span></span>(<span>self, force: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -399,9 +425,15 @@ class AsyncBaseSocketModeClient:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def connect_to_new_endpoint(self):
-    self.wss_uri = await self.issue_new_wss_url()
-    await self.connect()</code></pre>
+<pre><code class="python">async def connect_to_new_endpoint(self, force: bool = False):
+    try:
+        await self.connect_operation_lock.acquire()
+        if force or not await self.is_connected():
+            self.wss_uri = await self.issue_new_wss_url()
+            await self.connect()
+    finally:
+        if self.connect_operation_lock.locked() is True:
+            self.connect_operation_lock.release()</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.disconnect"><code class="name flex">
@@ -433,6 +465,19 @@ class AsyncBaseSocketModeClient:
         self.logger.debug(
             f&#34;A new message enqueued (current queue size: {queue_size})&#34;
         )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.is_connected"><code class="name flex">
+<span>async def <span class="ident">is_connected</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def is_connected(self) -&gt; bool:
+    return False</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.issue_new_wss_url"><code class="name flex">
@@ -518,7 +563,7 @@ class AsyncBaseSocketModeClient:
         )
     try:
         if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
-            await self.connect_to_new_endpoint()
+            await self.connect_to_new_endpoint(force=True)
             return
 
         for listener in self.message_listeners:
@@ -603,9 +648,11 @@ class AsyncBaseSocketModeClient:
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.close" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.close">close</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.closed" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.closed">closed</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect">connect</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_operation_lock" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_operation_lock">connect_operation_lock</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_to_new_endpoint" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_to_new_endpoint">connect_to_new_endpoint</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.disconnect" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.disconnect">disconnect</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.enqueue_message" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.enqueue_message">enqueue_message</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.is_connected" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.is_connected">is_connected</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.issue_new_wss_url" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.issue_new_wss_url">issue_new_wss_url</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.logger" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners">message_listeners</a></code></li>

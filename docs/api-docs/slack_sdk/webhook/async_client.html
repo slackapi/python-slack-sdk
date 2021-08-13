@@ -29,7 +29,7 @@
 <pre><code class="python">import json
 import logging
 from ssl import SSLContext
-from typing import Dict, Union, Optional, Any, Sequence
+from typing import Dict, Union, Optional, Any, Sequence, List
 
 import aiohttp
 from aiohttp import BasicAuth, ClientSession
@@ -45,6 +45,12 @@ from .internal_utils import (
 from .webhook_response import WebhookResponse
 from ..proxy_env_variable_loader import load_http_proxy_from_env
 
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
+from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
+from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
+from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
+from slack_sdk.http_retry.state import RetryState
+
 
 class AsyncWebhookClient:
     url: str
@@ -56,6 +62,7 @@ class AsyncWebhookClient:
     auth: Optional[BasicAuth]
     default_headers: Dict[str, str]
     logger: logging.Logger
+    retry_handlers: List[AsyncRetryHandler]
 
     def __init__(
         self,
@@ -70,6 +77,7 @@ class AsyncWebhookClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         &#34;&#34;&#34;API client for Incoming Webhooks and `response_url`
 
@@ -100,6 +108,9 @@ class AsyncWebhookClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else async_default_handlers()
+        )
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -174,10 +185,6 @@ class AsyncWebhookClient:
         body = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
 
-        if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
-            )
         session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed
         if use_running_session:
@@ -189,7 +196,8 @@ class AsyncWebhookClient:
                 trust_env=self.trust_env_in_session,
             )
 
-        resp: WebhookResponse
+        last_error: Optional[Exception] = None
+        resp: Optional[WebhookResponse] = None
         try:
             request_kwargs = {
                 &#34;headers&#34;: headers,
@@ -197,22 +205,103 @@ class AsyncWebhookClient:
                 &#34;ssl&#34;: self.ssl,
                 &#34;proxy&#34;: self.proxy,
             }
-            async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:
-                response_body: str = &#34;&#34;
-                try:
-                    response_body = await res.text()
-                except aiohttp.ContentTypeError:
+            retry_request = RetryHttpRequest(
+                method=&#34;POST&#34;,
+                url=self.url,
+                headers=headers,
+                body_params=body,
+            )
+
+            retry_state = RetryState()
+            counter_for_safety = 0
+            while counter_for_safety &lt; 100:
+                counter_for_safety += 1
+                # If this is a retry, the next try started here. We can reset the flag.
+                retry_state.next_attempt_requested = False
+                retry_response: Optional[RetryHttpResponse] = None
+                response_body = &#34;&#34;
+
+                if self.logger.level &lt;= logging.DEBUG:
                     self.logger.debug(
-                        f&#34;No response data returned from the following API call: {self.url}&#34;
+                        f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
                     )
 
-                resp = WebhookResponse(
-                    url=self.url,
-                    status_code=res.status,
-                    body=response_body,
-                    headers=res.headers,
-                )
-                _debug_log_response(self.logger, resp)
+                try:
+                    async with session.request(
+                        &#34;POST&#34;, self.url, **request_kwargs
+                    ) as res:
+                        try:
+                            response_body = await res.text()
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                                data=response_body.encode(&#34;utf-8&#34;)
+                                if response_body is not None
+                                else None,
+                            )
+                        except aiohttp.ContentTypeError:
+                            self.logger.debug(
+                                f&#34;No response data returned from the following API call: {self.url}&#34;
+                            )
+
+                        if res.status == 429:
+                            for handler in self.retry_handlers:
+                                if await handler.can_retry_async(
+                                    state=retry_state,
+                                    request=retry_request,
+                                    response=retry_response,
+                                ):
+                                    if self.logger.level &lt;= logging.DEBUG:
+                                        self.logger.info(
+                                            f&#34;A retry handler found: {type(handler).__name__} &#34;
+                                            f&#34;for POST {self.url} - rate_limited&#34;
+                                        )
+                                    await handler.prepare_for_next_attempt_async(
+                                        state=retry_state,
+                                        request=retry_request,
+                                        response=retry_response,
+                                    )
+                                    break
+
+                        if retry_state.next_attempt_requested is False:
+                            resp = WebhookResponse(
+                                url=self.url,
+                                status_code=res.status,
+                                body=response_body,
+                                headers=res.headers,
+                            )
+                            _debug_log_response(self.logger, resp)
+                            return resp
+
+                except Exception as e:
+                    last_error = e
+                    for handler in self.retry_handlers:
+                        if await handler.can_retry_async(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        ):
+                            if self.logger.level &lt;= logging.DEBUG:
+                                self.logger.info(
+                                    f&#34;A retry handler found: {type(handler).__name__} &#34;
+                                    f&#34;for POST {self.url} - {e}&#34;
+                                )
+                            await handler.prepare_for_next_attempt_async(
+                                state=retry_state,
+                                request=retry_request,
+                                response=retry_response,
+                                error=e,
+                            )
+                            break
+
+                    if retry_state.next_attempt_requested is False:
+                        raise last_error
+
+            if resp is not None:
+                return resp
+            raise last_error
+
         finally:
             if not use_running_session:
                 await session.close()
@@ -231,7 +320,7 @@ class AsyncWebhookClient:
 <dl>
 <dt id="slack_sdk.webhook.async_client.AsyncWebhookClient"><code class="flex name class">
 <span>class <span class="ident">AsyncWebhookClient</span></span>
-<span>(</span><span>url: str, timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, auth: Optional[aiohttp.helpers.BasicAuth] = None, default_headers: Optional[Dict[str, str]] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, logger: Optional[logging.Logger] = None)</span>
+<span>(</span><span>url: str, timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, auth: Optional[aiohttp.helpers.BasicAuth] = None, default_headers: Optional[Dict[str, str]] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler" href="../http_retry/async_handler.html#slack_sdk.http_retry.async_handler.AsyncRetryHandler">AsyncRetryHandler</a>]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>API client for Incoming Webhooks and <code>response_url</code></p>
@@ -275,6 +364,7 @@ class AsyncWebhookClient:
     auth: Optional[BasicAuth]
     default_headers: Dict[str, str]
     logger: logging.Logger
+    retry_handlers: List[AsyncRetryHandler]
 
     def __init__(
         self,
@@ -289,6 +379,7 @@ class AsyncWebhookClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         &#34;&#34;&#34;API client for Incoming Webhooks and `response_url`
 
@@ -319,6 +410,9 @@ class AsyncWebhookClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else async_default_handlers()
+        )
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -393,10 +487,6 @@ class AsyncWebhookClient:
         body = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
 
-        if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
-            )
         session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed
         if use_running_session:
@@ -408,7 +498,8 @@ class AsyncWebhookClient:
                 trust_env=self.trust_env_in_session,
             )
 
-        resp: WebhookResponse
+        last_error: Optional[Exception] = None
+        resp: Optional[WebhookResponse] = None
         try:
             request_kwargs = {
                 &#34;headers&#34;: headers,
@@ -416,22 +507,103 @@ class AsyncWebhookClient:
                 &#34;ssl&#34;: self.ssl,
                 &#34;proxy&#34;: self.proxy,
             }
-            async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:
-                response_body: str = &#34;&#34;
-                try:
-                    response_body = await res.text()
-                except aiohttp.ContentTypeError:
+            retry_request = RetryHttpRequest(
+                method=&#34;POST&#34;,
+                url=self.url,
+                headers=headers,
+                body_params=body,
+            )
+
+            retry_state = RetryState()
+            counter_for_safety = 0
+            while counter_for_safety &lt; 100:
+                counter_for_safety += 1
+                # If this is a retry, the next try started here. We can reset the flag.
+                retry_state.next_attempt_requested = False
+                retry_response: Optional[RetryHttpResponse] = None
+                response_body = &#34;&#34;
+
+                if self.logger.level &lt;= logging.DEBUG:
                     self.logger.debug(
-                        f&#34;No response data returned from the following API call: {self.url}&#34;
+                        f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
                     )
 
-                resp = WebhookResponse(
-                    url=self.url,
-                    status_code=res.status,
-                    body=response_body,
-                    headers=res.headers,
-                )
-                _debug_log_response(self.logger, resp)
+                try:
+                    async with session.request(
+                        &#34;POST&#34;, self.url, **request_kwargs
+                    ) as res:
+                        try:
+                            response_body = await res.text()
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                                data=response_body.encode(&#34;utf-8&#34;)
+                                if response_body is not None
+                                else None,
+                            )
+                        except aiohttp.ContentTypeError:
+                            self.logger.debug(
+                                f&#34;No response data returned from the following API call: {self.url}&#34;
+                            )
+
+                        if res.status == 429:
+                            for handler in self.retry_handlers:
+                                if await handler.can_retry_async(
+                                    state=retry_state,
+                                    request=retry_request,
+                                    response=retry_response,
+                                ):
+                                    if self.logger.level &lt;= logging.DEBUG:
+                                        self.logger.info(
+                                            f&#34;A retry handler found: {type(handler).__name__} &#34;
+                                            f&#34;for POST {self.url} - rate_limited&#34;
+                                        )
+                                    await handler.prepare_for_next_attempt_async(
+                                        state=retry_state,
+                                        request=retry_request,
+                                        response=retry_response,
+                                    )
+                                    break
+
+                        if retry_state.next_attempt_requested is False:
+                            resp = WebhookResponse(
+                                url=self.url,
+                                status_code=res.status,
+                                body=response_body,
+                                headers=res.headers,
+                            )
+                            _debug_log_response(self.logger, resp)
+                            return resp
+
+                except Exception as e:
+                    last_error = e
+                    for handler in self.retry_handlers:
+                        if await handler.can_retry_async(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        ):
+                            if self.logger.level &lt;= logging.DEBUG:
+                                self.logger.info(
+                                    f&#34;A retry handler found: {type(handler).__name__} &#34;
+                                    f&#34;for POST {self.url} - {e}&#34;
+                                )
+                            await handler.prepare_for_next_attempt_async(
+                                state=retry_state,
+                                request=retry_request,
+                                response=retry_response,
+                                error=e,
+                            )
+                            break
+
+                    if retry_state.next_attempt_requested is False:
+                        raise last_error
+
+            if resp is not None:
+                return resp
+            raise last_error
+
         finally:
             if not use_running_session:
                 await session.close()
@@ -453,6 +625,10 @@ class AsyncWebhookClient:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.webhook.async_client.AsyncWebhookClient.proxy"><code class="name">var <span class="ident">proxy</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.webhook.async_client.AsyncWebhookClient.retry_handlers"><code class="name">var <span class="ident">retry_handlers</span> : List[<a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler" href="../http_retry/async_handler.html#slack_sdk.http_retry.async_handler.AsyncRetryHandler">AsyncRetryHandler</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -619,6 +795,7 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.default_headers" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.default_headers">default_headers</a></code></li>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.logger" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.proxy" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.proxy">proxy</a></code></li>
+<li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.retry_handlers" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.retry_handlers">retry_handlers</a></code></li>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.send" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.send">send</a></code></li>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.send_dict" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.send_dict">send_dict</a></code></li>
 <li><code><a title="slack_sdk.webhook.async_client.AsyncWebhookClient.session" href="#slack_sdk.webhook.async_client.AsyncWebhookClient.session">session</a></code></li>
