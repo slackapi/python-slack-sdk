@@ -44,7 +44,7 @@ class WebhookClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = default_retry_handlers,
+        retry_handlers: List[RetryHandler] = default_retry_handlers(),
     ):
         """API client for Incoming Webhooks and `response_url`
 

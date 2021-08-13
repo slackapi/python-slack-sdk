@@ -41,7 +41,7 @@ class AsyncBaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = async_default_handlers,
+        retry_handlers: List[RetryHandler] = async_default_handlers(),
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url

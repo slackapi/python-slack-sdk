@@ -1,3 +1,5 @@
+from typing import List
+
 from .handler import RetryHandler  # noqa
 from .builtin_handlers import (
     ConnectionErrorRetryHandler,  # noqa
@@ -16,11 +18,13 @@ from .state import RetryState  # noqa
 connect_error_retry_handler = ConnectionErrorRetryHandler()  # noqa
 rate_limit_error_retry_handler = RateLimitErrorRetryHandler()  # noqa
 
-default_retry_handlers = [  # noqa
-    connect_error_retry_handler,  # noqa
-]  # noqa
 
-all_builtin_retry_handlers = [  # noqa
-    connect_error_retry_handler,  # noqa
-    rate_limit_error_retry_handler,  # noqa
-]  # noqa
+def default_retry_handlers() -> List[RetryHandler]:
+    return [connect_error_retry_handler]
+
+
+def all_builtin_retry_handlers() -> List[RetryHandler]:
+    return [
+        connect_error_retry_handler,
+        rate_limit_error_retry_handler,
+    ]

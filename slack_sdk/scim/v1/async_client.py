@@ -70,7 +70,7 @@ class AsyncSCIMClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[AsyncRetryHandler] = async_default_handlers,
+        retry_handlers: List[AsyncRetryHandler] = async_default_handlers(),
     ):
         """API client for SCIM API
         See https://api.slack.com/scim for more details

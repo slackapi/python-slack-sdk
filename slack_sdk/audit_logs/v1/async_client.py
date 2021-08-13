@@ -55,7 +55,7 @@ class AsyncAuditLogsClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[AsyncRetryHandler] = async_default_handlers,
+        retry_handlers: List[AsyncRetryHandler] = async_default_handlers(),
     ):
         """API client for Audit Logs API
         See https://api.slack.com/admins/audit-logs for more details
