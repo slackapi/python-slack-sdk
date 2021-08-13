@@ -98,4 +98,55 @@ Lastly, if you are keen to use asyncio for SCIM API calls, we offer ``AsyncSCIMC
 
     asyncio.run(main())
 
+--------
+
+RetryHandler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With the default settings, only ``ConnectionErrorRetryHandler`` with its default configuration (=only one retry in the manner of `exponential backoff and jitter <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>`_ is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).
+
+To use other retry handlers, you can pass a list of ``RetryHandler`` to the client constructor. For instance, you can add the built-in ``RateLimitErrorRetryHandler`` this way:
+
+.. code-block:: python
+
+    import os
+    from slack_sdk.scim import SCIMClient
+    client = SCIMClient(token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"])
+
+    # This handler does retries when HTTP status 429 is returned
+    from slack_sdk.http_retry.builtin_handlers import RateLimitErrorRetryHandler
+    rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
+
+    # Enable rate limited error retries as well
+    client.retry_handlers.append(rate_limit_handler)
+
+Creating your own ones is also quite simple. Defining a new class that inherits ``slack_sdk.http_retry.RetryHandler`` (``AsyncRetryHandler`` for asyncio apps) and implements required methods (internals of ``can_retry`` / ``prepare_for_next_retry``). Check the built-in ones' source code for learning how to properly implement.
+
+.. code-block:: python
+
+    import socket
+    from typing import Optional
+    from slack_sdk.http_retry import (RetryHandler, RetryState, HttpRequest, HttpResponse)
+    from slack_sdk.http_retry.builtin_interval_calculators import BackoffRetryIntervalCalculator
+    from slack_sdk.http_retry.jitter import RandomJitter
+
+    class MyRetryHandler(RetryHandler):
+        def _can_retry(
+            self,
+            *,
+            state: RetryState,
+            request: HttpRequest,
+            response: Optional[HttpResponse] = None,
+            error: Optional[Exception] = None
+        ) -> bool:
+            # [Errno 104] Connection reset by peer
+            return error is not None and isinstance(error, socket.error) and error.errno == 104
+
+    client = SCIMClient(
+        token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"],
+        retry_handlers=[MyRetryHandler()],
+    )
+
+For asyncio apps, ``Async`` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check `the source code <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py>`_ and `tests <https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py>`_ for more details.
+
 .. include:: ../metadata.rst
