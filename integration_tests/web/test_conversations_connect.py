@@ -73,7 +73,7 @@ class TestWebClient(unittest.TestCase):
             )
             self.assertIsNotNone(invite["invite_id"])
 
-            # reciever accept conversations invite via invite id
+            # receiver accept conversations invite via invite id
             accepted: SlackResponse = receiver.conversations_acceptSharedInvite(
                 channel_name=unique_channel_name,
                 invite_id=invite["invite_id"],
@@ -123,7 +123,7 @@ class TestWebClient(unittest.TestCase):
             )
             self.assertIsNotNone(invite["invite_id"])
 
-            # reciever accept conversations invite via invite id
+            # receiver accept conversations invite via invite id
             accepted: SlackResponse = await receiver.conversations_acceptSharedInvite(
                 channel_name=unique_channel_name,
                 invite_id=invite["invite_id"],
