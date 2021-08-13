@@ -56,7 +56,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
         response: Optional[HttpResponse] = None,
         error: Optional[Exception] = None,
     ) -> bool:
-        return response.status_code == 429
+        return response is not None and response.status_code == 429
 
     def prepare_for_next_attempt(
         self,

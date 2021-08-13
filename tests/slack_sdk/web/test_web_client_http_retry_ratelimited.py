@@ -20,6 +20,6 @@ class TestWebClient_HttpRetry_RateLimited(unittest.TestCase):
             base_url="http://localhost:8888",
             token="xoxb-rate_limited_only_once",
             team_id="T111",
-            retry_handlers=[rate_limit_error_retry_handler],
         )
+        client.retry_handlers.append(rate_limit_error_retry_handler)
         client.auth_test()

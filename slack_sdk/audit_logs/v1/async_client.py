@@ -55,7 +55,7 @@ class AsyncAuditLogsClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[AsyncRetryHandler] = async_default_handlers(),
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         """API client for Audit Logs API
         See https://api.slack.com/admins/audit-logs for more details
@@ -88,7 +88,9 @@ class AsyncAuditLogsClient:
             user_agent_prefix, user_agent_suffix
         )
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = retry_handlers
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else async_default_handlers()
+        )
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)

@@ -31,10 +31,8 @@ class TestWebhook_HttpRetries(unittest.TestCase):
         self.assertEqual(2, retry_handler.call_count)
 
     def test_ratelimited(self):
-        client = WebhookClient(
-            "http://localhost:8888/ratelimited",
-            retry_handlers=[RateLimitErrorRetryHandler()],
-        )
+        client = WebhookClient("http://localhost:8888/ratelimited")
+        client.retry_handlers.append(RateLimitErrorRetryHandler())
         response = client.send(text="hello!")
         # Just running retries; no assertions for call count so far
         self.assertEqual(429, response.status_code)

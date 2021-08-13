@@ -38,8 +38,8 @@ class TestWebClient_HttpRetry(unittest.TestCase):
             base_url="http://localhost:8888",
             token="xoxp-ratelimited",
             team_id="T111",
-            retry_handlers=[RateLimitErrorRetryHandler()],
         )
+        client.retry_handlers.append(RateLimitErrorRetryHandler())
         try:
             client.auth_test()
             self.fail("An exception is expected")

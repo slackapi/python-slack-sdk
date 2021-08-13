@@ -35,8 +35,8 @@ class TestAuditLogsClient_HttpRetries(unittest.TestCase):
         client = AuditLogsClient(
             token="xoxp-ratelimited",
             base_url="http://localhost:8888/",
-            retry_handlers=[RateLimitErrorRetryHandler()],
         )
+        client.retry_handlers.append(RateLimitErrorRetryHandler())
 
         response = client.actions()
         # Just running retries; no assertions for call count so far
