@@ -54,7 +54,7 @@ class BaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = default_retry_handlers,
+        retry_handlers: List[RetryHandler] = default_retry_handlers(),
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url

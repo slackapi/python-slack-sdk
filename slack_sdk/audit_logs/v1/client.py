@@ -50,7 +50,7 @@ class AuditLogsClient:
         user_agent_prefix: Optional[str] = None,
         user_agent_suffix: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: List[RetryHandler] = default_retry_handlers,
+        retry_handlers: List[RetryHandler] = default_retry_handlers(),
     ):
         """API client for Audit Logs API
         See https://api.slack.com/admins/audit-logs for more details

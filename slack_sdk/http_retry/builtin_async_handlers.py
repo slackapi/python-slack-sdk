@@ -87,4 +87,5 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         await asyncio.sleep(duration)
 
 
-async_default_handlers = [AsyncConnectionErrorRetryHandler()]
+def async_default_handlers() -> List[AsyncRetryHandler]:
+    return [AsyncConnectionErrorRetryHandler()]
