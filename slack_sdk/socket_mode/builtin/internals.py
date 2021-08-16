@@ -204,7 +204,9 @@ def _receive_messages(
                         logger.debug(f"Received bytes: {received_bytes}")
                 return received_bytes
             except OSError as e:
-                if e.errno == errno.EBADF:
+                # For Linux/macOS, errno.EBADF is the expected error for bad connections.
+                # The errno.ENOTSOCK can be sent when running on Windows OS.
+                if e.errno in (errno.EBADF, errno.ENOTSOCK):
                     logger.debug("The connection seems to be already closed.")
                     return bytes()
                 raise e

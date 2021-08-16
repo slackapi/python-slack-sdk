@@ -31,7 +31,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Socket Mode                    | Receive and send messages over Socket Mode connections.                                       | ``slack_sdk.socket_mode``          |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| OAuth                          | Setup the authentication flow using V2 OAuth for Slack apps.                                  | ``slack_sdk.oauth``                |
+| OAuth                          | Setup the authentication flow using V2 OAuth, OpenID Connect for Slack apps.                  | ``slack_sdk.oauth``                |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Audit Logs API                 | Receive audit logs API data.                                                                  | ``slack_sdk.audit_logs``           |
 +--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
@@ -60,22 +60,25 @@ Of course, you can always pull the source code directly into your project:
 .. code-block:: bash
 
 	git clone https://github.com/slackapi/python-slack-sdk.git
+	cd python-slack-sdk
+	python3 -m venv .venv
+	source .venv/bin/activate
+	pip install -U pip
+	pip install -e .  # install the SDK project into the virtual env
 
 And then, save a few lines of code as ``./test.py``.
 
 .. code-block:: python
 
-        # test.py
-        import sys
-        # Load the local source directly
-        sys.path.insert(1, "./python-slack-sdk")
-        # Enable debug logging
-        import logging
-        logging.basicConfig(level=logging.DEBUG)
-        # Verify it works
-        from slack_sdk import WebClient
-        client = WebClient()
-        api_response = client.api_test()
+    # test.py
+    import sys
+    # Enable debug logging
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    # Verify it works
+    from slack_sdk import WebClient
+    client = WebClient()
+    api_response = client.api_test()
 
 You can run the code this way.
 

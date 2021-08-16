@@ -236,5 +236,35 @@ You can use the same ``InstallationStore`` in the Slack event handler.
 
 Again, if you're looking for an easier solution, take a look at `Bolt for Python <https://github.com/slackapi/bolt-python>`_. With Bolt, you don't need to implement most of the above code on your own.
 
+Sign in with Slack
+*************************************************
+
+`Sign in with Slack <https://api.slack.com/authentication/sign-in-with-slack>`_ helps users log into your service using their Slack profile. The platform feature was recently upgraded to be compatible with the standard `OpenID Connect <https://openid.net/connect/>`_ specification. With slack-sdk v3.9+, implementing the auth flow is much easier.
+
+When you create a new Slack app, set the following user scopes:
+
+.. code-block:: yaml
+
+  oauth_config:
+    redirect_urls:
+      - https://{your-domain}/slack/oauth_redirect
+    scopes:
+      user:
+        - openid   # required
+        - email    # optional
+        - profile  # optional
+
+Check `the Flask app example <https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/flask_example.py>`_ to learn how to implement your Web app that handles the OpenID Connect flow with end-users. It does the following:
+
+**Build the OpenID Connect authorize URL**
+
+- ``slack_sdk.oauth.OpenIDConnectAuthorizeUrlGenerator`` helps you easily do this
+- ``slack_sdk.oauth.OAuthStateStore`` is still available for generating ``state`` parameter value. It's available for ``nonce`` management too.
+
+**openid.connect.* API calls**
+
+``WebClient`` can perform ``openid.connect.token`` API calls with given ``code`` parameter
+
+If you want to know the way with asyncio, check `the Sanic app example <https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/sanic_example.py>`_ in the same directory.
 
 .. include:: ../metadata.rst

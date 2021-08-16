@@ -135,12 +135,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#asyncwebclient">AsyncWebClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../webhook/index.html">Webhook Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#id1">Incoming Webhooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#response-url">response_url</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#asyncwebhookclient">AsyncWebhookClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../webhook/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../socket-mode/index.html">Socket Mode Client</a><ul>
@@ -152,16 +154,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../oauth/index.html">OAuth Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#app-installation-flow">App Installation Flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#token-lookup">Token Lookup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../oauth/index.html#sign-in-with-slack">Sign in with Slack</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../audit-logs/index.html">Audit Logs API Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../audit-logs/index.html#auditlogsclient">AuditLogsClient</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../audit-logs/index.html#asyncauditlogsclient">AsyncAuditLogsClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../audit-logs/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../scim/index.html">SCIM API Client</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../scim/index.html#scimclient">SCIMClient</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../scim/index.html#asyncscimclient">AsyncSCIMClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../scim/index.html#retryhandler">RetryHandler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../real_time_messaging.html">RTM Client</a><ul>
@@ -684,7 +689,8 @@ deletion of threaded replies works the same as regular messages.</p>
             <span class="k">raise</span> <span class="n">e</span>
 </pre></div>
 </div>
-<p>See the documentation on <a class="reference external" href="https://api.slack.com/docs/rate-limits">Rate Limiting</a> for more info.</p>
+<p>Since v3.9.0, the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> is available as an easier way to do the retries for rate limited errors. Refer to the RetryHandler section in this page for more details.</p>
+<p>To learn the Slack rate limits in general, see the documentation on <a class="reference external" href="https://api.slack.com/docs/rate-limits">Rate Limiting</a>.</p>
 <hr class="docutils" />
 <div class="section" id="calling-any-api-methods">
 <h3>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this headline">¶</a></h3>
@@ -695,7 +701,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SLACK_BOT_TOKEN&#39;</span><span class="p">])</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span>
     <span class="n">api_method</span><span class="o">=</span><span class="s1">&#39;chat.postMessage&#39;</span><span class="p">,</span>
-    <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="s1">&#39;#random&#39;</span><span class="p">,</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s2">&quot;Hello world!&quot;</span><span class="p">}</span>
 <span class="p">)</span>
 <span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
 </pre></div>
@@ -734,6 +740,50 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">post_message</span><span class="p">())</span>
 </pre></div>
 </div>
+</div>
+<hr class="docutils" />
+<div class="section" id="retryhandler">
+<h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this headline">¶</a></h2>
+<p>With the default settings, only <code class="docutils literal notranslate"><span class="pre">ConnectionErrorRetryHandler</span></code> with its default configuration (=only one retry in the manner of <a class="reference external" href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">exponential backoff and jitter</a> is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).</p>
+<p>To use other retry handlers, you can pass a list of <code class="docutils literal notranslate"><span class="pre">RetryHandler</span></code> to the client constructor. For instance, you can add the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> this way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.web</span> <span class="kn">import</span> <span class="n">WebClient</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">])</span>
+
+<span class="c1"># This handler does retries when HTTP status 429 is returned</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.http_retry.builtin_handlers</span> <span class="kn">import</span> <span class="n">RateLimitErrorRetryHandler</span>
+<span class="n">rate_limit_handler</span> <span class="o">=</span> <span class="n">RateLimitErrorRetryHandler</span><span class="p">(</span><span class="n">max_retry_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Enable rate limited error retries as well</span>
+<span class="n">client</span><span class="o">.</span><span class="n">retry_handlers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rate_limit_handler</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Creating your own ones is also quite simple. Defining a new class that inherits <code class="docutils literal notranslate"><span class="pre">slack_sdk.http_retry.RetryHandler</span></code> (<code class="docutils literal notranslate"><span class="pre">AsyncRetryHandler</span></code> for asyncio apps) and implements required methods (internals of <code class="docutils literal notranslate"><span class="pre">can_retry</span></code> / <code class="docutils literal notranslate"><span class="pre">prepare_for_next_retry</span></code>). Check the built-in ones’ source code for learning how to properly implement.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.http_retry</span> <span class="kn">import</span> <span class="p">(</span><span class="n">RetryHandler</span><span class="p">,</span> <span class="n">RetryState</span><span class="p">,</span> <span class="n">HttpRequest</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.http_retry.builtin_interval_calculators</span> <span class="kn">import</span> <span class="n">BackoffRetryIntervalCalculator</span>
+<span class="kn">from</span> <span class="nn">slack_sdk.http_retry.jitter</span> <span class="kn">import</span> <span class="n">RandomJitter</span>
+
+<span class="k">class</span> <span class="nc">MyRetryHandler</span><span class="p">(</span><span class="n">RetryHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_can_retry</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">RetryState</span><span class="p">,</span>
+        <span class="n">request</span><span class="p">:</span> <span class="n">HttpRequest</span><span class="p">,</span>
+        <span class="n">response</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HttpResponse</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># [Errno 104] Connection reset by peer</span>
+        <span class="k">return</span> <span class="n">error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="ow">and</span> <span class="n">error</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="mi">104</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span>
+    <span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">],</span>
+    <span class="n">retry_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">MyRetryHandler</span><span class="p">()],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>For asyncio apps, <code class="docutils literal notranslate"><span class="pre">Async</span></code> prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py">the source code</a> and <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py">tests</a> for more details.</p>
 </div>
 </div>
 

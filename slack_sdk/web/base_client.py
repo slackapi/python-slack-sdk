@@ -30,7 +30,12 @@ from .internal_utils import (
     _build_unexpected_body_error_message,
 )
 from .slack_response import SlackResponse
-from ..proxy_env_variable_loader import load_http_proxy_from_env
+from slack_sdk.http_retry import default_retry_handlers
+from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
+from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
+from slack_sdk.http_retry.state import RetryState
+from slack_sdk.proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class BaseClient:
@@ -49,6 +54,7 @@ class BaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
+        retry_handlers: Optional[List[RetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
         self.base_url = base_url
@@ -63,6 +69,10 @@ class BaseClient:
         if team_id is not None:
             self.default_params["team_id"] = team_id
         self._logger = logger if logger is not None else logging.getLogger(__name__)
+
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else default_retry_handlers()
+        )
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self._logger)
@@ -282,9 +292,9 @@ class BaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)
-            body = response.get("body", None)  # skipcq: PTC-W0039
-            response_body_data: Optional[Union[dict, bytes]] = body
-            if body is not None and not isinstance(body, bytes):
+            response_body = response.get("body", None)  # skipcq: PTC-W0039
+            response_body_data: Optional[Union[dict, bytes]] = response_body
+            if response_body is not None and not isinstance(response_body, bytes):
                 try:
                     response_body_data = json.loads(response["body"])
                 except json.decoder.JSONDecodeError:
@@ -384,57 +394,140 @@ class BaseClient:
 
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
-        try:
-            # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
-            # With this it might be possible to open local files on the executing machine
-            # which might be a security risk if the URL to open can be manipulated by an external user.
-            # (BAN-B310)
-            if url.lower().startswith("http"):
-                req = Request(method="POST", url=url, data=body, headers=headers)
-                opener: Optional[OpenerDirector] = None
-                if self.proxy is not None:
-                    if isinstance(self.proxy, str):
-                        opener = urllib.request.build_opener(
-                            ProxyHandler({"http": self.proxy, "https": self.proxy}),
-                            HTTPSHandler(context=self.ssl),
+        req = Request(method="POST", url=url, data=body, headers=headers)
+        resp = None
+        last_error = None
+
+        retry_state = RetryState()
+        counter_for_safety = 0
+        while counter_for_safety < 100:
+            counter_for_safety += 1
+            # If this is a retry, the next try started here. We can reset the flag.
+            retry_state.next_attempt_requested = False
+
+            try:
+                resp = self._perform_urllib_http_request_internal(url, req)
+                # The resp is a 200 OK response
+                return resp
+
+            except HTTPError as e:
+                resp = {"status": e.code, "headers": e.headers}
+                if e.code == 429:
+                    # for compatibility with aiohttp
+                    resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
+
+                # read the response body here
+                charset = e.headers.get_content_charset() or "utf-8"
+                response_body: str = e.read().decode(charset)
+                resp["body"] = response_body
+
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                retry_response = RetryHttpResponse(
+                    status_code=e.code,
+                    headers={k: [v] for k, v in e.headers.items()},
+                    data=response_body.encode("utf-8")
+                    if response_body is not None
+                    else None,
+                )
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=retry_response,
+                        error=e,
+                    ):
+                        if self._logger.level <= logging.DEBUG:
+                            self._logger.info(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
                         )
-                    else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
+                        break
+
+                if retry_state.next_attempt_requested is False:
+                    return resp
+
+            except Exception as err:
+                last_error = err
+                self._logger.error(
+                    f"Failed to send a request to Slack API server: {err}"
+                )
+
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=None,
+                        error=err,
+                    ):
+                        if self._logger.level <= logging.DEBUG:
+                            self._logger.info(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=None,
+                            error=err,
                         )
+                        self._logger.info(
+                            f"Going to retry the same request: {req.method} {req.full_url}"
+                        )
+                        break
 
-                # NOTE: BAN-B310 is already checked above
-                resp: Optional[HTTPResponse] = None
-                if opener:
-                    resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
-                else:
-                    resp = urlopen(  # skipcq: BAN-B310
-                        req, context=self.ssl, timeout=self.timeout
-                    )
-                if resp.headers.get_content_type() == "application/gzip":
-                    # admin.analytics.getFile
-                    body: bytes = resp.read()
-                    return {"status": resp.code, "headers": resp.headers, "body": body}
+                if retry_state.next_attempt_requested is False:
+                    raise err
 
-                charset = resp.headers.get_content_charset() or "utf-8"
-                body: str = resp.read().decode(charset)  # read the response body here
-                return {"status": resp.code, "headers": resp.headers, "body": body}
-            raise SlackRequestError(f"Invalid URL detected: {url}")
-        except HTTPError as e:
-            resp = {"status": e.code, "headers": e.headers}
-            if e.code == 429:
-                # for compatibility with aiohttp
-                resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
-
-            # read the response body here
-            charset = e.headers.get_content_charset() or "utf-8"
-            body: str = e.read().decode(charset)
-            resp["body"] = body
+        if resp is not None:
             return resp
+        raise last_error
 
-        except Exception as err:
-            self._logger.error(f"Failed to send a request to Slack API server: {err}")
-            raise err
+    def _perform_urllib_http_request_internal(
+        self,
+        url: str,
+        req: Request,
+    ) -> Dict[str, any]:
+        # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
+        # With this it might be possible to open local files on the executing machine
+        # which might be a security risk if the URL to open can be manipulated by an external user.
+        # (BAN-B310)
+        if url.lower().startswith("http"):
+            opener: Optional[OpenerDirector] = None
+            if self.proxy is not None:
+                if isinstance(self.proxy, str):
+                    opener = urllib.request.build_opener(
+                        ProxyHandler({"http": self.proxy, "https": self.proxy}),
+                        HTTPSHandler(context=self.ssl),
+                    )
+                else:
+                    raise SlackRequestError(
+                        f"Invalid proxy detected: {self.proxy} must be a str value"
+                    )
+
+            # NOTE: BAN-B310 is already checked above
+            resp: Optional[HTTPResponse] = None
+            if opener:
+                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            else:
+                resp = urlopen(  # skipcq: BAN-B310
+                    req, context=self.ssl, timeout=self.timeout
+                )
+            if resp.headers.get_content_type() == "application/gzip":
+                # admin.analytics.getFile
+                body: bytes = resp.read()
+                return {"status": resp.code, "headers": resp.headers, "body": body}
+
+            charset = resp.headers.get_content_charset() or "utf-8"
+            body: str = resp.read().decode(charset)  # read the response body here
+            return {"status": resp.code, "headers": resp.headers, "body": body}
+        raise SlackRequestError(f"Invalid URL detected: {url}")
 
     def _build_urllib_request_headers(
         self, token: str, has_json: bool, has_files: bool, additional_headers: dict
