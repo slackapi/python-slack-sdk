@@ -70,7 +70,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         if response is None:
             raise error
 
-        state.increment_current_attempt()
+        state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
         for k in response.headers.keys():
             if k.lower() == "retry-after":
@@ -85,6 +85,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
                 int(response.headers.get(retry_after_header_name)[0]) + random.random()
             )
         await asyncio.sleep(duration)
+        state.increment_current_attempt()
 
 
 def async_default_handlers() -> List[AsyncRetryHandler]:

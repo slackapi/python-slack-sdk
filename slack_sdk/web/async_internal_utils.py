@@ -143,6 +143,15 @@ async def _request_with_session(
                                     res,
                                 )
 
+                    if logger.level <= logging.DEBUG:
+                        body = data if isinstance(data, dict) else "(binary)"
+                        logger.debug(
+                            "Received the following response - "
+                            f"status: {res.status}, "
+                            f"headers: {dict(res.headers)}, "
+                            f"body: {body}"
+                        )
+
                     if res.status == 429:
                         for handler in retry_handlers:
                             if await handler.can_retry_async(
