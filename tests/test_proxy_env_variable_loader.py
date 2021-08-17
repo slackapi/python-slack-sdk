@@ -22,3 +22,19 @@ class TestProxyEnvVariableLoader(unittest.TestCase):
         os.environ["HTTPS_PROXY"] = "http://localhost:9999"
         url = load_http_proxy_from_env()
         self.assertEqual(url, "http://localhost:9999")
+
+    def test_load_all_empty_case(self):
+        os.environ["HTTP_PROXY"] = ""
+        os.environ["http_proxy"] = ""
+        os.environ["HTTPS_PROXY"] = ""
+        os.environ["https_proxy"] = ""
+        url = load_http_proxy_from_env()
+        self.assertEqual(url, None)
+
+    def test_proxy_url_is_none_case(self):
+        os.environ.pop("HTTPS_PROXY", None)
+        os.environ.pop("https_proxy", None)
+        os.environ.pop("HTTP_PROXY", None)
+        os.environ.pop("http_proxy", None)
+        url = load_http_proxy_from_env()
+        self.assertEqual(url, None)
