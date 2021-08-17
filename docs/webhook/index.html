@@ -343,7 +343,13 @@
 
 <span class="n">webhook</span> <span class="o">=</span> <span class="n">WebhookClient</span><span class="p">(</span>
     <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
-    <span class="n">retry_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">MyRetryHandler</span><span class="p">()],</span>
+    <span class="n">retry_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">MyRetryHandler</span><span class="p">(</span>
+        <span class="n">max_retry_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">interval_calculator</span><span class="o">=</span><span class="n">BackoffRetryIntervalCalculator</span><span class="p">(</span>
+            <span class="n">backoff_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="n">RandomJitter</span><span class="p">(),</span>
+        <span class="p">),</span>
+    <span class="p">)],</span>
 <span class="p">)</span>
 </pre></div>
 </div>

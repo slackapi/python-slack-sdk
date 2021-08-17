@@ -153,7 +153,13 @@ Creating your own ones is also quite simple. Defining a new class that inherits 
 
     webhook = WebhookClient(
         url=url,
-        retry_handlers=[MyRetryHandler()],
+        retry_handlers=[MyRetryHandler(
+            max_retry_count=1,
+            interval_calculator=BackoffRetryIntervalCalculator(
+                backoff_factor=0.5,
+                jitter=RandomJitter(),
+            ),
+        )],
     )
 
 For asyncio apps, ``Async`` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check `the source code <https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py>`_ and `tests <https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py>`_ for more details.

@@ -779,7 +779,13 @@ deletion of threaded replies works the same as regular messages.</p>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">WebClient</span><span class="p">(</span>
     <span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">],</span>
-    <span class="n">retry_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">MyRetryHandler</span><span class="p">()],</span>
+    <span class="n">retry_handlers</span><span class="o">=</span><span class="p">[</span><span class="n">MyRetryHandler</span><span class="p">(</span>
+        <span class="n">max_retry_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">interval_calculator</span><span class="o">=</span><span class="n">BackoffRetryIntervalCalculator</span><span class="p">(</span>
+            <span class="n">backoff_factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="n">RandomJitter</span><span class="p">(),</span>
+        <span class="p">),</span>
+    <span class="p">)],</span>
 <span class="p">)</span>
 </pre></div>
 </div>
