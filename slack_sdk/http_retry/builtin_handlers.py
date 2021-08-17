@@ -39,6 +39,10 @@ class ConnectionErrorRetryHandler(RetryHandler):
         if error is None:
             return False
 
+        if isinstance(error, URLError):
+            if response is not None:
+                return False  # status 40x
+
         for error_type in self.error_types_to_do_retries:
             if isinstance(error, error_type):
                 return True
@@ -69,7 +73,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
         if response is None:
             raise error
 
-        state.increment_current_attempt()
+        state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
         for k in response.headers.keys():
             if k.lower() == "retry-after":
@@ -84,3 +88,4 @@ class RateLimitErrorRetryHandler(RetryHandler):
                 int(response.headers.get(retry_after_header_name)[0]) + random.random()
             )
         time.sleep(duration)
+        state.increment_current_attempt()
