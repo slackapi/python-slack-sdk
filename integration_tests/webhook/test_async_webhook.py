@@ -93,6 +93,7 @@ class TestAsyncWebhook(unittest.TestCase):
         time.sleep(2)
         history = await client.conversations_history(channel=self.channel_id, limit=1)
         self.assertIsNotNone(history)
+        # FIXME: when repeatedly running this test, the following assertion can fail
         self.assertTrue("attachments" in history["messages"][0])
 
     @async_test
