@@ -26,3 +26,20 @@ class TestSlackResponse(unittest.TestCase):
         self.assertTrue("ok" in response.data)
         self.assertTrue("args" in response.data)
         self.assertFalse("error" in response.data)
+
+    # https://github.com/slackapi/python-slack-sdk/issues/1100
+    def test_issue_1100(self):
+        response = SlackResponse(
+            client=WebClient(token="xoxb-dummy"),
+            http_verb="POST",
+            api_url="http://localhost:3000/api.test",
+            req_args={},
+            data=None,
+            headers={},
+            status_code=200,
+        )
+        with self.assertRaises(ValueError):
+            response["foo"]
+
+        foo = response.get("foo")
+        self.assertIsNone(foo)

@@ -96,6 +96,10 @@ class SlackResponse:
             raise ValueError(
                 "As the response.data is binary data, this operation is unsupported"
             )
+        if self.data is None:
+            raise ValueError(
+                "As the response.data is empty, this operation is unsupported"
+            )
         return self.data.get(key, None)
 
     def __iter__(self):
@@ -174,6 +178,8 @@ class SlackResponse:
             raise ValueError(
                 "As the response.data is binary data, this operation is unsupported"
             )
+        if self.data is None:
+            return None
         return self.data.get(key, default)
 
     def validate(self):
