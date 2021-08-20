@@ -193,7 +193,12 @@ class Option(JsonObject):
                 dialogs.
         """
         if text:
-            self._text: Optional[TextObject] = TextObject.parse(text)
+            # For better compatibility with Block Kit ("mrkdwn" does not work for it),
+            # we've changed the default text object type to plain_text since version 3.10.0
+            self._text: Optional[TextObject] = TextObject.parse(
+                text=text,  # "text" here can be either a str or a TextObject
+                default_type=PlainTextObject.type,
+            )
             self._label: Optional[str] = None
         else:
             self._text: Optional[TextObject] = None
