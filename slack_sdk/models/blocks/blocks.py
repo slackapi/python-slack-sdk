@@ -12,6 +12,7 @@ from .basic_components import MarkdownTextObject
 from .basic_components import PlainTextObject
 from .basic_components import TextObject
 from .block_elements import BlockElement
+from .block_elements import ImageElement
 from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
 
@@ -264,7 +265,7 @@ class ContextBlock(Block):
     def __init__(
         self,
         *,
-        elements: Sequence[Union[dict, ImageBlock, TextObject]],
+        elements: Sequence[Union[dict, ImageElement, TextObject]],
         block_id: Optional[str] = None,
         **others: dict,
     ):
