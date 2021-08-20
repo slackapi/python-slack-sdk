@@ -81,6 +81,9 @@ class SlackResponse:
             )
         return f"{self.data}"
 
+    def __contains__(self, key: str) -> bool:
+        return self.get(key) is not None
+
     def __getitem__(self, key):
         """Retrieves any key from the data store.
 
