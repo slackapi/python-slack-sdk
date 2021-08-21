@@ -11,7 +11,7 @@ from .internal_utils import (
     _parse_web_class_objects,
     _update_call_participants,
     _warn_if_text_is_missing,
-    _filter_none_values,
+    _remove_none_values,
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -755,12 +755,7 @@ class WebClient(BaseClient):
         """Add an emoji.
         https://api.slack.com/methods/admin.emoji.add
         """
-        kwargs.update(
-            {
-                "name": name,
-                "url": url,
-            }
-        )
+        kwargs.update({"name": name, "url": url})
         return self.api_call("admin.emoji.add", http_verb="GET", params=kwargs)
 
     def admin_emoji_addAlias(
@@ -773,12 +768,7 @@ class WebClient(BaseClient):
         """Add an emoji alias.
         https://api.slack.com/methods/admin.emoji.addAlias
         """
-        kwargs.update(
-            {
-                "alias_for": alias_for,
-                "name": name,
-            }
-        )
+        kwargs.update({"alias_for": alias_for, "name": name})
         return self.api_call("admin.emoji.addAlias", http_verb="GET", params=kwargs)
 
     def admin_emoji_list(
@@ -791,12 +781,7 @@ class WebClient(BaseClient):
         """List emoji for an Enterprise Grid organization.
         https://api.slack.com/methods/admin.emoji.list
         """
-        kwargs.update(
-            {
-                "cursor": cursor,
-                "limit": limit,
-            }
-        )
+        kwargs.update({"cursor": cursor, "limit": limit})
         return self.api_call("admin.emoji.list", http_verb="GET", params=kwargs)
 
     def admin_emoji_remove(
@@ -808,11 +793,7 @@ class WebClient(BaseClient):
         """Remove an emoji across an Enterprise Grid organization.
         https://api.slack.com/methods/admin.emoji.remove
         """
-        kwargs.update(
-            {
-                "name": name,
-            }
-        )
+        kwargs.update({"name": name})
         return self.api_call("admin.emoji.remove", http_verb="GET", params=kwargs)
 
     def admin_emoji_rename(
@@ -825,12 +806,7 @@ class WebClient(BaseClient):
         """Rename an emoji.
         https://api.slack.com/methods/admin.emoji.rename
         """
-        kwargs.update(
-            {
-                "name": name,
-                "new_name": new_name,
-            }
-        )
+        kwargs.update({"name": name, "new_name": new_name})
         return self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
 
     def admin_users_session_reset(
@@ -973,12 +949,7 @@ class WebClient(BaseClient):
         """Approve a workspace invite request.
         https://api.slack.com/methods/admin.inviteRequests.approve
         """
-        kwargs.update(
-            {
-                "invite_request_id": invite_request_id,
-                "team_id": team_id,
-            }
-        )
+        kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
         return self.api_call("admin.inviteRequests.approve", params=kwargs)
 
     def admin_inviteRequests_approved_list(
@@ -1031,12 +1002,7 @@ class WebClient(BaseClient):
         """Deny a workspace invite request.
         https://api.slack.com/methods/admin.inviteRequests.deny
         """
-        kwargs.update(
-            {
-                "invite_request_id": invite_request_id,
-                "team_id": team_id,
-            }
-        )
+        kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
         return self.api_call("admin.inviteRequests.deny", params=kwargs)
 
     def admin_inviteRequests_list(
@@ -1072,9 +1038,7 @@ class WebClient(BaseClient):
         team_domain: str,
         team_name: str,
         team_description: Optional[str] = None,
-        team_discoverability: Optional[
-            str
-        ] = None,  # open, closed, invite_only, or unlisted
+        team_discoverability: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Create an Enterprise team.
@@ -1100,12 +1064,7 @@ class WebClient(BaseClient):
         """List all teams on an Enterprise organization.
         https://api.slack.com/methods/admin.teams.list
         """
-        kwargs.update(
-            {
-                "cursor": cursor,
-                "limit": limit,
-            }
-        )
+        kwargs.update({"cursor": cursor, "limit": limit})
         return self.api_call("admin.teams.list", params=kwargs)
 
     def admin_teams_owners_list(
@@ -1119,13 +1078,7 @@ class WebClient(BaseClient):
         """List all of the admins on a given workspace.
         https://api.slack.com/methods/admin.teams.owners.list
         """
-        kwargs.update(
-            {
-                "team_id": team_id,
-                "cursor": cursor,
-                "limit": limit,
-            }
-        )
+        kwargs.update({"team_id": team_id, "cursor": cursor, "limit": limit})
         return self.api_call("admin.teams.owners.list", http_verb="GET", params=kwargs)
 
     def admin_teams_settings_info(
@@ -1459,11 +1412,7 @@ class WebClient(BaseClient):
         https://api.slack.com/methods/apps.event.authorizations.list
         """
         kwargs.update(
-            {
-                "event_context": event_context,
-                "cursor": cursor,
-                "limit": limit,
-            }
+            {"event_context": event_context, "cursor": cursor, "limit": limit}
         )
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
@@ -1511,12 +1460,7 @@ class WebClient(BaseClient):
         """Gets information about a bot user.
         https://api.slack.com/methods/bots.info
         """
-        kwargs.update(
-            {
-                "bot": bot,
-                "team_id": team_id,
-            }
-        )
+        kwargs.update({"bot": bot, "team_id": team_id})
         return self.api_call("bots.info", http_verb="GET", params=kwargs)
 
     def calls_add(
@@ -1562,12 +1506,7 @@ class WebClient(BaseClient):
         """Ends a Call.
         https://api.slack.com/methods/calls.end
         """
-        kwargs.update(
-            {
-                "id": id,
-                "duration": duration,
-            }
-        )
+        kwargs.update({"id": id, "duration": duration})
         return self.api_call("calls.end", http_verb="POST", params=kwargs)
 
     def calls_info(
@@ -1646,7 +1585,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Archives a channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.archive", json=kwargs)
 
     def channels_create(
@@ -1657,7 +1596,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Creates a channel."""
         kwargs.update({"name": name})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.create", json=kwargs)
 
     def channels_history(
@@ -1689,7 +1628,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Invites a user to a channel."""
         kwargs.update({"channel": channel, "user": user})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.invite", json=kwargs)
 
     def channels_join(
@@ -1700,7 +1639,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Joins a channel, creating it if needed."""
         kwargs.update({"name": name})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.join", json=kwargs)
 
     def channels_kick(
@@ -1712,7 +1651,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Removes a user from a channel."""
         kwargs.update({"channel": channel, "user": user})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.kick", json=kwargs)
 
     def channels_leave(
@@ -1723,7 +1662,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Leaves a channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.leave", json=kwargs)
 
     def channels_list(
@@ -1742,7 +1681,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the read cursor in a channel."""
         kwargs.update({"channel": channel, "ts": ts})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.mark", json=kwargs)
 
     def channels_rename(
@@ -1754,7 +1693,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Renames a channel."""
         kwargs.update({"channel": channel, "name": name})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.rename", json=kwargs)
 
     def channels_replies(
@@ -1777,7 +1716,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the purpose for a channel."""
         kwargs.update({"channel": channel, "purpose": purpose})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.setPurpose", json=kwargs)
 
     def channels_setTopic(
@@ -1789,7 +1728,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the topic for a channel."""
         kwargs.update({"channel": channel, "topic": topic})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.setTopic", json=kwargs)
 
     def channels_unarchive(
@@ -1800,7 +1739,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Unarchives a channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.unarchive", json=kwargs)
 
     # --------------------------
@@ -1816,13 +1755,7 @@ class WebClient(BaseClient):
         """Deletes a message.
         https://api.slack.com/methods/chat.delete
         """
-        kwargs.update(
-            {
-                "channel": channel,
-                "ts": ts,
-                "as_user": as_user,
-            }
-        )
+        kwargs.update({"channel": channel, "ts": ts, "as_user": as_user})
         return self.api_call("chat.delete", params=kwargs)
 
     def chat_deleteScheduledMessage(
@@ -1908,7 +1841,7 @@ class WebClient(BaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.postEphemeral", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postEphemeral", json=kwargs)
@@ -1960,7 +1893,7 @@ class WebClient(BaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.postMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postMessage", json=kwargs)
@@ -2000,7 +1933,7 @@ class WebClient(BaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.scheduleMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
@@ -2031,7 +1964,7 @@ class WebClient(BaseClient):
                 "user_auth_url": user_auth_url,
             }
         )
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.unfurl", json=kwargs)
 
@@ -2066,7 +1999,7 @@ class WebClient(BaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
@@ -2139,12 +2072,7 @@ class WebClient(BaseClient):
         """Approves an invitation to a Slack Connect channel.
         https://api.slack.com/methods/conversations.approveSharedInvite
         """
-        kwargs.update(
-            {
-                "invite_id": invite_id,
-                "target_team": target_team,
-            }
-        )
+        kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call(
             "conversations.approveSharedInvite", http_verb="POST", params=kwargs
         )
@@ -2184,13 +2112,7 @@ class WebClient(BaseClient):
         """Initiates a public or private channel-based conversation
         https://api.slack.com/methods/conversations.create
         """
-        kwargs.update(
-            {
-                "name": name,
-                "is_private": is_private,
-                "team_id": team_id,
-            }
-        )
+        kwargs.update({"name": name, "is_private": is_private, "team_id": team_id})
         return self.api_call("conversations.create", params=kwargs)
 
     def conversations_declineSharedInvite(
@@ -2203,12 +2125,7 @@ class WebClient(BaseClient):
         """Declines a Slack Connect channel invite.
         https://api.slack.com/methods/conversations.declineSharedInvite
         """
-        kwargs.update(
-            {
-                "invite_id": invite_id,
-                "target_team": target_team,
-            }
-        )
+        kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call(
             "conversations.declineSharedInvite", http_verb="GET", params=kwargs
         )
@@ -2539,7 +2456,7 @@ class WebClient(BaseClient):
                 e.g. '12345.98765.abcd2358fdea'
         """
         kwargs.update({"dialog": dialog, "trigger_id": trigger_id})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: As the dialog can be a dict, this API call works only with json format.
         return self.api_call("dialog.open", json=kwargs)
 
@@ -2705,12 +2622,7 @@ class WebClient(BaseClient):
         """Retrieve information about a remote file added to Slack.
         https://api.slack.com/methods/files.remote.info
         """
-        kwargs.update(
-            {
-                "external_id": external_id,
-                "file": file,
-            }
-        )
+        kwargs.update({"external_id": external_id, "file": file})
         return self.api_call("files.remote.info", http_verb="GET", params=kwargs)
 
     def files_remote_list(
@@ -2829,12 +2741,7 @@ class WebClient(BaseClient):
         """Remove a remote file.
         https://api.slack.com/methods/files.remote.remove
         """
-        kwargs.update(
-            {
-                "external_id": external_id,
-                "file": file,
-            }
-        )
+        kwargs.update({"external_id": external_id, "file": file})
         return self.api_call("files.remote.remove", http_verb="POST", params=kwargs)
 
     def files_remote_share(
@@ -2852,12 +2759,7 @@ class WebClient(BaseClient):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
-        kwargs.update(
-            {
-                "external_id": external_id,
-                "file": file,
-            }
-        )
+        kwargs.update({"external_id": external_id, "file": file})
         return self.api_call("files.remote.share", http_verb="GET", params=kwargs)
 
     def files_revokePublicURL(
@@ -2941,7 +2843,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Archives a private channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.archive", json=kwargs)
 
     def groups_create(
@@ -2952,7 +2854,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Creates a private channel."""
         kwargs.update({"name": name})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.create", json=kwargs)
 
     def groups_createChild(
@@ -2994,7 +2896,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Invites a user to a private channel."""
         kwargs.update({"channel": channel, "user": user})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.invite", json=kwargs)
 
     def groups_kick(
@@ -3006,7 +2908,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Removes a user from a private channel."""
         kwargs.update({"channel": channel, "user": user})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.kick", json=kwargs)
 
     def groups_leave(
@@ -3017,7 +2919,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Leaves a private channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.leave", json=kwargs)
 
     def groups_list(
@@ -3036,7 +2938,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the read cursor in a private channel."""
         kwargs.update({"channel": channel, "ts": ts})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.mark", json=kwargs)
 
     def groups_open(
@@ -3047,7 +2949,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Opens a private channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.open", json=kwargs)
 
     def groups_rename(
@@ -3059,7 +2961,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Renames a private channel."""
         kwargs.update({"channel": channel, "name": name})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.rename", json=kwargs)
 
     def groups_replies(
@@ -3082,7 +2984,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the purpose for a private channel."""
         kwargs.update({"channel": channel, "purpose": purpose})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.setPurpose", json=kwargs)
 
     def groups_setTopic(
@@ -3094,7 +2996,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the topic for a private channel."""
         kwargs.update({"channel": channel, "topic": topic})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.setTopic", json=kwargs)
 
     def groups_unarchive(
@@ -3105,7 +3007,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Unarchives a private channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.unarchive", json=kwargs)
 
     # --------------------------
@@ -3120,7 +3022,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Close a direct message channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.close", json=kwargs)
 
     def im_history(
@@ -3149,7 +3051,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the read cursor in a direct message channel."""
         kwargs.update({"channel": channel, "ts": ts})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.mark", json=kwargs)
 
     def im_open(
@@ -3160,7 +3062,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Opens a direct message channel."""
         kwargs.update({"user": user})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.open", json=kwargs)
 
     def im_replies(
@@ -3191,12 +3093,7 @@ class WebClient(BaseClient):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
-        kwargs.update(
-            {
-                "team_id": team_id,
-                "to_old": to_old,
-            }
-        )
+        kwargs.update({"team_id": team_id, "to_old": to_old})
         return self.api_call("migration.exchange", http_verb="GET", params=kwargs)
 
     # --------------------------
@@ -3211,7 +3108,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Closes a multiparty direct message channel."""
         kwargs.update({"channel": channel})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("mpim.close", json=kwargs)
 
     def mpim_history(
@@ -3240,7 +3137,7 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Sets the read cursor in a multiparty direct message channel."""
         kwargs.update({"channel": channel, "ts": ts})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("mpim.mark", json=kwargs)
 
     def mpim_open(
@@ -4179,7 +4076,7 @@ class WebClient(BaseClient):
                 "value": value,
             }
         )
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "profile" parameter
         return self.api_call("users.profile.set", json=kwargs)
 
@@ -4199,7 +4096,7 @@ class WebClient(BaseClient):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.open", json=kwargs)
 
@@ -4223,7 +4120,7 @@ class WebClient(BaseClient):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.push", json=kwargs)
 
@@ -4254,7 +4151,7 @@ class WebClient(BaseClient):
         else:
             raise e.SlackRequestError("Either view_id or external_id is required.")
         kwargs.update({"hash": hash})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.update", json=kwargs)
 
@@ -4276,7 +4173,7 @@ class WebClient(BaseClient):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.publish", json=kwargs)
 
@@ -4293,7 +4190,7 @@ class WebClient(BaseClient):
         kwargs.update({"workflow_step_execute_id": workflow_step_execute_id})
         if outputs is not None:
             kwargs.update({"outputs": outputs})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "outputs" parameter
         return self.api_call("workflows.stepCompleted", json=kwargs)
 
@@ -4313,7 +4210,7 @@ class WebClient(BaseClient):
                 "error": error,
             }
         )
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "error" parameter
         return self.api_call("workflows.stepFailed", json=kwargs)
 
@@ -4333,6 +4230,6 @@ class WebClient(BaseClient):
             kwargs.update({"inputs": inputs})
         if outputs is not None:
             kwargs.update({"outputs": outputs})
-        kwargs = _filter_none_values(kwargs)
+        kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "inputs" / "outputs" parameters
         return self.api_call("workflows.updateStep", json=kwargs)

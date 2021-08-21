@@ -281,7 +281,7 @@ def _build_unexpected_body_error_message(body: str) -> str:
     return message
 
 
-def _filter_none_values(d: dict) -> dict:
+def _remove_none_values(d: dict) -> dict:
     # To avoid having null values in JSON (Slack API does not work with null in many situations)
     #
     # >>> import json
