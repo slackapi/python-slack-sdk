@@ -518,6 +518,9 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "conversations_close":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
+            elif method_name == "conversations_open":
+                self.api_methods_to_call.remove(method(channel="C123")["method"])
+                await async_method(channel="C123")
             elif method_name == "conversations_create":
                 self.api_methods_to_call.remove(method(name="announcements")["method"])
                 await async_method(name="announcements")
@@ -644,10 +647,12 @@ class TestWebClientCoverage(unittest.TestCase):
                     title="File title",
                 )
             elif method_name == "files_remote_share":
-                self.api_methods_to_call.remove(method(channels="C123,G123")["method"])
-                method(channels=["C123", "G123"])
-                method(channels="C123,G123")
-                await async_method(channels="C123,G123")
+                self.api_methods_to_call.remove(
+                    method(external_id="xxx", channels="C123,G123")["method"]
+                )
+                method(external_id="xxx", channels=["C123", "G123"])
+                method(external_id="xxx", channels="C123,G123")
+                await async_method(external_id="xxx", channels="C123,G123")
             elif method_name == "migration_exchange":
                 self.api_methods_to_call.remove(method(users="U123,U234")["method"])
                 method(users="U123,U234")
