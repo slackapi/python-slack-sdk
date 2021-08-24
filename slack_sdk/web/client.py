@@ -251,6 +251,7 @@ class WebClient(BaseClient):
         **kwargs,
     ) -> SlackResponse:
         """Uninstall an app from one or many workspaces, or an entire enterprise organization.
+        With an org-level token, enterprise_id or team_ids is required.
         https://api.slack.com/methods/admin.apps.uninstall
         """
         kwargs.update({"app_id": app_id})
@@ -709,7 +710,7 @@ class WebClient(BaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Set the workspaces in an Enterprise grid org that connect to a channel.
+        """Set the workspaces in an Enterprise grid org that connect to a public or private channel.
         https://api.slack.com/methods/admin.conversations.setTeams
         """
         kwargs.update(
@@ -1110,7 +1111,7 @@ class WebClient(BaseClient):
         self,
         *,
         team_id: str,
-        discoverability: str,  # open, invite_only, closed, or unlisted
+        discoverability: str,
         **kwargs,
     ) -> SlackResponse:
         """Sets the icon of a workspace.
@@ -1150,9 +1151,9 @@ class WebClient(BaseClient):
     def admin_usergroups_addChannels(
         self,
         *,
-        team_id: str,
-        usergroup_id: str,
         channel_ids: Union[str, Sequence[str]],
+        usergroup_id: str,
+        team_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Add one or more default channels to an IDP group.
@@ -1336,8 +1337,8 @@ class WebClient(BaseClient):
         self,
         *,
         expiration_ts: int,
-        team_id: str,
         user_id: str,
+        team_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Set an expiration for a guest user.
@@ -1575,6 +1576,8 @@ class WebClient(BaseClient):
 
     # --------------------------
     # Deprecated: channels.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
     # --------------------------
 
     def channels_archive(
@@ -1818,7 +1821,7 @@ class WebClient(BaseClient):
         icon_url: Optional[str] = None,
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
-        parse: Optional[str] = None,  # none, full
+        parse: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends an ephemeral message to a user in a channel.
@@ -1908,6 +1911,7 @@ class WebClient(BaseClient):
         attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
         blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         thread_ts: Optional[str] = None,
+        parse: Optional[str] = None,
         reply_broadcast: Optional[bool] = None,
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
@@ -1927,6 +1931,7 @@ class WebClient(BaseClient):
                 "blocks": blocks,
                 "thread_ts": thread_ts,
                 "reply_broadcast": reply_broadcast,
+                "parse": parse,
                 "unfurl_links": unfurl_links,
                 "unfurl_media": unfurl_media,
                 "link_names": link_names,
@@ -2336,6 +2341,8 @@ class WebClient(BaseClient):
         """Opens or resumes a direct message or multi-person direct message.
         https://api.slack.com/methods/conversations.open
         """
+        if channel is None and users is None:
+            raise e.SlackRequestError("Either channel or users must be provided.")
         kwargs.update({"channel": channel, "return_im": return_im})
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
@@ -2431,29 +2438,6 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Open a dialog with a user.
         https://api.slack.com/methods/dialog.open
-
-        Args:
-            dialog (dict): A dictionary of dialog arguments.
-                {
-                    "callback_id": "46eh782b0",
-                    "title": "Request something",
-                    "submit_label": "Request",
-                    "state": "Max",
-                    "elements": [
-                        {
-                            "type": "text",
-                            "label": "Origin",
-                            "name": "loc_origin"
-                        },
-                        {
-                            "type": "text",
-                            "label": "Destination",
-                            "name": "loc_destination"
-                        }
-                    ]
-                }
-            trigger_id (str): The trigger id of a recent message interaction.
-                e.g. '12345.98765.abcd2358fdea'
         """
         kwargs.update({"dialog": dialog, "trigger_id": trigger_id})
         kwargs = _remove_none_values(kwargs)
@@ -2656,8 +2640,8 @@ class WebClient(BaseClient):
         external_url: str,
         title: str,
         filetype: Optional[str] = None,
-        indexable_file_contents: Optional[str] = None,
-        preview_image: Optional[str] = None,
+        indexable_file_contents: Optional[Union[str, bytes, IOBase]] = None,
+        preview_image: Optional[Union[str, bytes, IOBase]] = None,
         **kwargs,
     ) -> SlackResponse:
         """Adds a file from a remote service.
@@ -2669,16 +2653,18 @@ class WebClient(BaseClient):
                 "external_url": external_url,
                 "title": title,
                 "filetype": filetype,
-                "indexable_file_contents": indexable_file_contents,
             }
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if "preview_image" in kwargs:
+        if "preview_image" in kwargs or "indexable_file_contents" in kwargs:
             files = {
                 "preview_image": preview_image
                 if preview_image is not None
-                else kwargs.pop("preview_image")
+                else kwargs.pop("preview_image"),
+                "indexable_file_contents": indexable_file_contents
+                if indexable_file_contents is not None
+                else kwargs.pop("indexable_file_contents"),
             }
 
         return self.api_call(
@@ -2755,6 +2741,8 @@ class WebClient(BaseClient):
         """Share a remote file into a channel.
         https://api.slack.com/methods/files.remote.share
         """
+        if external_id is None and file is None:
+            raise e.SlackRequestError("Either external_id or file must be provided.")
         if isinstance(channels, (list, Tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
@@ -2833,6 +2821,8 @@ class WebClient(BaseClient):
 
     # --------------------------
     # Deprecated: groups.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
     # --------------------------
 
     def groups_archive(
@@ -3012,6 +3002,8 @@ class WebClient(BaseClient):
 
     # --------------------------
     # Deprecated: im.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
     # --------------------------
 
     def im_close(
@@ -3098,6 +3090,8 @@ class WebClient(BaseClient):
 
     # --------------------------
     # Deprecated: mpim.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
     # --------------------------
 
     def mpim_close(
@@ -3408,12 +3402,21 @@ class WebClient(BaseClient):
         time: str,
         team_id: Optional[str] = None,
         user: Optional[str] = None,
+        recurrence: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Creates a reminder.
         https://api.slack.com/methods/reminders.add
         """
-        kwargs.update({"text": text, "time": time, "team_id": team_id, "user": user})
+        kwargs.update(
+            {
+                "text": text,
+                "time": time,
+                "team_id": team_id,
+                "user": user,
+                "recurrence": recurrence,
+            }
+        )
         return self.api_call("reminders.add", params=kwargs)
 
     def reminders_complete(
