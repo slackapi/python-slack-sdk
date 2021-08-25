@@ -10,9 +10,10 @@
 from asyncio import Future
 
 """A Python module for interacting with Slack's Web API."""
+import json
 import os
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Tuple
+from typing import Union, Sequence, Optional, Dict, Tuple, Any, List
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
@@ -21,7 +22,10 @@ from .internal_utils import (
     _parse_web_class_objects,
     _update_call_participants,
     _warn_if_text_is_missing,
+    _remove_none_values,
 )
+from ..models.attachments import Attachment
+from ..models.blocks import Block
 
 
 class LegacyWebClient(LegacyBaseClient):
@@ -88,12 +92,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve analytics data for a given date, presented as a compressed JSON file
-
-        Args:
-            date (str): Date to retrieve the analytics data for,
-                expressed as YYYY-MM-DD in UTC.
-            type (str): The type of analytics to retrieve.
-                The options are currently limited to member.
+        https://api.slack.com/methods/admin.analytics.getFile
         """
         kwargs.update({"type": type})
         if date is not None:
@@ -107,19 +106,15 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         app_id: Optional[str] = None,
         request_id: Optional[str] = None,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approve an app for installation on a workspace.
-
         Either app_id or request_id is required.
         These IDs can be obtained either directly via the app_requested event,
         or by the admin.apps.requests.list method.
-
-        Args:
-            app_id (str): The id of the app to approve. e.g. 'A12345'
-            request_id (str): The id of the request to approve. e.g. 'Ar12345'
-        Raises:
-            SlackRequestError: If neither or both the `app_id` and `request_id` args are specified.
+        https://api.slack.com/methods/admin.apps.approve
         """
         if app_id:
             kwargs.update({"app_id": app_id})
@@ -130,35 +125,130 @@ class LegacyWebClient(LegacyBaseClient):
                 "The app_id or request_id argument must be specified."
             )
 
-        return self.api_call("admin.apps.approve", json=kwargs)
+        kwargs.update(
+            {
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("admin.apps.approve", params=kwargs)
 
-    def admin_apps_approved_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List approved apps for an org or workspace."""
+    def admin_apps_approved_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List approved apps for an org or workspace.
+        https://api.slack.com/methods/admin.apps.approved.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.apps.approved.list", http_verb="GET", params=kwargs)
 
     def admin_apps_clearResolution(
-        self, *, app_id: str, **kwargs
+        self,
+        *,
+        app_id: str,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Clear an app resolution
-
-        Args:
-            app_id (str): The id of the app whose resolution you want to clear/undo.
+        https://api.slack.com/methods/admin.apps.clearResolution
         """
-        kwargs.update({"app_id": app_id})
+        kwargs.update(
+            {
+                "app_id": app_id,
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
         return self.api_call(
             "admin.apps.clearResolution", http_verb="POST", params=kwargs
         )
 
-    def admin_apps_requests_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List app requests for a team/workspace."""
+    def admin_apps_requests_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List app requests for a team/workspace.
+        https://api.slack.com/methods/admin.apps.requests.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.apps.requests.list", http_verb="GET", params=kwargs)
 
-    def admin_apps_restrict(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Restrict an app for installation on a workspace."""
-        return self.api_call("admin.apps.restrict", json=kwargs)
+    def admin_apps_restrict(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_id: Optional[str] = None,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Restrict an app for installation on a workspace.
+        Exactly one of the team_id or enterprise_id arguments is required, not both.
+        Either app_id or request_id is required. These IDs can be obtained either directly
+        via the app_requested event, or by the admin.apps.requests.list method.
+        https://api.slack.com/methods/admin.apps.restrict
+        """
+        if app_id:
+            kwargs.update({"app_id": app_id})
+        elif request_id:
+            kwargs.update({"request_id": request_id})
+        else:
+            raise e.SlackRequestError(
+                "The app_id or request_id argument must be specified."
+            )
 
-    def admin_apps_restricted_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List restricted apps for an org or workspace."""
+        kwargs.update(
+            {
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("admin.apps.restrict", params=kwargs)
+
+    def admin_apps_restricted_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List restricted apps for an org or workspace.
+        https://api.slack.com/methods/admin.apps.restricted.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
         return self.api_call(
             "admin.apps.restricted.list", http_verb="GET", params=kwargs
         )
@@ -171,7 +261,10 @@ class LegacyWebClient(LegacyBaseClient):
         team_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Uninstall an app from one or many workspaces, or an entire enterprise organization."""
+        """Uninstall an app from one or many workspaces, or an entire enterprise organization.
+        With an org-level token, enterprise_id or team_ids is required.
+        https://api.slack.com/methods/admin.apps.uninstall
+        """
         kwargs.update({"app_id": app_id})
         if enterprise_id is not None:
             kwargs.update({"enterprise_id": enterprise_id})
@@ -191,7 +284,9 @@ class LegacyWebClient(LegacyBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Fetch all the entities assigned to a particular authentication policy by name."""
+        """Fetch all the entities assigned to a particular authentication policy by name.
+        https://api.slack.com/methods/admin.auth.policy.getEntities
+        """
         kwargs.update({"policy_name": policy_name})
         if cursor is not None:
             kwargs.update({"cursor": cursor})
@@ -211,7 +306,9 @@ class LegacyWebClient(LegacyBaseClient):
         entity_type: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Assign entities to a particular authentication policy."""
+        """Assign entities to a particular authentication policy.
+        https://api.slack.com/methods/admin.auth.policy.assignEntities
+        """
         if isinstance(entity_ids, (list, Tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
@@ -230,7 +327,9 @@ class LegacyWebClient(LegacyBaseClient):
         entity_type: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Remove specified entities from a specified authentication policy."""
+        """Remove specified entities from a specified authentication policy.
+        https://api.slack.com/methods/admin.auth.policy.removeEntities
+        """
         if isinstance(entity_ids, (list, Tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
@@ -249,7 +348,9 @@ class LegacyWebClient(LegacyBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create an Information Barrier"""
+        """Create an Information Barrier
+        https://api.slack.com/methods/admin.barriers.create
+        """
         kwargs.update({"primary_usergroup_id": primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
             kwargs.update(
@@ -266,9 +367,14 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.barriers.create", http_verb="POST", params=kwargs)
 
     def admin_barriers_delete(
-        self, *, barrier_id: str, **kwargs
+        self,
+        *,
+        barrier_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Delete an existing Information Barrier"""
+        """Delete an existing Information Barrier
+        https://api.slack.com/methods/admin.barriers.delete
+        """
         kwargs.update({"barrier_id": barrier_id})
         return self.api_call("admin.barriers.delete", http_verb="POST", params=kwargs)
 
@@ -281,7 +387,9 @@ class LegacyWebClient(LegacyBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update an existing Information Barrier"""
+        """Update an existing Information Barrier
+        https://api.slack.com/methods/admin.barriers.update
+        """
         kwargs.update(
             {"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id}
         )
@@ -299,47 +407,68 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"restricted_subjects": restricted_subjects})
         return self.api_call("admin.barriers.update", http_verb="POST", params=kwargs)
 
-    def admin_barriers_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Get all Information Barriers for your organization"""
+    def admin_barriers_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get all Information Barriers for your organization
+        https://api.slack.com/methods/admin.barriers.list"""
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
         return self.api_call("admin.barriers.list", http_verb="GET", params=kwargs)
 
     def admin_conversations_create(
-        self, *, is_private: bool, name: str, **kwargs
+        self,
+        *,
+        is_private: bool,
+        name: str,
+        description: Optional[str] = None,
+        org_wide: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create a public or private channel-based conversation.
-
-        Args:
-            is_private (bool): When true, creates a private channel instead of a public channel
-            name (str): Name of the public or private channel to create.
-            org_wide (bool): When true, the channel will be available org-wide.
-                Note: if the channel is not org_wide=true, you must specify a team_id for this channel
-            team_id (str): The workspace to create the channel in.
-                Note: this argument is required unless you set org_wide=true.
-
+        https://api.slack.com/methods/admin.conversations.create
         """
-        kwargs.update({"is_private": is_private, "name": name})
-        return self.api_call("admin.conversations.create", json=kwargs)
+        kwargs.update(
+            {
+                "is_private": is_private,
+                "name": name,
+                "description": description,
+                "org_wide": org_wide,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("admin.conversations.create", params=kwargs)
 
     def admin_conversations_delete(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Delete a public or private channel.
-
-        Args:
-            channel_id (str): The channel to delete.
-
+        https://api.slack.com/methods/admin.conversations.delete
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.delete", json=kwargs)
+        return self.api_call("admin.conversations.delete", params=kwargs)
 
     def admin_conversations_invite(
-        self, *, channel_id: str, user_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        channel_id: str,
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a public or private channel.
-
-        Args:
-            channel_id (str): The channel that the users will be invited to.
-            user_ids (str or list): The users to invite.
+        https://api.slack.com/methods/admin.conversations.invite
         """
         kwargs.update({"channel_id": channel_id})
         if isinstance(user_ids, (list, Tuple)):
@@ -350,113 +479,187 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.conversations.invite", params=kwargs)
 
     def admin_conversations_archive(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Archive a public or private channel.
-
-        Args:
-            channel_id (str): The channel to archive.
+        https://api.slack.com/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.archive", json=kwargs)
+        return self.api_call("admin.conversations.archive", params=kwargs)
 
     def admin_conversations_unarchive(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Unarchive a public or private channel.
-
-        Args:
-            channel_id (str): The channel to unarchive.
+        https://api.slack.com/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.unarchive", json=kwargs)
+        return self.api_call("admin.conversations.unarchive", params=kwargs)
 
     def admin_conversations_rename(
-        self, *, channel_id: str, name: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        name: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Rename a public or private channel.
-
-        Args:
-            channel_id (str): The channel to rename.
-            name (str): The name to rename the channel to.
+        https://api.slack.com/methods/admin.conversations.rename
         """
         kwargs.update({"channel_id": channel_id, "name": name})
-        return self.api_call("admin.conversations.rename", json=kwargs)
+        return self.api_call("admin.conversations.rename", params=kwargs)
 
-    def admin_conversations_search(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Search for public or private channels in an Enterprise organization."""
+    def admin_conversations_search(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        query: Optional[str] = None,
+        search_channel_types: Optional[Union[str, Sequence[str]]] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Search for public or private channels in an Enterprise organization.
+        https://api.slack.com/methods/admin.conversations.search
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "query": query,
+                "sort": sort,
+                "sort_dir": sort_dir,
+            }
+        )
+
+        if isinstance(search_channel_types, (list, Tuple)):
+            kwargs.update({"search_channel_types": ",".join(search_channel_types)})
+        else:
+            kwargs.update({"search_channel_types": search_channel_types})
+
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({"team_ids": ",".join(team_ids)})
+        else:
+            kwargs.update({"team_ids": team_ids})
+
         return self.api_call("admin.conversations.search", params=kwargs)
 
     def admin_conversations_convertToPrivate(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Convert a public channel to a private channel.
-
-        Args:
-            channel_id (str): The channel to convert to private.
+        https://api.slack.com/methods/admin.conversations.convertToPrivate
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.convertToPrivate", json=kwargs)
+        return self.api_call("admin.conversations.convertToPrivate", params=kwargs)
 
     def admin_conversations_setConversationPrefs(
-        self, *, channel_id: str, prefs: Union[str, dict], **kwargs
+        self,
+        *,
+        channel_id: str,
+        prefs: Union[str, Dict[str, str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the posting permissions for a public or private channel.
-
-        Args:
-            channel_id (str): The channel to set the prefs for
-            prefs (str or dict): The prefs for this channel in a stringified JSON format.
+        https://api.slack.com/methods/admin.conversations.setConversationPrefs
         """
-        kwargs.update({"channel_id": channel_id, "prefs": prefs})
-        return self.api_call("admin.conversations.setConversationPrefs", json=kwargs)
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(prefs, dict):
+            kwargs.update({"prefs": json.dumps(prefs)})
+        else:
+            kwargs.update({"prefs": prefs})
+        return self.api_call("admin.conversations.setConversationPrefs", params=kwargs)
 
     def admin_conversations_getConversationPrefs(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get conversation preferences for a public or private channel.
-
-        Args:
-            channel_id (str): The channel to get the preferences for.
+        https://api.slack.com/methods/admin.conversations.getConversationPrefs
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.getConversationPrefs", json=kwargs)
+        return self.api_call("admin.conversations.getConversationPrefs", params=kwargs)
 
     def admin_conversations_disconnectShared(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        leaving_team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Disconnect a connected channel from one or more workspaces.
-
-        Args:
-            channel_id (str): The channel to be disconnected from some workspaces.
+        https://api.slack.com/methods/admin.conversations.disconnectShared
         """
         kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.disconnectShared", json=kwargs)
+        if isinstance(leaving_team_ids, (list, Tuple)):
+            kwargs.update({"leaving_team_ids": ",".join(leaving_team_ids)})
+        else:
+            kwargs.update({"leaving_team_ids": leaving_team_ids})
+        return self.api_call("admin.conversations.disconnectShared", params=kwargs)
 
     def admin_conversations_ekm_listOriginalConnectedChannelInfo(
-        self, **kwargs
+        self,
+        *,
+        channel_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        team_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all disconnected channels—i.e.,
         channels that were once connected to other workspaces and then disconnected—and
         the corresponding original channel IDs for key revocation with EKM.
+        https://api.slack.com/methods/admin.conversations.ekm.listOriginalConnectedChannelInfo
         """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        if isinstance(channel_ids, (list, Tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({"team_ids": ",".join(team_ids)})
+        else:
+            kwargs.update({"team_ids": team_ids})
         return self.api_call(
             "admin.conversations.ekm.listOriginalConnectedChannelInfo", params=kwargs
         )
 
     def admin_conversations_restrictAccess_addGroup(
-        self, *, channel_id: str, group_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        group_id: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an allowlist of IDP groups for accessing a channel.
-
-        Args:
-            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
-            group_id (str): The IDP Group ID to be an allowlist for the private channel. 'S0604QSJC'
-            team_id (str): The workspace where the channel exists.
-                This argument is required for channels only tied to one workspace,
-                and optional for channels that are shared across an organization.
-                e.g 'T1234'
+        https://api.slack.com/methods/admin.conversations.restrictAccess.addGroup
         """
-        kwargs.update({"channel_id": channel_id, "group_id": group_id})
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "group_id": group_id,
+                "team_id": team_id,
+            }
+        )
         return self.api_call(
             "admin.conversations.restrictAccess.addGroup",
             http_verb="GET",
@@ -464,18 +667,21 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def admin_conversations_restrictAccess_listGroups(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all IDP Groups linked to a channel.
-
-        Args:
-            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
-            team_id (str): The workspace where the channel exists.
-                This argument is required for channels only tied to one workspace,
-                and optional for channels that are shared across an organization.
-                e.g 'T1234'
+        https://api.slack.com/methods/admin.conversations.restrictAccess.listGroups
         """
-        kwargs.update({"channel_id": channel_id})
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "team_id": team_id,
+            }
+        )
         return self.api_call(
             "admin.conversations.restrictAccess.listGroups",
             http_verb="GET",
@@ -483,20 +689,22 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def admin_conversations_restrictAccess_removeGroup(
-        self, *, channel_id: str, group_id: str, team_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        group_id: str,
+        team_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove a linked IDP group linked from a private channel.
-
-        Args:
-            channel_id (str): The channel to link this group to. e.g. 'C1234567890'
-            group_id (str): The IDP Group ID to be an allowlist for the private channel. 'S0604QSJC'
-            team_id (str): The workspace where the channel exists.
-                This argument is required for channels only tied to one workspace,
-                and optional for channels that are shared across an organization.
-                e.g 'T1234'
+        https://api.slack.com/methods/admin.conversations.restrictAccess.removeGroup
         """
         kwargs.update(
-            {"channel_id": channel_id, "group_id": group_id, "team_id": team_id}
+            {
+                "channel_id": channel_id,
+                "group_id": group_id,
+                "team_id": team_id,
+            }
         )
         return self.api_call(
             "admin.conversations.restrictAccess.removeGroup",
@@ -505,84 +713,178 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def admin_conversations_setTeams(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        org_channel: Optional[bool] = None,
+        target_team_ids: Optional[Union[str, Sequence[str]]] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Set the workspaces in an Enterprise grid org that connect to a channel.
-
-        Args:
-            channel_id (str): The encoded channel_id to add or remove to workspaces.
-
+        """Set the workspaces in an Enterprise grid org that connect to a public or private channel.
+        https://api.slack.com/methods/admin.conversations.setTeams
         """
-        kwargs.update({"channel_id": channel_id})
-        return self.api_call("admin.conversations.setTeams", json=kwargs)
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "org_channel": org_channel,
+                "team_id": team_id,
+            }
+        )
+        if isinstance(target_team_ids, (list, Tuple)):
+            kwargs.update({"target_team_ids": ",".join(target_team_ids)})
+        else:
+            kwargs.update({"target_team_ids": target_team_ids})
+        return self.api_call("admin.conversations.setTeams", params=kwargs)
 
     def admin_conversations_getTeams(
-        self, *, channel_id: str, **kwargs
+        self,
+        *,
+        channel_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
-
-        Args:
-            channel_id (str): The channel to determine connected workspaces within the organization for.
-
+        https://api.slack.com/methods/admin.conversations.getTeams
         """
-        kwargs.update({"channel_id": channel_id})
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
         return self.api_call("admin.conversations.getTeams", params=kwargs)
 
-    def admin_emoji_add(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Add an emoji."""
+    def admin_emoji_add(
+        self,
+        *,
+        name: str,
+        url: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Add an emoji.
+        https://api.slack.com/methods/admin.emoji.add
+        """
+        kwargs.update({"name": name, "url": url})
         return self.api_call("admin.emoji.add", http_verb="GET", params=kwargs)
 
-    def admin_emoji_addAlias(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Add an emoji alias."""
+    def admin_emoji_addAlias(
+        self,
+        *,
+        alias_for: str,
+        name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Add an emoji alias.
+        https://api.slack.com/methods/admin.emoji.addAlias
+        """
+        kwargs.update({"alias_for": alias_for, "name": name})
         return self.api_call("admin.emoji.addAlias", http_verb="GET", params=kwargs)
 
-    def admin_emoji_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List emoji for an Enterprise Grid organization."""
+    def admin_emoji_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List emoji for an Enterprise Grid organization.
+        https://api.slack.com/methods/admin.emoji.list
+        """
+        kwargs.update({"cursor": cursor, "limit": limit})
         return self.api_call("admin.emoji.list", http_verb="GET", params=kwargs)
 
-    def admin_emoji_remove(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Remove an emoji across an Enterprise Grid organization."""
+    def admin_emoji_remove(
+        self,
+        *,
+        name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Remove an emoji across an Enterprise Grid organization.
+        https://api.slack.com/methods/admin.emoji.remove
+        """
+        kwargs.update({"name": name})
         return self.api_call("admin.emoji.remove", http_verb="GET", params=kwargs)
 
-    def admin_emoji_rename(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Rename an emoji."""
+    def admin_emoji_rename(
+        self,
+        *,
+        name: str,
+        new_name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Rename an emoji.
+        https://api.slack.com/methods/admin.emoji.rename
+        """
+        kwargs.update({"name": name, "new_name": new_name})
         return self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
 
     def admin_users_session_reset(
-        self, *, user_id: str, **kwargs
+        self,
+        *,
+        user_id: str,
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Wipes all valid sessions on all devices for a given user.
-
-        Args:
-            user_id (str): The ID of the user to wipe sessions for. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.session.reset
         """
-        kwargs.update({"user_id": user_id})
-        return self.api_call("admin.users.session.reset", json=kwargs)
+        kwargs.update(
+            {
+                "user_id": user_id,
+                "mobile_only": mobile_only,
+                "web_only": web_only,
+            }
+        )
+        return self.api_call("admin.users.session.reset", params=kwargs)
 
     def admin_users_session_invalidate(
-        self, *, session_id: str, team_id: str, **kwargs
+        self,
+        *,
+        session_id: str,
+        team_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invalidate a single session for a user by session_id.
-        Args:
-            session_id (str): The ID of a session
-            team_id (str): ID of the team that the session belongs to
+        https://api.slack.com/methods/admin.users.session.invalidate
         """
         kwargs.update({"session_id": session_id, "team_id": team_id})
         return self.api_call("admin.users.session.invalidate", params=kwargs)
 
-    def admin_users_session_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists all active user sessions for an organization"""
+    def admin_users_session_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all active user sessions for an organization
+        https://api.slack.com/methods/admin.users.session.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "team_id": team_id,
+                "user_id": user_id,
+            }
+        )
         return self.api_call("admin.users.session.list", params=kwargs)
 
     def admin_teams_settings_setDefaultChannels(
-        self, *, team_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        team_id: str,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the default channels of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            channel_ids (str or list): A list of channel_ids.
-                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
+        https://api.slack.com/methods/admin.teams.settings.setDefaultChannels
         """
         kwargs.update({"team_id": team_id})
         if isinstance(channel_ids, (list, Tuple)):
@@ -594,14 +896,14 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def admin_users_session_getSettings(
-        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get user-specific session settings—the session duration
         and what happens when the client closes—given a list of users.
-
-        Args:
-            user_ids (str or list): The IDs of users you'd like to fetch session settings for.
-                Note: if a user does not have any active sessions, they will not be returned in the response.
+        https://api.slack.com/methods/admin.users.session.getSettings
         """
         if isinstance(user_ids, (list, Tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -610,28 +912,38 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.users.session.getSettings", params=kwargs)
 
     def admin_users_session_setSettings(
-        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        desktop_app_browser_quit: Optional[bool] = None,
+        duration: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Configure the user-level session settings—the session duration
         and what happens when the client closes—for one or more users.
-
-        Args:
-            user_ids (str or list): The list of user IDs to apply the session settings for.
+        https://api.slack.com/methods/admin.users.session.setSettings
         """
         if isinstance(user_ids, (list, Tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
+        kwargs.update(
+            {
+                "desktop_app_browser_quit": desktop_app_browser_quit,
+                "duration": duration,
+            }
+        )
         return self.api_call("admin.users.session.setSettings", params=kwargs)
 
     def admin_users_session_clearSettings(
-        self, *, user_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Clear user-specific session settings—the session duration
         and what happens when the client closes—for a list of users.
-
-        Args:
-            user_ids (str or list): The list of user IDs to apply the session settings for.
+        https://api.slack.com/methods/admin.users.session.clearSettings
         """
         if isinstance(user_ids, (list, Tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -640,127 +952,194 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.users.session.clearSettings", params=kwargs)
 
     def admin_inviteRequests_approve(
-        self, *, invite_request_id: str, **kwargs
+        self,
+        *,
+        invite_request_id: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approve a workspace invite request.
-
-        team_id is required if your Enterprise Grid org contains more than one workspace.
-
-        Args:
-            invite_request_id (str): ID of the request to invite. e.g. 'Ir1234'
+        https://api.slack.com/methods/admin.inviteRequests.approve
         """
-        kwargs.update({"invite_request_id": invite_request_id})
-        return self.api_call("admin.inviteRequests.approve", json=kwargs)
+        kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
+        return self.api_call("admin.inviteRequests.approve", params=kwargs)
 
     def admin_inviteRequests_approved_list(
-        self, **kwargs
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List all approved workspace invite requests."""
+        """List all approved workspace invite requests.
+        https://api.slack.com/methods/admin.inviteRequests.approved.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.inviteRequests.approved.list", params=kwargs)
 
     def admin_inviteRequests_denied_list(
-        self, **kwargs
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List all denied workspace invite requests."""
+        """List all denied workspace invite requests.
+        https://api.slack.com/methods/admin.inviteRequests.denied.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.inviteRequests.denied.list", params=kwargs)
 
     def admin_inviteRequests_deny(
-        self, *, invite_request_id: str, **kwargs
+        self,
+        *,
+        invite_request_id: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deny a workspace invite request.
-
-        Args:
-            invite_request_id (str): ID of the request to invite. e.g. 'Ir1234'
+        https://api.slack.com/methods/admin.inviteRequests.deny
         """
-        kwargs.update({"invite_request_id": invite_request_id})
-        return self.api_call("admin.inviteRequests.deny", json=kwargs)
+        kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
+        return self.api_call("admin.inviteRequests.deny", params=kwargs)
 
-    def admin_inviteRequests_list(self, **kwargs) -> Union[Future, SlackResponse]:
+    def admin_inviteRequests_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """List all pending workspace invite requests."""
         return self.api_call("admin.inviteRequests.list", params=kwargs)
 
     def admin_teams_admins_list(
-        self, *, team_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all of the admins on a given workspace.
-
-        Args:
-            team_id (str): ID of the team.
+        https://api.slack.com/methods/admin.inviteRequests.list
         """
-        kwargs.update({"team_id": team_id})
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("admin.teams.admins.list", http_verb="GET", params=kwargs)
 
     def admin_teams_create(
-        self, *, team_domain: str, team_name: str, **kwargs
+        self,
+        *,
+        team_domain: str,
+        team_name: str,
+        team_description: Optional[str] = None,
+        team_discoverability: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create an Enterprise team.
-
-        Args:
-            team_domain (str): Team domain. e.g. 'slacksoftballteam'
-            team_name (str): Team name. e.g. 'Slack Softball Team'
+        https://api.slack.com/methods/admin.teams.create
         """
-        kwargs.update({"team_domain": team_domain, "team_name": team_name})
-        return self.api_call("admin.teams.create", json=kwargs)
+        kwargs.update(
+            {
+                "team_domain": team_domain,
+                "team_name": team_name,
+                "team_description": team_description,
+                "team_discoverability": team_discoverability,
+            }
+        )
+        return self.api_call("admin.teams.create", params=kwargs)
 
-    def admin_teams_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List all teams on an Enterprise organization."""
+    def admin_teams_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List all teams on an Enterprise organization.
+        https://api.slack.com/methods/admin.teams.list
+        """
+        kwargs.update({"cursor": cursor, "limit": limit})
         return self.api_call("admin.teams.list", params=kwargs)
 
     def admin_teams_owners_list(
-        self, *, team_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all of the admins on a given workspace.
-
-        Args:
-            team_id (str): ID of the team.
+        https://api.slack.com/methods/admin.teams.owners.list
         """
-        kwargs.update({"team_id": team_id})
+        kwargs.update({"team_id": team_id, "cursor": cursor, "limit": limit})
         return self.api_call("admin.teams.owners.list", http_verb="GET", params=kwargs)
 
     def admin_teams_settings_info(
-        self, team_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Fetch information about settings in a workspace
-
-        Args:
-            team_id (str): ID of the team.
+        https://api.slack.com/methods/admin.teams.settings.info
         """
         kwargs.update({"team_id": team_id})
-        return self.api_call("admin.teams.settings.info", json=kwargs)
+        return self.api_call("admin.teams.settings.info", params=kwargs)
 
     def admin_teams_settings_setDescription(
-        self, *, team_id: str, description: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        description: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the description of a given workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            description (str): Description of the team.
+        https://api.slack.com/methods/admin.teams.settings.setDescription
         """
         kwargs.update({"team_id": team_id, "description": description})
-        return self.api_call("admin.teams.settings.setDescription", json=kwargs)
+        return self.api_call("admin.teams.settings.setDescription", params=kwargs)
 
     def admin_teams_settings_setDiscoverability(
-        self, *, team_id: str, discoverability: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        discoverability: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            discoverability (str): This workspace's discovery setting.
-                It must be set to one of open, invite_only, closed, or unlisted.
+        https://api.slack.com/methods/admin.teams.settings.setDiscoverability
         """
         kwargs.update({"team_id": team_id, "discoverability": discoverability})
-        return self.api_call("admin.teams.settings.setDiscoverability", json=kwargs)
+        return self.api_call("admin.teams.settings.setDiscoverability", params=kwargs)
 
     def admin_teams_settings_setIcon(
-        self, *, team_id: str, image_url: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        image_url: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            image_url (str): Url of the icon.
+        https://api.slack.com/methods/admin.teams.settings.setIcon
         """
         kwargs.update({"team_id": team_id, "image_url": image_url})
         return self.api_call(
@@ -768,31 +1147,28 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def admin_teams_settings_setName(
-        self, *, team_id: str, name: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        name: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
-
-        Args:
-            team_id (str): ID of the team.
-            name (str): Name of the team.
+        https://api.slack.com/methods/admin.teams.settings.setName
         """
         kwargs.update({"team_id": team_id, "name": name})
-        return self.api_call("admin.teams.settings.setName", json=kwargs)
+        return self.api_call("admin.teams.settings.setName", params=kwargs)
 
     def admin_usergroups_addChannels(
         self,
         *,
-        team_id: str,
-        usergroup_id: str,
         channel_ids: Union[str, Sequence[str]],
+        usergroup_id: str,
+        team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
-
-        Args:
-            team_id (str): The workspace to add default channels in. e.g. 'T1234'
-            usergroup_id (str): ID of the IDP group to add default channels for. e.g. 'S1234'
-            channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
+        https://api.slack.com/methods/admin.usergroups.addChannels
         """
         kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
         if isinstance(channel_ids, (list, Tuple)):
@@ -802,17 +1178,17 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.usergroups.addChannels", params=kwargs)
 
     def admin_usergroups_addTeams(
-        self, *, usergroup_id: str, team_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        usergroup_id: str,
+        team_ids: Union[str, Sequence[str]],
+        auto_provision: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Associate one or more default workspaces with an organization-wide IDP group.
-
-        Args:
-            usergroup_id (str): ID of the IDP group. e.g. 'S1234'
-            team_ids (str or list): A comma separated list of encoded team (workspace) IDs.
-                Each workspace MUST belong to the organization associated with the token.
-                e.g. 'T12345678,T98765432' or ['T12345678', 'T98765432']
+        https://api.slack.com/methods/admin.usergroups.addTeams
         """
-        kwargs.update({"usergroup_id": usergroup_id})
+        kwargs.update({"usergroup_id": usergroup_id, "auto_provision": auto_provision})
         if isinstance(team_ids, (list, Tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
@@ -820,24 +1196,34 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.usergroups.addTeams", params=kwargs)
 
     def admin_usergroups_listChannels(
-        self, *, usergroup_id: str, **kwargs
+        self,
+        *,
+        usergroup_id: str,
+        include_num_members: Optional[bool] = None,
+        team_id: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
-
-        Args:
-            usergroup_id (str): ID of the IDP group to list default channels for. e.g. 'S1234'
+        https://api.slack.com/methods/admin.usergroups.listChannels
         """
-        kwargs.update({"usergroup_id": usergroup_id})
-        return self.api_call("admin.usergroups.listChannels", json=kwargs)
+        kwargs.update(
+            {
+                "usergroup_id": usergroup_id,
+                "include_num_members": include_num_members,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("admin.usergroups.listChannels", params=kwargs)
 
     def admin_usergroups_removeChannels(
-        self, *, usergroup_id: str, channel_ids: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        usergroup_id: str,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
-
-        Args:
-            usergroup_id (str): ID of the IDP group. e.g. 'S1234'
-            channel_ids (str or list): Comma separated string of channel IDs. e.g. 'C123,C234' or ['C123', 'C234']
+        https://api.slack.com/methods/admin.usergroups.removeChannels
         """
         kwargs.update({"usergroup_id": usergroup_id})
         if isinstance(channel_ids, (list, Tuple)):
@@ -847,16 +1233,31 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.usergroups.removeChannels", params=kwargs)
 
     def admin_users_assign(
-        self, *, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        user_id: str,
+        channel_ids: Optional[Union[str, Sequence[str]]] = None,
+        is_restricted: Optional[bool] = None,
+        is_ultra_restricted: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an Enterprise user to a workspace.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): ID of the user to add to the workspace.
+        https://api.slack.com/methods/admin.users.assign
         """
-        kwargs.update({"team_id": team_id, "user_id": user_id})
-        return self.api_call("admin.users.assign", json=kwargs)
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "user_id": user_id,
+                "is_restricted": is_restricted,
+                "is_ultra_restricted": is_ultra_restricted,
+            }
+        )
+        if isinstance(channel_ids, (list, Tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call("admin.users.assign", params=kwargs)
 
     def admin_users_invite(
         self,
@@ -864,17 +1265,33 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: str,
         email: str,
         channel_ids: Union[str, Sequence[str]],
+        custom_message: Optional[str] = None,
+        email_password_policy_enabled: Optional[bool] = None,
+        guest_expiration_ts: Optional[Union[str, float]] = None,
+        is_restricted: Optional[bool] = None,
+        is_ultra_restricted: Optional[bool] = None,
+        real_name: Optional[str] = None,
+        resend: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a workspace.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            email (str): The email address of the person to invite. e.g. 'joe@email.com'
-            channel_ids (str or list): A list of channel_ids for this user to join.
-                At least one channel is required. e.g. ['C1A2B3C4D', 'C26Z25Y24']
+        https://api.slack.com/methods/admin.users.invite
         """
-        kwargs.update({"team_id": team_id, "email": email})
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "email": email,
+                "custom_message": custom_message,
+                "email_password_policy_enabled": email_password_policy_enabled,
+                "guest_expiration_ts": str(guest_expiration_ts)
+                if guest_expiration_ts is not None
+                else None,
+                "is_restricted": is_restricted,
+                "is_ultra_restricted": is_ultra_restricted,
+                "real_name": real_name,
+                "resend": resend,
+            }
+        )
         if isinstance(channel_ids, (list, Tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
@@ -882,160 +1299,236 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("admin.users.invite", params=kwargs)
 
     def admin_users_list(
-        self, *, team_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List users on a workspace
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
+        https://api.slack.com/methods/admin.users.list
         """
-        kwargs.update({"team_id": team_id})
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
         return self.api_call("admin.users.list", params=kwargs)
 
     def admin_users_remove(
-        self, *, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        user_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove a user from a workspace.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.remove
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
-        return self.api_call("admin.users.remove", json=kwargs)
+        return self.api_call("admin.users.remove", params=kwargs)
 
     def admin_users_setAdmin(
-        self, *, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        user_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest, regular user, or owner to be an admin user.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.setAdmin
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
-        return self.api_call("admin.users.setAdmin", json=kwargs)
+        return self.api_call("admin.users.setAdmin", params=kwargs)
 
     def admin_users_setExpiration(
-        self, *, expiration_ts: int, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        expiration_ts: int,
+        user_id: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an expiration for a guest user.
-
-        Args:
-            expiration_ts (int): Timestamp when guest account should be disabled. e.g. '1234567890'
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): The ID of the user to set an expiration for. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.setExpiration
         """
         kwargs.update(
             {"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id}
         )
-        return self.api_call("admin.users.setExpiration", json=kwargs)
+        return self.api_call("admin.users.setExpiration", params=kwargs)
 
     def admin_users_setOwner(
-        self, *, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        user_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest, regular user, or admin user to be a workspace owner.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.setOwner
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
-        return self.api_call("admin.users.setOwner", json=kwargs)
+        return self.api_call("admin.users.setOwner", params=kwargs)
 
     def admin_users_setRegular(
-        self, *, team_id: str, user_id: str, **kwargs
+        self,
+        *,
+        team_id: str,
+        user_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest user, admin user, or owner to be a regular user.
-
-        Args:
-            team_id (str): ID of the team. e.g. 'T1234'
-            user_id (str): The ID of the user to remove. e.g. 'W12345678'
+        https://api.slack.com/methods/admin.users.setRegular
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
-        return self.api_call("admin.users.setRegular", json=kwargs)
+        return self.api_call("admin.users.setRegular", params=kwargs)
 
-    def api_test(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Checks API calling code."""
-        return self.api_call("api.test", json=kwargs)
+    def api_test(
+        self,
+        *,
+        error: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Checks API calling code.
+        https://api.slack.com/methods/api.test
+        """
+        kwargs.update({"error": error})
+        return self.api_call("api.test", params=kwargs)
 
     def apps_connections_open(
-        self, *, app_token: str, **kwargs
+        self,
+        *,
+        app_token: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Get a new WSS URL for Socket Mode"""
+        """Generate a temporary Socket Mode WebSocket URL that your app can connect to
+        in order to receive events and interactive payloads
+        https://api.slack.com/methods/apps.connections.open
+        """
         kwargs.update({"token": app_token})
         return self.api_call("apps.connections.open", http_verb="POST", params=kwargs)
 
     def apps_event_authorizations_list(
-        self, event_context: str, **kwargs
+        self,
+        *,
+        event_context: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get a list of authorizations for the given event context.
         Each authorization represents an app installation that the event is visible to.
-        Args:
-            event_context (str): You'll receive an event_context identifying an event in each event payload sent to your app.
+        https://api.slack.com/methods/apps.event.authorizations.list
         """
-        kwargs.update({"event_context": event_context})
+        kwargs.update(
+            {"event_context": event_context, "cursor": cursor, "limit": limit}
+        )
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
     def apps_uninstall(
-        self, client_id: str, client_secret: str, **kwargs
+        self,
+        *,
+        client_id: str,
+        client_secret: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Uninstalls your app from a workspace.
-        Args:
-            client_id (str): Issued when you created your application. e.g. '56579136444.26251006572'
-            client_secret (str): Issued when you created your application. e.g. 'f25b5ceaf8a3c2a2c4f52bb4f0b0499e'
+        https://api.slack.com/methods/apps.uninstall
         """
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
         return self.api_call("apps.uninstall", params=kwargs)
 
-    def auth_revoke(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Revokes a token."""
+    def auth_revoke(
+        self,
+        *,
+        test: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Revokes a token.
+        https://api.slack.com/methods/auth.revoke
+        """
+        kwargs.update({"test": test})
         return self.api_call("auth.revoke", http_verb="GET", params=kwargs)
 
-    def auth_test(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Checks authentication & identity."""
-        return self.api_call("auth.test", json=kwargs)
+    def auth_test(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Checks authentication & identity.
+        https://api.slack.com/methods/auth.test
+        """
+        return self.api_call("auth.test", params=kwargs)
 
-    def bots_info(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets information about a bot user."""
+    def bots_info(
+        self,
+        *,
+        bot: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets information about a bot user.
+        https://api.slack.com/methods/bots.info
+        """
+        kwargs.update({"bot": bot, "team_id": team_id})
         return self.api_call("bots.info", http_verb="GET", params=kwargs)
 
     def calls_add(
-        self, *, external_unique_id: str, join_url: str, **kwargs
+        self,
+        *,
+        external_unique_id: str,
+        join_url: str,
+        created_by: Optional[str] = None,
+        date_start: Optional[int] = None,
+        desktop_app_join_url: Optional[str] = None,
+        external_display_id: Optional[str] = None,
+        title: Optional[str] = None,
+        users: Optional[Union[str, Sequence[Dict[str, str]]]] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers a new Call.
-
-        Args:
-            external_unique_id (str): An ID supplied by the 3rd-party Call provider.
-                It must be unique across all Calls from that service.
-                e.g. '025169F6-E37A-4E62-BB54-7F93A0FC4C1F'
-            join_url (str): The URL required for a client to join the Call.
-                e.g. 'https://example.com/calls/1234567890'
+        https://api.slack.com/methods/calls.add
         """
-        kwargs.update({"external_unique_id": external_unique_id, "join_url": join_url})
+        kwargs.update(
+            {
+                "external_unique_id": external_unique_id,
+                "join_url": join_url,
+                "created_by": created_by,
+                "date_start": date_start,
+                "desktop_app_join_url": desktop_app_join_url,
+                "external_display_id": external_display_id,
+                "title": title,
+            }
+        )
         _update_call_participants(  # skipcq: PTC-W0039
-            kwargs, kwargs.get("users", None)  # skipcq: PTC-W0039
+            kwargs,
+            users if users is not None else kwargs.get("users"),  # skipcq: PTC-W0039
         )  # skipcq: PTC-W0039
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     def calls_end(
-        self, *, id: str, **kwargs
+        self,
+        *,
+        id: str,
+        duration: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
         """Ends a Call.
-
-        Args:
-            id (str): id returned when registering the call using the calls.add method.
+        https://api.slack.com/methods/calls.end
         """
-        kwargs.update({"id": id})
+        kwargs.update({"id": id, "duration": duration})
         return self.api_call("calls.end", http_verb="POST", params=kwargs)
 
     def calls_info(
-        self, *, id: str, **kwargs
+        self,
+        *,
+        id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
         """Returns information about a Call.
-
-        Args:
-            id (str): id returned when registering the call using the calls.add method.
+        https://api.slack.com/methods/calls.info
         """
         kwargs.update({"id": id})
         return self.api_call("calls.info", http_verb="POST", params=kwargs)
@@ -1048,10 +1541,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers new participants added to a Call.
-
-        Args:
-            id (str): id returned when registering the call using the calls.add method.
-            users: (list): The list of users to add as participants in the Call.
+        https://api.slack.com/methods/calls.participants.add
         """
         kwargs.update({"id": id})
         _update_call_participants(kwargs, users)
@@ -1065,10 +1555,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers participants removed from a Call.
-
-        Args:
-            id (str): id returned when registering the call using the calls.add method.
-            users: (list): The list of users to remove as participants in the Call.
+        https://api.slack.com/methods/calls.participants.remove
         """
         kwargs.update({"id": id})
         _update_call_participants(kwargs, users)
@@ -1077,311 +1564,486 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def calls_update(
-        self, *, id: str, **kwargs
+        self,
+        *,
+        id: str,
+        desktop_app_join_url: Optional[str] = None,
+        join_url: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
         """Updates information about a Call.
-
-        Args:
-            id (str): id returned by the calls.add method.
+        https://api.slack.com/methods/calls.update
         """
-        kwargs.update({"id": id})
+        kwargs.update(
+            {
+                "id": id,
+                "desktop_app_join_url": desktop_app_join_url,
+                "join_url": join_url,
+                "title": title,
+            }
+        )
         return self.api_call("calls.update", http_verb="POST", params=kwargs)
 
-    def channels_archive(
-        self, *, channel: str, **kwargs
-    ) -> Union[Future, SlackResponse]:
-        """Archives a channel.
+    # --------------------------
+    # Deprecated: channels.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # --------------------------
 
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+    def channels_archive(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Archives a channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.archive", json=kwargs)
 
-    def channels_create(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Creates a channel.
-
-        Args:
-            name (str): The name of the channel. e.g. 'mychannel'
-        """
+    def channels_create(
+        self,
+        *,
+        name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Creates a channel."""
         kwargs.update({"name": name})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.create", json=kwargs)
 
     def channels_history(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Fetches history of messages and events from a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+        """Fetches history of messages and events from a channel."""
         kwargs.update({"channel": channel})
         return self.api_call("channels.history", http_verb="GET", params=kwargs)
 
-    def channels_info(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets information about a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+    def channels_info(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets information about a channel."""
         kwargs.update({"channel": channel})
         return self.api_call("channels.info", http_verb="GET", params=kwargs)
 
     def channels_invite(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Invites a user to a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            user (str): The user id. e.g. 'U1234567890'
-        """
+        """Invites a user to a channel."""
         kwargs.update({"channel": channel, "user": user})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.invite", json=kwargs)
 
-    def channels_join(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Joins a channel, creating it if needed.
-
-        Args:
-            name (str): The channel name. e.g. '#general'
-        """
+    def channels_join(
+        self,
+        *,
+        name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Joins a channel, creating it if needed."""
         kwargs.update({"name": name})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.join", json=kwargs)
 
     def channels_kick(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Removes a user from a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            user (str): The user id. e.g. 'U1234567890'
-        """
+        """Removes a user from a channel."""
         kwargs.update({"channel": channel, "user": user})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.kick", json=kwargs)
 
-    def channels_leave(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Leaves a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+    def channels_leave(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Leaves a channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.leave", json=kwargs)
 
-    def channels_list(self, **kwargs) -> Union[Future, SlackResponse]:
+    def channels_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Lists all channels in a Slack team."""
         return self.api_call("channels.list", http_verb="GET", params=kwargs)
 
     def channels_mark(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the read cursor in a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            ts (str): Timestamp of the most recently seen message. e.g. '1234567890.123456'
-        """
+        """Sets the read cursor in a channel."""
         kwargs.update({"channel": channel, "ts": ts})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.mark", json=kwargs)
 
     def channels_rename(
-        self, *, channel: str, name: str, **kwargs
+        self,
+        *,
+        channel: str,
+        name: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Renames a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            name (str): The new channel name. e.g. 'newchannel'
-        """
+        """Renames a channel."""
         kwargs.update({"channel": channel, "name": name})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.rename", json=kwargs)
 
     def channels_replies(
-        self, *, channel: str, thread_ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a channel
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            thread_ts (str): The timestamp of an existing message with 0 or more replies.
-                e.g. '1234567890.123456'
-        """
+        """Retrieve a thread of messages posted to a channel"""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("channels.replies", http_verb="GET", params=kwargs)
 
     def channels_setPurpose(
-        self, *, channel: str, purpose: str, **kwargs
+        self,
+        *,
+        channel: str,
+        purpose: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the purpose for a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            purpose (str): The new purpose for the channel. e.g. 'My Purpose'
-        """
+        """Sets the purpose for a channel."""
         kwargs.update({"channel": channel, "purpose": purpose})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.setPurpose", json=kwargs)
 
     def channels_setTopic(
-        self, *, channel: str, topic: str, **kwargs
+        self,
+        *,
+        channel: str,
+        topic: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the topic for a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            topic (str): The new topic for the channel. e.g. 'My Topic'
-        """
+        """Sets the topic for a channel."""
         kwargs.update({"channel": channel, "topic": topic})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.setTopic", json=kwargs)
 
     def channels_unarchive(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Unarchives a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+        """Unarchives a channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("channels.unarchive", json=kwargs)
 
+    # --------------------------
+
     def chat_delete(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        as_user: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a message.
-
-        Args:
-            channel (str): Channel containing the message to be deleted. e.g. 'C1234567890'
-            ts (str): Timestamp of the message to be deleted. e.g. '1234567890.123456'
+        https://api.slack.com/methods/chat.delete
         """
-        kwargs.update({"channel": channel, "ts": ts})
-        return self.api_call("chat.delete", json=kwargs)
+        kwargs.update({"channel": channel, "ts": ts, "as_user": as_user})
+        return self.api_call("chat.delete", params=kwargs)
 
     def chat_deleteScheduledMessage(
-        self, *, channel: str, scheduled_message_id: str, **kwargs
+        self,
+        *,
+        channel: str,
+        scheduled_message_id: str,
+        as_user: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a scheduled message.
-
-        Args:
-            channel (str): The channel the scheduled_message is posting to. e.g. 'C1234567890'
-            scheduled_message_id (str): scheduled_message_id returned from call to chat.scheduleMessage e.g. 'Q1234ABCD'
+        https://api.slack.com/methods/chat.deleteScheduledMessage
         """
         kwargs.update(
-            {"channel": channel, "scheduled_message_id": scheduled_message_id}
+            {
+                "channel": channel,
+                "scheduled_message_id": scheduled_message_id,
+                "as_user": as_user,
+            }
         )
-        return self.api_call("chat.deleteScheduledMessage", json=kwargs)
+        return self.api_call("chat.deleteScheduledMessage", params=kwargs)
 
     def chat_getPermalink(
-        self, *, channel: str, message_ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        message_ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve a permalink URL for a specific extant message
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            message_ts (str): The timestamp. e.g. '1234567890.123456'
+        https://api.slack.com/methods/chat.getPermalink
         """
         kwargs.update({"channel": channel, "message_ts": message_ts})
         return self.api_call("chat.getPermalink", http_verb="GET", params=kwargs)
 
     def chat_meMessage(
-        self, *, channel: str, text: str, **kwargs
+        self,
+        *,
+        channel: str,
+        text: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Share a me message into a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            text (str): The message you'd like to share. e.g. 'Hello world'
+        https://api.slack.com/methods/chat.meMessage
         """
         kwargs.update({"channel": channel, "text": text})
-        return self.api_call("chat.meMessage", json=kwargs)
+        return self.api_call("chat.meMessage", params=kwargs)
 
     def chat_postEphemeral(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        text: Optional[str] = None,
+        as_user: Optional[bool] = None,
+        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        thread_ts: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        link_names: Optional[bool] = None,
+        username: Optional[str] = None,
+        parse: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends an ephemeral message to a user in a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            user (str): The id of user who should see the message. e.g. 'U0BPQUNTA'
-            text (str): The message you'd like to share. e.g. 'Hello world'
-                text is not required when presenting blocks.
-            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
-                Blocks are required when not presenting text.
-                e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
+        https://api.slack.com/methods/chat.postEphemeral
         """
-        kwargs.update({"channel": channel, "user": user})
+        kwargs.update(
+            {
+                "channel": channel,
+                "user": user,
+                "text": text,
+                "as_user": as_user,
+                "attachments": attachments,
+                "blocks": blocks,
+                "thread_ts": thread_ts,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "link_names": link_names,
+                "username": username,
+                "parse": parse,
+            }
+        )
         _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.postEphemeral", kwargs)
+        # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postEphemeral", json=kwargs)
 
     def chat_postMessage(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        text: Optional[str] = None,
+        as_user: Optional[bool] = None,
+        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        thread_ts: Optional[str] = None,
+        reply_broadcast: Optional[bool] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        container_id: Optional[str] = None,
+        file_annotation: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        mrkdwn: Optional[bool] = None,
+        link_names: Optional[bool] = None,
+        username: Optional[str] = None,
+        parse: Optional[str] = None,  # none, full
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends a message to a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            text (str): The message you'd like to share. e.g. 'Hello world'
-                text is not required when presenting blocks.
-            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
-                Blocks are required when not presenting text.
-                e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
+        https://api.slack.com/methods/chat.postMessage
         """
-        kwargs.update({"channel": channel})
+        kwargs.update(
+            {
+                "channel": channel,
+                "text": text,
+                "as_user": as_user,
+                "attachments": attachments,
+                "blocks": blocks,
+                "thread_ts": thread_ts,
+                "reply_broadcast": reply_broadcast,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
+                "container_id": container_id,
+                "file_annotation": file_annotation,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "mrkdwn": mrkdwn,
+                "link_names": link_names,
+                "username": username,
+                "parse": parse,
+            }
+        )
         _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.postMessage", kwargs)
+        # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postMessage", json=kwargs)
 
     def chat_scheduleMessage(
-        self, *, channel: str, post_at: str, text: str, **kwargs
+        self,
+        *,
+        channel: str,
+        post_at: Union[str, int],
+        text: str,
+        as_user: Optional[bool] = None,
+        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        thread_ts: Optional[str] = None,
+        parse: Optional[str] = None,
+        reply_broadcast: Optional[bool] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        link_names: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Schedules a message.
-
-        Args:
-            channel (str): The channel the scheduled_message is posting to. e.g. 'C1234567890'
-            post_at (str): Unix EPOCH timestamp of time in future to send the message. e.g. '299876400'
-            text (str): The message you'd like to send. e.g. 'Hello world'
+        https://api.slack.com/methods/chat.scheduleMessage
         """
-        kwargs.update({"channel": channel, "post_at": post_at, "text": text})
+        kwargs.update(
+            {
+                "channel": channel,
+                "post_at": post_at,
+                "text": text,
+                "as_user": as_user,
+                "attachments": attachments,
+                "blocks": blocks,
+                "thread_ts": thread_ts,
+                "reply_broadcast": reply_broadcast,
+                "parse": parse,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
+                "link_names": link_names,
+            }
+        )
         _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.scheduleMessage", kwargs)
+        # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
     def chat_unfurl(
-        self, *, channel: str, ts: str, unfurls: dict, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        unfurls: Dict[str, Dict],
+        user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        user_auth_message: Optional[str] = None,
+        user_auth_required: Optional[bool] = None,
+        user_auth_url: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Provide custom unfurl behavior for user-posted URLs.
-
-        Args:
-            channel (str): The Channel ID of the message. e.g. 'C1234567890'
-            ts (str): Timestamp of the message to add unfurl behavior to. e.g. '1234567890.123456'
-            unfurls (dict): a dict of the specific URLs you're offering an unfurl for.
-                e.g. {"https://example.com/": {"text": "Every day is the test."}}
+        https://api.slack.com/methods/chat.unfurl
         """
-        kwargs.update({"channel": channel, "ts": ts, "unfurls": unfurls})
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "unfurls": unfurls,
+                "user_auth_blocks": user_auth_blocks,
+                "user_auth_message": user_auth_message,
+                "user_auth_required": user_auth_required,
+                "user_auth_url": user_auth_url,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.unfurl", json=kwargs)
 
     def chat_update(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        text: Optional[str] = None,
+        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        as_user: Optional[bool] = None,
+        link_names: Optional[bool] = None,
+        parse: Optional[str] = None,  # none, full
+        reply_broadcast: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates a message in a channel.
-
-        Args:
-            channel (str): The channel containing the message to be updated. e.g. 'C1234567890'
-            ts (str): Timestamp of the message to be updated. e.g. '1234567890.123456'
-            text (str): The message you'd like to share. e.g. 'Hello world'
-                text is not required when presenting blocks.
-            blocks (list): A list of either dict values or `slack_sdk.models.blocks.Block` objects.
-                Blocks are required when not presenting text.
-                e.g. [{"type": "section", "text": {"type": "plain_text", "text": "Hello world"}}]
+        https://api.slack.com/methods/chat.update
         """
-        kwargs.update({"channel": channel, "ts": ts})
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "text": text,
+                "attachments": attachments,
+                "blocks": blocks,
+                "as_user": as_user,
+                "link_names": link_names,
+                "parse": parse,
+                "reply_broadcast": reply_broadcast,
+            }
+        )
         _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.update", kwargs)
+        # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
 
-    def chat_scheduledMessages_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists all scheduled messages."""
+    def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all scheduled messages.
+        https://api.slack.com/methods/chat.scheduledMessages.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "latest": latest,
+                "limit": limit,
+                "oldest": oldest,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("chat.scheduledMessages.list", params=kwargs)
 
     def conversations_acceptSharedInvite(
@@ -1390,120 +2052,155 @@ class LegacyWebClient(LegacyBaseClient):
         channel_name: str,
         channel_id: Optional[str] = None,
         invite_id: Optional[str] = None,
+        free_trial_accepted: Optional[bool] = None,
+        is_private: Optional[bool] = None,
+        team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Accepts an invitation to a Slack Connect channel.
-
-        Args:
-            channel_name (str): The name of a channel, e.g. 'connectedchannel'
-            channel_id (str): Optional ID of the channel you'd like to accept
-            invite_id (str): Optional ID of the shared channel invitation
-
-            While both fields are optional, either channel_id or invite_id must be provided.
-
+        https://api.slack.com/methods/conversations.acceptSharedInvite
         """
         if channel_id is None and invite_id is None:
             raise e.SlackRequestError(
                 "Either channel_id or invite_id must be provided."
             )
-        kwargs.update({"channel_name": channel_name})
-        if channel_id:
-            kwargs.update({"channel_id": channel_id})
-        else:
-            kwargs.update({"invite_id": invite_id})
+        kwargs.update(
+            {
+                "channel_name": channel_name,
+                "channel_id": channel_id,
+                "invite_id": invite_id,
+                "free_trial_accepted": free_trial_accepted,
+                "is_private": is_private,
+                "team_id": team_id,
+            }
+        )
         return self.api_call(
             "conversations.acceptSharedInvite", http_verb="POST", params=kwargs
         )
 
     def conversations_approveSharedInvite(
-        self, *, invite_id: str, **kwargs
+        self,
+        *,
+        invite_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approves an invitation to a Slack Connect channel.
-
-        Args:
-            invite_id (str): ID of the shared channel invite to approve
+        https://api.slack.com/methods/conversations.approveSharedInvite
         """
-        kwargs.update({"invite_id": invite_id})
+        kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call(
             "conversations.approveSharedInvite", http_verb="POST", params=kwargs
         )
 
     def conversations_archive(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Archives a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.archive
         """
         kwargs.update({"channel": channel})
-        return self.api_call("conversations.archive", json=kwargs)
+        return self.api_call("conversations.archive", params=kwargs)
 
     def conversations_close(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Closes a direct message or multi-person direct message.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.close
         """
         kwargs.update({"channel": channel})
-        return self.api_call("conversations.close", json=kwargs)
+        return self.api_call("conversations.close", params=kwargs)
 
     def conversations_create(
-        self, *, name: str, **kwargs
+        self,
+        *,
+        name: str,
+        is_private: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Initiates a public or private channel-based conversation
-
-        Args:
-            name (str): The name of the channel. e.g. 'mychannel'
+        https://api.slack.com/methods/conversations.create
         """
-        kwargs.update({"name": name})
-        return self.api_call("conversations.create", json=kwargs)
+        kwargs.update({"name": name, "is_private": is_private, "team_id": team_id})
+        return self.api_call("conversations.create", params=kwargs)
 
     def conversations_declineSharedInvite(
-        self, *, invite_id: str, **kwargs
+        self,
+        *,
+        invite_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Declines a Slack Connect channel invite.
-
-        Args:
-            invite_id (str): ID of the Slack Connect invite to decline.
+        https://api.slack.com/methods/conversations.declineSharedInvite
         """
-        kwargs.update({"invite_id": invite_id})
+        kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call(
             "conversations.declineSharedInvite", http_verb="GET", params=kwargs
         )
 
     def conversations_history(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        cursor: Optional[str] = None,
+        inclusive: Optional[bool] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Fetches a conversation's history of messages and events.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.history
         """
-        kwargs.update({"channel": channel})
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "inclusive": inclusive,
+                "limit": limit,
+                "latest": latest,
+                "oldest": oldest,
+            }
+        )
         return self.api_call("conversations.history", http_verb="GET", params=kwargs)
 
     def conversations_info(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        include_locale: Optional[bool] = None,
+        include_num_members: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve information about a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.info
         """
-        kwargs.update({"channel": channel})
+        kwargs.update(
+            {
+                "channel": channel,
+                "include_locale": include_locale,
+                "include_num_members": include_num_members,
+            }
+        )
         return self.api_call("conversations.info", http_verb="GET", params=kwargs)
 
     def conversations_invite(
-        self, *, channel: str, users: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        channel: str,
+        users: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invites users to a channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            users (str or list): An list of user id's to invite. e.g. ['U2345678901', 'U3456789012']
+        https://api.slack.com/methods/conversations.invite
         """
         kwargs.update({"channel": channel})
         if isinstance(users, (list, Tuple)):
@@ -1521,13 +2218,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends an invitation to a Slack Connect channel.
-
-        Args:
-            channel (str): id of the channel on your team you'd like to share. e.g. 'C1234567890'
-            emails (str or list): Optional email or list of emails to receive this invite.
-            user_ids (str or list): Optional user id or list of user ids to receive this invite.
-
-            While both fields are optional, either emails or user ids must be provided.
+        https://api.slack.com/methods/conversations.inviteShared
         """
         if emails is None and user_ids is None:
             raise e.SlackRequestError("Either emails or user ids must be provided.")
@@ -1545,227 +2236,317 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def conversations_join(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Joins an existing conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.join
         """
         kwargs.update({"channel": channel})
-        return self.api_call("conversations.join", json=kwargs)
+        return self.api_call("conversations.join", params=kwargs)
 
     def conversations_kick(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Removes a user from a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            user (str): The id of the user to kick. e.g. 'U2345678901'
+        https://api.slack.com/methods/conversations.kick
         """
         kwargs.update({"channel": channel, "user": user})
-        return self.api_call("conversations.kick", json=kwargs)
+        return self.api_call("conversations.kick", params=kwargs)
 
     def conversations_leave(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Leaves a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.leave
         """
         kwargs.update({"channel": channel})
-        return self.api_call("conversations.leave", json=kwargs)
+        return self.api_call("conversations.leave", params=kwargs)
 
-    def conversations_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists all channels in a Slack team."""
+    def conversations_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        exclude_archived: Optional[bool] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        types: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all channels in a Slack team.
+        https://api.slack.com/methods/conversations.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "exclude_archived": exclude_archived,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
+        if isinstance(types, (list, Tuple)):
+            kwargs.update({"types": ",".join(types)})
+        else:
+            kwargs.update({"types": types})
         return self.api_call("conversations.list", http_verb="GET", params=kwargs)
 
     def conversations_listConnectInvites(
-        self, **kwargs
+        self,
+        *,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List shared channel invites that have been generated or received but have not yet been approved by all parties."""
-        return self.api_call("conversations.listConnectInvites", json=kwargs)
+        """List shared channel invites that have been generated
+        or received but have not yet been approved by all parties.
+        https://api.slack.com/methods/conversations.listConnectInvites
+        """
+        kwargs.update({"count": count, "cursor": cursor, "team_id": team_id})
+        return self.api_call("conversations.listConnectInvites", params=kwargs)
 
     def conversations_mark(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the read cursor in a channel.
-
-        Args:
-            channel (str): Channel or conversation to set the read cursor for e.g. 'C1234567890'
-            ts (str): Unique identifier of message to mark as most recently seen in the convo e.g. '1593473566.000200'
+        https://api.slack.com/methods/conversations.mark
         """
         kwargs.update({"channel": channel, "ts": ts})
-        return self.api_call("conversations.mark", json=kwargs)
+        return self.api_call("conversations.mark", params=kwargs)
 
     def conversations_members(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve members of a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.members
         """
-        kwargs.update({"channel": channel})
+        kwargs.update({"channel": channel, "cursor": cursor, "limit": limit})
         return self.api_call("conversations.members", http_verb="GET", params=kwargs)
 
-    def conversations_open(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Opens or resumes a direct message or multi-person direct message."""
-        return self.api_call("conversations.open", json=kwargs)
+    def conversations_open(
+        self,
+        *,
+        channel: Optional[str] = None,
+        return_im: Optional[bool] = None,
+        users: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Opens or resumes a direct message or multi-person direct message.
+        https://api.slack.com/methods/conversations.open
+        """
+        if channel is None and users is None:
+            raise e.SlackRequestError("Either channel or users must be provided.")
+        kwargs.update({"channel": channel, "return_im": return_im})
+        if isinstance(users, (list, Tuple)):
+            kwargs.update({"users": ",".join(users)})
+        else:
+            kwargs.update({"users": users})
+        return self.api_call("conversations.open", params=kwargs)
 
     def conversations_rename(
-        self, *, channel: str, name: str, **kwargs
+        self,
+        *,
+        channel: str,
+        name: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Renames a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            name (str): The new channel name. e.g. 'newchannel'
+        https://api.slack.com/methods/conversations.rename
         """
         kwargs.update({"channel": channel, "name": name})
-        return self.api_call("conversations.rename", json=kwargs)
+        return self.api_call("conversations.rename", params=kwargs)
 
     def conversations_replies(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        cursor: Optional[str] = None,
+        inclusive: Optional[bool] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve a thread of messages posted to a conversation
-
-        Args:
-            channel (str): Conversation ID to fetch thread from. e.g. 'C1234567890'
-            ts (str): Unique identifier of a thread's parent message. e.g. '1234567890.123456'
+        https://api.slack.com/methods/conversations.replies
         """
-        kwargs.update({"channel": channel, "ts": ts})
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "cursor": cursor,
+                "inclusive": inclusive,
+                "limit": limit,
+                "latest": latest,
+                "oldest": oldest,
+            }
+        )
         return self.api_call("conversations.replies", http_verb="GET", params=kwargs)
 
     def conversations_setPurpose(
-        self, *, channel: str, purpose: str, **kwargs
+        self,
+        *,
+        channel: str,
+        purpose: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the purpose for a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            purpose (str): The new purpose for the channel. e.g. 'My Purpose'
+        https://api.slack.com/methods/conversations.setPurpose
         """
         kwargs.update({"channel": channel, "purpose": purpose})
-        return self.api_call("conversations.setPurpose", json=kwargs)
+        return self.api_call("conversations.setPurpose", params=kwargs)
 
     def conversations_setTopic(
-        self, *, channel: str, topic: str, **kwargs
+        self,
+        *,
+        channel: str,
+        topic: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the topic for a conversation.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            topic (str): The new topic for the channel. e.g. 'My Topic'
+        https://api.slack.com/methods/conversations.setTopic
         """
         kwargs.update({"channel": channel, "topic": topic})
-        return self.api_call("conversations.setTopic", json=kwargs)
+        return self.api_call("conversations.setTopic", params=kwargs)
 
     def conversations_unarchive(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Reverses conversation archival.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
+        https://api.slack.com/methods/conversations.unarchive
         """
         kwargs.update({"channel": channel})
-        return self.api_call("conversations.unarchive", json=kwargs)
+        return self.api_call("conversations.unarchive", params=kwargs)
 
     def dialog_open(
-        self, *, dialog: dict, trigger_id: str, **kwargs
+        self,
+        *,
+        dialog: Dict[str, Any],
+        trigger_id: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Open a dialog with a user.
-
-        Args:
-            dialog (dict): A dictionary of dialog arguments.
-                {
-                    "callback_id": "46eh782b0",
-                    "title": "Request something",
-                    "submit_label": "Request",
-                    "state": "Max",
-                    "elements": [
-                        {
-                            "type": "text",
-                            "label": "Origin",
-                            "name": "loc_origin"
-                        },
-                        {
-                            "type": "text",
-                            "label": "Destination",
-                            "name": "loc_destination"
-                        }
-                    ]
-                }
-            trigger_id (str): The trigger id of a recent message interaction.
-                e.g. '12345.98765.abcd2358fdea'
+        https://api.slack.com/methods/dialog.open
         """
         kwargs.update({"dialog": dialog, "trigger_id": trigger_id})
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: As the dialog can be a dict, this API call works only with json format.
         return self.api_call("dialog.open", json=kwargs)
 
-    def dnd_endDnd(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Ends the current user's Do Not Disturb session immediately."""
-        return self.api_call("dnd.endDnd", json=kwargs)
+    def dnd_endDnd(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Ends the current user's Do Not Disturb session immediately.
+        https://api.slack.com/methods/dnd.endDnd
+        """
+        return self.api_call("dnd.endDnd", params=kwargs)
 
-    def dnd_endSnooze(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Ends the current user's snooze mode immediately."""
-        return self.api_call("dnd.endSnooze", json=kwargs)
+    def dnd_endSnooze(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Ends the current user's snooze mode immediately.
+        https://api.slack.com/methods/dnd.endSnooze
+        """
+        return self.api_call("dnd.endSnooze", params=kwargs)
 
-    def dnd_info(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Retrieves a user's current Do Not Disturb status."""
+    def dnd_info(
+        self,
+        *,
+        team_id: Optional[str] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieves a user's current Do Not Disturb status.
+        https://api.slack.com/methods/dnd.info
+        """
+        kwargs.update({"team_id": team_id, "user": user})
         return self.api_call("dnd.info", http_verb="GET", params=kwargs)
 
     def dnd_setSnooze(
-        self, *, num_minutes: int, **kwargs
+        self,
+        *,
+        num_minutes: Union[int, str],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Turns on Do Not Disturb mode for the current user, or changes its duration.
-
-        Args:
-            num_minutes (int): The snooze duration. e.g. 60
+        https://api.slack.com/methods/dnd.setSnooze
         """
         kwargs.update({"num_minutes": num_minutes})
         return self.api_call("dnd.setSnooze", http_verb="GET", params=kwargs)
 
     def dnd_teamInfo(
-        self, users: Union[str, Sequence[str]], **kwargs
+        self,
+        users: Union[str, Sequence[str]],
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieves the Do Not Disturb status for users on a team.
-
-        Args:
-            users (str or list): User IDs to fetch information e.g. 'U123,U234' or ["U123", "U234"]
+        https://api.slack.com/methods/dnd.teamInfo
         """
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
+        kwargs.update({"team_id": team_id})
         return self.api_call("dnd.teamInfo", http_verb="GET", params=kwargs)
 
-    def emoji_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists custom emoji for a team."""
+    def emoji_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists custom emoji for a team.
+        https://api.slack.com/methods/emoji.list
+        """
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     def files_comments_delete(
-        self, *, file: str, id: str, **kwargs  # skipcq: PYL-W0622
+        self,
+        *,
+        file: str,
+        id: str,
+        **kwargs,  # skipcq: PYL-W0622
     ) -> Union[Future, SlackResponse]:
         """Deletes an existing comment on a file.
-
-        Args:
-            file (str): The file id. e.g. 'F1234467890'
-            id (str): The file comment id. e.g. 'Fc1234567890'
+        https://api.slack.com/methods/files.comments.delete
         """
         kwargs.update({"file": file, "id": id})
-        return self.api_call("files.comments.delete", json=kwargs)
+        return self.api_call("files.comments.delete", params=kwargs)
 
-    def files_delete(self, *, file: str, **kwargs) -> Union[Future, SlackResponse]:
+    def files_delete(
+        self,
+        *,
+        file: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Deletes a file.
-
-        Args:
-            file (str): The file id. e.g. 'F1234467890'
+        https://api.slack.com/methods/files.delete
         """
         kwargs.update({"file": file})
-        return self.api_call("files.delete", json=kwargs)
+        return self.api_call("files.delete", params=kwargs)
 
     def files_info(
         self,
@@ -1778,13 +2559,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a team file.
-
-        Args:
-            file (str): The file id. e.g. 'F1234467890'
-            count (int): An optional number of items to return per page
-            cursor (str): An optional parameter for pagination
-            limit (int): An optional parameter defining the maximum number of items to return
-            page (int): An optional parameter defining the page number of results to return
+        https://api.slack.com/methods/files.info
         """
         kwargs.update(
             {
@@ -1797,35 +2572,111 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("files.info", http_verb="GET", params=kwargs)
 
-    def files_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists & filters team files."""
+    def files_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        count: Optional[int] = None,
+        page: Optional[int] = None,
+        show_files_hidden_by_limit: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        ts_from: Optional[str] = None,
+        ts_to: Optional[str] = None,
+        types: Optional[Union[str, Sequence[str]]] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists & filters team files.
+        https://api.slack.com/methods/files.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "count": count,
+                "page": page,
+                "show_files_hidden_by_limit": show_files_hidden_by_limit,
+                "team_id": team_id,
+                "ts_from": ts_from,
+                "ts_to": ts_to,
+                "user": user,
+            }
+        )
+        if isinstance(types, (list, Tuple)):
+            kwargs.update({"types": ",".join(types)})
+        else:
+            kwargs.update({"types": types})
         return self.api_call("files.list", http_verb="GET", params=kwargs)
 
-    def files_remote_info(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Retrieve information about a remote file added to Slack."""
+    def files_remote_info(
+        self,
+        *,
+        external_id: Optional[str] = None,
+        file: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve information about a remote file added to Slack.
+        https://api.slack.com/methods/files.remote.info
+        """
+        kwargs.update({"external_id": external_id, "file": file})
         return self.api_call("files.remote.info", http_verb="GET", params=kwargs)
 
-    def files_remote_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Retrieve information about a remote file added to Slack."""
+    def files_remote_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        ts_from: Optional[str] = None,
+        ts_to: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve information about a remote file added to Slack.
+        https://api.slack.com/methods/files.remote.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "limit": limit,
+                "ts_from": ts_from,
+                "ts_to": ts_to,
+            }
+        )
         return self.api_call("files.remote.list", http_verb="GET", params=kwargs)
 
     def files_remote_add(
-        self, *, external_id: str, external_url: str, title: str, **kwargs
+        self,
+        *,
+        external_id: str,
+        external_url: str,
+        title: str,
+        filetype: Optional[str] = None,
+        indexable_file_contents: Optional[Union[str, bytes, IOBase]] = None,
+        preview_image: Optional[Union[str, bytes, IOBase]] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Adds a file from a remote service.
-
-        Args:
-            external_id (str): Creator defined GUID for the file. e.g. '123456'
-            external_url (str): URL of the remote file. e.g. 'http://example.com/my_cloud_service_file/abc123'
-            title (str): Title of the file being shared. e.g. 'Danger, High Voltage!'
+        https://api.slack.com/methods/files.remote.add
         """
         kwargs.update(
-            {"external_id": external_id, "external_url": external_url, "title": title}
+            {
+                "external_id": external_id,
+                "external_url": external_url,
+                "title": title,
+                "filetype": filetype,
+            }
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if "preview_image" in kwargs:
-            files = {"preview_image": kwargs.pop("preview_image")}
+        if "preview_image" in kwargs or "indexable_file_contents" in kwargs:
+            files = {
+                "preview_image": preview_image
+                if preview_image is not None
+                else kwargs.pop("preview_image"),
+                "indexable_file_contents": indexable_file_contents
+                if indexable_file_contents is not None
+                else kwargs.pop("indexable_file_contents"),
+            }
 
         return self.api_call(
             # Intentionally using "POST" method over "GET" here
@@ -1835,67 +2686,120 @@ class LegacyWebClient(LegacyBaseClient):
             files=files,
         )
 
-    def files_remote_update(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Updates an existing remote file."""
-        return self.api_call("files.remote.update", http_verb="GET", params=kwargs)
+    def files_remote_update(
+        self,
+        *,
+        external_id: Optional[str] = None,
+        external_url: Optional[str] = None,
+        file: Optional[str] = None,
+        title: Optional[str] = None,
+        filetype: Optional[str] = None,
+        indexable_file_contents: Optional[str] = None,
+        preview_image: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Updates an existing remote file.
+        https://api.slack.com/methods/files.remote.update
+        """
+        kwargs.update(
+            {
+                "external_id": external_id,
+                "external_url": external_url,
+                "file": file,
+                "title": title,
+                "filetype": filetype,
+                "indexable_file_contents": indexable_file_contents,
+            }
+        )
+        files = None
+        # preview_image (file): Preview of the document via multipart/form-data.
+        if "preview_image" in kwargs:
+            files = {
+                "preview_image": preview_image
+                if preview_image is not None
+                else kwargs.pop("preview_image")
+            }
 
-    def files_remote_remove(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Remove a remote file."""
-        return self.api_call("files.remote.remove", http_verb="GET", params=kwargs)
+        return self.api_call(
+            # Intentionally using "POST" method over "GET" here
+            "files.remote.update",
+            http_verb="POST",
+            data=kwargs,
+            files=files,
+        )
+
+    def files_remote_remove(
+        self,
+        *,
+        external_id: Optional[str] = None,
+        file: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Remove a remote file.
+        https://api.slack.com/methods/files.remote.remove
+        """
+        kwargs.update({"external_id": external_id, "file": file})
+        return self.api_call("files.remote.remove", http_verb="POST", params=kwargs)
 
     def files_remote_share(
-        self, *, channels: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        channels: Union[str, Sequence[str]],
+        external_id: Optional[str] = None,
+        file: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Share a remote file into a channel.
-
-        Args:
-            channels (str or list): Comma-separated list of channel IDs where the file will be shared.
-                e.g. ['C1234567890', 'C2345678901']
+        https://api.slack.com/methods/files.remote.share
         """
+        if external_id is None and file is None:
+            raise e.SlackRequestError("Either external_id or file must be provided.")
         if isinstance(channels, (list, Tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
+        kwargs.update({"external_id": external_id, "file": file})
         return self.api_call("files.remote.share", http_verb="GET", params=kwargs)
 
     def files_revokePublicURL(
-        self, *, file: str, **kwargs
+        self,
+        *,
+        file: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Revokes public/external sharing access for a file
-
-        Args:
-            file (str): The file id. e.g. 'F1234467890'
+        https://api.slack.com/methods/files.revokePublicURL
         """
         kwargs.update({"file": file})
-        return self.api_call("files.revokePublicURL", json=kwargs)
+        return self.api_call("files.revokePublicURL", params=kwargs)
 
     def files_sharedPublicURL(
-        self, *, file: str, **kwargs
+        self,
+        *,
+        file: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Enables a file for public/external sharing.
-
-        Args:
-            file (str): The file id. e.g. 'F1234467890'
+        https://api.slack.com/methods/files.sharedPublicURL
         """
         kwargs.update({"file": file})
-        return self.api_call("files.sharedPublicURL", json=kwargs)
+        return self.api_call("files.sharedPublicURL", params=kwargs)
 
     def files_upload(
         self,
         *,
         file: Optional[Union[str, bytes, IOBase]] = None,
-        content: str = None,
+        content: Optional[str] = None,
+        filename: Optional[str] = None,
+        filetype: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        title: Optional[str] = None,
+        channels: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Uploads or creates a file.
-
-        Args:
-            file (str): Supply a file path.
-                when you'd like to upload a specific file. e.g. 'dramacat.gif'
-            content (str): Supply content when you'd like to create an
-                editable text file containing the specified text. e.g. 'launch plan'
-        Raises:
-            SlackRequestError: If neither or both the `file` and `content` args are specified.
+        https://api.slack.com/methods/files.upload
         """
         if file is None and content is None:
             raise e.SlackRequestError("The file or content argument must be specified.")
@@ -1910,291 +2814,344 @@ class LegacyWebClient(LegacyBaseClient):
                 kwargs["filename"] = file.split(os.path.sep)[-1]
             return self.api_call("files.upload", files={"file": file}, data=kwargs)
         data = kwargs.copy()
-        data.update({"content": content})
+        data.update(
+            {
+                "content": content,
+                "filename": filename,
+                "filetype": filetype,
+                "initial_comment": initial_comment,
+                "thread_ts": thread_ts,
+                "title": title,
+            }
+        )
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({"channels": ",".join(channels)})
+        else:
+            kwargs.update({"channels": channels})
         return self.api_call("files.upload", data=data)
 
-    def groups_archive(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Archives a private channel.
+    # --------------------------
+    # Deprecated: groups.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # --------------------------
 
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+    def groups_archive(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Archives a private channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.archive", json=kwargs)
 
-    def groups_create(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Creates a private channel.
-
-        Args:
-            name (str): The name of the private group. e.g. 'mychannel'
-        """
+    def groups_create(
+        self,
+        *,
+        name: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Creates a private channel."""
         kwargs.update({"name": name})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.create", json=kwargs)
 
     def groups_createChild(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Clones and archives a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-        """
+        """Clones and archives a private channel."""
         kwargs.update({"channel": channel})
         return self.api_call("groups.createChild", http_verb="GET", params=kwargs)
 
-    def groups_history(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Fetches history of messages and events from a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-        """
+    def groups_history(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetches history of messages and events from a private channel."""
         kwargs.update({"channel": channel})
         return self.api_call("groups.history", http_verb="GET", params=kwargs)
 
-    def groups_info(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets information about a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-        """
+    def groups_info(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets information about a private channel."""
         kwargs.update({"channel": channel})
         return self.api_call("groups.info", http_verb="GET", params=kwargs)
 
     def groups_invite(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Invites a user to a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-            user (str): The user id. e.g. 'U1234567890'
-        """
+        """Invites a user to a private channel."""
         kwargs.update({"channel": channel, "user": user})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.invite", json=kwargs)
 
     def groups_kick(
-        self, *, channel: str, user: str, **kwargs
+        self,
+        *,
+        channel: str,
+        user: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Removes a user from a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-            user (str): The user id. e.g. 'U1234567890'
-        """
+        """Removes a user from a private channel."""
         kwargs.update({"channel": channel, "user": user})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.kick", json=kwargs)
 
-    def groups_leave(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Leaves a private channel.
-
-        Args:
-            channel (str): The group id. e.g. 'G1234567890'
-        """
+    def groups_leave(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Leaves a private channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.leave", json=kwargs)
 
-    def groups_list(self, **kwargs) -> Union[Future, SlackResponse]:
+    def groups_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Lists private channels that the calling user has access to."""
         return self.api_call("groups.list", http_verb="GET", params=kwargs)
 
     def groups_mark(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the read cursor in a private channel.
-
-        Args:
-            channel (str): Private channel to set reading cursor in. e.g. 'C1234567890'
-            ts (str): Timestamp of the most recently seen message. e.g. '1234567890.123456'
-        """
+        """Sets the read cursor in a private channel."""
         kwargs.update({"channel": channel, "ts": ts})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.mark", json=kwargs)
 
-    def groups_open(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Opens a private channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-        """
+    def groups_open(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Opens a private channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.open", json=kwargs)
 
     def groups_rename(
-        self, *, channel: str, name: str, **kwargs
+        self,
+        *,
+        channel: str,
+        name: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Renames a private channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            name (str): The new channel name. e.g. 'newchannel'
-        """
+        """Renames a private channel."""
         kwargs.update({"channel": channel, "name": name})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.rename", json=kwargs)
 
     def groups_replies(
-        self, *, channel: str, thread_ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a private channel
-
-        Args:
-            channel (str): The channel id. e.g. 'C1234567890'
-            thread_ts (str): The timestamp of an existing message with 0 or more replies.
-                e.g. '1234567890.123456'
-        """
+        """Retrieve a thread of messages posted to a private channel"""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("groups.replies", http_verb="GET", params=kwargs)
 
     def groups_setPurpose(
-        self, *, channel: str, purpose: str, **kwargs
+        self,
+        *,
+        channel: str,
+        purpose: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the purpose for a private channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'G1234567890'
-            purpose (str): The new purpose for the channel. e.g. 'My Purpose'
-        """
+        """Sets the purpose for a private channel."""
         kwargs.update({"channel": channel, "purpose": purpose})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.setPurpose", json=kwargs)
 
     def groups_setTopic(
-        self, *, channel: str, topic: str, **kwargs
+        self,
+        *,
+        channel: str,
+        topic: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the topic for a private channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'G1234567890'
-            topic (str): The new topic for the channel. e.g. 'My Topic'
-        """
+        """Sets the topic for a private channel."""
         kwargs.update({"channel": channel, "topic": topic})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.setTopic", json=kwargs)
 
     def groups_unarchive(
-        self, *, channel: str, **kwargs
+        self,
+        *,
+        channel: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Unarchives a private channel.
-
-        Args:
-            channel (str): The channel id. e.g. 'G1234567890'
-        """
+        """Unarchives a private channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("groups.unarchive", json=kwargs)
 
-    def im_close(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Close a direct message channel.
+    # --------------------------
+    # Deprecated: im.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # --------------------------
 
-        Args:
-            channel (str): Direct message channel to close. e.g. 'D1234567890'
-        """
+    def im_close(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Close a direct message channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.close", json=kwargs)
 
-    def im_history(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Fetches history of messages and events from direct message channel.
-
-        Args:
-            channel (str): Direct message channel to fetch history from. e.g. 'D1234567890'
-        """
+    def im_history(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetches history of messages and events from direct message channel."""
         kwargs.update({"channel": channel})
         return self.api_call("im.history", http_verb="GET", params=kwargs)
 
-    def im_list(self, **kwargs) -> Union[Future, SlackResponse]:
+    def im_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Lists direct message channels for the calling user."""
         return self.api_call("im.list", http_verb="GET", params=kwargs)
 
     def im_mark(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the read cursor in a direct message channel.
-
-        Args:
-            channel (str): Direct message channel to set reading cursor in. e.g. 'D1234567890'
-            ts (str): Timestamp of the most recently seen message. e.g. '1234567890.123456'
-        """
+        """Sets the read cursor in a direct message channel."""
         kwargs.update({"channel": channel, "ts": ts})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.mark", json=kwargs)
 
-    def im_open(self, *, user: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Opens a direct message channel.
-
-        Args:
-            user (str): The user id to open a DM with. e.g. 'W1234567890'
-        """
+    def im_open(
+        self,
+        *,
+        user: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Opens a direct message channel."""
         kwargs.update({"user": user})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("im.open", json=kwargs)
 
     def im_replies(
-        self, *, channel: str, thread_ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a direct message conversation
-
-        Args:
-            channel (str): Direct message channel to fetch thread from. e.g. 'C1234567890'
-            thread_ts (str): The timestamp of an existing message with 0 or more replies.
-                e.g. '1234567890.123456'
-        """
+        """Retrieve a thread of messages posted to a direct message conversation"""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("im.replies", http_verb="GET", params=kwargs)
 
+    # --------------------------
+
     def migration_exchange(
-        self, *, users: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        users: Union[str, Sequence[str]],
+        team_id: Optional[str] = None,
+        to_old: Optional[bool] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """For Enterprise Grid workspaces, map local user IDs to global user IDs
-
-        Args:
-            users (str or list): A list of user ids, up to 400 per request.
-                e.g. ['W1234567890', 'U2345678901', 'U3456789012']
+        https://api.slack.com/methods/migration.exchange
         """
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
+        kwargs.update({"team_id": team_id, "to_old": to_old})
         return self.api_call("migration.exchange", http_verb="GET", params=kwargs)
 
-    def mpim_close(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Closes a multiparty direct message channel.
+    # --------------------------
+    # Deprecated: mpim.*
+    # You can use conversations.* APIs instead.
+    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # --------------------------
 
-        Args:
-            channel (str): Multiparty Direct message channel to close. e.g. 'G1234567890'
-        """
+    def mpim_close(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Closes a multiparty direct message channel."""
         kwargs.update({"channel": channel})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("mpim.close", json=kwargs)
 
-    def mpim_history(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
-        """Fetches history of messages and events from a multiparty direct message.
-
-        Args:
-            channel (str): Multiparty direct message to fetch history for. e.g. 'G1234567890'
-        """
+    def mpim_history(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetches history of messages and events from a multiparty direct message."""
         kwargs.update({"channel": channel})
         return self.api_call("mpim.history", http_verb="GET", params=kwargs)
 
-    def mpim_list(self, **kwargs) -> Union[Future, SlackResponse]:
+    def mpim_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Lists multiparty direct message channels for the calling user."""
         return self.api_call("mpim.list", http_verb="GET", params=kwargs)
 
     def mpim_mark(
-        self, *, channel: str, ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the read cursor in a multiparty direct message channel.
-
-        Args:
-            channel (str): Multiparty direct message channel to set reading cursor in.
-                e.g. 'G1234567890'
-            ts (str): Timestamp of the most recently seen message.
-                e.g. '1234567890.123456'
-        """
+        """Sets the read cursor in a multiparty direct message channel."""
         kwargs.update({"channel": channel, "ts": ts})
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("mpim.mark", json=kwargs)
 
     def mpim_open(
-        self, *, users: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        users: Union[str, Sequence[str]],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """This method opens a multiparty direct message.
-
-        Args:
-            users (str or list): A lists of user ids. The ordering of the users
-                is preserved whenever a MPIM group is returned.
-                e.g. ['W1234567890', 'U2345678901', 'U3456789012']
-        """
+        """This method opens a multiparty direct message."""
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
@@ -2202,19 +3159,19 @@ class LegacyWebClient(LegacyBaseClient):
         return self.api_call("mpim.open", params=kwargs)
 
     def mpim_replies(
-        self, *, channel: str, thread_ts: str, **kwargs
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve a thread of messages posted to a direct message conversation from a
         multiparty direct message.
-
-        Args:
-            channel (str): Multiparty direct message channel to fetch thread from.
-                e.g. 'G1234567890'
-            thread_ts (str): Unique identifier of a thread's parent message.
-                e.g. '1234567890.123456'
         """
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("mpim.replies", http_verb="GET", params=kwargs)
+
+    # --------------------------
 
     def oauth_v2_access(
         self,
@@ -2232,15 +3189,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
-
-        Args:
-            client_id (str): Issued when you created your application. e.g. '4b39e9-752c4'
-            client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
-            code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
-            redirect_uri (optional str): Must match the originally submitted URI
-                (if one was sent). e.g. 'https://example.com'
-            grant_type: The grant type. The possible value is only 'refresh_token' as of July 2021.
-            refresh_token: The refresh token for token rotation.
+        https://api.slack.com/methods/oauth.v2.access
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -2266,13 +3215,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
-
-        Args:
-            client_id (str): Issued when you created your application. e.g. '4b39e9-752c4'
-            client_secret (str): Issued when you created your application. e.g. '33fea0113f5b1'
-            code (str): The code param returned via the OAuth callback. e.g. 'ccdaa72ad'
-            redirect_uri (optional str): Must match the originally submitted URI
-                (if one was sent). e.g. 'https://example.com'
+        https://api.slack.com/methods/oauth.access
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -2284,14 +3227,15 @@ class LegacyWebClient(LegacyBaseClient):
         )
 
     def oauth_v2_exchange(
-        self, *, token: str, client_id: str, client_secret: str, **kwargs
+        self,
+        *,
+        token: str,
+        client_id: str,
+        client_secret: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a legacy access token for a new expiring access token and refresh token
-
-        Args:
-            token: The legacy xoxb or xoxp token being migrated to use token rotation.
-            client_id: Issued when you created your application.
-            client_secret: Issued when you created your application.
+        https://api.slack.com/methods/oauth.v2.exchange
         """
         kwargs.update(
             {"client_id": client_id, "client_secret": client_secret, "token": token}
@@ -2309,14 +3253,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
-
-        Args:
-            client_id (str): Issued when you created your application.
-            client_secret (str): Issued when you created your application.
-            code (str): The code param returned via the OAuth callback.
-            redirect_uri (optional str): This must match the originally submitted URI (if one was sent).
-            grant_type: The grant_type param as described in the OAuth spec.
-            refresh_token: The refresh_token param as described in the OAuth spec.
+        https://api.slack.com/methods/openid.connect.token
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -2332,409 +3269,873 @@ class LegacyWebClient(LegacyBaseClient):
             auth={"client_id": client_id, "client_secret": client_secret},
         )
 
-    def openid_connect_userInfo(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Get the identity of a user who has authorized Sign in with Slack."""
+    def openid_connect_userInfo(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get the identity of a user who has authorized Sign in with Slack.
+        https://api.slack.com/methods/openid.connect.userInfo
+        """
         return self.api_call("openid.connect.userInfo", params=kwargs)
 
-    def pins_add(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
+    def pins_add(
+        self,
+        *,
+        channel: str,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Pins an item to a channel.
-
-        Args:
-            channel (str): Channel to pin the item in. e.g. 'C1234567890'
-            file (str): File id to pin. e.g. 'F1234567890'
-            file_comment (str): File comment to pin. e.g. 'Fc1234567890'
-            timestamp (str): Timestamp of message to pin. e.g. '1234567890.123456'
+        https://api.slack.com/methods/pins.add
         """
-        kwargs.update({"channel": channel})
-        return self.api_call("pins.add", json=kwargs)
+        kwargs.update({"channel": channel, "timestamp": timestamp})
+        return self.api_call("pins.add", params=kwargs)
 
-    def pins_list(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
+    def pins_list(
+        self,
+        *,
+        channel: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Lists items pinned to a channel.
-
-        Args:
-            channel (str): Channel to get pinned items for. e.g. 'C1234567890'
+        https://api.slack.com/methods/pins.list
         """
         kwargs.update({"channel": channel})
         return self.api_call("pins.list", http_verb="GET", params=kwargs)
 
-    def pins_remove(self, *, channel: str, **kwargs) -> Union[Future, SlackResponse]:
+    def pins_remove(
+        self,
+        *,
+        channel: str,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Un-pins an item from a channel.
-
-        Args:
-            channel (str): Channel to pin the item in. e.g. 'C1234567890'
-            file (str): File id to pin. e.g. 'F1234567890'
-            file_comment (str): File comment to pin. e.g. 'Fc1234567890'
-            timestamp (str): Timestamp of message to pin. e.g. '1234567890.123456'
+        https://api.slack.com/methods/pins.remove
         """
-        kwargs.update({"channel": channel})
-        return self.api_call("pins.remove", json=kwargs)
+        kwargs.update({"channel": channel, "timestamp": timestamp})
+        return self.api_call("pins.remove", params=kwargs)
 
-    def reactions_add(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
+    def reactions_add(
+        self,
+        *,
+        channel: str,
+        name: str,
+        timestamp: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Adds a reaction to an item.
-
-        Args:
-            name (str): Reaction (emoji) name. e.g. 'thumbsup'
-            channel (str): Channel where the message to add reaction to was posted.
-                e.g. 'C1234567890'
-            timestamp (str): Timestamp of the message to add reaction to. e.g. '1234567890.123456'
+        https://api.slack.com/methods/reactions.add
         """
-        kwargs.update({"name": name})
-        return self.api_call("reactions.add", json=kwargs)
+        kwargs.update({"channel": channel, "name": name, "timestamp": timestamp})
+        return self.api_call("reactions.add", params=kwargs)
 
-    def reactions_get(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets reactions for an item."""
+    def reactions_get(
+        self,
+        *,
+        channel: Optional[str] = None,
+        file: Optional[str] = None,
+        file_comment: Optional[str] = None,
+        full: Optional[bool] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets reactions for an item.
+        https://api.slack.com/methods/reactions.get
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "file": file,
+                "file_comment": file_comment,
+                "full": full,
+                "timestamp": timestamp,
+            }
+        )
         return self.api_call("reactions.get", http_verb="GET", params=kwargs)
 
-    def reactions_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists reactions made by a user."""
+    def reactions_list(
+        self,
+        *,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        full: Optional[bool] = None,
+        limit: Optional[int] = None,
+        page: Optional[int] = None,
+        team_id: Optional[str] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists reactions made by a user.
+        https://api.slack.com/methods/reactions.list
+        """
+        kwargs.update(
+            {
+                "count": count,
+                "cursor": cursor,
+                "full": full,
+                "limit": limit,
+                "page": page,
+                "team_id": team_id,
+                "user": user,
+            }
+        )
         return self.api_call("reactions.list", http_verb="GET", params=kwargs)
 
-    def reactions_remove(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
+    def reactions_remove(
+        self,
+        *,
+        name: str,
+        channel: Optional[str] = None,
+        file: Optional[str] = None,
+        file_comment: Optional[str] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Removes a reaction from an item.
-
-        Args:
-            name (str): Reaction (emoji) name. e.g. 'thumbsup'
+        https://api.slack.com/methods/reactions.remove
         """
-        kwargs.update({"name": name})
-        return self.api_call("reactions.remove", json=kwargs)
+        kwargs.update(
+            {
+                "name": name,
+                "channel": channel,
+                "file": file,
+                "file_comment": file_comment,
+                "timestamp": timestamp,
+            }
+        )
+        return self.api_call("reactions.remove", params=kwargs)
 
     def reminders_add(
-        self, *, text: str, time: str, **kwargs
+        self,
+        *,
+        text: str,
+        time: str,
+        team_id: Optional[str] = None,
+        user: Optional[str] = None,
+        recurrence: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Creates a reminder.
-
-        Args:
-            text (str): The content of the reminder. e.g. 'eat a banana'
-            time (str): When this reminder should happen:
-                the Unix timestamp (up to five years from now e.g. '1602288000'),
-                the number of seconds until the reminder (if within 24 hours),
-                or a natural language description (Ex. 'in 15 minutes' or 'every Thursday')
+        https://api.slack.com/methods/reminders.add
         """
-        kwargs.update({"text": text, "time": time})
-        return self.api_call("reminders.add", json=kwargs)
+        kwargs.update(
+            {
+                "text": text,
+                "time": time,
+                "team_id": team_id,
+                "user": user,
+                "recurrence": recurrence,
+            }
+        )
+        return self.api_call("reminders.add", params=kwargs)
 
     def reminders_complete(
-        self, *, reminder: str, **kwargs
+        self,
+        *,
+        reminder: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Marks a reminder as complete.
-
-        Args:
-            reminder (str): The ID of the reminder to be marked as complete.
-                e.g. 'Rm12345678'
+        https://api.slack.com/methods/reminders.complete
         """
-        kwargs.update({"reminder": reminder})
-        return self.api_call("reminders.complete", json=kwargs)
+        kwargs.update({"reminder": reminder, "team_id": team_id})
+        return self.api_call("reminders.complete", params=kwargs)
 
     def reminders_delete(
-        self, *, reminder: str, **kwargs
+        self,
+        *,
+        reminder: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a reminder.
-
-        Args:
-            reminder (str): The ID of the reminder. e.g. 'Rm12345678'
+        https://api.slack.com/methods/reminders.delete
         """
-        kwargs.update({"reminder": reminder})
-        return self.api_call("reminders.delete", json=kwargs)
+        kwargs.update({"reminder": reminder, "team_id": team_id})
+        return self.api_call("reminders.delete", params=kwargs)
 
     def reminders_info(
-        self, *, reminder: str, **kwargs
+        self,
+        *,
+        reminder: str,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a reminder.
-
-        Args:
-            reminder (str): The ID of the reminder. e.g. 'Rm12345678'
+        https://api.slack.com/methods/reminders.info
         """
-        kwargs.update({"reminder": reminder})
+        kwargs.update({"reminder": reminder, "team_id": team_id})
         return self.api_call("reminders.info", http_verb="GET", params=kwargs)
 
-    def reminders_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists all reminders created by or for a given user."""
+    def reminders_list(
+        self,
+        *,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all reminders created by or for a given user.
+        https://api.slack.com/methods/reminders.list
+        """
+        kwargs.update({"team_id": team_id})
         return self.api_call("reminders.list", http_verb="GET", params=kwargs)
 
-    def rtm_connect(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Starts a Real Time Messaging session."""
+    def rtm_connect(
+        self,
+        *,
+        batch_presence_aware: Optional[bool] = None,
+        presence_sub: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Starts a Real Time Messaging session.
+        https://api.slack.com/methods/rtm.connect
+        """
+        kwargs.update(
+            {"batch_presence_aware": batch_presence_aware, "presence_sub": presence_sub}
+        )
         return self.api_call("rtm.connect", http_verb="GET", params=kwargs)
 
-    def rtm_start(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Starts a Real Time Messaging session."""
+    def rtm_start(
+        self,
+        *,
+        batch_presence_aware: Optional[bool] = None,
+        include_locale: Optional[bool] = None,
+        mpim_aware: Optional[bool] = None,
+        no_latest: Optional[bool] = None,
+        no_unreads: Optional[bool] = None,
+        presence_sub: Optional[bool] = None,
+        simple_latest: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Starts a Real Time Messaging session.
+        https://api.slack.com/methods/rtm.start
+        """
+        kwargs.update(
+            {
+                "batch_presence_aware": batch_presence_aware,
+                "include_locale": include_locale,
+                "mpim_aware": mpim_aware,
+                "no_latest": no_latest,
+                "no_unreads": no_unreads,
+                "presence_sub": presence_sub,
+                "simple_latest": simple_latest,
+            }
+        )
         return self.api_call("rtm.start", http_verb="GET", params=kwargs)
 
-    def search_all(self, *, query: str, **kwargs) -> Union[Future, SlackResponse]:
+    def search_all(
+        self,
+        *,
+        query: str,
+        count: Optional[int] = None,
+        highlight: Optional[bool] = None,
+        page: Optional[int] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Searches for messages and files matching a query.
-
-        Args:
-            query (str): Search query. May contains booleans, etc.
-                e.g. 'pickleface'
+        https://api.slack.com/methods/search.all
         """
-        kwargs.update({"query": query})
+        kwargs.update(
+            {
+                "query": query,
+                "count": count,
+                "highlight": highlight,
+                "page": page,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("search.all", http_verb="GET", params=kwargs)
 
-    def search_files(self, *, query: str, **kwargs) -> Union[Future, SlackResponse]:
+    def search_files(
+        self,
+        *,
+        query: str,
+        count: Optional[int] = None,
+        highlight: Optional[bool] = None,
+        page: Optional[int] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Searches for files matching a query.
-
-        Args:
-            query (str): Search query. May contains booleans, etc.
-                e.g. 'pickleface'
+        https://api.slack.com/methods/search.files
         """
-        kwargs.update({"query": query})
+        kwargs.update(
+            {
+                "query": query,
+                "count": count,
+                "highlight": highlight,
+                "page": page,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("search.files", http_verb="GET", params=kwargs)
 
-    def search_messages(self, *, query: str, **kwargs) -> Union[Future, SlackResponse]:
+    def search_messages(
+        self,
+        *,
+        query: str,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        highlight: Optional[bool] = None,
+        page: Optional[int] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Searches for messages matching a query.
-
-        Args:
-            query (str): Search query. May contains booleans, etc.
-                e.g. 'pickleface'
+        https://api.slack.com/methods/search.messages
         """
-        kwargs.update({"query": query})
+        kwargs.update(
+            {
+                "query": query,
+                "count": count,
+                "cursor": cursor,
+                "highlight": highlight,
+                "page": page,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("search.messages", http_verb="GET", params=kwargs)
 
-    def stars_add(self, **kwargs) -> Union[Future, SlackResponse]:
+    def stars_add(
+        self,
+        *,
+        channel: Optional[str] = None,
+        file: Optional[str] = None,
+        file_comment: Optional[str] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Adds a star to an item.
-
-        Args:
-            channel (str): Channel to add star to, or channel where the message to add
-                star to was posted (used with timestamp). e.g. 'C1234567890'
-            file (str): File to add star to. e.g. 'F1234567890'
-            file_comment (str): File comment to add star to. e.g. 'Fc1234567890'
-            timestamp (str): Timestamp of the message to add star to. e.g. '1234567890.123456'
+        https://api.slack.com/methods/stars.add
         """
-        return self.api_call("stars.add", json=kwargs)
+        kwargs.update(
+            {
+                "channel": channel,
+                "file": file,
+                "file_comment": file_comment,
+                "timestamp": timestamp,
+            }
+        )
+        return self.api_call("stars.add", params=kwargs)
 
-    def stars_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists stars for a user."""
+    def stars_list(
+        self,
+        *,
+        count: Optional[int] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        page: Optional[int] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists stars for a user.
+        https://api.slack.com/methods/stars.list
+        """
+        kwargs.update(
+            {
+                "count": count,
+                "cursor": cursor,
+                "limit": limit,
+                "page": page,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("stars.list", http_verb="GET", params=kwargs)
 
-    def stars_remove(self, **kwargs) -> Union[Future, SlackResponse]:
+    def stars_remove(
+        self,
+        *,
+        channel: Optional[str] = None,
+        file: Optional[str] = None,
+        file_comment: Optional[str] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Removes a star from an item.
-
-        Args:
-            channel (str): Channel to remove star from, or channel where
-                the message to remove star from was posted (used with timestamp). e.g. 'C1234567890'
-            file (str): File to remove star from. e.g. 'F1234567890'
-            file_comment (str): File comment to remove star from. e.g. 'Fc1234567890'
-            timestamp (str): Timestamp of the message to remove star from. e.g. '1234567890.123456'
+        https://api.slack.com/methods/stars.remove
         """
-        return self.api_call("stars.remove", json=kwargs)
+        kwargs.update(
+            {
+                "channel": channel,
+                "file": file,
+                "file_comment": file_comment,
+                "timestamp": timestamp,
+            }
+        )
+        return self.api_call("stars.remove", params=kwargs)
 
-    def team_accessLogs(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets the access logs for the current team."""
+    def team_accessLogs(
+        self,
+        *,
+        before: Optional[Union[int, str]] = None,
+        count: Optional[Union[int, str]] = None,
+        page: Optional[Union[int, str]] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets the access logs for the current team.
+        https://api.slack.com/methods/team.accessLogs
+        """
+        kwargs.update(
+            {
+                "before": before,
+                "count": count,
+                "page": page,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("team.accessLogs", http_verb="GET", params=kwargs)
 
-    def team_billableInfo(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets billable users information for the current team."""
+    def team_billableInfo(
+        self,
+        *,
+        team_id: Optional[str] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets billable users information for the current team.
+        https://api.slack.com/methods/team.billableInfo
+        """
+        kwargs.update({"team_id": team_id, "user": user})
         return self.api_call("team.billableInfo", http_verb="GET", params=kwargs)
 
-    def team_info(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets information about the current team."""
+    def team_info(
+        self,
+        *,
+        team: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets information about the current team.
+        https://api.slack.com/methods/team.info
+        """
+        kwargs.update({"team": team})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
-    def team_integrationLogs(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Gets the integration logs for the current team."""
+    def team_integrationLogs(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        change_type: Optional[str] = None,
+        count: Optional[Union[int, str]] = None,
+        page: Optional[Union[int, str]] = None,
+        service_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Gets the integration logs for the current team.
+        https://api.slack.com/methods/team.integrationLogs
+        """
+        kwargs.update(
+            {
+                "app_id": app_id,
+                "change_type": change_type,
+                "count": count,
+                "page": page,
+                "service_id": service_id,
+                "team_id": team_id,
+                "user": user,
+            }
+        )
         return self.api_call("team.integrationLogs", http_verb="GET", params=kwargs)
 
-    def team_profile_get(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Retrieve a team's profile."""
+    def team_profile_get(
+        self,
+        *,
+        visibility: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve a team's profile.
+        https://api.slack.com/methods/team.profile.get
+        """
+        kwargs.update({"visibility": visibility})
         return self.api_call("team.profile.get", http_verb="GET", params=kwargs)
 
-    def usergroups_create(self, *, name: str, **kwargs) -> Union[Future, SlackResponse]:
+    def usergroups_create(
+        self,
+        *,
+        name: str,
+        channels: Optional[Union[str, Sequence[str]]] = None,
+        description: Optional[str] = None,
+        handle: Optional[str] = None,
+        include_count: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Create a User Group
-
-        Args:
-            name (str): A name for the User Group. Must be unique among User Groups.
-                e.g. 'My Test Team'
+        https://api.slack.com/methods/usergroups.create
         """
-        kwargs.update({"name": name})
-        return self.api_call("usergroups.create", json=kwargs)
+        kwargs.update(
+            {
+                "name": name,
+                "description": description,
+                "handle": handle,
+                "include_count": include_count,
+                "team_id": team_id,
+            }
+        )
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({"channels": ",".join(channels)})
+        else:
+            kwargs.update({"channels": channels})
+        return self.api_call("usergroups.create", params=kwargs)
 
     def usergroups_disable(
-        self, *, usergroup: str, **kwargs
+        self,
+        *,
+        usergroup: str,
+        include_count: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Disable an existing User Group
-
-        Args:
-            usergroup (str): The encoded ID of the User Group to disable.
-                e.g. 'S0604QSJC'
+        https://api.slack.com/methods/usergroups.disable
         """
-        kwargs.update({"usergroup": usergroup})
-        return self.api_call("usergroups.disable", json=kwargs)
+        kwargs.update(
+            {"usergroup": usergroup, "include_count": include_count, "team_id": team_id}
+        )
+        return self.api_call("usergroups.disable", params=kwargs)
 
     def usergroups_enable(
-        self, *, usergroup: str, **kwargs
+        self,
+        *,
+        usergroup: str,
+        include_count: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Enable a User Group
-
-        Args:
-            usergroup (str): The encoded ID of the User Group to enable.
-                e.g. 'S0604QSJC'
+        https://api.slack.com/methods/usergroups.enable
         """
-        kwargs.update({"usergroup": usergroup})
-        return self.api_call("usergroups.enable", json=kwargs)
+        kwargs.update(
+            {"usergroup": usergroup, "include_count": include_count, "team_id": team_id}
+        )
+        return self.api_call("usergroups.enable", params=kwargs)
 
-    def usergroups_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List all User Groups for a team"""
+    def usergroups_list(
+        self,
+        *,
+        include_count: Optional[bool] = None,
+        include_disabled: Optional[bool] = None,
+        include_users: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List all User Groups for a team
+        https://api.slack.com/methods/usergroups.list
+        """
+        kwargs.update(
+            {
+                "include_count": include_count,
+                "include_disabled": include_disabled,
+                "include_users": include_users,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("usergroups.list", http_verb="GET", params=kwargs)
 
     def usergroups_update(
-        self, *, usergroup: str, **kwargs
+        self,
+        *,
+        usergroup: str,
+        channels: Optional[Union[str, Sequence[str]]] = None,
+        description: Optional[str] = None,
+        handle: Optional[str] = None,
+        include_count: Optional[bool] = None,
+        name: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update an existing User Group
-
-        Args:
-            usergroup (str): The encoded ID of the User Group to update.
-                e.g. 'S0604QSJC'
+        https://api.slack.com/methods/usergroups.update
         """
-        kwargs.update({"usergroup": usergroup})
-        return self.api_call("usergroups.update", json=kwargs)
+        kwargs.update(
+            {
+                "usergroup": usergroup,
+                "description": description,
+                "handle": handle,
+                "include_count": include_count,
+                "name": name,
+                "team_id": team_id,
+            }
+        )
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({"channels": ",".join(channels)})
+        else:
+            kwargs.update({"channels": channels})
+        return self.api_call("usergroups.update", params=kwargs)
 
     def usergroups_users_list(
-        self, *, usergroup: str, **kwargs
+        self,
+        *,
+        usergroup: str,
+        include_disabled: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all users in a User Group
-
-        Args:
-            usergroup (str): The encoded ID of the User Group to update.
-                e.g. 'S0604QSJC'
+        https://api.slack.com/methods/usergroups.users.list
         """
-        kwargs.update({"usergroup": usergroup})
+        kwargs.update(
+            {
+                "usergroup": usergroup,
+                "include_disabled": include_disabled,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("usergroups.users.list", http_verb="GET", params=kwargs)
 
     def usergroups_users_update(
-        self, *, usergroup: str, users: Union[str, Sequence[str]], **kwargs
+        self,
+        *,
+        usergroup: str,
+        users: Union[str, Sequence[str]],
+        include_count: Optional[bool] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update the list of users for a User Group
-
-        Args:
-            usergroup (str): The encoded ID of the User Group to update.
-                e.g. 'S0604QSJC'
-            users (str or list): A list user IDs that represent the entire list of
-                users for the User Group. e.g. ['U060R4BJ4', 'U060RNRCZ']
+        https://api.slack.com/methods/usergroups.users.update
         """
-        kwargs.update({"usergroup": usergroup})
+        kwargs.update(
+            {
+                "usergroup": usergroup,
+                "include_count": include_count,
+                "team_id": team_id,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
         return self.api_call("usergroups.users.update", params=kwargs)
 
-    def users_conversations(self, **kwargs) -> Union[Future, SlackResponse]:
-        """List conversations the calling user may access."""
+    def users_conversations(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        exclude_archived: Optional[bool] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        types: Optional[Union[str, Sequence[str]]] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List conversations the calling user may access.
+        https://api.slack.com/methods/users.conversations
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "exclude_archived": exclude_archived,
+                "limit": limit,
+                "team_id": team_id,
+                "user": user,
+            }
+        )
+        if isinstance(types, (list, Tuple)):
+            kwargs.update({"types": ",".join(types)})
+        else:
+            kwargs.update({"types": types})
         return self.api_call("users.conversations", http_verb="GET", params=kwargs)
 
-    def users_deletePhoto(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Delete the user profile photo"""
+    def users_deletePhoto(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Delete the user profile photo
+        https://api.slack.com/methods/users.deletePhoto
+        """
         return self.api_call("users.deletePhoto", http_verb="GET", params=kwargs)
 
-    def users_getPresence(self, *, user: str, **kwargs) -> Union[Future, SlackResponse]:
+    def users_getPresence(
+        self,
+        *,
+        user: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Gets user presence information.
-
-        Args:
-            user (str): User to get presence info on. Defaults to the authed user.
-                e.g. 'W1234567890'
+        https://api.slack.com/methods/users.getPresence
         """
         kwargs.update({"user": user})
         return self.api_call("users.getPresence", http_verb="GET", params=kwargs)
 
-    def users_identity(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Get a user's identity."""
+    def users_identity(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get a user's identity.
+        https://api.slack.com/methods/users.identity
+        """
         return self.api_call("users.identity", http_verb="GET", params=kwargs)
 
-    def users_info(self, *, user: str, **kwargs) -> Union[Future, SlackResponse]:
+    def users_info(
+        self,
+        *,
+        user: str,
+        include_locale: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
         """Gets information about a user.
-
-        Args:
-            user (str): User to get info on.
-                e.g. 'W1234567890'
+        https://api.slack.com/methods/users.info
         """
-        kwargs.update({"user": user})
+        kwargs.update({"user": user, "include_locale": include_locale})
         return self.api_call("users.info", http_verb="GET", params=kwargs)
 
-    def users_list(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Lists all users in a Slack team."""
+    def users_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        include_locale: Optional[bool] = None,
+        limit: Optional[int] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all users in a Slack team.
+        https://api.slack.com/methods/users.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "include_locale": include_locale,
+                "limit": limit,
+                "team_id": team_id,
+            }
+        )
         return self.api_call("users.list", http_verb="GET", params=kwargs)
 
     def users_lookupByEmail(
-        self, *, email: str, **kwargs
+        self,
+        *,
+        email: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Find a user with an email address.
-
-        Args:
-            email (str): An email address belonging to a user in the workspace.
-                e.g. 'spengler@ghostbusters.example.com'
+        https://api.slack.com/methods/users.lookupByEmail
         """
         kwargs.update({"email": email})
         return self.api_call("users.lookupByEmail", http_verb="GET", params=kwargs)
 
     def users_setPhoto(
-        self, *, image: Union[str, IOBase], **kwargs
+        self,
+        *,
+        image: Union[str, IOBase],
+        crop_w: Optional[Union[int, str]] = None,
+        crop_x: Optional[Union[int, str]] = None,
+        crop_y: Optional[Union[int, str]] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the user profile photo
-
-        Args:
-            image (str): Supply the path of the image you'd like to upload.
-                e.g. 'myimage.png'
+        https://api.slack.com/methods/users.setPhoto
         """
+        kwargs.update({"crop_w": crop_w, "crop_x": crop_x, "crop_y": crop_y})
         return self.api_call("users.setPhoto", files={"image": image}, data=kwargs)
 
     def users_setPresence(
-        self, *, presence: str, **kwargs
+        self,
+        *,
+        presence: str,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Manually sets user presence.
-
-        Args:
-            presence (str): Either 'auto' or 'away'.
+        https://api.slack.com/methods/users.setPresence
         """
         kwargs.update({"presence": presence})
-        return self.api_call("users.setPresence", json=kwargs)
+        return self.api_call("users.setPresence", params=kwargs)
 
-    def users_profile_get(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Retrieves a user's profile information."""
+    def users_profile_get(
+        self,
+        *,
+        user: Optional[str] = None,
+        include_labels: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieves a user's profile information.
+        https://api.slack.com/methods/users.profile.get
+        """
+        kwargs.update({"user": user, "include_labels": include_labels})
         return self.api_call("users.profile.get", http_verb="GET", params=kwargs)
 
-    def users_profile_set(self, **kwargs) -> Union[Future, SlackResponse]:
-        """Set the profile information for a user."""
+    def users_profile_set(
+        self,
+        *,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+        user: Optional[str] = None,
+        profile: Optional[Dict] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set the profile information for a user.
+        https://api.slack.com/methods/users.profile.set
+        """
+        kwargs.update(
+            {
+                "name": name,
+                "profile": profile,
+                "user": user,
+                "value": value,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "profile" parameter
         return self.api_call("users.profile.set", json=kwargs)
 
     def views_open(
-        self, *, trigger_id: str, view: Union[dict, View], **kwargs
+        self,
+        *,
+        trigger_id: str,
+        view: Union[dict, View],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Open a view for a user.
+        https://api.slack.com/methods/views.open
         See https://api.slack.com/block-kit/surfaces/modals for details.
-
-        Args:
-            trigger_id (str): Exchange a trigger to post to the user.
-                e.g. '12345.98765.abcd2358fdea'
-            view (dict or View): The view payload.
         """
         kwargs.update({"trigger_id": trigger_id})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.open", json=kwargs)
 
     def views_push(
-        self, *, trigger_id: str, view: Union[dict, View], **kwargs
+        self,
+        *,
+        trigger_id: str,
+        view: Union[dict, View],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Push a view onto the stack of a root view.
-
         Push a new view onto the existing view stack by passing a view
         payload and a valid trigger_id generated from an interaction
         within the existing modal.
-
         Read the modals documentation (https://api.slack.com/block-kit/surfaces/modals)
         to learn more about the lifecycle and intricacies of views.
-
-        Args:
-            trigger_id (str): Exchange a trigger to post to the user.
-                e.g. '12345.98765.abcd2358fdea'
-            view (dict or View): The view payload.
+        https://api.slack.com/methods/views.push
         """
-        kwargs.update({"trigger_id": trigger_id, "view": view})
+        kwargs.update({"trigger_id": trigger_id})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.push", json=kwargs)
 
     def views_update(
@@ -2743,24 +4144,15 @@ class LegacyWebClient(LegacyBaseClient):
         view: Union[dict, View],
         external_id: Optional[str] = None,
         view_id: Optional[str] = None,
+        hash: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update an existing view.
-
         Update a view by passing a new view definition along with the
         view_id returned in views.open or the external_id.
-
         See the modals documentation (https://api.slack.com/block-kit/surfaces/modals#updating_views)
         to learn more about updating views and avoiding race conditions with the hash argument.
-
-        Args:
-            view (dict or View): The view payload.
-            external_id (str): A unique identifier of the view set by the developer.
-                e.g. 'bmarley_view2'
-            view_id (str): A unique identifier of the view to be updated.
-                e.g. 'VMM512F2U'
-        Raises:
-            SlackRequestError: Either view_id or external_id is required.
+        https://api.slack.com/methods/views.update
         """
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
@@ -2772,81 +4164,86 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"view_id": view_id})
         else:
             raise e.SlackRequestError("Either view_id or external_id is required.")
-
+        kwargs.update({"hash": hash})
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.update", json=kwargs)
 
     def views_publish(
-        self, *, user_id: str, view: Union[dict, View], **kwargs
+        self,
+        *,
+        user_id: str,
+        view: Union[dict, View],
+        hash: Optional[str] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Publish a static view for a User.
         Create or update the view that comprises an
         app's Home tab (https://api.slack.com/surfaces/tabs)
-        for a specific user.
-        Args:
-            user_id (str): id of the user you want publish a view to.
-                e.g. 'U0BPQUNTA'
-            view (dict or View): The view payload.
+        https://api.slack.com/methods/views.publish
         """
-        kwargs.update({"user_id": user_id})
+        kwargs.update({"user_id": user_id, "hash": hash})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
             kwargs.update({"view": view})
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.publish", json=kwargs)
 
     def workflows_stepCompleted(
-        self, *, workflow_step_execute_id: str, outputs: Optional[dict] = None, **kwargs
+        self,
+        *,
+        workflow_step_execute_id: str,
+        outputs: Optional[dict] = None,
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Indicate a successful outcome of a workflow step's execution.
-        Args:
-            workflow_step_execute_id (str): A unique identifier of the workflow step to be updated.
-                e.g. 'add_task'
-            outputs (dict): A key-value object of outputs from your step.
-                e.g. { 'task_name': 'Task Name' }
+        https://api.slack.com/methods/workflows.stepCompleted
         """
         kwargs.update({"workflow_step_execute_id": workflow_step_execute_id})
-        if outputs:
+        if outputs is not None:
             kwargs.update({"outputs": outputs})
-
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "outputs" parameter
         return self.api_call("workflows.stepCompleted", json=kwargs)
 
     def workflows_stepFailed(
-        self, *, workflow_step_execute_id: str, error: dict, **kwargs
+        self,
+        *,
+        workflow_step_execute_id: str,
+        error: Dict[str, str],
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Indicate an unsuccessful outcome of a workflow step's execution.
-        Args:
-            workflow_step_execute_id (str): A unique identifier of the workflow step to be updated.
-                e.g. 'add_task'
-            error (dict): A dict with a message property that contains a human readable error message
-                e.g. { message: 'Step failed to execute.' }
+        https://api.slack.com/methods/workflows.stepFailed
         """
         kwargs.update(
-            {"workflow_step_execute_id": workflow_step_execute_id, "error": error}
+            {
+                "workflow_step_execute_id": workflow_step_execute_id,
+                "error": error,
+            }
         )
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "error" parameter
         return self.api_call("workflows.stepFailed", json=kwargs)
 
     def workflows_updateStep(
         self,
         *,
         workflow_step_edit_id: str,
-        inputs: Optional[dict] = None,
-        outputs: Optional[list] = None,
+        inputs: Optional[Dict[str, Any]] = None,
+        outputs: Optional[List[Dict[str, str]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update the configuration for a workflow extension step.
-        Args:
-            workflow_step_edit_id (str): A unique identifier of the workflow step to be updated.
-                e.g. 'add_task'
-            inputs (dict): A key-value object of inputs required from a user during step configuration.
-                e.g. { 'title': { 'value': 'The Title' }, 'submitter': { 'value': 'The Submitter' } }
-            outputs (list): A list of output objects used during step execution.
-                e.g. [{ 'type': 'text', 'name': 'title', 'label': 'Title' }]
+        https://api.slack.com/methods/workflows.updateStep
         """
         kwargs.update({"workflow_step_edit_id": workflow_step_edit_id})
-
-        if inputs:
+        if inputs is not None:
             kwargs.update({"inputs": inputs})
-        if outputs:
+        if outputs is not None:
             kwargs.update({"outputs": outputs})
-
+        kwargs = _remove_none_values(kwargs)
+        # NOTE: Intentionally using json for the "inputs" / "outputs" parameters
         return self.api_call("workflows.updateStep", json=kwargs)

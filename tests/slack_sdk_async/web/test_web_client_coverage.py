@@ -71,6 +71,11 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(app_id="AID123", request_id="RID123")["method"]
                 )
                 await async_method(app_id="AID123", request_id="RID123")
+            elif method_name == "admin_apps_restrict":
+                self.api_methods_to_call.remove(
+                    method(app_id="AID123", request_id="RID123")["method"]
+                )
+                await async_method(app_id="AID123", request_id="RID123")
             elif method_name == "admin_apps_uninstall":
                 self.api_methods_to_call.remove(
                     method(
@@ -141,6 +146,24 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "admin_barriers_delete":
                 self.api_methods_to_call.remove(method(barrier_id="AAA")["method"])
                 await async_method(barrier_id="AAA")
+            elif method_name == "admin_emoji_add":
+                self.api_methods_to_call.remove(
+                    method(name="eyes", url="https://www.example.com/")["method"]
+                )
+                await async_method(name="eyes", url="https://www.example.com/")
+            elif method_name == "admin_emoji_addAlias":
+                self.api_methods_to_call.remove(
+                    method(name="watching", alias_for="eyes")["method"]
+                )
+                await async_method(name="watching", alias_for="eyes")
+            elif method_name == "admin_emoji_remove":
+                self.api_methods_to_call.remove(method(name="eyes")["method"])
+                await async_method(name="eyes")
+            elif method_name == "admin_emoji_rename":
+                self.api_methods_to_call.remove(
+                    method(name="eyes", new_name="eyez")["method"]
+                )
+                await async_method(name="eyes", new_name="eyez")
             elif method_name == "admin_inviteRequests_approve":
                 self.api_methods_to_call.remove(
                     method(invite_request_id="ID123")["method"]
@@ -495,6 +518,9 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "conversations_close":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
+            elif method_name == "conversations_open":
+                self.api_methods_to_call.remove(method(channel="C123")["method"])
+                await async_method(channel="C123")
             elif method_name == "conversations_create":
                 self.api_methods_to_call.remove(method(name="announcements")["method"])
                 await async_method(name="announcements")
@@ -621,10 +647,12 @@ class TestWebClientCoverage(unittest.TestCase):
                     title="File title",
                 )
             elif method_name == "files_remote_share":
-                self.api_methods_to_call.remove(method(channels="C123,G123")["method"])
-                method(channels=["C123", "G123"])
-                method(channels="C123,G123")
-                await async_method(channels="C123,G123")
+                self.api_methods_to_call.remove(
+                    method(external_id="xxx", channels="C123,G123")["method"]
+                )
+                method(external_id="xxx", channels=["C123", "G123"])
+                method(external_id="xxx", channels="C123,G123")
+                await async_method(external_id="xxx", channels="C123,G123")
             elif method_name == "migration_exchange":
                 self.api_methods_to_call.remove(method(users="U123,U234")["method"])
                 method(users="U123,U234")
@@ -643,8 +671,10 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "reactions_add":
-                self.api_methods_to_call.remove(method(name="eyes")["method"])
-                await async_method(name="eyes")
+                self.api_methods_to_call.remove(
+                    method(name="eyes", channel="C111", timestamp="111.222")["method"]
+                )
+                await async_method(name="eyes", channel="C111", timestamp="111.222")
             elif method_name == "reactions_remove":
                 self.api_methods_to_call.remove(method(name="eyes")["method"])
                 await async_method(name="eyes")

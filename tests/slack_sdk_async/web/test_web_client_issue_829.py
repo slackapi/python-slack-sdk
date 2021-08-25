@@ -24,7 +24,7 @@ class TestWebClient_Issue_829(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertEqual(
-                "The request to the Slack API failed.\n"
+                "The request to the Slack API failed. (url: http://localhost:8888/users.list)\n"
                 "The server responded with: {}",
                 str(e),
             )

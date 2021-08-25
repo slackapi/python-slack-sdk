@@ -204,5 +204,5 @@ class AsyncSlackResponse:
             and (isinstance(self.data, bytes) or self.data.get("ok", False))
         ):
             return self
-        msg = "The request to the Slack API failed."
+        msg = f"The request to the Slack API failed. (url: {self.api_url})"
         raise e.SlackApiError(message=msg, response=self)

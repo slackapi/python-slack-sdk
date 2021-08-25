@@ -279,3 +279,14 @@ def _build_unexpected_body_error_message(body: str) -> str:
         body_for_logging = body_for_logging[:100] + "..."
     message = f"Received a response in a non-JSON format: {body_for_logging}"
     return message
+
+
+def _remove_none_values(d: dict) -> dict:
+    # To avoid having null values in JSON (Slack API does not work with null in many situations)
+    #
+    # >>> import json
+    # >>> d = {"a": None, "b":123}
+    # >>> json.dumps(d)
+    # '{"a": null, "b": 123}'
+    #
+    return {k: v for k, v in d.items() if v is not None}
