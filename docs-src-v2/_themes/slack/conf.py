@@ -52,8 +52,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'slackclient (Legacy Python Slack SDK)'
-copyright = u'2015–2016 Slack Technologies, Inc. and contributors'
-author = u'Slack Technologies, Inc. and contributors'
+copyright = u'2015– Slack Technologies, LLC and contributors'
+author = u'Slack Technologies, LLC and contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
