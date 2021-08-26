@@ -2808,15 +2808,12 @@ class LegacyWebClient(LegacyBaseClient):
                 "You cannot specify both the file and the content argument."
             )
 
-        if file:
-            if "filename" not in kwargs and isinstance(file, str):
-                # use the local filename if filename is missing
-                kwargs["filename"] = file.split(os.path.sep)[-1]
-            return self.api_call("files.upload", files={"file": file}, data=kwargs)
-        data = kwargs.copy()
-        data.update(
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({"channels": ",".join(channels)})
+        else:
+            kwargs.update({"channels": channels})
+        kwargs.update(
             {
-                "content": content,
                 "filename": filename,
                 "filetype": filetype,
                 "initial_comment": initial_comment,
@@ -2824,11 +2821,15 @@ class LegacyWebClient(LegacyBaseClient):
                 "title": title,
             }
         )
-        if isinstance(channels, (list, Tuple)):
-            kwargs.update({"channels": ",".join(channels)})
+        if file:
+            if "filename" not in kwargs and isinstance(file, str):
+                # use the local filename if filename is missing
+                if kwargs.get("filename") is None:
+                    kwargs["filename"] = file.split(os.path.sep)[-1]
+            return self.api_call("files.upload", files={"file": file}, data=kwargs)
         else:
-            kwargs.update({"channels": channels})
-        return self.api_call("files.upload", data=data)
+            kwargs["content"] = content
+            return self.api_call("files.upload", data=kwargs)
 
     # --------------------------
     # Deprecated: groups.*
