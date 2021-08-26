@@ -2826,15 +2826,12 @@ class WebClient(BaseClient):
                 &#34;You cannot specify both the file and the content argument.&#34;
             )
 
-        if file:
-            if &#34;filename&#34; not in kwargs and isinstance(file, str):
-                # use the local filename if filename is missing
-                kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-            return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
-        data = kwargs.copy()
-        data.update(
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+        else:
+            kwargs.update({&#34;channels&#34;: channels})
+        kwargs.update(
             {
-                &#34;content&#34;: content,
                 &#34;filename&#34;: filename,
                 &#34;filetype&#34;: filetype,
                 &#34;initial_comment&#34;: initial_comment,
@@ -2842,11 +2839,15 @@ class WebClient(BaseClient):
                 &#34;title&#34;: title,
             }
         )
-        if isinstance(channels, (list, Tuple)):
-            kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+        if file:
+            if &#34;filename&#34; not in kwargs and isinstance(file, str):
+                # use the local filename if filename is missing
+                if kwargs.get(&#34;filename&#34;) is None:
+                    kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
+            return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
         else:
-            kwargs.update({&#34;channels&#34;: channels})
-        return self.api_call(&#34;files.upload&#34;, data=data)
+            kwargs[&#34;content&#34;] = content
+            return self.api_call(&#34;files.upload&#34;, data=kwargs)
 
     # --------------------------
     # Deprecated: groups.*
@@ -7112,15 +7113,12 @@ removed at anytime.</p></div>
                 &#34;You cannot specify both the file and the content argument.&#34;
             )
 
-        if file:
-            if &#34;filename&#34; not in kwargs and isinstance(file, str):
-                # use the local filename if filename is missing
-                kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-            return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
-        data = kwargs.copy()
-        data.update(
+        if isinstance(channels, (list, Tuple)):
+            kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+        else:
+            kwargs.update({&#34;channels&#34;: channels})
+        kwargs.update(
             {
-                &#34;content&#34;: content,
                 &#34;filename&#34;: filename,
                 &#34;filetype&#34;: filetype,
                 &#34;initial_comment&#34;: initial_comment,
@@ -7128,11 +7126,15 @@ removed at anytime.</p></div>
                 &#34;title&#34;: title,
             }
         )
-        if isinstance(channels, (list, Tuple)):
-            kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+        if file:
+            if &#34;filename&#34; not in kwargs and isinstance(file, str):
+                # use the local filename if filename is missing
+                if kwargs.get(&#34;filename&#34;) is None:
+                    kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
+            return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
         else:
-            kwargs.update({&#34;channels&#34;: channels})
-        return self.api_call(&#34;files.upload&#34;, data=data)
+            kwargs[&#34;content&#34;] = content
+            return self.api_call(&#34;files.upload&#34;, data=kwargs)
 
     # --------------------------
     # Deprecated: groups.*
@@ -12934,15 +12936,12 @@ or received but have not yet been approved by all parties.
             &#34;You cannot specify both the file and the content argument.&#34;
         )
 
-    if file:
-        if &#34;filename&#34; not in kwargs and isinstance(file, str):
-            # use the local filename if filename is missing
-            kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-        return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
-    data = kwargs.copy()
-    data.update(
+    if isinstance(channels, (list, Tuple)):
+        kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+    else:
+        kwargs.update({&#34;channels&#34;: channels})
+    kwargs.update(
         {
-            &#34;content&#34;: content,
             &#34;filename&#34;: filename,
             &#34;filetype&#34;: filetype,
             &#34;initial_comment&#34;: initial_comment,
@@ -12950,11 +12949,15 @@ or received but have not yet been approved by all parties.
             &#34;title&#34;: title,
         }
     )
-    if isinstance(channels, (list, Tuple)):
-        kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
+    if file:
+        if &#34;filename&#34; not in kwargs and isinstance(file, str):
+            # use the local filename if filename is missing
+            if kwargs.get(&#34;filename&#34;) is None:
+                kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
+        return self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
     else:
-        kwargs.update({&#34;channels&#34;: channels})
-    return self.api_call(&#34;files.upload&#34;, data=data)</code></pre>
+        kwargs[&#34;content&#34;] = content
+        return self.api_call(&#34;files.upload&#34;, data=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.groups_archive"><code class="name flex">
