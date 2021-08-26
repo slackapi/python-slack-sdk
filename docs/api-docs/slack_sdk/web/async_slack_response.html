@@ -110,6 +110,9 @@ class AsyncSlackResponse:
             )
         return f&#34;{self.data}&#34;
 
+    def __contains__(self, key: str) -&gt; bool:
+        return self.get(key) is not None
+
     def __getitem__(self, key):
         &#34;&#34;&#34;Retrieves any key from the data store.
 
@@ -124,6 +127,10 @@ class AsyncSlackResponse:
         if isinstance(self.data, bytes):
             raise ValueError(
                 &#34;As the response.data is binary data, this operation is unsupported&#34;
+            )
+        if self.data is None:
+            raise ValueError(
+                &#34;As the response.data is empty, this operation is unsupported&#34;
             )
         return self.data.get(key, None)
 
@@ -206,6 +213,8 @@ class AsyncSlackResponse:
             raise ValueError(
                 &#34;As the response.data is binary data, this operation is unsupported&#34;
             )
+        if self.data is None:
+            return None
         return self.data.get(key, default)
 
     def validate(self):
@@ -218,21 +227,13 @@ class AsyncSlackResponse:
         Raises:
             SlackApiError: The request to the Slack API failed.
         &#34;&#34;&#34;
-        if self._logger.level &lt;= logging.DEBUG:
-            body = self.data if isinstance(self.data, dict) else &#34;(binary)&#34;
-            self._logger.debug(
-                &#34;Received the following response - &#34;
-                f&#34;status: {self.status_code}, &#34;
-                f&#34;headers: {dict(self.headers)}, &#34;
-                f&#34;body: {body}&#34;
-            )
         if (
             self.status_code == 200
             and self.data
             and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False))
         ):
             return self
-        msg = &#34;The request to the Slack API failed.&#34;
+        msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
         raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 </section>
@@ -366,6 +367,9 @@ removed at anytime.</p></div>
             )
         return f&#34;{self.data}&#34;
 
+    def __contains__(self, key: str) -&gt; bool:
+        return self.get(key) is not None
+
     def __getitem__(self, key):
         &#34;&#34;&#34;Retrieves any key from the data store.
 
@@ -380,6 +384,10 @@ removed at anytime.</p></div>
         if isinstance(self.data, bytes):
             raise ValueError(
                 &#34;As the response.data is binary data, this operation is unsupported&#34;
+            )
+        if self.data is None:
+            raise ValueError(
+                &#34;As the response.data is empty, this operation is unsupported&#34;
             )
         return self.data.get(key, None)
 
@@ -462,6 +470,8 @@ removed at anytime.</p></div>
             raise ValueError(
                 &#34;As the response.data is binary data, this operation is unsupported&#34;
             )
+        if self.data is None:
+            return None
         return self.data.get(key, default)
 
     def validate(self):
@@ -474,21 +484,13 @@ removed at anytime.</p></div>
         Raises:
             SlackApiError: The request to the Slack API failed.
         &#34;&#34;&#34;
-        if self._logger.level &lt;= logging.DEBUG:
-            body = self.data if isinstance(self.data, dict) else &#34;(binary)&#34;
-            self._logger.debug(
-                &#34;Received the following response - &#34;
-                f&#34;status: {self.status_code}, &#34;
-                f&#34;headers: {dict(self.headers)}, &#34;
-                f&#34;body: {body}&#34;
-            )
         if (
             self.status_code == 200
             and self.data
             and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False))
         ):
             return self
-        msg = &#34;The request to the Slack API failed.&#34;
+        msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
         raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 <h3>Methods</h3>
@@ -523,6 +525,8 @@ e.g. response.get("ok", False)</p>
         raise ValueError(
             &#34;As the response.data is binary data, this operation is unsupported&#34;
         )
+    if self.data is None:
+        return None
     return self.data.get(key, default)</code></pre>
 </details>
 </dd>
@@ -553,21 +557,13 @@ This method returns it's own object. e.g. 'self'</p>
     Raises:
         SlackApiError: The request to the Slack API failed.
     &#34;&#34;&#34;
-    if self._logger.level &lt;= logging.DEBUG:
-        body = self.data if isinstance(self.data, dict) else &#34;(binary)&#34;
-        self._logger.debug(
-            &#34;Received the following response - &#34;
-            f&#34;status: {self.status_code}, &#34;
-            f&#34;headers: {dict(self.headers)}, &#34;
-            f&#34;body: {body}&#34;
-        )
     if (
         self.status_code == 200
         and self.data
         and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False))
     ):
         return self
-    msg = &#34;The request to the Slack API failed.&#34;
+    msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
     raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 </dd>

@@ -40,6 +40,7 @@ from .basic_components import MarkdownTextObject
 from .basic_components import PlainTextObject
 from .basic_components import TextObject
 from .block_elements import BlockElement
+from .block_elements import ImageElement
 from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
 
@@ -292,7 +293,7 @@ class ContextBlock(Block):
     def __init__(
         self,
         *,
-        elements: Sequence[Union[dict, ImageBlock, TextObject]],
+        elements: Sequence[Union[dict, ImageElement, TextObject]],
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -841,7 +842,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.ContextBlock"><code class="flex name class">
 <span>class <span class="ident">ContextBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.blocks.ImageBlock" href="#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -864,7 +865,7 @@ to create visually rich and compellingly interactive messages.
     def __init__(
         self,
         *,
-        elements: Sequence[Union[dict, ImageBlock, TextObject]],
+        elements: Sequence[Union[dict, ImageElement, TextObject]],
         block_id: Optional[str] = None,
         **others: dict,
     ):

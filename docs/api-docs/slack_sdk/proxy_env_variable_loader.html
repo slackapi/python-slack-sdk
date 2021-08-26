@@ -42,10 +42,16 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -&gt; Opt
         or os.environ.get(&#34;HTTP_PROXY&#34;)
         or os.environ.get(&#34;http_proxy&#34;)
     )
-    if proxy_url is not None:
+    if proxy_url is None:
+        return None
+    if len(proxy_url.strip()) == 0:
+        # If the value is an empty string, the intention should be unsetting it
         logger.debug(
-            f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;
+            &#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;
         )
+        return None
+
+    logger.debug(f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;)
     return proxy_url</code></pre>
 </details>
 </section>
@@ -72,10 +78,16 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -&gt; Opt
         or os.environ.get(&#34;HTTP_PROXY&#34;)
         or os.environ.get(&#34;http_proxy&#34;)
     )
-    if proxy_url is not None:
+    if proxy_url is None:
+        return None
+    if len(proxy_url.strip()) == 0:
+        # If the value is an empty string, the intention should be unsetting it
         logger.debug(
-            f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;
+            &#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;
         )
+        return None
+
+    logger.debug(f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;)
     return proxy_url</code></pre>
 </details>
 </dd>

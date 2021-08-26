@@ -98,7 +98,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         if response is None:
             raise error
 
-        state.increment_current_attempt()
+        state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
         for k in response.headers.keys():
             if k.lower() == &#34;retry-after&#34;:
@@ -113,6 +113,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
                 int(response.headers.get(retry_after_header_name)[0]) + random.random()
             )
         await asyncio.sleep(duration)
+        state.increment_current_attempt()
 
 
 def async_default_handlers() -&gt; List[AsyncRetryHandler]:
@@ -253,7 +254,7 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
         if response is None:
             raise error
 
-        state.increment_current_attempt()
+        state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
         for k in response.headers.keys():
             if k.lower() == &#34;retry-after&#34;:
@@ -267,7 +268,8 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
             duration = (
                 int(response.headers.get(retry_after_header_name)[0]) + random.random()
             )
-        await asyncio.sleep(duration)</code></pre>
+        await asyncio.sleep(duration)
+        state.increment_current_attempt()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -306,7 +308,7 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
     if response is None:
         raise error
 
-    state.increment_current_attempt()
+    state.next_attempt_requested = True
     retry_after_header_name: Optional[str] = None
     for k in response.headers.keys():
         if k.lower() == &#34;retry-after&#34;:
@@ -320,7 +322,8 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
         duration = (
             int(response.headers.get(retry_after_header_name)[0]) + random.random()
         )
-    await asyncio.sleep(duration)</code></pre>
+    await asyncio.sleep(duration)
+    state.increment_current_attempt()</code></pre>
 </details>
 </dd>
 </dl>

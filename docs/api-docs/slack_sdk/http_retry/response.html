@@ -40,12 +40,12 @@ class HttpResponse:
     def __init__(
         self,
         *,
-        status_code: int,
+        status_code: Union[int, str],
         headers: Dict[str, Union[str, List[str]]],
         body: Optional[Dict[str, Any]] = None,
         data: Optional[bytes] = None,
     ):
-        self.status_code = status_code
+        self.status_code = int(status_code)
         self.headers = {
             k: v if isinstance(v, list) else [v] for k, v in headers.items()
         }
@@ -64,7 +64,7 @@ class HttpResponse:
 <dl>
 <dt id="slack_sdk.http_retry.response.HttpResponse"><code class="flex name class">
 <span>class <span class="ident">HttpResponse</span></span>
-<span>(</span><span>*, status_code: int, headers: Dict[str, Union[str, List[str]]], body: Optional[Dict[str, Any]] = None, data: Optional[bytes] = None)</span>
+<span>(</span><span>*, status_code: Union[int, str], headers: Dict[str, Union[str, List[str]]], body: Optional[Dict[str, Any]] = None, data: Optional[bytes] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>HTTP response representation</p></div>
@@ -83,12 +83,12 @@ class HttpResponse:
     def __init__(
         self,
         *,
-        status_code: int,
+        status_code: Union[int, str],
         headers: Dict[str, Union[str, List[str]]],
         body: Optional[Dict[str, Any]] = None,
         data: Optional[bytes] = None,
     ):
-        self.status_code = status_code
+        self.status_code = int(status_code)
         self.headers = {
             k: v if isinstance(v, list) else [v] for k, v in headers.items()
         }

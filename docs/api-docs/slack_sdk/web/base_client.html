@@ -551,10 +551,24 @@ class BaseClient:
             if resp.headers.get_content_type() == &#34;application/gzip&#34;:
                 # admin.analytics.getFile
                 body: bytes = resp.read()
+                if self._logger.level &lt;= logging.DEBUG:
+                    self._logger.debug(
+                        &#34;Received the following response - &#34;
+                        f&#34;status: {resp.code}, &#34;
+                        f&#34;headers: {dict(resp.headers)}, &#34;
+                        f&#34;body: (binary)&#34;
+                    )
                 return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
 
             charset = resp.headers.get_content_charset() or &#34;utf-8&#34;
             body: str = resp.read().decode(charset)  # read the response body here
+            if self._logger.level &lt;= logging.DEBUG:
+                self._logger.debug(
+                    &#34;Received the following response - &#34;
+                    f&#34;status: {resp.code}, &#34;
+                    f&#34;headers: {dict(resp.headers)}, &#34;
+                    f&#34;body: {body}&#34;
+                )
             return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
         raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
@@ -1117,10 +1131,24 @@ class BaseClient:
             if resp.headers.get_content_type() == &#34;application/gzip&#34;:
                 # admin.analytics.getFile
                 body: bytes = resp.read()
+                if self._logger.level &lt;= logging.DEBUG:
+                    self._logger.debug(
+                        &#34;Received the following response - &#34;
+                        f&#34;status: {resp.code}, &#34;
+                        f&#34;headers: {dict(resp.headers)}, &#34;
+                        f&#34;body: (binary)&#34;
+                    )
                 return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
 
             charset = resp.headers.get_content_charset() or &#34;utf-8&#34;
             body: str = resp.read().decode(charset)  # read the response body here
+            if self._logger.level &lt;= logging.DEBUG:
+                self._logger.debug(
+                    &#34;Received the following response - &#34;
+                    f&#34;status: {resp.code}, &#34;
+                    f&#34;headers: {dict(resp.headers)}, &#34;
+                    f&#34;body: {body}&#34;
+                )
             return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
         raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
