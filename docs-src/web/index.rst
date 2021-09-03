@@ -657,7 +657,7 @@ All the API methods are available in asynchronous programming using the standard
 RetryHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-With the default settings, only ``ConnectionErrorRetryHandler`` with its default configuration (=only one retry in the manner of `exponential backoff and jitter <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>`_ is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).
+With the default settings, only ``ConnectionErrorRetryHandler`` with its default configuration (=only one retry in the manner of `exponential backoff and jitter <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>`_) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).
 
 To use other retry handlers, you can pass a list of ``RetryHandler`` to the client constructor. For instance, you can add the built-in ``RateLimitErrorRetryHandler`` this way:
 
