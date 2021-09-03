@@ -10,9 +10,19 @@
    changelog
    about
 
+Important Notice
+*********************
+
+The `slackclient <https://pypi.org/project/slackclient/>`_ PyPI project is in maintenance mode now and `slack-sdk <https://pypi.org/project/slack-sdk/>`_ project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, retry hanlders, and many more.
+
+Refer to `the migration guide <https://slack.dev/python-slack-sdk/v3-migration/index.html#from-slackclient-2-x>`_ to learn how to smoothly migrate your existing code.
+
+--------
+
 ==============================================
 |product_name|
 ==============================================
+
 Slack's APIs allow anyone to build full featured integrations that extend
 and expand the capabilities of your Slack workspace. These APIs allow you
 to build applications that interact with Slack just like the people on your
