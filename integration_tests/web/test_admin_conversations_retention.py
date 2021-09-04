@@ -91,7 +91,7 @@ class TestWebClient(unittest.TestCase):
             )
         )
 
-        time.sleep(2)  # To avoid internal_error
+        await asyncio.sleep(2)  # To avoid internal_error
         self.assertIsNotNone(
             await client.admin_conversations_delete(
                 channel_id=created_channel_id,
