@@ -13,8 +13,8 @@
 - [ ] **slack_sdk.scim** (SCIM API client)
 - [ ] **slack_sdk.audit_logs** (Audit Logs API client)
 - [ ] **slack_sdk.rtm_v2** (RTM client)
-- [ ] `/docs-src` (Documents, have you run `./docs.sh`?)
-- [ ] `/docs-src-v2` (Documents, have you run `./docs-v2.sh`?)
+- [ ] `/docs-src` (Documents, have you run `./scripts/docs.sh`?)
+- [ ] `/docs-src-v2` (Documents, have you run `./scripts/docs-v2.sh`?)
 - [ ] `/tutorial` (PythOnBoardingBot tutorial)
 - [ ] `tests`/`integration_tests` (Automated tests for this library)
 
