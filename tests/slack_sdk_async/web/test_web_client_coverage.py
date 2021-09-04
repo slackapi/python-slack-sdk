@@ -1024,7 +1024,9 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
             elif method_name == "admin_conversations_setCustomRetention":
-                self.api_methods_to_call.remove(method(channel_id="C123", duration_days=365)["method"])
+                self.api_methods_to_call.remove(
+                    method(channel_id="C123", duration_days=365)["method"]
+                )
                 await async_method(channel_id="C123", duration_days=365)
             else:
                 self.api_methods_to_call.remove(method(*{})["method"])
