@@ -48,9 +48,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 "openid.connect.token",
                 "openid.connect.userInfo",
                 "users.setActive",
-                "admin.conversations.getCustomRetention",
-                "admin.conversations.removeCustomRetention",
-                "admin.conversations.setCustomRetention",
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
