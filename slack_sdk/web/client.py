@@ -746,6 +746,43 @@ class WebClient(BaseClient):
         )
         return self.api_call("admin.conversations.getTeams", params=kwargs)
 
+    def admin_conversations_getCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Get a channel's retention policy
+        https://api.slack.com/methods/admin.conversations.getCustomRetention
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.getCustomRetention", params=kwargs)
+
+    def admin_conversations_removeCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Remove a channel's retention policy
+        https://api.slack.com/methods/admin.conversations.removeCustomRetention
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("admin.conversations.removeCustomRetention", params=kwargs)
+
+    def admin_conversations_setCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        duration_days: int,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set a channel's retention policy
+        https://api.slack.com/methods/admin.conversations.setCustomRetention
+        """
+        kwargs.update({"channel_id": channel_id, "duration_days": duration_days})
+        return self.api_call("admin.conversations.setCustomRetention", params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
