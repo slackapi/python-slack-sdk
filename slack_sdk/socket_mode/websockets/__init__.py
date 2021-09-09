@@ -106,7 +106,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.current_session is None or self.current_session.closed
                 ):
                     self.logger.info(
-                        "The session seems to be already closed. Going to reconnect..."
+                        "The session seems to be already closed. Reconnecting..."
                     )
                     await self.connect_to_new_endpoint()
             except Exception as e:

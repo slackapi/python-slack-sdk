@@ -150,7 +150,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         should_reconnect = False
                         if self.current_session is None or self.current_session.closed:
                             self.logger.info(
-                                "The session seems to be already closed. Going to reconnect..."
+                                "The session seems to be already closed. Reconnecting..."
                             )
                             should_reconnect = True
 
@@ -160,7 +160,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             )
                             if disconnected_seconds >= (self.ping_interval * 4):
                                 self.logger.info(
-                                    "The connection seems to be stale. Disconnecting..."
+                                    "The connection seems to be stale. Reconnecting..."
                                     f" reason: disconnected for {disconnected_seconds}+ seconds)"
                                 )
                                 self.stale = True
@@ -208,7 +208,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         elif message.type == WSMsgType.CLOSE:
                             if self.auto_reconnect_enabled:
                                 self.logger.info(
-                                    "Received CLOSE event. Going to reconnect..."
+                                    "Received CLOSE event. Reconnecting..."
                                 )
                                 await self.connect_to_new_endpoint()
                             for listener in self.on_close_listeners:

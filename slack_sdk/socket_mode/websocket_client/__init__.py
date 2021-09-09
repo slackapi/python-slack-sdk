@@ -177,7 +177,7 @@ class SocketModeClient(BaseSocketModeClient):
                     f"on_close invoked: (code: {close_status_code}, message: {close_msg})"
                 )
             if self.auto_reconnect_enabled:
-                self.logger.info("Received CLOSE event. Going to reconnect...")
+                self.logger.info("Received CLOSE event. Reconnecting...")
                 self.connect_to_new_endpoint()
             for listener in self.on_close_listeners:
                 listener(ws)
@@ -246,7 +246,7 @@ class SocketModeClient(BaseSocketModeClient):
                     self.current_session is None or self.current_session.sock is None
                 ):
                     self.logger.info(
-                        "The session seems to be already closed. Going to reconnect..."
+                        "The session seems to be already closed. Reconnecting..."
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:
