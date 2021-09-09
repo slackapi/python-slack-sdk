@@ -22,6 +22,7 @@ class AsyncBaseSocketModeClient:
     app_token: str
     wss_uri: str
     auto_reconnect_enabled: bool
+    trace_enabled: bool
     closed: bool
     connect_operation_lock: Lock
 
@@ -72,12 +73,16 @@ class AsyncBaseSocketModeClient:
     async def connect_to_new_endpoint(self, force: bool = False):
         try:
             await self.connect_operation_lock.acquire()
+            if self.trace_enabled:
+                self.logger.debug("For reconnection, the connect_operation_lock was acquired")
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
         finally:
             if self.connect_operation_lock.locked() is True:
                 self.connect_operation_lock.release()
+                if self.trace_enabled:
+                    self.logger.debug("The connect_operation_lock for reconnection was released")
 
     async def close(self):
         self.closed = True

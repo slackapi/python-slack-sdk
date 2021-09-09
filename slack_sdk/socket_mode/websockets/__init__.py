@@ -50,6 +50,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_processor: Future
 
     ping_interval: float
+    trace_enabled: bool
+
     current_session: Optional[WebSocketClientProtocol]
     current_session_monitor: Optional[Future]
 
@@ -65,6 +67,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         web_client: Optional[AsyncWebClient] = None,
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 10,
+        trace_enabled: bool = False,
     ):
         """Socket Mode client
 
@@ -74,6 +77,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             web_client: Web API client
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
+            trace_enabled: True if more verbose logs to see what's happening under the hood
         """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
@@ -83,6 +87,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
+        self.trace_enabled = trace_enabled
         self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []

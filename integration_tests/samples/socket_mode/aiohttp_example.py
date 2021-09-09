@@ -17,6 +17,7 @@ async def main():
         web_client=AsyncWebClient(
             token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")
         ),
+        trace_enabled=True,
     )
 
     async def process(client: SocketModeClient, req: SocketModeRequest):
