@@ -112,11 +112,16 @@ class AsyncBaseSocketModeClient:
             )
 
     async def process_messages(self):
-        while not self.closed:
-            try:
-                await self.process_message()
-            except Exception as e:
-                self.logger.exception(f"Failed to process a message: {e}")
+        try:
+            while not self.closed:
+                try:
+                    await self.process_message()
+                except Exception as e:
+                    self.logger.exception(f"Failed to process a message: {e}")
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug("The running process_messages task is now cancelled")
+            raise
 
     async def process_message(self):
         raw_message = await self.message_queue.get()

@@ -250,7 +250,7 @@ class Connection:
                     is_stale = disconnected_seconds > self.ping_interval * 4
                     if is_stale:
                         self.logger.info(
-                            "The connection seems to be stale. Reconnecting..."
+                            "The connection seems to be stale. Disconnecting..."
                             f" (session id: {self.session_id},"
                             f" reason: disconnected for {disconnected_seconds}+ seconds)"
                         )

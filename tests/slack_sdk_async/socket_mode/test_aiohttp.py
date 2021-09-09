@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 
 from slack_sdk.socket_mode.aiohttp import SocketModeClient
@@ -39,8 +40,11 @@ class TestAiohttp(unittest.TestCase):
             web_client=self.web_client,
             auto_reconnect_enabled=False,
         )
-        url = await client.issue_new_wss_url()
-        self.assertTrue(url.startswith("wss://"))
+        try:
+            url = await client.issue_new_wss_url()
+            self.assertTrue(url.startswith("wss://"))
+        finally:
+            await client.close()
 
     @async_test
     async def test_connect_to_new_endpoint(self):
@@ -63,6 +67,7 @@ class TestAiohttp(unittest.TestCase):
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
             auto_reconnect_enabled=False,
+            trace_enabled=True,
             on_message_listeners=[lambda msg: None],
         )
         client.message_listeners.append(listener)
@@ -75,6 +80,7 @@ class TestAiohttp(unittest.TestCase):
             )
             await client.process_message()
         finally:
+            await client.disconnect()
             await client.close()
 
 

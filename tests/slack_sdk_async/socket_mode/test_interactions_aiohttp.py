@@ -67,6 +67,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
             web_client=self.web_client,
             on_message_listeners=[message_handler],
             auto_reconnect_enabled=False,
+            trace_enabled=True,
         )
         client.socket_mode_request_listeners.append(socket_mode_listener)
 

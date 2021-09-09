@@ -302,7 +302,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.closed = True
         self.auto_reconnect_enabled = False
         await self.disconnect()
-        self.message_processor.cancel()
+        if self.message_processor is not None:
+            self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
         if self.message_receiver is not None:
