@@ -8,7 +8,7 @@
 import asyncio
 import logging
 import time
-from asyncio import Future, Lock, Task
+from asyncio import Future, Lock
 from asyncio import Queue
 from logging import Logger
 from typing import Union, Optional, List, Callable, Awaitable
@@ -155,7 +155,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             should_reconnect = True
 
                         if self.last_ping_pong_time is not None:
-                            disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                            disconnected_seconds = int(
+                                time.time() - self.last_ping_pong_time
+                            )
                             if disconnected_seconds >= (self.ping_interval * 4):
                                 self.logger.info(
                                     "The connection seems to be stale. Disconnecting..."
@@ -167,7 +169,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
                         if should_reconnect is True or not await self.is_connected():
                             await self.connect_to_new_endpoint()
-                            self.logger.info("Reconnection done.")
 
                 except Exception as e:
                     self.logger.error(
@@ -176,7 +177,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     )
         except asyncio.CancelledError:
             if self.trace_enabled:
-                self.logger.debug("The running monitor_current_session task is now cancelled")
+                self.logger.debug(
+                    "The running monitor_current_session task is now cancelled"
+                )
             raise
 
     async def receive_messages(self) -> None:
@@ -220,12 +223,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             await self.current_session.pong(message.data)
                             continue
                         elif message.type == WSMsgType.PONG:
-                            elements = message.data.decode('utf-8').split(":")
-                            if len(elements) == 2:
-                                try:
-                                    self.last_ping_pong_time = float(elements[1])
-                                except:
-                                    pass
+                            if message.data is not None:
+                                str_message_data = message.data.decode("utf-8")
+                                elements = str_message_data.split(":")
+                                if len(elements) == 2:
+                                    try:
+                                        self.last_ping_pong_time = float(elements[1])
+                                    except Exception as e:
+                                        self.logger.warning(
+                                            f"Failed to parse the last_ping_pong_time value from {str_message_data}"
+                                            f" - error : {e}"
+                                        )
                             continue
                     consecutive_error_count = 0
                 except Exception as e:

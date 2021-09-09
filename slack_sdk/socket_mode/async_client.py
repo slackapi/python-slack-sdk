@@ -74,7 +74,9 @@ class AsyncBaseSocketModeClient:
         try:
             await self.connect_operation_lock.acquire()
             if self.trace_enabled:
-                self.logger.debug("For reconnection, the connect_operation_lock was acquired")
+                self.logger.debug(
+                    "For reconnection, the connect_operation_lock was acquired"
+                )
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
@@ -82,7 +84,9 @@ class AsyncBaseSocketModeClient:
             if self.connect_operation_lock.locked() is True:
                 self.connect_operation_lock.release()
                 if self.trace_enabled:
-                    self.logger.debug("The connect_operation_lock for reconnection was released")
+                    self.logger.debug(
+                        "The connect_operation_lock for reconnection was released"
+                    )
 
     async def close(self):
         self.closed = True
