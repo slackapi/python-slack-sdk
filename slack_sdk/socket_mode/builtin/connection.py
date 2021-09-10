@@ -176,8 +176,13 @@ class Connection:
 
     def disconnect(self) -> None:
         if self.sock is not None:
-            self.sock.close()
-            self.sock = None
+            with self.sock_send_lock:
+                with self.sock_receive_lock:
+                    # Synchronize before closing this instance's socket
+                    self.sock.close()
+                    self.sock = None
+                    # After this, all operations using self.sock will be skipped
+
         self.logger.info(
             f"The connection has been closed (session id: {self.session_id})"
         )
@@ -198,7 +203,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        "Skipped sending a ping message as the underlying socket is no longer available."
+                    )
 
     def pong(self, payload: Union[str, bytes] = "") -> None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
@@ -210,7 +221,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        "Skipped sending a pong message as the underlying socket is no longer available."
+                    )
 
     def send(self, payload: str) -> None:
         if self.trace_enabled:
@@ -222,7 +239,17 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
-            self.sock.send(data)
+            try:
+                self.sock.send(data)
+            except Exception as e:
+                # In most cases, we want to retry this operation with a newly established connection.
+                # Getting this exception means that this connection has been replaced with a new one
+                # and it's no loner usable.
+                # The SocketModeClient implementation can do one retry when it gets this exception.
+                raise SlackClientNotConnectedError(
+                    f"Failed to send a message as the connection is no longer active "
+                    f"(session_id: {self.session_id}, error: {e})"
+                )
 
     def check_state(self) -> None:
         try:

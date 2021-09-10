@@ -4,6 +4,8 @@ import unittest
 from random import randint
 from threading import Thread
 
+from websocket import WebSocketException
+
 from slack_sdk.socket_mode.client import BaseSocketModeClient
 
 from slack_sdk.socket_mode.request import SocketModeRequest
@@ -97,6 +99,42 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             self.assertEqual(
                 len(socket_mode_envelopes), len(received_socket_mode_requests)
             )
+        finally:
+            client.close()
+            self.server.stop()
+            self.server.close()
+
+    def test_sending_messages(self):
+        if is_ci_unstable_test_skip_enabled():
+            return
+        t = Thread(target=start_socket_mode_server(self, 3012))
+        t.daemon = True
+        t.start()
+        time.sleep(2)  # wait for the server
+
+        try:
+            self.reset_sever_state()
+            client = SocketModeClient(
+                app_token="xapp-A111-222-xyz",
+                web_client=self.web_client,
+                auto_reconnect_enabled=False,
+                trace_enabled=True,
+            )
+            client.wss_uri = "ws://0.0.0.0:3012/link"
+            client.connect()
+            time.sleep(1)  # wait for the connection
+            client.send_message("foo")
+
+            client.disconnect()
+            time.sleep(1)  # wait for the connection
+            try:
+                client.send_message("foo")
+            except WebSocketException as _:
+                pass
+
+            client.connect()
+            time.sleep(1)  # wait for the connection
+            client.send_message("foo")
         finally:
             client.close()
             self.server.stop()
