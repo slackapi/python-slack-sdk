@@ -126,6 +126,11 @@ class TestAuditLogsClient(unittest.TestCase):
             [],
             f"found: {entry.actor.unknown_fields.keys()}",
         )
+        self.assertEqual(entry.details.is_token_rotation_enabled_app, True)
+        self.assertEqual(entry.details.inviter.id, "inviter_id")
+        self.assertEqual(entry.details.kicker.id, "kicker_id")
+        self.assertEqual(entry.details.old_retention_policy.type, "old")
+        self.assertEqual(entry.details.new_retention_policy.type, "new")
 
 
 logs_response_data = """{
@@ -242,27 +247,13 @@ logs_response_data = """{
           ""
         ],
         "inviter": {
-          "type": "",
-          "user": {
-            "id": "",
-            "name": "",
-            "email": "",
-            "team": ""
-          },
-          "id": "",
+          "id": "inviter_id",
           "name": "",
           "email": "",
           "team": ""
         },
         "kicker": {
-          "type": "",
-          "user": {
-            "id": "",
-            "name": "",
-            "email": "",
-            "team": ""
-          },
-          "id": "",
+          "id": "kicker_id",
           "name": "",
           "email": "",
           "team": ""
@@ -331,7 +322,16 @@ logs_response_data = """{
         "external_user_id": "",
         "external_user_email": "",
         "channel_id": "",
-        "added_team_id": ""
+        "added_team_id": "",
+        "is_token_rotation_enabled_app": true,
+        "old_retention_policy": {
+          "type": "old",
+          "duration_days": 111
+        },
+        "new_retention_policy": {
+          "type": "new",
+          "duration_days": 222
+        }
       }
     }
   ]

@@ -86,6 +86,22 @@ class Context:
         self.unknown_fields = kwargs
 
 
+class RetentionPolicy:
+    type: Optional[str]
+    duration_days: Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        duration_days: Optional[int] = None,
+        **kwargs,
+    ) -> None:
+        self.type = type
+        self.duration_days = duration_days
+        self.unknown_fields = kwargs
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -140,6 +156,8 @@ class Details:
     added_team_id: Optional[str]
     unknown_fields: Dict[str, Any]
     is_token_rotation_enabled_app: Optional[bool]
+    old_retention_policy: Optional[RetentionPolicy]
+    new_retention_policy: Optional[RetentionPolicy]
 
     def __init__(
         self,
@@ -153,8 +171,8 @@ class Details:
         non_sso_only: Optional[bool] = None,
         type: Optional[str] = None,
         is_workflow: Optional[bool] = None,
-        inviter: Optional[User] = None,
-        kicker: Optional[User] = None,
+        inviter: Optional[Union[Dict[str, Any], User]] = None,
+        kicker: Optional[Union[Dict[str, Any], User]] = None,
         shared_to: Optional[str] = None,
         reason: Optional[str] = None,
         origin_team: Optional[str] = None,
@@ -196,6 +214,8 @@ class Details:
         channel_id: Optional[str] = None,
         added_team_id: Optional[str] = None,
         is_token_rotation_enabled_app: Optional[bool] = None,
+        old_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
+        new_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -207,8 +227,8 @@ class Details:
         self.non_sso_only = non_sso_only
         self.type = type
         self.is_workflow = is_workflow
-        self.inviter = inviter
-        self.kicker = kicker
+        self.inviter = inviter if isinstance(inviter, User) else User(**inviter)
+        self.kicker = kicker if isinstance(kicker, User) else User(**kicker)
         self.shared_to = shared_to
         self.reason = reason
         self.origin_team = origin_team
@@ -251,6 +271,16 @@ class Details:
         self.channel_id = channel_id
         self.added_team_id = added_team_id
         self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
+        self.old_retention_policy = (
+            old_retention_policy
+            if isinstance(old_retention_policy, RetentionPolicy)
+            else RetentionPolicy(**old_retention_policy)
+        )
+        self.new_retention_policy = (
+            new_retention_policy
+            if isinstance(new_retention_policy, RetentionPolicy)
+            else RetentionPolicy(**new_retention_policy)
+        )
 
 
 class App:
