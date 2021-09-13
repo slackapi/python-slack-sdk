@@ -34,8 +34,11 @@ class TestAiohttp(unittest.TestCase):
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
         )
-        url = await client.issue_new_wss_url()
-        self.assertTrue(url.startswith("wss://"))
+        try:
+            url = await client.issue_new_wss_url()
+            self.assertTrue(url.startswith("wss://"))
+        finally:
+            await client.close()
 
     @async_test
     async def test_connect_to_new_endpoint(self):

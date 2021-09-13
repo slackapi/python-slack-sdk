@@ -6,6 +6,8 @@ from random import randint
 from threading import Thread
 from typing import Optional
 
+from websockets.exceptions import WebSocketException
+
 from slack_sdk.socket_mode.request import SocketModeRequest
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
@@ -102,6 +104,44 @@ class TestInteractionsWebsockets(unittest.TestCase):
             self.assertEqual(
                 len(socket_mode_envelopes), len(received_socket_mode_requests)
             )
+        finally:
+            await client.close()
+            self.server.stop()
+            self.server.close()
+
+    @async_test
+    async def test_send_message_while_disconnection(self):
+        if is_ci_unstable_test_skip_enabled():
+            return
+        t = Thread(target=start_socket_mode_server(self, 3001))
+        t.daemon = True
+        t.start()
+
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            trace_enabled=True,
+        )
+
+        try:
+            time.sleep(1)  # wait for the server
+            client.wss_uri = "ws://0.0.0.0:3001/link"
+            await client.connect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            await client.send_message("foo")
+
+            await client.disconnect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            try:
+                await client.send_message("foo")
+                self.fail("WebSocketException is expected here")
+            except WebSocketException as _:
+                pass
+
+            await client.connect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            await client.send_message("foo")
         finally:
             await client.close()
             self.server.stop()

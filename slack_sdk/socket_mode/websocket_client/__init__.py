@@ -13,7 +13,7 @@ from threading import Lock
 from typing import Union, Optional, List, Callable, Tuple
 
 import websocket
-from websocket import WebSocketApp
+from websocket import WebSocketApp, WebSocketException
 
 from slack_sdk.socket_mode.client import BaseSocketModeClient
 from slack_sdk.socket_mode.interval_runner import IntervalRunner
@@ -212,7 +212,27 @@ class SocketModeClient(BaseSocketModeClient):
     def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
-        self.current_session.send(message)
+        try:
+            self.current_session.send(message)
+        except WebSocketException as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level <= logging.DEBUG:
+                self.logger.debug(
+                    f"Failed to send a message (error: {e}, message: {message})"
+                    " as the underlying connection was replaced. Retrying the same request only one time..."
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
+            with self.connect_operation_lock:
+                if self.is_connected():
+                    self.current_session.send(message)
+                else:
+                    self.logger.warning(
+                        f"The current session (session id: {self.session_id()}) is no longer active. "
+                        "Failed to send a message"
+                    )
+                    raise e
 
     def close(self):
         self.closed = True

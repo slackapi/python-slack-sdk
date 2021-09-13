@@ -105,3 +105,41 @@ class TestInteractionsAiohttp(unittest.TestCase):
             await client.close()
             self.server.stop()
             self.server.close()
+
+    @async_test
+    async def test_send_message_while_disconnection(self):
+        if is_ci_unstable_test_skip_enabled():
+            return
+        t = Thread(target=start_socket_mode_server(self, 3001))
+        t.daemon = True
+        t.start()
+
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            trace_enabled=True,
+        )
+
+        try:
+            time.sleep(1)  # wait for the server
+            client.wss_uri = "ws://0.0.0.0:3001/link"
+            await client.connect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            await client.send_message("foo")
+
+            await client.disconnect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            try:
+                await client.send_message("foo")
+                self.fail("ConnectionError is expected here")
+            except ConnectionError as _:
+                pass
+
+            await client.connect()
+            await asyncio.sleep(1)  # wait for the message receiver
+            await client.send_message("foo")
+        finally:
+            await client.close()
+            self.server.stop()
+            self.server.close()

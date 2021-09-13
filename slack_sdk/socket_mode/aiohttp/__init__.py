@@ -144,7 +144,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         t = time.time()
                         if self.last_ping_pong_time is None:
                             self.last_ping_pong_time = float(t)
-                        await self.current_session.ping(f"ping-pong:{t}")
+                        await self.current_session.ping(f"sdk-ping-pong:{t}")
 
                     if self.auto_reconnect_enabled:
                         should_reconnect = False
@@ -226,7 +226,10 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             if message.data is not None:
                                 str_message_data = message.data.decode("utf-8")
                                 elements = str_message_data.split(":")
-                                if len(elements) == 2:
+                                if (
+                                    len(elements) == 2
+                                    and elements[0] == "sdk-ping-pong"
+                                ):
                                     try:
                                         self.last_ping_pong_time = float(elements[1])
                                     except Exception as e:
@@ -296,7 +299,30 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
-        await self.current_session.send_str(message)
+        try:
+            await self.current_session.send_str(message)
+        except ConnectionError as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level <= logging.DEBUG:
+                self.logger.debug(
+                    f"Failed to send a message (error: {e}, message: {message})"
+                    " as the underlying connection was replaced. Retrying the same request only one time..."
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
+            try:
+                await self.connect_operation_lock.acquire()
+                if await self.is_connected():
+                    await self.current_session.send_str(message)
+                else:
+                    self.logger.warning(
+                        "The current session is no longer active. Failed to send a message"
+                    )
+                    raise e
+            finally:
+                if self.connect_operation_lock.locked() is True:
+                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
