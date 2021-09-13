@@ -132,7 +132,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
 
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 
-    def test_sending_messages(self):
+    def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
             return
         t = Thread(target=start_socket_mode_server(self, 3011))
@@ -157,6 +157,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
             time.sleep(1)  # wait for the connection
             try:
                 client.send_message("foo")
+                self.fail("SlackClientNotConnectedError is expected here")
             except SlackClientNotConnectedError as _:
                 pass
 

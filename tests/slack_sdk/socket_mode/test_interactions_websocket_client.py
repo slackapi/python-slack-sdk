@@ -104,7 +104,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             self.server.stop()
             self.server.close()
 
-    def test_sending_messages(self):
+    def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
             return
         t = Thread(target=start_socket_mode_server(self, 3012))
@@ -129,6 +129,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             time.sleep(1)  # wait for the connection
             try:
                 client.send_message("foo")
+                self.fail("WebSocketException is expected here")
             except WebSocketException as _:
                 pass
 

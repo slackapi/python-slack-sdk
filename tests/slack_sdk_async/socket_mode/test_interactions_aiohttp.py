@@ -107,7 +107,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
             self.server.close()
 
     @async_test
-    async def test_sending_messages(self):
+    async def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
             return
         t = Thread(target=start_socket_mode_server(self, 3001))
@@ -132,6 +132,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
             await asyncio.sleep(1)  # wait for the message receiver
             try:
                 await client.send_message("foo")
+                self.fail("ConnectionError is expected here")
             except ConnectionError as _:
                 pass
 

@@ -244,7 +244,7 @@ class Connection:
             except Exception as e:
                 # In most cases, we want to retry this operation with a newly established connection.
                 # Getting this exception means that this connection has been replaced with a new one
-                # and it's no loner usable.
+                # and it's no longer usable.
                 # The SocketModeClient implementation can do one retry when it gets this exception.
                 raise SlackClientNotConnectedError(
                     f"Failed to send a message as the connection is no longer active "
