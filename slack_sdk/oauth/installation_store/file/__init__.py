@@ -129,8 +129,8 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 return Bot(**data)
         except FileNotFoundError as e:
-            message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
-            self.logger.warning(message)
+            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            self.logger.debug(message)
             return None
 
     async def async_find_installation(
@@ -172,8 +172,8 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 return Installation(**data)
         except FileNotFoundError as e:
-            message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
-            self.logger.warning(message)
+            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            self.logger.debug(message)
             return None
 
     async def async_delete_bot(
