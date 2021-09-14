@@ -129,7 +129,9 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 return Bot(**data)
         except FileNotFoundError as e:
-            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            message = (
+                f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            )
             self.logger.debug(message)
             return None
 
@@ -172,7 +174,9 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 return Installation(**data)
         except FileNotFoundError as e:
-            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            message = (
+                f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
+            )
             self.logger.debug(message)
             return None
 

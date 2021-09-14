@@ -131,6 +131,8 @@ class TestAuditLogsClient(unittest.TestCase):
         self.assertEqual(entry.details.kicker.id, "kicker_id")
         self.assertEqual(entry.details.old_retention_policy.type, "old")
         self.assertEqual(entry.details.new_retention_policy.type, "new")
+        self.assertEqual(entry.details.is_internal_integration, True)
+        self.assertEqual(entry.details.cleared_resolution, "approved")
 
 
 logs_response_data = """{
@@ -331,7 +333,9 @@ logs_response_data = """{
         "new_retention_policy": {
           "type": "new",
           "duration_days": 222
-        }
+        },
+        "is_internal_integration": true,
+        "cleared_resolution": "approved"
       }
     }
   ]

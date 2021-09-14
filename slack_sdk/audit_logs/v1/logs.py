@@ -119,6 +119,7 @@ class Details:
     origin_team: Optional[str]
     target_team: Optional[str]
     is_internal_integration: Optional[bool]
+    cleared_resolution: Optional[str]
     app_owner_id: Optional[str]
     bot_scopes: Optional[List[str]]
     new_scopes: Optional[List[str]]
@@ -178,6 +179,7 @@ class Details:
         origin_team: Optional[str] = None,
         target_team: Optional[str] = None,
         is_internal_integration: Optional[bool] = None,
+        cleared_resolution: Optional[str] = None,
         app_owner_id: Optional[str] = None,
         bot_scopes: Optional[List[str]] = None,
         new_scopes: Optional[List[str]] = None,
@@ -234,6 +236,7 @@ class Details:
         self.origin_team = origin_team
         self.target_team = target_team
         self.is_internal_integration = is_internal_integration
+        self.cleared_resolution = cleared_resolution
         self.app_owner_id = app_owner_id
         self.bot_scopes = bot_scopes
         self.new_scopes = new_scopes
