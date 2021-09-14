@@ -27,7 +27,7 @@ class IntervalRunner:
         return self.thread is not None and self.thread.is_alive()
 
     def shutdown(self):
-        if self.thread.is_alive():
+        if self.is_alive():
             self.event.set()
             self.thread.join()
         self.thread = None
