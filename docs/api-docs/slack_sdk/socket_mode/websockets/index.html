@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.websockets API documentation</title>
 <meta name="description" content="websockets bassd Socket Mode client …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -48,6 +48,7 @@ from typing import Union, Optional, List, Callable, Awaitable
 
 import websockets
 from websockets.client import WebSocketClientProtocol
+from websockets.exceptions import WebSocketException
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
 from slack_sdk.socket_mode.async_listeners import (
@@ -84,6 +85,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_processor: Future
 
     ping_interval: float
+    trace_enabled: bool
+
     current_session: Optional[WebSocketClientProtocol]
     current_session_monitor: Optional[Future]
 
@@ -99,6 +102,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         web_client: Optional[AsyncWebClient] = None,
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 10,
+        trace_enabled: bool = False,
     ):
         &#34;&#34;&#34;Socket Mode client
 
@@ -108,6 +112,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             web_client: Web API client
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
+            trace_enabled: True if more verbose logs to see what&#39;s happening under the hood
         &#34;&#34;&#34;
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
@@ -117,6 +122,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
+        self.trace_enabled = trace_enabled
         self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []
@@ -135,7 +141,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.current_session is None or self.current_session.closed
                 ):
                     self.logger.info(
-                        &#34;The session seems to be already closed. Going to reconnect...&#34;
+                        &#34;The session seems to be already closed. Reconnecting...&#34;
                     )
                     await self.connect_to_new_endpoint()
             except Exception as e:
@@ -206,7 +212,29 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;Sending a message: {message}&#34;)
-        await self.current_session.send(message)
+        try:
+            await self.current_session.send(message)
+        except WebSocketException as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.debug(
+                    f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                    &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+            try:
+                if await self.is_connected():
+                    await self.current_session.send(message)
+                else:
+                    self.logger.warning(
+                        &#34;The current session is no longer active. Failed to send a message&#34;
+                    )
+                    raise e
+            finally:
+                if self.connect_operation_lock.locked() is True:
+                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
@@ -230,7 +258,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dl>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient"><code class="flex name class">
 <span>class <span class="ident">SocketModeClient</span></span>
-<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 10)</span>
+<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 10, trace_enabled: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Socket Mode client</p>
@@ -246,6 +274,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>True if automatic reconnection is enabled (default: True)</dd>
 <dt><strong><code>ping_interval</code></strong></dt>
 <dd>interval for ping-pong with Slack servers (seconds)</dd>
+<dt><strong><code>trace_enabled</code></strong></dt>
+<dd>True if more verbose logs to see what's happening under the hood</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -277,6 +307,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_processor: Future
 
     ping_interval: float
+    trace_enabled: bool
+
     current_session: Optional[WebSocketClientProtocol]
     current_session_monitor: Optional[Future]
 
@@ -292,6 +324,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         web_client: Optional[AsyncWebClient] = None,
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 10,
+        trace_enabled: bool = False,
     ):
         &#34;&#34;&#34;Socket Mode client
 
@@ -301,6 +334,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             web_client: Web API client
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
+            trace_enabled: True if more verbose logs to see what&#39;s happening under the hood
         &#34;&#34;&#34;
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
@@ -310,6 +344,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
+        self.trace_enabled = trace_enabled
         self.wss_uri = None
         self.message_queue = Queue()
         self.message_listeners = []
@@ -328,7 +363,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.current_session is None or self.current_session.closed
                 ):
                     self.logger.info(
-                        &#34;The session seems to be already closed. Going to reconnect...&#34;
+                        &#34;The session seems to be already closed. Reconnecting...&#34;
                     )
                     await self.connect_to_new_endpoint()
             except Exception as e:
@@ -399,7 +434,29 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;Sending a message: {message}&#34;)
-        await self.current_session.send(message)
+        try:
+            await self.current_session.send(message)
+        except WebSocketException as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.debug(
+                    f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                    &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+            try:
+                if await self.is_connected():
+                    await self.current_session.send(message)
+                else:
+                    self.logger.warning(
+                        &#34;The current session is no longer active. Failed to send a message&#34;
+                    )
+                    raise e
+            finally:
+                if self.connect_operation_lock.locked() is True:
+                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
@@ -449,7 +506,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[None]]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -469,7 +526,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="../request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="../request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[None]]]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled"><code class="name">var <span class="ident">trace_enabled</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -572,7 +633,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.monitor_current_session"><code class="name flex">
-<span>async def <span class="ident">monitor_current_session</span></span>(<span>self) ‑> NoneType</span>
+<span>async def <span class="ident">monitor_current_session</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -588,7 +649,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 self.current_session is None or self.current_session.closed
             ):
                 self.logger.info(
-                    &#34;The session seems to be already closed. Going to reconnect...&#34;
+                    &#34;The session seems to be already closed. Reconnecting...&#34;
                 )
                 await self.connect_to_new_endpoint()
         except Exception as e:
@@ -599,7 +660,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.receive_messages"><code class="name flex">
-<span>async def <span class="ident">receive_messages</span></span>(<span>self) ‑> NoneType</span>
+<span>async def <span class="ident">receive_messages</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -642,7 +703,29 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <pre><code class="python">async def send_message(self, message: str):
     if self.logger.level &lt;= logging.DEBUG:
         self.logger.debug(f&#34;Sending a message: {message}&#34;)
-    await self.current_session.send(message)</code></pre>
+    try:
+        await self.current_session.send(message)
+    except WebSocketException as e:
+        # We rarely get this exception while replacing the underlying WebSocket connections.
+        # We can do one more try here as the self.current_session should be ready now.
+        if self.logger.level &lt;= logging.DEBUG:
+            self.logger.debug(
+                f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+            )
+        # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+        # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+        try:
+            if await self.is_connected():
+                await self.current_session.send(message)
+            else:
+                self.logger.warning(
+                    &#34;The current session is no longer active. Failed to send a message&#34;
+                )
+                raise e
+        finally:
+            if self.connect_operation_lock.locked() is True:
+                self.connect_operation_lock.release()</code></pre>
 </details>
 </dd>
 </dl>
@@ -687,6 +770,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.receive_messages" href="#slack_sdk.socket_mode.websockets.SocketModeClient.receive_messages">receive_messages</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.send_message" href="#slack_sdk.socket_mode.websockets.SocketModeClient.send_message">send_message</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners" href="#slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners">socket_mode_request_listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled" href="#slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled">trace_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.web_client" href="#slack_sdk.socket_mode.websockets.SocketModeClient.web_client">web_client</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.wss_uri" href="#slack_sdk.socket_mode.websockets.SocketModeClient.wss_uri">wss_uri</a></code></li>
 </ul>
@@ -697,7 +781,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

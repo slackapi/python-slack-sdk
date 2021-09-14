@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.rtm_v2 API documentation</title>
 <meta name="description" content="A Python module for interacting with Slack&#39;s RTM API." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -458,7 +458,7 @@ class RTMClient:
 <dl>
 <dt id="slack_sdk.rtm_v2.RTMClient"><code class="flex name class">
 <span>class <span class="ident">RTMClient</span></span>
-<span>(</span><span>*, token: Optional[str] = None, web_client: Optional[<a title="slack_sdk.web.client.WebClient" href="../web/client.html#slack_sdk.web.client.WebClient">WebClient</a>] = None, auto_reconnect_enabled: bool = True, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, timeout: int = 30, base_url: str = 'https://www.slack.com/api/', headers: Optional[dict] = None, ping_interval: int = 5, concurrency: int = 10, logger: Optional[logging.Logger] = None, on_message_listeners: Optional[List[Callable[[str], NoneType]]] = None, on_error_listeners: Optional[List[Callable[[Exception], NoneType]]] = None, on_close_listeners: Optional[List[Callable[[int, Optional[str]], NoneType]]] = None, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False)</span>
+<span>(</span><span>*, token: Optional[str] = None, web_client: Optional[<a title="slack_sdk.web.client.WebClient" href="../web/client.html#slack_sdk.web.client.WebClient">WebClient</a>] = None, auto_reconnect_enabled: bool = True, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, timeout: int = 30, base_url: str = 'https://www.slack.com/api/', headers: Optional[dict] = None, ping_interval: int = 5, concurrency: int = 10, logger: Optional[logging.Logger] = None, on_message_listeners: Optional[List[Callable[[str], None]]] = None, on_error_listeners: Optional[List[Callable[[Exception], None]]] = None, on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -904,7 +904,7 @@ class RTMClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.rtm_v2.RTMClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Callable[[<a title="slack_sdk.rtm_v2.RTMClient" href="#slack_sdk.rtm_v2.RTMClient">RTMClient</a>, dict], NoneType]]</code></dt>
+<dt id="slack_sdk.rtm_v2.RTMClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Callable[[<a title="slack_sdk.rtm_v2.RTMClient" href="#slack_sdk.rtm_v2.RTMClient">RTMClient</a>, dict], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -920,15 +920,15 @@ class RTMClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.rtm_v2.RTMClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[int, Optional[str]], NoneType]]</code></dt>
+<dt id="slack_sdk.rtm_v2.RTMClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[int, Optional[str]], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.rtm_v2.RTMClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[Exception], NoneType]]</code></dt>
+<dt id="slack_sdk.rtm_v2.RTMClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[Exception], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.rtm_v2.RTMClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[str], NoneType]]</code></dt>
+<dt id="slack_sdk.rtm_v2.RTMClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[str], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -964,7 +964,7 @@ class RTMClient:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.rtm_v2.RTMClient.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Closes this instance and cleans up underlying resources.
@@ -1217,7 +1217,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.process_messages"><code class="name flex">
-<span>def <span class="ident">process_messages</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">process_messages</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1291,7 +1291,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.run_message_listeners"><code class="name flex">
-<span>def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict) ‑> NoneType</span>
+<span>def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1317,7 +1317,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.send"><code class="name flex">
-<span>def <span class="ident">send</span></span>(<span>self, payload: Union[dict, str]) ‑> NoneType</span>
+<span>def <span class="ident">send</span></span>(<span>self, payload: Union[dict, str]) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1354,7 +1354,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.start"><code class="name flex">
-<span>def <span class="ident">start</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">start</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Establishes an RTM connection and blocks the current thread.</p></div>
@@ -1437,7 +1437,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

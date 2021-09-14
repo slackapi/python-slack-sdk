@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.aiohttp API documentation</title>
-<meta name="description" content="aiohttp bassd Socket Mode client …" />
+<meta name="description" content="aiohttp based Socket Mode client …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,7 +22,7 @@
 <h1 class="title">Module <code>slack_sdk.socket_mode.aiohttp</code></h1>
 </header>
 <section id="section-intro">
-<p>aiohttp bassd Socket Mode client</p>
+<p>aiohttp based Socket Mode client</p>
 <ul>
 <li><a href="https://api.slack.com/apis/connections/socket">https://api.slack.com/apis/connections/socket</a></li>
 <li><a href="https://slack.dev/python-slack-sdk/socket-mode/">https://slack.dev/python-slack-sdk/socket-mode/</a></li>
@@ -32,7 +32,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;aiohttp bassd Socket Mode client
+<pre><code class="python">&#34;&#34;&#34;aiohttp based Socket Mode client
 
 * https://api.slack.com/apis/connections/socket
 * https://slack.dev/python-slack-sdk/socket-mode/
@@ -41,6 +41,7 @@
 &#34;&#34;&#34;
 import asyncio
 import logging
+import time
 from asyncio import Future, Lock
 from asyncio import Queue
 from logging import Logger
@@ -86,12 +87,16 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     proxy: Optional[str]
     ping_interval: float
+    trace_enabled: bool
+
+    last_ping_pong_time: Optional[float]
     current_session: Optional[ClientWebSocketResponse]
     current_session_monitor: Optional[Future]
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    stale: bool
     connect_operation_lock: Lock
 
     on_message_listeners: List[Callable[[WSMessage], Awaitable[None]]]
@@ -105,7 +110,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         web_client: Optional[AsyncWebClient] = None,
         proxy: Optional[str] = None,
         auto_reconnect_enabled: bool = True,
-        ping_interval: float = 10,
+        ping_interval: float = 5,
+        trace_enabled: bool = False,
         on_message_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
         on_error_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
@@ -118,6 +124,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             web_client: Web API client
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
+            trace_enabled: True if more verbose logs to see what&#39;s happening under the hood
             proxy: the HTTP proxy URL
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
@@ -127,6 +134,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.stale = False
         self.connect_operation_lock = Lock()
         self.proxy = proxy
         if self.proxy is None or len(self.proxy.strip()) == 0:
@@ -137,6 +145,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
+        self.trace_enabled = trace_enabled
+        self.last_ping_pong_time = None
 
         self.wss_uri = None
         self.message_queue = Queue()
@@ -160,70 +170,127 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.message_processor = asyncio.ensure_future(self.process_messages())
 
     async def monitor_current_session(self) -&gt; None:
-        while not self.closed:
-            await asyncio.sleep(self.ping_interval)
-            try:
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or self.current_session.closed
-                ):
-                    self.logger.info(
-                        &#34;The session seems to be already closed. Going to reconnect...&#34;
+        try:
+            while not self.closed:
+                try:
+                    await asyncio.sleep(self.ping_interval)
+                    if self.current_session is not None:
+                        t = time.time()
+                        if self.last_ping_pong_time is None:
+                            self.last_ping_pong_time = float(t)
+                        await self.current_session.ping(f&#34;sdk-ping-pong:{t}&#34;)
+
+                    if self.auto_reconnect_enabled:
+                        should_reconnect = False
+                        if self.current_session is None or self.current_session.closed:
+                            self.logger.info(
+                                &#34;The session seems to be already closed. Reconnecting...&#34;
+                            )
+                            should_reconnect = True
+
+                        if self.last_ping_pong_time is not None:
+                            disconnected_seconds = int(
+                                time.time() - self.last_ping_pong_time
+                            )
+                            if disconnected_seconds &gt;= (self.ping_interval * 4):
+                                self.logger.info(
+                                    &#34;The connection seems to be stale. Reconnecting...&#34;
+                                    f&#34; reason: disconnected for {disconnected_seconds}+ seconds)&#34;
+                                )
+                                self.stale = True
+                                self.last_ping_pong_time = None
+                                should_reconnect = True
+
+                        if should_reconnect is True or not await self.is_connected():
+                            await self.connect_to_new_endpoint()
+
+                except Exception as e:
+                    self.logger.error(
+                        &#34;Failed to check the current session or reconnect to the server &#34;
+                        f&#34;(error: {type(e).__name__}, message: {e})&#34;
                     )
-                    await self.connect_to_new_endpoint()
-            except Exception as e:
-                self.logger.error(
-                    &#34;Failed to check the current session or reconnect to the server &#34;
-                    f&#34;(error: {type(e).__name__}, message: {e})&#34;
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(
+                    &#34;The running monitor_current_session task is now cancelled&#34;
                 )
+            raise
 
     async def receive_messages(self) -&gt; None:
-        consecutive_error_count = 0
-        while not self.closed:
-            try:
-                message: WSMessage = await self.current_session.receive()
-                if self.logger.level &lt;= logging.DEBUG:
-                    type = WSMsgType(message.type)
-                    message_type = type.name if type is not None else message.type
-                    message_data = message.data
-                    if isinstance(message_data, bytes):
-                        message_data = message_data.decode(&#34;utf-8&#34;)
-                    self.logger.debug(
-                        f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
-                    )
-                if message is not None:
-                    if message.type == WSMsgType.TEXT:
+        try:
+            consecutive_error_count = 0
+            while not self.closed:
+                try:
+                    message: WSMessage = await self.current_session.receive()
+                    if self.trace_enabled and self.logger.level &lt;= logging.DEBUG:
+                        type = WSMsgType(message.type)
+                        message_type = type.name if type is not None else message.type
                         message_data = message.data
-                        await self.enqueue_message(message_data)
-                        for listener in self.on_message_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.CLOSE:
-                        if self.auto_reconnect_enabled:
-                            self.logger.info(
-                                &#34;Received CLOSE event. Going to reconnect...&#34;
+                        if isinstance(message_data, bytes):
+                            message_data = message_data.decode(&#34;utf-8&#34;)
+                        if len(message_data) &gt; 0:
+                            # To skip the empty message that Slack server-side often sends
+                            self.logger.debug(
+                                f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
                             )
-                            await self.connect_to_new_endpoint()
-                        for listener in self.on_close_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.ERROR:
-                        for listener in self.on_error_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.CLOSED:
+                    if message is not None:
+                        if message.type == WSMsgType.TEXT:
+                            message_data = message.data
+                            await self.enqueue_message(message_data)
+                            for listener in self.on_message_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.CLOSE:
+                            if self.auto_reconnect_enabled:
+                                self.logger.info(
+                                    &#34;Received CLOSE event. Reconnecting...&#34;
+                                )
+                                await self.connect_to_new_endpoint()
+                            for listener in self.on_close_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.ERROR:
+                            for listener in self.on_error_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.CLOSED:
+                            await asyncio.sleep(self.ping_interval)
+                            continue
+                        elif message.type == WSMsgType.PING:
+                            await self.current_session.pong(message.data)
+                            continue
+                        elif message.type == WSMsgType.PONG:
+                            if message.data is not None:
+                                str_message_data = message.data.decode(&#34;utf-8&#34;)
+                                elements = str_message_data.split(&#34;:&#34;)
+                                if (
+                                    len(elements) == 2
+                                    and elements[0] == &#34;sdk-ping-pong&#34;
+                                ):
+                                    try:
+                                        self.last_ping_pong_time = float(elements[1])
+                                    except Exception as e:
+                                        self.logger.warning(
+                                            f&#34;Failed to parse the last_ping_pong_time value from {str_message_data}&#34;
+                                            f&#34; - error : {e}&#34;
+                                        )
+                            continue
+                    consecutive_error_count = 0
+                except Exception as e:
+                    consecutive_error_count += 1
+                    self.logger.error(
+                        f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
+                    )
+                    if isinstance(e, ClientConnectionError):
                         await asyncio.sleep(self.ping_interval)
-                        continue
-                consecutive_error_count = 0
-            except Exception as e:
-                consecutive_error_count += 1
-                self.logger.error(
-                    f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
-                )
-                if isinstance(e, ClientConnectionError):
-                    await asyncio.sleep(self.ping_interval)
-                else:
-                    await asyncio.sleep(consecutive_error_count)
+                    else:
+                        await asyncio.sleep(consecutive_error_count)
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(&#34;The running receive_messages task is now cancelled&#34;)
+            raise
 
     async def is_connected(self) -&gt; bool:
         return (
             not self.closed
+            and not self.stale
             and self.current_session is not None
             and not self.current_session.closed
         )
@@ -234,19 +301,25 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.wss_uri = await self.issue_new_wss_url()
         self.current_session = await self.aiohttp_client_session.ws_connect(
             self.wss_uri,
+            autoping=False,
             heartbeat=self.ping_interval,
             proxy=self.proxy,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
+        self.stale = False
         self.logger.info(&#34;A new session has been established&#34;)
 
-        if self.current_session_monitor is None:
-            self.current_session_monitor = asyncio.ensure_future(
-                self.monitor_current_session()
-            )
+        if self.current_session_monitor is not None:
+            self.current_session_monitor.cancel()
 
-        if self.message_receiver is None:
-            self.message_receiver = asyncio.ensure_future(self.receive_messages())
+        self.current_session_monitor = asyncio.ensure_future(
+            self.monitor_current_session()
+        )
+
+        if self.message_receiver is not None:
+            self.message_receiver.cancel()
+
+        self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if old_session is not None:
             await old_session.close()
@@ -260,13 +333,37 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;Sending a message: {message}&#34;)
-        await self.current_session.send_str(message)
+        try:
+            await self.current_session.send_str(message)
+        except ConnectionError as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.debug(
+                    f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                    &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+            try:
+                await self.connect_operation_lock.acquire()
+                if await self.is_connected():
+                    await self.current_session.send_str(message)
+                else:
+                    self.logger.warning(
+                        &#34;The current session is no longer active. Failed to send a message&#34;
+                    )
+                    raise e
+            finally:
+                if self.connect_operation_lock.locked() is True:
+                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
         self.auto_reconnect_enabled = False
         await self.disconnect()
-        self.message_processor.cancel()
+        if self.message_processor is not None:
+            self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
         if self.message_receiver is not None:
@@ -286,7 +383,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dl>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient"><code class="flex name class">
 <span>class <span class="ident">SocketModeClient</span></span>
-<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, proxy: Optional[str] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 10, on_message_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], NoneType]]] = None, on_error_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], NoneType]]] = None, on_close_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], NoneType]]] = None)</span>
+<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, proxy: Optional[str] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 5, trace_enabled: bool = False, on_message_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], None]]] = None, on_error_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], None]]] = None, on_close_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], None]]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Socket Mode client</p>
@@ -302,6 +399,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>True if automatic reconnection is enabled (default: True)</dd>
 <dt><strong><code>ping_interval</code></strong></dt>
 <dd>interval for ping-pong with Slack servers (seconds)</dd>
+<dt><strong><code>trace_enabled</code></strong></dt>
+<dd>True if more verbose logs to see what's happening under the hood</dd>
 <dt><strong><code>proxy</code></strong></dt>
 <dd>the HTTP proxy URL</dd>
 <dt><strong><code>on_message_listeners</code></strong></dt>
@@ -342,12 +441,16 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     proxy: Optional[str]
     ping_interval: float
+    trace_enabled: bool
+
+    last_ping_pong_time: Optional[float]
     current_session: Optional[ClientWebSocketResponse]
     current_session_monitor: Optional[Future]
 
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
+    stale: bool
     connect_operation_lock: Lock
 
     on_message_listeners: List[Callable[[WSMessage], Awaitable[None]]]
@@ -361,7 +464,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         web_client: Optional[AsyncWebClient] = None,
         proxy: Optional[str] = None,
         auto_reconnect_enabled: bool = True,
-        ping_interval: float = 10,
+        ping_interval: float = 5,
+        trace_enabled: bool = False,
         on_message_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
         on_error_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
@@ -374,6 +478,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             web_client: Web API client
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
+            trace_enabled: True if more verbose logs to see what&#39;s happening under the hood
             proxy: the HTTP proxy URL
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
@@ -383,6 +488,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.logger = logger or logging.getLogger(__name__)
         self.web_client = web_client or AsyncWebClient()
         self.closed = False
+        self.stale = False
         self.connect_operation_lock = Lock()
         self.proxy = proxy
         if self.proxy is None or len(self.proxy.strip()) == 0:
@@ -393,6 +499,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.default_auto_reconnect_enabled = auto_reconnect_enabled
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
         self.ping_interval = ping_interval
+        self.trace_enabled = trace_enabled
+        self.last_ping_pong_time = None
 
         self.wss_uri = None
         self.message_queue = Queue()
@@ -416,70 +524,127 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.message_processor = asyncio.ensure_future(self.process_messages())
 
     async def monitor_current_session(self) -&gt; None:
-        while not self.closed:
-            await asyncio.sleep(self.ping_interval)
-            try:
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or self.current_session.closed
-                ):
-                    self.logger.info(
-                        &#34;The session seems to be already closed. Going to reconnect...&#34;
+        try:
+            while not self.closed:
+                try:
+                    await asyncio.sleep(self.ping_interval)
+                    if self.current_session is not None:
+                        t = time.time()
+                        if self.last_ping_pong_time is None:
+                            self.last_ping_pong_time = float(t)
+                        await self.current_session.ping(f&#34;sdk-ping-pong:{t}&#34;)
+
+                    if self.auto_reconnect_enabled:
+                        should_reconnect = False
+                        if self.current_session is None or self.current_session.closed:
+                            self.logger.info(
+                                &#34;The session seems to be already closed. Reconnecting...&#34;
+                            )
+                            should_reconnect = True
+
+                        if self.last_ping_pong_time is not None:
+                            disconnected_seconds = int(
+                                time.time() - self.last_ping_pong_time
+                            )
+                            if disconnected_seconds &gt;= (self.ping_interval * 4):
+                                self.logger.info(
+                                    &#34;The connection seems to be stale. Reconnecting...&#34;
+                                    f&#34; reason: disconnected for {disconnected_seconds}+ seconds)&#34;
+                                )
+                                self.stale = True
+                                self.last_ping_pong_time = None
+                                should_reconnect = True
+
+                        if should_reconnect is True or not await self.is_connected():
+                            await self.connect_to_new_endpoint()
+
+                except Exception as e:
+                    self.logger.error(
+                        &#34;Failed to check the current session or reconnect to the server &#34;
+                        f&#34;(error: {type(e).__name__}, message: {e})&#34;
                     )
-                    await self.connect_to_new_endpoint()
-            except Exception as e:
-                self.logger.error(
-                    &#34;Failed to check the current session or reconnect to the server &#34;
-                    f&#34;(error: {type(e).__name__}, message: {e})&#34;
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(
+                    &#34;The running monitor_current_session task is now cancelled&#34;
                 )
+            raise
 
     async def receive_messages(self) -&gt; None:
-        consecutive_error_count = 0
-        while not self.closed:
-            try:
-                message: WSMessage = await self.current_session.receive()
-                if self.logger.level &lt;= logging.DEBUG:
-                    type = WSMsgType(message.type)
-                    message_type = type.name if type is not None else message.type
-                    message_data = message.data
-                    if isinstance(message_data, bytes):
-                        message_data = message_data.decode(&#34;utf-8&#34;)
-                    self.logger.debug(
-                        f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
-                    )
-                if message is not None:
-                    if message.type == WSMsgType.TEXT:
+        try:
+            consecutive_error_count = 0
+            while not self.closed:
+                try:
+                    message: WSMessage = await self.current_session.receive()
+                    if self.trace_enabled and self.logger.level &lt;= logging.DEBUG:
+                        type = WSMsgType(message.type)
+                        message_type = type.name if type is not None else message.type
                         message_data = message.data
-                        await self.enqueue_message(message_data)
-                        for listener in self.on_message_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.CLOSE:
-                        if self.auto_reconnect_enabled:
-                            self.logger.info(
-                                &#34;Received CLOSE event. Going to reconnect...&#34;
+                        if isinstance(message_data, bytes):
+                            message_data = message_data.decode(&#34;utf-8&#34;)
+                        if len(message_data) &gt; 0:
+                            # To skip the empty message that Slack server-side often sends
+                            self.logger.debug(
+                                f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
                             )
-                            await self.connect_to_new_endpoint()
-                        for listener in self.on_close_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.ERROR:
-                        for listener in self.on_error_listeners:
-                            await listener(message)
-                    elif message.type == WSMsgType.CLOSED:
+                    if message is not None:
+                        if message.type == WSMsgType.TEXT:
+                            message_data = message.data
+                            await self.enqueue_message(message_data)
+                            for listener in self.on_message_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.CLOSE:
+                            if self.auto_reconnect_enabled:
+                                self.logger.info(
+                                    &#34;Received CLOSE event. Reconnecting...&#34;
+                                )
+                                await self.connect_to_new_endpoint()
+                            for listener in self.on_close_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.ERROR:
+                            for listener in self.on_error_listeners:
+                                await listener(message)
+                        elif message.type == WSMsgType.CLOSED:
+                            await asyncio.sleep(self.ping_interval)
+                            continue
+                        elif message.type == WSMsgType.PING:
+                            await self.current_session.pong(message.data)
+                            continue
+                        elif message.type == WSMsgType.PONG:
+                            if message.data is not None:
+                                str_message_data = message.data.decode(&#34;utf-8&#34;)
+                                elements = str_message_data.split(&#34;:&#34;)
+                                if (
+                                    len(elements) == 2
+                                    and elements[0] == &#34;sdk-ping-pong&#34;
+                                ):
+                                    try:
+                                        self.last_ping_pong_time = float(elements[1])
+                                    except Exception as e:
+                                        self.logger.warning(
+                                            f&#34;Failed to parse the last_ping_pong_time value from {str_message_data}&#34;
+                                            f&#34; - error : {e}&#34;
+                                        )
+                            continue
+                    consecutive_error_count = 0
+                except Exception as e:
+                    consecutive_error_count += 1
+                    self.logger.error(
+                        f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
+                    )
+                    if isinstance(e, ClientConnectionError):
                         await asyncio.sleep(self.ping_interval)
-                        continue
-                consecutive_error_count = 0
-            except Exception as e:
-                consecutive_error_count += 1
-                self.logger.error(
-                    f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
-                )
-                if isinstance(e, ClientConnectionError):
-                    await asyncio.sleep(self.ping_interval)
-                else:
-                    await asyncio.sleep(consecutive_error_count)
+                    else:
+                        await asyncio.sleep(consecutive_error_count)
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(&#34;The running receive_messages task is now cancelled&#34;)
+            raise
 
     async def is_connected(self) -&gt; bool:
         return (
             not self.closed
+            and not self.stale
             and self.current_session is not None
             and not self.current_session.closed
         )
@@ -490,19 +655,25 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.wss_uri = await self.issue_new_wss_url()
         self.current_session = await self.aiohttp_client_session.ws_connect(
             self.wss_uri,
+            autoping=False,
             heartbeat=self.ping_interval,
             proxy=self.proxy,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
+        self.stale = False
         self.logger.info(&#34;A new session has been established&#34;)
 
-        if self.current_session_monitor is None:
-            self.current_session_monitor = asyncio.ensure_future(
-                self.monitor_current_session()
-            )
+        if self.current_session_monitor is not None:
+            self.current_session_monitor.cancel()
 
-        if self.message_receiver is None:
-            self.message_receiver = asyncio.ensure_future(self.receive_messages())
+        self.current_session_monitor = asyncio.ensure_future(
+            self.monitor_current_session()
+        )
+
+        if self.message_receiver is not None:
+            self.message_receiver.cancel()
+
+        self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if old_session is not None:
             await old_session.close()
@@ -516,13 +687,37 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;Sending a message: {message}&#34;)
-        await self.current_session.send_str(message)
+        try:
+            await self.current_session.send_str(message)
+        except ConnectionError as e:
+            # We rarely get this exception while replacing the underlying WebSocket connections.
+            # We can do one more try here as the self.current_session should be ready now.
+            if self.logger.level &lt;= logging.DEBUG:
+                self.logger.debug(
+                    f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                    &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+                )
+            # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+            # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+            try:
+                await self.connect_operation_lock.acquire()
+                if await self.is_connected():
+                    await self.current_session.send_str(message)
+                else:
+                    self.logger.warning(
+                        &#34;The current session is no longer active. Failed to send a message&#34;
+                    )
+                    raise e
+            finally:
+                if self.connect_operation_lock.locked() is True:
+                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
         self.auto_reconnect_enabled = False
         await self.disconnect()
-        self.message_processor.cancel()
+        if self.message_processor is not None:
+            self.message_processor.cancel()
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
         if self.message_receiver is not None:
@@ -564,11 +759,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.last_ping_pong_time"><code class="name">var <span class="ident">last_ping_pong_time</span> : Optional[float]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.logger"><code class="name">var <span class="ident">logger</span> : logging.Logger</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[None]]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -584,15 +783,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[NoneType]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[NoneType]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[NoneType]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -604,7 +803,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="../request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="../request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[None]]]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.stale"><code class="name">var <span class="ident">stale</span> : bool</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.trace_enabled"><code class="name">var <span class="ident">trace_enabled</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -632,7 +839,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     self.closed = True
     self.auto_reconnect_enabled = False
     await self.disconnect()
-    self.message_processor.cancel()
+    if self.message_processor is not None:
+        self.message_processor.cancel()
     if self.current_session_monitor is not None:
         self.current_session_monitor.cancel()
     if self.message_receiver is not None:
@@ -656,19 +864,25 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.wss_uri = await self.issue_new_wss_url()
     self.current_session = await self.aiohttp_client_session.ws_connect(
         self.wss_uri,
+        autoping=False,
         heartbeat=self.ping_interval,
         proxy=self.proxy,
     )
     self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
+    self.stale = False
     self.logger.info(&#34;A new session has been established&#34;)
 
-    if self.current_session_monitor is None:
-        self.current_session_monitor = asyncio.ensure_future(
-            self.monitor_current_session()
-        )
+    if self.current_session_monitor is not None:
+        self.current_session_monitor.cancel()
 
-    if self.message_receiver is None:
-        self.message_receiver = asyncio.ensure_future(self.receive_messages())
+    self.current_session_monitor = asyncio.ensure_future(
+        self.monitor_current_session()
+    )
+
+    if self.message_receiver is not None:
+        self.message_receiver.cancel()
+
+    self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
     if old_session is not None:
         await old_session.close()
@@ -702,13 +916,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <pre><code class="python">async def is_connected(self) -&gt; bool:
     return (
         not self.closed
+        and not self.stale
         and self.current_session is not None
         and not self.current_session.closed
     )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.monitor_current_session"><code class="name flex">
-<span>async def <span class="ident">monitor_current_session</span></span>(<span>self) ‑> NoneType</span>
+<span>async def <span class="ident">monitor_current_session</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -717,25 +932,55 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def monitor_current_session(self) -&gt; None:
-    while not self.closed:
-        await asyncio.sleep(self.ping_interval)
-        try:
-            if self.auto_reconnect_enabled and (
-                self.current_session is None or self.current_session.closed
-            ):
-                self.logger.info(
-                    &#34;The session seems to be already closed. Going to reconnect...&#34;
+    try:
+        while not self.closed:
+            try:
+                await asyncio.sleep(self.ping_interval)
+                if self.current_session is not None:
+                    t = time.time()
+                    if self.last_ping_pong_time is None:
+                        self.last_ping_pong_time = float(t)
+                    await self.current_session.ping(f&#34;sdk-ping-pong:{t}&#34;)
+
+                if self.auto_reconnect_enabled:
+                    should_reconnect = False
+                    if self.current_session is None or self.current_session.closed:
+                        self.logger.info(
+                            &#34;The session seems to be already closed. Reconnecting...&#34;
+                        )
+                        should_reconnect = True
+
+                    if self.last_ping_pong_time is not None:
+                        disconnected_seconds = int(
+                            time.time() - self.last_ping_pong_time
+                        )
+                        if disconnected_seconds &gt;= (self.ping_interval * 4):
+                            self.logger.info(
+                                &#34;The connection seems to be stale. Reconnecting...&#34;
+                                f&#34; reason: disconnected for {disconnected_seconds}+ seconds)&#34;
+                            )
+                            self.stale = True
+                            self.last_ping_pong_time = None
+                            should_reconnect = True
+
+                    if should_reconnect is True or not await self.is_connected():
+                        await self.connect_to_new_endpoint()
+
+            except Exception as e:
+                self.logger.error(
+                    &#34;Failed to check the current session or reconnect to the server &#34;
+                    f&#34;(error: {type(e).__name__}, message: {e})&#34;
                 )
-                await self.connect_to_new_endpoint()
-        except Exception as e:
-            self.logger.error(
-                &#34;Failed to check the current session or reconnect to the server &#34;
-                f&#34;(error: {type(e).__name__}, message: {e})&#34;
-            )</code></pre>
+    except asyncio.CancelledError:
+        if self.trace_enabled:
+            self.logger.debug(
+                &#34;The running monitor_current_session task is now cancelled&#34;
+            )
+        raise</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.receive_messages"><code class="name flex">
-<span>async def <span class="ident">receive_messages</span></span>(<span>self) ‑> NoneType</span>
+<span>async def <span class="ident">receive_messages</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -744,49 +989,75 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def receive_messages(self) -&gt; None:
-    consecutive_error_count = 0
-    while not self.closed:
-        try:
-            message: WSMessage = await self.current_session.receive()
-            if self.logger.level &lt;= logging.DEBUG:
-                type = WSMsgType(message.type)
-                message_type = type.name if type is not None else message.type
-                message_data = message.data
-                if isinstance(message_data, bytes):
-                    message_data = message_data.decode(&#34;utf-8&#34;)
-                self.logger.debug(
-                    f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
-                )
-            if message is not None:
-                if message.type == WSMsgType.TEXT:
+    try:
+        consecutive_error_count = 0
+        while not self.closed:
+            try:
+                message: WSMessage = await self.current_session.receive()
+                if self.trace_enabled and self.logger.level &lt;= logging.DEBUG:
+                    type = WSMsgType(message.type)
+                    message_type = type.name if type is not None else message.type
                     message_data = message.data
-                    await self.enqueue_message(message_data)
-                    for listener in self.on_message_listeners:
-                        await listener(message)
-                elif message.type == WSMsgType.CLOSE:
-                    if self.auto_reconnect_enabled:
-                        self.logger.info(
-                            &#34;Received CLOSE event. Going to reconnect...&#34;
+                    if isinstance(message_data, bytes):
+                        message_data = message_data.decode(&#34;utf-8&#34;)
+                    if len(message_data) &gt; 0:
+                        # To skip the empty message that Slack server-side often sends
+                        self.logger.debug(
+                            f&#34;Received message (type: {message_type}, data: {message_data}, extra: {message.extra})&#34;
                         )
-                        await self.connect_to_new_endpoint()
-                    for listener in self.on_close_listeners:
-                        await listener(message)
-                elif message.type == WSMsgType.ERROR:
-                    for listener in self.on_error_listeners:
-                        await listener(message)
-                elif message.type == WSMsgType.CLOSED:
+                if message is not None:
+                    if message.type == WSMsgType.TEXT:
+                        message_data = message.data
+                        await self.enqueue_message(message_data)
+                        for listener in self.on_message_listeners:
+                            await listener(message)
+                    elif message.type == WSMsgType.CLOSE:
+                        if self.auto_reconnect_enabled:
+                            self.logger.info(
+                                &#34;Received CLOSE event. Reconnecting...&#34;
+                            )
+                            await self.connect_to_new_endpoint()
+                        for listener in self.on_close_listeners:
+                            await listener(message)
+                    elif message.type == WSMsgType.ERROR:
+                        for listener in self.on_error_listeners:
+                            await listener(message)
+                    elif message.type == WSMsgType.CLOSED:
+                        await asyncio.sleep(self.ping_interval)
+                        continue
+                    elif message.type == WSMsgType.PING:
+                        await self.current_session.pong(message.data)
+                        continue
+                    elif message.type == WSMsgType.PONG:
+                        if message.data is not None:
+                            str_message_data = message.data.decode(&#34;utf-8&#34;)
+                            elements = str_message_data.split(&#34;:&#34;)
+                            if (
+                                len(elements) == 2
+                                and elements[0] == &#34;sdk-ping-pong&#34;
+                            ):
+                                try:
+                                    self.last_ping_pong_time = float(elements[1])
+                                except Exception as e:
+                                    self.logger.warning(
+                                        f&#34;Failed to parse the last_ping_pong_time value from {str_message_data}&#34;
+                                        f&#34; - error : {e}&#34;
+                                    )
+                        continue
+                consecutive_error_count = 0
+            except Exception as e:
+                consecutive_error_count += 1
+                self.logger.error(
+                    f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
+                )
+                if isinstance(e, ClientConnectionError):
                     await asyncio.sleep(self.ping_interval)
-                    continue
-            consecutive_error_count = 0
-        except Exception as e:
-            consecutive_error_count += 1
-            self.logger.error(
-                f&#34;Failed to receive or enqueue a message: {type(e).__name__}, {e}&#34;
-            )
-            if isinstance(e, ClientConnectionError):
-                await asyncio.sleep(self.ping_interval)
-            else:
-                await asyncio.sleep(consecutive_error_count)</code></pre>
+                else:
+                    await asyncio.sleep(consecutive_error_count)
+    except asyncio.CancelledError:
+        if self.trace_enabled:
+            self.logger.debug(&#34;The running receive_messages task is now cancelled&#34;)
+        raise</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.send_message"><code class="name flex">
@@ -801,7 +1072,30 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <pre><code class="python">async def send_message(self, message: str):
     if self.logger.level &lt;= logging.DEBUG:
         self.logger.debug(f&#34;Sending a message: {message}&#34;)
-    await self.current_session.send_str(message)</code></pre>
+    try:
+        await self.current_session.send_str(message)
+    except ConnectionError as e:
+        # We rarely get this exception while replacing the underlying WebSocket connections.
+        # We can do one more try here as the self.current_session should be ready now.
+        if self.logger.level &lt;= logging.DEBUG:
+            self.logger.debug(
+                f&#34;Failed to send a message (error: {e}, message: {message})&#34;
+                &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
+            )
+        # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
+        # we avoid synchronizing a lot for better performance. That&#39;s why we are doing a retry here.
+        try:
+            await self.connect_operation_lock.acquire()
+            if await self.is_connected():
+                await self.current_session.send_str(message)
+            else:
+                self.logger.warning(
+                    &#34;The current session is no longer active. Failed to send a message&#34;
+                )
+                raise e
+        finally:
+            if self.connect_operation_lock.locked() is True:
+                self.connect_operation_lock.release()</code></pre>
 </details>
 </dd>
 </dl>
@@ -836,6 +1130,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.default_auto_reconnect_enabled" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.default_auto_reconnect_enabled">default_auto_reconnect_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.disconnect" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.disconnect">disconnect</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.is_connected" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.is_connected">is_connected</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.last_ping_pong_time" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.last_ping_pong_time">last_ping_pong_time</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.logger" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.message_listeners" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.message_listeners">message_listeners</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.message_processor" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.message_processor">message_processor</a></code></li>
@@ -850,6 +1145,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.receive_messages" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.receive_messages">receive_messages</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.send_message" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.send_message">send_message</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.socket_mode_request_listeners" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.socket_mode_request_listeners">socket_mode_request_listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.stale" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.stale">stale</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.trace_enabled" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.trace_enabled">trace_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.web_client" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.web_client">web_client</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.aiohttp.SocketModeClient.wss_uri" href="#slack_sdk.socket_mode.aiohttp.SocketModeClient.wss_uri">wss_uri</a></code></li>
 </ul>
@@ -860,7 +1157,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

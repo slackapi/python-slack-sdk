@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.scim.v1.user API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -280,7 +280,7 @@ class User:
 <dl>
 <dt id="slack_sdk.scim.v1.user.User"><code class="flex name class">
 <span>class <span class="ident">User</span></span>
-<span>(</span><span>*, active: Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, addresses: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, display_name: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, emails: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, external_id: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, groups: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, id: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, meta: Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, Dict[str, Any], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, name: Union[<a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a>, Dict[str, Any], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, nick_name: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, phone_numbers: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, photos: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, profile_url: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, roles: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, schemas: Union[List[str], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, timezone: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, title: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, user_name: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, active: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, addresses: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, display_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, emails: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, external_id: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, groups: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, id: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, meta: Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, Dict[str, Any], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, name: Union[<a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a>, Dict[str, Any], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, nick_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, phone_numbers: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, photos: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, profile_url: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, roles: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, schemas: Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, timezone: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, title: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, user_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -404,71 +404,71 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.User.active"><code class="name">var <span class="ident">active</span> : Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.active"><code class="name">var <span class="ident">active</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.addresses"><code class="name">var <span class="ident">addresses</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.addresses"><code class="name">var <span class="ident">addresses</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.display_name"><code class="name">var <span class="ident">display_name</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.display_name"><code class="name">var <span class="ident">display_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.emails"><code class="name">var <span class="ident">emails</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.emails"><code class="name">var <span class="ident">emails</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.external_id"><code class="name">var <span class="ident">external_id</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.external_id"><code class="name">var <span class="ident">external_id</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.groups"><code class="name">var <span class="ident">groups</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.groups"><code class="name">var <span class="ident">groups</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.id"><code class="name">var <span class="ident">id</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.id"><code class="name">var <span class="ident">id</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.meta"><code class="name">var <span class="ident">meta</span> : Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.meta"><code class="name">var <span class="ident">meta</span> : Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.name"><code class="name">var <span class="ident">name</span> : Union[<a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a>, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.name"><code class="name">var <span class="ident">name</span> : Union[<a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.nick_name"><code class="name">var <span class="ident">nick_name</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.nick_name"><code class="name">var <span class="ident">nick_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.phone_numbers"><code class="name">var <span class="ident">phone_numbers</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.phone_numbers"><code class="name">var <span class="ident">phone_numbers</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.photos"><code class="name">var <span class="ident">photos</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.photos"><code class="name">var <span class="ident">photos</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.profile_url"><code class="name">var <span class="ident">profile_url</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.profile_url"><code class="name">var <span class="ident">profile_url</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.roles"><code class="name">var <span class="ident">roles</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.roles"><code class="name">var <span class="ident">roles</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.schemas"><code class="name">var <span class="ident">schemas</span> : Union[List[str], NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.schemas"><code class="name">var <span class="ident">schemas</span> : Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.timezone"><code class="name">var <span class="ident">timezone</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.timezone"><code class="name">var <span class="ident">timezone</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.title"><code class="name">var <span class="ident">title</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.title"><code class="name">var <span class="ident">title</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -476,7 +476,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.User.user_name"><code class="name">var <span class="ident">user_name</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.User.user_name"><code class="name">var <span class="ident">user_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -500,7 +500,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserAddress"><code class="flex name class">
 <span>class <span class="ident">UserAddress</span></span>
-<span>(</span><span>*, country: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, locality: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, postal_code: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, primary: Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, region: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, street_address: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, country: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, locality: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, postal_code: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, primary: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, region: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, street_address: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -541,27 +541,27 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserAddress.country"><code class="name">var <span class="ident">country</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.country"><code class="name">var <span class="ident">country</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserAddress.locality"><code class="name">var <span class="ident">locality</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.locality"><code class="name">var <span class="ident">locality</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserAddress.postal_code"><code class="name">var <span class="ident">postal_code</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.postal_code"><code class="name">var <span class="ident">postal_code</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserAddress.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserAddress.region"><code class="name">var <span class="ident">region</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.region"><code class="name">var <span class="ident">region</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserAddress.street_address"><code class="name">var <span class="ident">street_address</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserAddress.street_address"><code class="name">var <span class="ident">street_address</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -589,7 +589,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserEmail"><code class="flex name class">
 <span>class <span class="ident">UserEmail</span></span>
-<span>(</span><span>*, primary: Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, primary: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -606,11 +606,11 @@ class User:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserEmail.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserEmail.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserEmail.type"><code class="name">var <span class="ident">type</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserEmail.type"><code class="name">var <span class="ident">type</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -618,7 +618,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserEmail.value"><code class="name">var <span class="ident">value</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserEmail.value"><code class="name">var <span class="ident">value</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -626,7 +626,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserGroup"><code class="flex name class">
 <span>class <span class="ident">UserGroup</span></span>
-<span>(</span><span>*, display: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, display: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -655,7 +655,7 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserGroup.display"><code class="name">var <span class="ident">display</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserGroup.display"><code class="name">var <span class="ident">display</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -663,7 +663,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserGroup.value"><code class="name">var <span class="ident">value</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserGroup.value"><code class="name">var <span class="ident">value</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -687,7 +687,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserMeta"><code class="flex name class">
 <span>class <span class="ident">UserMeta</span></span>
-<span>(</span><span>created: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, location: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>created: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, location: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -715,11 +715,11 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserMeta.created"><code class="name">var <span class="ident">created</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserMeta.created"><code class="name">var <span class="ident">created</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserMeta.location"><code class="name">var <span class="ident">location</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserMeta.location"><code class="name">var <span class="ident">location</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -747,7 +747,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserName"><code class="flex name class">
 <span>class <span class="ident">UserName</span></span>
-<span>(</span><span>family_name: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, given_name: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>family_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, given_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -775,11 +775,11 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserName.family_name"><code class="name">var <span class="ident">family_name</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserName.family_name"><code class="name">var <span class="ident">family_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserName.given_name"><code class="name">var <span class="ident">given_name</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserName.given_name"><code class="name">var <span class="ident">given_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -807,7 +807,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserPhoneNumber"><code class="flex name class">
 <span>class <span class="ident">UserPhoneNumber</span></span>
-<span>(</span><span>*, primary: Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, primary: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -824,11 +824,11 @@ class User:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.type"><code class="name">var <span class="ident">type</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.type"><code class="name">var <span class="ident">type</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -836,7 +836,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.value"><code class="name">var <span class="ident">value</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserPhoneNumber.value"><code class="name">var <span class="ident">value</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -844,7 +844,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserPhoto"><code class="flex name class">
 <span>class <span class="ident">UserPhoto</span></span>
-<span>(</span><span>type: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>type: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -872,7 +872,7 @@ class User:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserPhoto.type"><code class="name">var <span class="ident">type</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.type"><code class="name">var <span class="ident">type</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -880,7 +880,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserPhoto.value"><code class="name">var <span class="ident">value</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.value"><code class="name">var <span class="ident">value</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -904,7 +904,7 @@ class User:
 </dd>
 <dt id="slack_sdk.scim.v1.user.UserRole"><code class="flex name class">
 <span>class <span class="ident">UserRole</span></span>
-<span>(</span><span>*, primary: Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+<span>(</span><span>*, primary: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, type: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, value: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -921,11 +921,11 @@ class User:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.user.UserRole.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserRole.primary"><code class="name">var <span class="ident">primary</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserRole.type"><code class="name">var <span class="ident">type</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserRole.type"><code class="name">var <span class="ident">type</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -933,7 +933,7 @@ class User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.user.UserRole.value"><code class="name">var <span class="ident">value</span> : Union[str, NoneType, <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dt id="slack_sdk.scim.v1.user.UserRole.value"><code class="name">var <span class="ident">value</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1062,7 +1062,7 @@ class User:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

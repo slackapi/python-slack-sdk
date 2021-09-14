@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.async_client API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -50,6 +50,7 @@ class AsyncBaseSocketModeClient:
     app_token: str
     wss_uri: str
     auto_reconnect_enabled: bool
+    trace_enabled: bool
     closed: bool
     connect_operation_lock: Lock
 
@@ -100,12 +101,20 @@ class AsyncBaseSocketModeClient:
     async def connect_to_new_endpoint(self, force: bool = False):
         try:
             await self.connect_operation_lock.acquire()
+            if self.trace_enabled:
+                self.logger.debug(
+                    &#34;For reconnection, the connect_operation_lock was acquired&#34;
+                )
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
         finally:
             if self.connect_operation_lock.locked() is True:
                 self.connect_operation_lock.release()
+                if self.trace_enabled:
+                    self.logger.debug(
+                        &#34;The connect_operation_lock for reconnection was released&#34;
+                    )
 
     async def close(self):
         self.closed = True
@@ -131,11 +140,16 @@ class AsyncBaseSocketModeClient:
             )
 
     async def process_messages(self):
-        while not self.closed:
-            try:
-                await self.process_message()
-            except Exception as e:
-                self.logger.exception(f&#34;Failed to process a message: {e}&#34;)
+        try:
+            while not self.closed:
+                try:
+                    await self.process_message()
+                except Exception as e:
+                    self.logger.exception(f&#34;Failed to process a message: {e}&#34;)
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(&#34;The running process_messages task is now cancelled&#34;)
+            raise
 
     async def process_message(self):
         raw_message = await self.message_queue.get()
@@ -207,6 +221,7 @@ class AsyncBaseSocketModeClient:
     app_token: str
     wss_uri: str
     auto_reconnect_enabled: bool
+    trace_enabled: bool
     closed: bool
     connect_operation_lock: Lock
 
@@ -257,12 +272,20 @@ class AsyncBaseSocketModeClient:
     async def connect_to_new_endpoint(self, force: bool = False):
         try:
             await self.connect_operation_lock.acquire()
+            if self.trace_enabled:
+                self.logger.debug(
+                    &#34;For reconnection, the connect_operation_lock was acquired&#34;
+                )
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
         finally:
             if self.connect_operation_lock.locked() is True:
                 self.connect_operation_lock.release()
+                if self.trace_enabled:
+                    self.logger.debug(
+                        &#34;The connect_operation_lock for reconnection was released&#34;
+                    )
 
     async def close(self):
         self.closed = True
@@ -288,11 +311,16 @@ class AsyncBaseSocketModeClient:
             )
 
     async def process_messages(self):
-        while not self.closed:
-            try:
-                await self.process_message()
-            except Exception as e:
-                self.logger.exception(f&#34;Failed to process a message: {e}&#34;)
+        try:
+            while not self.closed:
+                try:
+                    await self.process_message()
+                except Exception as e:
+                    self.logger.exception(f&#34;Failed to process a message: {e}&#34;)
+        except asyncio.CancelledError:
+            if self.trace_enabled:
+                self.logger.debug(&#34;The running process_messages task is now cancelled&#34;)
+            raise
 
     async def process_message(self):
         raw_message = await self.message_queue.get()
@@ -366,7 +394,7 @@ class AsyncBaseSocketModeClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, Optional[str]], Awaitable[None]]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -374,7 +402,11 @@ class AsyncBaseSocketModeClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[NoneType]]]]</code></dt>
+<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[None]]]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.trace_enabled"><code class="name">var <span class="ident">trace_enabled</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -428,12 +460,20 @@ class AsyncBaseSocketModeClient:
 <pre><code class="python">async def connect_to_new_endpoint(self, force: bool = False):
     try:
         await self.connect_operation_lock.acquire()
+        if self.trace_enabled:
+            self.logger.debug(
+                &#34;For reconnection, the connect_operation_lock was acquired&#34;
+            )
         if force or not await self.is_connected():
             self.wss_uri = await self.issue_new_wss_url()
             await self.connect()
     finally:
         if self.connect_operation_lock.locked() is True:
-            self.connect_operation_lock.release()</code></pre>
+            self.connect_operation_lock.release()
+            if self.trace_enabled:
+                self.logger.debug(
+                    &#34;The connect_operation_lock for reconnection was released&#34;
+                )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.disconnect"><code class="name flex">
@@ -539,15 +579,20 @@ class AsyncBaseSocketModeClient:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def process_messages(self):
-    while not self.closed:
-        try:
-            await self.process_message()
-        except Exception as e:
-            self.logger.exception(f&#34;Failed to process a message: {e}&#34;)</code></pre>
+    try:
+        while not self.closed:
+            try:
+                await self.process_message()
+            except Exception as e:
+                self.logger.exception(f&#34;Failed to process a message: {e}&#34;)
+    except asyncio.CancelledError:
+        if self.trace_enabled:
+            self.logger.debug(&#34;The running process_messages task is now cancelled&#34;)
+        raise</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.run_message_listeners"><code class="name flex">
-<span>async def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict, raw_message: str) ‑> NoneType</span>
+<span>async def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict, raw_message: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -663,6 +708,7 @@ class AsyncBaseSocketModeClient:
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.send_message" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.send_message">send_message</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.send_socket_mode_response" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.send_socket_mode_response">send_socket_mode_response</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners">socket_mode_request_listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.trace_enabled" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.trace_enabled">trace_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.web_client" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.web_client">web_client</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.wss_uri" href="#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.wss_uri">wss_uri</a></code></li>
 </ul>
@@ -673,7 +719,7 @@ class AsyncBaseSocketModeClient:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

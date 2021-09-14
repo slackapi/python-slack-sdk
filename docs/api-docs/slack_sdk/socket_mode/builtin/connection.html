@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.builtin.connection API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -204,8 +204,13 @@ class Connection:
 
     def disconnect(self) -&gt; None:
         if self.sock is not None:
-            self.sock.close()
-            self.sock = None
+            with self.sock_send_lock:
+                with self.sock_receive_lock:
+                    # Synchronize before closing this instance&#39;s socket
+                    self.sock.close()
+                    self.sock = None
+                    # After this, all operations using self.sock will be skipped
+
         self.logger.info(
             f&#34;The connection has been closed (session id: {self.session_id})&#34;
         )
@@ -226,7 +231,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
+                    )
 
     def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
@@ -238,7 +249,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
+                    )
 
     def send(self, payload: str) -&gt; None:
         if self.trace_enabled:
@@ -250,7 +267,17 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
-            self.sock.send(data)
+            try:
+                self.sock.send(data)
+            except Exception as e:
+                # In most cases, we want to retry this operation with a newly established connection.
+                # Getting this exception means that this connection has been replaced with a new one
+                # and it&#39;s no longer usable.
+                # The SocketModeClient implementation can do one retry when it gets this exception.
+                raise SlackClientNotConnectedError(
+                    f&#34;Failed to send a message as the connection is no longer active &#34;
+                    f&#34;(session_id: {self.session_id}, error: {e})&#34;
+                )
 
     def check_state(self) -&gt; None:
         try:
@@ -481,7 +508,7 @@ class Connection:
 <dl>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection"><code class="flex name class">
 <span>class <span class="ident">Connection</span></span>
-<span>(</span><span>url: str, logger: logging.Logger, proxy: Optional[str] = None, proxy_headers: Optional[Dict[str, str]] = None, ping_interval: float = 5, receive_timeout: float = 3, receive_buffer_size: int = 1024, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False, on_message_listener: Optional[Callable[[str], NoneType]] = None, on_error_listener: Optional[Callable[[Exception], NoneType]] = None, on_close_listener: Optional[Callable[[int, Optional[str]], NoneType]] = None, connection_type_name: str = 'Socket Mode')</span>
+<span>(</span><span>url: str, logger: logging.Logger, proxy: Optional[str] = None, proxy_headers: Optional[Dict[str, str]] = None, ping_interval: float = 5, receive_timeout: float = 3, receive_buffer_size: int = 1024, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False, on_message_listener: Optional[Callable[[str], None]] = None, on_error_listener: Optional[Callable[[Exception], None]] = None, on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None, connection_type_name: str = 'Socket Mode')</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -634,8 +661,13 @@ class Connection:
 
     def disconnect(self) -&gt; None:
         if self.sock is not None:
-            self.sock.close()
-            self.sock = None
+            with self.sock_send_lock:
+                with self.sock_receive_lock:
+                    # Synchronize before closing this instance&#39;s socket
+                    self.sock.close()
+                    self.sock = None
+                    # After this, all operations using self.sock will be skipped
+
         self.logger.info(
             f&#34;The connection has been closed (session id: {self.session_id})&#34;
         )
@@ -656,7 +688,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
+                    )
 
     def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
@@ -668,7 +706,13 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
-            self.sock.send(data)
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(
+                        &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
+                    )
 
     def send(self, payload: str) -&gt; None:
         if self.trace_enabled:
@@ -680,7 +724,17 @@ class Connection:
             )
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
-            self.sock.send(data)
+            try:
+                self.sock.send(data)
+            except Exception as e:
+                # In most cases, we want to retry this operation with a newly established connection.
+                # Getting this exception means that this connection has been replaced with a new one
+                # and it&#39;s no longer usable.
+                # The SocketModeClient implementation can do one retry when it gets this exception.
+                raise SlackClientNotConnectedError(
+                    f&#34;Failed to send a message as the connection is no longer active &#34;
+                    f&#34;(session_id: {self.session_id}, error: {e})&#34;
+                )
 
     def check_state(self) -&gt; None:
         try:
@@ -909,15 +963,15 @@ class Connection:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_close_listener"><code class="name">var <span class="ident">on_close_listener</span> : Optional[Callable[[int, Optional[str]], NoneType]]</code></dt>
+<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_close_listener"><code class="name">var <span class="ident">on_close_listener</span> : Optional[Callable[[int, Optional[str]], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_error_listener"><code class="name">var <span class="ident">on_error_listener</span> : Optional[Callable[[Exception], NoneType]]</code></dt>
+<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_error_listener"><code class="name">var <span class="ident">on_error_listener</span> : Optional[Callable[[Exception], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_message_listener"><code class="name">var <span class="ident">on_message_listener</span> : Optional[Callable[[str], NoneType]]</code></dt>
+<dt id="slack_sdk.socket_mode.builtin.connection.Connection.on_message_listener"><code class="name">var <span class="ident">on_message_listener</span> : Optional[Callable[[str], None]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -953,7 +1007,7 @@ class Connection:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.check_state"><code class="name flex">
-<span>def <span class="ident">check_state</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">check_state</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1010,7 +1064,7 @@ class Connection:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1023,7 +1077,7 @@ class Connection:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.connect"><code class="name flex">
-<span>def <span class="ident">connect</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1113,7 +1167,7 @@ class Connection:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.disconnect"><code class="name flex">
-<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1123,8 +1177,13 @@ class Connection:
 </summary>
 <pre><code class="python">def disconnect(self) -&gt; None:
     if self.sock is not None:
-        self.sock.close()
-        self.sock = None
+        with self.sock_send_lock:
+            with self.sock_receive_lock:
+                # Synchronize before closing this instance&#39;s socket
+                self.sock.close()
+                self.sock = None
+                # After this, all operations using self.sock will be skipped
+
     self.logger.info(
         f&#34;The connection has been closed (session id: {self.session_id})&#34;
     )</code></pre>
@@ -1144,7 +1203,7 @@ class Connection:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.ping"><code class="name flex">
-<span>def <span class="ident">ping</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> NoneType</span>
+<span>def <span class="ident">ping</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1162,11 +1221,17 @@ class Connection:
         )
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
     with self.sock_send_lock:
-        self.sock.send(data)</code></pre>
+        if self.sock is not None:
+            self.sock.send(data)
+        else:
+            if self.ping_pong_trace_enabled:
+                self.logger.debug(
+                    &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
+                )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.pong"><code class="name flex">
-<span>def <span class="ident">pong</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> NoneType</span>
+<span>def <span class="ident">pong</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1184,11 +1249,17 @@ class Connection:
         )
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
     with self.sock_send_lock:
-        self.sock.send(data)</code></pre>
+        if self.sock is not None:
+            self.sock.send(data)
+        else:
+            if self.ping_pong_trace_enabled:
+                self.logger.debug(
+                    &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
+                )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.run_until_completion"><code class="name flex">
-<span>def <span class="ident">run_until_completion</span></span>(<span>self, state: <a title="slack_sdk.socket_mode.builtin.connection.ConnectionState" href="#slack_sdk.socket_mode.builtin.connection.ConnectionState">ConnectionState</a>) ‑> NoneType</span>
+<span>def <span class="ident">run_until_completion</span></span>(<span>self, state: <a title="slack_sdk.socket_mode.builtin.connection.ConnectionState" href="#slack_sdk.socket_mode.builtin.connection.ConnectionState">ConnectionState</a>) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1368,7 +1439,7 @@ class Connection:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.send"><code class="name flex">
-<span>def <span class="ident">send</span></span>(<span>self, payload: str) ‑> NoneType</span>
+<span>def <span class="ident">send</span></span>(<span>self, payload: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1386,7 +1457,17 @@ class Connection:
         )
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
     with self.sock_send_lock:
-        self.sock.send(data)</code></pre>
+        try:
+            self.sock.send(data)
+        except Exception as e:
+            # In most cases, we want to retry this operation with a newly established connection.
+            # Getting this exception means that this connection has been replaced with a new one
+            # and it&#39;s no longer usable.
+            # The SocketModeClient implementation can do one retry when it gets this exception.
+            raise SlackClientNotConnectedError(
+                f&#34;Failed to send a message as the connection is no longer active &#34;
+                f&#34;(session_id: {self.session_id}, error: {e})&#34;
+            )</code></pre>
 </details>
 </dd>
 </dl>
@@ -1470,7 +1551,7 @@ class Connection:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

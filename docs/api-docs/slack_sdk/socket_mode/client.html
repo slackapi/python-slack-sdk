@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.client API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -388,7 +388,7 @@ class BaseSocketModeClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.listeners.WebSocketMessageListener" href="listeners.html#slack_sdk.socket_mode.listeners.WebSocketMessageListener">WebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.client.BaseSocketModeClient" href="#slack_sdk.socket_mode.client.BaseSocketModeClient">BaseSocketModeClient</a>, dict, Optional[str]], NoneType]]]</code></dt>
+<dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.listeners.WebSocketMessageListener" href="listeners.html#slack_sdk.socket_mode.listeners.WebSocketMessageListener">WebSocketMessageListener</a>, Callable[[<a title="slack_sdk.socket_mode.client.BaseSocketModeClient" href="#slack_sdk.socket_mode.client.BaseSocketModeClient">BaseSocketModeClient</a>, dict, Optional[str]], None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -404,7 +404,7 @@ class BaseSocketModeClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.listeners.SocketModeRequestListener" href="listeners.html#slack_sdk.socket_mode.listeners.SocketModeRequestListener">SocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.client.BaseSocketModeClient" href="#slack_sdk.socket_mode.client.BaseSocketModeClient">BaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], NoneType]]]</code></dt>
+<dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[Union[<a title="slack_sdk.socket_mode.listeners.SocketModeRequestListener" href="listeners.html#slack_sdk.socket_mode.listeners.SocketModeRequestListener">SocketModeRequestListener</a>, Callable[[<a title="slack_sdk.socket_mode.client.BaseSocketModeClient" href="#slack_sdk.socket_mode.client.BaseSocketModeClient">BaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -420,7 +420,7 @@ class BaseSocketModeClient:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -434,7 +434,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.connect"><code class="name flex">
-<span>def <span class="ident">connect</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">connect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -468,7 +468,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.disconnect"><code class="name flex">
-<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">disconnect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -571,7 +571,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.process_messages"><code class="name flex">
-<span>def <span class="ident">process_messages</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">process_messages</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -588,7 +588,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.run_message_listeners"><code class="name flex">
-<span>def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict, raw_message: str) ‑> NoneType</span>
+<span>def <span class="ident">run_message_listeners</span></span>(<span>self, message: dict, raw_message: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -634,7 +634,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.send_message"><code class="name flex">
-<span>def <span class="ident">send_message</span></span>(<span>self, message: str) ‑> NoneType</span>
+<span>def <span class="ident">send_message</span></span>(<span>self, message: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -647,7 +647,7 @@ class BaseSocketModeClient:
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.send_socket_mode_response"><code class="name flex">
-<span>def <span class="ident">send_socket_mode_response</span></span>(<span>self, response: Union[Dict[str, Any], <a title="slack_sdk.socket_mode.response.SocketModeResponse" href="response.html#slack_sdk.socket_mode.response.SocketModeResponse">SocketModeResponse</a>]) ‑> NoneType</span>
+<span>def <span class="ident">send_socket_mode_response</span></span>(<span>self, response: Union[Dict[str, Any], <a title="slack_sdk.socket_mode.response.SocketModeResponse" href="response.html#slack_sdk.socket_mode.response.SocketModeResponse">SocketModeResponse</a>]) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -716,7 +716,7 @@ class BaseSocketModeClient:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

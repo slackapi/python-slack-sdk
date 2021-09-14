@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.web.legacy_client API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -784,6 +784,43 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         return self.api_call(&#34;admin.conversations.getTeams&#34;, params=kwargs)
+
+    def admin_conversations_getCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Get a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.getCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)
+
+    def admin_conversations_removeCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Remove a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.removeCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)
+
+    def admin_conversations_setCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        duration_days: int,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Set a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.setCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
+        return self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
 
     def admin_emoji_add(
         self,
@@ -2850,7 +2887,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if file:
-            if &#34;filename&#34; not in kwargs and isinstance(file, str):
+            if kwargs.get(&#34;filename&#34;) is None and isinstance(file, str):
                 # use the local filename if filename is missing
                 if kwargs.get(&#34;filename&#34;) is None:
                     kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
@@ -5072,6 +5109,43 @@ removed at anytime.</p></div>
         )
         return self.api_call(&#34;admin.conversations.getTeams&#34;, params=kwargs)
 
+    def admin_conversations_getCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Get a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.getCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)
+
+    def admin_conversations_removeCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Remove a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.removeCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)
+
+    def admin_conversations_setCustomRetention(
+        self,
+        *,
+        channel_id: str,
+        duration_days: int,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Set a channel&#39;s retention policy
+        https://api.slack.com/methods/admin.conversations.setCustomRetention
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
+        return self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
@@ -7137,7 +7211,7 @@ removed at anytime.</p></div>
             }
         )
         if file:
-            if &#34;filename&#34; not in kwargs and isinstance(file, str):
+            if kwargs.get(&#34;filename&#34;) is None and isinstance(file, str):
                 # use the local filename if filename is missing
                 if kwargs.get(&#34;filename&#34;) is None:
                     kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
@@ -8824,7 +8898,7 @@ via the app_requested event, or by the admin.apps.requests.list method.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_apps_uninstall"><code class="name flex">
-<span>def <span class="ident">admin_apps_uninstall</span></span>(<span>self, *, app_id: str, enterprise_id: Optional[str] = None, team_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_apps_uninstall</span></span>(<span>self, *, app_id: str, enterprise_id: Optional[str] = None, team_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Uninstall an app from one or many workspaces, or an entire enterprise organization.
@@ -9188,7 +9262,7 @@ With an org-level token, enterprise_id or team_ids is required.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared"><code class="name flex">
-<span>def <span class="ident">admin_conversations_disconnectShared</span></span>(<span>self, *, channel_id: str, leaving_team_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_conversations_disconnectShared</span></span>(<span>self, *, channel_id: str, leaving_team_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Disconnect a connected channel from one or more workspaces.
@@ -9216,7 +9290,7 @@ With an org-level token, enterprise_id or team_ids is required.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo"><code class="name flex">
-<span>def <span class="ident">admin_conversations_ekm_listOriginalConnectedChannelInfo</span></span>(<span>self, *, channel_ids: Union[str, Sequence[str], NoneType] = None, cursor: Optional[str] = None, limit: Optional[int] = None, team_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_conversations_ekm_listOriginalConnectedChannelInfo</span></span>(<span>self, *, channel_ids: Union[str, Sequence[str], ForwardRef(None)] = None, cursor: Optional[str] = None, limit: Optional[int] = None, team_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List all disconnected channels—i.e.,
@@ -9283,6 +9357,29 @@ the corresponding original channel IDs for key revocation with EKM.
     return self.api_call(&#34;admin.conversations.getConversationPrefs&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention"><code class="name flex">
+<span>def <span class="ident">admin_conversations_getCustomRetention</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a channel's retention policy
+<a href="https://api.slack.com/methods/admin.conversations.getCustomRetention">https://api.slack.com/methods/admin.conversations.getCustomRetention</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_getCustomRetention(
+    self,
+    *,
+    channel_id: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Get a channel&#39;s retention policy
+    https://api.slack.com/methods/admin.conversations.getCustomRetention
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    return self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams"><code class="name flex">
 <span>def <span class="ident">admin_conversations_getTeams</span></span>(<span>self, *, channel_id: str, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
@@ -9341,6 +9438,29 @@ the corresponding original channel IDs for key revocation with EKM.
         kwargs.update({&#34;user_ids&#34;: user_ids})
     # NOTE: the endpoint is unable to handle Content-Type: application/json as of Sep 3, 2020.
     return self.api_call(&#34;admin.conversations.invite&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention"><code class="name flex">
+<span>def <span class="ident">admin_conversations_removeCustomRetention</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove a channel's retention policy
+<a href="https://api.slack.com/methods/admin.conversations.removeCustomRetention">https://api.slack.com/methods/admin.conversations.removeCustomRetention</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_removeCustomRetention(
+    self,
+    *,
+    channel_id: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Remove a channel&#39;s retention policy
+    https://api.slack.com/methods/admin.conversations.removeCustomRetention
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    return self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename"><code class="name flex">
@@ -9471,7 +9591,7 @@ the corresponding original channel IDs for key revocation with EKM.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_search"><code class="name flex">
-<span>def <span class="ident">admin_conversations_search</span></span>(<span>self, *, cursor: Optional[str] = None, limit: Optional[int] = None, query: Optional[str] = None, search_channel_types: Union[str, Sequence[str], NoneType] = None, sort: Optional[str] = None, sort_dir: Optional[str] = None, team_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_conversations_search</span></span>(<span>self, *, cursor: Optional[str] = None, limit: Optional[int] = None, query: Optional[str] = None, search_channel_types: Union[str, Sequence[str], ForwardRef(None)] = None, sort: Optional[str] = None, sort_dir: Optional[str] = None, team_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Search for public or private channels in an Enterprise organization.
@@ -9546,8 +9666,32 @@ the corresponding original channel IDs for key revocation with EKM.
     return self.api_call(&#34;admin.conversations.setConversationPrefs&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setCustomRetention"><code class="name flex">
+<span>def <span class="ident">admin_conversations_setCustomRetention</span></span>(<span>self, *, channel_id: str, duration_days: int, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set a channel's retention policy
+<a href="https://api.slack.com/methods/admin.conversations.setCustomRetention">https://api.slack.com/methods/admin.conversations.setCustomRetention</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_setCustomRetention(
+    self,
+    *,
+    channel_id: str,
+    duration_days: int,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Set a channel&#39;s retention policy
+    https://api.slack.com/methods/admin.conversations.setCustomRetention
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
+    return self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setTeams"><code class="name flex">
-<span>def <span class="ident">admin_conversations_setTeams</span></span>(<span>self, *, channel_id: str, org_channel: Optional[bool] = None, target_team_ids: Union[str, Sequence[str], NoneType] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_conversations_setTeams</span></span>(<span>self, *, channel_id: str, org_channel: Optional[bool] = None, target_team_ids: Union[str, Sequence[str], ForwardRef(None)] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set the workspaces in an Enterprise grid org that connect to a public or private channel.
@@ -10233,7 +10377,7 @@ the corresponding original channel IDs for key revocation with EKM.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_assign"><code class="name flex">
-<span>def <span class="ident">admin_users_assign</span></span>(<span>self, *, team_id: str, user_id: str, channel_ids: Union[str, Sequence[str], NoneType] = None, is_restricted: Optional[bool] = None, is_ultra_restricted: Optional[bool] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_users_assign</span></span>(<span>self, *, team_id: str, user_id: str, channel_ids: Union[str, Sequence[str], ForwardRef(None)] = None, is_restricted: Optional[bool] = None, is_ultra_restricted: Optional[bool] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Add an Enterprise user to a workspace.
@@ -10271,7 +10415,7 @@ the corresponding original channel IDs for key revocation with EKM.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_users_invite"><code class="name flex">
-<span>def <span class="ident">admin_users_invite</span></span>(<span>self, *, team_id: str, email: str, channel_ids: Union[str, Sequence[str]], custom_message: Optional[str] = None, email_password_policy_enabled: Optional[bool] = None, guest_expiration_ts: Union[str, float, NoneType] = None, is_restricted: Optional[bool] = None, is_ultra_restricted: Optional[bool] = None, real_name: Optional[str] = None, resend: Optional[bool] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">admin_users_invite</span></span>(<span>self, *, team_id: str, email: str, channel_ids: Union[str, Sequence[str]], custom_message: Optional[str] = None, email_password_policy_enabled: Optional[bool] = None, guest_expiration_ts: Union[str, float, ForwardRef(None)] = None, is_restricted: Optional[bool] = None, is_ultra_restricted: Optional[bool] = None, real_name: Optional[str] = None, resend: Optional[bool] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Invite a user to a workspace.
@@ -10823,7 +10967,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.calls_add"><code class="name flex">
-<span>def <span class="ident">calls_add</span></span>(<span>self, *, external_unique_id: str, join_url: str, created_by: Optional[str] = None, date_start: Optional[int] = None, desktop_app_join_url: Optional[str] = None, external_display_id: Optional[str] = None, title: Optional[str] = None, users: Union[str, Sequence[Dict[str, str]], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">calls_add</span></span>(<span>self, *, external_unique_id: str, join_url: str, created_by: Optional[str] = None, date_start: Optional[int] = None, desktop_app_join_url: Optional[str] = None, external_display_id: Optional[str] = None, title: Optional[str] = None, users: Union[str, Sequence[Dict[str, str]], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Registers a new Call.
@@ -11974,7 +12118,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.conversations_inviteShared"><code class="name flex">
-<span>def <span class="ident">conversations_inviteShared</span></span>(<span>self, *, channel: str, emails: Union[str, Sequence[str], NoneType] = None, user_ids: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">conversations_inviteShared</span></span>(<span>self, *, channel: str, emails: Union[str, Sequence[str], ForwardRef(None)] = None, user_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sends an invitation to a Slack Connect channel.
@@ -12081,7 +12225,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.conversations_list"><code class="name flex">
-<span>def <span class="ident">conversations_list</span></span>(<span>self, *, cursor: Optional[str] = None, exclude_archived: Optional[bool] = None, limit: Optional[int] = None, team_id: Optional[str] = None, types: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">conversations_list</span></span>(<span>self, *, cursor: Optional[str] = None, exclude_archived: Optional[bool] = None, limit: Optional[int] = None, team_id: Optional[str] = None, types: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Lists all channels in a Slack team.
@@ -12195,7 +12339,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.conversations_open"><code class="name flex">
-<span>def <span class="ident">conversations_open</span></span>(<span>self, *, channel: Optional[str] = None, return_im: Optional[bool] = None, users: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">conversations_open</span></span>(<span>self, *, channel: Optional[str] = None, return_im: Optional[bool] = None, users: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Opens or resumes a direct message or multi-person direct message.
@@ -12450,7 +12594,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.dnd_setSnooze"><code class="name flex">
-<span>def <span class="ident">dnd_setSnooze</span></span>(<span>self, *, num_minutes: Union[int, str], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">dnd_setSnooze</span></span>(<span>self, *, num_minutes: Union[str, int], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Turns on Do Not Disturb mode for the current user, or changes its duration.
@@ -12602,7 +12746,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.files_list"><code class="name flex">
-<span>def <span class="ident">files_list</span></span>(<span>self, *, channel: Optional[str] = None, count: Optional[int] = None, page: Optional[int] = None, show_files_hidden_by_limit: Optional[bool] = None, team_id: Optional[str] = None, ts_from: Optional[str] = None, ts_to: Optional[str] = None, types: Union[str, Sequence[str], NoneType] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">files_list</span></span>(<span>self, *, channel: Optional[str] = None, count: Optional[int] = None, page: Optional[int] = None, show_files_hidden_by_limit: Optional[bool] = None, team_id: Optional[str] = None, ts_from: Optional[str] = None, ts_to: Optional[str] = None, types: Union[str, Sequence[str], ForwardRef(None)] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Lists &amp; filters team files.
@@ -12648,7 +12792,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.files_remote_add"><code class="name flex">
-<span>def <span class="ident">files_remote_add</span></span>(<span>self, *, external_id: str, external_url: str, title: str, filetype: Optional[str] = None, indexable_file_contents: Union[str, bytes, io.IOBase, NoneType] = None, preview_image: Union[str, bytes, io.IOBase, NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">files_remote_add</span></span>(<span>self, *, external_id: str, external_url: str, title: str, filetype: Optional[str] = None, indexable_file_contents: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, preview_image: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Adds a file from a remote service.
@@ -12914,7 +13058,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.files_upload"><code class="name flex">
-<span>def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase, NoneType] = None, content: Optional[str] = None, filename: Optional[str] = None, filetype: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, title: Optional[str] = None, channels: Union[str, Sequence[str], NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Optional[str] = None, filename: Optional[str] = None, filetype: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, title: Optional[str] = None, channels: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Uploads or creates a file.
@@ -12960,7 +13104,7 @@ or received but have not yet been approved by all parties.
         }
     )
     if file:
-        if &#34;filename&#34; not in kwargs and isinstance(file, str):
+        if kwargs.get(&#34;filename&#34;) is None and isinstance(file, str):
             # use the local filename if filename is missing
             if kwargs.get(&#34;filename&#34;) is None:
                 kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
@@ -14364,7 +14508,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.team_accessLogs"><code class="name flex">
-<span>def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[int, str, NoneType] = None, count: Union[int, str, NoneType] = None, page: Union[int, str, NoneType] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[int, str, ForwardRef(None)] = None, count: Union[int, str, ForwardRef(None)] = None, page: Union[int, str, ForwardRef(None)] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the access logs for the current team.
@@ -14444,7 +14588,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.team_integrationLogs"><code class="name flex">
-<span>def <span class="ident">team_integrationLogs</span></span>(<span>self, *, app_id: Optional[str] = None, change_type: Optional[str] = None, count: Union[int, str, NoneType] = None, page: Union[int, str, NoneType] = None, service_id: Optional[str] = None, team_id: Optional[str] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">team_integrationLogs</span></span>(<span>self, *, app_id: Optional[str] = None, change_type: Optional[str] = None, count: Union[int, str, ForwardRef(None)] = None, page: Union[int, str, ForwardRef(None)] = None, service_id: Optional[str] = None, team_id: Optional[str] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the integration logs for the current team.
@@ -14506,7 +14650,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.usergroups_create"><code class="name flex">
-<span>def <span class="ident">usergroups_create</span></span>(<span>self, *, name: str, channels: Union[str, Sequence[str], NoneType] = None, description: Optional[str] = None, handle: Optional[str] = None, include_count: Optional[bool] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">usergroups_create</span></span>(<span>self, *, name: str, channels: Union[str, Sequence[str], ForwardRef(None)] = None, description: Optional[str] = None, handle: Optional[str] = None, include_count: Optional[bool] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a User Group
@@ -14633,7 +14777,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.usergroups_update"><code class="name flex">
-<span>def <span class="ident">usergroups_update</span></span>(<span>self, *, usergroup: str, channels: Union[str, Sequence[str], NoneType] = None, description: Optional[str] = None, handle: Optional[str] = None, include_count: Optional[bool] = None, name: Optional[str] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">usergroups_update</span></span>(<span>self, *, usergroup: str, channels: Union[str, Sequence[str], ForwardRef(None)] = None, description: Optional[str] = None, handle: Optional[str] = None, include_count: Optional[bool] = None, name: Optional[str] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Update an existing User Group
@@ -14742,7 +14886,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.users_conversations"><code class="name flex">
-<span>def <span class="ident">users_conversations</span></span>(<span>self, *, cursor: Optional[str] = None, exclude_archived: Optional[bool] = None, limit: Optional[int] = None, team_id: Optional[str] = None, types: Union[str, Sequence[str], NoneType] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">users_conversations</span></span>(<span>self, *, cursor: Optional[str] = None, exclude_archived: Optional[bool] = None, limit: Optional[int] = None, team_id: Optional[str] = None, types: Union[str, Sequence[str], ForwardRef(None)] = None, user: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List conversations the calling user may access.
@@ -14984,7 +15128,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.users_setPhoto"><code class="name flex">
-<span>def <span class="ident">users_setPhoto</span></span>(<span>self, *, image: Union[str, io.IOBase], crop_w: Union[int, str, NoneType] = None, crop_x: Union[int, str, NoneType] = None, crop_y: Union[int, str, NoneType] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">users_setPhoto</span></span>(<span>self, *, image: Union[str, io.IOBase], crop_w: Union[int, str, ForwardRef(None)] = None, crop_x: Union[int, str, ForwardRef(None)] = None, crop_y: Union[int, str, ForwardRef(None)] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set the user profile photo
@@ -15327,14 +15471,17 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared">admin_conversations_disconnectShared</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo">admin_conversations_ekm_listOriginalConnectedChannelInfo</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getConversationPrefs" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getConversationPrefs">admin_conversations_getConversationPrefs</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention">admin_conversations_getCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams">admin_conversations_getTeams</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite">admin_conversations_invite</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention">admin_conversations_removeCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename">admin_conversations_rename</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_addGroup" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_addGroup">admin_conversations_restrictAccess_addGroup</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_listGroups" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_listGroups">admin_conversations_restrictAccess_listGroups</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_removeGroup" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_removeGroup">admin_conversations_restrictAccess_removeGroup</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_search" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_search">admin_conversations_search</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setConversationPrefs" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setConversationPrefs">admin_conversations_setConversationPrefs</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setCustomRetention">admin_conversations_setCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setTeams" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setTeams">admin_conversations_setTeams</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unarchive" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unarchive">admin_conversations_unarchive</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_add" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_add">admin_emoji_add</a></code></li>
@@ -15548,7 +15695,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.2" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.models.blocks.blocks API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -1155,7 +1155,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.ImageBlock"><code class="flex name class">
 <span>class <span class="ident">ImageBlock</span></span>
-<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, NoneType] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1270,7 +1270,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.InputBlock"><code class="flex name class">
 <span>class <span class="ident">InputBlock</span></span>
-<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, NoneType] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1398,7 +1398,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.SectionBlock"><code class="flex name class">
 <span>class <span class="ident">SectionBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, fields: Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, NoneType] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, fields: Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1618,7 +1618,7 @@ def attributes(self) -&gt; Set[str]:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>
