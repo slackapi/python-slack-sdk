@@ -2905,7 +2905,7 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         if file:
-            if "filename" not in kwargs and isinstance(file, str):
+            if kwargs.get("filename") is None and isinstance(file, str):
                 # use the local filename if filename is missing
                 if kwargs.get("filename") is None:
                     kwargs["filename"] = file.split(os.path.sep)[-1]
