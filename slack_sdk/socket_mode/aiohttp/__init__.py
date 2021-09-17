@@ -154,18 +154,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             )
                             should_reconnect = True
 
-                        if self.last_ping_pong_time is not None:
+                        if await self.is_ping_pong_failing():
                             disconnected_seconds = int(
                                 time.time() - self.last_ping_pong_time
                             )
-                            if disconnected_seconds >= (self.ping_interval * 4):
-                                self.logger.info(
-                                    "The connection seems to be stale. Reconnecting..."
-                                    f" reason: disconnected for {disconnected_seconds}+ seconds)"
-                                )
-                                self.stale = True
-                                self.last_ping_pong_time = None
-                                should_reconnect = True
+                            self.logger.info(
+                                "The connection seems to be stale. Reconnecting..."
+                                f" reason: disconnected for {disconnected_seconds}+ seconds)"
+                            )
+                            self.stale = True
+                            self.last_ping_pong_time = None
+                            should_reconnect = True
 
                         if should_reconnect is True or not await self.is_connected():
                             await self.connect_to_new_endpoint()
@@ -253,12 +252,19 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 self.logger.debug("The running receive_messages task is now cancelled")
             raise
 
+    async def is_ping_pong_failing(self) -> bool:
+        if self.last_ping_pong_time is None:
+            return False
+        disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+        return disconnected_seconds >= (self.ping_interval * 4)
+
     async def is_connected(self) -> bool:
         return (
             not self.closed
             and not self.stale
             and self.current_session is not None
             and not self.current_session.closed
+            and not await self.is_ping_pong_failing()
         )
 
     async def connect(self):
