@@ -275,6 +275,10 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.stale = False
         self.logger.info("A new session has been established")
 
+        # The first ping from the new connection
+        t = time.time()
+        await self.current_session.ping(f"sdk-ping-pong:{t}")
+
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
 
