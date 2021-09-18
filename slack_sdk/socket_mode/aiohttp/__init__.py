@@ -318,7 +318,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 except Exception as e:
                     consecutive_error_count += 1
                     self.logger.error(
-                        f"Failed to receive or enqueue a message: {type(e).__name__}, {e} ({session_id}"
+                        f"Failed to receive or enqueue a message: {type(e).__name__}, {e} ({session_id})"
                     )
                     if isinstance(e, ClientConnectionError):
                         await asyncio.sleep(self.ping_interval)
@@ -347,13 +347,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         )
         if connected is False and self.logger.level <= logging.DEBUG:
             is_ping_pong_failing = await self.is_ping_pong_failing()
+            session_id = await self.session_id()
             self.logger.debug(
-                "Inactive connection detected "
-                f"(session_id: {await self.session_id()}, "
+                "Inactive connection detected ("
+                f"session_id: {session_id}, "
                 f"closed: {self.closed}, "
                 f"stale: {self.stale}, "
                 f"current_session.closed: {self.current_session.closed}, "
-                f"is_ping_pong_failing: {is_ping_pong_failing})"
+                f"is_ping_pong_failing: {is_ping_pong_failing}"
+                ")"
             )
         return connected
 
@@ -411,8 +413,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def disconnect(self):
         if self.current_session is not None:
             await self.current_session.close()
+        session_id = await self.session_id()
         self.logger.info(
-            f"The current session ({await self.session_id()}) has been abandoned by disconnect() method call"
+            f"The current session ({session_id}) has been abandoned by disconnect() method call"
         )
 
     async def send_message(self, message: str):
