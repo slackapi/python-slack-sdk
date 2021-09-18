@@ -64,6 +64,9 @@ class AsyncBaseSocketModeClient:
     async def is_connected(self) -> bool:
         return False
 
+    async def session_id(self) -> str:
+        return ""
+
     async def connect(self):
         raise NotImplementedError()
 
@@ -71,11 +74,12 @@ class AsyncBaseSocketModeClient:
         raise NotImplementedError()
 
     async def connect_to_new_endpoint(self, force: bool = False):
+        session_id = await self.session_id()
         try:
             await self.connect_operation_lock.acquire()
             if self.trace_enabled:
                 self.logger.debug(
-                    "For reconnection, the connect_operation_lock was acquired"
+                    f"For reconnection, the connect_operation_lock was acquired (session: {session_id})"
                 )
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
@@ -85,7 +89,7 @@ class AsyncBaseSocketModeClient:
                 self.connect_operation_lock.release()
                 if self.trace_enabled:
                     self.logger.debug(
-                        "The connect_operation_lock for reconnection was released"
+                        f"The connect_operation_lock for reconnection was released (session: {session_id})"
                     )
 
     async def close(self):
@@ -107,20 +111,26 @@ class AsyncBaseSocketModeClient:
         await self.message_queue.put(message)
         if self.logger.level <= logging.DEBUG:
             queue_size = self.message_queue.qsize()
+            session_id = await self.session_id()
             self.logger.debug(
-                f"A new message enqueued (current queue size: {queue_size})"
+                f"A new message enqueued (current queue size: {queue_size}, session: {session_id})"
             )
 
     async def process_messages(self):
+        session_id = await self.session_id()
         try:
             while not self.closed:
                 try:
                     await self.process_message()
                 except Exception as e:
-                    self.logger.exception(f"Failed to process a message: {e}")
+                    self.logger.exception(
+                        f"Failed to process a message: {e}, session: {session_id}"
+                    )
         except asyncio.CancelledError:
             if self.trace_enabled:
-                self.logger.debug("The running process_messages task is now cancelled")
+                self.logger.debug(
+                    f"The running process_messages task for {session_id} is now cancelled"
+                )
             raise
 
     async def process_message(self):
@@ -134,10 +144,11 @@ class AsyncBaseSocketModeClient:
             )
 
     async def run_message_listeners(self, message: dict, raw_message: str) -> None:
+        session_id = await self.session_id()
         type, envelope_id = message.get("type"), message.get("envelope_id")
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(
-                f"Message processing started (type: {type}, envelope_id: {envelope_id})"
+                f"Message processing started (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
             )
         try:
             if message.get("type") == "disconnect":
@@ -148,7 +159,9 @@ class AsyncBaseSocketModeClient:
                 try:
                     await listener(self, message, raw_message)
                 except Exception as e:
-                    self.logger.exception(f"Failed to run a message listener: {e}")
+                    self.logger.exception(
+                        f"Failed to run a message listener: {e}, session: {session_id}"
+                    )
 
             if len(self.socket_mode_request_listeners) > 0:
                 request = SocketModeRequest.from_dict(message)
@@ -158,12 +171,17 @@ class AsyncBaseSocketModeClient:
                             await listener(self, request)
                         except Exception as e:
                             self.logger.exception(
-                                f"Failed to run a request listener: {e}"
+                                f"Failed to run a request listener: {e}, session: {session_id}"
                             )
         except Exception as e:
-            self.logger.exception(f"Failed to run message listeners: {e}")
+            self.logger.exception(
+                f"Failed to run message listeners: {e}, session: {session_id}"
+            )
         finally:
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(
-                    f"Message processing completed (type: {type}, envelope_id: {envelope_id})"
+                    f"Message processing completed ("
+                    f"type: {type}, "
+                    f"envelope_id: {envelope_id}, "
+                    f"session: {session_id})"
                 )
