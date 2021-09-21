@@ -14,7 +14,9 @@ from typing import Union, Optional, List, Callable, Awaitable
 
 import websockets
 from websockets.exceptions import WebSocketException
-from websockets.legacy.client import WebSocketClientProtocol
+
+# To keep compatibility with websockets 8.x, we use this import over .legacy.client
+from websockets import WebSocketClientProtocol
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
 from slack_sdk.socket_mode.async_listeners import (
