@@ -1467,6 +1467,67 @@ class WebClient(BaseClient):
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
         return self.api_call("apps.uninstall", params=kwargs)
 
+    def apps_manifest_create(
+        self,
+        *,
+        manifest: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates a new app from a manifest.
+        https://api.slack.com/methods/apps.manifest.create
+        """
+        kwargs.update({"manifest": manifest})
+        return self.api_call("apps.manifest.create", params=kwargs)
+
+    def apps_manifest_delete(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Deletes an app manifest.
+        https://api.slack.com/methods/apps.manifest.delete
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.delete", params=kwargs)
+
+    def apps_manifest_export(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Exports the manifest of an existing app.
+        https://api.slack.com/methods/apps.manifest.export
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.export", params=kwargs)
+
+    def apps_manifest_update(
+        self,
+        *,
+        app_id: str,
+        manifest: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Updates an app manifest with a new manifest.
+        https://api.slack.com/methods/apps.manifest.update
+        """
+        kwargs.update({"app_id": app_id, "manifest": manifest})
+        return self.api_call("apps.manifest.update", params=kwargs)
+
+    def apps_manifest_validate(
+        self,
+        *,
+        manifest: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Validates an app manifest.
+        https://api.slack.com/methods/apps.manifest.validate
+        """
+        kwargs.update({"manifest": manifest})
+        return self.api_call("apps.manifest.validate", params=kwargs)
+
     def auth_revoke(
         self,
         *,

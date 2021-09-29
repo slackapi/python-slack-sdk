@@ -1514,6 +1514,67 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
         return await self.api_call("apps.uninstall", params=kwargs)
 
+    async def apps_manifest_create(
+        self,
+        *,
+        manifest: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Creates a new app from a manifest.
+        https://api.slack.com/methods/apps.manifest.create
+        """
+        kwargs.update({"manifest": manifest})
+        return await self.api_call("apps.manifest.create", params=kwargs)
+
+    async def apps_manifest_delete(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Deletes an app manifest.
+        https://api.slack.com/methods/apps.manifest.delete
+        """
+        kwargs.update({"app_id": app_id})
+        return await self.api_call("apps.manifest.delete", params=kwargs)
+
+    async def apps_manifest_export(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Exports the manifest of an existing app.
+        https://api.slack.com/methods/apps.manifest.export
+        """
+        kwargs.update({"app_id": app_id})
+        return await self.api_call("apps.manifest.export", params=kwargs)
+
+    async def apps_manifest_update(
+        self,
+        *,
+        app_id: str,
+        manifest: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates an app manifest with a new manifest.
+        https://api.slack.com/methods/apps.manifest.update
+        """
+        kwargs.update({"app_id": app_id, "manifest": manifest})
+        return await self.api_call("apps.manifest.update", params=kwargs)
+
+    async def apps_manifest_validate(
+        self,
+        *,
+        manifest: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Validates an app manifest.
+        https://api.slack.com/methods/apps.manifest.validate
+        """
+        kwargs.update({"manifest": manifest})
+        return await self.api_call("apps.manifest.validate", params=kwargs)
+
     async def auth_revoke(
         self,
         *,
