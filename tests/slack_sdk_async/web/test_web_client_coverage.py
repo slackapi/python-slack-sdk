@@ -715,6 +715,11 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "search_messages":
                 self.api_methods_to_call.remove(method(query="Slack")["method"])
                 await async_method(query="Slack")
+            elif method_name == "tooling_tokens_rotate":
+                self.api_methods_to_call.remove(
+                    method(refresh_token="xoxe-refresh")["method"]
+                )
+                await async_method(refresh_token="xoxe-refresh")
             elif method_name == "usergroups_create":
                 self.api_methods_to_call.remove(
                     method(name="Engineering Team")["method"]

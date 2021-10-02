@@ -1485,7 +1485,7 @@ class WebClient(BaseClient):
         app_id: str,
         **kwargs,
     ) -> SlackResponse:
-        """Deletes an app manifest.
+        """Deletes an app.
         https://api.slack.com/methods/apps.manifest.delete
         """
         kwargs.update({"app_id": app_id})
@@ -1497,7 +1497,7 @@ class WebClient(BaseClient):
         app_id: str,
         **kwargs,
     ) -> SlackResponse:
-        """Exports the manifest of an existing app.
+        """Retrieves the manifest of an app.
         https://api.slack.com/methods/apps.manifest.export
         """
         kwargs.update({"app_id": app_id})
@@ -1510,7 +1510,7 @@ class WebClient(BaseClient):
         manifest: str,
         **kwargs,
     ) -> SlackResponse:
-        """Updates an app manifest with a new manifest.
+        """Updates an app using a manifest.
         https://api.slack.com/methods/apps.manifest.update
         """
         kwargs.update({"app_id": app_id, "manifest": manifest})
@@ -3852,6 +3852,18 @@ class WebClient(BaseClient):
         """
         kwargs.update({"visibility": visibility})
         return self.api_call("team.profile.get", http_verb="GET", params=kwargs)
+
+    def tooling_tokens_rotate(
+        self,
+        *,
+        refresh_token: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Refresh a tooling token.
+        https://api.slack.com/methods/tooling.tokens.rotate
+        """
+        kwargs.update({"refresh_token": refresh_token})
+        return self.api_call("tooling.tokens.rotate", params=kwargs)
 
     def usergroups_create(
         self,

@@ -1496,7 +1496,7 @@ class LegacyWebClient(LegacyBaseClient):
         app_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Deletes an app manifest.
+        """Deletes an app.
         https://api.slack.com/methods/apps.manifest.delete
         """
         kwargs.update({"app_id": app_id})
@@ -1508,7 +1508,7 @@ class LegacyWebClient(LegacyBaseClient):
         app_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Exports the manifest of an existing app.
+        """Retrieves the manifest of an app.
         https://api.slack.com/methods/apps.manifest.export
         """
         kwargs.update({"app_id": app_id})
@@ -1521,7 +1521,7 @@ class LegacyWebClient(LegacyBaseClient):
         manifest: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Updates an app manifest with a new manifest.
+        """Updates an app using a manifest.
         https://api.slack.com/methods/apps.manifest.update
         """
         kwargs.update({"app_id": app_id, "manifest": manifest})
@@ -3863,6 +3863,18 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"visibility": visibility})
         return self.api_call("team.profile.get", http_verb="GET", params=kwargs)
+
+    def tooling_tokens_rotate(
+        self,
+        *,
+        refresh_token: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Refresh a tooling token.
+        https://api.slack.com/methods/tooling.tokens.rotate
+        """
+        kwargs.update({"refresh_token": refresh_token})
+        return self.api_call("tooling.tokens.rotate", params=kwargs)
 
     def usergroups_create(
         self,
