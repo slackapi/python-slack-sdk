@@ -96,15 +96,12 @@ You can generate the documentation by running `./scripts/docs.sh`.
 
 1. Create the commit for the release:
 
-- Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slackclient/version.py`.
-- Add a description of changes to the Changelog in `docs-src/changelog.rst`
+- Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
 - Build the docs with `./scripts/docs.sh`.
-- Cut off a branch for the release with `git branch -b v2.5.0-release`
-- Set the version in `slack/version.py` (e.g., `2.5.0`)
-- Commit with a message including the new version number: `git commit -m'version 2.5.0'`.
-- Push the commit to a branch and create a PR to sanity check.
-- Merge in release PR after receiving at least one approval from other maintainers.
-- Create a git tag for the release. For example `git tag 2.5.0`.
+- Create a branch for the release with `git checkout -b v2.5.0`
+- Make a commit that includes the new version number: `git commit -m 'version 2.5.0'`.
+- Open a PR and merge after receiving at least one approval from other maintainers.
+- Create a git tag for the release. For example `git tag v2.5.0`.
 - Push the tag up to github with `git push origin --tags`
 
 2. Distribute the release
