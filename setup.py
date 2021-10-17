@@ -17,7 +17,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
 validate_dependencies = [
-    "pytest>=5.4,<6",
+    "pytest>=6.2.5,<7",
     "pytest-asyncio<1",  # for async
     "Flask-Sockets>=0.2,<1",
     "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
@@ -277,6 +277,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     keywords="slack slack-api web-api slack-rtm websocket chat chatbot chatops",
     packages=find_packages(
@@ -310,7 +311,8 @@ setup(
             # InstallationStore/OAuthStateStore
             "SQLAlchemy>=1,<2",
             # Socket Mode
-            "websockets>=9.1,<10",
+            # websockets 9 is not compatible with Python 3.10
+            "websockets>=10,<11" if sys.version_info.minor > 6 else "websockets>=9.1,<10",
             "websocket-client>=1,<2",
         ],
     },
