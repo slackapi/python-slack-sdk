@@ -7,7 +7,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -89,7 +89,7 @@ class AuditLogsClient:
     def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """Returns information about the kind of objects which the Audit Logs API
@@ -111,7 +111,7 @@ class AuditLogsClient:
     def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """Returns information about the kind of actions that the Audit Logs API
@@ -140,7 +140,7 @@ class AuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """This is the primary endpoint for retrieving actual audit events from your organization.
@@ -188,8 +188,8 @@ class AuditLogsClient:
         *,
         http_verb: str = "GET",
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """Performs a Slack API request and returns the result."""
@@ -214,7 +214,7 @@ class AuditLogsClient:
         *,
         http_verb: str = "GET",
         url: str,
-        body: Optional[Dict[str, any]] = None,
+        body: Optional[Dict[str, Any]] = None,
         headers: Dict[str, str],
     ) -> AuditLogsResponse:
         if body is not None:
@@ -261,11 +261,20 @@ class AuditLogsClient:
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers["Retry-After"] = resp.headers["retry-after"]
+                    if (
+                        "retry-after" not in resp.headers
+                        and "Retry-After" in resp.headers
+                    ):
+                        resp.headers["retry-after"] = resp.headers["Retry-After"]
+                    if (
+                        "Retry-After" not in resp.headers
+                        and "retry-after" in resp.headers
+                    ):
+                        resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -356,20 +365,20 @@ class AuditLogsClient:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or "utf-8"
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or "utf-8"
+        response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp

@@ -72,7 +72,7 @@ class Bot:
         self.bot_refresh_token = bot_refresh_token
         if bot_token_expires_at is not None:
             if type(bot_token_expires_at) == datetime:
-                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())  # type: ignore
             elif type(bot_token_expires_at) == str and not re.match(
                 "^\\d+$", bot_token_expires_at
             ):
@@ -88,9 +88,9 @@ class Bot:
         self.is_enterprise_install = is_enterprise_install or False
 
         if type(installed_at) == float:
-            self.installed_at = installed_at
+            self.installed_at = installed_at  # type: ignore
         elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()
+            self.installed_at = installed_at.timestamp()  # type: ignore
         elif type(installed_at) == str:
             if re.match("^\\d+.\\d+$", installed_at):
                 self.installed_at = float(installed_at)

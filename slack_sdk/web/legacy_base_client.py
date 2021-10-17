@@ -13,7 +13,7 @@ import uuid
 import warnings
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import BinaryIO, Dict, List
+from typing import BinaryIO, Dict, List, Any
 from typing import Optional, Union
 from urllib.error import HTTPError
 from urllib.parse import urlencode
@@ -86,12 +86,12 @@ class LegacyBaseClient:
         api_method: str,
         *,
         http_verb: str = "POST",
-        files: dict = None,
+        files: Optional[dict] = None,
         data: Union[dict, FormData] = None,
-        params: dict = None,
-        json: dict = None,  # skipcq: PYL-W0621
-        headers: dict = None,
-        auth: dict = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
     ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
         Args:
@@ -124,13 +124,16 @@ class LegacyBaseClient:
         """
 
         api_url = _get_url(self.base_url, api_method)
-        if isinstance(auth, dict):
-            auth = BasicAuth(auth["client_id"], auth["client_secret"])
-        elif isinstance(auth, BasicAuth):
-            headers["Authorization"] = auth.encode()
 
         headers = headers or {}
         headers.update(self.headers)
+
+        if auth is not None:
+            if isinstance(auth, dict):
+                auth = BasicAuth(auth["client_id"], auth["client_secret"])
+            elif isinstance(auth, BasicAuth):
+                headers["Authorization"] = auth.encode()
+
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
@@ -160,8 +163,8 @@ class LegacyBaseClient:
             if self.use_sync_aiohttp:
                 # Using this is no longer recommended - just keep this for backward-compatibility
                 return self._event_loop.run_until_complete(future)
-        else:
-            return self._sync_send(api_url=api_url, req_args=req_args)
+
+        return self._sync_send(api_url=api_url, req_args=req_args)
 
     # =================================================================
     # aiohttp based async WebClient
@@ -207,7 +210,7 @@ class LegacyBaseClient:
         }
         return SlackResponse(**{**data, **res}).validate()
 
-    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
+    async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, Any]:
         """Submit the HTTP request with the running session or a new session.
         Returns:
             A dictionary of the response data.
@@ -236,6 +239,7 @@ class LegacyBaseClient:
             req_args["auth"] if "auth" in req_args else None
         )  # Basic Auth for oauth.v2.access / oauth.access
         if auth is not None:
+            headers = {}
             if isinstance(auth, BasicAuth):
                 headers["Authorization"] = auth.encode()
             elif isinstance(auth, str):
@@ -261,7 +265,9 @@ class LegacyBaseClient:
             additional_headers=headers,
         )
 
-    def _request_for_pagination(self, api_url, req_args) -> Dict[str, any]:
+    def _request_for_pagination(
+        self, api_url: str, req_args: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """This method is supposed to be used only for SlackResponse pagination
         You can paginate using Python's for iterator as below:
           for response in client.conversations_list(limit=100):
@@ -277,13 +283,13 @@ class LegacyBaseClient:
     def _urllib_api_call(
         self,
         *,
-        token: str = None,
+        token: Optional[str] = None,
         url: str,
-        query_params: Dict[str, str] = {},
-        json_body: Dict = {},
-        body_params: Dict[str, str] = {},
-        files: Dict[str, io.BytesIO] = {},
-        additional_headers: Dict[str, str] = {},
+        query_params: Dict[str, str],
+        json_body: Dict,
+        body_params: Dict[str, str],
+        files: Dict[str, io.BytesIO],
+        additional_headers: Dict[str, str],
     ) -> SlackResponse:
         """Performs a Slack API request and returns the result.
 
@@ -373,11 +379,11 @@ class LegacyBaseClient:
                     )
                     raise err.SlackApiError(message, response)
 
+            all_params: Dict[str, Any] = (
+                copy.copy(body_params) if body_params is not None else {}
+            )
             if query_params:
-                all_params = copy.copy(body_params)
                 all_params.update(query_params)
-            else:
-                all_params = body_params
             request_args["params"] = all_params  # for backward-compatibility
 
             return SlackResponse(
@@ -396,17 +402,17 @@ class LegacyBaseClient:
                     f.close()
 
     def _perform_urllib_http_request(
-        self, *, url: str, args: Dict[str, Dict[str, any]]
-    ) -> Dict[str, any]:
+        self, *, url: str, args: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Performs an HTTP request and parses the response.
 
         Args:
             url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
             args: args has "headers", "data", "params", and "json"
                 "headers": Dict[str, str]
-                "data": Dict[str, any]
+                "data": Dict[str, Any]
                 "params": Dict[str, str],
-                "json": Dict[str, any],
+                "json": Dict[str, Any],
 
         Returns:
             dict {status: int, headers: Headers, body: str}
@@ -505,7 +511,16 @@ class LegacyBaseClient:
             resp = {"status": e.code, "headers": e.headers}
             if e.code == 429:
                 # for compatibility with aiohttp
-                resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
+                if (
+                    "retry-after" not in resp["headers"]
+                    and "Retry-After" in resp["headers"]
+                ):
+                    resp["headers"]["retry-after"] = resp["headers"]["Retry-After"]
+                if (
+                    "Retry-After" not in resp["headers"]
+                    and "retry-after" in resp["headers"]
+                ):
+                    resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
 
             # read the response body here
             charset = e.headers.get_content_charset() or "utf-8"

@@ -3,7 +3,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Union, Sequence, Optional, List
+from typing import Dict, Union, Sequence, Optional, List, Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -83,8 +83,8 @@ class WebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
+        attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
@@ -126,7 +126,7 @@ class WebhookClient:
         )
 
     def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
+        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
 
@@ -143,7 +143,7 @@ class WebhookClient:
         )
 
     def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
+        self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -> WebhookResponse:
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
@@ -182,11 +182,20 @@ class WebhookClient:
                     url=url,
                     status_code=e.code,
                     body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers["Retry-After"] = resp.headers["retry-after"]
+                    if (
+                        "retry-after" not in resp.headers
+                        and "Retry-After" in resp.headers
+                    ):
+                        resp.headers["retry-after"] = resp.headers["Retry-After"]
+                    if (
+                        "Retry-After" not in resp.headers
+                        and "retry-after" in resp.headers
+                    ):
+                        resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -275,20 +284,20 @@ class WebhookClient:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or "utf-8"
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or "utf-8"
+        response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp

@@ -3,7 +3,7 @@ import json
 import logging
 from asyncio import AbstractEventLoop
 from logging import Logger
-from typing import Optional, BinaryIO, Dict, Sequence, Union, List
+from typing import Optional, BinaryIO, Dict, Sequence, Union, List, Any
 
 import aiohttp
 from aiohttp import ClientSession
@@ -50,12 +50,13 @@ async def _request_with_session(
     api_url: str,
     req_args: dict,
     # set the default to an empty array for legacy clients
-    retry_handlers: List[AsyncRetryHandler] = [],
-) -> Dict[str, any]:
+    retry_handlers: Optional[List[AsyncRetryHandler]] = None,
+) -> Dict[str, Any]:
     """Submit the HTTP request with the running session or a new session.
     Returns:
         A dictionary of the response data.
     """
+    retry_handlers = retry_handlers if retry_handlers is not None else []
     session = None
     use_running_session = current_session and not current_session.closed
     if use_running_session:
@@ -67,7 +68,7 @@ async def _request_with_session(
         )
 
     last_error: Optional[Exception] = None
-    resp: Optional[Dict[str, any]] = None
+    resp: Optional[Dict[str, Any]] = None
     try:
         retry_request = RetryHttpRequest(
             method=http_verb,

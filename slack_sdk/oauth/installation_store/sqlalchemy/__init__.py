@@ -65,7 +65,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),
+                default=sqlalchemy.sql.func.now(),  # type: ignore
             ),
             Index(
                 f"{table_name}_idx",
@@ -100,7 +100,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),
+                default=sqlalchemy.sql.func.now(),  # type: ignore
             ),
             Index(
                 f"{table_name}_idx",
@@ -227,7 +227,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:
+            for row in result:  # type: ignore
                 return Bot(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -275,7 +275,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:
+            for row in result:  # type: ignore
                 return Installation(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],

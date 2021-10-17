@@ -183,32 +183,32 @@ class User:
         **kwargs,
     ) -> None:
         self.active = active
-        self.addresses = (
+        self.addresses = (  # type: ignore
             [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]
             if _is_iterable(addresses)
             else addresses
         )
         self.display_name = display_name
-        self.emails = (
+        self.emails = (  # type: ignore
             [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]
             if _is_iterable(emails)
             else emails
         )
         self.external_id = external_id
-        self.groups = (
+        self.groups = (  # type: ignore
             [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]
             if _is_iterable(groups)
             else groups
         )
         self.id = id
-        self.meta = (
+        self.meta = (  # type: ignore
             UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
         )
-        self.name = (
+        self.name = (  # type: ignore
             UserName(**name) if name is not None and isinstance(name, dict) else name
         )
         self.nick_name = nick_name
-        self.phone_numbers = (
+        self.phone_numbers = (  # type: ignore
             [
                 a if isinstance(a, TypeAndValue) else TypeAndValue(**a)
                 for a in phone_numbers
@@ -216,13 +216,13 @@ class User:
             if _is_iterable(phone_numbers)
             else phone_numbers
         )
-        self.photos = (
+        self.photos = (  # type: ignore
             [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]
             if _is_iterable(photos)
             else photos
         )
         self.profile_url = profile_url
-        self.roles = (
+        self.roles = (  # type: ignore
             [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]
             if _is_iterable(roles)
             else roles

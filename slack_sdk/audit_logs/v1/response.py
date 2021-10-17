@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from slack_sdk.audit_logs.v1.logs import LogsResponse
 
@@ -8,12 +8,14 @@ class AuditLogsResponse:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    typed_body: LogsResponse
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    typed_body: Optional[LogsResponse]
 
     @property
-    def typed_body(self) -> LogsResponse:
+    def typed_body(self) -> Optional[LogsResponse]:  # type: ignore
+        if self.body is None:
+            return None
         return LogsResponse(**self.body)
 
     def __init__(
@@ -21,7 +23,7 @@ class AuditLogsResponse:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url

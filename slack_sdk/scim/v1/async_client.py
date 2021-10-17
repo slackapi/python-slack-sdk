@@ -170,10 +170,11 @@ class AsyncSCIMClient:
     async def update_user(
         self, user: Union[Dict[str, Any], User]
     ) -> UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user["id"]
         return UserUpdateResponse(
             await self.api_call(
                 http_verb="PUT",
-                path=f"Users/{quote(user.id)}",
+                path=f"Users/{quote(user_id)}",
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -246,10 +247,11 @@ class AsyncSCIMClient:
     async def update_group(
         self, group: Union[Dict[str, Any], Group]
     ) -> GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group["id"]
         return GroupUpdateResponse(
             await self.api_call(
                 http_verb="PUT",
-                path=f"Groups/{quote(group.id)}",
+                path=f"Groups/{quote(group_id)}",
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -271,8 +273,8 @@ class AsyncSCIMClient:
         *,
         http_verb: str,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> SCIMResponse:
         url = f"{self.base_url}{path}"

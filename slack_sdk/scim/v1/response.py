@@ -22,20 +22,20 @@ class SCIMResponse:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    snake_cased_body: Dict[str, Any]
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    snake_cased_body: Optional[Dict[str, Any]]
 
     errors: Optional[Errors]
 
     @property
-    def snake_cased_body(self) -> Dict[str, Any]:
+    def snake_cased_body(self) -> Optional[Dict[str, Any]]:  # type: ignore
         if self._snake_cased_body is None:
             self._snake_cased_body = _to_snake_cased(self.body)
         return self._snake_cased_body
 
     @property
-    def errors(self) -> Optional[Errors]:
+    def errors(self) -> Optional[Errors]:  # type: ignore
         errors = self.snake_cased_body.get("errors")
         if errors is None:
             return None
@@ -46,7 +46,7 @@ class SCIMResponse:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url
@@ -58,7 +58,9 @@ class SCIMResponse:
             if raw_body is not None and raw_body.startswith("{")
             else None
         )
-        self._snake_cased_body = None
+        self._snake_cased_body = (
+            None  # build this when it's accessed for the first time
+        )
 
     def __repr__(self):
         dict_value = {}
@@ -80,7 +82,7 @@ class SearchUsersResponse(SCIMResponse):
     users: List[User]
 
     @property
-    def users(self) -> List[User]:
+    def users(self) -> List[User]:  # type: ignore
         return [User(**r) for r in self.snake_cased_body.get("resources")]
 
     def __init__(self, underlying: SCIMResponse):
@@ -97,7 +99,7 @@ class ReadUserResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -> User:
+    def user(self) -> User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -114,7 +116,7 @@ class UserCreateResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -> User:
+    def user(self) -> User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -131,7 +133,7 @@ class UserPatchResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -> User:
+    def user(self) -> User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -148,7 +150,7 @@ class UserUpdateResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -> User:
+    def user(self) -> User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -181,7 +183,7 @@ class SearchGroupsResponse(SCIMResponse):
     groups: List[Group]
 
     @property
-    def groups(self) -> List[Group]:
+    def groups(self) -> List[Group]:  # type: ignore
         return [Group(**r) for r in self.snake_cased_body.get("resources")]
 
     def __init__(self, underlying: SCIMResponse):
@@ -198,7 +200,7 @@ class ReadGroupResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -> Group:
+    def group(self) -> Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -215,7 +217,7 @@ class GroupCreateResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -> Group:
+    def group(self) -> Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -243,7 +245,7 @@ class GroupUpdateResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -> Group:
+    def group(self) -> Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):

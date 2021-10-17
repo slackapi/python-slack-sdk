@@ -100,7 +100,7 @@ class AsyncAuditLogsClient:
     async def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """Returns information about the kind of objects which the Audit Logs API
@@ -122,7 +122,7 @@ class AsyncAuditLogsClient:
     async def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """Returns information about the kind of actions that the Audit Logs API
@@ -151,7 +151,7 @@ class AsyncAuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """This is the primary endpoint for retrieving actual audit events from your organization.
@@ -199,8 +199,8 @@ class AsyncAuditLogsClient:
         *,
         http_verb: str = "GET",
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         url = f"{self.base_url}{path}"

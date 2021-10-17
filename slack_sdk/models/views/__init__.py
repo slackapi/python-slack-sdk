@@ -47,7 +47,7 @@ class View(JsonObject):
         app_id: Optional[str] = None,
         root_view_id: Optional[str] = None,
         previous_view_id: Optional[str] = None,
-        title: Union[str, dict, PlainTextObject] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
         blocks: Optional[Sequence[Union[dict, Block]]] = None,
@@ -162,7 +162,9 @@ class ViewState(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions = copy.copy(actions)
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
+                        actions
+                    )
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)

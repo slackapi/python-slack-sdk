@@ -23,7 +23,7 @@ class RTMClient:
     default_auto_reconnect_enabled: bool
     auto_reconnect_enabled: bool
     ssl: Optional[SSLContext]
-    proxy: str
+    proxy: Optional[str]
     timeout: int
     base_url: str
     ping_interval: int

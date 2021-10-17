@@ -104,7 +104,7 @@ class Connection:
                     f"Connecting to the address for handshake: {hostname}:{port} "
                     f"(session id: {self.session_id})"
                 )
-            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
                 session_id=self.session_id,
                 server_hostname=hostname,
                 server_port=port,

@@ -417,7 +417,7 @@ class ConfirmObject(JsonObject):
         text: Union[str, dict, TextObject],
         confirm: Union[str, dict, PlainTextObject] = "Yes",
         deny: Union[str, dict, PlainTextObject] = "No",
-        style: str = None,
+        style: Optional[str] = None,
     ):
         """
         An object that defines a dialog that provides a confirmation step to any
@@ -439,25 +439,25 @@ class ConfirmObject(JsonObject):
         self.style = self._style
 
     @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
-    def title_length(self):
+    def title_length(self) -> bool:
         return self._title is None or len(self._title.text) <= self.title_max_length
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
-    def text_length(self):
+    def text_length(self) -> bool:
         return self._text is None or len(self._text.text) <= self.text_max_length
 
     @JsonValidator(f"confirm attribute cannot exceed {confirm_max_length} characters")
-    def confirm_length(self):
+    def confirm_length(self) -> bool:
         return (
             self._confirm is None or len(self._confirm.text) <= self.confirm_max_length
         )
 
     @JsonValidator(f"deny attribute cannot exceed {deny_max_length} characters")
-    def deny_length(self):
+    def deny_length(self) -> bool:
         return self._deny is None or len(self._deny.text) <= self.deny_max_length
 
     @JsonValidator('style for confirm must be either "primary" or "danger"')
-    def _validate_confirm_style(self):
+    def _validate_confirm_style(self) -> bool:
         return self._style is None or self._style in ["primary", "danger"]
 
     def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221

@@ -118,8 +118,8 @@ class SectionBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
-        fields: Sequence[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
+        fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
         accessory: Optional[Union[dict, BlockElement]] = None,
         **others: dict,
     ):
@@ -409,7 +409,7 @@ class HeaderBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
         """A header is a plain-text block that displays in a larger, bold font.
