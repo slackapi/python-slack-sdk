@@ -88,7 +88,7 @@ class TestWebClient(unittest.TestCase):
 
         auth = client.auth_test()
         self.assertIsNotNone(auth)
-        subdomain = auth["team"]
+        url = auth["url"]
 
         channel = self.channel_id
         message = (
@@ -105,7 +105,7 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(permalink)
         self.assertRegex(
             permalink["permalink"],
-            f"https://{subdomain}.slack.com/archives/{channel}/.+",
+            f"{url}archives/{channel}/.+",
         )
 
         new_reaction = client.reactions_add(channel=channel, timestamp=ts, name="eyes")
@@ -140,7 +140,7 @@ class TestWebClient(unittest.TestCase):
 
         auth = await client.auth_test()
         self.assertIsNotNone(auth)
-        subdomain = auth["team"]
+        url = auth["url"]
 
         channel = self.channel_id
         message = (
@@ -157,7 +157,7 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(permalink)
         self.assertRegex(
             permalink["permalink"],
-            f"https://{subdomain}.slack.com/archives/{channel}/.+",
+            f"{url}archives/{channel}/.+",
         )
 
         new_reaction = await client.reactions_add(

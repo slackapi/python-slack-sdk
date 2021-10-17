@@ -68,7 +68,7 @@ class TestAsyncWebClient(unittest.TestCase):
 
         auth = await client.auth_test()
         self.assertIsNotNone(auth)
-        subdomain = auth["team"]
+        url = auth["url"]
 
         channel = self.channel_id
         message = (
@@ -85,7 +85,7 @@ class TestAsyncWebClient(unittest.TestCase):
         self.assertIsNotNone(permalink)
         self.assertRegex(
             permalink["permalink"],
-            f"https://{subdomain}.slack.com/archives/{channel}/.+",
+            f"{url}archives/{channel}/.+",
         )
 
         new_reaction = await client.reactions_add(
