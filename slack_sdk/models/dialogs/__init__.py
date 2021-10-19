@@ -63,52 +63,52 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         self.subtype = subtype
 
     @JsonValidator(f"name attribute cannot exceed {name_max_length} characters")
-    def name_length(self):
+    def name_length(self) -> bool:
         return len(self.name) < self.name_max_length
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
-    def label_length(self):
+    def label_length(self) -> bool:
         return len(self.label) < self.label_max_length
 
     @JsonValidator(
         f"placeholder attribute cannot exceed {placeholder_max_length} characters"
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -> bool:
         return (
             self.placeholder is None
             or len(self.placeholder) < self.placeholder_max_length
         )
 
     @JsonValidator(f"hint attribute cannot exceed {hint_max_length} characters")
-    def hint_length(self):
+    def hint_length(self) -> bool:
         return self.hint is None or len(self.hint) < self.hint_max_length
 
     @JsonValidator("value attribute exceeded bounds")
-    def value_length(self):
+    def value_length(self) -> bool:
         return self.value is None or len(self.value) < self.max_value_length
 
     @JsonValidator("min_length attribute must be greater than or equal to 0")
-    def min_length_above_zero(self):
+    def min_length_above_zero(self) -> bool:
         return self.min_length is None or self.min_length >= 0
 
     @JsonValidator("min_length attribute exceed bounds")
-    def min_length_length(self):
+    def min_length_length(self) -> bool:
         return self.min_length is None or self.min_length <= self.max_value_length
 
     @JsonValidator("min_length attribute must be less than max value attribute")
-    def min_length_below_max_length(self):
+    def min_length_below_max_length(self) -> bool:
         return self.min_length is None or self.min_length < self.max_length
 
     @JsonValidator("max_length attribute must be greater than or equal to 0")
-    def max_length_above_zero(self):
+    def max_length_above_zero(self) -> bool:
         return self.max_length is None or self.max_length > 0
 
     @JsonValidator("max_length attribute exceeded bounds")
-    def max_length_length(self):
+    def max_length_length(self) -> bool:
         return self.max_length is None or self.max_length <= self.max_value_length
 
     @EnumValidator("subtype", TextElementSubtypes)
-    def subtype_valid(self):
+    def subtype_valid(self) -> bool:
         return self.subtype is None or self.subtype in TextElementSubtypes
 
 
@@ -157,8 +157,8 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
         name: str,
         label: str,
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         self.name = name
         self.label = label
@@ -168,24 +168,24 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
         self.type = "select"
 
     @JsonValidator(f"name attribute cannot exceed {name_max_length} characters")
-    def name_length(self):
+    def name_length(self) -> bool:
         return len(self.name) < self.name_max_length
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
-    def label_length(self):
+    def label_length(self) -> bool:
         return len(self.label) < self.label_max_length
 
     @JsonValidator(
         f"placeholder attribute cannot exceed {placeholder_max_length} characters"
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -> bool:
         return (
             self.placeholder is None
             or len(self.placeholder) < self.placeholder_max_length
         )
 
     @EnumValidator("data_source", DataSourceTypes)
-    def data_source_valid(self):
+    def data_source_valid(self) -> bool:
         return self.data_source in self.DataSourceTypes
 
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
@@ -223,8 +223,8 @@ class DialogStaticSelector(AbstractDialogSelector):
         label: str,
         options: Union[Sequence[Option], Sequence[OptionGroup]],
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         """
         Use the select element for multiple choice selections allowing users to pick
@@ -257,7 +257,7 @@ class DialogStaticSelector(AbstractDialogSelector):
         self.options = options
 
     @JsonValidator(f"options attribute cannot exceed {options_max_length} items")
-    def options_length(self):
+    def options_length(self) -> bool:
         return len(self.options) < self.options_max_length
 
     def to_dict(self) -> dict:
@@ -278,8 +278,8 @@ class DialogUserSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         """
         Now you can easily populate a select menu with a list of users. For example,
@@ -316,8 +316,8 @@ class DialogChannelSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         """
         You can also provide a select menu with a list of channels. Specify your
@@ -352,8 +352,8 @@ class DialogConversationSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         """
         You can also provide a select menu with a list of conversations - including
@@ -395,7 +395,7 @@ class DialogExternalSelector(AbstractDialogSelector):
         value: Optional[Option] = None,
         min_query_length: Optional[int] = None,
         optional: Optional[bool] = False,
-        placeholder: str = None,
+        placeholder: Optional[str] = None,
     ):
         """
         Use the select element for multiple choice selections allowing users to pick
@@ -820,34 +820,34 @@ class DialogBuilder(JsonObject):
         return self
 
     @JsonValidator("title attribute is required")
-    def title_present(self):
+    def title_present(self) -> bool:
         return self._title is not None
 
     @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
-    def title_length(self):
+    def title_length(self) -> bool:
         return self._title is not None and len(self._title) <= self.title_max_length
 
     @JsonValidator("callback_id attribute is required")
-    def callback_id_present(self):
+    def callback_id_present(self) -> bool:
         return self._callback_id is not None
 
     @JsonValidator(f"dialogs must contain between 1 and {elements_max_length} elements")
-    def elements_length(self):
+    def elements_length(self) -> bool:
         return 0 < len(self._elements) <= self.elements_max_length
 
     @JsonValidator(f"submit_label cannot exceed {submit_label_max_length} characters")
-    def submit_label_length(self):
+    def submit_label_length(self) -> bool:
         return (
             self._submit_label is None
             or len(self._submit_label) <= self.submit_label_max_length
         )
 
     @JsonValidator("submit_label can only be one word")
-    def submit_label_valid(self):
+    def submit_label_valid(self) -> bool:
         return self._submit_label is None or " " not in self._submit_label
 
     @JsonValidator(f"state cannot exceed {state_max_length} characters")
-    def state_length(self):
+    def state_length(self) -> bool:
         return not self._state or len(self._state) <= self.state_max_length
 
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
@@ -906,7 +906,7 @@ class ActionStaticSelector(AbstractActionSelector):
         self.options = options
 
     @JsonValidator(f"options attribute cannot exceed {options_max_length} items")
-    def options_length(self):
+    def options_length(self) -> bool:
         return len(self.options) < self.options_max_length
 
     def to_dict(self) -> dict:

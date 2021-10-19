@@ -73,12 +73,12 @@ class AsyncBaseClient:
         api_method: str,
         *,
         http_verb: str = "POST",
-        files: dict = None,
+        files: Optional[dict] = None,
         data: Union[dict, FormData] = None,
-        params: dict = None,
-        json: dict = None,  # skipcq: PYL-W0621
-        headers: dict = None,
-        auth: dict = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
     ) -> AsyncSlackResponse:
         """Create a request and execute the API call to Slack.
 

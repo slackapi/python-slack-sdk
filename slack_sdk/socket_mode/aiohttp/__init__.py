@@ -78,9 +78,15 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 5,
         trace_enabled: bool = False,
-        on_message_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
-        on_error_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
-        on_close_listeners: Optional[List[Callable[[WSMessage], None]]] = None,
+        on_message_listeners: Optional[
+            List[Callable[[WSMessage], Awaitable[None]]]
+        ] = None,
+        on_error_listeners: Optional[
+            List[Callable[[WSMessage], Awaitable[None]]]
+        ] = None,
+        on_close_listeners: Optional[
+            List[Callable[[WSMessage], Awaitable[None]]]
+        ] = None,
     ):
         """Socket Mode client
 
@@ -466,5 +472,5 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     @classmethod
     def build_session_id(cls, session: ClientWebSocketResponse) -> str:
         if session is None:
-            return None
+            return ""
         return "s_" + str(hash(session))

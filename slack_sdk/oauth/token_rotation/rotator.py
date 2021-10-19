@@ -18,7 +18,7 @@ class TokenRotator:
         self.client_id = client_id
         self.client_secret = client_secret
 
-    def perform_token_rotation(
+    def perform_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
@@ -37,27 +37,27 @@ class TokenRotator:
         # TODO: make the following two calls in parallel for better performance
 
         # bot
-        rotated_bot: Optional[Bot] = self.perform_bot_token_rotation(
+        rotated_bot: Optional[Bot] = self.perform_bot_token_rotation(  # type: ignore
             bot=installation.to_bot(),
             minutes_before_expiration=minutes_before_expiration,
         )
 
         # user
-        rotated_installation: Optional[Installation] = self.perform_user_token_rotation(
+        rotated_installation: Optional[Installation] = self.perform_user_token_rotation(  # type: ignore
             installation=installation,
             minutes_before_expiration=minutes_before_expiration,
         )
 
         if rotated_bot is not None:
             if rotated_installation is None:
-                rotated_installation = Installation(**installation.to_dict())
+                rotated_installation = Installation(**installation.to_dict())  # type: ignore
             rotated_installation.bot_token = rotated_bot.bot_token
             rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
             rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
 
         return rotated_installation
 
-    def perform_bot_token_rotation(
+    def perform_bot_token_rotation(  # type: ignore
         self,
         *,
         bot: Bot,
@@ -87,7 +87,7 @@ class TokenRotator:
             if refresh_response.get("token_type") != "bot":
                 return None
 
-            refreshed_bot = Bot(**bot.to_dict())
+            refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get("access_token")
             refreshed_bot.bot_refresh_token = refresh_response.get("refresh_token")
             refreshed_bot.bot_token_expires_at = int(time()) + int(
@@ -98,12 +98,12 @@ class TokenRotator:
         except SlackApiError as e:
             raise SlackTokenRotationError(e)
 
-    def perform_user_token_rotation(
+    def perform_user_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -> Optional[Bot]:
+    ) -> Optional[Installation]:
         """Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -129,7 +129,7 @@ class TokenRotator:
             if refresh_response.get("token_type") != "user":
                 return None
 
-            refreshed_installation = Installation(**installation.to_dict())
+            refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get("access_token")
             refreshed_installation.user_refresh_token = refresh_response.get(
                 "refresh_token"

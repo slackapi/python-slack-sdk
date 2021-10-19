@@ -284,8 +284,7 @@ class Attachment(JsonObject):
         "ts",
     }
 
-    fields: List[AttachmentField]
-    actions: List[Action]
+    fields: Sequence[AttachmentField]
 
     MarkdownFields = {"fields", "pretext", "text"}
 
@@ -388,11 +387,11 @@ class Attachment(JsonObject):
         self.markdown_in = markdown_in or []
 
     @JsonValidator(f"footer attribute cannot exceed {footer_max_length} characters")
-    def footer_length(self):
+    def footer_length(self) -> bool:
         return self.footer is None or len(self.footer) <= self.footer_max_length
 
     @JsonValidator("ts attribute cannot be present if footer attribute is absent")
-    def ts_without_footer(self):
+    def ts_without_footer(self) -> bool:
         return self.ts is None or self.footer is not None
 
     @EnumValidator("markdown_in", MarkdownFields)
@@ -404,23 +403,23 @@ class Attachment(JsonObject):
     @JsonValidator(
         "color attribute must be 'good', 'warning', 'danger', or a hex color code"
     )
-    def color_valid(self):
+    def color_valid(self) -> bool:
         return (
             self.color is None
             or self.color in SeededColors
-            or re.match("^#(?:[0-9A-F]{2}){3}$", self.color, re.IGNORECASE)
+            or re.match("^#(?:[0-9A-F]{2}){3}$", self.color, re.IGNORECASE) is not None
         )
 
     @JsonValidator("image_url attribute cannot be present if thumb_url is populated")
-    def image_url_and_thumb_url_populated(self):
+    def image_url_and_thumb_url_populated(self) -> bool:
         return self.image_url is None or self.thumb_url is None
 
     @JsonValidator("name must be present if link is present")
-    def author_link_without_author_name(self):
+    def author_link_without_author_name(self) -> bool:
         return self.author_link is None or self.author_name is not None
 
     @JsonValidator("icon must be present if link is present")
-    def author_link_without_author_icon(self):
+    def author_link_without_author_icon(self) -> bool:
         return self.author_link is None or self.author_icon is not None
 
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
@@ -463,7 +462,7 @@ class BlockAttachment(Attachment):
         self.blocks = list(blocks)
 
     @JsonValidator("fields attribute cannot be populated on BlockAttachment")
-    def fields_attribute_absent(self):
+    def fields_attribute_absent(self) -> bool:
         return not self.fields
 
     def to_dict(self) -> dict:
@@ -588,7 +587,7 @@ class InteractiveAttachment(Attachment):
         self.actions = actions or []
 
     @JsonValidator(f"actions attribute cannot exceed {actions_max_length} elements")
-    def actions_length(self):
+    def actions_length(self) -> bool:
         return len(self.actions) <= self.actions_max_length
 
     def to_dict(self) -> dict:

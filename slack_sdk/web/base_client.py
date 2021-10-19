@@ -13,7 +13,7 @@ import warnings
 from base64 import b64encode
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import BinaryIO, Dict, List
+from typing import BinaryIO, Dict, List, Any
 from typing import Optional, Union
 from urllib.error import HTTPError
 from urllib.parse import urlencode
@@ -84,12 +84,12 @@ class BaseClient:
         api_method: str,
         *,
         http_verb: str = "POST",
-        files: dict = None,
-        data: Union[dict] = None,
-        params: dict = None,
-        json: dict = None,  # skipcq: PYL-W0621
-        headers: dict = None,
-        auth: dict = None,
+        files: Optional[dict] = None,
+        data: Optional[dict] = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
     ) -> SlackResponse:
         """Create a request and execute the API call to Slack.
 
@@ -159,6 +159,7 @@ class BaseClient:
             req_args["auth"] if "auth" in req_args else None
         )  # Basic Auth for oauth.v2.access / oauth.access
         if auth is not None:
+            headers = {}
             if isinstance(auth, str):
                 headers["Authorization"] = auth
             elif isinstance(auth, dict):
@@ -188,7 +189,9 @@ class BaseClient:
             additional_headers=headers,
         )
 
-    def _request_for_pagination(self, api_url, req_args) -> Dict[str, any]:
+    def _request_for_pagination(
+        self, api_url: str, req_args: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """This method is supposed to be used only for SlackResponse pagination
 
         You can paginate using Python's for iterator as below:
@@ -206,13 +209,13 @@ class BaseClient:
     def _urllib_api_call(
         self,
         *,
-        token: str = None,
+        token: Optional[str] = None,
         url: str,
-        query_params: Dict[str, str] = {},
-        json_body: Dict = {},
-        body_params: Dict[str, str] = {},
-        files: Dict[str, io.BytesIO] = {},
-        additional_headers: Dict[str, str] = {},
+        query_params: Dict[str, str],
+        json_body: Dict,
+        body_params: Dict[str, str],
+        files: Dict[str, io.BytesIO],
+        additional_headers: Dict[str, str],
     ) -> SlackResponse:
         """Performs a Slack API request and returns the result.
 
@@ -303,11 +306,11 @@ class BaseClient:
                     )
                     raise err.SlackApiError(message, response)
 
+            all_params: Dict[str, Any] = (
+                copy.copy(body_params) if body_params is not None else {}
+            )
             if query_params:
-                all_params = copy.copy(body_params)
                 all_params.update(query_params)
-            else:
-                all_params = body_params
             request_args["params"] = all_params  # for backward-compatibility
 
             return SlackResponse(
@@ -325,17 +328,17 @@ class BaseClient:
                     f.close()
 
     def _perform_urllib_http_request(
-        self, *, url: str, args: Dict[str, Dict[str, any]]
-    ) -> Dict[str, any]:
+        self, *, url: str, args: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Performs an HTTP request and parses the response.
 
         Args:
             url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
             args: args has "headers", "data", "params", and "json"
                 "headers": Dict[str, str]
-                "data": Dict[str, any]
+                "data": Dict[str, Any]
                 "params": Dict[str, str],
-                "json": Dict[str, any],
+                "json": Dict[str, Any],
 
         Returns:
             dict {status: int, headers: Headers, body: str}
@@ -414,7 +417,16 @@ class BaseClient:
                 resp = {"status": e.code, "headers": e.headers}
                 if e.code == 429:
                     # for compatibility with aiohttp
-                    resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
+                    if (
+                        "retry-after" not in resp["headers"]
+                        and "Retry-After" in resp["headers"]
+                    ):
+                        resp["headers"]["retry-after"] = resp["headers"]["Retry-After"]
+                    if (
+                        "Retry-After" not in resp["headers"]
+                        and "retry-after" in resp["headers"]
+                    ):
+                        resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
 
                 # read the response body here
                 charset = e.headers.get_content_charset() or "utf-8"
@@ -493,7 +505,7 @@ class BaseClient:
         self,
         url: str,
         req: Request,
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         # urllib not only opens http:// or https:// URLs, but also ftp:// and file://.
         # With this it might be possible to open local files on the executing machine
         # which might be a security risk if the URL to open can be manipulated by an external user.

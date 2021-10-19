@@ -282,5 +282,5 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     @classmethod
     def build_session_id(cls, session: WebSocketClientProtocol) -> str:
         if session is None:
-            return None
+            return ""
         return "s_" + str(hash(session))

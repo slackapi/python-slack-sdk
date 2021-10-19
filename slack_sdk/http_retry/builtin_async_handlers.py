@@ -1,6 +1,6 @@
 import asyncio
 import random
-from typing import Optional, List
+from typing import Optional, List, Type
 
 from aiohttp import ServerDisconnectedError, ServerConnectionError, ClientOSError
 
@@ -19,7 +19,7 @@ class AsyncConnectionErrorRetryHandler(AsyncRetryHandler):
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             ServerConnectionError,
             ServerDisconnectedError,
             # ClientOSError: [Errno 104] Connection reset by peer
@@ -57,7 +57,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         response: Optional[HttpResponse],
         error: Optional[Exception],
     ) -> bool:
-        return response.status_code == 429
+        return response is not None and response.status_code == 429
 
     async def prepare_for_next_attempt_async(
         self,

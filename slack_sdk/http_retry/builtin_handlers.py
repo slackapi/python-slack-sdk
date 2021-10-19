@@ -1,7 +1,7 @@
 import random
 import time
 from http.client import RemoteDisconnected
-from typing import Optional, List
+from typing import Optional, List, Type
 from urllib.error import URLError
 
 from slack_sdk.http_retry.interval_calculator import RetryIntervalCalculator
@@ -18,7 +18,7 @@ class ConnectionErrorRetryHandler(RetryHandler):
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             # To cover URLError: <urlopen error [Errno 104] Connection reset by peer>
             URLError,
             ConnectionResetError,

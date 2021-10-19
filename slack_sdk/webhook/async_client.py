@@ -154,7 +154,7 @@ class AsyncWebhookClient:
     async def _perform_http_request(
         self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -> WebhookResponse:
-        body = json.dumps(body)
+        str_body: str = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         session: Optional[ClientSession] = None
@@ -173,7 +173,7 @@ class AsyncWebhookClient:
         try:
             request_kwargs = {
                 "headers": headers,
-                "data": body,
+                "data": str_body,
                 "ssl": self.ssl,
                 "proxy": self.proxy,
             }
@@ -195,7 +195,7 @@ class AsyncWebhookClient:
 
                 if self.logger.level <= logging.DEBUG:
                     self.logger.debug(
-                        f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
+                        f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}"
                     )
 
                 try:

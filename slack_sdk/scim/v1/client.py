@@ -162,10 +162,11 @@ class SCIMClient:
         )
 
     def update_user(self, user: Union[Dict[str, Any], User]) -> UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user["id"]
         return UserUpdateResponse(
             self.api_call(
                 http_verb="PUT",
-                path=f"Users/{quote(user.id)}",
+                path=f"Users/{quote(user_id)}",
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -234,10 +235,11 @@ class SCIMClient:
         )
 
     def update_group(self, group: Union[Dict[str, Any], Group]) -> GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group["id"]
         return GroupUpdateResponse(
             self.api_call(
                 http_verb="PUT",
-                path=f"Groups/{quote(group.id)}",
+                path=f"Groups/{quote(group_id)}",
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -334,11 +336,20 @@ class SCIMClient:
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers["Retry-After"] = resp.headers["retry-after"]
+                    if (
+                        "retry-after" not in resp.headers
+                        and "Retry-After" in resp.headers
+                    ):
+                        resp.headers["retry-after"] = resp.headers["Retry-After"]
+                    if (
+                        "Retry-After" not in resp.headers
+                        and "retry-after" in resp.headers
+                    ):
+                        resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -427,20 +438,20 @@ class SCIMClient:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or "utf-8"
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or "utf-8"
+        response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp

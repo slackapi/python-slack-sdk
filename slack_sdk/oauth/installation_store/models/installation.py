@@ -102,7 +102,8 @@ class Installation:
         self.bot_refresh_token = bot_refresh_token
         if bot_token_expires_at is not None:
             if type(bot_token_expires_at) == datetime:
-                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())
+                ts: float = bot_token_expires_at.timestamp()  # type: ignore
+                self.bot_token_expires_at = int(ts)
             elif type(bot_token_expires_at) == str and not re.match(
                 "^\\d+$", bot_token_expires_at
             ):
@@ -110,7 +111,7 @@ class Installation:
                     _from_iso_format_to_unix_timestamp(bot_token_expires_at)
                 )
             else:
-                self.bot_token_expires_at = bot_token_expires_at
+                self.bot_token_expires_at = bot_token_expires_at  # type: ignore
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
@@ -125,7 +126,8 @@ class Installation:
         self.user_refresh_token = user_refresh_token
         if user_token_expires_at is not None:
             if type(user_token_expires_at) == datetime:
-                self.user_token_expires_at = int(user_token_expires_at.timestamp())
+                ts: float = user_token_expires_at.timestamp()  # type: ignore
+                self.user_token_expires_at = int(ts)
             elif type(user_token_expires_at) == str and not re.match(
                 "^\\d+$", user_token_expires_at
             ):
@@ -133,7 +135,7 @@ class Installation:
                     _from_iso_format_to_unix_timestamp(user_token_expires_at)
                 )
             else:
-                self.user_token_expires_at = user_token_expires_at
+                self.user_token_expires_at = user_token_expires_at  # type: ignore
         elif user_token_expires_in is not None:
             self.user_token_expires_at = int(time()) + user_token_expires_in
         else:
@@ -150,9 +152,9 @@ class Installation:
         if installed_at is None:
             self.installed_at = datetime.now().timestamp()
         elif type(installed_at) == float:
-            self.installed_at = installed_at
+            self.installed_at = installed_at  # type: ignore
         elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()
+            self.installed_at = installed_at.timestamp()  # type: ignore
         elif type(installed_at) == str:
             if re.match("^\\d+.\\d+$", installed_at):
                 self.installed_at = float(installed_at)

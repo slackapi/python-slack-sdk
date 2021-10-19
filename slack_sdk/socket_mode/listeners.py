@@ -4,7 +4,7 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 
 
 class WebSocketMessageListener:
-    def __call__(
+    def __call__(  # type: ignore
         client: "BaseSocketModeClient",  # noqa: F821
         message: dict,
         raw_message: Optional[str] = None,
@@ -13,7 +13,7 @@ class WebSocketMessageListener:
 
 
 class SocketModeRequestListener:
-    def __call__(
+    def __call__(  # type: ignore
         client: "BaseSocketModeClient", request: SocketModeRequest  # noqa: F821
     ):  # noqa: F821
         raise NotImplementedError()

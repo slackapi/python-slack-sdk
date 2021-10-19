@@ -228,13 +228,13 @@ class SocketModeClient(BaseSocketModeClient):
                 if self.is_connected():
                     self.current_session.send(message)
                 else:
-                    self.logger.warning(
-                        f"The current session (session id: {self.session_id()}) is no longer active. "
+                    self.logger.warning(  # type: ignore
+                        f"The current session (session id: {self.session_id()}) is no longer active. "  # type: ignore
                         "Failed to send a message"
                     )
                     raise e
 
-    def close(self):
+    def close(self) -> None:  # type: ignore
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
