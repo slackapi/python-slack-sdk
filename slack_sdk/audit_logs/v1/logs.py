@@ -102,6 +102,22 @@ class RetentionPolicy:
         self.unknown_fields = kwargs
 
 
+class ConversationPref:
+    type: Optional[List[str]]
+    user: Optional[List[str]]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[List[str]] = None,
+        user: Optional[List[str]] = None,
+        **kwargs,
+    ) -> None:
+        self.type = type
+        self.user = user
+        self.unknown_fields = kwargs
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -159,6 +175,8 @@ class Details:
     is_token_rotation_enabled_app: Optional[bool]
     old_retention_policy: Optional[RetentionPolicy]
     new_retention_policy: Optional[RetentionPolicy]
+    who_can_post: Optional[ConversationPref]
+    can_thread: Optional[ConversationPref]
 
     def __init__(
         self,
@@ -218,6 +236,8 @@ class Details:
         is_token_rotation_enabled_app: Optional[bool] = None,
         old_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
         new_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
+        who_can_post: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
+        can_thread: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -283,6 +303,16 @@ class Details:
             new_retention_policy
             if isinstance(new_retention_policy, RetentionPolicy)
             else RetentionPolicy(**new_retention_policy)
+        )
+        self.who_can_post = (
+            who_can_post
+            if isinstance(who_can_post, ConversationPref)
+            else ConversationPref(**who_can_post)
+        )
+        self.can_thread = (
+            can_thread
+            if isinstance(can_thread, ConversationPref)
+            else ConversationPref(**can_thread)
         )
 
 

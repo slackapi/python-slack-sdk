@@ -133,6 +133,10 @@ class TestAuditLogsClient(unittest.TestCase):
         self.assertEqual(entry.details.new_retention_policy.type, "new")
         self.assertEqual(entry.details.is_internal_integration, True)
         self.assertEqual(entry.details.cleared_resolution, "approved")
+        self.assertEqual(entry.details.who_can_post.type, ["owner", "admin"])
+        self.assertEqual(entry.details.who_can_post.user, ["W111"])
+        self.assertEqual(entry.details.can_thread.type, ["admin", "org_admin"])
+        self.assertEqual(entry.details.can_thread.user, ["W222"])
 
 
 logs_response_data = """{
@@ -335,7 +339,25 @@ logs_response_data = """{
           "duration_days": 222
         },
         "is_internal_integration": true,
-        "cleared_resolution": "approved"
+        "cleared_resolution": "approved",
+        "who_can_post": {
+          "type": [
+            "owner",
+            "admin"
+          ],
+          "user": [
+            "W111"
+          ]
+        },
+        "can_thread": {
+          "type": [
+            "admin",
+            "org_admin"
+          ],
+          "user": [
+            "W222"
+          ]
+        }
       }
     }
   ]
