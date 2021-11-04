@@ -34,11 +34,13 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_reset(self):
-        client = self.client
-        response = client.admin_users_session_reset(user_id=self.user_ids[0])
+        response = self.client.admin_users_session_reset(user_id=self.user_ids[0])
         self.assertIsNone(response.get("error"))
 
     def test_resetBulk(self):
-        client = self.client
-        response = client.admin_users_session_resetBulk(user_ids=self.user_ids)
+        response = self.client.admin_users_session_resetBulk(user_ids=self.user_ids)
+        self.assertIsNone(response.get("error"))
+
+    def test_resetBulk_str(self):
+        response = self.client.admin_users_session_resetBulk(user_ids=",".join(self.user_ids))
         self.assertIsNone(response.get("error"))
