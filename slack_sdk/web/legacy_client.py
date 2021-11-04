@@ -878,6 +878,29 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("admin.users.session.reset", params=kwargs)
 
+    def admin_users_session_resetBulk(
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+        https://api.slack.com/methods/admin.users.session.resetBulk
+        """
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        kwargs.update(
+            {
+                "mobile_only": mobile_only,
+                "web_only": web_only,
+            }
+        )
+        return self.api_call("admin.users.session.resetBulk", params=kwargs)
+
     def admin_users_session_invalidate(
         self,
         *,
@@ -3751,6 +3774,15 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"team_id": team_id, "user": user})
         return self.api_call("team.billableInfo", http_verb="GET", params=kwargs)
 
+    def team_billing_info(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Reads a workspace's billing plan information.
+        https://api.slack.com/methods/team.billing.info
+        """
+        return self.api_call("team.billing.info", params=kwargs)
+
     def team_info(
         self,
         *,
@@ -3802,6 +3834,15 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"visibility": visibility})
         return self.api_call("team.profile.get", http_verb="GET", params=kwargs)
+
+    def team_preferences_list(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve a list of a workspace's team preferences.
+        https://api.slack.com/methods/team.preferences.list
+        """
+        return self.api_call("team.preferences.list", params=kwargs)
 
     def usergroups_create(
         self,
