@@ -358,7 +358,9 @@ class TestWebClientCoverage(unittest.TestCase):
                 await async_method(user_id="W123")
             elif method_name == "admin_users_session_resetBulk":
                 self.api_methods_to_call.remove(method(user_ids=["W123"])["method"])
+                method(user_ids="W123,W234")
                 await async_method(user_ids=["W123"])
+                await async_method(user_ids="W123,W234")
             elif method_name == "admin_users_session_getSettings":
                 self.api_methods_to_call.remove(method(user_ids=["W111"])["method"])
                 await async_method(user_ids=["W111"])
