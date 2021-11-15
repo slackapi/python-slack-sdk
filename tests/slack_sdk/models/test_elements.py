@@ -129,6 +129,12 @@ class ButtonElementTests(unittest.TestCase):
                 text=STRING_301_CHARS, action_id="button", value="click_me"
             ).to_dict()
 
+    def test_action_id_length(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ButtonElement(
+                text="test", action_id="1234567890" * 26, value="click_me"
+            ).to_dict()
+
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
@@ -160,6 +166,15 @@ class LinkButtonElementTests(unittest.TestCase):
     def test_url_length(self):
         with self.assertRaises(SlackObjectFormationError):
             LinkButtonElement(text="Button", url=STRING_3001_CHARS).to_dict()
+
+    def test_action_id_length(self):
+        with self.assertRaises(SlackObjectFormationError):
+            LinkButtonElement(
+                text="test",
+                action_id="1234567890" * 26,
+                value="click_me",
+                url="https://slack.com/",
+            ).to_dict()
 
 
 # -------------------------------------------------
