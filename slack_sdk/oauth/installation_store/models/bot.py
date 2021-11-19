@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime  # type: ignore
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
