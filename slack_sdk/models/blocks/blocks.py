@@ -370,7 +370,7 @@ class InputBlock(Block):
                 block_id should be unique for each message or view and each iteration of a message or view.
                 If a message or view is updated, use a new block_id.
             hint: An optional hint that appears below an input element in a lighter grey.
-                It must be a a text object with a type of plain_text.
+                It must be a text object with a type of plain_text.
                 Maximum length for the text in this field is 2000 characters.
             dispatch_action: A boolean that indicates whether or not the use of elements in this block
                 should dispatch a block_actions payload. Defaults to false.

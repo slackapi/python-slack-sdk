@@ -376,7 +376,7 @@ class CheckboxesElement(InputInteractiveElement):
                 Should be unique among all other action_ids in the containing block.
                 Maximum length for this field is 255 characters.
             options (required): An array of option objects. A maximum of 10 options are allowed.
-            initial_options: An array of option objects that exactly matches one or more of the options within options.
+            initial_options: An array of option objects that exactly matches one or more of the options.
                 These options will be selected when the checkbox group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the checkboxes in this element.
@@ -599,7 +599,7 @@ class StaticSelectElement(InputInteractiveElement):
             option_groups (either options or option_groups is required): An array of option group objects.
                 Maximum number of option groups is 100.
                 If options is specified, this field should not be.
-            initial_option: A single option that exactly matches one of the options within options or option_groups.
+            initial_option: A single option that exactly matches one of the options or option_groups.
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
@@ -757,7 +757,7 @@ class SelectElement(InputInteractiveElement):
             option_groups (either options or option_groups is required): An array of option group objects.
                 Maximum number of option groups is 100.
                 If options is specified, this field should not be.
-            initial_option: A single option that exactly matches one of the options within options or option_groups.
+            initial_option: A single option that exactly matches one of the options or option_groups.
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
@@ -1383,7 +1383,7 @@ class RadioButtonsElement(InputInteractiveElement):
                 Should be unique among all other action_ids in the containing block.
                 Maximum length for this field is 255 characters.
             options (required): An array of option objects. A maximum of 10 options are allowed.
-            initial_option: An option object that exactly matches one of the options within options.
+            initial_option: An option object that exactly matches one of the options.
                 This option will be selected when the radio button group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the radio buttons in this element.
