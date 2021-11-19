@@ -164,16 +164,18 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         )
                     break
                 try:
-                    # The logging here is for detailed trouble shooting of potential issues in this client.
-                    # If you don't see this log for a while, it means that
-                    # this receive_messages execution is no longer working for some reason.
-                    counter_for_logging = (counter_for_logging + 1) % logging_interval
-                    if counter_for_logging == 0:
-                        log_message = (
-                            f"{logging_interval} session verification executed after the previous same log"
-                            f" ({session_id})"
-                        )
-                        self.logger.debug(log_message)
+                    if self.trace_enabled and self.logger.level <= logging.DEBUG:
+                        # The logging here is for detailed investigation on potential issues in this client.
+                        # If you don't see this log for a while, it means that
+                        # this receive_messages execution is no longer working for some reason.
+                        counter_for_logging += 1
+                        if counter_for_logging >= logging_interval:
+                            counter_for_logging = 0
+                            log_message = (
+                                "#monitor_current_session method has been verifying if this session is active "
+                                f"(session: {session_id}, logging interval: {logging_interval})"
+                            )
+                            self.logger.debug(log_message)
 
                     await asyncio.sleep(self.ping_interval)
 
@@ -250,38 +252,41 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     break
                 try:
                     message: WSMessage = await session.receive()
-                    if self.trace_enabled and self.logger.level <= logging.DEBUG:
-                        # The following logging prints every single received message except empty message data ones.
-                        type = WSMsgType(message.type)
-                        message_type = type.name if type is not None else message.type
-                        message_data = message.data
-                        if isinstance(message_data, bytes):
-                            message_data = message_data.decode("utf-8")
-                        if len(message_data) > 0:
-                            # To skip the empty message that Slack server-side often sends
-                            self.logger.debug(
-                                f"Received message "
-                                f"(type: {message_type}, "
-                                f"data: {message_data}, "
-                                f"extra: {message.extra}, "
-                                f"session: {session_id})"
-                            )
-
-                    # The logging here is for detailed trouble shooting of potential issues in this client.
-                    # If you don't see this log for a while, it means that
-                    # this receive_messages execution is no longer working for some reason.
-                    if self.logger.level <= logging.DEBUG:
-                        counter_for_logging = (
-                            counter_for_logging + 1
-                        ) % logging_interval
-                        if counter_for_logging == 0:
-                            log_message = (
-                                f"{logging_interval} WebSocket messages received "
-                                f"after the previous same log ({session_id})"
-                            )
-                            self.logger.debug(log_message)
-
+                    # just in case, checking if the value is not None
                     if message is not None:
+                        if self.logger.level <= logging.DEBUG:
+                            # The following logging prints every single received message
+                            # except empty message data ones.
+                            type = WSMsgType(message.type)
+                            message_type = (
+                                type.name if type is not None else message.type
+                            )
+                            message_data = message.data
+                            if isinstance(message_data, bytes):
+                                message_data = message_data.decode("utf-8")
+                            if len(message_data) > 0:
+                                # To skip the empty message that Slack server-side often sends
+                                self.logger.debug(
+                                    f"Received message "
+                                    f"(type: {message_type}, "
+                                    f"data: {message_data}, "
+                                    f"extra: {message.extra}, "
+                                    f"session: {session_id})"
+                                )
+
+                            if self.trace_enabled:
+                                # The logging here is for detailed trouble shooting of potential issues in this client.
+                                # If you don't see this log for a while, it can mean that
+                                # this receive_messages execution is no longer working for some reason.
+                                counter_for_logging += 1
+                                if counter_for_logging >= logging_interval:
+                                    counter_for_logging = 0
+                                    log_message = (
+                                        "#receive_messages method has been working without any issues "
+                                        f"(session: {session_id}, logging interval: {logging_interval})"
+                                    )
+                                    self.logger.debug(log_message)
+
                         if message.type == WSMsgType.TEXT:
                             message_data = message.data
                             await self.enqueue_message(message_data)
@@ -320,7 +325,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                             f" - error : {e}, session: {session_id}"
                                         )
                             continue
+
                     consecutive_error_count = 0
+
                 except Exception as e:
                     consecutive_error_count += 1
                     self.logger.error(
@@ -351,7 +358,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             and not self.current_session.closed
             and not await self.is_ping_pong_failing()
         )
-        if connected is False and self.logger.level <= logging.DEBUG:
+        if self.logger.level <= logging.DEBUG and connected is False:
+            # Prints more detailed information about the inactive connection
             is_ping_pong_failing = await self.is_ping_pong_failing()
             session_id = await self.session_id()
             self.logger.debug(
@@ -369,9 +377,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         return self.build_session_id(self.current_session)
 
     async def connect(self):
-        old_session = None if self.current_session is None else self.current_session
+        old_session: Optional[ClientWebSocketResponse] = (
+            None if self.current_session is None else self.current_session
+        )
         if self.wss_uri is None:
+            # If the underlying WSS URL does not exist,
+            # acquiring a new active WSS URL from the server-side first
             self.wss_uri = await self.issue_new_wss_url()
+
         self.current_session = await self.aiohttp_client_session.ws_connect(
             self.wss_uri,
             autoping=False,
