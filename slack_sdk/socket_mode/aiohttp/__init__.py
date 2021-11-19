@@ -168,13 +168,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         # The logging here is for detailed investigation on potential issues in this client.
                         # If you don't see this log for a while, it means that
                         # this receive_messages execution is no longer working for some reason.
-                        counter_for_logging = (
-                            counter_for_logging + 1
-                        ) % logging_interval
-                        if counter_for_logging == 0:
+                        counter_for_logging += 1
+                        if counter_for_logging >= logging_interval:
+                            counter_for_logging = 0
                             log_message = (
-                                f"{logging_interval} session verification executed after the previous same log"
-                                f" ({session_id})"
+                                "#monitor_current_session method has been verifying if this session is active "
+                                f"(session: {session_id}, logging interval: {logging_interval})"
                             )
                             self.logger.debug(log_message)
 
@@ -275,16 +274,18 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                     f"session: {session_id})"
                                 )
 
-                            counter_for_logging = (
-                                counter_for_logging + 1
-                            ) % logging_interval
+                            counter_for_logging += 1
                             # The logging here is for detailed trouble shooting of potential issues in this client.
                             # If you don't see this log for a while, it can mean that
                             # this receive_messages execution is no longer working for some reason.
-                            if self.trace_enabled and counter_for_logging == 0:
+                            if (
+                                self.trace_enabled
+                                and counter_for_logging >= logging_interval
+                            ):
+                                counter_for_logging = 0
                                 log_message = (
-                                    f"{logging_interval} WebSocket messages received "
-                                    f"after the previous same log ({session_id})"
+                                    "#receive_messages method has been working without any issues "
+                                    f"(session: {session_id}, logging interval: {logging_interval})"
                                 )
                                 self.logger.debug(log_message)
 
