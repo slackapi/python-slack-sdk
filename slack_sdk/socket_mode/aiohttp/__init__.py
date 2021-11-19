@@ -274,20 +274,18 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                     f"session: {session_id})"
                                 )
 
-                            counter_for_logging += 1
-                            # The logging here is for detailed trouble shooting of potential issues in this client.
-                            # If you don't see this log for a while, it can mean that
-                            # this receive_messages execution is no longer working for some reason.
-                            if (
-                                self.trace_enabled
-                                and counter_for_logging >= logging_interval
-                            ):
-                                counter_for_logging = 0
-                                log_message = (
-                                    "#receive_messages method has been working without any issues "
-                                    f"(session: {session_id}, logging interval: {logging_interval})"
-                                )
-                                self.logger.debug(log_message)
+                            if self.trace_enabled:
+                                # The logging here is for detailed trouble shooting of potential issues in this client.
+                                # If you don't see this log for a while, it can mean that
+                                # this receive_messages execution is no longer working for some reason.
+                                counter_for_logging += 1
+                                if counter_for_logging >= logging_interval:
+                                    counter_for_logging = 0
+                                    log_message = (
+                                        "#receive_messages method has been working without any issues "
+                                        f"(session: {session_id}, logging interval: {logging_interval})"
+                                    )
+                                    self.logger.debug(log_message)
 
                         if message.type == WSMsgType.TEXT:
                             message_data = message.data
