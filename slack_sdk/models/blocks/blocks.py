@@ -125,6 +125,22 @@ class SectionBlock(Block):
     ):
         """A section is one of the most flexible blocks available.
         https://api.slack.com/reference/block-kit/blocks#section
+
+        Args:
+            block_id (required): A string acting as a unique identifier for a block.
+                If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (preferred): The text for the block, in the form of a text object.
+                Maximum length for the text in this field is 3000 characters.
+                This field is not required if a valid array of fields objects is provided instead.
+            fields (required if no text is provided): Required if no text is provided.
+                An array of text objects. Any text objects included with fields will be rendered
+                in a compact format that allows for 2 columns of side-by-side text.
+                Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
+            accessory: One of the available element objects.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -172,6 +188,13 @@ class DividerBlock(Block):
     ):
         """A content divider, like an <hr>, to split up different blocks inside of a message.
         https://api.slack.com/reference/block-kit/blocks#divider
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -199,6 +222,18 @@ class ImageBlock(Block):
     ):
         """A simple image block, designed to make those cat photos really pop.
         https://api.slack.com/reference/block-kit/blocks#image
+
+        Args:
+            image_url (required): The URL of the image to be displayed.
+                Maximum length for this field is 3000 characters.
+            alt_text (required): A plain-text summary of the image. This should not contain any markup.
+                Maximum length for this field is 2000 characters.
+            title: An optional title for the image in the form of a text object that can only be of type: plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -243,6 +278,16 @@ class ActionsBlock(Block):
     ):
         """A block that is used to hold interactive elements.
         https://api.slack.com/reference/block-kit/blocks#actions
+
+        Args:
+            elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
+                or date pickers. There is a maximum of 5 elements in each action block.
+            block_id: A string acting as a unique identifier for a block.
+                If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -271,6 +316,13 @@ class ContextBlock(Block):
     ):
         """Displays message context, which can include both images and text.
         https://api.slack.com/reference/block-kit/blocks#context
+
+        Args:
+            elements (required): An array of image elements and text objects. Maximum number of items is 10.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -307,6 +359,23 @@ class InputBlock(Block):
         """A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
         https://api.slack.com/reference/block-kit/blocks#input
+
+        Args:
+            label (required): A label that appears above an input element in the form of a text object
+                that must have type of plain_text. Maximum length for the text in this field is 2000 characters.
+            element (required): An plain-text input element, a checkbox element, a radio button element,
+                a select menu element, a multi-select menu element, or a datepicker.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message or view and each iteration of a message or view.
+                If a message or view is updated, use a new block_id.
+            hint: An optional hint that appears below an input element in a lighter grey.
+                It must be a text object with a type of plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            dispatch_action: A boolean that indicates whether or not the use of elements in this block
+                should dispatch a block_actions payload. Defaults to false.
+            optional: A boolean that indicates whether the input element may be empty when a user submits the modal.
+                Defaults to false.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -362,6 +431,14 @@ class FileBlock(Block):
     ):
         """Displays a remote file.
         https://api.slack.com/reference/block-kit/blocks#file
+
+        Args:
+            external_id (required): The external unique ID for this file.
+            source (required): At the moment, source will always be remote for a remote file.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -414,6 +491,14 @@ class HeaderBlock(Block):
     ):
         """A header is a plain-text block that displays in a larger, bold font.
         https://api.slack.com/reference/block-kit/blocks#header
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The text for the block, in the form of a plain_text text object.
+                Maximum length for the text in this field is 150 characters.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)

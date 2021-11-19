@@ -86,6 +86,12 @@ class PlainTextObject(TextObject):
         """A plain text object, meaning markdown characters will not be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            emoji: Indicates whether emojis in a text field should be escaped into the colon emoji format.
+                This field is only usable when type is plain_text.
         """
         super().__init__(text=text, type=self.type)
         self.emoji = emoji
@@ -113,6 +119,14 @@ class MarkdownTextObject(TextObject):
         """A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            verbatim: When set to false (as is default) URLs will be auto-converted into links,
+                conversation names will be link-ified, and certain mentions will be automatically parsed.
+                Using a value of true will skip any preprocessing of this nature,
+                although you can still include manual parsing strings. This field is only usable when type is mrkdwn.
         """
         super().__init__(text=text, type=self.type)
         self.verbatim = verbatim

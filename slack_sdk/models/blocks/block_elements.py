@@ -133,7 +133,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 # Interactive Block Elements
 # -------------------------------------------------
 
-
+# This is a base class
 class InteractiveElement(BlockElement):
     action_id_max_length = 255
 
@@ -172,16 +172,11 @@ class InteractiveElement(BlockElement):
         )
 
 
+# This is a base class
 class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
     placeholder_max_length = 150
 
     attributes = {"type", "action_id", "placeholder", "confirm"}
-
-    def _subtype_warning(self):
-        warnings.warn(
-            "subtype is deprecated since slackclient 2.6.0, use type instead",
-            DeprecationWarning,
-        )
 
     @property
     def subtype(self) -> Optional[str]:
@@ -252,6 +247,28 @@ class ButtonElement(InteractiveElement):
         """An interactive element that inserts a button. The button can be a trigger for
         anything from opening a simple link to starting a complex workflow.
         https://api.slack.com/reference/block-kit/block-elements#button
+
+        Args:
+            text (required): A text object that defines the button's text.
+                Can only be of type: plain_text.
+                Maximum length for the text in this field is 75 characters.
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            url: A URL to load in the user's browser when the button is clicked.
+                Maximum length for this field is 3000 characters.
+                If you're using url, you'll still receive an interaction payload
+                and will need to send an acknowledgement response.
+            value: The value to send along with the interaction payload.
+                Maximum length for this field is 2000 characters.
+            style: Decorates buttons with alternative visual color schemes. Use this option with restraint.
+                "primary" gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+                "primary" should only be used for one button within a set.
+                "danger" gives buttons a red outline and text, and should be used when the action is destructive.
+                Use "danger" even more sparingly than "primary".
+                If you don't include this field, the default button style will be used.
+            confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
         """
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -298,6 +315,25 @@ class LinkButtonElement(ButtonElement):
         interaction payload and will need to send an acknowledgement response.
         This is a helper class that makes creating links simpler.
         https://api.slack.com/reference/block-kit/block-elements#button
+
+        Args:
+            text (required): A text object that defines the button's text.
+                Can only be of type: plain_text.
+                Maximum length for the text in this field is 75 characters.
+            url (required): A URL to load in the user's browser when the button is clicked.
+                Maximum length for this field is 3000 characters.
+                If you're using url, you'll still receive an interaction payload
+                and will need to send an acknowledgement response.
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            style: Decorates buttons with alternative visual color schemes. Use this option with restraint.
+                "primary" gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+                "primary" should only be used for one button within a set.
+                "danger" gives buttons a red outline and text, and should be used when the action is destructive.
+                Use "danger" even more sparingly than "primary".
+                If you don't include this field, the default button style will be used.
         """
         super().__init__(
             # NOTE: value must be always absent
@@ -326,7 +362,6 @@ class CheckboxesElement(InputInteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        placeholder: Optional[str] = None,
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
@@ -334,11 +369,21 @@ class CheckboxesElement(InputInteractiveElement):
     ):
         """A checkbox group that allows a user to choose multiple items from a list of possible options.
         https://api.slack.com/reference/block-kit/block-elements#checkboxes
+
+        Args:
+            action_id (required): An identifier for the action triggered when the checkbox group is changed.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            options (required): An array of option objects. A maximum of 10 options are allowed.
+            initial_options: An array of option objects that exactly matches one or more of the options.
+                These options will be selected when the checkbox group initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                after clicking one of the checkboxes in this element.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
         )
         show_unknown_key_warning(self, others)
@@ -372,6 +417,18 @@ class DatePickerElement(InputInteractiveElement):
         An element which lets users easily select a date from a calendar style UI.
         Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
         https://api.slack.com/reference/block-kit/block-elements#datepicker
+
+        Args:
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder: A plain_text only text object that defines the placeholder text shown on the datepicker.
+                Maximum length for the text in this field is 150 characters.
+            initial_date: The initial date that is selected when the element is loaded.
+                This should be in the format YYYY-MM-DD.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a date is selected.
         """
         super().__init__(
             type=self.type,
@@ -417,7 +474,23 @@ class TimePickerElement(InputInteractiveElement):
     ):
         """
         An element which allows selection of a time of day.
+        On desktop clients, this time picker will take the form of a dropdown list
+        with free-text entry for precise choices.
+        On mobile clients, the time picker will use native time picker UIs.
         https://api.slack.com/reference/block-kit/block-elements#timepicker
+
+        Args:
+            action_id (required): An identifier for the action triggered when a time is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder: A plain_text only text object that defines the placeholder text shown on the timepicker.
+                Maximum length for the text in this field is 150 characters.
+            initial_time: The initial time that is selected when the element is loaded.
+                This should be in the format HH:mm, where HH is the 24-hour format of an hour (00 to 23)
+                and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a time is selected.
         """
         super().__init__(
             type=self.type,
@@ -463,6 +536,10 @@ class ImageElement(BlockElement):
         context blocks only. If you want a block with only an image in it,
         you're looking for the image block.
         https://api.slack.com/reference/block-kit/block-elements#image
+
+        Args:
+            image_url (required): The URL of the image to be displayed.
+            alt_text (required): A plain-text summary of the image. This should not contain any markup.
         """
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
@@ -508,6 +585,24 @@ class StaticSelectElement(InputInteractiveElement):
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
         https://api.slack.com/reference/block-kit/block-elements#static_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            options (either options or option_groups is required): An array of option objects.
+                Maximum number of options is 100.
+                If option_groups is specified, this field should not be.
+            option_groups (either options or option_groups is required): An array of option group objects.
+                Maximum number of option groups is 100.
+                If options is specified, this field should not be.
+            initial_option: A single option that exactly matches one of the options or option_groups.
+                This option will be selected when the menu initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a menu item is selected.
         """
         super().__init__(
             type=self.type,
@@ -569,6 +664,26 @@ class StaticMultiSelectElement(InputInteractiveElement):
         """
         This is the simplest form of select menu, with a static list of options passed in when defining the element.
         https://api.slack.com/reference/block-kit/block-elements#static_multi_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            options (either options or option_groups is required): An array of option objects.
+                Maximum number of options is 100.
+                If option_groups is specified, this field should not be.
+            option_groups (either options or option_groups is required): An array of option group objects.
+                Maximum number of option groups is 100.
+                If options is specified, this field should not be.
+            initial_options: An array of option objects that exactly match one or more of the options
+                within options or option_groups. These options will be selected when the menu initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears before the multi-select choices are submitted.
+            max_selected_items: Specifies the maximum number of items that can be selected in the menu.
+                Minimum number is 1.
         """
         super().__init__(
             type=self.type,
@@ -628,6 +743,24 @@ class SelectElement(InputInteractiveElement):
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
         https://api.slack.com/reference/block-kit/block-elements#static_select
+
+        Args:
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            options (either options or option_groups is required): An array of option objects.
+                Maximum number of options is 100.
+                If option_groups is specified, this field should not be.
+            option_groups (either options or option_groups is required): An array of option group objects.
+                Maximum number of option groups is 100.
+                If options is specified, this field should not be.
+            initial_option: A single option that exactly matches one of the options or option_groups.
+                This option will be selected when the menu initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a menu item is selected.
         """
         super().__init__(
             type=self.type,
@@ -689,6 +822,24 @@ class ExternalDataSelectElement(InputInteractiveElement):
         This select menu will load its options from an external data source, allowing
         for a dynamic list of options.
         https://api.slack.com/reference/block-kit/block-elements#external_select
+
+        Args:
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            initial_option: A single option that exactly matches one of the options
+                within the options or option_groups loaded from the external data source.
+                This option will be selected when the menu initially loads.
+            min_query_length: When the typeahead field is used, a request will be sent on every character change.
+                If you prefer fewer requests or more fully ideated queries,
+                use the min_query_length attribute to tell Slack
+                the fewest number of typed characters required before dispatch.
+                The default value is 3.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a menu item is selected.
         """
         super().__init__(
             type=self.type,
@@ -725,7 +876,26 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         """
         This select menu will load its options from an external data source, allowing
         for a dynamic list of options.
-        https://api.slack.com/reference/block-kit/block-elements#external-select
+        https://api.slack.com/reference/block-kit/block-elements#external_multi_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            min_query_length: When the typeahead field is used, a request will be sent on every character change.
+                If you prefer fewer requests or more fully ideated queries,
+                use the min_query_length attribute to tell Slack
+                the fewest number of typed characters required before dispatch.
+                The default value is 3
+            initial_options: An array of option objects that exactly match one or more of the options
+                within options or option_groups. These options will be selected when the menu initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                before the multi-select choices are submitted.
+            max_selected_items: Specifies the maximum number of items that can be selected in the menu.
+                Minimum number is 1.
         """
         super().__init__(
             type=self.type,
@@ -765,6 +935,17 @@ class UserSelectElement(InputInteractiveElement):
         This select menu will populate its options with a list of Slack users visible to
         the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#users_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_user: The user ID of any valid user to be pre-selected when the menu loads.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a menu item is selected.
         """
         super().__init__(
             type=self.type,
@@ -798,6 +979,19 @@ class UserMultiSelectElement(InputInteractiveElement):
         This select menu will populate its options with a list of Slack users visible to
         the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#users_multi_select
+
+        Args:
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            initial_users: An array of user IDs of any valid users to be pre-selected when the menu loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                before the multi-select choices are submitted.
+            max_selected_items: Specifies the maximum number of items that can be selected in the menu.
+                Minimum number is 1.
         """
         super().__init__(
             type=self.type,
@@ -827,6 +1021,19 @@ class ConversationFilter(JsonObject):
         exclude_bot_users: Optional[bool] = None,
         exclude_external_shared_channels: Optional[bool] = None,
     ):
+        """Provides a way to filter the list of options in a conversations select menu
+        or conversations multi-select menu.
+        https://api.slack.com/reference/block-kit/composition-objects#filter_conversations
+
+        Args:
+            include: Indicates which type of conversations should be included in the list.
+                When this field is provided, any conversations that do not match will be excluded.
+                You should provide an array of strings from the following options:
+                "im", "mpim", "private", and "public". The array cannot be empty.
+            exclude_bot_users: Indicates whether to exclude bot users from conversation lists. Defaults to false.
+            exclude_external_shared_channels: Indicates whether to exclude external shared channels
+                from conversation lists. Defaults to false.
+        """
         self.include = include
         self.exclude_bot_users = exclude_bot_users
         self.exclude_external_shared_channels = exclude_external_shared_channels
@@ -877,6 +1084,25 @@ class ConversationSelectElement(InputInteractiveElement):
         This select menu will populate its options with a list of public and private
         channels, DMs, and MPIMs visible to the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#conversation_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_conversation: The ID of any valid conversation to be pre-selected when the menu loads.
+                If default_to_current_conversation is also supplied, initial_conversation will take precedence.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a menu item is selected.
+            response_url_enabled: This field only works with menus in input blocks in modals.
+                When set to true, the view_submission payload from the menu's parent view will contain a response_url.
+                This response_url can be used for message responses. The target conversation for the message
+                will be determined by the value of this select menu.
+            default_to_current_conversation: Pre-populates the select menu with the conversation
+                that the user was viewing when they opened the modal, if available. Default is false.
+            filter: A filter object that reduces the list of available conversations using the specified criteria.
         """
         super().__init__(
             type=self.type,
@@ -922,6 +1148,24 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         This multi-select menu will populate its options with a list of public and private channels,
         DMs, and MPIMs visible to the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_conversations: An array of one or more IDs of any valid conversations to be pre-selected
+                when the menu loads. If default_to_current_conversation is also supplied,
+                initial_conversations will be ignored.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                before the multi-select choices are submitted.
+            max_selected_items: Specifies the maximum number of items that can be selected in the menu.
+                Minimum number is 1.
+            default_to_current_conversation: Pre-populates the select menu with the conversation that
+                the user was viewing when they opened the modal, if available. Default is false.
+            filter: A filter object that reduces the list of available conversations using the specified criteria.
         """
         super().__init__(
             type=self.type,
@@ -963,6 +1207,21 @@ class ChannelSelectElement(InputInteractiveElement):
         This select menu will populate its options with a list of public channels
         visible to the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#channel_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_channel: The ID of any valid public channel to be pre-selected when the menu loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                after a menu item is selected.
+            response_url_enabled: This field only works with menus in input blocks in modals.
+                When set to true, the view_submission payload from the menu's parent view will contain a response_url.
+                This response_url can be used for message responses.
+                The target channel for the message will be determined by the value of this select menu
         """
         super().__init__(
             type=self.type,
@@ -997,6 +1256,20 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         This multi-select menu will populate its options with a list of public channels visible
         to the current user in the active workspace.
         https://api.slack.com/reference/block-kit/block-elements#channel_multi_select
+
+        Args:
+            placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
+                Maximum length for the text in this field is 150 characters.
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_channels: An array of one or more IDs of any valid public channel
+                to be pre-selected when the menu loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                before the multi-select choices are submitted.
+            max_selected_items: Specifies the maximum number of items that can be selected in the menu.
+                Minimum number is 1.
         """
         super().__init__(
             type=self.type,
@@ -1035,7 +1308,6 @@ class PlainTextInputElement(InputInteractiveElement):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
-        confirm: Optional[Union[dict, ConfirmObject]] = None,
         initial_value: Optional[str] = None,
         multiline: Optional[bool] = None,
         min_length: Optional[int] = None,
@@ -1049,12 +1321,28 @@ class PlainTextInputElement(InputInteractiveElement):
         field or a larger textarea using the multiline flag. Plain-text input
         elements can be used inside of SectionBlocks and ActionsBlocks.
         https://api.slack.com/reference/block-kit/block-elements#input
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            placeholder: A plain_text only text object that defines the placeholder text shown
+                in the plain-text input. Maximum length for the text in this field is 150 characters.
+            initial_value: The initial value in the plain-text input when it is loaded.
+            multiline: Indicates whether the input will be a single line (false) or a larger textarea (true).
+                Defaults to false.
+            min_length: The minimum length of input that the user must provide. If the user provides less,
+                they will receive an error. Maximum value is 3000.
+            max_length: The maximum length of input that the user can provide. If the user provides more,
+                they will receive an error.
+            dispatch_action_config: A dispatch configuration object that determines when
+                during text input the element returns a block_actions payload.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
         )
         show_unknown_key_warning(self, others)
 
@@ -1081,7 +1369,6 @@ class RadioButtonsElement(InputInteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        placeholder: Optional[Union[str, dict, TextObject]] = None,
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
@@ -1089,11 +1376,21 @@ class RadioButtonsElement(InputInteractiveElement):
     ):
         """A radio button group that allows a user to choose one item from a list of possible options.
         https://api.slack.com/reference/block-kit/block-elements#radio
+
+        Args:
+            action_id (required): An identifier for the action triggered when the radio button group is changed.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            options (required): An array of option objects. A maximum of 10 options are allowed.
+            initial_option: An option object that exactly matches one of the options.
+                This option will be selected when the radio button group initially loads.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                after clicking one of the radio buttons in this element.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
         )
         show_unknown_key_warning(self, others)
@@ -1136,6 +1433,16 @@ class OverflowMenuElement(InteractiveElement):
         instead of actions.
 
         https://api.slack.com/reference/block-kit/block-elements#overflow
+
+        Args:
+            action_id (required): An identifier for the action triggered when a menu option is selected.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            options (required): An array of option objects to display in the menu.
+                Maximum number of options is 5, minimum is 2.
+            confirm: A confirm object that defines an optional confirmation dialog that appears
+                after a menu item is selected.
         """
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
