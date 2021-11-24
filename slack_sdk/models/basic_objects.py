@@ -89,7 +89,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, JsonObject):
-            return NotImplemented
+            return False
         return self.to_dict() == other.to_dict()
 
 
