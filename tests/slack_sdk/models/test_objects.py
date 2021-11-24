@@ -156,6 +156,8 @@ class JsonObjectTests(unittest.TestCase):
         obj2.test = "another"
         self.assertNotEqual(self.good_test_object, obj2)
 
+        self.assertNotEqual(self.good_test_object, None)
+
 
 class JsonValidatorTests(unittest.TestCase):
     def setUp(self) -> None:
