@@ -115,6 +115,11 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         else:
             return self.__str__()
 
+    def __eq__(self, other: Any) -&gt; bool:
+        if not isinstance(other, JsonObject):
+            return False
+        return self.to_dict() == other.to_dict()
+
 
 class JsonValidator:
     def __init__(self, message: str):
@@ -285,7 +290,12 @@ functions should return true if valid, false if not.</p>
         if dict_value:  # skipcq: PYL-R1705
             return f&#34;&lt;slack_sdk.{self.__class__.__name__}: {dict_value}&gt;&#34;
         else:
-            return self.__str__()</code></pre>
+            return self.__str__()
+
+    def __eq__(self, other: Any) -&gt; bool:
+        if not isinstance(other, JsonObject):
+            return False
+        return self.to_dict() == other.to_dict()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

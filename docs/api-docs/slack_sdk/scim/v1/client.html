@@ -195,10 +195,11 @@ class SCIMClient:
         )
 
     def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
         return UserUpdateResponse(
             self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Users/{quote(user.id)}&#34;,
+                path=f&#34;Users/{quote(user_id)}&#34;,
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -267,10 +268,11 @@ class SCIMClient:
         )
 
     def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
         return GroupUpdateResponse(
             self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Groups/{quote(group.id)}&#34;,
+                path=f&#34;Groups/{quote(group_id)}&#34;,
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -367,11 +369,20 @@ class SCIMClient:
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -460,20 +471,20 @@ class SCIMClient:
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -635,10 +646,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         )
 
     def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
         return UserUpdateResponse(
             self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Users/{quote(user.id)}&#34;,
+                path=f&#34;Users/{quote(user_id)}&#34;,
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -707,10 +719,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         )
 
     def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
         return GroupUpdateResponse(
             self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Groups/{quote(group.id)}&#34;,
+                path=f&#34;Groups/{quote(group_id)}&#34;,
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -807,11 +820,20 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -900,20 +922,20 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -1219,10 +1241,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+    group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
     return GroupUpdateResponse(
         self.api_call(
             http_verb=&#34;PUT&#34;,
-            path=f&#34;Groups/{quote(group.id)}&#34;,
+            path=f&#34;Groups/{quote(group_id)}&#34;,
             body_params=group.to_dict()
             if isinstance(group, Group)
             else _to_dict_without_not_given(group),
@@ -1240,10 +1263,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+    user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
     return UserUpdateResponse(
         self.api_call(
             http_verb=&#34;PUT&#34;,
-            path=f&#34;Users/{quote(user.id)}&#34;,
+            path=f&#34;Users/{quote(user_id)}&#34;,
             body_params=user.to_dict()
             if isinstance(user, User)
             else _to_dict_without_not_given(user),

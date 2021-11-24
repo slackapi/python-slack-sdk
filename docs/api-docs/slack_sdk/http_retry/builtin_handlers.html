@@ -29,7 +29,7 @@
 <pre><code class="python">import random
 import time
 from http.client import RemoteDisconnected
-from typing import Optional, List
+from typing import Optional, List, Type
 from urllib.error import URLError
 
 from slack_sdk.http_retry.interval_calculator import RetryIntervalCalculator
@@ -46,7 +46,7 @@ class ConnectionErrorRetryHandler(RetryHandler):
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             # To cover URLError: &lt;urlopen error [Errno 104] Connection reset by peer&gt;
             URLError,
             ConnectionResetError,
@@ -130,7 +130,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
 <dl>
 <dt id="slack_sdk.http_retry.builtin_handlers.ConnectionErrorRetryHandler"><code class="flex name class">
 <span>class <span class="ident">ConnectionErrorRetryHandler</span></span>
-<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;, error_types: List[Exception] = [&lt;class &#x27;urllib.error.URLError&#x27;&gt;, &lt;class &#x27;ConnectionResetError&#x27;&gt;, &lt;class &#x27;http.client.RemoteDisconnected&#x27;&gt;])</span>
+<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;, error_types: List[Type[Exception]] = [&lt;class &#x27;urllib.error.URLError&#x27;&gt;, &lt;class &#x27;ConnectionResetError&#x27;&gt;, &lt;class &#x27;http.client.RemoteDisconnected&#x27;&gt;])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>RetryHandler that does retries for connectivity issues.</p>
@@ -153,7 +153,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             # To cover URLError: &lt;urlopen error [Errno 104] Connection reset by peer&gt;
             URLError,
             ConnectionResetError,

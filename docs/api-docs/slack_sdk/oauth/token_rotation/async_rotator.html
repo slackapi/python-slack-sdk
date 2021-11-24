@@ -50,12 +50,12 @@ class AsyncTokenRotator:
         self.client_id = client_id
         self.client_secret = client_secret
 
-    async def perform_token_rotation(
+    async def perform_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Installation]:
+    ) -&gt; Optional[Installation]:  # type: ignore
         &#34;&#34;&#34;Performs token rotation if the underlying tokens (bot / user) are expired / expiring.
 
         Args:
@@ -69,29 +69,27 @@ class AsyncTokenRotator:
         # TODO: make the following two calls in parallel for better performance
 
         # bot
-        rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(
+        rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(  # type: ignore
             bot=installation.to_bot(),
             minutes_before_expiration=minutes_before_expiration,
         )
 
         # user
-        rotated_installation: Optional[
-            Installation
-        ] = await self.perform_user_token_rotation(
+        rotated_installation = await self.perform_user_token_rotation(
             installation=installation,
             minutes_before_expiration=minutes_before_expiration,
         )
 
         if rotated_bot is not None:
             if rotated_installation is None:
-                rotated_installation = Installation(**installation.to_dict())
+                rotated_installation = Installation(**installation.to_dict())  # type: ignore
             rotated_installation.bot_token = rotated_bot.bot_token
             rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
             rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
 
-        return rotated_installation
+        return rotated_installation  # type: ignore
 
-    async def perform_bot_token_rotation(
+    async def perform_bot_token_rotation(  # type: ignore
         self,
         *,
         bot: Bot,
@@ -123,7 +121,7 @@ class AsyncTokenRotator:
             if refresh_response.get(&#34;token_type&#34;) != &#34;bot&#34;:
                 return None
 
-            refreshed_bot = Bot(**bot.to_dict())
+            refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
             refreshed_bot.bot_token_expires_at = int(time()) + int(
@@ -134,12 +132,12 @@ class AsyncTokenRotator:
         except SlackApiError as e:
             raise SlackTokenRotationError(e)
 
-    async def perform_user_token_rotation(
+    async def perform_user_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Bot]:
+    ) -&gt; Optional[Bot]:  # type: ignore
         &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -164,7 +162,7 @@ class AsyncTokenRotator:
             if refresh_response.get(&#34;token_type&#34;) != &#34;user&#34;:
                 return None
 
-            refreshed_installation = Installation(**installation.to_dict())
+            refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_installation.user_refresh_token = refresh_response.get(
                 &#34;refresh_token&#34;
@@ -172,7 +170,7 @@ class AsyncTokenRotator:
             refreshed_installation.user_token_expires_at = int(time()) + int(
                 refresh_response.get(&#34;expires_in&#34;)
             )
-            return refreshed_installation
+            return refreshed_installation  # type: ignore
 
         except SlackApiError as e:
             raise SlackTokenRotationError(e)</code></pre>
@@ -213,12 +211,12 @@ class AsyncTokenRotator:
         self.client_id = client_id
         self.client_secret = client_secret
 
-    async def perform_token_rotation(
+    async def perform_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Installation]:
+    ) -&gt; Optional[Installation]:  # type: ignore
         &#34;&#34;&#34;Performs token rotation if the underlying tokens (bot / user) are expired / expiring.
 
         Args:
@@ -232,29 +230,27 @@ class AsyncTokenRotator:
         # TODO: make the following two calls in parallel for better performance
 
         # bot
-        rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(
+        rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(  # type: ignore
             bot=installation.to_bot(),
             minutes_before_expiration=minutes_before_expiration,
         )
 
         # user
-        rotated_installation: Optional[
-            Installation
-        ] = await self.perform_user_token_rotation(
+        rotated_installation = await self.perform_user_token_rotation(
             installation=installation,
             minutes_before_expiration=minutes_before_expiration,
         )
 
         if rotated_bot is not None:
             if rotated_installation is None:
-                rotated_installation = Installation(**installation.to_dict())
+                rotated_installation = Installation(**installation.to_dict())  # type: ignore
             rotated_installation.bot_token = rotated_bot.bot_token
             rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
             rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
 
-        return rotated_installation
+        return rotated_installation  # type: ignore
 
-    async def perform_bot_token_rotation(
+    async def perform_bot_token_rotation(  # type: ignore
         self,
         *,
         bot: Bot,
@@ -286,7 +282,7 @@ class AsyncTokenRotator:
             if refresh_response.get(&#34;token_type&#34;) != &#34;bot&#34;:
                 return None
 
-            refreshed_bot = Bot(**bot.to_dict())
+            refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
             refreshed_bot.bot_token_expires_at = int(time()) + int(
@@ -297,12 +293,12 @@ class AsyncTokenRotator:
         except SlackApiError as e:
             raise SlackTokenRotationError(e)
 
-    async def perform_user_token_rotation(
+    async def perform_user_token_rotation(  # type: ignore
         self,
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Bot]:
+    ) -&gt; Optional[Bot]:  # type: ignore
         &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -327,7 +323,7 @@ class AsyncTokenRotator:
             if refresh_response.get(&#34;token_type&#34;) != &#34;user&#34;:
                 return None
 
-            refreshed_installation = Installation(**installation.to_dict())
+            refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_installation.user_refresh_token = refresh_response.get(
                 &#34;refresh_token&#34;
@@ -335,7 +331,7 @@ class AsyncTokenRotator:
             refreshed_installation.user_token_expires_at = int(time()) + int(
                 refresh_response.get(&#34;expires_in&#34;)
             )
-            return refreshed_installation
+            return refreshed_installation  # type: ignore
 
         except SlackApiError as e:
             raise SlackTokenRotationError(e)</code></pre>
@@ -375,7 +371,7 @@ class AsyncTokenRotator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def perform_bot_token_rotation(
+<pre><code class="python">async def perform_bot_token_rotation(  # type: ignore
     self,
     *,
     bot: Bot,
@@ -407,7 +403,7 @@ class AsyncTokenRotator:
         if refresh_response.get(&#34;token_type&#34;) != &#34;bot&#34;:
             return None
 
-        refreshed_bot = Bot(**bot.to_dict())
+        refreshed_bot = Bot(**bot.to_dict())  # type: ignore
         refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
         refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
         refreshed_bot.bot_token_expires_at = int(time()) + int(
@@ -437,12 +433,12 @@ class AsyncTokenRotator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def perform_token_rotation(
+<pre><code class="python">async def perform_token_rotation(  # type: ignore
     self,
     *,
     installation: Installation,
     minutes_before_expiration: int = 120,  # 2 hours by default
-) -&gt; Optional[Installation]:
+) -&gt; Optional[Installation]:  # type: ignore
     &#34;&#34;&#34;Performs token rotation if the underlying tokens (bot / user) are expired / expiring.
 
     Args:
@@ -456,27 +452,25 @@ class AsyncTokenRotator:
     # TODO: make the following two calls in parallel for better performance
 
     # bot
-    rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(
+    rotated_bot: Optional[Bot] = await self.perform_bot_token_rotation(  # type: ignore
         bot=installation.to_bot(),
         minutes_before_expiration=minutes_before_expiration,
     )
 
     # user
-    rotated_installation: Optional[
-        Installation
-    ] = await self.perform_user_token_rotation(
+    rotated_installation = await self.perform_user_token_rotation(
         installation=installation,
         minutes_before_expiration=minutes_before_expiration,
     )
 
     if rotated_bot is not None:
         if rotated_installation is None:
-            rotated_installation = Installation(**installation.to_dict())
+            rotated_installation = Installation(**installation.to_dict())  # type: ignore
         rotated_installation.bot_token = rotated_bot.bot_token
         rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
         rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
 
-    return rotated_installation</code></pre>
+    return rotated_installation  # type: ignore</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.oauth.token_rotation.async_rotator.AsyncTokenRotator.perform_user_token_rotation"><code class="name flex">
@@ -497,12 +491,12 @@ class AsyncTokenRotator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def perform_user_token_rotation(
+<pre><code class="python">async def perform_user_token_rotation(  # type: ignore
     self,
     *,
     installation: Installation,
     minutes_before_expiration: int = 120,  # 2 hours by default
-) -&gt; Optional[Bot]:
+) -&gt; Optional[Bot]:  # type: ignore
     &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
     Args:
@@ -527,7 +521,7 @@ class AsyncTokenRotator:
         if refresh_response.get(&#34;token_type&#34;) != &#34;user&#34;:
             return None
 
-        refreshed_installation = Installation(**installation.to_dict())
+        refreshed_installation = Installation(**installation.to_dict())  # type: ignore
         refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
         refreshed_installation.user_refresh_token = refresh_response.get(
             &#34;refresh_token&#34;
@@ -535,7 +529,7 @@ class AsyncTokenRotator:
         refreshed_installation.user_token_expires_at = int(time()) + int(
             refresh_response.get(&#34;expires_in&#34;)
         )
-        return refreshed_installation
+        return refreshed_installation  # type: ignore
 
     except SlackApiError as e:
         raise SlackTokenRotationError(e)</code></pre>

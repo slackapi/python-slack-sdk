@@ -37,8 +37,8 @@ from slack_sdk.oauth.installation_store.async_installation_store import (
 
 class AsyncCacheableInstallationStore(AsyncInstallationStore):
     underlying: AsyncInstallationStore
-    cached_bots: Dict[str, Bot]
-    cached_installations: Dict[str, Installation]
+    cached_bots: Dict[str, Bot]  # type: ignore
+    cached_installations: Dict[str, Installation]  # type: ignore
 
     def __init__(self, installation_store: AsyncInstallationStore):
         &#34;&#34;&#34;A simple memory cache wrapper for any installation stores.
@@ -54,7 +54,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     def logger(self) -&gt; Logger:
         return self.underlying.logger
 
-    async def async_save(self, installation: Installation):
+    async def async_save(self, installation: Installation):  # type: ignore
         # Invalidate cache data for update operations
         key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
@@ -64,14 +64,14 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             self.cached_installations.pop(key)
         return await self.underlying.async_save(installation)
 
-    async def async_save_bot(self, bot: Bot):
+    async def async_save_bot(self, bot: Bot):  # type: ignore
         # Invalidate cache data for update operations
         key = f&#34;{bot.enterprise_id or &#39;&#39;}-{bot.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return await self.underlying.async_save_bot(bot)
 
-    async def async_find_bot(
+    async def async_find_bot(  # type: ignore
         self,
         *,
         enterprise_id: Optional[str],
@@ -92,7 +92,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             self.cached_bots[key] = bot
         return bot
 
-    async def async_find_installation(
+    async def async_find_installation(  # type: ignore
         self,
         *,
         enterprise_id: Optional[str],
@@ -209,8 +209,8 @@ the following methods should be implemented.</p>
 </summary>
 <pre><code class="python">class AsyncCacheableInstallationStore(AsyncInstallationStore):
     underlying: AsyncInstallationStore
-    cached_bots: Dict[str, Bot]
-    cached_installations: Dict[str, Installation]
+    cached_bots: Dict[str, Bot]  # type: ignore
+    cached_installations: Dict[str, Installation]  # type: ignore
 
     def __init__(self, installation_store: AsyncInstallationStore):
         &#34;&#34;&#34;A simple memory cache wrapper for any installation stores.
@@ -226,7 +226,7 @@ the following methods should be implemented.</p>
     def logger(self) -&gt; Logger:
         return self.underlying.logger
 
-    async def async_save(self, installation: Installation):
+    async def async_save(self, installation: Installation):  # type: ignore
         # Invalidate cache data for update operations
         key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
@@ -236,14 +236,14 @@ the following methods should be implemented.</p>
             self.cached_installations.pop(key)
         return await self.underlying.async_save(installation)
 
-    async def async_save_bot(self, bot: Bot):
+    async def async_save_bot(self, bot: Bot):  # type: ignore
         # Invalidate cache data for update operations
         key = f&#34;{bot.enterprise_id or &#39;&#39;}-{bot.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return await self.underlying.async_save_bot(bot)
 
-    async def async_find_bot(
+    async def async_find_bot(  # type: ignore
         self,
         *,
         enterprise_id: Optional[str],
@@ -264,7 +264,7 @@ the following methods should be implemented.</p>
             self.cached_bots[key] = bot
         return bot
 
-    async def async_find_installation(
+    async def async_find_installation(  # type: ignore
         self,
         *,
         enterprise_id: Optional[str],

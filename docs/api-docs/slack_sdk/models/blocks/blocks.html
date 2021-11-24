@@ -146,13 +146,29 @@ class SectionBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
-        fields: Sequence[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
+        fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
         accessory: Optional[Union[dict, BlockElement]] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A section is one of the most flexible blocks available.
         https://api.slack.com/reference/block-kit/blocks#section
+
+        Args:
+            block_id (required): A string acting as a unique identifier for a block.
+                If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (preferred): The text for the block, in the form of a text object.
+                Maximum length for the text in this field is 3000 characters.
+                This field is not required if a valid array of fields objects is provided instead.
+            fields (required if no text is provided): Required if no text is provided.
+                An array of text objects. Any text objects included with fields will be rendered
+                in a compact format that allows for 2 columns of side-by-side text.
+                Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
+            accessory: One of the available element objects.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -200,6 +216,13 @@ class DividerBlock(Block):
     ):
         &#34;&#34;&#34;A content divider, like an &lt;hr&gt;, to split up different blocks inside of a message.
         https://api.slack.com/reference/block-kit/blocks#divider
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -227,6 +250,18 @@ class ImageBlock(Block):
     ):
         &#34;&#34;&#34;A simple image block, designed to make those cat photos really pop.
         https://api.slack.com/reference/block-kit/blocks#image
+
+        Args:
+            image_url (required): The URL of the image to be displayed.
+                Maximum length for this field is 3000 characters.
+            alt_text (required): A plain-text summary of the image. This should not contain any markup.
+                Maximum length for this field is 2000 characters.
+            title: An optional title for the image in the form of a text object that can only be of type: plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -271,6 +306,16 @@ class ActionsBlock(Block):
     ):
         &#34;&#34;&#34;A block that is used to hold interactive elements.
         https://api.slack.com/reference/block-kit/blocks#actions
+
+        Args:
+            elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
+                or date pickers. There is a maximum of 5 elements in each action block.
+            block_id: A string acting as a unique identifier for a block.
+                If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -299,6 +344,13 @@ class ContextBlock(Block):
     ):
         &#34;&#34;&#34;Displays message context, which can include both images and text.
         https://api.slack.com/reference/block-kit/blocks#context
+
+        Args:
+            elements (required): An array of image elements and text objects. Maximum number of items is 10.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -335,6 +387,23 @@ class InputBlock(Block):
         &#34;&#34;&#34;A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
         https://api.slack.com/reference/block-kit/blocks#input
+
+        Args:
+            label (required): A label that appears above an input element in the form of a text object
+                that must have type of plain_text. Maximum length for the text in this field is 2000 characters.
+            element (required): An plain-text input element, a checkbox element, a radio button element,
+                a select menu element, a multi-select menu element, or a datepicker.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message or view and each iteration of a message or view.
+                If a message or view is updated, use a new block_id.
+            hint: An optional hint that appears below an input element in a lighter grey.
+                It must be a text object with a type of plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            dispatch_action: A boolean that indicates whether or not the use of elements in this block
+                should dispatch a block_actions payload. Defaults to false.
+            optional: A boolean that indicates whether the input element may be empty when a user submits the modal.
+                Defaults to false.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -390,6 +459,14 @@ class FileBlock(Block):
     ):
         &#34;&#34;&#34;Displays a remote file.
         https://api.slack.com/reference/block-kit/blocks#file
+
+        Args:
+            external_id (required): The external unique ID for this file.
+            source (required): At the moment, source will always be remote for a remote file.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -437,11 +514,19 @@ class HeaderBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A header is a plain-text block that displays in a larger, bold font.
         https://api.slack.com/reference/block-kit/blocks#header
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The text for the block, in the form of a plain_text text object.
+                Maximum length for the text in this field is 150 characters.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -475,7 +560,20 @@ class HeaderBlock(Block):
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
-<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of interactive element objects - buttons, select menus, overflow menus,
+or date pickers. There is a maximum of 5 elements in each action block.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block.
+If not specified, a block_id will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -497,6 +595,16 @@ to create visually rich and compellingly interactive messages.
     ):
         &#34;&#34;&#34;A block that is used to hold interactive elements.
         https://api.slack.com/reference/block-kit/blocks#actions
+
+        Args:
+            elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
+                or date pickers. There is a maximum of 5 elements in each action block.
+            block_id: A string acting as a unique identifier for a block.
+                If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -849,7 +957,17 @@ def attributes(self) -&gt; Set[str]:
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>Displays message context, which can include both images and text.
-<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of image elements and text objects. Maximum number of items is 10.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -871,6 +989,13 @@ to create visually rich and compellingly interactive messages.
     ):
         &#34;&#34;&#34;Displays message context, which can include both images and text.
         https://api.slack.com/reference/block-kit/blocks#context
+
+        Args:
+            elements (required): An array of image elements and text objects. Maximum number of items is 10.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -935,7 +1060,16 @@ def attributes(self) -&gt; Set[str]:
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A content divider, like an <hr>, to split up different blocks inside of a message.
-<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -951,6 +1085,13 @@ to create visually rich and compellingly interactive messages.
     ):
         &#34;&#34;&#34;A content divider, like an &lt;hr&gt;, to split up different blocks inside of a message.
         https://api.slack.com/reference/block-kit/blocks#divider
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)</code></pre>
@@ -993,7 +1134,19 @@ to create visually rich and compellingly interactive messages.
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>Displays a remote file.
-<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>The external unique ID for this file.</dd>
+<dt><strong><code>source</code></strong> :&ensp;<code>required</code></dt>
+<dd>At the moment, source will always be remote for a remote file.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1015,6 +1168,14 @@ to create visually rich and compellingly interactive messages.
     ):
         &#34;&#34;&#34;Displays a remote file.
         https://api.slack.com/reference/block-kit/blocks#file
+
+        Args:
+            external_id (required): The external unique ID for this file.
+            source (required): At the moment, source will always be remote for a remote file.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1065,14 +1226,25 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.HeaderBlock"><code class="flex name class">
 <span>class <span class="ident">HeaderBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A header is a plain-text block that displays in a larger, bold font.
-<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The text for the block, in the form of a plain_text text object.
+Maximum length for the text in this field is 150 characters.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1089,11 +1261,19 @@ to create visually rich and compellingly interactive messages.
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A header is a plain-text block that displays in a larger, bold font.
         https://api.slack.com/reference/block-kit/blocks#header
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The text for the block, in the form of a plain_text text object.
+                Maximum length for the text in this field is 150 characters.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1162,7 +1342,24 @@ def attributes(self) -&gt; Set[str]:
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A simple image block, designed to make those cat photos really pop.
-<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_url</code></strong> :&ensp;<code>required</code></dt>
+<dd>The URL of the image to be displayed.
+Maximum length for this field is 3000 characters.</dd>
+<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
+<dd>A plain-text summary of the image. This should not contain any markup.
+Maximum length for this field is 2000 characters.</dd>
+<dt><strong><code>title</code></strong></dt>
+<dd>An optional title for the image in the form of a text object that can only be of type: plain_text.
+Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1189,6 +1386,18 @@ to create visually rich and compellingly interactive messages.
     ):
         &#34;&#34;&#34;A simple image block, designed to make those cat photos really pop.
         https://api.slack.com/reference/block-kit/blocks#image
+
+        Args:
+            image_url (required): The URL of the image to be displayed.
+                Maximum length for this field is 3000 characters.
+            alt_text (required): A plain-text summary of the image. This should not contain any markup.
+                Maximum length for this field is 2000 characters.
+            title: An optional title for the image in the form of a text object that can only be of type: plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1278,7 +1487,31 @@ to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A block that collects information from users - it can hold a plain-text input element,
 a select menu element, a multi-select menu element, or a datepicker.
-<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
+<dd>A label that appears above an input element in the form of a text object
+that must have type of plain_text. Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>element</code></strong> :&ensp;<code>required</code></dt>
+<dd>An plain-text input element, a checkbox element, a radio button element,
+a select menu element, a multi-select menu element, or a datepicker.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message or view and each iteration of a message or view.
+If a message or view is updated, use a new block_id.</dd>
+<dt><strong><code>hint</code></strong></dt>
+<dd>An optional hint that appears below an input element in a lighter grey.
+It must be a text object with a type of plain_text.
+Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>dispatch_action</code></strong></dt>
+<dd>A boolean that indicates whether or not the use of elements in this block
+should dispatch a block_actions payload. Defaults to false.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>A boolean that indicates whether the input element may be empty when a user submits the modal.
+Defaults to false.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1308,6 +1541,23 @@ a select menu element, a multi-select menu element, or a datepicker.
         &#34;&#34;&#34;A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
         https://api.slack.com/reference/block-kit/blocks#input
+
+        Args:
+            label (required): A label that appears above an input element in the form of a text object
+                that must have type of plain_text. Maximum length for the text in this field is 2000 characters.
+            element (required): An plain-text input element, a checkbox element, a radio button element,
+                a select menu element, a multi-select menu element, or a datepicker.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message or view and each iteration of a message or view.
+                If a message or view is updated, use a new block_id.
+            hint: An optional hint that appears below an input element in a lighter grey.
+                It must be a text object with a type of plain_text.
+                Maximum length for the text in this field is 2000 characters.
+            dispatch_action: A boolean that indicates whether or not the use of elements in this block
+                should dispatch a block_actions payload. Defaults to false.
+            optional: A boolean that indicates whether the input element may be empty when a user submits the modal.
+                Defaults to false.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1398,14 +1648,35 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.SectionBlock"><code class="flex name class">
 <span>class <span class="ident">SectionBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] = None, fields: Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, fields: Optional[Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
 <p>A section is one of the most flexible blocks available.
-<a href="https://api.slack.com/reference/block-kit/blocks#section">https://api.slack.com/reference/block-kit/blocks#section</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/blocks#section">https://api.slack.com/reference/block-kit/blocks#section</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>A string acting as a unique identifier for a block.
+If not specified, one will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>text</code></strong> :&ensp;<code>preferred</code></dt>
+<dd>The text for the block, in the form of a text object.
+Maximum length for the text in this field is 3000 characters.
+This field is not required if a valid array of fields objects is provided instead.</dd>
+<dt><strong><code>fields</code></strong> :&ensp;<code>required if no text is provided</code></dt>
+<dd>Required if no text is provided.
+An array of text objects. Any text objects included with fields will be rendered
+in a compact format that allows for 2 columns of side-by-side text.
+Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.</dd>
+<dt><strong><code>accessory</code></strong></dt>
+<dd>One of the available element objects.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1423,13 +1694,29 @@ to create visually rich and compellingly interactive messages.
         self,
         *,
         block_id: Optional[str] = None,
-        text: Union[str, dict, TextObject] = None,
-        fields: Sequence[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
+        fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
         accessory: Optional[Union[dict, BlockElement]] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A section is one of the most flexible blocks available.
         https://api.slack.com/reference/block-kit/blocks#section
+
+        Args:
+            block_id (required): A string acting as a unique identifier for a block.
+                If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (preferred): The text for the block, in the form of a text object.
+                Maximum length for the text in this field is 3000 characters.
+                This field is not required if a valid array of fields objects is provided instead.
+            fields (required if no text is provided): Required if no text is provided.
+                An array of text objects. Any text objects included with fields will be rendered
+                in a compact format that allows for 2 columns of side-by-side text.
+                Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
+            accessory: One of the available element objects.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)

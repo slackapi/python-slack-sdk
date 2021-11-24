@@ -896,6 +896,29 @@ class WebClient(BaseClient):
         )
         return self.api_call(&#34;admin.users.session.reset&#34;, params=kwargs)
 
+    def admin_users_session_resetBulk(
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+        https://api.slack.com/methods/admin.users.session.resetBulk
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        kwargs.update(
+            {
+                &#34;mobile_only&#34;: mobile_only,
+                &#34;web_only&#34;: web_only,
+            }
+        )
+        return self.api_call(&#34;admin.users.session.resetBulk&#34;, params=kwargs)
+
     def admin_users_session_invalidate(
         self,
         *,
@@ -3769,6 +3792,15 @@ class WebClient(BaseClient):
         kwargs.update({&#34;team_id&#34;: team_id, &#34;user&#34;: user})
         return self.api_call(&#34;team.billableInfo&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def team_billing_info(
+        self,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Reads a workspace&#39;s billing plan information.
+        https://api.slack.com/methods/team.billing.info
+        &#34;&#34;&#34;
+        return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
+
     def team_info(
         self,
         *,
@@ -3820,6 +3852,15 @@ class WebClient(BaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;visibility&#34;: visibility})
         return self.api_call(&#34;team.profile.get&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    def team_preferences_list(
+        self,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Retrieve a list of a workspace&#39;s team preferences.
+        https://api.slack.com/methods/team.preferences.list
+        &#34;&#34;&#34;
+        return self.api_call(&#34;team.preferences.list&#34;, params=kwargs)
 
     def usergroups_create(
         self,
@@ -5220,6 +5261,29 @@ removed at anytime.</p></div>
         )
         return self.api_call(&#34;admin.users.session.reset&#34;, params=kwargs)
 
+    def admin_users_session_resetBulk(
+        self,
+        *,
+        user_ids: Union[str, Sequence[str]],
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+        https://api.slack.com/methods/admin.users.session.resetBulk
+        &#34;&#34;&#34;
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        kwargs.update(
+            {
+                &#34;mobile_only&#34;: mobile_only,
+                &#34;web_only&#34;: web_only,
+            }
+        )
+        return self.api_call(&#34;admin.users.session.resetBulk&#34;, params=kwargs)
+
     def admin_users_session_invalidate(
         self,
         *,
@@ -8093,6 +8157,15 @@ removed at anytime.</p></div>
         kwargs.update({&#34;team_id&#34;: team_id, &#34;user&#34;: user})
         return self.api_call(&#34;team.billableInfo&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def team_billing_info(
+        self,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Reads a workspace&#39;s billing plan information.
+        https://api.slack.com/methods/team.billing.info
+        &#34;&#34;&#34;
+        return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
+
     def team_info(
         self,
         *,
@@ -8144,6 +8217,15 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;visibility&#34;: visibility})
         return self.api_call(&#34;team.profile.get&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    def team_preferences_list(
+        self,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Retrieve a list of a workspace&#39;s team preferences.
+        https://api.slack.com/methods/team.preferences.list
+        &#34;&#34;&#34;
+        return self.api_call(&#34;team.preferences.list&#34;, params=kwargs)
 
     def usergroups_create(
         self,
@@ -10651,6 +10733,40 @@ and what happens when the client closes—given a list of users.
         }
     )
     return self.api_call(&#34;admin.users.session.reset&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.admin_users_session_resetBulk"><code class="name flex">
+<span>def <span class="ident">admin_users_session_resetBulk</span></span>(<span>self, *, user_ids: Union[str, Sequence[str]], mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+<a href="https://api.slack.com/methods/admin.users.session.resetBulk">https://api.slack.com/methods/admin.users.session.resetBulk</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_users_session_resetBulk(
+    self,
+    *,
+    user_ids: Union[str, Sequence[str]],
+    mobile_only: Optional[bool] = None,
+    web_only: Optional[bool] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+    https://api.slack.com/methods/admin.users.session.resetBulk
+    &#34;&#34;&#34;
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    kwargs.update(
+        {
+            &#34;mobile_only&#34;: mobile_only,
+            &#34;web_only&#34;: web_only,
+        }
+    )
+    return self.api_call(&#34;admin.users.session.resetBulk&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.admin_users_session_setSettings"><code class="name flex">
@@ -14554,6 +14670,26 @@ multiparty direct message.</p></div>
     return self.api_call(&#34;team.billableInfo&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.team_billing_info"><code class="name flex">
+<span>def <span class="ident">team_billing_info</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reads a workspace's billing plan information.
+<a href="https://api.slack.com/methods/team.billing.info">https://api.slack.com/methods/team.billing.info</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def team_billing_info(
+    self,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Reads a workspace&#39;s billing plan information.
+    https://api.slack.com/methods/team.billing.info
+    &#34;&#34;&#34;
+    return self.api_call(&#34;team.billing.info&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.team_info"><code class="name flex">
 <span>def <span class="ident">team_info</span></span>(<span>self, *, team: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -14614,6 +14750,26 @@ multiparty direct message.</p></div>
         }
     )
     return self.api_call(&#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.team_preferences_list"><code class="name flex">
+<span>def <span class="ident">team_preferences_list</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Retrieve a list of a workspace's team preferences.
+<a href="https://api.slack.com/methods/team.preferences.list">https://api.slack.com/methods/team.preferences.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def team_preferences_list(
+    self,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Retrieve a list of a workspace&#39;s team preferences.
+    https://api.slack.com/methods/team.preferences.list
+    &#34;&#34;&#34;
+    return self.api_call(&#34;team.preferences.list&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.team_profile_get"><code class="name flex">
@@ -15507,6 +15663,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_session_invalidate" href="#slack_sdk.web.client.WebClient.admin_users_session_invalidate">admin_users_session_invalidate</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_session_list" href="#slack_sdk.web.client.WebClient.admin_users_session_list">admin_users_session_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_session_reset" href="#slack_sdk.web.client.WebClient.admin_users_session_reset">admin_users_session_reset</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_users_session_resetBulk" href="#slack_sdk.web.client.WebClient.admin_users_session_resetBulk">admin_users_session_resetBulk</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_session_setSettings" href="#slack_sdk.web.client.WebClient.admin_users_session_setSettings">admin_users_session_setSettings</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_setAdmin" href="#slack_sdk.web.client.WebClient.admin_users_setAdmin">admin_users_setAdmin</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_setExpiration" href="#slack_sdk.web.client.WebClient.admin_users_setExpiration">admin_users_setExpiration</a></code></li>
@@ -15649,8 +15806,10 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.stars_remove" href="#slack_sdk.web.client.WebClient.stars_remove">stars_remove</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_accessLogs" href="#slack_sdk.web.client.WebClient.team_accessLogs">team_accessLogs</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_billableInfo" href="#slack_sdk.web.client.WebClient.team_billableInfo">team_billableInfo</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.team_billing_info" href="#slack_sdk.web.client.WebClient.team_billing_info">team_billing_info</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_info" href="#slack_sdk.web.client.WebClient.team_info">team_info</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_integrationLogs" href="#slack_sdk.web.client.WebClient.team_integrationLogs">team_integrationLogs</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.team_preferences_list" href="#slack_sdk.web.client.WebClient.team_preferences_list">team_preferences_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_profile_get" href="#slack_sdk.web.client.WebClient.team_profile_get">team_profile_get</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.usergroups_create" href="#slack_sdk.web.client.WebClient.usergroups_create">usergroups_create</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.usergroups_disable" href="#slack_sdk.web.client.WebClient.usergroups_disable">usergroups_disable</a></code></li>

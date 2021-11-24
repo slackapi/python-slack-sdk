@@ -58,7 +58,10 @@ class SocketModeRequest:
         elif isinstance(payload, str):
             self.payload = {&#34;text&#34;: payload}
         else:
-            raise ValueError(f&#34;Unsupported payload data type ({type(payload)})&#34;)
+            unexpected_payload_type = type(payload)  # type: ignore
+            raise ValueError(
+                f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;
+            )
 
         self.accepts_response_payload = accepts_response_payload or False
         self.retry_attempt = retry_attempt
@@ -131,7 +134,10 @@ class SocketModeRequest:
         elif isinstance(payload, str):
             self.payload = {&#34;text&#34;: payload}
         else:
-            raise ValueError(f&#34;Unsupported payload data type ({type(payload)})&#34;)
+            unexpected_payload_type = type(payload)  # type: ignore
+            raise ValueError(
+                f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;
+            )
 
         self.accepts_response_payload = accepts_response_payload or False
         self.retry_attempt = retry_attempt

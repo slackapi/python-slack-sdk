@@ -37,7 +37,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -119,7 +119,7 @@ class AuditLogsClient:
     def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
@@ -141,7 +141,7 @@ class AuditLogsClient:
     def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -170,7 +170,7 @@ class AuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -218,8 +218,8 @@ class AuditLogsClient:
         *,
         http_verb: str = &#34;GET&#34;,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
@@ -244,7 +244,7 @@ class AuditLogsClient:
         *,
         http_verb: str = &#34;GET&#34;,
         url: str,
-        body: Optional[Dict[str, any]] = None,
+        body: Optional[Dict[str, Any]] = None,
         headers: Dict[str, str],
     ) -&gt; AuditLogsResponse:
         if body is not None:
@@ -291,11 +291,20 @@ class AuditLogsClient:
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -386,20 +395,20 @@ class AuditLogsClient:
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -510,7 +519,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
     def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
@@ -532,7 +541,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
     def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -561,7 +570,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -609,8 +618,8 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         *,
         http_verb: str = &#34;GET&#34;,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
@@ -635,7 +644,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         *,
         http_verb: str = &#34;GET&#34;,
         url: str,
-        body: Optional[Dict[str, any]] = None,
+        body: Optional[Dict[str, Any]] = None,
         headers: Dict[str, str],
     ) -&gt; AuditLogsResponse:
         if body is not None:
@@ -682,11 +691,20 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -777,20 +795,20 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             raw_body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -837,7 +855,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.client.AuditLogsClient.actions"><code class="name flex">
-<span>def <span class="ident">actions</span></span>(<span>self, *, query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">actions</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of actions that the Audit Logs API
@@ -859,7 +877,7 @@ Authentication not required.</p>
 <pre><code class="python">def actions(
     self,
     *,
-    query_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -881,7 +899,7 @@ Authentication not required.</p>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.client.AuditLogsClient.api_call"><code class="name flex">
-<span>def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str = 'GET', path: str, query_params: Optional[Dict[str, <built-in function any>]] = None, body_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str = 'GET', path: str, query_params: Optional[Dict[str, Any]] = None, body_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p></div>
@@ -894,8 +912,8 @@ Authentication not required.</p>
     *,
     http_verb: str = &#34;GET&#34;,
     path: str,
-    query_params: Optional[Dict[str, any]] = None,
-    body_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
+    body_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
@@ -917,7 +935,7 @@ Authentication not required.</p>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.client.AuditLogsClient.logs"><code class="name flex">
-<span>def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, additional_query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, additional_query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.
@@ -962,7 +980,7 @@ Data is not available prior to March 2018.</dd>
     action: Optional[str] = None,
     actor: Optional[str] = None,
     entity: Optional[str] = None,
-    additional_query_params: Optional[Dict[str, any]] = None,
+    additional_query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -1007,7 +1025,7 @@ Data is not available prior to March 2018.</dd>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.client.AuditLogsClient.schemas"><code class="name flex">
-<span>def <span class="ident">schemas</span></span>(<span>self, *, query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">schemas</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of objects which the Audit Logs API
@@ -1029,7 +1047,7 @@ Authentication not required.</p>
 <pre><code class="python">def schemas(
     self,
     *,
-    query_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API

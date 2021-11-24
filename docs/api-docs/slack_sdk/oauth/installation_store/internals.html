@@ -35,7 +35,7 @@ is_python_3_6: bool = int(major) == 3 and int(minor) &gt;= 6
 utc_timezone = datetime.timezone.utc
 
 
-def _from_iso_format_to_datetime(iso_datetime_str: str) -&gt; datetime:
+def _from_iso_format_to_datetime(iso_datetime_str: str) -&gt; datetime.datetime:
     if is_python_3_6:
         elements = iso_datetime_str.split(&#34; &#34;)
         ymd = elements[0].split(&#34;-&#34;)

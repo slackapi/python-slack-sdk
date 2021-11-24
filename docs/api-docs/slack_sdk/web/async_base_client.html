@@ -101,12 +101,12 @@ class AsyncBaseClient:
         api_method: str,
         *,
         http_verb: str = &#34;POST&#34;,
-        files: dict = None,
+        files: Optional[dict] = None,
         data: Union[dict, FormData] = None,
-        params: dict = None,
-        json: dict = None,  # skipcq: PYL-W0621
-        headers: dict = None,
-        auth: dict = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Create a request and execute the API call to Slack.
 
@@ -300,12 +300,12 @@ class AsyncBaseClient:
         api_method: str,
         *,
         http_verb: str = &#34;POST&#34;,
-        files: dict = None,
+        files: Optional[dict] = None,
         data: Union[dict, FormData] = None,
-        params: dict = None,
-        json: dict = None,  # skipcq: PYL-W0621
-        headers: dict = None,
-        auth: dict = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Create a request and execute the API call to Slack.
 
@@ -443,7 +443,7 @@ class AsyncBaseClient:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient.api_call"><code class="name flex">
-<span>async def <span class="ident">api_call</span></span>(<span>self, api_method: str, *, http_verb: str = 'POST', files: dict = None, data: Union[dict, aiohttp.formdata.FormData] = None, params: dict = None, json: dict = None, headers: dict = None, auth: dict = None) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">api_call</span></span>(<span>self, api_method: str, *, http_verb: str = 'POST', files: Optional[dict] = None, data: Union[dict, aiohttp.formdata.FormData] = None, params: Optional[dict] = None, json: Optional[dict] = None, headers: Optional[dict] = None, auth: Optional[dict] = None) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a request and execute the API call to Slack.</p>
@@ -497,12 +497,12 @@ POST requests.</dd>
     api_method: str,
     *,
     http_verb: str = &#34;POST&#34;,
-    files: dict = None,
+    files: Optional[dict] = None,
     data: Union[dict, FormData] = None,
-    params: dict = None,
-    json: dict = None,  # skipcq: PYL-W0621
-    headers: dict = None,
-    auth: dict = None,
+    params: Optional[dict] = None,
+    json: Optional[dict] = None,  # skipcq: PYL-W0621
+    headers: Optional[dict] = None,
+    auth: Optional[dict] = None,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Create a request and execute the API call to Slack.
 

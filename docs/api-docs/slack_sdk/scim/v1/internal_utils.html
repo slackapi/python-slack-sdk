@@ -176,7 +176,10 @@ def _build_request_headers(
     return request_headers
 
 
-def _debug_log_response(logger, resp: &#34;SCIMResponse&#34;) -&gt; None:  # noqa: F821
+def _debug_log_response(  # type: ignore
+    logger,
+    resp: &#34;SCIMResponse&#34;,  # noqa: F821
+) -&gt; None:
     if logger.level &lt;= logging.DEBUG:
         logger.debug(
             &#34;Received the following response - &#34;

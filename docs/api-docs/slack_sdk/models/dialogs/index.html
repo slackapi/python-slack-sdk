@@ -91,52 +91,52 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
         self.subtype = subtype
 
     @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-    def name_length(self):
+    def name_length(self) -&gt; bool:
         return len(self.name) &lt; self.name_max_length
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def label_length(self):
+    def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -&gt; bool:
         return (
             self.placeholder is None
             or len(self.placeholder) &lt; self.placeholder_max_length
         )
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
-    def hint_length(self):
+    def hint_length(self) -&gt; bool:
         return self.hint is None or len(self.hint) &lt; self.hint_max_length
 
     @JsonValidator(&#34;value attribute exceeded bounds&#34;)
-    def value_length(self):
+    def value_length(self) -&gt; bool:
         return self.value is None or len(self.value) &lt; self.max_value_length
 
     @JsonValidator(&#34;min_length attribute must be greater than or equal to 0&#34;)
-    def min_length_above_zero(self):
+    def min_length_above_zero(self) -&gt; bool:
         return self.min_length is None or self.min_length &gt;= 0
 
     @JsonValidator(&#34;min_length attribute exceed bounds&#34;)
-    def min_length_length(self):
+    def min_length_length(self) -&gt; bool:
         return self.min_length is None or self.min_length &lt;= self.max_value_length
 
     @JsonValidator(&#34;min_length attribute must be less than max value attribute&#34;)
-    def min_length_below_max_length(self):
+    def min_length_below_max_length(self) -&gt; bool:
         return self.min_length is None or self.min_length &lt; self.max_length
 
     @JsonValidator(&#34;max_length attribute must be greater than or equal to 0&#34;)
-    def max_length_above_zero(self):
+    def max_length_above_zero(self) -&gt; bool:
         return self.max_length is None or self.max_length &gt; 0
 
     @JsonValidator(&#34;max_length attribute exceeded bounds&#34;)
-    def max_length_length(self):
+    def max_length_length(self) -&gt; bool:
         return self.max_length is None or self.max_length &lt;= self.max_value_length
 
     @EnumValidator(&#34;subtype&#34;, TextElementSubtypes)
-    def subtype_valid(self):
+    def subtype_valid(self) -&gt; bool:
         return self.subtype is None or self.subtype in TextElementSubtypes
 
 
@@ -185,8 +185,8 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
         name: str,
         label: str,
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         self.name = name
         self.label = label
@@ -196,24 +196,24 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
         self.type = &#34;select&#34;
 
     @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-    def name_length(self):
+    def name_length(self) -&gt; bool:
         return len(self.name) &lt; self.name_max_length
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def label_length(self):
+    def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -&gt; bool:
         return (
             self.placeholder is None
             or len(self.placeholder) &lt; self.placeholder_max_length
         )
 
     @EnumValidator(&#34;data_source&#34;, DataSourceTypes)
-    def data_source_valid(self):
+    def data_source_valid(self) -&gt; bool:
         return self.data_source in self.DataSourceTypes
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -251,8 +251,8 @@ class DialogStaticSelector(AbstractDialogSelector):
         label: str,
         options: Union[Sequence[Option], Sequence[OptionGroup]],
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Use the select element for multiple choice selections allowing users to pick
@@ -285,7 +285,7 @@ class DialogStaticSelector(AbstractDialogSelector):
         self.options = options
 
     @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-    def options_length(self):
+    def options_length(self) -&gt; bool:
         return len(self.options) &lt; self.options_max_length
 
     def to_dict(self) -&gt; dict:
@@ -306,8 +306,8 @@ class DialogUserSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Now you can easily populate a select menu with a list of users. For example,
@@ -344,8 +344,8 @@ class DialogChannelSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         You can also provide a select menu with a list of channels. Specify your
@@ -380,8 +380,8 @@ class DialogConversationSelector(AbstractDialogSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         You can also provide a select menu with a list of conversations - including
@@ -423,7 +423,7 @@ class DialogExternalSelector(AbstractDialogSelector):
         value: Optional[Option] = None,
         min_query_length: Optional[int] = None,
         optional: Optional[bool] = False,
-        placeholder: str = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Use the select element for multiple choice selections allowing users to pick
@@ -848,34 +848,34 @@ class DialogBuilder(JsonObject):
         return self
 
     @JsonValidator(&#34;title attribute is required&#34;)
-    def title_present(self):
+    def title_present(self) -&gt; bool:
         return self._title is not None
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-    def title_length(self):
+    def title_length(self) -&gt; bool:
         return self._title is not None and len(self._title) &lt;= self.title_max_length
 
     @JsonValidator(&#34;callback_id attribute is required&#34;)
-    def callback_id_present(self):
+    def callback_id_present(self) -&gt; bool:
         return self._callback_id is not None
 
     @JsonValidator(f&#34;dialogs must contain between 1 and {elements_max_length} elements&#34;)
-    def elements_length(self):
+    def elements_length(self) -&gt; bool:
         return 0 &lt; len(self._elements) &lt;= self.elements_max_length
 
     @JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
-    def submit_label_length(self):
+    def submit_label_length(self) -&gt; bool:
         return (
             self._submit_label is None
             or len(self._submit_label) &lt;= self.submit_label_max_length
         )
 
     @JsonValidator(&#34;submit_label can only be one word&#34;)
-    def submit_label_valid(self):
+    def submit_label_valid(self) -&gt; bool:
         return self._submit_label is None or &#34; &#34; not in self._submit_label
 
     @JsonValidator(f&#34;state cannot exceed {state_max_length} characters&#34;)
-    def state_length(self):
+    def state_length(self) -&gt; bool:
         return not self._state or len(self._state) &lt;= self.state_max_length
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -934,7 +934,7 @@ class ActionStaticSelector(AbstractActionSelector):
         self.options = options
 
     @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-    def options_length(self):
+    def options_length(self) -&gt; bool:
         return len(self.options) &lt; self.options_max_length
 
     def to_dict(self) -&gt; dict:
@@ -957,7 +957,7 @@ class ActionStaticSelector(AbstractActionSelector):
 <dl>
 <dt id="slack_sdk.models.dialogs.AbstractDialogSelector"><code class="flex name class">
 <span>class <span class="ident">AbstractDialogSelector</span></span>
-<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str] = None, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str, ForwardRef(None)] = None, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p></div>
@@ -985,8 +985,8 @@ class ActionStaticSelector(AbstractActionSelector):
         name: str,
         label: str,
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         self.name = name
         self.label = label
@@ -996,24 +996,24 @@ class ActionStaticSelector(AbstractActionSelector):
         self.type = &#34;select&#34;
 
     @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-    def name_length(self):
+    def name_length(self) -&gt; bool:
         return len(self.name) &lt; self.name_max_length
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def label_length(self):
+    def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -&gt; bool:
         return (
             self.placeholder is None
             or len(self.placeholder) &lt; self.placeholder_max_length
         )
 
     @EnumValidator(&#34;data_source&#34;, DataSourceTypes)
-    def data_source_valid(self):
+    def data_source_valid(self) -&gt; bool:
         return self.data_source in self.DataSourceTypes
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -1081,7 +1081,7 @@ def data_source(self) -&gt; str:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.dialogs.AbstractDialogSelector.data_source_valid"><code class="name flex">
-<span>def <span class="ident">data_source_valid</span></span>(<span>self)</span>
+<span>def <span class="ident">data_source_valid</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1090,12 +1090,12 @@ def data_source(self) -&gt; str:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@EnumValidator(&#34;data_source&#34;, DataSourceTypes)
-def data_source_valid(self):
+def data_source_valid(self) -&gt; bool:
     return self.data_source in self.DataSourceTypes</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.AbstractDialogSelector.label_length"><code class="name flex">
-<span>def <span class="ident">label_length</span></span>(<span>self)</span>
+<span>def <span class="ident">label_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1104,12 +1104,12 @@ def data_source_valid(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-def label_length(self):
+def label_length(self) -&gt; bool:
     return len(self.label) &lt; self.label_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.AbstractDialogSelector.name_length"><code class="name flex">
-<span>def <span class="ident">name_length</span></span>(<span>self)</span>
+<span>def <span class="ident">name_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1118,12 +1118,12 @@ def label_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-def name_length(self):
+def name_length(self) -&gt; bool:
     return len(self.name) &lt; self.name_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.AbstractDialogSelector.placeholder_length"><code class="name flex">
-<span>def <span class="ident">placeholder_length</span></span>(<span>self)</span>
+<span>def <span class="ident">placeholder_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1134,7 +1134,7 @@ def name_length(self):
 <pre><code class="python">@JsonValidator(
     f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
 )
-def placeholder_length(self):
+def placeholder_length(self) -&gt; bool:
     return (
         self.placeholder is None
         or len(self.placeholder) &lt; self.placeholder_max_length
@@ -1226,7 +1226,7 @@ value.</dd>
         self.options = options
 
     @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-    def options_length(self):
+    def options_length(self) -&gt; bool:
         return len(self.options) &lt; self.options_max_length
 
     def to_dict(self) -&gt; dict:
@@ -1258,7 +1258,7 @@ value.</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.dialogs.ActionStaticSelector.options_length"><code class="name flex">
-<span>def <span class="ident">options_length</span></span>(<span>self)</span>
+<span>def <span class="ident">options_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1267,7 +1267,7 @@ value.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-def options_length(self):
+def options_length(self) -&gt; bool:
     return len(self.options) &lt; self.options_max_length</code></pre>
 </details>
 </dd>
@@ -1689,34 +1689,34 @@ dialog to Slack</p></div>
         return self
 
     @JsonValidator(&#34;title attribute is required&#34;)
-    def title_present(self):
+    def title_present(self) -&gt; bool:
         return self._title is not None
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-    def title_length(self):
+    def title_length(self) -&gt; bool:
         return self._title is not None and len(self._title) &lt;= self.title_max_length
 
     @JsonValidator(&#34;callback_id attribute is required&#34;)
-    def callback_id_present(self):
+    def callback_id_present(self) -&gt; bool:
         return self._callback_id is not None
 
     @JsonValidator(f&#34;dialogs must contain between 1 and {elements_max_length} elements&#34;)
-    def elements_length(self):
+    def elements_length(self) -&gt; bool:
         return 0 &lt; len(self._elements) &lt;= self.elements_max_length
 
     @JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
-    def submit_label_length(self):
+    def submit_label_length(self) -&gt; bool:
         return (
             self._submit_label is None
             or len(self._submit_label) &lt;= self.submit_label_max_length
         )
 
     @JsonValidator(&#34;submit_label can only be one word&#34;)
-    def submit_label_valid(self):
+    def submit_label_valid(self) -&gt; bool:
         return self._submit_label is None or &#34; &#34; not in self._submit_label
 
     @JsonValidator(f&#34;state cannot exceed {state_max_length} characters&#34;)
-    def state_length(self):
+    def state_length(self) -&gt; bool:
         return not self._state or len(self._state) &lt;= self.state_max_length
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -1787,7 +1787,7 @@ receive upon dialog submission</p>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.callback_id_present"><code class="name flex">
-<span>def <span class="ident">callback_id_present</span></span>(<span>self)</span>
+<span>def <span class="ident">callback_id_present</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1796,7 +1796,7 @@ receive upon dialog submission</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;callback_id attribute is required&#34;)
-def callback_id_present(self):
+def callback_id_present(self) -&gt; bool:
     return self._callback_id is not None</code></pre>
 </details>
 </dd>
@@ -1927,7 +1927,7 @@ completing the element. 150 character maximum.</dd>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.elements_length"><code class="name flex">
-<span>def <span class="ident">elements_length</span></span>(<span>self)</span>
+<span>def <span class="ident">elements_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1936,7 +1936,7 @@ completing the element. 150 character maximum.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;dialogs must contain between 1 and {elements_max_length} elements&#34;)
-def elements_length(self):
+def elements_length(self) -&gt; bool:
     return 0 &lt; len(self._elements) &lt;= self.elements_max_length</code></pre>
 </details>
 </dd>
@@ -2084,7 +2084,7 @@ back to your application on submission</dd>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.state_length"><code class="name flex">
-<span>def <span class="ident">state_length</span></span>(<span>self)</span>
+<span>def <span class="ident">state_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2093,7 +2093,7 @@ back to your application on submission</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;state cannot exceed {state_max_length} characters&#34;)
-def state_length(self):
+def state_length(self) -&gt; bool:
     return not self._state or len(self._state) &lt;= self.state_max_length</code></pre>
 </details>
 </dd>
@@ -2203,7 +2203,7 @@ spaces)</dd>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.submit_label_length"><code class="name flex">
-<span>def <span class="ident">submit_label_length</span></span>(<span>self)</span>
+<span>def <span class="ident">submit_label_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2212,7 +2212,7 @@ spaces)</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
-def submit_label_length(self):
+def submit_label_length(self) -&gt; bool:
     return (
         self._submit_label is None
         or len(self._submit_label) &lt;= self.submit_label_max_length
@@ -2220,7 +2220,7 @@ def submit_label_length(self):
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.submit_label_valid"><code class="name flex">
-<span>def <span class="ident">submit_label_valid</span></span>(<span>self)</span>
+<span>def <span class="ident">submit_label_valid</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2229,7 +2229,7 @@ def submit_label_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;submit_label can only be one word&#34;)
-def submit_label_valid(self):
+def submit_label_valid(self) -&gt; bool:
     return self._submit_label is None or &#34; &#34; not in self._submit_label</code></pre>
 </details>
 </dd>
@@ -2447,7 +2447,7 @@ subtype.</dd>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.title_length"><code class="name flex">
-<span>def <span class="ident">title_length</span></span>(<span>self)</span>
+<span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2456,12 +2456,12 @@ subtype.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-def title_length(self):
+def title_length(self) -&gt; bool:
     return self._title is not None and len(self._title) &lt;= self.title_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.title_present"><code class="name flex">
-<span>def <span class="ident">title_present</span></span>(<span>self)</span>
+<span>def <span class="ident">title_present</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2470,7 +2470,7 @@ def title_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;title attribute is required&#34;)
-def title_present(self):
+def title_present(self) -&gt; bool:
     return self._title is not None</code></pre>
 </details>
 </dd>
@@ -2555,7 +2555,7 @@ completing the element. 150 character maximum.</dd>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogChannelSelector"><code class="flex name class">
 <span>class <span class="ident">DialogChannelSelector</span></span>
-<span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -2590,8 +2590,8 @@ completing the element. 150 character maximum.</dd>
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         You can also provide a select menu with a list of channels. Specify your
@@ -2647,7 +2647,7 @@ completing the element. 150 character maximum.</dd>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogConversationSelector"><code class="flex name class">
 <span>class <span class="ident">DialogConversationSelector</span></span>
-<span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -2683,8 +2683,8 @@ completing the element. 150 character maximum.</dd>
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         You can also provide a select menu with a list of conversations - including
@@ -2741,7 +2741,7 @@ completing the element. 150 character maximum.</dd>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogExternalSelector"><code class="flex name class">
 <span>class <span class="ident">DialogExternalSelector</span></span>
-<span>(</span><span>*, name: str, label: str, value: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, min_query_length: Optional[int] = None, optional: Optional[bool] = False, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, value: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, min_query_length: Optional[int] = None, optional: Optional[bool] = False, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -2790,7 +2790,7 @@ completing the element. 150 character maximum.</dd>
         value: Optional[Option] = None,
         min_query_length: Optional[int] = None,
         optional: Optional[bool] = False,
-        placeholder: str = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Use the select element for multiple choice selections allowing users to pick
@@ -2867,7 +2867,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogStaticSelector"><code class="flex name class">
 <span>class <span class="ident">DialogStaticSelector</span></span>
-<span>(</span><span>*, name: str, label: str, options: Union[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]], optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str] = None, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, options: Union[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]], optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str, ForwardRef(None)] = None, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a
@@ -2922,8 +2922,8 @@ completing the element. 150 character maximum.</dd>
         label: str,
         options: Union[Sequence[Option], Sequence[OptionGroup]],
         optional: bool = False,
-        value: Union[Option, str] = None,
-        placeholder: str = None,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Use the select element for multiple choice selections allowing users to pick
@@ -2956,7 +2956,7 @@ completing the element. 150 character maximum.</dd>
         self.options = options
 
     @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-    def options_length(self):
+    def options_length(self) -&gt; bool:
         return len(self.options) &lt; self.options_max_length
 
     def to_dict(self) -&gt; dict:
@@ -2987,7 +2987,7 @@ completing the element. 150 character maximum.</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.dialogs.DialogStaticSelector.options_length"><code class="name flex">
-<span>def <span class="ident">options_length</span></span>(<span>self)</span>
+<span>def <span class="ident">options_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2996,7 +2996,7 @@ completing the element. 150 character maximum.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
-def options_length(self):
+def options_length(self) -&gt; bool:
     return len(self.options) &lt; self.options_max_length</code></pre>
 </details>
 </dd>
@@ -3140,52 +3140,52 @@ max_length you have set or the default, 3000.</p>
         self.subtype = subtype
 
     @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-    def name_length(self):
+    def name_length(self) -&gt; bool:
         return len(self.name) &lt; self.name_max_length
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def label_length(self):
+    def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
     )
-    def placeholder_length(self):
+    def placeholder_length(self) -&gt; bool:
         return (
             self.placeholder is None
             or len(self.placeholder) &lt; self.placeholder_max_length
         )
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
-    def hint_length(self):
+    def hint_length(self) -&gt; bool:
         return self.hint is None or len(self.hint) &lt; self.hint_max_length
 
     @JsonValidator(&#34;value attribute exceeded bounds&#34;)
-    def value_length(self):
+    def value_length(self) -&gt; bool:
         return self.value is None or len(self.value) &lt; self.max_value_length
 
     @JsonValidator(&#34;min_length attribute must be greater than or equal to 0&#34;)
-    def min_length_above_zero(self):
+    def min_length_above_zero(self) -&gt; bool:
         return self.min_length is None or self.min_length &gt;= 0
 
     @JsonValidator(&#34;min_length attribute exceed bounds&#34;)
-    def min_length_length(self):
+    def min_length_length(self) -&gt; bool:
         return self.min_length is None or self.min_length &lt;= self.max_value_length
 
     @JsonValidator(&#34;min_length attribute must be less than max value attribute&#34;)
-    def min_length_below_max_length(self):
+    def min_length_below_max_length(self) -&gt; bool:
         return self.min_length is None or self.min_length &lt; self.max_length
 
     @JsonValidator(&#34;max_length attribute must be greater than or equal to 0&#34;)
-    def max_length_above_zero(self):
+    def max_length_above_zero(self) -&gt; bool:
         return self.max_length is None or self.max_length &gt; 0
 
     @JsonValidator(&#34;max_length attribute exceeded bounds&#34;)
-    def max_length_length(self):
+    def max_length_length(self) -&gt; bool:
         return self.max_length is None or self.max_length &lt;= self.max_value_length
 
     @EnumValidator(&#34;subtype&#34;, TextElementSubtypes)
-    def subtype_valid(self):
+    def subtype_valid(self) -&gt; bool:
         return self.subtype is None or self.subtype in TextElementSubtypes</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -3249,7 +3249,7 @@ def type(self):
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.hint_length"><code class="name flex">
-<span>def <span class="ident">hint_length</span></span>(<span>self)</span>
+<span>def <span class="ident">hint_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3258,12 +3258,12 @@ def type(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
-def hint_length(self):
+def hint_length(self) -&gt; bool:
     return self.hint is None or len(self.hint) &lt; self.hint_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.label_length"><code class="name flex">
-<span>def <span class="ident">label_length</span></span>(<span>self)</span>
+<span>def <span class="ident">label_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3272,12 +3272,12 @@ def hint_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-def label_length(self):
+def label_length(self) -&gt; bool:
     return len(self.label) &lt; self.label_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.max_length_above_zero"><code class="name flex">
-<span>def <span class="ident">max_length_above_zero</span></span>(<span>self)</span>
+<span>def <span class="ident">max_length_above_zero</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3286,12 +3286,12 @@ def label_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;max_length attribute must be greater than or equal to 0&#34;)
-def max_length_above_zero(self):
+def max_length_above_zero(self) -&gt; bool:
     return self.max_length is None or self.max_length &gt; 0</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.max_length_length"><code class="name flex">
-<span>def <span class="ident">max_length_length</span></span>(<span>self)</span>
+<span>def <span class="ident">max_length_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3300,12 +3300,12 @@ def max_length_above_zero(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;max_length attribute exceeded bounds&#34;)
-def max_length_length(self):
+def max_length_length(self) -&gt; bool:
     return self.max_length is None or self.max_length &lt;= self.max_value_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.min_length_above_zero"><code class="name flex">
-<span>def <span class="ident">min_length_above_zero</span></span>(<span>self)</span>
+<span>def <span class="ident">min_length_above_zero</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3314,12 +3314,12 @@ def max_length_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;min_length attribute must be greater than or equal to 0&#34;)
-def min_length_above_zero(self):
+def min_length_above_zero(self) -&gt; bool:
     return self.min_length is None or self.min_length &gt;= 0</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.min_length_below_max_length"><code class="name flex">
-<span>def <span class="ident">min_length_below_max_length</span></span>(<span>self)</span>
+<span>def <span class="ident">min_length_below_max_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3328,12 +3328,12 @@ def min_length_above_zero(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;min_length attribute must be less than max value attribute&#34;)
-def min_length_below_max_length(self):
+def min_length_below_max_length(self) -&gt; bool:
     return self.min_length is None or self.min_length &lt; self.max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.min_length_length"><code class="name flex">
-<span>def <span class="ident">min_length_length</span></span>(<span>self)</span>
+<span>def <span class="ident">min_length_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3342,12 +3342,12 @@ def min_length_below_max_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;min_length attribute exceed bounds&#34;)
-def min_length_length(self):
+def min_length_length(self) -&gt; bool:
     return self.min_length is None or self.min_length &lt;= self.max_value_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.name_length"><code class="name flex">
-<span>def <span class="ident">name_length</span></span>(<span>self)</span>
+<span>def <span class="ident">name_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3356,12 +3356,12 @@ def min_length_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
-def name_length(self):
+def name_length(self) -&gt; bool:
     return len(self.name) &lt; self.name_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.placeholder_length"><code class="name flex">
-<span>def <span class="ident">placeholder_length</span></span>(<span>self)</span>
+<span>def <span class="ident">placeholder_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3372,7 +3372,7 @@ def name_length(self):
 <pre><code class="python">@JsonValidator(
     f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
 )
-def placeholder_length(self):
+def placeholder_length(self) -&gt; bool:
     return (
         self.placeholder is None
         or len(self.placeholder) &lt; self.placeholder_max_length
@@ -3380,7 +3380,7 @@ def placeholder_length(self):
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.subtype_valid"><code class="name flex">
-<span>def <span class="ident">subtype_valid</span></span>(<span>self)</span>
+<span>def <span class="ident">subtype_valid</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3389,12 +3389,12 @@ def placeholder_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@EnumValidator(&#34;subtype&#34;, TextElementSubtypes)
-def subtype_valid(self):
+def subtype_valid(self) -&gt; bool:
     return self.subtype is None or self.subtype in TextElementSubtypes</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.value_length"><code class="name flex">
-<span>def <span class="ident">value_length</span></span>(<span>self)</span>
+<span>def <span class="ident">value_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3403,7 +3403,7 @@ def subtype_valid(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;value attribute exceeded bounds&#34;)
-def value_length(self):
+def value_length(self) -&gt; bool:
     return self.value is None or len(self.value) &lt; self.max_value_length</code></pre>
 </details>
 </dd>
@@ -3476,7 +3476,7 @@ def value_length(self):
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogUserSelector"><code class="flex name class">
 <span>class <span class="ident">DialogUserSelector</span></span>
-<span>(</span><span>*, name: str, label: str, optional: bool = False, value: str = None, placeholder: str = None)</span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -3513,8 +3513,8 @@ completing the element. 150 character maximum.</dd>
         name: str,
         label: str,
         optional: bool = False,
-        value: str = None,
-        placeholder: str = None,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         Now you can easily populate a select menu with a list of users. For example,

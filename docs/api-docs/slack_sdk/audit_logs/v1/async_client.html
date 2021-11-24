@@ -130,7 +130,7 @@ class AsyncAuditLogsClient:
     async def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
@@ -152,7 +152,7 @@ class AsyncAuditLogsClient:
     async def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -181,7 +181,7 @@ class AsyncAuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -229,8 +229,8 @@ class AsyncAuditLogsClient:
         *,
         http_verb: str = &#34;GET&#34;,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         url = f&#34;{self.base_url}{path}&#34;
@@ -516,7 +516,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
     async def schemas(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
@@ -538,7 +538,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
     async def actions(
         self,
         *,
-        query_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -567,7 +567,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
-        additional_query_params: Optional[Dict[str, any]] = None,
+        additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -615,8 +615,8 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         *,
         http_verb: str = &#34;GET&#34;,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         url = f&#34;{self.base_url}{path}&#34;
@@ -832,7 +832,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.async_client.AsyncAuditLogsClient.actions"><code class="name flex">
-<span>async def <span class="ident">actions</span></span>(<span>self, *, query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>async def <span class="ident">actions</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of actions that the Audit Logs API
@@ -854,7 +854,7 @@ Authentication not required.</p>
 <pre><code class="python">async def actions(
     self,
     *,
-    query_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
@@ -876,7 +876,7 @@ Authentication not required.</p>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.async_client.AsyncAuditLogsClient.api_call"><code class="name flex">
-<span>async def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str = 'GET', path: str, query_params: Optional[Dict[str, <built-in function any>]] = None, body_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>async def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str = 'GET', path: str, query_params: Optional[Dict[str, Any]] = None, body_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -889,8 +889,8 @@ Authentication not required.</p>
     *,
     http_verb: str = &#34;GET&#34;,
     path: str,
-    query_params: Optional[Dict[str, any]] = None,
-    body_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
+    body_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     url = f&#34;{self.base_url}{path}&#34;
@@ -908,7 +908,7 @@ Authentication not required.</p>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.async_client.AsyncAuditLogsClient.logs"><code class="name flex">
-<span>async def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, additional_query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>async def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, additional_query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.
@@ -953,7 +953,7 @@ Data is not available prior to March 2018.</dd>
     action: Optional[str] = None,
     actor: Optional[str] = None,
     entity: Optional[str] = None,
-    additional_query_params: Optional[Dict[str, any]] = None,
+    additional_query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
@@ -998,7 +998,7 @@ Data is not available prior to March 2018.</dd>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.async_client.AsyncAuditLogsClient.schemas"><code class="name flex">
-<span>async def <span class="ident">schemas</span></span>(<span>self, *, query_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>async def <span class="ident">schemas</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of objects which the Audit Logs API
@@ -1020,7 +1020,7 @@ Authentication not required.</p>
 <pre><code class="python">async def schemas(
     self,
     *,
-    query_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API

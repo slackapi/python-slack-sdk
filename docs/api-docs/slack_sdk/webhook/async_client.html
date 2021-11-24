@@ -182,7 +182,7 @@ class AsyncWebhookClient:
     async def _perform_http_request(
         self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -&gt; WebhookResponse:
-        body = json.dumps(body)
+        str_body: str = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
 
         session: Optional[ClientSession] = None
@@ -201,7 +201,7 @@ class AsyncWebhookClient:
         try:
             request_kwargs = {
                 &#34;headers&#34;: headers,
-                &#34;data&#34;: body,
+                &#34;data&#34;: str_body,
                 &#34;ssl&#34;: self.ssl,
                 &#34;proxy&#34;: self.proxy,
             }
@@ -223,7 +223,7 @@ class AsyncWebhookClient:
 
                 if self.logger.level &lt;= logging.DEBUG:
                     self.logger.debug(
-                        f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
+                        f&#34;Sending a request - url: {self.url}, body: {str_body}, headers: {headers}&#34;
                     )
 
                 try:
@@ -484,7 +484,7 @@ class AsyncWebhookClient:
     async def _perform_http_request(
         self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -&gt; WebhookResponse:
-        body = json.dumps(body)
+        str_body: str = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
 
         session: Optional[ClientSession] = None
@@ -503,7 +503,7 @@ class AsyncWebhookClient:
         try:
             request_kwargs = {
                 &#34;headers&#34;: headers,
-                &#34;data&#34;: body,
+                &#34;data&#34;: str_body,
                 &#34;ssl&#34;: self.ssl,
                 &#34;proxy&#34;: self.proxy,
             }
@@ -525,7 +525,7 @@ class AsyncWebhookClient:
 
                 if self.logger.level &lt;= logging.DEBUG:
                     self.logger.debug(
-                        f&#34;Sending a request - url: {self.url}, body: {body}, headers: {headers}&#34;
+                        f&#34;Sending a request - url: {self.url}, body: {str_body}, headers: {headers}&#34;
                     )
 
                 try:

@@ -52,7 +52,7 @@ class RTMClient:
     default_auto_reconnect_enabled: bool
     auto_reconnect_enabled: bool
     ssl: Optional[SSLContext]
-    proxy: str
+    proxy: Optional[str]
     timeout: int
     base_url: str
     ping_interval: int
@@ -472,7 +472,7 @@ class RTMClient:
     default_auto_reconnect_enabled: bool
     auto_reconnect_enabled: bool
     ssl: Optional[SSLContext]
-    proxy: str
+    proxy: Optional[str]
     timeout: int
     base_url: str
     ping_interval: int
@@ -936,7 +936,7 @@ class RTMClient:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.rtm_v2.RTMClient.proxy"><code class="name">var <span class="ident">proxy</span> : str</code></dt>
+<dt id="slack_sdk.rtm_v2.RTMClient.proxy"><code class="name">var <span class="ident">proxy</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>

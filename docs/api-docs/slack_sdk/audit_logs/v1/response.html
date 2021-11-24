@@ -27,7 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import json
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from slack_sdk.audit_logs.v1.logs import LogsResponse
 
@@ -36,12 +36,14 @@ class AuditLogsResponse:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    typed_body: LogsResponse
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    typed_body: Optional[LogsResponse]
 
     @property
-    def typed_body(self) -&gt; LogsResponse:
+    def typed_body(self) -&gt; Optional[LogsResponse]:  # type: ignore
+        if self.body is None:
+            return None
         return LogsResponse(**self.body)
 
     def __init__(
@@ -49,7 +51,7 @@ class AuditLogsResponse:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url
@@ -74,7 +76,7 @@ class AuditLogsResponse:
 <dl>
 <dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse"><code class="flex name class">
 <span>class <span class="ident">AuditLogsResponse</span></span>
-<span>(</span><span>*, url: str, status_code: int, raw_body: str, headers: dict)</span>
+<span>(</span><span>*, url: str, status_code: int, raw_body: Optional[str], headers: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -86,12 +88,14 @@ class AuditLogsResponse:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    typed_body: LogsResponse
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    typed_body: Optional[LogsResponse]
 
     @property
-    def typed_body(self) -&gt; LogsResponse:
+    def typed_body(self) -&gt; Optional[LogsResponse]:  # type: ignore
+        if self.body is None:
+            return None
         return LogsResponse(**self.body)
 
     def __init__(
@@ -99,7 +103,7 @@ class AuditLogsResponse:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url
@@ -114,7 +118,7 @@ class AuditLogsResponse:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -122,7 +126,7 @@ class AuditLogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str</code></dt>
+<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -137,7 +141,7 @@ class AuditLogsResponse:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.typed_body"><code class="name">var <span class="ident">typed_body</span> : <a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="logs.html#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a></code></dt>
+<dt id="slack_sdk.audit_logs.v1.response.AuditLogsResponse.typed_body"><code class="name">var <span class="ident">typed_body</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="logs.html#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -145,7 +149,9 @@ class AuditLogsResponse:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def typed_body(self) -&gt; LogsResponse:
+def typed_body(self) -&gt; Optional[LogsResponse]:  # type: ignore
+    if self.body is None:
+        return None
     return LogsResponse(**self.body)</code></pre>
 </details>
 </dd>

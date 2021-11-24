@@ -132,7 +132,7 @@ class Connection:
                     f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
                     f&#34;(session id: {self.session_id})&#34;
                 )
-            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
                 session_id=self.session_id,
                 server_hostname=hostname,
                 server_port=port,
@@ -589,7 +589,7 @@ class Connection:
                     f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
                     f&#34;(session id: {self.session_id})&#34;
                 )
-            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
                 session_id=self.session_id,
                 server_hostname=hostname,
                 server_port=port,
@@ -1095,7 +1095,7 @@ class Connection:
                 f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
                 f&#34;(session id: {self.session_id})&#34;
             )
-        sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(
+        sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
             session_id=self.session_id,
             server_hostname=hostname,
             server_port=port,

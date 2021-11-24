@@ -31,7 +31,7 @@ import logging
 import urllib
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Dict, Union, Sequence, Optional, List
+from typing import Dict, Union, Sequence, Optional, List, Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
@@ -111,8 +111,8 @@ class WebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
+        attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
@@ -154,7 +154,7 @@ class WebhookClient:
         )
 
     def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
+        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
     ) -&gt; WebhookResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.
 
@@ -171,7 +171,7 @@ class WebhookClient:
         )
 
     def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
+        self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -&gt; WebhookResponse:
         body = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
@@ -210,11 +210,20 @@ class WebhookClient:
                     url=url,
                     status_code=e.code,
                     body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -303,20 +312,20 @@ class WebhookClient:
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -421,8 +430,8 @@ class WebhookClient:
         self,
         *,
         text: Optional[str] = None,
-        attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
+        attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+        blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
         response_type: Optional[str] = None,
         replace_original: Optional[bool] = None,
         delete_original: Optional[bool] = None,
@@ -464,7 +473,7 @@ class WebhookClient:
         )
 
     def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
+        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
     ) -&gt; WebhookResponse:
         &#34;&#34;&#34;Performs a Slack API request and returns the result.
 
@@ -481,7 +490,7 @@ class WebhookClient:
         )
 
     def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
+        self, *, body: Dict[str, Any], headers: Dict[str, str]
     ) -&gt; WebhookResponse:
         body = json.dumps(body)
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
@@ -520,11 +529,20 @@ class WebhookClient:
                     url=url,
                     status_code=e.code,
                     body=response_body,
-                    headers=e.headers,
+                    headers=dict(e.headers.items()),
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
                 # Try to find a retry handler for this error
@@ -613,20 +631,20 @@ class WebhookClient:
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
         # NOTE: BAN-B310 is already checked above
-        resp: Optional[HTTPResponse] = None
+        http_resp: Optional[HTTPResponse] = None
         if opener:
-            resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            resp = urlopen(  # skipcq: BAN-B310
+            http_resp = urlopen(  # skipcq: BAN-B310
                 req, context=self.ssl, timeout=self.timeout
             )
-        charset: str = resp.headers.get_content_charset() or &#34;utf-8&#34;
-        response_body: str = resp.read().decode(charset)
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(
             url=url,
-            status_code=resp.status,
+            status_code=http_resp.status,
             body=response_body,
-            headers=resp.headers,
+            headers=http_resp.headers,
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
@@ -665,7 +683,7 @@ class WebhookClient:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.webhook.client.WebhookClient.send"><code class="name flex">
-<span>def <span class="ident">send</span></span>(<span>self, *, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict[str, <built-in function any>], <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, response_type: Optional[str] = None, replace_original: Optional[bool] = None, delete_original: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
+<span>def <span class="ident">send</span></span>(<span>self, *, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict[str, Any], <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict[str, Any], <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, response_type: Optional[str] = None, replace_original: Optional[bool] = None, delete_original: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
@@ -701,8 +719,8 @@ class WebhookClient:
     self,
     *,
     text: Optional[str] = None,
-    attachments: Optional[Sequence[Union[Dict[str, any], Attachment]]] = None,
-    blocks: Optional[Sequence[Union[Dict[str, any], Block]]] = None,
+    attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+    blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
     response_type: Optional[str] = None,
     replace_original: Optional[bool] = None,
     delete_original: Optional[bool] = None,
@@ -745,7 +763,7 @@ class WebhookClient:
 </details>
 </dd>
 <dt id="slack_sdk.webhook.client.WebhookClient.send_dict"><code class="name flex">
-<span>def <span class="ident">send_dict</span></span>(<span>self, body: Dict[str, <built-in function any>], headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
+<span>def <span class="ident">send_dict</span></span>(<span>self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
@@ -764,7 +782,7 @@ if you give this argument, body_params and files will be skipped</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def send_dict(
-    self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
+    self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
 ) -&gt; WebhookResponse:
     &#34;&#34;&#34;Performs a Slack API request and returns the result.
 

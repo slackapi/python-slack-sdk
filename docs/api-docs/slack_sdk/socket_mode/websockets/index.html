@@ -316,7 +316,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     @classmethod
     def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
         if session is None:
-            return None
+            return &#34;&#34;
         return &#34;s_&#34; + str(hash(session))</code></pre>
 </details>
 </section>
@@ -609,7 +609,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     @classmethod
     def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
         if session is None:
-            return None
+            return &#34;&#34;
         return &#34;s_&#34; + str(hash(session))</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -701,7 +701,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 <pre><code class="python">@classmethod
 def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
     if session is None:
-        return None
+        return &#34;&#34;
     return &#34;s_&#34; + str(hash(session))</code></pre>
 </details>
 </dd>

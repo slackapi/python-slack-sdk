@@ -50,20 +50,20 @@ class SCIMResponse:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    snake_cased_body: Dict[str, Any]
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    snake_cased_body: Optional[Dict[str, Any]]
 
     errors: Optional[Errors]
 
     @property
-    def snake_cased_body(self) -&gt; Dict[str, Any]:
+    def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
         if self._snake_cased_body is None:
             self._snake_cased_body = _to_snake_cased(self.body)
         return self._snake_cased_body
 
     @property
-    def errors(self) -&gt; Optional[Errors]:
+    def errors(self) -&gt; Optional[Errors]:  # type: ignore
         errors = self.snake_cased_body.get(&#34;errors&#34;)
         if errors is None:
             return None
@@ -74,7 +74,7 @@ class SCIMResponse:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url
@@ -86,7 +86,9 @@ class SCIMResponse:
             if raw_body is not None and raw_body.startswith(&#34;{&#34;)
             else None
         )
-        self._snake_cased_body = None
+        self._snake_cased_body = (
+            None  # build this when it&#39;s accessed for the first time
+        )
 
     def __repr__(self):
         dict_value = {}
@@ -108,7 +110,7 @@ class SearchUsersResponse(SCIMResponse):
     users: List[User]
 
     @property
-    def users(self) -&gt; List[User]:
+    def users(self) -&gt; List[User]:  # type: ignore
         return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -125,7 +127,7 @@ class ReadUserResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -142,7 +144,7 @@ class UserCreateResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -159,7 +161,7 @@ class UserPatchResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -176,7 +178,7 @@ class UserUpdateResponse(SCIMResponse):
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -209,7 +211,7 @@ class SearchGroupsResponse(SCIMResponse):
     groups: List[Group]
 
     @property
-    def groups(self) -&gt; List[Group]:
+    def groups(self) -&gt; List[Group]:  # type: ignore
         return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -226,7 +228,7 @@ class ReadGroupResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -243,7 +245,7 @@ class GroupCreateResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -271,7 +273,7 @@ class GroupUpdateResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -367,7 +369,7 @@ class GroupDeleteResponse(SCIMResponse):
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -393,7 +395,7 @@ class GroupDeleteResponse(SCIMResponse):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def group(self) -&gt; Group:
+def group(self) -&gt; Group:  # type: ignore
     return Group(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -425,7 +427,7 @@ def group(self) -&gt; Group:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -433,7 +435,7 @@ def group(self) -&gt; Group:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -456,14 +458,14 @@ def group(self) -&gt; Group:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def errors(self) -&gt; Optional[Errors]:
+def errors(self) -&gt; Optional[Errors]:  # type: ignore
     errors = self.snake_cased_body.get(&#34;errors&#34;)
     if errors is None:
         return None
     return Errors(**errors)</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupDeleteResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -471,7 +473,7 @@ def errors(self) -&gt; Optional[Errors]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def snake_cased_body(self) -&gt; Dict[str, Any]:
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
     if self._snake_cased_body is None:
         self._snake_cased_body = _to_snake_cased(self.body)
     return self._snake_cased_body</code></pre>
@@ -505,7 +507,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -513,7 +515,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -536,14 +538,14 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def errors(self) -&gt; Optional[Errors]:
+def errors(self) -&gt; Optional[Errors]:  # type: ignore
     errors = self.snake_cased_body.get(&#34;errors&#34;)
     if errors is None:
         return None
     return Errors(**errors)</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.GroupPatchResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -551,7 +553,7 @@ def errors(self) -&gt; Optional[Errors]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def snake_cased_body(self) -&gt; Dict[str, Any]:
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
     if self._snake_cased_body is None:
         self._snake_cased_body = _to_snake_cased(self.body)
     return self._snake_cased_body</code></pre>
@@ -573,7 +575,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -599,7 +601,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def group(self) -&gt; Group:
+def group(self) -&gt; Group:  # type: ignore
     return Group(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -619,7 +621,7 @@ def group(self) -&gt; Group:
     group: Group
 
     @property
-    def group(self) -&gt; Group:
+    def group(self) -&gt; Group:  # type: ignore
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -645,7 +647,7 @@ def group(self) -&gt; Group:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def group(self) -&gt; Group:
+def group(self) -&gt; Group:  # type: ignore
     return Group(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -665,7 +667,7 @@ def group(self) -&gt; Group:
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -691,7 +693,7 @@ def group(self) -&gt; Group:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def user(self) -&gt; User:
+def user(self) -&gt; User:  # type: ignore
     return User(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -699,7 +701,7 @@ def user(self) -&gt; User:
 </dd>
 <dt id="slack_sdk.scim.v1.response.SCIMResponse"><code class="flex name class">
 <span>class <span class="ident">SCIMResponse</span></span>
-<span>(</span><span>*, url: str, status_code: int, raw_body: str, headers: dict)</span>
+<span>(</span><span>*, url: str, status_code: int, raw_body: Optional[str], headers: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -711,20 +713,20 @@ def user(self) -&gt; User:
     url: str
     status_code: int
     headers: Dict[str, Any]
-    raw_body: str
-    body: Dict[str, Any]
-    snake_cased_body: Dict[str, Any]
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    snake_cased_body: Optional[Dict[str, Any]]
 
     errors: Optional[Errors]
 
     @property
-    def snake_cased_body(self) -&gt; Dict[str, Any]:
+    def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
         if self._snake_cased_body is None:
             self._snake_cased_body = _to_snake_cased(self.body)
         return self._snake_cased_body
 
     @property
-    def errors(self) -&gt; Optional[Errors]:
+    def errors(self) -&gt; Optional[Errors]:  # type: ignore
         errors = self.snake_cased_body.get(&#34;errors&#34;)
         if errors is None:
             return None
@@ -735,7 +737,7 @@ def user(self) -&gt; User:
         *,
         url: str,
         status_code: int,
-        raw_body: str,
+        raw_body: Optional[str],
         headers: dict,
     ):
         self.url = url
@@ -747,7 +749,9 @@ def user(self) -&gt; User:
             if raw_body is not None and raw_body.startswith(&#34;{&#34;)
             else None
         )
-        self._snake_cased_body = None
+        self._snake_cased_body = (
+            None  # build this when it&#39;s accessed for the first time
+        )
 
     def __repr__(self):
         dict_value = {}
@@ -776,7 +780,7 @@ def user(self) -&gt; User:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.response.SCIMResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.SCIMResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -784,7 +788,7 @@ def user(self) -&gt; User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.response.SCIMResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str</code></dt>
+<dt id="slack_sdk.scim.v1.response.SCIMResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -807,14 +811,14 @@ def user(self) -&gt; User:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def errors(self) -&gt; Optional[Errors]:
+def errors(self) -&gt; Optional[Errors]:  # type: ignore
     errors = self.snake_cased_body.get(&#34;errors&#34;)
     if errors is None:
         return None
     return Errors(**errors)</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.scim.v1.response.SCIMResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.SCIMResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -822,7 +826,7 @@ def errors(self) -&gt; Optional[Errors]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def snake_cased_body(self) -&gt; Dict[str, Any]:
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
     if self._snake_cased_body is None:
         self._snake_cased_body = _to_snake_cased(self.body)
     return self._snake_cased_body</code></pre>
@@ -844,7 +848,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
     groups: List[Group]
 
     @property
-    def groups(self) -&gt; List[Group]:
+    def groups(self) -&gt; List[Group]:  # type: ignore
         return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -870,7 +874,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def groups(self) -&gt; List[Group]:
+def groups(self) -&gt; List[Group]:  # type: ignore
     return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
 </details>
 </dd>
@@ -890,7 +894,7 @@ def groups(self) -&gt; List[Group]:
     users: List[User]
 
     @property
-    def users(self) -&gt; List[User]:
+    def users(self) -&gt; List[User]:  # type: ignore
         return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -916,7 +920,7 @@ def groups(self) -&gt; List[Group]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def users(self) -&gt; List[User]:
+def users(self) -&gt; List[User]:  # type: ignore
     return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
 </details>
 </dd>
@@ -936,7 +940,7 @@ def users(self) -&gt; List[User]:
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -962,7 +966,7 @@ def users(self) -&gt; List[User]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def user(self) -&gt; User:
+def user(self) -&gt; User:  # type: ignore
     return User(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -994,7 +998,7 @@ def user(self) -&gt; User:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1002,7 +1006,7 @@ def user(self) -&gt; User:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str</code></dt>
+<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1025,14 +1029,14 @@ def user(self) -&gt; User:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def errors(self) -&gt; Optional[Errors]:
+def errors(self) -&gt; Optional[Errors]:  # type: ignore
     errors = self.snake_cased_body.get(&#34;errors&#34;)
     if errors is None:
         return None
     return Errors(**errors)</code></pre>
 </details>
 </dd>
-<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Dict[str, Any]</code></dt>
+<dt id="slack_sdk.scim.v1.response.UserDeleteResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Optional[Dict[str, Any]]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -1040,7 +1044,7 @@ def errors(self) -&gt; Optional[Errors]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def snake_cased_body(self) -&gt; Dict[str, Any]:
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
     if self._snake_cased_body is None:
         self._snake_cased_body = _to_snake_cased(self.body)
     return self._snake_cased_body</code></pre>
@@ -1062,7 +1066,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -1088,7 +1092,7 @@ def snake_cased_body(self) -&gt; Dict[str, Any]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def user(self) -&gt; User:
+def user(self) -&gt; User:  # type: ignore
     return User(**self.snake_cased_body)</code></pre>
 </details>
 </dd>
@@ -1108,7 +1112,7 @@ def user(self) -&gt; User:
     user: User
 
     @property
-    def user(self) -&gt; User:
+    def user(self) -&gt; User:  # type: ignore
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -1134,7 +1138,7 @@ def user(self) -&gt; User:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def user(self) -&gt; User:
+def user(self) -&gt; User:  # type: ignore
     return User(**self.snake_cased_body)</code></pre>
 </details>
 </dd>

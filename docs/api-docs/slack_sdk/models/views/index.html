@@ -75,7 +75,7 @@ class View(JsonObject):
         app_id: Optional[str] = None,
         root_view_id: Optional[str] = None,
         previous_view_id: Optional[str] = None,
-        title: Union[str, dict, PlainTextObject] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
         blocks: Optional[Sequence[Union[dict, Block]]] = None,
@@ -190,7 +190,9 @@ class ViewState(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions = copy.copy(actions)
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
+                        actions
+                    )
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)
@@ -285,7 +287,7 @@ class ViewStateValue(JsonObject):
 <dl>
 <dt id="slack_sdk.models.views.View"><code class="flex name class">
 <span>class <span class="ident">View</span></span>
-<span>(</span><span>type: str, id: Optional[str] = None, callback_id: Optional[str] = None, external_id: Optional[str] = None, team_id: Optional[str] = None, bot_id: Optional[str] = None, app_id: Optional[str] = None, root_view_id: Optional[str] = None, previous_view_id: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = None, submit: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, close: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, blocks: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, private_metadata: Optional[str] = None, state: Union[dict, ForwardRef('<a title="slack_sdk.models.views.ViewState" href="#slack_sdk.models.views.ViewState">ViewState</a>'), ForwardRef(None)] = None, hash: Optional[str] = None, clear_on_close: Optional[bool] = None, notify_on_close: Optional[bool] = None, **kwargs)</span>
+<span>(</span><span>type: str, id: Optional[str] = None, callback_id: Optional[str] = None, external_id: Optional[str] = None, team_id: Optional[str] = None, bot_id: Optional[str] = None, app_id: Optional[str] = None, root_view_id: Optional[str] = None, previous_view_id: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, submit: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, close: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, blocks: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, private_metadata: Optional[str] = None, state: Union[dict, ForwardRef('<a title="slack_sdk.models.views.ViewState" href="#slack_sdk.models.views.ViewState">ViewState</a>'), ForwardRef(None)] = None, hash: Optional[str] = None, clear_on_close: Optional[bool] = None, notify_on_close: Optional[bool] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>View object for modals and Home tabs.</p>
@@ -335,7 +337,7 @@ class ViewStateValue(JsonObject):
         app_id: Optional[str] = None,
         root_view_id: Optional[str] = None,
         previous_view_id: Optional[str] = None,
-        title: Union[str, dict, PlainTextObject] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         submit: Optional[Union[str, dict, PlainTextObject]] = None,
         close: Optional[Union[str, dict, PlainTextObject]] = None,
         blocks: Optional[Sequence[Union[dict, Block]]] = None,
@@ -507,7 +509,9 @@ class ViewStateValue(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions = copy.copy(actions)
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
+                        actions
+                    )
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)

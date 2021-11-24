@@ -198,10 +198,11 @@ class AsyncSCIMClient:
     async def update_user(
         self, user: Union[Dict[str, Any], User]
     ) -&gt; UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
         return UserUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Users/{quote(user.id)}&#34;,
+                path=f&#34;Users/{quote(user_id)}&#34;,
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -274,10 +275,11 @@ class AsyncSCIMClient:
     async def update_group(
         self, group: Union[Dict[str, Any], Group]
     ) -&gt; GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
         return GroupUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Groups/{quote(group.id)}&#34;,
+                path=f&#34;Groups/{quote(group_id)}&#34;,
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -299,8 +301,8 @@ class AsyncSCIMClient:
         *,
         http_verb: str,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; SCIMResponse:
         url = f&#34;{self.base_url}{path}&#34;
@@ -636,10 +638,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
     async def update_user(
         self, user: Union[Dict[str, Any], User]
     ) -&gt; UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
         return UserUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Users/{quote(user.id)}&#34;,
+                path=f&#34;Users/{quote(user_id)}&#34;,
                 body_params=user.to_dict()
                 if isinstance(user, User)
                 else _to_dict_without_not_given(user),
@@ -712,10 +715,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
     async def update_group(
         self, group: Union[Dict[str, Any], Group]
     ) -&gt; GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
         return GroupUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
-                path=f&#34;Groups/{quote(group.id)}&#34;,
+                path=f&#34;Groups/{quote(group_id)}&#34;,
                 body_params=group.to_dict()
                 if isinstance(group, Group)
                 else _to_dict_without_not_given(group),
@@ -737,8 +741,8 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         *,
         http_verb: str,
         path: str,
-        query_params: Optional[Dict[str, any]] = None,
-        body_params: Optional[Dict[str, any]] = None,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; SCIMResponse:
         url = f&#34;{self.base_url}{path}&#34;
@@ -949,7 +953,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.scim.v1.async_client.AsyncSCIMClient.api_call"><code class="name flex">
-<span>async def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str, path: str, query_params: Optional[Dict[str, <built-in function any>]] = None, body_params: Optional[Dict[str, <built-in function any>]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.scim.v1.response.SCIMResponse" href="response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></span>
+<span>async def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str, path: str, query_params: Optional[Dict[str, Any]] = None, body_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.scim.v1.response.SCIMResponse" href="response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -962,8 +966,8 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
     *,
     http_verb: str,
     path: str,
-    query_params: Optional[Dict[str, any]] = None,
-    body_params: Optional[Dict[str, any]] = None,
+    query_params: Optional[Dict[str, Any]] = None,
+    body_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; SCIMResponse:
     url = f&#34;{self.base_url}{path}&#34;
@@ -1212,10 +1216,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <pre><code class="python">async def update_group(
     self, group: Union[Dict[str, Any], Group]
 ) -&gt; GroupUpdateResponse:
+    group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
     return GroupUpdateResponse(
         await self.api_call(
             http_verb=&#34;PUT&#34;,
-            path=f&#34;Groups/{quote(group.id)}&#34;,
+            path=f&#34;Groups/{quote(group_id)}&#34;,
             body_params=group.to_dict()
             if isinstance(group, Group)
             else _to_dict_without_not_given(group),
@@ -1235,10 +1240,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <pre><code class="python">async def update_user(
     self, user: Union[Dict[str, Any], User]
 ) -&gt; UserUpdateResponse:
+    user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
     return UserUpdateResponse(
         await self.api_call(
             http_verb=&#34;PUT&#34;,
-            path=f&#34;Users/{quote(user.id)}&#34;,
+            path=f&#34;Users/{quote(user_id)}&#34;,
             body_params=user.to_dict()
             if isinstance(user, User)
             else _to_dict_without_not_given(user),

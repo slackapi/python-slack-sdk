@@ -114,6 +114,12 @@ class PlainTextObject(TextObject):
         &#34;&#34;&#34;A plain text object, meaning markdown characters will not be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            emoji: Indicates whether emojis in a text field should be escaped into the colon emoji format.
+                This field is only usable when type is plain_text.
         &#34;&#34;&#34;
         super().__init__(text=text, type=self.type)
         self.emoji = emoji
@@ -141,6 +147,14 @@ class MarkdownTextObject(TextObject):
         &#34;&#34;&#34;A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            verbatim: When set to false (as is default) URLs will be auto-converted into links,
+                conversation names will be link-ified, and certain mentions will be automatically parsed.
+                Using a value of true will skip any preprocessing of this nature,
+                although you can still include manual parsing strings. This field is only usable when type is mrkdwn.
         &#34;&#34;&#34;
         super().__init__(text=text, type=self.type)
         self.verbatim = verbatim
@@ -445,7 +459,7 @@ class ConfirmObject(JsonObject):
         text: Union[str, dict, TextObject],
         confirm: Union[str, dict, PlainTextObject] = &#34;Yes&#34;,
         deny: Union[str, dict, PlainTextObject] = &#34;No&#34;,
-        style: str = None,
+        style: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         An object that defines a dialog that provides a confirmation step to any
@@ -467,25 +481,25 @@ class ConfirmObject(JsonObject):
         self.style = self._style
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-    def title_length(self):
+    def title_length(self) -&gt; bool:
         return self._title is None or len(self._title.text) &lt;= self.title_max_length
 
     @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
-    def text_length(self):
+    def text_length(self) -&gt; bool:
         return self._text is None or len(self._text.text) &lt;= self.text_max_length
 
     @JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
-    def confirm_length(self):
+    def confirm_length(self) -&gt; bool:
         return (
             self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
         )
 
     @JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
-    def deny_length(self):
+    def deny_length(self) -&gt; bool:
         return self._deny is None or len(self._deny.text) &lt;= self.deny_max_length
 
     @JsonValidator(&#39;style for confirm must be either &#34;primary&#34; or &#34;danger&#34;&#39;)
-    def _validate_confirm_style(self):
+    def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
     def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
@@ -567,7 +581,7 @@ class DispatchActionConfig(JsonObject):
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject"><code class="flex name class">
 <span>class <span class="ident">ConfirmObject</span></span>
-<span>(</span><span>*, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: str = None)</span>
+<span>(</span><span>*, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -606,7 +620,7 @@ offering a confirm and deny button.
         text: Union[str, dict, TextObject],
         confirm: Union[str, dict, PlainTextObject] = &#34;Yes&#34;,
         deny: Union[str, dict, PlainTextObject] = &#34;No&#34;,
-        style: str = None,
+        style: Optional[str] = None,
     ):
         &#34;&#34;&#34;
         An object that defines a dialog that provides a confirmation step to any
@@ -628,25 +642,25 @@ offering a confirm and deny button.
         self.style = self._style
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-    def title_length(self):
+    def title_length(self) -&gt; bool:
         return self._title is None or len(self._title.text) &lt;= self.title_max_length
 
     @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
-    def text_length(self):
+    def text_length(self) -&gt; bool:
         return self._text is None or len(self._text.text) &lt;= self.text_max_length
 
     @JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
-    def confirm_length(self):
+    def confirm_length(self) -&gt; bool:
         return (
             self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
         )
 
     @JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
-    def deny_length(self):
+    def deny_length(self) -&gt; bool:
         return self._deny is None or len(self._deny.text) &lt;= self.deny_max_length
 
     @JsonValidator(&#39;style for confirm must be either &#34;primary&#34; or &#34;danger&#34;&#39;)
-    def _validate_confirm_style(self):
+    def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
     def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
@@ -734,7 +748,7 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, dict]):
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.confirm_length"><code class="name flex">
-<span>def <span class="ident">confirm_length</span></span>(<span>self)</span>
+<span>def <span class="ident">confirm_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -743,14 +757,14 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, dict]):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
-def confirm_length(self):
+def confirm_length(self) -&gt; bool:
     return (
         self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
     )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.deny_length"><code class="name flex">
-<span>def <span class="ident">deny_length</span></span>(<span>self)</span>
+<span>def <span class="ident">deny_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -759,12 +773,12 @@ def confirm_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
-def deny_length(self):
+def deny_length(self) -&gt; bool:
     return self._deny is None or len(self._deny.text) &lt;= self.deny_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.text_length"><code class="name flex">
-<span>def <span class="ident">text_length</span></span>(<span>self)</span>
+<span>def <span class="ident">text_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -773,12 +787,12 @@ def deny_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
-def text_length(self):
+def text_length(self) -&gt; bool:
     return self._text is None or len(self._text.text) &lt;= self.text_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.title_length"><code class="name flex">
-<span>def <span class="ident">title_length</span></span>(<span>self)</span>
+<span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -787,7 +801,7 @@ def text_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-def title_length(self):
+def title_length(self) -&gt; bool:
     return self._title is None or len(self._title.text) &lt;= self.title_max_length</code></pre>
 </details>
 </dd>
@@ -899,7 +913,18 @@ def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, dict]):
 <div class="desc"><p>mrkdwn typed text object</p>
 <p>A Markdown text object, meaning markdown characters will be parsed as
 formatting information.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The text for the block. This field accepts any of the standard text formatting markup
+when type is mrkdwn.</dd>
+<dt><strong><code>verbatim</code></strong></dt>
+<dd>When set to false (as is default) URLs will be auto-converted into links,
+conversation names will be link-ified, and certain mentions will be automatically parsed.
+Using a value of true will skip any preprocessing of this nature,
+although you can still include manual parsing strings. This field is only usable when type is mrkdwn.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -917,6 +942,14 @@ formatting information.
         &#34;&#34;&#34;A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            verbatim: When set to false (as is default) URLs will be auto-converted into links,
+                conversation names will be link-ified, and certain mentions will be automatically parsed.
+                Using a value of true will skip any preprocessing of this nature,
+                although you can still include manual parsing strings. This field is only usable when type is mrkdwn.
         &#34;&#34;&#34;
         super().__init__(text=text, type=self.type)
         self.verbatim = verbatim
@@ -1557,7 +1590,16 @@ def parse_all(
 <div class="desc"><p>plain_text typed text object</p>
 <p>A plain text object, meaning markdown characters will not be parsed as
 formatting information.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p></div>
+<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The text for the block. This field accepts any of the standard text formatting markup
+when type is mrkdwn.</dd>
+<dt><strong><code>emoji</code></strong></dt>
+<dd>Indicates whether emojis in a text field should be escaped into the colon emoji format.
+This field is only usable when type is plain_text.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1575,6 +1617,12 @@ formatting information.
         &#34;&#34;&#34;A plain text object, meaning markdown characters will not be parsed as
         formatting information.
         https://api.slack.com/reference/block-kit/composition-objects#text
+
+        Args:
+            text (required): The text for the block. This field accepts any of the standard text formatting markup
+                when type is mrkdwn.
+            emoji: Indicates whether emojis in a text field should be escaped into the colon emoji format.
+                This field is only usable when type is plain_text.
         &#34;&#34;&#34;
         super().__init__(text=text, type=self.type)
         self.emoji = emoji

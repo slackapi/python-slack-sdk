@@ -32,7 +32,7 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 
 
 class AsyncWebSocketMessageListener(Callable):
-    async def __call__(
+    async def __call__(  # type: ignore
         client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
         message: dict,
         raw_message: Optional[str] = None,
@@ -41,7 +41,7 @@ class AsyncWebSocketMessageListener(Callable):
 
 
 class AsyncSocketModeRequestListener(Callable):
-    async def __call__(
+    async def __call__(  # type: ignore
         client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
         request: SocketModeRequest,
     ):  # noqa: F821
@@ -80,7 +80,7 @@ return default</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AsyncSocketModeRequestListener(Callable):
-    async def __call__(
+    async def __call__(  # type: ignore
         client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
         request: SocketModeRequest,
     ):  # noqa: F821
@@ -115,7 +115,7 @@ return default</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AsyncWebSocketMessageListener(Callable):
-    async def __call__(
+    async def __call__(  # type: ignore
         client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
         message: dict,
         raw_message: Optional[str] = None,

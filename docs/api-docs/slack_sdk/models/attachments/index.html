@@ -312,8 +312,7 @@ class Attachment(JsonObject):
         &#34;ts&#34;,
     }
 
-    fields: List[AttachmentField]
-    actions: List[Action]
+    fields: Sequence[AttachmentField]
 
     MarkdownFields = {&#34;fields&#34;, &#34;pretext&#34;, &#34;text&#34;}
 
@@ -416,11 +415,11 @@ class Attachment(JsonObject):
         self.markdown_in = markdown_in or []
 
     @JsonValidator(f&#34;footer attribute cannot exceed {footer_max_length} characters&#34;)
-    def footer_length(self):
+    def footer_length(self) -&gt; bool:
         return self.footer is None or len(self.footer) &lt;= self.footer_max_length
 
     @JsonValidator(&#34;ts attribute cannot be present if footer attribute is absent&#34;)
-    def ts_without_footer(self):
+    def ts_without_footer(self) -&gt; bool:
         return self.ts is None or self.footer is not None
 
     @EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
@@ -432,23 +431,23 @@ class Attachment(JsonObject):
     @JsonValidator(
         &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
     )
-    def color_valid(self):
+    def color_valid(self) -&gt; bool:
         return (
             self.color is None
             or self.color in SeededColors
-            or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE)
+            or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE) is not None
         )
 
     @JsonValidator(&#34;image_url attribute cannot be present if thumb_url is populated&#34;)
-    def image_url_and_thumb_url_populated(self):
+    def image_url_and_thumb_url_populated(self) -&gt; bool:
         return self.image_url is None or self.thumb_url is None
 
     @JsonValidator(&#34;name must be present if link is present&#34;)
-    def author_link_without_author_name(self):
+    def author_link_without_author_name(self) -&gt; bool:
         return self.author_link is None or self.author_name is not None
 
     @JsonValidator(&#34;icon must be present if link is present&#34;)
-    def author_link_without_author_icon(self):
+    def author_link_without_author_icon(self) -&gt; bool:
         return self.author_link is None or self.author_icon is not None
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -491,7 +490,7 @@ class BlockAttachment(Attachment):
         self.blocks = list(blocks)
 
     @JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
-    def fields_attribute_absent(self):
+    def fields_attribute_absent(self) -&gt; bool:
         return not self.fields
 
     def to_dict(self) -&gt; dict:
@@ -616,7 +615,7 @@ class InteractiveAttachment(Attachment):
         self.actions = actions or []
 
     @JsonValidator(f&#34;actions attribute cannot exceed {actions_max_length} elements&#34;)
-    def actions_length(self):
+    def actions_length(self) -&gt; bool:
         return len(self.actions) &lt;= self.actions_max_length
 
     def to_dict(self) -&gt; dict:
@@ -1488,8 +1487,7 @@ desktop may also transform its rendered appearance.</dd>
         &#34;ts&#34;,
     }
 
-    fields: List[AttachmentField]
-    actions: List[Action]
+    fields: Sequence[AttachmentField]
 
     MarkdownFields = {&#34;fields&#34;, &#34;pretext&#34;, &#34;text&#34;}
 
@@ -1592,11 +1590,11 @@ desktop may also transform its rendered appearance.</dd>
         self.markdown_in = markdown_in or []
 
     @JsonValidator(f&#34;footer attribute cannot exceed {footer_max_length} characters&#34;)
-    def footer_length(self):
+    def footer_length(self) -&gt; bool:
         return self.footer is None or len(self.footer) &lt;= self.footer_max_length
 
     @JsonValidator(&#34;ts attribute cannot be present if footer attribute is absent&#34;)
-    def ts_without_footer(self):
+    def ts_without_footer(self) -&gt; bool:
         return self.ts is None or self.footer is not None
 
     @EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
@@ -1608,23 +1606,23 @@ desktop may also transform its rendered appearance.</dd>
     @JsonValidator(
         &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
     )
-    def color_valid(self):
+    def color_valid(self) -&gt; bool:
         return (
             self.color is None
             or self.color in SeededColors
-            or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE)
+            or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE) is not None
         )
 
     @JsonValidator(&#34;image_url attribute cannot be present if thumb_url is populated&#34;)
-    def image_url_and_thumb_url_populated(self):
+    def image_url_and_thumb_url_populated(self) -&gt; bool:
         return self.image_url is None or self.thumb_url is None
 
     @JsonValidator(&#34;name must be present if link is present&#34;)
-    def author_link_without_author_name(self):
+    def author_link_without_author_name(self) -&gt; bool:
         return self.author_link is None or self.author_name is not None
 
     @JsonValidator(&#34;icon must be present if link is present&#34;)
-    def author_link_without_author_icon(self):
+    def author_link_without_author_icon(self) -&gt; bool:
         return self.author_link is None or self.author_icon is not None
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
@@ -1651,11 +1649,7 @@ desktop may also transform its rendered appearance.</dd>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.models.attachments.Attachment.actions"><code class="name">var <span class="ident">actions</span> : List[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.fields"><code class="name">var <span class="ident">fields</span> : List[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
+<dt id="slack_sdk.models.attachments.Attachment.fields"><code class="name">var <span class="ident">fields</span> : Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1667,7 +1661,7 @@ desktop may also transform its rendered appearance.</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_icon"><code class="name flex">
-<span>def <span class="ident">author_link_without_author_icon</span></span>(<span>self)</span>
+<span>def <span class="ident">author_link_without_author_icon</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1676,12 +1670,12 @@ desktop may also transform its rendered appearance.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;icon must be present if link is present&#34;)
-def author_link_without_author_icon(self):
+def author_link_without_author_icon(self) -&gt; bool:
     return self.author_link is None or self.author_icon is not None</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_name"><code class="name flex">
-<span>def <span class="ident">author_link_without_author_name</span></span>(<span>self)</span>
+<span>def <span class="ident">author_link_without_author_name</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1690,12 +1684,12 @@ def author_link_without_author_icon(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;name must be present if link is present&#34;)
-def author_link_without_author_name(self):
+def author_link_without_author_name(self) -&gt; bool:
     return self.author_link is None or self.author_name is not None</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.color_valid"><code class="name flex">
-<span>def <span class="ident">color_valid</span></span>(<span>self)</span>
+<span>def <span class="ident">color_valid</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1706,16 +1700,16 @@ def author_link_without_author_name(self):
 <pre><code class="python">@JsonValidator(
     &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
 )
-def color_valid(self):
+def color_valid(self) -&gt; bool:
     return (
         self.color is None
         or self.color in SeededColors
-        or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE)
+        or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE) is not None
     )</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.footer_length"><code class="name flex">
-<span>def <span class="ident">footer_length</span></span>(<span>self)</span>
+<span>def <span class="ident">footer_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1724,12 +1718,12 @@ def color_valid(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;footer attribute cannot exceed {footer_max_length} characters&#34;)
-def footer_length(self):
+def footer_length(self) -&gt; bool:
     return self.footer is None or len(self.footer) &lt;= self.footer_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.image_url_and_thumb_url_populated"><code class="name flex">
-<span>def <span class="ident">image_url_and_thumb_url_populated</span></span>(<span>self)</span>
+<span>def <span class="ident">image_url_and_thumb_url_populated</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1738,7 +1732,7 @@ def footer_length(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;image_url attribute cannot be present if thumb_url is populated&#34;)
-def image_url_and_thumb_url_populated(self):
+def image_url_and_thumb_url_populated(self) -&gt; bool:
     return self.image_url is None or self.thumb_url is None</code></pre>
 </details>
 </dd>
@@ -1759,7 +1753,7 @@ def markdown_in_valid(self):
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.ts_without_footer"><code class="name flex">
-<span>def <span class="ident">ts_without_footer</span></span>(<span>self)</span>
+<span>def <span class="ident">ts_without_footer</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1768,7 +1762,7 @@ def markdown_in_valid(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;ts attribute cannot be present if footer attribute is absent&#34;)
-def ts_without_footer(self):
+def ts_without_footer(self) -&gt; bool:
     return self.ts is None or self.footer is not None</code></pre>
 </details>
 </dd>
@@ -1881,7 +1875,7 @@ attachment from the default gray. Can either be one of "good" (green),
         self.blocks = list(blocks)
 
     @JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
-    def fields_attribute_absent(self):
+    def fields_attribute_absent(self) -&gt; bool:
         return not self.fields
 
     def to_dict(self) -&gt; dict:
@@ -1923,7 +1917,7 @@ def attributes(self):
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.attachments.BlockAttachment.fields_attribute_absent"><code class="name flex">
-<span>def <span class="ident">fields_attribute_absent</span></span>(<span>self)</span>
+<span>def <span class="ident">fields_attribute_absent</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1932,7 +1926,7 @@ def attributes(self):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
-def fields_attribute_absent(self):
+def fields_attribute_absent(self) -&gt; bool:
     return not self.fields</code></pre>
 </details>
 </dd>
@@ -2153,7 +2147,7 @@ desktop may also transform its rendered appearance.</dd>
         self.actions = actions or []
 
     @JsonValidator(f&#34;actions attribute cannot exceed {actions_max_length} elements&#34;)
-    def actions_length(self):
+    def actions_length(self) -&gt; bool:
         return len(self.actions) &lt;= self.actions_max_length
 
     def to_dict(self) -&gt; dict:
@@ -2169,15 +2163,11 @@ desktop may also transform its rendered appearance.</dd>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.attachments.InteractiveAttachment.actions"><code class="name">var <span class="ident">actions</span> : List[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt id="slack_sdk.models.attachments.InteractiveAttachment.actions_max_length"><code class="name">var <span class="ident">actions_max_length</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.models.attachments.InteractiveAttachment.fields"><code class="name">var <span class="ident">fields</span> : List[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
+<dt id="slack_sdk.models.attachments.InteractiveAttachment.fields"><code class="name">var <span class="ident">fields</span> : Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2202,7 +2192,7 @@ def attributes(self) -&gt; Set[str]:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.attachments.InteractiveAttachment.actions_length"><code class="name flex">
-<span>def <span class="ident">actions_length</span></span>(<span>self)</span>
+<span>def <span class="ident">actions_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2211,7 +2201,7 @@ def attributes(self) -&gt; Set[str]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;actions attribute cannot exceed {actions_max_length} elements&#34;)
-def actions_length(self):
+def actions_length(self) -&gt; bool:
     return len(self.actions) &lt;= self.actions_max_length</code></pre>
 </details>
 </dd>
@@ -2298,7 +2288,6 @@ def actions_length(self):
 <h4><code><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.attachments.Attachment.MarkdownFields" href="#slack_sdk.models.attachments.Attachment.MarkdownFields">MarkdownFields</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.actions" href="#slack_sdk.models.attachments.Attachment.actions">actions</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.Attachment.author_link_without_author_icon" href="#slack_sdk.models.attachments.Attachment.author_link_without_author_icon">author_link_without_author_icon</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.Attachment.author_link_without_author_name" href="#slack_sdk.models.attachments.Attachment.author_link_without_author_name">author_link_without_author_name</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.Attachment.color_valid" href="#slack_sdk.models.attachments.Attachment.color_valid">color_valid</a></code></li>
@@ -2324,7 +2313,6 @@ def actions_length(self):
 <li>
 <h4><code><a title="slack_sdk.models.attachments.InteractiveAttachment" href="#slack_sdk.models.attachments.InteractiveAttachment">InteractiveAttachment</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.models.attachments.InteractiveAttachment.actions" href="#slack_sdk.models.attachments.InteractiveAttachment.actions">actions</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.InteractiveAttachment.actions_length" href="#slack_sdk.models.attachments.InteractiveAttachment.actions_length">actions_length</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.InteractiveAttachment.actions_max_length" href="#slack_sdk.models.attachments.InteractiveAttachment.actions_max_length">actions_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.attachments.InteractiveAttachment.attributes" href="#slack_sdk.models.attachments.InteractiveAttachment.attributes">attributes</a></code></li>

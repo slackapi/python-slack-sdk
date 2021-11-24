@@ -45,7 +45,7 @@ from urllib.parse import urlparse
 from .frame_header import FrameHeader
 
 
-def _parse_connect_response(sock) -&gt; (Optional[int], str):
+def _parse_connect_response(sock: Socket) -&gt; Tuple[Optional[int], str]:
     status = None
     lines = []
     while True:
@@ -146,7 +146,7 @@ def _read_http_response_line(sock: ssl.SSLSocket) -&gt; str:
     return &#34;&#34;.join(cs)
 
 
-def _parse_handshake_response(sock: ssl.SSLSocket) -&gt; (int, dict, str):
+def _parse_handshake_response(sock: ssl.SSLSocket) -&gt; Tuple[Optional[int], dict, str]:
     &#34;&#34;&#34;Parses the handshake response.
 
     Args:
@@ -182,7 +182,7 @@ def _generate_sec_websocket_key() -&gt; str:
 def _validate_sec_websocket_accept(sec_websocket_key: str, headers: dict) -&gt; bool:
     v = (sec_websocket_key + &#34;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&#34;).encode(&#34;utf-8&#34;)
     expected = encodebytes(hashlib.sha1(v).digest()).decode(&#34;utf-8&#34;).strip()
-    actual = headers.get(&#34;sec-websocket-accept&#34;).strip()
+    actual = headers.get(&#34;sec-websocket-accept&#34;, &#34;&#34;).strip()
     return compare_digest(expected, actual)
 
 
@@ -199,6 +199,7 @@ def _to_readable_opcode(opcode: int) -&gt; str:
         return &#34;ping&#34;
     if opcode == FrameHeader.OPCODE_PONG:
         return &#34;pong&#34;
+    return &#34;-&#34;
 
 
 def _parse_text_payload(data: Optional[bytes], logger: Logger) -&gt; str:
@@ -209,6 +210,7 @@ def _parse_text_payload(data: Optional[bytes], logger: Logger) -&gt; str:
             return &#34;&#34;
     except UnicodeDecodeError as e:
         logger.debug(f&#34;Failed to parse a payload (data: {data}, error: {e})&#34;)
+        return &#34;&#34;
 
 
 def _receive_messages(
@@ -262,7 +264,7 @@ def _fetch_messages(
 
     if remaining_bytes is None:
         # Fetch more to complete the current message
-        remaining_bytes = receive()
+        remaining_bytes = receive()  # type: ignore
 
     if remaining_bytes is None or len(remaining_bytes) == 0:
         # no more bytes
@@ -273,7 +275,7 @@ def _fetch_messages(
     if current_header is None:
         # new message
         if len(remaining_bytes) &lt;= 2:
-            remaining_bytes += receive()
+            remaining_bytes += receive()  # type: ignore
 
         if remaining_bytes[0] == 10:  # \n
             if current_data is not None and len(current_data) &gt;= 0:
@@ -329,7 +331,7 @@ def _fetch_messages(
         if current_header.masked &gt; 0:
             for i in range(data_to_append):
                 mask = current_mask_key[i % 4]
-                data_to_append[i] ^= mask
+                data_to_append[i] ^= mask  # type: ignore
             current_data += data_to_append
         else:
             current_data += data_to_append
@@ -358,7 +360,7 @@ def _fetch_messages(
             )
         else:
             # This pattern is unexpected but set data with the expected length anyway
-            _append_message(current_header, current_data[:current_data_length])
+            _append_message(current_header, current_data[:current_data_length])  # type: ignore
             return messages
 
     # work in progress with the current_header/current_data

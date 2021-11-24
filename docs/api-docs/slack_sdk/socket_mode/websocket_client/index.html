@@ -262,13 +262,13 @@ class SocketModeClient(BaseSocketModeClient):
                 if self.is_connected():
                     self.current_session.send(message)
                 else:
-                    self.logger.warning(
-                        f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;
+                    self.logger.warning(  # type: ignore
+                        f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;  # type: ignore
                         &#34;Failed to send a message&#34;
                     )
                     raise e
 
-    def close(self):
+    def close(self) -&gt; None:  # type: ignore
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
@@ -562,13 +562,13 @@ class SocketModeClient(BaseSocketModeClient):
                 if self.is_connected():
                     self.current_session.send(message)
                 else:
-                    self.logger.warning(
-                        f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;
+                    self.logger.warning(  # type: ignore
+                        f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;  # type: ignore
                         &#34;Failed to send a message&#34;
                     )
                     raise e
 
-    def close(self):
+    def close(self) -&gt; None:  # type: ignore
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
@@ -699,7 +699,7 @@ class SocketModeClient(BaseSocketModeClient):
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.websocket_client.SocketModeClient.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self) ‑> bool</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -707,7 +707,7 @@ class SocketModeClient(BaseSocketModeClient):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def close(self):
+<pre><code class="python">def close(self) -&gt; None:  # type: ignore
     self.closed = True
     self.auto_reconnect_enabled = False
     self.disconnect()
@@ -840,8 +840,8 @@ class SocketModeClient(BaseSocketModeClient):
             if self.is_connected():
                 self.current_session.send(message)
             else:
-                self.logger.warning(
-                    f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;
+                self.logger.warning(  # type: ignore
+                    f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;  # type: ignore
                     &#34;Failed to send a message&#34;
                 )
                 raise e</code></pre>

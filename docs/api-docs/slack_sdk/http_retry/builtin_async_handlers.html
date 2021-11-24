@@ -28,7 +28,7 @@
 </summary>
 <pre><code class="python">import asyncio
 import random
-from typing import Optional, List
+from typing import Optional, List, Type
 
 from aiohttp import ServerDisconnectedError, ServerConnectionError, ClientOSError
 
@@ -47,7 +47,7 @@ class AsyncConnectionErrorRetryHandler(AsyncRetryHandler):
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             ServerConnectionError,
             ServerDisconnectedError,
             # ClientOSError: [Errno 104] Connection reset by peer
@@ -85,7 +85,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         response: Optional[HttpResponse],
         error: Optional[Exception],
     ) -&gt; bool:
-        return response.status_code == 429
+        return response is not None and response.status_code == 429
 
     async def prepare_for_next_attempt_async(
         self,
@@ -147,7 +147,7 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
 <dl>
 <dt id="slack_sdk.http_retry.builtin_async_handlers.AsyncConnectionErrorRetryHandler"><code class="flex name class">
 <span>class <span class="ident">AsyncConnectionErrorRetryHandler</span></span>
-<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;, error_types: List[Exception] = [&lt;class &#x27;aiohttp.client_exceptions.ServerConnectionError&#x27;&gt;, &lt;class &#x27;aiohttp.client_exceptions.ServerDisconnectedError&#x27;&gt;, &lt;class &#x27;aiohttp.client_exceptions.ClientOSError&#x27;&gt;])</span>
+<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;, error_types: List[Type[Exception]] = [&lt;class &#x27;aiohttp.client_exceptions.ServerConnectionError&#x27;&gt;, &lt;class &#x27;aiohttp.client_exceptions.ServerDisconnectedError&#x27;&gt;, &lt;class &#x27;aiohttp.client_exceptions.ClientOSError&#x27;&gt;])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>RetryHandler that does retries for connectivity issues.</p>
@@ -170,7 +170,7 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
         self,
         max_retry_count: int = 1,
         interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-        error_types: List[Exception] = [
+        error_types: List[Type[Exception]] = [
             ServerConnectionError,
             ServerDisconnectedError,
             # ClientOSError: [Errno 104] Connection reset by peer
@@ -241,7 +241,7 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
         response: Optional[HttpResponse],
         error: Optional[Exception],
     ) -&gt; bool:
-        return response.status_code == 429
+        return response is not None and response.status_code == 429
 
     async def prepare_for_next_attempt_async(
         self,
