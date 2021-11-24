@@ -21,7 +21,9 @@ class TestWebClient(unittest.TestCase):
         self.logger = logging.getLogger(__name__)
         self.org_admin_token = os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
         self.sync_client: WebClient = WebClient(token=self.org_admin_token)
-        self.sync_client.retry_handlers.append(RateLimitErrorRetryHandler(max_retry_count=2))
+        self.sync_client.retry_handlers.append(
+            RateLimitErrorRetryHandler(max_retry_count=2)
+        )
         self.async_client: AsyncWebClient = AsyncWebClient(token=self.org_admin_token)
         self.async_client.retry_handlers.append(
             AsyncRateLimitErrorRetryHandler(max_retry_count=2)

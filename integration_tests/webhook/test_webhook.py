@@ -70,7 +70,6 @@ class TestWebhook(unittest.TestCase):
         self.assertIsNotNone(history)
         self.assertTrue("attachments" not in history["messages"][0])
 
-
     # FIXME: This test started failing as of August 5, 2021
     @pytest.mark.skip()
     def test_with_unfurls_on(self):

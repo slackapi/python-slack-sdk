@@ -34,7 +34,7 @@ validate_dependencies = [
     "moto<2",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==21.9b0",
+    "black==21.11b1",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)

@@ -6,7 +6,6 @@ from slack_sdk.web import WebClient
 
 
 class TestWebClient(unittest.TestCase):
-
     def setUp(self):
         self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
         self.client: WebClient = WebClient(token=self.bot_token)
