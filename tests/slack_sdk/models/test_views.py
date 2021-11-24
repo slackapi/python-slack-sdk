@@ -531,3 +531,15 @@ class ViewTests(unittest.TestCase):
     def test_load_home_tab_view_006(self):
         with open("tests/slack_sdk_fixture/view_home_006.json") as file:
             self.verify_loaded_view_object(file)
+
+    def test_eq(self):
+        input = {
+            "type": "modal",
+            "blocks": [DividerBlock()],
+        }
+        another_input = {
+            "type": "modal",
+            "blocks": [DividerBlock(), DividerBlock()],
+        }
+        self.assertEqual(View(**input), View(**input))
+        self.assertNotEqual(View(**input), View(**another_input))

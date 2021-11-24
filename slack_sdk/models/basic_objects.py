@@ -87,6 +87,11 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         else:
             return self.__str__()
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, JsonObject):
+            return False
+        return self.to_dict() == other.to_dict()
+
 
 class JsonValidator:
     def __init__(self, message: str):

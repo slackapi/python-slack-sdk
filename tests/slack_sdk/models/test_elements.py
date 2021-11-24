@@ -2,6 +2,7 @@ import unittest
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
+    BlockElement,
     ButtonElement,
     DatePickerElement,
     TimePickerElement,
@@ -27,6 +28,15 @@ from slack_sdk.models.blocks import (
     InteractiveElement,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
+
+
+class BlockElementTests(unittest.TestCase):
+    def test_eq(self):
+        self.assertEqual(BlockElement(), BlockElement())
+        self.assertEqual(BlockElement(type="test"), BlockElement(type="test"))
+        self.assertNotEqual(
+            BlockElement(type="test"), BlockElement(type="another test")
+        )
 
 
 # -------------------------------------------------

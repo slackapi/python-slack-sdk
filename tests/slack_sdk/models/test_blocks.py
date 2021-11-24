@@ -54,6 +54,11 @@ class BlockTests(unittest.TestCase):
             block.to_dict(),
         )
 
+    def test_eq(self):
+        self.assertEqual(Block(), Block())
+        self.assertEqual(Block(type="test"), Block(type="test"))
+        self.assertNotEqual(Block(type="test"), Block(type="another test"))
+
 
 # ----------------------------------------------
 # Section

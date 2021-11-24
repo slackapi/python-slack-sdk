@@ -148,6 +148,14 @@ class JsonObjectTests(unittest.TestCase):
         )
         self.assertDictEqual(expected, nested.get_non_null_attributes())
 
+    def test_eq(self):
+        obj1 = SimpleJsonObject()
+        self.assertEqual(self.good_test_object, obj1)
+
+        obj2 = SimpleJsonObject()
+        obj2.test = "another"
+        self.assertNotEqual(self.good_test_object, obj2)
+
 
 class JsonValidatorTests(unittest.TestCase):
     def setUp(self) -> None:
