@@ -15,13 +15,17 @@ First off, let's start with enabling Socket Mode. Visit `the Slack App configura
 * Go to **Settings** > **Socket Mode**, then turn on **Enable Socket Mode**
 * Go to **Features** > **App Home**, look under **Show Tabs** > **Messages Tab** then turn on **Allow users to send Slash commands and messages from the messages tab**
 * Go to **Features** > **Event Subscriptions**, then turn on **Enable Events**
+
     * On the same page expand **Subscribe to bot events** click **Add Bot User Event** and select **message.im**
+
         * This will allow the bot to get events for messages that are sent in 1:1 direct messages with itself
 * Go to **Features** > **Interactivity and Shortcuts**, look under *Shortcuts** click **Create a New Shortcut** then create a new Global shortcut with the following details
+
     * **Name**: Hello
     * **Short Description**: Receive a Greeting
     * **Callback ID**: hello-shortcut
 * Go to **Features** > **OAuth & Permissions** under **Scopes** > **Bot Token Scopes** click **Add an OAuth Scope** and select **reactions:write**
+
     * This will allow the bot to add emoji reactions (Reacji's) to messages
 * Go to **Features** > **Oauth & Permissions** under **OAuth Tokens for Your Workspace** click **Install to Workspace**
 
