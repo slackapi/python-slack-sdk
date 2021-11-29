@@ -59,6 +59,7 @@ class InteractiveElementTests(unittest.TestCase):
             "type": "plain_text_input",
             "action_id": "plain_input",
             "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+            "focus_on_load": True,
         }
         # Any properties should not be lost
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
@@ -207,6 +208,20 @@ class CheckboxesElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, CheckboxesElement(**input).to_dict())
 
+    def test_focus_on_load(self):
+        input = {
+            "type": "checkboxes",
+            "action_id": "this_is_an_action_id",
+            "initial_options": [
+                {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}}
+            ],
+            "options": [
+                {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}},
+            ],
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, CheckboxesElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # DatePicker
@@ -263,6 +278,16 @@ class DatePickerElementTests(unittest.TestCase):
             elem = DatePickerElement(action_id="1", placeholder="12345" * 100)
             elem.to_dict()
 
+    def test_focus_on_load(self):
+        input = {
+            "type": "datepicker",
+            "action_id": "datepicker123",
+            "initial_date": "1990-04-28",
+            "placeholder": {"type": "plain_text", "text": "Select a date"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, DatePickerElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # TimePicker
@@ -310,6 +335,19 @@ class TimePickerElementTests(unittest.TestCase):
                 placeholder="Select a time",
                 initial_time="25:00",
             ).to_dict()
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "timepicker",
+            "action_id": "timepicker123",
+            "initial_time": "11:40",
+            "placeholder": {
+                "type": "plain_text",
+                "text": "Select a time",
+            },
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, TimePickerElement(**input).to_dict())
 
 
 # -------------------------------------------------
@@ -377,6 +415,30 @@ class StaticMultiSelectElementTests(unittest.TestCase):
                 },
             ],
             "max_selected_items": 1,
+        }
+        self.assertDictEqual(input, StaticMultiSelectElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "multi_static_select",
+            "placeholder": {"type": "plain_text", "text": "Select items"},
+            "options": [
+                {
+                    "text": {"type": "plain_text", "text": "*this is plain_text text*"},
+                    "value": "value-0",
+                },
+                {
+                    "text": {"type": "plain_text", "text": "*this is plain_text text*"},
+                    "value": "value-1",
+                },
+                {
+                    "text": {"type": "plain_text", "text": "*this is plain_text text*"},
+                    "value": "value-2",
+                },
+            ],
+            "max_selected_items": 1,
+            "focus_on_load": True,
         }
         self.assertDictEqual(input, StaticMultiSelectElement(**input).to_dict())
 
@@ -511,6 +573,21 @@ class StaticSelectElementTests(unittest.TestCase):
                 options=[self.option_one] * 101,
             ).to_dict()
 
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "static_select",
+            "placeholder": {"type": "plain_text", "text": "Select an item"},
+            "options": [
+                {
+                    "text": {"type": "plain_text", "text": "*this is plain_text text*"},
+                    "value": "value-0",
+                },
+            ],
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, StaticSelectElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # External Data Source Select
@@ -542,6 +619,15 @@ class ExternalDataMultiSelectElementTests(unittest.TestCase):
             ],
             "min_query_length": 0,
             "max_selected_items": 1,
+        }
+        self.assertDictEqual(input, ExternalDataMultiSelectElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "multi_external_select",
+            "placeholder": {"type": "plain_text", "text": "Select items"},
+            "focus_on_load": True,
         }
         self.assertDictEqual(input, ExternalDataMultiSelectElement(**input).to_dict())
 
@@ -614,6 +700,15 @@ class ExternalDataSelectElementTests(unittest.TestCase):
             ).to_dict(),
         )
 
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "external_select",
+            "placeholder": {"type": "plain_text", "text": "Select an item"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, ExternalDataSelectElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # Users Select
@@ -661,6 +756,16 @@ class UserSelectElementTests(unittest.TestCase):
             ).to_dict(),
         )
 
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "users_select",
+            "placeholder": {"type": "plain_text", "text": "Select an item"},
+            "initial_user": "U123",
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, UserSelectElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # Conversations Select
@@ -680,6 +785,16 @@ class ConversationSelectMultiElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, ConversationMultiSelectElement(**input).to_dict())
 
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "multi_conversations_select",
+            "placeholder": {"type": "plain_text", "text": "Select conversations"},
+            "initial_conversations": ["C123", "C234"],
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, ConversationMultiSelectElement(**input).to_dict())
+
 
 class ConversationSelectElementTests(unittest.TestCase):
     def test_document(self):
@@ -691,6 +806,16 @@ class ConversationSelectElementTests(unittest.TestCase):
             "response_url_enabled": True,
             "default_to_current_conversation": True,
             "filter": {"include": ["public", "mpim"], "exclude_bot_users": True},
+        }
+        self.assertDictEqual(input, ConversationSelectElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "conversations_select",
+            "placeholder": {"type": "plain_text", "text": "Select an item"},
+            "initial_conversation": "C123",
+            "focus_on_load": True,
         }
         self.assertDictEqual(input, ConversationSelectElement(**input).to_dict())
 
@@ -711,6 +836,16 @@ class ChannelSelectMultiElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, ChannelMultiSelectElement(**input).to_dict())
 
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "multi_channels_select",
+            "placeholder": {"type": "plain_text", "text": "Select channels"},
+            "initial_channels": ["C123", "C234"],
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, ChannelMultiSelectElement(**input).to_dict())
+
 
 class ChannelSelectElementTests(unittest.TestCase):
     def test_document(self):
@@ -720,6 +855,15 @@ class ChannelSelectElementTests(unittest.TestCase):
             "placeholder": {"type": "plain_text", "text": "Select an item"},
             "response_url_enabled": True,
             "initial_channel": "C123",
+        }
+        self.assertDictEqual(input, ChannelSelectElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "action_id": "text1234",
+            "type": "channels_select",
+            "placeholder": {"type": "plain_text", "text": "Select an item"},
+            "focus_on_load": True,
         }
         self.assertDictEqual(input, ChannelSelectElement(**input).to_dict())
 
@@ -795,6 +939,15 @@ class PlainTextInputElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, PlainTextInputElement(**input).to_dict())
 
+    def test_focus_on_load(self):
+        input = {
+            "type": "plain_text_input",
+            "action_id": "plain_input",
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, PlainTextInputElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # Radio Buttons
@@ -814,9 +967,21 @@ class RadioButtonsElementTest(unittest.TestCase):
                 {"value": "A1", "text": {"type": "plain_text", "text": "Radio 1"}},
                 {"value": "A2", "text": {"type": "plain_text", "text": "Radio 2"}},
             ],
+        }
+        self.assertDictEqual(input, RadioButtonsElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "radio_buttons",
+            "action_id": "this_is_an_action_id",
             "initial_option": {
-                "value": "A2",
-                "text": {"type": "plain_text", "text": "Radio 2"},
+                "value": "A1",
+                "text": {"type": "plain_text", "text": "Radio 1"},
             },
+            "options": [
+                {"value": "A1", "text": {"type": "plain_text", "text": "Radio 1"}},
+                {"value": "A2", "text": {"type": "plain_text", "text": "Radio 2"}},
+            ],
+            "focus_on_load": True,
         }
         self.assertDictEqual(input, RadioButtonsElement(**input).to_dict())
