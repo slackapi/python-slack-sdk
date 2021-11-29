@@ -13,6 +13,21 @@ First off, let's start with enabling Socket Mode. Visit `the Slack App configura
 
 * Go to **Settings** > **Basic Information**, then add a new **App-Level Token** with the `connections:write` scope
 * Go to **Settings** > **Socket Mode**, then turn on **Enable Socket Mode**
+* Go to **Features** > **App Home**, look under **Show Tabs** > **Messages Tab** then turn on **Allow users to send Slash commands and messages from the messages tab**
+* Go to **Features** > **Event Subscriptions**, then turn on **Enable Events**
+
+    * On the same page expand **Subscribe to bot events** click **Add Bot User Event** and select **message.im**
+
+        * This will allow the bot to get events for messages that are sent in 1:1 direct messages with itself
+* Go to **Features** > **Interactivity and Shortcuts**, look under *Shortcuts** click **Create a New Shortcut** then create a new Global shortcut with the following details
+
+    * **Name**: Hello
+    * **Short Description**: Receive a Greeting
+    * **Callback ID**: hello-shortcut
+* Go to **Features** > **OAuth & Permissions** under **Scopes** > **Bot Token Scopes** click **Add an OAuth Scope** and select **reactions:write**
+
+    * This will allow the bot to add emoji reactions (Reacji's) to messages
+* Go to **Features** > **Oauth & Permissions** under **OAuth Tokens for Your Workspace** click **Install to Workspace**
 
 You will be using the app-level token that starts with ``xapp-`` prefix. Note that the token here is not the ones starting with either ``xoxb-`` or ``xoxp-``.
 
@@ -47,6 +62,44 @@ You will be using the app-level token that starts with ``xapp-`` prefix. Note th
                     channel=req.payload["event"]["channel"],
                     timestamp=req.payload["event"]["ts"],
                 )
+        if req.type == "interactive" \
+            and req.payload.get("type") == "shortcut":
+            if req.payload["callback_id"] == "hello-shortcut":
+                # Acknowledge the request
+                response = SocketModeResponse(envelope_id=req.envelope_id)
+                client.send_socket_mode_response(response)
+                # Open a welcome modal
+                client.web_client.views_open(
+                    trigger_id=req.payload["trigger_id"],
+                    view={
+                        "type": "modal",
+                        "callback_id": "hello-modal",
+                        "title": {
+                            "type": "plain_text",
+                            "text": "Greetings!"
+                        },
+                        "submit": {
+                            "type": "plain_text",
+                            "text": "Good Bye"
+                        },
+                        "blocks": [
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "Hello!"
+                                }
+                            }
+                        ]
+                    }
+                )
+
+        if req.type == "interactive" \
+            and req.payload.get("type") == "view_submission":
+            if req.payload["view"]["callback_id"] == "hello-modal":
+                # Acknowledge the request and close the modal
+                response = SocketModeResponse(envelope_id=req.envelope_id)
+                client.send_socket_mode_response(response)
 
     # Add a new listener to receive messages from Slack
     # You can add more listeners like this
@@ -136,6 +189,44 @@ To use the asyncio-based ones such as aiohttp, your app needs to be compatible w
                         channel=req.payload["event"]["channel"],
                         timestamp=req.payload["event"]["ts"],
                     )
+            if req.type == "interactive" \
+                and req.payload.get("type") == "shortcut":
+                if req.payload["callback_id"] == "hello-shortcut":
+                    # Acknowledge the request
+                    response = SocketModeResponse(envelope_id=req.envelope_id)
+                    await client.send_socket_mode_response(response)
+                    # Open a welcome modal
+                    await client.web_client.views_open(
+                        trigger_id=req.payload["trigger_id"],
+                        view={
+                            "type": "modal",
+                            "callback_id": "hello-modal",
+                            "title": {
+                                "type": "plain_text",
+                                "text": "Greetings!"
+                            },
+                            "submit": {
+                                "type": "plain_text",
+                                "text": "Good Bye"
+                            },
+                            "blocks": [
+                                {
+                                    "type": "section",
+                                    "text": {
+                                        "type": "mrkdwn",
+                                        "text": "Hello!"
+                                    }
+                                }
+                            ]
+                        }
+                    )
+
+            if req.type == "interactive" \
+                and req.payload.get("type") == "view_submission":
+                if req.payload["view"]["callback_id"] == "hello-modal":
+                    # Acknowledge the request and close the modal
+                    response = SocketModeResponse(envelope_id=req.envelope_id)
+                    await client.send_socket_mode_response(response)
 
         # Add a new listener to receive messages from Slack
         # You can add more listeners like this
