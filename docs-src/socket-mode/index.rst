@@ -63,7 +63,7 @@ You will be using the app-level token that starts with ``xapp-`` prefix. Note th
                     timestamp=req.payload["event"]["ts"],
                 )
         if req.type == "interactive" \
-            and req.payload["type"] == "shortcut":
+            and req.payload.get("type") == "shortcut":
             if req.payload["callback_id"] == "hello-shortcut":
                 # Acknowledge the request
                 response = SocketModeResponse(envelope_id=req.envelope_id)
@@ -95,7 +95,7 @@ You will be using the app-level token that starts with ``xapp-`` prefix. Note th
                 )
 
         if req.type == "interactive" \
-            and req.payload["type"] == "view_submission":
+            and req.payload.get("type") == "view_submission":
             if req.payload["view"]["callback_id"] == "hello-modal":
                 # Acknowledge the request and close the modal
                 response = SocketModeResponse(envelope_id=req.envelope_id)
@@ -190,7 +190,7 @@ To use the asyncio-based ones such as aiohttp, your app needs to be compatible w
                         timestamp=req.payload["event"]["ts"],
                     )
             if req.type == "interactive" \
-                and req.payload["type"] == "shortcut":
+                and req.payload.get("type") == "shortcut":
                 if req.payload["callback_id"] == "hello-shortcut":
                     # Acknowledge the request
                     response = SocketModeResponse(envelope_id=req.envelope_id)
@@ -222,7 +222,7 @@ To use the asyncio-based ones such as aiohttp, your app needs to be compatible w
                     )
 
             if req.type == "interactive" \
-                and req.payload["type"] == "view_submission":
+                and req.payload.get("type") == "view_submission":
                 if req.payload["view"]["callback_id"] == "hello-modal":
                     # Acknowledge the request and close the modal
                     response = SocketModeResponse(envelope_id=req.envelope_id)
