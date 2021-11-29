@@ -5,7 +5,8 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        
+        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
         <title>SCIM API Client &mdash; Python Slack SDK</title>
 
         <!-- Google Tag Manager -->
@@ -210,13 +211,13 @@
                 <div class="col span_3_of_4">
                     <!-- <div class="section-title">SCIM API Client</div> -->
                     <div class="card">
-  <div class="section" id="scim-api-client">
+  <section id="scim-api-client">
 <h1>SCIM API Client<a class="headerlink" href="#scim-api-client" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://api.slack.com/scim">SCIM API</a> is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.</p>
 <p><a class="reference external" href="http://www.simplecloud.info/">SCIM (System for Cross-domain Identity Management)</a> is supported by a myriad of services. It behaves slightly differently from other Slack APIs.</p>
 <p>Refer to <a class="reference external" href="https://api.slack.com/scim">the API document</a> for more details.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
-<div class="section" id="scimclient">
+<section id="scimclient">
 <h2>SCIMClient<a class="headerlink" href="#scimclient" title="Permalink to this headline">¶</a></h2>
 <p>An OAuth token with <a class="reference external" href="https://api.slack.com/scopes/admin">the admin scope</a> is required to access the SCIM API.</p>
 <p>To fetch provisioned user data, you can use the <code class="docutils literal notranslate"><span class="pre">search_users</span></code> method in the client.</p>
@@ -276,8 +277,8 @@
 <span class="n">delete_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">delete_user</span><span class="p">(</span><span class="n">user_to_update</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="asyncscimclient">
+</section>
+<section id="asyncscimclient">
 <h2>AsyncSCIMClient<a class="headerlink" href="#asyncscimclient" title="Permalink to this headline">¶</a></h2>
 <p>Lastly, if you are keen to use asyncio for SCIM API calls, we offer <code class="docutils literal notranslate"><span class="pre">AsyncSCIMClient</span></code> for it. This client relies on aiohttp library.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
@@ -293,9 +294,9 @@
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="retryhandler">
+<section id="retryhandler">
 <h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this headline">¶</a></h2>
 <p>With the default settings, only <code class="docutils literal notranslate"><span class="pre">ConnectionErrorRetryHandler</span></code> with its default configuration (=only one retry in the manner of <a class="reference external" href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">exponential backoff and jitter</a>) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).</p>
 <p>To use other retry handlers, you can pass a list of <code class="docutils literal notranslate"><span class="pre">RetryHandler</span></code> to the client constructor. For instance, you can add the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> this way:</p>
@@ -343,8 +344,8 @@
 </pre></div>
 </div>
 <p>For asyncio apps, <code class="docutils literal notranslate"><span class="pre">Async</span></code> prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py">the source code</a> and <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py">tests</a> for more details.</p>
-</div>
-</div>
+</section>
+</section>
 
 
                         <div class="clear_both large_bottom_margin"></div>

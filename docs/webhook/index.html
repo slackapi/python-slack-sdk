@@ -5,7 +5,8 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        
+        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
         <title>Webhook Client &mdash; Python Slack SDK</title>
 
         <!-- Google Tag Manager -->
@@ -210,11 +211,11 @@
                 <div class="col span_3_of_4">
                     <!-- <div class="section-title">Webhook Client</div> -->
                     <div class="card">
-  <div class="section" id="webhook-client">
+  <section id="webhook-client">
 <h1>Webhook Client<a class="headerlink" href="#webhook-client" title="Permalink to this headline">¶</a></h1>
 <p>You can use <code class="docutils literal notranslate"><span class="pre">slack_sdk.webhook.WebhookClient</span></code> for <a class="reference external" href="https://api.slack.com/messaging/webhooks">Incoming Webhooks</a> and message responses using <a class="reference external" href="https://api.slack.com/interactivity/handling#message_responses">response_url in payloads</a>.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
-<div class="section" id="id1">
+<section id="id1">
 <h2>Incoming Webhooks<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>To use <a class="reference external" href="https://api.slack.com/messaging/webhooks">Incoming Webhooks</a>, just calling <code class="docutils literal notranslate"><span class="pre">WebhookClient(url)#send(payload)</span></code> method works for you. The call posts a message in a channel associated with the webhook URL.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.webhook</span> <span class="kn">import</span> <span class="n">WebhookClient</span>
@@ -244,8 +245,8 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="response-url">
+</section>
+<section id="response-url">
 <h2>response_url<a class="headerlink" href="#response-url" title="Permalink to this headline">¶</a></h2>
 <p>User actions in channels generates a <a class="reference external" href="https://api.slack.com/interactivity/handling#message_responses">response_url</a> and includes the URL in its payload. You can use <code class="docutils literal notranslate"><span class="pre">WebhookClient</span></code> to send a message via the <code class="docutils literal notranslate"><span class="pre">response_url</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -283,8 +284,8 @@
     <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="asyncwebhookclient">
+</section>
+<section id="asyncwebhookclient">
 <h2>AsyncWebhookClient<a class="headerlink" href="#asyncwebhookclient" title="Permalink to this headline">¶</a></h2>
 <p>The webhook client is available in asynchronous programming using the standard <a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a> library, too. You use <code class="docutils literal notranslate"><span class="pre">AsyncWebhookClient</span></code> instead for it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">AsyncWebhookClient</span></code> internally relies on <a class="reference external" href="https://docs.aiohttp.org/en/stable/">AIOHTTP</a> library but it is an optional dependency. So, to use this class, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">aiohttp</span></code> beforehand.</p>
@@ -304,9 +305,9 @@
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">send_message_via_webhook</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="retryhandler">
+<section id="retryhandler">
 <h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this headline">¶</a></h2>
 <p>With the default settings, only <code class="docutils literal notranslate"><span class="pre">ConnectionErrorRetryHandler</span></code> with its default configuration (=only one retry in the manner of <a class="reference external" href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">exponential backoff and jitter</a>) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).</p>
 <p>To use other retry handlers, you can pass a list of <code class="docutils literal notranslate"><span class="pre">RetryHandler</span></code> to the client constructor. For instance, you can add the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> this way:</p>
@@ -354,8 +355,8 @@
 </pre></div>
 </div>
 <p>For asyncio apps, <code class="docutils literal notranslate"><span class="pre">Async</span></code> prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py">the source code</a> and <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py">tests</a> for more details.</p>
-</div>
-</div>
+</section>
+</section>
 
 
                         <div class="clear_both large_bottom_margin"></div>

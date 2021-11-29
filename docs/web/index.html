@@ -5,7 +5,8 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        
+        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
         <title>Web Client &mdash; Python Slack SDK</title>
 
         <!-- Google Tag Manager -->
@@ -210,13 +211,13 @@
                 <div class="col span_3_of_4">
                     <!-- <div class="section-title">Web Client</div> -->
                     <div class="card">
-  <div class="section" id="web-client">
+  <section id="web-client">
 <h1>Web Client<a class="headerlink" href="#web-client" title="Permalink to this headline">¶</a></h1>
 <p>The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations we provide out of the box.</p>
 <p>Access Slack’s API methods requires an OAuth token – see the <a class="reference external" href="../installation/index.html">Tokens &amp; Authentication</a> section for more on how Slack uses OAuth tokens as well as best practices.</p>
 <p><a class="reference external" href="https://api.slack.com/methods">Each of these API methods</a> is fully documented on our developer site at <a class="reference external" href="https://api.slack.com/">https://api.slack.com/</a></p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
-<div class="section" id="messaging">
+<section id="messaging">
 <h2>Messaging<a class="headerlink" href="#messaging" title="Permalink to this headline">¶</a></h2>
 <p><strong>Sending a message</strong></p>
 <p>One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
@@ -360,9 +361,9 @@ deletion of threaded replies works the same as regular messages.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/reactions.add">reactions.add</a> and <a class="reference external" href="https://api.slack.com/methods/reactions.remove">reactions.remove</a> for more info.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="files">
+<section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
 <p><strong>Uploading files</strong></p>
 <p>You can upload files onto Slack and share the file with people in channels. Note that your app’s bot user needs to be in the channel (otherwise, you will get either <code class="docutils literal notranslate"><span class="pre">not_in_channel</span></code> or <code class="docutils literal notranslate"><span class="pre">channel_not_found</span></code> error code).</p>
@@ -385,9 +386,9 @@ deletion of threaded replies works the same as regular messages.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/files.remote.add">files.remote.add</a> for more info.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="conversations">
+<section id="conversations">
 <h2>Conversations<a class="headerlink" href="#conversations" title="Permalink to this headline">¶</a></h2>
 <p>The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack; public channels, private channels, direct messages, group direct messages, and our newest channel type, Shared Channels.</p>
 <p>See <a class="reference external" href="https://api.slack.com/docs/conversations-api">Conversations API</a> docs for more info.</p>
@@ -489,9 +490,9 @@ deletion of threaded replies works the same as regular messages.</p>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/conversations.leave">conversations.leave</a> for more info.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="modals">
+<section id="modals">
 <h2>Modals<a class="headerlink" href="#modals" title="Permalink to this headline">¶</a></h2>
 <p><strong>Opening a modal</strong></p>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
@@ -649,9 +650,9 @@ deletion of threaded replies works the same as regular messages.</p>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/methods/views.update">views.update</a> for more info.</p>
 <p>If you want to push a new view onto the modal instead of updating an existing view, reference the <a class="reference external" href="https://api.slack.com/methods/views.push">views.push</a> documentation.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="rate-limits">
+<section id="rate-limits">
 <h2>Rate Limits<a class="headerlink" href="#rate-limits" title="Permalink to this headline">¶</a></h2>
 <p>When posting messages to a channel, Slack allows applications to send no more than one message per channel per second. We allow bursts over that limit for short periods. However, if your app continues to exceed the limit over a longer period of time it will be rate limited. Different API methods have other rate limits – be sure to <a class="reference external" href="https://api.slack.com/docs/rate-limits">check the limits</a> and test that your application has a graceful fallback if it should hit those limits.</p>
 <p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error, a JSON object containing the number of calls you have been making, and a Retry-After header containing the number of seconds until you can retry.</p>
@@ -692,7 +693,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <p>Since v3.9.0, the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> is available as an easier way to do the retries for rate limited errors. Refer to the RetryHandler section in this page for more details.</p>
 <p>To learn the Slack rate limits in general, see the documentation on <a class="reference external" href="https://api.slack.com/docs/rate-limits">Rate Limiting</a>.</p>
 <hr class="docutils" />
-<div class="section" id="calling-any-api-methods">
+<section id="calling-any-api-methods">
 <h3>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this headline">¶</a></h3>
 <p>This library covers all the public endpoints as the methods in <code class="docutils literal notranslate"><span class="pre">WebClient</span></code>. That said, you may see a bit delay of the library release. When you’re in a hurry, you can directly use <code class="docutils literal notranslate"><span class="pre">api_call</span></code> method as below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -706,10 +707,10 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Hello world!&quot;</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="asyncwebclient">
+<section id="asyncwebclient">
 <h2>AsyncWebClient<a class="headerlink" href="#asyncwebclient" title="Permalink to this headline">¶</a></h2>
 <p>All the API methods are available in asynchronous programming using the standard <a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a> library. You use <code class="docutils literal notranslate"><span class="pre">AsyncWebClient</span></code> instead for it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">AsyncWebClient</span></code> internally relies on <a class="reference external" href="https://docs.aiohttp.org/en/stable/">AIOHTTP</a> library but it is an optional dependency. So, to use this class, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">aiohttp</span></code> beforehand.</p>
@@ -740,9 +741,9 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">post_message</span><span class="p">())</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="retryhandler">
+<section id="retryhandler">
 <h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this headline">¶</a></h2>
 <p>With the default settings, only <code class="docutils literal notranslate"><span class="pre">ConnectionErrorRetryHandler</span></code> with its default configuration (=only one retry in the manner of <a class="reference external" href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">exponential backoff and jitter</a>) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).</p>
 <p>To use other retry handlers, you can pass a list of <code class="docutils literal notranslate"><span class="pre">RetryHandler</span></code> to the client constructor. For instance, you can add the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> this way:</p>
@@ -790,8 +791,8 @@ deletion of threaded replies works the same as regular messages.</p>
 </pre></div>
 </div>
 <p>For asyncio apps, <code class="docutils literal notranslate"><span class="pre">Async</span></code> prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py">the source code</a> and <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py">tests</a> for more details.</p>
-</div>
-</div>
+</section>
+</section>
 
 
                         <div class="clear_both large_bottom_margin"></div>

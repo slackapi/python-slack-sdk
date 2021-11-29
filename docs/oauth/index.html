@@ -5,7 +5,8 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        
+        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
         <title>OAuth Modules &mdash; Python Slack SDK</title>
 
         <!-- Google Tag Manager -->
@@ -210,12 +211,12 @@
                 <div class="col span_3_of_4">
                     <!-- <div class="section-title">OAuth Modules</div> -->
                     <div class="card">
-  <div class="section" id="oauth-modules">
+  <section id="oauth-modules">
 <h1>OAuth Modules<a class="headerlink" href="#oauth-modules" title="Permalink to this headline">¶</a></h1>
 <p>This section explains the details about how to handle Slack’s OAuth flow.</p>
 <p>If you’re looking for a much easier way to do the same, check <a class="reference external" href="https://github.com/slackapi/bolt-python">Bolt for Python</a>, which is a full-stack Slack App framework. With Bolt, you don’t need to implement most of the following code on your own.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
-<div class="section" id="app-installation-flow">
+<section id="app-installation-flow">
 <h2>App Installation Flow<a class="headerlink" href="#app-installation-flow" title="Permalink to this headline">¶</a></h2>
 <p>OAuth lets a user in any Slack workspace install your app. At the end of OAuth, your app gains an access token. Refer to <a class="reference external" href="https://api.slack.com/authentication/oauth-v2">Installing with OAuth</a> for details.</p>
 <p>Python Slack SDK provides the necessary modules for building the OAuth flow.</p>
@@ -349,8 +350,8 @@
     <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Something is wrong with the installation (error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="token-lookup">
+</section>
+<section id="token-lookup">
 <h2>Token Lookup<a class="headerlink" href="#token-lookup" title="Permalink to this headline">¶</a></h2>
 <p>Now that your Flask app can choose the right access token for incoming event requests, let’s add the Slack event handler endpoint.</p>
 <p>You can use the same <code class="docutils literal notranslate"><span class="pre">InstallationStore</span></code> in the Slack event handler.</p>
@@ -441,8 +442,8 @@
 </pre></div>
 </div>
 <p>Again, if you’re looking for an easier solution, take a look at <a class="reference external" href="https://github.com/slackapi/bolt-python">Bolt for Python</a>. With Bolt, you don’t need to implement most of the above code on your own.</p>
-</div>
-<div class="section" id="sign-in-with-slack">
+</section>
+<section id="sign-in-with-slack">
 <h2>Sign in with Slack<a class="headerlink" href="#sign-in-with-slack" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://api.slack.com/authentication/sign-in-with-slack">Sign in with Slack</a> helps users log into your service using their Slack profile. The platform feature was recently upgraded to be compatible with the standard <a class="reference external" href="https://openid.net/connect/">OpenID Connect</a> specification. With slack-sdk v3.9+, implementing the auth flow is much easier.</p>
 <p>When you create a new Slack app, set the following user scopes:</p>
@@ -465,8 +466,8 @@
 <p><strong>openid.connect.* API calls</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">WebClient</span></code> can perform <code class="docutils literal notranslate"><span class="pre">openid.connect.token</span></code> API calls with given <code class="docutils literal notranslate"><span class="pre">code</span></code> parameter</p>
 <p>If you want to know the way with asyncio, check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/sanic_example.py">the Sanic app example</a> in the same directory.</p>
-</div>
-</div>
+</section>
+</section>
 
 
                         <div class="clear_both large_bottom_margin"></div>

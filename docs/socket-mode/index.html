@@ -5,7 +5,8 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        
+        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
         <title>Socket Mode Client &mdash; Python Slack SDK</title>
 
         <!-- Google Tag Manager -->
@@ -210,16 +211,47 @@
                 <div class="col span_3_of_4">
                     <!-- <div class="section-title">Socket Mode Client</div> -->
                     <div class="card">
-  <div class="section" id="socket-mode-client">
+  <section id="socket-mode-client">
 <h1>Socket Mode Client<a class="headerlink" href="#socket-mode-client" title="Permalink to this headline">¶</a></h1>
 <p>Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP. You can use  <code class="docutils literal notranslate"><span class="pre">slack_sdk.socket_mode.SocketModeClient</span></code> for managing <a class="reference external" href="https://api.slack.com/apis/connections/socket">Socket Mode</a> connections and performing interactions with Slack.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
-<div class="section" id="socketmodeclient">
+<section id="socketmodeclient">
 <h2>SocketModeClient<a class="headerlink" href="#socketmodeclient" title="Permalink to this headline">¶</a></h2>
 <p>First off, let’s start with enabling Socket Mode. Visit <a class="reference external" href="http://api.slack.com/apps">the Slack App configuration page</a>, choose the app you’re working on, and go to <strong>Settings</strong> on the left pane. There are a few things to do on the page.</p>
-<ul class="simple">
+<ul>
 <li><p>Go to <strong>Settings</strong> &gt; <strong>Basic Information</strong>, then add a new <strong>App-Level Token</strong> with the <cite>connections:write</cite> scope</p></li>
 <li><p>Go to <strong>Settings</strong> &gt; <strong>Socket Mode</strong>, then turn on <strong>Enable Socket Mode</strong></p></li>
+<li><p>Go to <strong>Features</strong> &gt; <strong>App Home</strong>, look under <strong>Show Tabs</strong> &gt; <strong>Messages Tab</strong> then turn on <strong>Allow users to send Slash commands and messages from the messages tab</strong></p></li>
+<li><p>Go to <strong>Features</strong> &gt; <strong>Event Subscriptions</strong>, then turn on <strong>Enable Events</strong></p>
+<blockquote>
+<div><ul>
+<li><p>On the same page expand <strong>Subscribe to bot events</strong> click <strong>Add Bot User Event</strong> and select <strong>message.im</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This will allow the bot to get events for messages that are sent in 1:1 direct messages with itself</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Go to <strong>Features</strong> &gt; <strong>Interactivity and Shortcuts</strong>, look under <em>Shortcuts*</em> click <strong>Create a New Shortcut</strong> then create a new Global shortcut with the following details</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Name</strong>: Hello</p></li>
+<li><p><strong>Short Description</strong>: Receive a Greeting</p></li>
+<li><p><strong>Callback ID</strong>: hello-shortcut</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Go to <strong>Features</strong> &gt; <strong>OAuth &amp; Permissions</strong> under <strong>Scopes</strong> &gt; <strong>Bot Token Scopes</strong> click <strong>Add an OAuth Scope</strong> and select <strong>reactions:write</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This will allow the bot to add emoji reactions (Reacji’s) to messages</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Go to <strong>Features</strong> &gt; <strong>Oauth &amp; Permissions</strong> under <strong>OAuth Tokens for Your Workspace</strong> click <strong>Install to Workspace</strong></p></li>
 </ul>
 <p>You will be using the app-level token that starts with <code class="docutils literal notranslate"><span class="pre">xapp-</span></code> prefix. Note that the token here is not the ones starting with either <code class="docutils literal notranslate"><span class="pre">xoxb-</span></code> or <code class="docutils literal notranslate"><span class="pre">xoxp-</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -251,6 +283,44 @@
                 <span class="n">channel</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">][</span><span class="s2">&quot;channel&quot;</span><span class="p">],</span>
                 <span class="n">timestamp</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">][</span><span class="s2">&quot;ts&quot;</span><span class="p">],</span>
             <span class="p">)</span>
+    <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;interactive&quot;</span> \
+        <span class="ow">and</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hello-shortcut&quot;</span><span class="p">:</span>
+            <span class="c1"># Acknowledge the request</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">SocketModeResponse</span><span class="p">(</span><span class="n">envelope_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">envelope_id</span><span class="p">)</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">send_socket_mode_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="c1"># Open a welcome modal</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">web_client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+                <span class="n">trigger_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">],</span>
+                <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;hello-modal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Greetings!&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Good Bye&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello!&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;interactive&quot;</span> \
+        <span class="ow">and</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hello-modal&quot;</span><span class="p">:</span>
+            <span class="c1"># Acknowledge the request and close the modal</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">SocketModeResponse</span><span class="p">(</span><span class="n">envelope_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">envelope_id</span><span class="p">)</span>
+            <span class="n">client</span><span class="o">.</span><span class="n">send_socket_mode_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
 <span class="c1"># Add a new listener to receive messages from Slack</span>
 <span class="c1"># You can add more listeners like this</span>
@@ -262,9 +332,9 @@
 <span class="n">Event</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="supported-libraries">
+<section id="supported-libraries">
 <h2>Supported Libraries<a class="headerlink" href="#supported-libraries" title="Permalink to this headline">¶</a></h2>
 <p>This SDK offers its own simple WebSocket client covering only required features for Socket Mode. In addition to that, <code class="docutils literal notranslate"><span class="pre">SocketModeClient</span></code> is implemented with a few 3rd party open-source libraries. If you prefer any of the following, you can use it over the built-in one.</p>
 <table class="docutils align-default">
@@ -303,9 +373,9 @@
 </pre></div>
 </div>
 <p>You can pass a few additional arguments that are specific to the library. Apart from that, all the functionalities work in the same way with the built-in version.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="asyncio-based-libraries">
+<section id="asyncio-based-libraries">
 <h2>Asyncio Based Libraries<a class="headerlink" href="#asyncio-based-libraries" title="Permalink to this headline">¶</a></h2>
 <p>To use the asyncio-based ones such as aiohttp, your app needs to be compatible with asyncio’s async/await programming model. The <cite>SocketModeClient</cite> only works with <cite>AsyncWebClient</cite> and async listeners.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
@@ -342,6 +412,44 @@
                     <span class="n">channel</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">][</span><span class="s2">&quot;channel&quot;</span><span class="p">],</span>
                     <span class="n">timestamp</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">][</span><span class="s2">&quot;ts&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;interactive&quot;</span> \
+            <span class="ow">and</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;shortcut&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hello-shortcut&quot;</span><span class="p">:</span>
+                <span class="c1"># Acknowledge the request</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">SocketModeResponse</span><span class="p">(</span><span class="n">envelope_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">envelope_id</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send_socket_mode_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+                <span class="c1"># Open a welcome modal</span>
+                <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">web_client</span><span class="o">.</span><span class="n">views_open</span><span class="p">(</span>
+                    <span class="n">trigger_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;trigger_id&quot;</span><span class="p">],</span>
+                    <span class="n">view</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;modal&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callback_id&quot;</span><span class="p">:</span> <span class="s2">&quot;hello-modal&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Greetings!&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;submit&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;plain_text&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Good Bye&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;blocks&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;mrkdwn&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello!&quot;</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                        <span class="p">]</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;interactive&quot;</span> \
+            <span class="ow">and</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;view_submission&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">][</span><span class="s2">&quot;callback_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hello-modal&quot;</span><span class="p">:</span>
+                <span class="c1"># Acknowledge the request and close the modal</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">SocketModeResponse</span><span class="p">(</span><span class="n">envelope_id</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">envelope_id</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">send_socket_mode_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
     <span class="c1"># Add a new listener to receive messages from Slack</span>
     <span class="c1"># You can add more listeners like this</span>
@@ -355,8 +463,8 @@
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
                         <div class="clear_both large_bottom_margin"></div>
