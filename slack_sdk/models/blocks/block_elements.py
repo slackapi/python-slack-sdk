@@ -176,7 +176,7 @@ class InteractiveElement(BlockElement):
 class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
     placeholder_max_length = 150
 
-    attributes = {"type", "action_id", "placeholder", "confirm"}
+    attributes = {"type", "action_id", "placeholder", "confirm", "focus_on_load"}
 
     @property
     def subtype(self) -> Optional[str]:
@@ -190,6 +190,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """InteractiveElement that is usable in input blocks
@@ -206,6 +207,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
+        self.focus_on_load = focus_on_load
 
     @JsonValidator(
         f"placeholder attribute cannot exceed {placeholder_max_length} characters"
@@ -365,6 +367,7 @@ class CheckboxesElement(InputInteractiveElement):
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """A checkbox group that allows a user to choose multiple items from a list of possible options.
@@ -380,11 +383,14 @@ class CheckboxesElement(InputInteractiveElement):
                 These options will be selected when the checkbox group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the checkboxes in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -411,6 +417,7 @@ class DatePickerElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_date: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -429,12 +436,15 @@ class DatePickerElement(InputInteractiveElement):
                 This should be in the format YYYY-MM-DD.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a date is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -470,6 +480,7 @@ class TimePickerElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_time: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -491,12 +502,15 @@ class TimePickerElement(InputInteractiveElement):
                 and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a time is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -581,6 +595,7 @@ class StaticSelectElement(InputInteractiveElement):
         option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -603,12 +618,15 @@ class StaticSelectElement(InputInteractiveElement):
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -659,6 +677,7 @@ class StaticMultiSelectElement(InputInteractiveElement):
         initial_options: Optional[Sequence[Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -684,12 +703,15 @@ class StaticMultiSelectElement(InputInteractiveElement):
                 that appears before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -739,6 +761,7 @@ class SelectElement(InputInteractiveElement):
         option_groups: Optional[Sequence[OptionGroup]] = None,
         initial_option: Optional[Option] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -761,12 +784,15 @@ class SelectElement(InputInteractiveElement):
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -816,6 +842,7 @@ class ExternalDataSelectElement(InputInteractiveElement):
         initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
         min_query_length: Optional[int] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -840,12 +867,15 @@ class ExternalDataSelectElement(InputInteractiveElement):
                 The default value is 3.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -871,6 +901,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -896,12 +927,15 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -929,6 +963,7 @@ class UserSelectElement(InputInteractiveElement):
         action_id: Optional[str] = None,
         initial_user: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -946,12 +981,15 @@ class UserSelectElement(InputInteractiveElement):
             initial_user: The user ID of any valid user to be pre-selected when the menu loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -973,6 +1011,7 @@ class UserMultiSelectElement(InputInteractiveElement):
         initial_users: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -992,12 +1031,15 @@ class UserMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1078,6 +1120,7 @@ class ConversationSelectElement(InputInteractiveElement):
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -1103,12 +1146,15 @@ class ConversationSelectElement(InputInteractiveElement):
             default_to_current_conversation: Pre-populates the select menu with the conversation
                 that the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1142,6 +1188,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -1166,12 +1213,15 @@ class ConversationMultiSelectElement(InputInteractiveElement):
             default_to_current_conversation: Pre-populates the select menu with the conversation that
                 the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1201,6 +1251,7 @@ class ChannelSelectElement(InputInteractiveElement):
         initial_channel: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -1222,12 +1273,15 @@ class ChannelSelectElement(InputInteractiveElement):
                 When set to true, the view_submission payload from the menu's parent view will contain a response_url.
                 This response_url can be used for message responses.
                 The target channel for the message will be determined by the value of this select menu
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1250,6 +1304,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         initial_channels: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -1270,12 +1325,15 @@ class ChannelMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1313,6 +1371,7 @@ class PlainTextInputElement(InputInteractiveElement):
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """
@@ -1338,11 +1397,14 @@ class PlainTextInputElement(InputInteractiveElement):
                 they will receive an error.
             dispatch_action_config: A dispatch configuration object that determines when
                 during text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1372,6 +1434,7 @@ class RadioButtonsElement(InputInteractiveElement):
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         """A radio button group that allows a user to choose one item from a list of possible options.
@@ -1387,11 +1450,14 @@ class RadioButtonsElement(InputInteractiveElement):
                 This option will be selected when the radio button group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the radio buttons in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         """
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
