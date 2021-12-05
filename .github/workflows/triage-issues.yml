@@ -26,7 +26,7 @@ jobs:
           stale-issue-label: auto-triage-stale
           stale-issue-message: 👋 It looks like this issue has been open for 30 days with no activity. We'll mark this as stale for now, and wait 10 days for an update or for further comment before closing this issue out.
           close-issue-message: As this issue has been inactive for more than one month, we will be closing it. Thank you to all the participants! If you would like to raise a related issue, please create a new issue which includes your specific details and references this issue number.
-          exempt-issue-labels: auto-triage-skip
+          exempt-issue-labels: auto-triage-skip,bug,discussion,docs,enhancement,security,area:examples,dependency-side-issue,server-side-issue,tests
           exempt-all-milestones: true
           remove-stale-when-updated: true
           enable-statistics: true
