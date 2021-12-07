@@ -7,7 +7,7 @@ name: Close stale issues and PRs
 on: 
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 0 * * 1'
   
 permissions:
   issues: write
@@ -24,7 +24,7 @@ jobs:
           days-before-pr-stale: -1
           days-before-pr-close: -1
           stale-issue-label: auto-triage-stale
-          stale-issue-message: 👋 It looks like this issue has been open for 30 days with no activity. We'll mark this as stale for now, and wait 10 days for an update or for further comment before closing this issue out.
+          stale-issue-message: 👋 It looks like this issue has been open for 30 days with no activity. We'll mark this as stale for now, and wait 10 days for an update or for further comment before closing this issue out. If you think this issue needs to be prioritized, please comment to get the thread going again! Maintainers also review issues marked as stale on a regular basis and comment or adjust status if the issue needs to be reprioritized.
           close-issue-message: As this issue has been inactive for more than one month, we will be closing it. Thank you to all the participants! If you would like to raise a related issue, please create a new issue which includes your specific details and references this issue number.
           exempt-issue-labels: auto-triage-skip
           exempt-all-milestones: true
