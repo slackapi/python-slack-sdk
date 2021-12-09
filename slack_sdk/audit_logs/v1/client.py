@@ -140,6 +140,7 @@ class AuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
+        cursor: Optional[str] = None,
         additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
@@ -160,6 +161,7 @@ class AuditLogsClient:
             action: Name of the action.
             actor: User ID who initiated the action.
             entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
+            cursor: The next page cursor of pagination
             additional_query_params: Add anything else if you need to use the ones this library does not support
             headers: Additional request headers
 
@@ -173,6 +175,7 @@ class AuditLogsClient:
             "action": action,
             "actor": actor,
             "entity": entity,
+            "cursor": cursor,
         }
         if additional_query_params is not None:
             query_params.update(additional_query_params)
@@ -257,11 +260,13 @@ class AuditLogsClient:
                 # read the response body here
                 charset = e.headers.get_content_charset() or "utf-8"
                 response_body: str = e.read().decode(charset)
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
                 resp = AuditLogsResponse(
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=dict(e.headers.items()),
+                    headers=response_headers,
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)

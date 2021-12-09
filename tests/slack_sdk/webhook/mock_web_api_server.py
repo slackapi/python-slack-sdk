@@ -52,7 +52,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
             if self.path == "/ratelimited":
                 self.send_response(429)
-                self.send_header("Retry-After", 1)
+                self.send_header("retry-after", 1)
                 self.set_common_headers()
                 self.wfile.write("".encode("utf-8"))
                 return
