@@ -3,6 +3,7 @@ from typing import Dict, Any, Optional
 
 from slack_sdk.audit_logs.v1.logs import LogsResponse
 
+
 # TODO: Unlike WebClient's responses, this class has not yet provided __iter__ method
 class AuditLogsResponse:
     url: str
