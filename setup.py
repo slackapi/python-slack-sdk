@@ -24,8 +24,8 @@ validate_dependencies = [
     "Werkzeug<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
-    "flake8>=3,<4",
-    "black==21.9b0",
+    "flake8>=4,<5",
+    "black==21.12b0",
     "psutil>=5,<6",
     "databases>=0.3",
     # used only under slack_sdk/*_store
@@ -34,7 +34,7 @@ validate_dependencies = [
     "moto<2",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==21.11b1",
+    "black==21.12b0",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
