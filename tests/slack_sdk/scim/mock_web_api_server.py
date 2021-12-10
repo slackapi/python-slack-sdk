@@ -57,7 +57,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                     return
                 if "ratelimited" in pattern:
                     self.send_response(429)
-                    self.send_header("Retry-After", 1)
+                    self.send_header("retry-after", 1)
                     self.set_common_headers()
                     self.wfile.write(
                         """{"ok": false, "error": "ratelimited"}""".encode("utf-8")

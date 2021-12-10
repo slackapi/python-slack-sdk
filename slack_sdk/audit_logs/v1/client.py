@@ -260,11 +260,13 @@ class AuditLogsClient:
                 # read the response body here
                 charset = e.headers.get_content_charset() or "utf-8"
                 response_body: str = e.read().decode(charset)
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
                 resp = AuditLogsResponse(
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=dict(e.headers.items()),
+                    headers=response_headers,
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
