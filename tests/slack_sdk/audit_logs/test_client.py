@@ -23,6 +23,15 @@ class TestAuditLogsClient(unittest.TestCase):
 
         self.assertEqual(resp.typed_body.entries[0].id, "xxx-yyy-zzz-111")
 
+    def test_logs_pagination(self):
+        resp: AuditLogsResponse = self.client.logs(
+            limit=1, action="user_login", cursor="xxxxxxx"
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertIsNotNone(resp.body.get("entries"))
+
+        self.assertEqual(resp.typed_body.entries[0].id, "xxx-yyy-zzz-111")
+
     def test_actions(self):
         resp: AuditLogsResponse = self.client.actions()
         self.assertEqual(200, resp.status_code)
