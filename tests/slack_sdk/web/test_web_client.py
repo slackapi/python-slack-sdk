@@ -91,6 +91,7 @@ class TestWebClient(unittest.TestCase):
         except err.SlackApiError as slack_api_error:
             self.assertFalse(slack_api_error.response["ok"])
             self.assertEqual(429, slack_api_error.response.status_code)
+            self.assertEqual(1, int(slack_api_error.response.headers["retry-after"]))
             self.assertEqual(1, int(slack_api_error.response.headers["Retry-After"]))
 
     def test_the_api_call_files_argument_creates_the_expected_data(self):

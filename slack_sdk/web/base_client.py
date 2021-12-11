@@ -414,19 +414,25 @@ class BaseClient:
                 return resp
 
             except HTTPError as e:
-                resp = {"status": e.code, "headers": e.headers}
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
+                resp = {"status": e.code, "headers": response_headers}
                 if e.code == 429:
                     # for compatibility with aiohttp
                     if (
-                        "retry-after" not in resp["headers"]
-                        and "Retry-After" in resp["headers"]
+                        "retry-after" not in response_headers
+                        and "Retry-After" in response_headers
                     ):
-                        resp["headers"]["retry-after"] = resp["headers"]["Retry-After"]
+                        response_headers["retry-after"] = response_headers[
+                            "Retry-After"
+                        ]
                     if (
-                        "Retry-After" not in resp["headers"]
-                        and "retry-after" in resp["headers"]
+                        "Retry-After" not in response_headers
+                        and "retry-after" in response_headers
                     ):
-                        resp["headers"]["Retry-After"] = resp["headers"]["retry-after"]
+                        response_headers["Retry-After"] = response_headers[
+                            "retry-after"
+                        ]
 
                 # read the response body here
                 charset = e.headers.get_content_charset() or "utf-8"
@@ -437,7 +443,7 @@ class BaseClient:
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
-                    headers={k: [v] for k, v in e.headers.items()},
+                    headers={k: [v] for k, v in response_headers.items()},
                     data=response_body.encode("utf-8")
                     if response_body is not None
                     else None,
