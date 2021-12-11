@@ -1477,6 +1477,59 @@ class WebClient(BaseClient):
         )
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
+    def apps_notifications_subscriptions_create(
+        self,
+        *,
+        trigger_id: str,
+        channel_id: str,
+        name: str,
+        type: Optional[object] = None,
+        resource_link: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Create a new subscription."""
+        kwargs.update(
+            {
+                "trigger_id": trigger_id,
+                "channel_id": channel_id,
+                "name": name,
+                "type": type,
+                "resource_link": resource_link,
+            }
+        )
+        return self.api_call(
+            "apps.notifications.subscriptions.create",
+            params=kwargs,
+        )
+
+    def apps_notifications_subscriptions_delete(
+        self,
+        *,
+        notification_subscription_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Remove a subscription in Slack"""
+        kwargs.update({"notification_subscription_id": notification_subscription_id})
+        return self.api_call("apps.notifications.subscriptions.delete", params=kwargs)
+
+    def apps_notifications_subscriptions_update(
+        self,
+        *,
+        notification_subscription_id: str,
+        channel_id: str,
+        trigger_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Confirms a subscription has been updated."""
+        kwargs.update(
+            {
+                "notification_subscription_id": notification_subscription_id,
+                "channel_id": channel_id,
+                "trigger_id": trigger_id,
+            }
+        )
+        return self.api_call("apps.notifications.subscriptions.update", params=kwargs)
+
     def apps_uninstall(
         self,
         *,
