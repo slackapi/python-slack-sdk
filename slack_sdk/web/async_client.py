@@ -1531,7 +1531,7 @@ class AsyncWebClient(AsyncBaseClient):
         channel_id: str,
         name: str,
         type: Optional[Dict] = None,
-        resource_link: Optional[Dict] = None,
+        resource_link: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create a new notification subscription."""
@@ -1545,7 +1545,8 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         return await self.api_call(
-            "apps.notifications.subscriptions.create", params=kwargs
+            "apps.notifications.subscriptions.create",
+            params=kwargs,
         )
 
     async def apps_notifications_subscriptions_delete(
@@ -1554,7 +1555,7 @@ class AsyncWebClient(AsyncBaseClient):
         notification_subscription_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Delete a notification subscription."""
+        """Remove a subscription in Slack"""
         kwargs.update({"notification_subscription_id": notification_subscription_id})
         return await self.api_call(
             "apps.notifications.subscriptions.delete", params=kwargs
@@ -1568,7 +1569,7 @@ class AsyncWebClient(AsyncBaseClient):
         trigger_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Confirm a notification subscription is updated."""
+        """Confirm a subscription has been updated."""
         kwargs.update(
             {
                 "notification_subscription_id": notification_subscription_id,
