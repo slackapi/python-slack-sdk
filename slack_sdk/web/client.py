@@ -1483,7 +1483,7 @@ class WebClient(BaseClient):
         trigger_id: str,
         channel_id: str,
         name: str,
-        type: Optional[object] = None,
+        type: Optional[Dict] = None,
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
@@ -1982,6 +1982,7 @@ class WebClient(BaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
+        metadata: Optional[Dict] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends a message to a channel.
