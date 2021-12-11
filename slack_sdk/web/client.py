@@ -2007,6 +2007,7 @@ class WebClient(BaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2099,6 +2100,7 @@ class WebClient(BaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
+        metadata: Optional[Dict] = None,
         **kwargs,
     ) -> SlackResponse:
         """Updates a message in a channel.
@@ -2115,6 +2117,7 @@ class WebClient(BaseClient):
                 "link_names": link_names,
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
