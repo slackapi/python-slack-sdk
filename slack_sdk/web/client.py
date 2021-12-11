@@ -1487,7 +1487,7 @@ class WebClient(BaseClient):
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Create a new subscription."""
+        """Create a new notification subscription."""
         kwargs.update(
             {
                 "trigger_id": trigger_id,
@@ -1520,7 +1520,7 @@ class WebClient(BaseClient):
         trigger_id: str,
         **kwargs,
     ) -> SlackResponse:
-        """Confirms a subscription has been updated."""
+        """Confirm a subscription has been updated."""
         kwargs.update(
             {
                 "notification_subscription_id": notification_subscription_id,

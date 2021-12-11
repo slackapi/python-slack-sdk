@@ -1524,6 +1524,62 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("apps.event.authorizations.list", params=kwargs)
 
+    async def apps_notifications_subscriptions_create(
+        self,
+        *,
+        trigger_id: str,
+        channel_id: str,
+        name: str,
+        type: Optional[Dict] = None,
+        resource_link: Optional[Dict] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create a new notification subscription."""
+        kwargs.update(
+            {
+                "trigger_id": trigger_id,
+                "channel_id": channel_id,
+                "name": name,
+                "type": type,
+                "resource_link": resource_link,
+            }
+        )
+        return await self.api_call(
+            "apps.notifications.subscriptions.create", params=kwargs
+        )
+
+    async def apps_notifications_subscriptions_delete(
+        self,
+        *,
+        notification_subscription_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Delete a notification subscription."""
+        kwargs.update({"notification_subscription_id": notification_subscription_id})
+        return await self.api_call(
+            "apps.notifications.subscriptions.delete", params=kwargs
+        )
+
+    async def apps_notifications_subscriptions_update(
+        self,
+        *,
+        notification_subscription_id: str,
+        channel_id: str,
+        trigger_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Confirm a notification subscription is updated."""
+        kwargs.update(
+            {
+                "notification_subscription_id": notification_subscription_id,
+                "channel_id": channel_id,
+                "trigger_id": trigger_id,
+            }
+        )
+        return await self.api_call(
+            "apps.notifications.subscriptions.update", params=kwargs
+        )
+
     async def apps_uninstall(
         self,
         *,
@@ -1978,6 +2034,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
+        metadata: Optional[Dict] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sends a message to a channel.
@@ -2002,6 +2059,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2094,6 +2152,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
+        metadata: Optional[Dict] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Updates a message in a channel.
@@ -2110,6 +2169,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "link_names": link_names,
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
