@@ -122,6 +122,8 @@ class AsyncBaseSocketModeClient:
             while not self.closed:
                 try:
                     await self.process_message()
+                except asyncio.CancelledError:
+                    raise
                 except Exception as e:
                     self.logger.exception(
                         f"Failed to process a message: {e}, session: {session_id}"
