@@ -1494,7 +1494,7 @@ class LegacyWebClient(LegacyBaseClient):
         trigger_id: str,
         channel_id: str,
         name: str,
-        type: Optional[Dict] = None,
+        type: Optional[Dict[str, Any]] = None,
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -1999,7 +1999,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends a message to a channel.
@@ -2117,7 +2117,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates a message in a channel.

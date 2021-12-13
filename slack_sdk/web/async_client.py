@@ -1530,7 +1530,7 @@ class AsyncWebClient(AsyncBaseClient):
         trigger_id: str,
         channel_id: str,
         name: str,
-        type: Optional[Dict] = None,
+        type: Optional[Dict[str, Any]] = None,
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
