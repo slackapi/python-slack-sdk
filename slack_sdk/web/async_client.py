@@ -2041,7 +2041,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sends a message to a channel.
@@ -2159,7 +2159,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Updates a message in a channel.
