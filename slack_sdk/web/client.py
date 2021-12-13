@@ -1483,11 +1483,13 @@ class WebClient(BaseClient):
         trigger_id: str,
         channel_id: str,
         name: str,
-        type: Optional[Dict] = None,
+        type: Optional[Dict[str, Any]] = None,
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Create a new notification subscription."""
+        """Create a new notification subscription.
+        https://api.slack.com/methods/apps.notifications.subscriptions.create
+        """
         kwargs.update(
             {
                 "trigger_id": trigger_id,
@@ -1508,7 +1510,9 @@ class WebClient(BaseClient):
         notification_subscription_id: str,
         **kwargs,
     ) -> SlackResponse:
-        """Remove a subscription in Slack"""
+        """Remove a subscription in Slack
+        https://api.slack.com/methods/apps.notifications.subscriptions.delete
+        """
         kwargs.update({"notification_subscription_id": notification_subscription_id})
         return self.api_call("apps.notifications.subscriptions.delete", params=kwargs)
 
@@ -1520,7 +1524,9 @@ class WebClient(BaseClient):
         trigger_id: str,
         **kwargs,
     ) -> SlackResponse:
-        """Confirm a subscription has been updated."""
+        """Confirm a subscription has been updated.
+        https://api.slack.com/methods/apps.notifications.subscriptions.update
+        """
         kwargs.update(
             {
                 "notification_subscription_id": notification_subscription_id,
@@ -1982,7 +1988,7 @@ class WebClient(BaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends a message to a channel.
@@ -2100,7 +2106,7 @@ class WebClient(BaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
-        metadata: Optional[Dict] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> SlackResponse:
         """Updates a message in a channel.

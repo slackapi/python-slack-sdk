@@ -1498,7 +1498,9 @@ class LegacyWebClient(LegacyBaseClient):
         resource_link: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create a new notification subscription."""
+        """Create a new notification subscription.
+        https://api.slack.com/methods/apps.notifications.subscriptions.create
+        """
         kwargs.update(
             {
                 "trigger_id": trigger_id,
@@ -1519,7 +1521,9 @@ class LegacyWebClient(LegacyBaseClient):
         notification_subscription_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Remove a subscription in Slack"""
+        """Remove a subscription in Slack
+        https://api.slack.com/methods/apps.notifications.subscriptions.delete
+        """
         kwargs.update({"notification_subscription_id": notification_subscription_id})
         return self.api_call("apps.notifications.subscriptions.delete", params=kwargs)
 
@@ -1531,7 +1535,9 @@ class LegacyWebClient(LegacyBaseClient):
         trigger_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Confirm a subscription has been updated."""
+        """Confirm a subscription has been updated.
+        https://api.slack.com/methods/apps.notifications.subscriptions.update
+        """
         kwargs.update(
             {
                 "notification_subscription_id": notification_subscription_id,
