@@ -55,6 +55,10 @@ class TestWebClientCoverage(unittest.TestCase):
                 "apps.manifest.update",
                 "apps.manifest.validate",
                 "tooling.tokens.rotate",
+                # TODO: Subscribe in Slack APIs
+                "apps.notifications.subscriptions.create",
+                "apps.notifications.subscriptions.delete",
+                "apps.notifications.subscriptions.update",
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
