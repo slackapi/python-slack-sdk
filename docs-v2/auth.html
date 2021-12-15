@@ -5,7 +5,8 @@
       http-equiv="Content-Type"
       content="text/html; charset=utf-8"
     />
-    
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Tokens &amp; Installation &mdash; slackclient (Legacy Python Slack SDK)</title>
 
     <!-- Google Tag Manager -->
@@ -243,9 +244,9 @@
         <div class="col span_3_of_4">
           <!-- <div class="section-title">Tokens &amp; Installation</div> -->
           <div class="card">
-  <div class="section" id="tokens-installation">
+  <section id="tokens-installation">
 <h1>Tokens &amp; Installation<a class="headerlink" href="#tokens-installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="keeping-tokens-safe">
+<section id="keeping-tokens-safe">
 <span id="handling-tokens"></span><h2>Keeping tokens safe<a class="headerlink" href="#keeping-tokens-safe" title="Permalink to this headline">¶</a></h2>
 <p>The OAuth token you use to call the Slack API has access to the data on the workspace where it is installed. Depending on the scopes granted to the token, it potentially has the ability to read and write data. Treat these tokens just as you would a password – don’t publish them, don’t check them into source code, don’t share them with others.</p>
 <p>🚫Avoid this:</p>
@@ -262,16 +263,16 @@
 </pre></div>
 </div>
 <p>For additional information, please see our <a class="reference external" href="https://api.slack.com/authentication/best-practices">Safely Storing Credentials</a> page.</p>
-</div>
-<div class="section" id="single-workspace-install">
+</section>
+<section id="single-workspace-install">
 <h2>Single Workspace Install<a class="headerlink" href="#single-workspace-install" title="Permalink to this headline">¶</a></h2>
 <p>If you’re building an application for a single Slack workspace, there’s no need to build out the entire OAuth flow.</p>
 <p>Once you’ve setup your features, click on the <strong>Install App to Team</strong> button found on the <strong>Install App</strong> page.
 If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to
 your workspace for changes to take effect.</p>
 <p>For additional information, see the <a class="reference external" href="https://api.slack.com/start/overview#installing_distributing">Installing Apps</a> of our <a class="reference external" href="https://api.slack.com/start">Building Slack apps</a> page.</p>
-</div>
-<div class="section" id="multiple-workspace-install">
+</section>
+<section id="multiple-workspace-install">
 <h2>Multiple Workspace Install<a class="headerlink" href="#multiple-workspace-install" title="Permalink to this headline">¶</a></h2>
 <p>If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about <a class="reference external" href="https://api.slack.com/authentication/oauth-v2">how Slack handles Oauth</a>.</p>
 <p>(The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we’ll use <a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>.)</p>
@@ -350,8 +351,8 @@ your workspace for changes to take effect.</p>
 </div>
 <p>Once your user has completed the OAuth flow, you’ll be able to use the provided tokens to call any of Slack’s API methods that require an access token.</p>
 <p>See the <a class="reference external" href="./basic_usage.html">Basic Usage</a> section of this documentation for usage examples.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clear_both large_bottom_margin"></div>
