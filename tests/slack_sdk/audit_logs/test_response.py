@@ -137,6 +137,7 @@ class TestAuditLogsClient(unittest.TestCase):
         self.assertEqual(entry.details.who_can_post.user, ["W111"])
         self.assertEqual(entry.details.can_thread.type, ["admin", "org_admin"])
         self.assertEqual(entry.details.can_thread.user, ["W222"])
+        self.assertEqual(entry.details.is_external_limited, True)
 
 
 logs_response_data = """{
@@ -357,7 +358,8 @@ logs_response_data = """{
           "user": [
             "W222"
           ]
-        }
+        },
+        "is_external_limited": true
       }
     }
   ]
