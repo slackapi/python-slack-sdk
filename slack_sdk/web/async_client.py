@@ -177,6 +177,28 @@ class AsyncWebClient(AsyncBaseClient):
             "admin.apps.clearResolution", http_verb="POST", params=kwargs
         )
 
+    async def admin_apps_requests_cancel(
+        self,
+        *,
+        request_id: str,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List app requests for a team/workspace.
+        https://api.slack.com/methods/admin.apps.requests.cancel
+        """
+        kwargs.update(
+            {
+                "request_id": request_id,
+                "enterprise_id": enterprise_id,
+                "team_id": team_id,
+            }
+        )
+        return await self.api_call(
+            "admin.apps.requests.cancel", http_verb="POST", params=kwargs
+        )
+
     async def admin_apps_requests_list(
         self,
         *,
