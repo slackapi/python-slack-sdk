@@ -78,9 +78,9 @@ $ pip install slack_sdk
 
 ---
 
-We've created this [tutorial](/tutorial) to build a basic Slack app in less than 10 minutes. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
+We've created this [tutorial](https://github.com/slackapi/python-slack-sdk/tree/main/tutorial) to build a basic Slack app in less than 10 minutes. It requires some general programming knowledge, and Python basics. It focuses on the interacting with Slack's Web and RTM API. Use it to give you an idea of how to use this SDK.
 
-**[Read the tutorial to get started!](/tutorial)**
+**[Read the tutorial to get started!](https://github.com/slackapi/python-slack-sdk/tree/main/tutorial)**
 
 ### Basic Usage of the Web Client
 
@@ -291,7 +291,7 @@ helpful and collaborative way.
 [bolt-python]: https://github.com/slackapi/bolt-python
 [pypi]: https://pypi.org/
 [gh-issues]: https://github.com/slackapi/python-slack-sdk/issues
-[slack-community]: http://slackcommunity.com/
+[slack-community]: https://slackcommunity.com/
 [files.upload]: https://api.slack.com/methods/files.upload
 [aiohttp]: https://aiohttp.readthedocs.io/
 [urllib]: https://docs.python.org/3/library/urllib.request.html
