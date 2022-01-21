@@ -5,7 +5,8 @@
       http-equiv="Content-Type"
       content="text/html; charset=utf-8"
     />
-    
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Real Time Messaging (RTM) &mdash; slackclient (Legacy Python Slack SDK)</title>
 
     <!-- Google Tag Manager -->
@@ -243,7 +244,7 @@
         <div class="col span_3_of_4">
           <!-- <div class="section-title">Real Time Messaging (RTM)</div> -->
           <div class="card">
-  <div class="section" id="real-time-messaging-rtm">
+  <section id="real-time-messaging-rtm">
 <span id="real-time-messaging"></span><h1>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging (RTM) API</a> is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.</p>
 <p>If you prefer events to be pushed to your app, we recommend using the HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> instead.
@@ -252,13 +253,13 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 <p>The RTMClient allows apps to communicate with the Slack Platform’s RTM API.</p>
 <p>The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.</p>
 <p>In our example below, we watch for a <a class="reference external" href="https://api.slack.com/events/message">message event</a> that contains “Hello” and if its received, we call the <code class="docutils literal notranslate"><span class="pre">say_hello()</span></code> function. We then issue a call to the web client to post back to the channel saying “Hi” to the user.</p>
-<div class="section" id="configuring-the-rtm-api">
+<section id="configuring-the-rtm-api">
 <h2>Configuring the RTM API<a class="headerlink" href="#configuring-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <p>Events using the RTM API <strong>must</strong> use a classic Slack app (with a plain <code class="docutils literal notranslate"><span class="pre">bot</span></code> scope).</p>
 <p>If you already have a classic Slack app, you can use those credentials. If you don’t and need to use the RTM API, you can <a class="reference external" href="https://api.slack.com/apps?new_classic_app=1">create a classic Slack app</a>. You can learn more in the <a class="reference external" href="https://api.slack.com/authentication/basics#soon">API documentation</a>.</p>
 <p>Also, even if the Slack app configuration pages encourage you to upgrade to the newer permission model, don’t upgrade it and keep using the “classic” bot permission.</p>
-</div>
-<div class="section" id="connecting-to-the-rtm-api">
+</section>
+<section id="connecting-to-the-rtm-api">
 <h2>Connecting to the RTM API<a class="headerlink" href="#connecting-to-the-rtm-api" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">RTMClient</span>
@@ -284,8 +285,8 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 <span class="n">rtm_client</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="rtm-start-vs-rtm-connect">
+</section>
+<section id="rtm-start-vs-rtm-connect">
 <h2>rtm.start vs rtm.connect<a class="headerlink" href="#rtm-start-vs-rtm-connect" title="Permalink to this headline">¶</a></h2>
 <p>By default, the RTM client uses <code class="docutils literal notranslate"><span class="pre">rtm.connect</span></code> to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.</p>
 <p>If you’d rather use <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> to establish the connection, which provides more information about the conversations and users on the team, you can set the <code class="docutils literal notranslate"><span class="pre">connect_method</span></code> option to <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> when instantiating the RTM Client. Note that on larger teams, use of <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code> can be slow and unreliable.</p>
@@ -316,8 +317,8 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 </pre></div>
 </div>
 <p>Read the <a class="reference external" href="https://api.slack.com/methods/rtm.connect">rtm.connect docs</a> and the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> for more details.</p>
-</div>
-<div class="section" id="rtm-events">
+</section>
+<section id="rtm-events">
 <h2>RTM Events<a class="headerlink" href="#rtm-events" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span>
@@ -328,8 +329,8 @@ and it supports most of the event types in the RTM API. If you’d like to use t
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/rtm#events">RTM Events</a> for a complete list of events.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clear_both large_bottom_margin"></div>

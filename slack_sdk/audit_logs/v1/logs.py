@@ -177,6 +177,7 @@ class Details:
     new_retention_policy: Optional[RetentionPolicy]
     who_can_post: Optional[ConversationPref]
     can_thread: Optional[ConversationPref]
+    is_external_limited: Optional[bool]
 
     def __init__(
         self,
@@ -238,6 +239,7 @@ class Details:
         new_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
         who_can_post: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
         can_thread: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
+        is_external_limited: Optional[bool] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -314,6 +316,7 @@ class Details:
             if isinstance(can_thread, ConversationPref)
             else ConversationPref(**can_thread)
         )
+        self.is_external_limited = is_external_limited
 
 
 class App:
