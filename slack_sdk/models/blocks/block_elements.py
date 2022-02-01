@@ -233,7 +233,9 @@ class ButtonElement(InteractiveElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"text", "url", "value", "style", "confirm"})
+        return super().attributes.union(
+            {"text", "url", "value", "style", "confirm", "accessibility_label"}
+        )
 
     def __init__(
         self,
@@ -244,6 +246,7 @@ class ButtonElement(InteractiveElement):
         value: Optional[str] = None,
         style: Optional[str] = None,  # primary, danger
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        accessibility_label: Optional[str] = None,
         **others: dict,
     ):
         """An interactive element that inserts a button. The button can be a trigger for
@@ -271,6 +274,9 @@ class ButtonElement(InteractiveElement):
                 Use "danger" even more sparingly than "primary".
                 If you don't include this field, the default button style will be used.
             confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
         """
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -281,6 +287,7 @@ class ButtonElement(InteractiveElement):
         self.value = value
         self.style = style
         self.confirm = ConfirmObject.parse(confirm)
+        self.accessibility_label = accessibility_label
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_text_length(self) -> bool:
@@ -301,6 +308,15 @@ class ButtonElement(InteractiveElement):
     @EnumValidator("style", ButtonStyles)
     def _validate_style_valid(self):
         return self.style is None or self.style in ButtonStyles
+
+    @JsonValidator(
+        f"accessibility_label attribute cannot exceed {text_max_length} characters"
+    )
+    def _validate_accessibility_label_length(self) -> bool:
+        return (
+            self.accessibility_label is None
+            or len(self.accessibility_label) <= self.text_max_length
+        )
 
 
 class LinkButtonElement(ButtonElement):
