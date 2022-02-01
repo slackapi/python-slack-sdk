@@ -102,6 +102,17 @@ class ButtonElementTests(unittest.TestCase):
         self.assertDictEqual(input, ButtonElement(**input).to_dict())
         self.assertDictEqual(input, LinkButtonElement(**input).to_dict())
 
+    def test_document_4(self):
+        input = {
+            "type": "button",
+            "text": {"type": "plain_text", "text": "Save"},
+            "style": "primary",
+            "value": "click_me_123",
+            "action_id": "button",
+            "accessibility_label": "This label will be read out by screen readers",
+        }
+        self.assertDictEqual(input, ButtonElement(**input).to_dict())
+
     def test_json(self):
         self.assertDictEqual(
             {
@@ -156,6 +167,15 @@ class ButtonElementTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ButtonElement(
                 text="Button", action_id="button", value="button", style="invalid"
+            ).to_dict()
+
+    def test_accessibility_label_length(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ButtonElement(
+                text="Hi there!",
+                action_id="button",
+                value="click_me",
+                accessibility_label=("1234567890" * 8),
             ).to_dict()
 
 
