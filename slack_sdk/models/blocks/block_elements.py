@@ -104,6 +104,8 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                     return OverflowMenuElement(**d)
                 elif t == DatePickerElement.type:
                     return DatePickerElement(**d)
+                elif t == TimePickerElement.type:
+                    return TimePickerElement(**d)
                 else:
                     cls.logger.warning(
                         f"Unknown element detected and skipped ({block_element})"
