@@ -25,16 +25,16 @@ validate_dependencies = [
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=4,<5",
-    "black==21.12b0",
+    "black==22.1.0",
     "psutil>=5,<6",
-    "databases>=0.3",
+    "databases>=0.5",
     # used only under slack_sdk/*_store
     "boto3<=2",
     # TODO: Upgrade to v2
-    "moto<2",  # For AWS tests
+    "moto>=3,<4",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==21.12b0",
+    "black==22.1.0",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)

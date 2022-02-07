@@ -574,7 +574,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         if hasattr(exception, "response"):
             wait_time = exception.response.get("headers", {}).get(
                 "Retry-After",
-                min((2 ** self._connection_attempts) + random.random(), max_wait_time),
+                min((2**self._connection_attempts) + random.random(), max_wait_time),
             )
             self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
             await asyncio.sleep(float(wait_time))
