@@ -206,6 +206,28 @@ class AsyncWebClient(AsyncBaseClient):
             &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
         )
 
+    async def admin_apps_requests_cancel(
+        self,
+        *,
+        request_id: str,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List app requests for a team/workspace.
+        https://api.slack.com/methods/admin.apps.requests.cancel
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;request_id&#34;: request_id,
+                &#34;enterprise_id&#34;: enterprise_id,
+                &#34;team_id&#34;: team_id,
+            }
+        )
+        return await self.api_call(
+            &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
     async def admin_apps_requests_list(
         self,
         *,
@@ -4631,6 +4653,28 @@ removed at anytime.</p></div>
             &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
         )
 
+    async def admin_apps_requests_cancel(
+        self,
+        *,
+        request_id: str,
+        enterprise_id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List app requests for a team/workspace.
+        https://api.slack.com/methods/admin.apps.requests.cancel
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;request_id&#34;: request_id,
+                &#34;enterprise_id&#34;: enterprise_id,
+                &#34;team_id&#34;: team_id,
+            }
+        )
+        return await self.api_call(
+            &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
+        )
+
     async def admin_apps_requests_list(
         self,
         *,
@@ -8985,6 +9029,39 @@ or by the admin.apps.requests.list method.
     )
     return await self.api_call(
         &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel"><code class="name flex">
+<span>async def <span class="ident">admin_apps_requests_cancel</span></span>(<span>self, *, request_id: str, enterprise_id: Optional[str] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>List app requests for a team/workspace.
+<a href="https://api.slack.com/methods/admin.apps.requests.cancel">https://api.slack.com/methods/admin.apps.requests.cancel</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_apps_requests_cancel(
+    self,
+    *,
+    request_id: str,
+    enterprise_id: Optional[str] = None,
+    team_id: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;List app requests for a team/workspace.
+    https://api.slack.com/methods/admin.apps.requests.cancel
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;request_id&#34;: request_id,
+            &#34;enterprise_id&#34;: enterprise_id,
+            &#34;team_id&#34;: team_id,
+        }
+    )
+    return await self.api_call(
+        &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
     )</code></pre>
 </details>
 </dd>
@@ -15787,6 +15864,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve">admin_apps_approve</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approved_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_approved_list">admin_apps_approved_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_clearResolution" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_clearResolution">admin_apps_clearResolution</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel">admin_apps_requests_cancel</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_list">admin_apps_requests_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_restrict" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_restrict">admin_apps_restrict</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_restricted_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_restricted_list">admin_apps_restricted_list</a></code></li>

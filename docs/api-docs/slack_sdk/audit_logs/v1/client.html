@@ -170,6 +170,7 @@ class AuditLogsClient:
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
+        cursor: Optional[str] = None,
         additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
@@ -190,6 +191,7 @@ class AuditLogsClient:
             action: Name of the action.
             actor: User ID who initiated the action.
             entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
+            cursor: The next page cursor of pagination
             additional_query_params: Add anything else if you need to use the ones this library does not support
             headers: Additional request headers
 
@@ -203,6 +205,7 @@ class AuditLogsClient:
             &#34;action&#34;: action,
             &#34;actor&#34;: actor,
             &#34;entity&#34;: entity,
+            &#34;cursor&#34;: cursor,
         }
         if additional_query_params is not None:
             query_params.update(additional_query_params)
@@ -287,11 +290,13 @@ class AuditLogsClient:
                 # read the response body here
                 charset = e.headers.get_content_charset() or &#34;utf-8&#34;
                 response_body: str = e.read().decode(charset)
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
                 resp = AuditLogsResponse(
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=dict(e.headers.items()),
+                    headers=response_headers,
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
@@ -570,6 +575,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         action: Optional[str] = None,
         actor: Optional[str] = None,
         entity: Optional[str] = None,
+        cursor: Optional[str] = None,
         additional_query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
@@ -590,6 +596,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
             action: Name of the action.
             actor: User ID who initiated the action.
             entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
+            cursor: The next page cursor of pagination
             additional_query_params: Add anything else if you need to use the ones this library does not support
             headers: Additional request headers
 
@@ -603,6 +610,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
             &#34;action&#34;: action,
             &#34;actor&#34;: actor,
             &#34;entity&#34;: entity,
+            &#34;cursor&#34;: cursor,
         }
         if additional_query_params is not None:
             query_params.update(additional_query_params)
@@ -687,11 +695,13 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                 # read the response body here
                 charset = e.headers.get_content_charset() or &#34;utf-8&#34;
                 response_body: str = e.read().decode(charset)
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
                 resp = AuditLogsResponse(
                     url=url,
                     status_code=e.code,
                     raw_body=response_body,
-                    headers=dict(e.headers.items()),
+                    headers=response_headers,
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
@@ -935,7 +945,7 @@ Authentication not required.</p>
 </details>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.client.AuditLogsClient.logs"><code class="name flex">
-<span>def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, additional_query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, cursor: Optional[str] = None, additional_query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.
@@ -960,6 +970,8 @@ Data is not available prior to March 2018.</dd>
 <dd>User ID who initiated the action.</dd>
 <dt><strong><code>entity</code></strong></dt>
 <dd>ID of the target entity of the action (such as a channel, workspace, organization, file).</dd>
+<dt><strong><code>cursor</code></strong></dt>
+<dd>The next page cursor of pagination</dd>
 <dt><strong><code>additional_query_params</code></strong></dt>
 <dd>Add anything else if you need to use the ones this library does not support</dd>
 <dt><strong><code>headers</code></strong></dt>
@@ -980,6 +992,7 @@ Data is not available prior to March 2018.</dd>
     action: Optional[str] = None,
     actor: Optional[str] = None,
     entity: Optional[str] = None,
+    cursor: Optional[str] = None,
     additional_query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
@@ -1000,6 +1013,7 @@ Data is not available prior to March 2018.</dd>
         action: Name of the action.
         actor: User ID who initiated the action.
         entity: ID of the target entity of the action (such as a channel, workspace, organization, file).
+        cursor: The next page cursor of pagination
         additional_query_params: Add anything else if you need to use the ones this library does not support
         headers: Additional request headers
 
@@ -1013,6 +1027,7 @@ Data is not available prior to March 2018.</dd>
         &#34;action&#34;: action,
         &#34;actor&#34;: actor,
         &#34;entity&#34;: entity,
+        &#34;cursor&#34;: cursor,
     }
     if additional_query_params is not None:
         query_params.update(additional_query_params)

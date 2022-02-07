@@ -603,7 +603,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         if hasattr(exception, &#34;response&#34;):
             wait_time = exception.response.get(&#34;headers&#34;, {}).get(
                 &#34;Retry-After&#34;,
-                min((2 ** self._connection_attempts) + random.random(), max_wait_time),
+                min((2**self._connection_attempts) + random.random(), max_wait_time),
             )
             self._logger.debug(&#34;Waiting %s seconds before reconnecting.&#34;, wait_time)
             await asyncio.sleep(float(wait_time))
@@ -1282,7 +1282,7 @@ removed at anytime.</p></div>
         if hasattr(exception, &#34;response&#34;):
             wait_time = exception.response.get(&#34;headers&#34;, {}).get(
                 &#34;Retry-After&#34;,
-                min((2 ** self._connection_attempts) + random.random(), max_wait_time),
+                min((2**self._connection_attempts) + random.random(), max_wait_time),
             )
             self._logger.debug(&#34;Waiting %s seconds before reconnecting.&#34;, wait_time)
             await asyncio.sleep(float(wait_time))

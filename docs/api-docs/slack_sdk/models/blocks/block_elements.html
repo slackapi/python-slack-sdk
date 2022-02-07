@@ -132,6 +132,8 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                     return OverflowMenuElement(**d)
                 elif t == DatePickerElement.type:
                     return DatePickerElement(**d)
+                elif t == TimePickerElement.type:
+                    return TimePickerElement(**d)
                 else:
                     cls.logger.warning(
                         f&#34;Unknown element detected and skipped ({block_element})&#34;
@@ -204,7 +206,7 @@ class InteractiveElement(BlockElement):
 class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
     placeholder_max_length = 150
 
-    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;}
+    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;, &#34;focus_on_load&#34;}
 
     @property
     def subtype(self) -&gt; Optional[str]:
@@ -218,6 +220,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;InteractiveElement that is usable in input blocks
@@ -234,6 +237,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
+        self.focus_on_load = focus_on_load
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
@@ -259,7 +263,9 @@ class ButtonElement(InteractiveElement):
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;})
+        return super().attributes.union(
+            {&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;, &#34;accessibility_label&#34;}
+        )
 
     def __init__(
         self,
@@ -270,6 +276,7 @@ class ButtonElement(InteractiveElement):
         value: Optional[str] = None,
         style: Optional[str] = None,  # primary, danger
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        accessibility_label: Optional[str] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;An interactive element that inserts a button. The button can be a trigger for
@@ -297,6 +304,9 @@ class ButtonElement(InteractiveElement):
                 Use &#34;danger&#34; even more sparingly than &#34;primary&#34;.
                 If you don&#39;t include this field, the default button style will be used.
             confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
         &#34;&#34;&#34;
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -307,6 +317,7 @@ class ButtonElement(InteractiveElement):
         self.value = value
         self.style = style
         self.confirm = ConfirmObject.parse(confirm)
+        self.accessibility_label = accessibility_label
 
     @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
@@ -327,6 +338,15 @@ class ButtonElement(InteractiveElement):
     @EnumValidator(&#34;style&#34;, ButtonStyles)
     def _validate_style_valid(self):
         return self.style is None or self.style in ButtonStyles
+
+    @JsonValidator(
+        f&#34;accessibility_label attribute cannot exceed {text_max_length} characters&#34;
+    )
+    def _validate_accessibility_label_length(self) -&gt; bool:
+        return (
+            self.accessibility_label is None
+            or len(self.accessibility_label) &lt;= self.text_max_length
+        )
 
 
 class LinkButtonElement(ButtonElement):
@@ -393,6 +413,7 @@ class CheckboxesElement(InputInteractiveElement):
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A checkbox group that allows a user to choose multiple items from a list of possible options.
@@ -408,11 +429,14 @@ class CheckboxesElement(InputInteractiveElement):
                 These options will be selected when the checkbox group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the checkboxes in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -439,6 +463,7 @@ class DatePickerElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_date: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -457,12 +482,15 @@ class DatePickerElement(InputInteractiveElement):
                 This should be in the format YYYY-MM-DD.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a date is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -498,6 +526,7 @@ class TimePickerElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_time: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -519,12 +548,15 @@ class TimePickerElement(InputInteractiveElement):
                 and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a time is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -609,6 +641,7 @@ class StaticSelectElement(InputInteractiveElement):
         option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -631,12 +664,15 @@ class StaticSelectElement(InputInteractiveElement):
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -687,6 +723,7 @@ class StaticMultiSelectElement(InputInteractiveElement):
         initial_options: Optional[Sequence[Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -712,12 +749,15 @@ class StaticMultiSelectElement(InputInteractiveElement):
                 that appears before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -767,6 +807,7 @@ class SelectElement(InputInteractiveElement):
         option_groups: Optional[Sequence[OptionGroup]] = None,
         initial_option: Optional[Option] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -789,12 +830,15 @@ class SelectElement(InputInteractiveElement):
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -844,6 +888,7 @@ class ExternalDataSelectElement(InputInteractiveElement):
         initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
         min_query_length: Optional[int] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -868,12 +913,15 @@ class ExternalDataSelectElement(InputInteractiveElement):
                 The default value is 3.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -899,6 +947,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -924,12 +973,15 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -957,6 +1009,7 @@ class UserSelectElement(InputInteractiveElement):
         action_id: Optional[str] = None,
         initial_user: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -974,12 +1027,15 @@ class UserSelectElement(InputInteractiveElement):
             initial_user: The user ID of any valid user to be pre-selected when the menu loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1001,6 +1057,7 @@ class UserMultiSelectElement(InputInteractiveElement):
         initial_users: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1020,12 +1077,15 @@ class UserMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1106,6 +1166,7 @@ class ConversationSelectElement(InputInteractiveElement):
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1131,12 +1192,15 @@ class ConversationSelectElement(InputInteractiveElement):
             default_to_current_conversation: Pre-populates the select menu with the conversation
                 that the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1170,6 +1234,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1194,12 +1259,15 @@ class ConversationMultiSelectElement(InputInteractiveElement):
             default_to_current_conversation: Pre-populates the select menu with the conversation that
                 the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1229,6 +1297,7 @@ class ChannelSelectElement(InputInteractiveElement):
         initial_channel: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1250,12 +1319,15 @@ class ChannelSelectElement(InputInteractiveElement):
                 When set to true, the view_submission payload from the menu&#39;s parent view will contain a response_url.
                 This response_url can be used for message responses.
                 The target channel for the message will be determined by the value of this select menu
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1278,6 +1350,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         initial_channels: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1298,12 +1371,15 @@ class ChannelMultiSelectElement(InputInteractiveElement):
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1341,6 +1417,7 @@ class PlainTextInputElement(InputInteractiveElement):
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1366,11 +1443,14 @@ class PlainTextInputElement(InputInteractiveElement):
                 they will receive an error.
             dispatch_action_config: A dispatch configuration object that determines when
                 during text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1400,6 +1480,7 @@ class RadioButtonsElement(InputInteractiveElement):
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A radio button group that allows a user to choose one item from a list of possible options.
@@ -1415,11 +1496,14 @@ class RadioButtonsElement(InputInteractiveElement):
                 This option will be selected when the radio button group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the radio buttons in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -1584,6 +1668,8 @@ class OverflowMenuElement(InteractiveElement):
                     return OverflowMenuElement(**d)
                 elif t == DatePickerElement.type:
                     return DatePickerElement(**d)
+                elif t == TimePickerElement.type:
+                    return TimePickerElement(**d)
                 else:
                     cls.logger.warning(
                         f&#34;Unknown element detected and skipped ({block_element})&#34;
@@ -1684,6 +1770,8 @@ def parse(
                 return OverflowMenuElement(**d)
             elif t == DatePickerElement.type:
                 return DatePickerElement(**d)
+            elif t == TimePickerElement.type:
+                return TimePickerElement(**d)
             else:
                 cls.logger.warning(
                     f&#34;Unknown element detected and skipped ({block_element})&#34;
@@ -1749,7 +1837,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ButtonElement"><code class="flex name class">
 <span>class <span class="ident">ButtonElement</span></span>
-<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, url: Optional[str] = None, value: Optional[str] = None, style: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, url: Optional[str] = None, value: Optional[str] = None, style: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, accessibility_label: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1785,6 +1873,10 @@ Use "danger" even more sparingly than "primary".
 If you don't include this field, the default button style will be used.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog after the button is clicked.</dd>
+<dt><strong><code>accessibility_label</code></strong></dt>
+<dd>A label for longer descriptive text about a button element.
+This label will be read out by screen readers instead of the button text object.
+Maximum length for this field is 75 characters.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1798,7 +1890,9 @@ If you don't include this field, the default button style will be used.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;})
+        return super().attributes.union(
+            {&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;, &#34;accessibility_label&#34;}
+        )
 
     def __init__(
         self,
@@ -1809,6 +1903,7 @@ If you don't include this field, the default button style will be used.</dd>
         value: Optional[str] = None,
         style: Optional[str] = None,  # primary, danger
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        accessibility_label: Optional[str] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;An interactive element that inserts a button. The button can be a trigger for
@@ -1836,6 +1931,9 @@ If you don't include this field, the default button style will be used.</dd>
                 Use &#34;danger&#34; even more sparingly than &#34;primary&#34;.
                 If you don&#39;t include this field, the default button style will be used.
             confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
         &#34;&#34;&#34;
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -1846,6 +1944,7 @@ If you don't include this field, the default button style will be used.</dd>
         self.value = value
         self.style = style
         self.confirm = ConfirmObject.parse(confirm)
+        self.accessibility_label = accessibility_label
 
     @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
@@ -1865,7 +1964,16 @@ If you don't include this field, the default button style will be used.</dd>
 
     @EnumValidator(&#34;style&#34;, ButtonStyles)
     def _validate_style_valid(self):
-        return self.style is None or self.style in ButtonStyles</code></pre>
+        return self.style is None or self.style in ButtonStyles
+
+    @JsonValidator(
+        f&#34;accessibility_label attribute cannot exceed {text_max_length} characters&#34;
+    )
+    def _validate_accessibility_label_length(self) -&gt; bool:
+        return (
+            self.accessibility_label is None
+            or len(self.accessibility_label) &lt;= self.text_max_length
+        )</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1911,7 +2019,7 @@ If you don't include this field, the default button style will be used.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ChannelMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channels: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channels: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1938,6 +2046,9 @@ before the multi-select choices are submitted.</dd>
 <dt><strong><code>max_selected_items</code></strong></dt>
 <dd>Specifies the maximum number of items that can be selected in the menu.
 Minimum number is 1.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1958,6 +2069,7 @@ Minimum number is 1.</dd>
         initial_channels: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -1978,12 +2090,15 @@ Minimum number is 1.</dd>
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2023,7 +2138,7 @@ Minimum number is 1.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ChannelSelectElement"><code class="flex name class">
 <span>class <span class="ident">ChannelSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channel: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channel: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2051,6 +2166,9 @@ after a menu item is selected.</dd>
 When set to true, the view_submission payload from the menu's parent view will contain a response_url.
 This response_url can be used for message responses.
 The target channel for the message will be determined by the value of this select menu</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2071,6 +2189,7 @@ The target channel for the message will be determined by the value of this selec
         initial_channel: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2092,12 +2211,15 @@ The target channel for the message will be determined by the value of this selec
                 When set to true, the view_submission payload from the menu&#39;s parent view will contain a response_url.
                 This response_url can be used for message responses.
                 The target channel for the message will be determined by the value of this select menu
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2137,7 +2259,7 @@ The target channel for the message will be determined by the value of this selec
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.CheckboxesElement"><code class="flex name class">
 <span>class <span class="ident">CheckboxesElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2159,6 +2281,9 @@ These options will be selected when the checkbox group initially loads.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog that appears
 after clicking one of the checkboxes in this element.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2178,6 +2303,7 @@ after clicking one of the checkboxes in this element.</dd>
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A checkbox group that allows a user to choose multiple items from a list of possible options.
@@ -2193,11 +2319,14 @@ after clicking one of the checkboxes in this element.</dd>
                 These options will be selected when the checkbox group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the checkboxes in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2358,7 +2487,7 @@ def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PY
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ConversationMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversations: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, default_to_current_conversation: Optional[bool] = None, filter: Union[dict, <a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversations: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, default_to_current_conversation: Optional[bool] = None, filter: Union[dict, <a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2391,6 +2520,9 @@ Minimum number is 1.</dd>
 the user was viewing when they opened the modal, if available. Default is false.</dd>
 <dt><strong><code>filter</code></strong></dt>
 <dd>A filter object that reduces the list of available conversations using the specified criteria.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2420,6 +2552,7 @@ the user was viewing when they opened the modal, if available. Default is false.
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2444,12 +2577,15 @@ the user was viewing when they opened the modal, if available. Default is false.
             default_to_current_conversation: Pre-populates the select menu with the conversation that
                 the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2491,7 +2627,7 @@ the user was viewing when they opened the modal, if available. Default is false.
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationSelectElement"><code class="flex name class">
 <span>class <span class="ident">ConversationSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversation: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, default_to_current_conversation: Optional[bool] = None, filter: Optional[<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversation: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, default_to_current_conversation: Optional[bool] = None, filter: Optional[<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2525,6 +2661,9 @@ will be determined by the value of this select menu.</dd>
 that the user was viewing when they opened the modal, if available. Default is false.</dd>
 <dt><strong><code>filter</code></strong></dt>
 <dd>A filter object that reduces the list of available conversations using the specified criteria.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2554,6 +2693,7 @@ that the user was viewing when they opened the modal, if available. Default is f
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
         filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2579,12 +2719,15 @@ that the user was viewing when they opened the modal, if available. Default is f
             default_to_current_conversation: Pre-populates the select menu with the conversation
                 that the user was viewing when they opened the modal, if available. Default is false.
             filter: A filter object that reduces the list of available conversations using the specified criteria.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2626,7 +2769,7 @@ that the user was viewing when they opened the modal, if available. Default is f
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.DatePickerElement"><code class="flex name class">
 <span>class <span class="ident">DatePickerElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_date: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_date: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2650,6 +2793,9 @@ This should be in the format YYYY-MM-DD.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a date is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2669,6 +2815,7 @@ that appears after a date is selected.</dd>
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_date: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2687,12 +2834,15 @@ that appears after a date is selected.</dd>
                 This should be in the format YYYY-MM-DD.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a date is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2741,7 +2891,7 @@ that appears after a date is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ExternalDataMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, min_query_length: Optional[int] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, min_query_length: Optional[int] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2774,6 +2924,9 @@ before the multi-select choices are submitted.</dd>
 <dt><strong><code>max_selected_items</code></strong></dt>
 <dd>Specifies the maximum number of items that can be selected in the menu.
 Minimum number is 1.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2797,6 +2950,7 @@ Minimum number is 1.</dd>
         initial_options: Optional[Sequence[Union[dict, Option]]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2822,12 +2976,15 @@ Minimum number is 1.</dd>
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -2868,7 +3025,7 @@ Minimum number is 1.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement"><code class="flex name class">
 <span>class <span class="ident">ExternalDataSelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_option: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None), <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] = None, min_query_length: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_option: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None), <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] = None, min_query_length: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2899,6 +3056,9 @@ The default value is 3.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a menu item is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2919,6 +3079,7 @@ that appears after a menu item is selected.</dd>
         initial_option: Union[Optional[Option], Optional[OptionGroup]] = None,
         min_query_length: Optional[int] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -2943,12 +3104,15 @@ that appears after a menu item is selected.</dd>
                 The default value is 3.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -3100,7 +3264,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement"><code class="flex name class">
 <span>class <span class="ident">InputInteractiveElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, type: Optional[str] = None, subtype: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, type: Optional[str] = None, subtype: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3114,7 +3278,7 @@ def attributes(self) -&gt; Set[str]:
 <pre><code class="python">class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
     placeholder_max_length = 150
 
-    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;}
+    attributes = {&#34;type&#34;, &#34;action_id&#34;, &#34;placeholder&#34;, &#34;confirm&#34;, &#34;focus_on_load&#34;}
 
     @property
     def subtype(self) -&gt; Optional[str]:
@@ -3128,6 +3292,7 @@ def attributes(self) -&gt; Set[str]:
         type: Optional[str] = None,  # skipcq: PYL-W0622
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;InteractiveElement that is usable in input blocks
@@ -3144,6 +3309,7 @@ def attributes(self) -&gt; Set[str]:
 
         self.placeholder = TextObject.parse(placeholder)
         self.confirm = ConfirmObject.parse(confirm)
+        self.focus_on_load = focus_on_load
 
     @JsonValidator(
         f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
@@ -3538,7 +3704,7 @@ after a menu item is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.PlainTextInputElement"><code class="flex name class">
 <span>class <span class="ident">PlainTextInputElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[str] = None, multiline: Optional[bool] = None, min_length: Optional[int] = None, max_length: Optional[int] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[str] = None, multiline: Optional[bool] = None, min_length: Optional[int] = None, max_length: Optional[int] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3572,6 +3738,9 @@ they will receive an error.</dd>
 <dt><strong><code>dispatch_action_config</code></strong></dt>
 <dd>A dispatch configuration object that determines when
 during text input the element returns a block_actions payload.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3602,6 +3771,7 @@ during text input the element returns a block_actions payload.</dd>
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -3627,11 +3797,14 @@ during text input the element returns a block_actions payload.</dd>
                 they will receive an error.
             dispatch_action_config: A dispatch configuration object that determines when
                 during text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -3674,7 +3847,7 @@ during text input the element returns a block_actions payload.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement"><code class="flex name class">
 <span>class <span class="ident">RadioButtonsElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3696,6 +3869,9 @@ This option will be selected when the radio button group initially loads.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog that appears
 after clicking one of the radio buttons in this element.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3715,6 +3891,7 @@ after clicking one of the radio buttons in this element.</dd>
         options: Optional[Sequence[Union[dict, Option]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;A radio button group that allows a user to choose one item from a list of possible options.
@@ -3730,11 +3907,14 @@ after clicking one of the radio buttons in this element.</dd>
                 This option will be selected when the radio button group initially loads.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after clicking one of the radio buttons in this element.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -3774,7 +3954,7 @@ after clicking one of the radio buttons in this element.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.SelectElement"><code class="flex name class">
 <span>class <span class="ident">SelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_option: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_option: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3805,6 +3985,9 @@ This option will be selected when the menu initially loads.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a menu item is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3828,6 +4011,7 @@ that appears after a menu item is selected.</dd>
         option_groups: Optional[Sequence[OptionGroup]] = None,
         initial_option: Optional[Option] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -3850,12 +4034,15 @@ that appears after a menu item is selected.</dd>
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -3925,7 +4112,7 @@ that appears after a menu item is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">StaticMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3959,6 +4146,9 @@ that appears before the multi-select choices are submitted.</dd>
 <dt><strong><code>max_selected_items</code></strong></dt>
 <dd>Specifies the maximum number of items that can be selected in the menu.
 Minimum number is 1.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3985,6 +4175,7 @@ Minimum number is 1.</dd>
         initial_options: Optional[Sequence[Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -4010,12 +4201,15 @@ Minimum number is 1.</dd>
                 that appears before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -4086,7 +4280,7 @@ Minimum number is 1.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement"><code class="flex name class">
 <span>class <span class="ident">StaticSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, option_groups: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, option_groups: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4117,6 +4311,9 @@ This option will be selected when the menu initially loads.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a menu item is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -4140,6 +4337,7 @@ that appears after a menu item is selected.</dd>
         option_groups: Optional[Sequence[Union[dict, OptionGroup]]] = None,
         initial_option: Optional[Union[dict, Option]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;This is the simplest form of select menu, with a static list of options passed in when defining the element.
@@ -4162,12 +4360,15 @@ that appears after a menu item is selected.</dd>
                 This option will be selected when the menu initially loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -4237,7 +4438,7 @@ that appears after a menu item is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.TimePickerElement"><code class="flex name class">
 <span>class <span class="ident">TimePickerElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4264,6 +4465,9 @@ and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.<
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a time is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -4283,6 +4487,7 @@ that appears after a time is selected.</dd>
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         initial_time: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -4304,12 +4509,15 @@ that appears after a time is selected.</dd>
                 and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a time is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -4356,7 +4564,7 @@ that appears after a time is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.UserMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">UserMultiSelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4382,6 +4590,9 @@ before the multi-select choices are submitted.</dd>
 <dt><strong><code>max_selected_items</code></strong></dt>
 <dd>Specifies the maximum number of items that can be selected in the menu.
 Minimum number is 1.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -4402,6 +4613,7 @@ Minimum number is 1.</dd>
         initial_users: Optional[Sequence[str]] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -4421,12 +4633,15 @@ Minimum number is 1.</dd>
                 before the multi-select choices are submitted.
             max_selected_items: Specifies the maximum number of items that can be selected in the menu.
                 Minimum number is 1.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 
@@ -4466,7 +4681,7 @@ Minimum number is 1.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.UserSelectElement"><code class="flex name class">
 <span>class <span class="ident">UserSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_user: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_user: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4489,6 +4704,9 @@ Maximum length for this field is 255 characters.</dd>
 <dt><strong><code>confirm</code></strong></dt>
 <dd>A confirm object that defines an optional confirmation dialog
 that appears after a menu item is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -4508,6 +4726,7 @@ that appears after a menu item is selected.</dd>
         action_id: Optional[str] = None,
         initial_user: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -4525,12 +4744,15 @@ that appears after a menu item is selected.</dd>
             initial_user: The user ID of any valid user to be pre-selected when the menu loads.
             confirm: A confirm object that defines an optional confirmation dialog
                 that appears after a menu item is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
             action_id=action_id,
             placeholder=TextObject.parse(placeholder, PlainTextObject.type),
             confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
 

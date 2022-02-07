@@ -443,19 +443,25 @@ class BaseClient:
                 return resp
 
             except HTTPError as e:
-                resp = {&#34;status&#34;: e.code, &#34;headers&#34;: e.headers}
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
+                resp = {&#34;status&#34;: e.code, &#34;headers&#34;: response_headers}
                 if e.code == 429:
                     # for compatibility with aiohttp
                     if (
-                        &#34;retry-after&#34; not in resp[&#34;headers&#34;]
-                        and &#34;Retry-After&#34; in resp[&#34;headers&#34;]
+                        &#34;retry-after&#34; not in response_headers
+                        and &#34;Retry-After&#34; in response_headers
                     ):
-                        resp[&#34;headers&#34;][&#34;retry-after&#34;] = resp[&#34;headers&#34;][&#34;Retry-After&#34;]
+                        response_headers[&#34;retry-after&#34;] = response_headers[
+                            &#34;Retry-After&#34;
+                        ]
                     if (
-                        &#34;Retry-After&#34; not in resp[&#34;headers&#34;]
-                        and &#34;retry-after&#34; in resp[&#34;headers&#34;]
+                        &#34;Retry-After&#34; not in response_headers
+                        and &#34;retry-after&#34; in response_headers
                     ):
-                        resp[&#34;headers&#34;][&#34;Retry-After&#34;] = resp[&#34;headers&#34;][&#34;retry-after&#34;]
+                        response_headers[&#34;Retry-After&#34;] = response_headers[
+                            &#34;retry-after&#34;
+                        ]
 
                 # read the response body here
                 charset = e.headers.get_content_charset() or &#34;utf-8&#34;
@@ -466,7 +472,7 @@ class BaseClient:
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
-                    headers={k: [v] for k, v in e.headers.items()},
+                    headers={k: [v] for k, v in response_headers.items()},
                     data=response_body.encode(&#34;utf-8&#34;)
                     if response_body is not None
                     else None,
@@ -1035,19 +1041,25 @@ class BaseClient:
                 return resp
 
             except HTTPError as e:
-                resp = {&#34;status&#34;: e.code, &#34;headers&#34;: e.headers}
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
+                resp = {&#34;status&#34;: e.code, &#34;headers&#34;: response_headers}
                 if e.code == 429:
                     # for compatibility with aiohttp
                     if (
-                        &#34;retry-after&#34; not in resp[&#34;headers&#34;]
-                        and &#34;Retry-After&#34; in resp[&#34;headers&#34;]
+                        &#34;retry-after&#34; not in response_headers
+                        and &#34;Retry-After&#34; in response_headers
                     ):
-                        resp[&#34;headers&#34;][&#34;retry-after&#34;] = resp[&#34;headers&#34;][&#34;Retry-After&#34;]
+                        response_headers[&#34;retry-after&#34;] = response_headers[
+                            &#34;Retry-After&#34;
+                        ]
                     if (
-                        &#34;Retry-After&#34; not in resp[&#34;headers&#34;]
-                        and &#34;retry-after&#34; in resp[&#34;headers&#34;]
+                        &#34;Retry-After&#34; not in response_headers
+                        and &#34;retry-after&#34; in response_headers
                     ):
-                        resp[&#34;headers&#34;][&#34;Retry-After&#34;] = resp[&#34;headers&#34;][&#34;retry-after&#34;]
+                        response_headers[&#34;Retry-After&#34;] = response_headers[
+                            &#34;retry-after&#34;
+                        ]
 
                 # read the response body here
                 charset = e.headers.get_content_charset() or &#34;utf-8&#34;
@@ -1058,7 +1070,7 @@ class BaseClient:
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
-                    headers={k: [v] for k, v in e.headers.items()},
+                    headers={k: [v] for k, v in response_headers.items()},
                     data=response_body.encode(&#34;utf-8&#34;)
                     if response_body is not None
                     else None,

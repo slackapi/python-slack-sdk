@@ -537,19 +537,21 @@ class LegacyBaseClient:
                 return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
         except HTTPError as e:
-            resp = {&#34;status&#34;: e.code, &#34;headers&#34;: e.headers}
+            # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+            response_headers = dict(e.headers.items())
+            resp = {&#34;status&#34;: e.code, &#34;headers&#34;: response_headers}
             if e.code == 429:
                 # for compatibility with aiohttp
                 if (
-                    &#34;retry-after&#34; not in resp[&#34;headers&#34;]
-                    and &#34;Retry-After&#34; in resp[&#34;headers&#34;]
+                    &#34;retry-after&#34; not in response_headers
+                    and &#34;Retry-After&#34; in response_headers
                 ):
-                    resp[&#34;headers&#34;][&#34;retry-after&#34;] = resp[&#34;headers&#34;][&#34;Retry-After&#34;]
+                    response_headers[&#34;retry-after&#34;] = response_headers[&#34;Retry-After&#34;]
                 if (
-                    &#34;Retry-After&#34; not in resp[&#34;headers&#34;]
-                    and &#34;retry-after&#34; in resp[&#34;headers&#34;]
+                    &#34;Retry-After&#34; not in response_headers
+                    and &#34;retry-after&#34; in response_headers
                 ):
-                    resp[&#34;headers&#34;][&#34;Retry-After&#34;] = resp[&#34;headers&#34;][&#34;retry-after&#34;]
+                    response_headers[&#34;Retry-After&#34;] = response_headers[&#34;retry-after&#34;]
 
             # read the response body here
             charset = e.headers.get_content_charset() or &#34;utf-8&#34;
@@ -1103,19 +1105,21 @@ class LegacyBaseClient:
                 return {&#34;status&#34;: resp.code, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
         except HTTPError as e:
-            resp = {&#34;status&#34;: e.code, &#34;headers&#34;: e.headers}
+            # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+            response_headers = dict(e.headers.items())
+            resp = {&#34;status&#34;: e.code, &#34;headers&#34;: response_headers}
             if e.code == 429:
                 # for compatibility with aiohttp
                 if (
-                    &#34;retry-after&#34; not in resp[&#34;headers&#34;]
-                    and &#34;Retry-After&#34; in resp[&#34;headers&#34;]
+                    &#34;retry-after&#34; not in response_headers
+                    and &#34;Retry-After&#34; in response_headers
                 ):
-                    resp[&#34;headers&#34;][&#34;retry-after&#34;] = resp[&#34;headers&#34;][&#34;Retry-After&#34;]
+                    response_headers[&#34;retry-after&#34;] = response_headers[&#34;Retry-After&#34;]
                 if (
-                    &#34;Retry-After&#34; not in resp[&#34;headers&#34;]
-                    and &#34;retry-after&#34; in resp[&#34;headers&#34;]
+                    &#34;Retry-After&#34; not in response_headers
+                    and &#34;retry-after&#34; in response_headers
                 ):
-                    resp[&#34;headers&#34;][&#34;Retry-After&#34;] = resp[&#34;headers&#34;][&#34;retry-after&#34;]
+                    response_headers[&#34;Retry-After&#34;] = response_headers[&#34;retry-after&#34;]
 
             # read the response body here
             charset = e.headers.get_content_charset() or &#34;utf-8&#34;
