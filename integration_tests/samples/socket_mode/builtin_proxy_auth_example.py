@@ -14,8 +14,8 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode import SocketModeClient
 
 # https://github.com/seratch/my-proxy-server
-# go build && ./my-proxy-sever -a
-proxy_url = "http://user:pass@localhost:9000"
+# go build && my-proxy-server -a -u user -p pass/word
+proxy_url = "http://user:pass%2Fword@localhost:9000"
 
 client = SocketModeClient(
     app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),

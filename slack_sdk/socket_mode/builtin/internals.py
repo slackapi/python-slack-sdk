@@ -12,7 +12,7 @@ from hmac import compare_digest
 from logging import Logger
 from threading import Lock
 from typing import Tuple, Optional, Union, List, Callable, Dict
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 
 from .frame_header import FrameHeader
 
@@ -59,7 +59,9 @@ def _establish_new_socket_connection(
         message = [f"CONNECT {server_hostname}:{server_port} HTTP/1.0"]
         if parsed_proxy.username is not None and parsed_proxy.password is not None:
             # In the case where the proxy is "http://{username}:{password}@{hostname}:{port}"
-            raw_value = f"{parsed_proxy.username}:{parsed_proxy.password}"
+            raw_value = (
+                f"{unquote(parsed_proxy.username)}:{unquote(parsed_proxy.password)}"
+            )
             auth = b64encode(raw_value.encode("utf-8")).decode("ascii")
             message.append(f"Proxy-Authorization: Basic {auth}")
         if proxy_headers is not None:
