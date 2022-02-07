@@ -38,6 +38,21 @@ class BlockElementTests(unittest.TestCase):
             BlockElement(type="test"), BlockElement(type="another test")
         )
 
+    def test_parse_timepicker(self):
+        timepicker = BlockElement.parse(
+            {
+                "type": "timepicker",
+                "action_id": "timepicker123",
+                "initial_time": "11:40",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select a time",
+                },
+            }
+        )
+        self.assertIsNotNone(timepicker)
+        self.assertEqual(timepicker.type, TimePickerElement.type)
+
 
 # -------------------------------------------------
 # Interactive Elements
