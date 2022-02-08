@@ -2823,14 +2823,10 @@ class AsyncWebClient(AsyncBaseClient):
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if &#34;preview_image&#34; in kwargs or &#34;indexable_file_contents&#34; in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                &#34;preview_image&#34;: preview_image
-                if preview_image is not None
-                else kwargs.pop(&#34;preview_image&#34;),
-                &#34;indexable_file_contents&#34;: indexable_file_contents
-                if indexable_file_contents is not None
-                else kwargs.pop(&#34;indexable_file_contents&#34;),
+                &#34;preview_image&#34;: preview_image,
+                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
 
         return await self.api_call(
@@ -2863,16 +2859,14 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;file&#34;: file,
                 &#34;title&#34;: title,
                 &#34;filetype&#34;: filetype,
-                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if &#34;preview_image&#34; in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                &#34;preview_image&#34;: preview_image
-                if preview_image is not None
-                else kwargs.pop(&#34;preview_image&#34;)
+                &#34;preview_image&#34;: preview_image,
+                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
 
         return await self.api_call(
@@ -7270,14 +7264,10 @@ removed at anytime.</p></div>
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if &#34;preview_image&#34; in kwargs or &#34;indexable_file_contents&#34; in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                &#34;preview_image&#34;: preview_image
-                if preview_image is not None
-                else kwargs.pop(&#34;preview_image&#34;),
-                &#34;indexable_file_contents&#34;: indexable_file_contents
-                if indexable_file_contents is not None
-                else kwargs.pop(&#34;indexable_file_contents&#34;),
+                &#34;preview_image&#34;: preview_image,
+                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
 
         return await self.api_call(
@@ -7310,16 +7300,14 @@ removed at anytime.</p></div>
                 &#34;file&#34;: file,
                 &#34;title&#34;: title,
                 &#34;filetype&#34;: filetype,
-                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if &#34;preview_image&#34; in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                &#34;preview_image&#34;: preview_image
-                if preview_image is not None
-                else kwargs.pop(&#34;preview_image&#34;)
+                &#34;preview_image&#34;: preview_image,
+                &#34;indexable_file_contents&#34;: indexable_file_contents,
             }
 
         return await self.api_call(
@@ -13183,14 +13171,10 @@ or received but have not yet been approved by all parties.
     )
     files = None
     # preview_image (file): Preview of the document via multipart/form-data.
-    if &#34;preview_image&#34; in kwargs or &#34;indexable_file_contents&#34; in kwargs:
+    if preview_image is not None or indexable_file_contents is not None:
         files = {
-            &#34;preview_image&#34;: preview_image
-            if preview_image is not None
-            else kwargs.pop(&#34;preview_image&#34;),
-            &#34;indexable_file_contents&#34;: indexable_file_contents
-            if indexable_file_contents is not None
-            else kwargs.pop(&#34;indexable_file_contents&#34;),
+            &#34;preview_image&#34;: preview_image,
+            &#34;indexable_file_contents&#34;: indexable_file_contents,
         }
 
     return await self.api_call(
@@ -13350,16 +13334,14 @@ or received but have not yet been approved by all parties.
             &#34;file&#34;: file,
             &#34;title&#34;: title,
             &#34;filetype&#34;: filetype,
-            &#34;indexable_file_contents&#34;: indexable_file_contents,
         }
     )
     files = None
     # preview_image (file): Preview of the document via multipart/form-data.
-    if &#34;preview_image&#34; in kwargs:
+    if preview_image is not None or indexable_file_contents is not None:
         files = {
-            &#34;preview_image&#34;: preview_image
-            if preview_image is not None
-            else kwargs.pop(&#34;preview_image&#34;)
+            &#34;preview_image&#34;: preview_image,
+            &#34;indexable_file_contents&#34;: indexable_file_contents,
         }
 
     return await self.api_call(
