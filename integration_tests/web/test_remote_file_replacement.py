@@ -32,6 +32,7 @@ class TestWebClient(unittest.TestCase):
             external_id=external_id,
             external_url=url,
             title="Slack Logo",
+            indexable_file_contents="so many keywords!".encode("utf-8"),
             preview_image=f"{current_dir}/../../tests/data/slack_logo.png",
         )
         self.assertIsNotNone(remote_file_creation)
@@ -61,6 +62,7 @@ class TestWebClient(unittest.TestCase):
             external_id=external_id,
             external_url=url,
             title="Slack Logo",
+            indexable_file_contents="more and more keywords!".encode("utf-8"),
             preview_image=f"{current_dir}/../../tests/data/slack_logo_new.png",
         )
         self.assertIsNotNone(new_version)

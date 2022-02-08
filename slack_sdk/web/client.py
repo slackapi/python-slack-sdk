@@ -2739,14 +2739,10 @@ class WebClient(BaseClient):
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if "preview_image" in kwargs or "indexable_file_contents" in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                "preview_image": preview_image
-                if preview_image is not None
-                else kwargs.pop("preview_image"),
-                "indexable_file_contents": indexable_file_contents
-                if indexable_file_contents is not None
-                else kwargs.pop("indexable_file_contents"),
+                "preview_image": preview_image,
+                "indexable_file_contents": indexable_file_contents,
             }
 
         return self.api_call(
@@ -2779,16 +2775,14 @@ class WebClient(BaseClient):
                 "file": file,
                 "title": title,
                 "filetype": filetype,
-                "indexable_file_contents": indexable_file_contents,
             }
         )
         files = None
         # preview_image (file): Preview of the document via multipart/form-data.
-        if "preview_image" in kwargs:
+        if preview_image is not None or indexable_file_contents is not None:
             files = {
-                "preview_image": preview_image
-                if preview_image is not None
-                else kwargs.pop("preview_image")
+                "preview_image": preview_image,
+                "indexable_file_contents": indexable_file_contents,
             }
 
         return self.api_call(
