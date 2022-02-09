@@ -20,9 +20,16 @@ class TestWebClient(unittest.TestCase):
         response = self.client.admin_users_unsupportedVersions_export()
         self.assertIsNone(response.get("error"))
 
-    def test_no_args(self):
+    def test_full_args(self):
         response = self.client.admin_users_unsupportedVersions_export(
             date_end_of_support=int(round(time.time())) + 60 * 60 * 24 * 120,
             date_sessions_started=0,
+        )
+        self.assertIsNone(response.get("error"))
+
+    def test_full_args_str(self):
+        response = self.client.admin_users_unsupportedVersions_export(
+            date_end_of_support=str(int(round(time.time())) + 60 * 60 * 24 * 120),
+            date_sessions_started="0",
         )
         self.assertIsNone(response.get("error"))
