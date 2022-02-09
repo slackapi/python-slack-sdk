@@ -1061,6 +1061,27 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": user_ids})
         return await self.api_call("admin.users.session.clearSettings", params=kwargs)
 
+    async def admin_users_unsupportedVersions_export(
+        self,
+        *,
+        date_end_of_support: Optional[Union[str, int]] = None,
+        date_sessions_started: Optional[Union[str, int]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Ask Slackbot to send you an export listing all workspace members using unsupported software,
+        presented as a zipped CSV file.
+        https://api.slack.com/methods/admin.users.unsupportedVersions.export
+        """
+        kwargs.update(
+            {
+                "date_end_of_support": date_end_of_support,
+                "date_sessions_started": date_sessions_started,
+            }
+        )
+        return await self.api_call(
+            "admin.users.unsupportedVersions.export", params=kwargs
+        )
+
     async def admin_inviteRequests_approve(
         self,
         *,
