@@ -1,7 +1,9 @@
 import logging
 import socket
+import ssl
 import time
 import unittest
+from unittest.mock import sentinel
 from threading import Thread
 
 from slack_sdk import WebClient
@@ -13,6 +15,7 @@ from slack_sdk.socket_mode.builtin.internals import (
     _to_readable_opcode,
     _build_data_frame_for_sending,
     _parse_connect_response,
+    _use_or_create_ssl_context,
 )
 from slack_sdk.web.legacy_client import LegacyWebClient
 from .mock_web_api_server import (
@@ -85,6 +88,14 @@ class TestBuiltin(unittest.TestCase):
         )
         client.process_message()
 
+    def test_client_with_ssl(self):
+        self.web_client.ssl = sentinel.ssl_context
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+        )
+        self.assertEqual(client.web_client.ssl, sentinel.ssl_context)
+
     # ----------------------------------
     # Connection
 
@@ -136,3 +147,11 @@ class TestBuiltin(unittest.TestCase):
             self.assertEqual(text, "HTTP/1.1 200 Connection established")
         finally:
             sock.close()
+
+    def test_creating_ssl_context(self):
+        ssl_context = _use_or_create_ssl_context(None)
+        self.assertTrue(isinstance(ssl_context, ssl.SSLContext))
+
+    def test_using_supplied_ssl_context(self):
+        ssl_context = _use_or_create_ssl_context(sentinel.ssl_context)
+        self.assertEqual(ssl_context, sentinel.ssl_context)
