@@ -1601,6 +1601,83 @@ class AsyncWebClient(AsyncBaseClient):
         """
         return await self.api_call("auth.test", params=kwargs)
 
+    async def bookmarks_add(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        type: str,
+        emoji: Optional[str] = None,
+        entity_id: Optional[str] = None,
+        link: Optional[str] = None,  # include when type is 'link'
+        parent_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Add bookmark to a channel.
+        https://api.slack.com/methods/bookmarks.add
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "type": type,
+                "emoji": emoji,
+                "entity_id": entity_id,
+                "link": link,
+                "parent_id": parent_id,
+            }
+        )
+        return await self.api_call("bookmarks.add", http_verb="POST", params=kwargs)
+
+    async def bookmarks_edit(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        emoji: Optional[str] = None,
+        link: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Edit bookmark.
+        https://api.slack.com/methods/bookmarks.edit
+        """
+        kwargs.update(
+            {
+                "bookmark_id": bookmark_id,
+                "channel_id": channel_id,
+                "emoji": emoji,
+                "link": link,
+                "title": title,
+            }
+        )
+        return await self.api_call("bookmarks.edit", http_verb="POST", params=kwargs)
+
+    async def bookmarks_list(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List bookmark for the channel.
+        https://api.slack.com/methods/bookmarks.list
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("bookmarks.list", http_verb="POST", params=kwargs)
+
+    async def bookmarks_remove(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Remove bookmark from the channel.
+        https://api.slack.com/methods/bookmarks.remove
+        """
+        kwargs.update({"bookmark_id": bookmark_id, "channel_id": channel_id})
+        return await self.api_call("bookmarks.remove", http_verb="POST", params=kwargs)
+
     async def bots_info(
         self,
         *,

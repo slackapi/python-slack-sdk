@@ -1563,6 +1563,83 @@ class LegacyWebClient(LegacyBaseClient):
         """
         return self.api_call("auth.test", params=kwargs)
 
+    def bookmarks_add(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        type: str,
+        emoji: Optional[str] = None,
+        entity_id: Optional[str] = None,
+        link: Optional[str] = None,
+        parent_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Add bookmark to a channel.
+        https://api.slack.com/methods/bookmarks.add
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "type": type,
+                "emoji": emoji,
+                "entity_id": entity_id,
+                "link": link,
+                "parent_id": parent_id,
+            }
+        )
+        return self.api_call("bookmarks.add", http_verb="POST", params=kwargs)
+
+    def bookmarks_edit(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        emoji: Optional[str] = None,
+        link: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Edit bookmark.
+        https://api.slack.com/methods/bookmarks.edit
+        """
+        kwargs.update(
+            {
+                "bookmark_id": bookmark_id,
+                "channel_id": channel_id,
+                "emoji": emoji,
+                "link": link,
+                "title": title,
+            }
+        )
+        return self.api_call("bookmarks.edit", http_verb="POST", params=kwargs)
+
+    def bookmarks_list(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List bookmark for the channel.
+        https://api.slack.com/methods/bookmarks.list
+        """
+        kwargs.update({"channel_id": channel_id})
+        return self.api_call("bookmarks.list", http_verb="POST", params=kwargs)
+
+    def bookmarks_remove(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Remove bookmark from the channel.
+        https://api.slack.com/methods/bookmarks.remove
+        """
+        kwargs.update({"bookmark_id": bookmark_id, "channel_id": channel_id})
+        return self.api_call("bookmarks.remove", http_verb="POST", params=kwargs)
+
     def bots_info(
         self,
         *,
