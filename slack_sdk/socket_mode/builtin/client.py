@@ -177,6 +177,7 @@ class SocketModeClient(BaseSocketModeClient):
             on_message_listener=self._on_message,
             on_error_listener=self._on_error,
             on_close_listener=self._on_close,
+            ssl_context=self.web_client.ssl,
         )
         current_session.connect()
 

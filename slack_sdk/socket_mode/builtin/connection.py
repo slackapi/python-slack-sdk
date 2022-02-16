@@ -64,6 +64,7 @@ class Connection:
         on_error_listener: Optional[Callable[[Exception], None]] = None,
         on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
         connection_type_name: str = "Socket Mode",
+        ssl_context: Optional[ssl.SSLContext] = None,
     ):
         self.url = url
         self.logger = logger
@@ -94,6 +95,8 @@ class Connection:
         self.on_close_listener = on_close_listener
         self.connection_type_name = connection_type_name
 
+        self.ssl_context = ssl_context
+
     def connect(self) -> None:
         try:
             parsed_url = urlparse(self.url.strip())
@@ -114,6 +117,7 @@ class Connection:
                 proxy=self.proxy,
                 proxy_headers=self.proxy_headers,
                 trace_enabled=self.trace_enabled,
+                ssl_context=self.ssl_context,
             )
 
             # WebSocket handshake

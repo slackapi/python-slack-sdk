@@ -37,6 +37,10 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
     return status, "\n".join(lines)
 
 
+def _use_or_create_ssl_context(ssl_context: Optional[ssl.SSLContext] = None):
+    return ssl_context if ssl_context is not None else ssl.create_default_context()
+
+
 def _establish_new_socket_connection(
     session_id: str,
     server_hostname: str,
@@ -47,7 +51,11 @@ def _establish_new_socket_connection(
     proxy: Optional[str],
     proxy_headers: Optional[Dict[str, str]],
     trace_enabled: bool,
+    ssl_context: Optional[ssl.SSLContext] = None,
 ) -> Union[ssl.SSLSocket, Socket]:
+
+    ssl_context = _use_or_create_ssl_context(ssl_context)
+
     if proxy is not None:
         parsed_proxy = urlparse(proxy)
         proxy_host, proxy_port = parsed_proxy.hostname, parsed_proxy.port or 80
@@ -83,7 +91,7 @@ def _establish_new_socket_connection(
                 f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})"
             )
 
-        sock = ssl.create_default_context().wrap_socket(
+        sock = ssl_context.wrap_socket(
             sock,
             do_handshake_on_connect=True,
             suppress_ragged_eofs=True,
@@ -100,7 +108,7 @@ def _establish_new_socket_connection(
         return sock
 
     sock = socket.create_connection((server_hostname, server_port), receive_timeout)
-    sock = ssl.create_default_context().wrap_socket(
+    sock = ssl_context.wrap_socket(
         sock,
         do_handshake_on_connect=True,
         suppress_ragged_eofs=True,
