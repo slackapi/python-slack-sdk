@@ -1560,7 +1560,7 @@ class WebClient(BaseClient):
         type: str,
         emoji: Optional[str] = None,
         entity_id: Optional[str] = None,
-        link: Optional[str] = None,
+        link: Optional[str] = None,  # include when type is 'link'
         parent_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
