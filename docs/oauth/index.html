@@ -447,14 +447,14 @@
 <h2>Sign in with Slack<a class="headerlink" href="#sign-in-with-slack" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://api.slack.com/authentication/sign-in-with-slack">Sign in with Slack</a> helps users log into your service using their Slack profile. The platform feature was recently upgraded to be compatible with the standard <a class="reference external" href="https://openid.net/connect/">OpenID Connect</a> specification. With slack-sdk v3.9+, implementing the auth flow is much easier.</p>
 <p>When you create a new Slack app, set the following user scopes:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">oauth_config</span><span class="p">:</span>
-  <span class="nt">redirect_urls</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://{your-domain}/slack/oauth_redirect</span>
-  <span class="nt">scopes</span><span class="p">:</span>
-    <span class="nt">user</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">openid</span>   <span class="c1"># required</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">email</span>    <span class="c1"># optional</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">profile</span>  <span class="c1"># optional</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">oauth_config</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">redirect_urls</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://{your-domain}/slack/oauth_redirect</span><span class="w"></span>
+<span class="w">  </span><span class="nt">scopes</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openid</span><span class="w">   </span><span class="c1"># required</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span><span class="w">    </span><span class="c1"># optional</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">profile</span><span class="w">  </span><span class="c1"># optional</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Check <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/flask_example.py">the Flask app example</a> to learn how to implement your Web app that handles the OpenID Connect flow with end-users. It does the following:</p>
