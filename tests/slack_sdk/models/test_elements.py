@@ -26,6 +26,7 @@ from slack_sdk.models.blocks import (
     Option,
     InputInteractiveElement,
     InteractiveElement,
+    PlainTextObject,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -203,6 +204,23 @@ class LinkButtonElementTests(unittest.TestCase):
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
                 "url": "http://google.com",
+                "type": "button",
+                "action_id": button.action_id,
+            },
+            button.to_dict(),
+        )
+
+    # https://github.com/slackapi/python-slack-sdk/issues/1178
+    def test_text_patterns_issue_1178(self):
+        button = LinkButtonElement(
+            action_id="test",
+            text=PlainTextObject(text="button text"),
+            url="http://slack.com",
+        )
+        self.assertDictEqual(
+            {
+                "text": {"text": "button text", "type": "plain_text"},
+                "url": "http://slack.com",
                 "type": "button",
                 "action_id": button.action_id,
             },

@@ -325,7 +325,7 @@ class LinkButtonElement(ButtonElement):
     def __init__(
         self,
         *,
-        text: str,
+        text: Union[str, dict, PlainTextObject],
         url: str,
         action_id: Optional[str] = None,
         style: Optional[str] = None,
