@@ -6,6 +6,6 @@ cd ${script_dir}/..
 pip install -U pip && \
   pip install -e ".[testing]" && \
   pip install -e ".[optional]" && \
-  black slack_sdk/ slack/ tests/ && \
+  black slack_sdk/ slack/ tests/ integration_tests/ && \
   python setup.py codegen && \
   python setup.py validate
