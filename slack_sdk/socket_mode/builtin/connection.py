@@ -173,9 +173,15 @@ class Connection:
                 raise
 
         except Exception as e:
-            self.logger.exception(
-                f"Failed to establish a connection (session id: {self.session_id}, error: {e})"
-            )
+            error_message = f"Failed to establish a connection (session id: {self.session_id}, error: {e})"
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
+            if self.on_error_listener is not None:
+                self.on_error_listener(e)
+
             self.disconnect()
 
     def disconnect(self) -> None:
