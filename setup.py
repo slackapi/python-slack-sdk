@@ -22,6 +22,7 @@ validate_dependencies = [
     "Flask-Sockets>=0.2,<1",
     "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "Werkzeug<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
+    "itsdangerous==2.0.1",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=4,<5",
