@@ -247,10 +247,15 @@ class SocketModeClient(BaseSocketModeClient):
             listener(message)
 
     def _on_error(self, error: Exception):
-        self.logger.exception(
+        error_message = (
             f"on_error invoked (session id: {self.session_id()}, "
             f"error: {type(error).__name__}, message: {error})"
         )
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
         for listener in self.on_error_listeners:
             listener(error)
 
@@ -281,10 +286,14 @@ class SocketModeClient(BaseSocketModeClient):
                     f" (session id: {session_id})"
                 )
             except Exception as e:
-                self.logger.exception(
+                error_message = (
                     "Failed to start or stop the current session"
                     f" (session id: {session_id}, error: {e})"
                 )
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
