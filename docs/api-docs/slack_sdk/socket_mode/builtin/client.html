@@ -210,6 +210,7 @@ class SocketModeClient(BaseSocketModeClient):
             on_message_listener=self._on_message,
             on_error_listener=self._on_error,
             on_close_listener=self._on_close,
+            ssl_context=self.web_client.ssl,
         )
         current_session.connect()
 
@@ -279,10 +280,15 @@ class SocketModeClient(BaseSocketModeClient):
             listener(message)
 
     def _on_error(self, error: Exception):
-        self.logger.exception(
+        error_message = (
             f&#34;on_error invoked (session id: {self.session_id()}, &#34;
             f&#34;error: {type(error).__name__}, message: {error})&#34;
         )
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
         for listener in self.on_error_listeners:
             listener(error)
 
@@ -313,10 +319,14 @@ class SocketModeClient(BaseSocketModeClient):
                     f&#34; (session id: {session_id})&#34;
                 )
             except Exception as e:
-                self.logger.exception(
+                error_message = (
                     &#34;Failed to start or stop the current session&#34;
                     f&#34; (session id: {session_id}, error: {e})&#34;
                 )
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
@@ -543,6 +553,7 @@ class SocketModeClient(BaseSocketModeClient):
             on_message_listener=self._on_message,
             on_error_listener=self._on_error,
             on_close_listener=self._on_close,
+            ssl_context=self.web_client.ssl,
         )
         current_session.connect()
 
@@ -612,10 +623,15 @@ class SocketModeClient(BaseSocketModeClient):
             listener(message)
 
     def _on_error(self, error: Exception):
-        self.logger.exception(
+        error_message = (
             f&#34;on_error invoked (session id: {self.session_id()}, &#34;
             f&#34;error: {type(error).__name__}, message: {error})&#34;
         )
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
         for listener in self.on_error_listeners:
             listener(error)
 
@@ -646,10 +662,14 @@ class SocketModeClient(BaseSocketModeClient):
                     f&#34; (session id: {session_id})&#34;
                 )
             except Exception as e:
-                self.logger.exception(
+                error_message = (
                     &#34;Failed to start or stop the current session&#34;
                     f&#34; (session id: {session_id}, error: {e})&#34;
                 )
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
@@ -816,6 +836,7 @@ class SocketModeClient(BaseSocketModeClient):
         on_message_listener=self._on_message,
         on_error_listener=self._on_error,
         on_close_listener=self._on_close,
+        ssl_context=self.web_client.ssl,
     )
     current_session.connect()
 

@@ -1090,6 +1090,27 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;user_ids&#34;: user_ids})
         return await self.api_call(&#34;admin.users.session.clearSettings&#34;, params=kwargs)
 
+    async def admin_users_unsupportedVersions_export(
+        self,
+        *,
+        date_end_of_support: Optional[Union[str, int]] = None,
+        date_sessions_started: Optional[Union[str, int]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Ask Slackbot to send you an export listing all workspace members using unsupported software,
+        presented as a zipped CSV file.
+        https://api.slack.com/methods/admin.users.unsupportedVersions.export
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;date_end_of_support&#34;: date_end_of_support,
+                &#34;date_sessions_started&#34;: date_sessions_started,
+            }
+        )
+        return await self.api_call(
+            &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
+        )
+
     async def admin_inviteRequests_approve(
         self,
         *,
@@ -1608,6 +1629,83 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/auth.test
         &#34;&#34;&#34;
         return await self.api_call(&#34;auth.test&#34;, params=kwargs)
+
+    async def bookmarks_add(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        type: str,
+        emoji: Optional[str] = None,
+        entity_id: Optional[str] = None,
+        link: Optional[str] = None,  # include when type is &#39;link&#39;
+        parent_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add bookmark to a channel.
+        https://api.slack.com/methods/bookmarks.add
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;title&#34;: title,
+                &#34;type&#34;: type,
+                &#34;emoji&#34;: emoji,
+                &#34;entity_id&#34;: entity_id,
+                &#34;link&#34;: link,
+                &#34;parent_id&#34;: parent_id,
+            }
+        )
+        return await self.api_call(&#34;bookmarks.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_edit(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        emoji: Optional[str] = None,
+        link: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Edit bookmark.
+        https://api.slack.com/methods/bookmarks.edit
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;bookmark_id&#34;: bookmark_id,
+                &#34;channel_id&#34;: channel_id,
+                &#34;emoji&#34;: emoji,
+                &#34;link&#34;: link,
+                &#34;title&#34;: title,
+            }
+        )
+        return await self.api_call(&#34;bookmarks.edit&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_list(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List bookmark for the channel.
+        https://api.slack.com/methods/bookmarks.list
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return await self.api_call(&#34;bookmarks.list&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_remove(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Remove bookmark from the channel.
+        https://api.slack.com/methods/bookmarks.remove
+        &#34;&#34;&#34;
+        kwargs.update({&#34;bookmark_id&#34;: bookmark_id, &#34;channel_id&#34;: channel_id})
+        return await self.api_call(&#34;bookmarks.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def bots_info(
         self,
@@ -5531,6 +5629,27 @@ removed at anytime.</p></div>
             kwargs.update({&#34;user_ids&#34;: user_ids})
         return await self.api_call(&#34;admin.users.session.clearSettings&#34;, params=kwargs)
 
+    async def admin_users_unsupportedVersions_export(
+        self,
+        *,
+        date_end_of_support: Optional[Union[str, int]] = None,
+        date_sessions_started: Optional[Union[str, int]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Ask Slackbot to send you an export listing all workspace members using unsupported software,
+        presented as a zipped CSV file.
+        https://api.slack.com/methods/admin.users.unsupportedVersions.export
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;date_end_of_support&#34;: date_end_of_support,
+                &#34;date_sessions_started&#34;: date_sessions_started,
+            }
+        )
+        return await self.api_call(
+            &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
+        )
+
     async def admin_inviteRequests_approve(
         self,
         *,
@@ -6049,6 +6168,83 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/auth.test
         &#34;&#34;&#34;
         return await self.api_call(&#34;auth.test&#34;, params=kwargs)
+
+    async def bookmarks_add(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        type: str,
+        emoji: Optional[str] = None,
+        entity_id: Optional[str] = None,
+        link: Optional[str] = None,  # include when type is &#39;link&#39;
+        parent_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add bookmark to a channel.
+        https://api.slack.com/methods/bookmarks.add
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;title&#34;: title,
+                &#34;type&#34;: type,
+                &#34;emoji&#34;: emoji,
+                &#34;entity_id&#34;: entity_id,
+                &#34;link&#34;: link,
+                &#34;parent_id&#34;: parent_id,
+            }
+        )
+        return await self.api_call(&#34;bookmarks.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_edit(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        emoji: Optional[str] = None,
+        link: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Edit bookmark.
+        https://api.slack.com/methods/bookmarks.edit
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;bookmark_id&#34;: bookmark_id,
+                &#34;channel_id&#34;: channel_id,
+                &#34;emoji&#34;: emoji,
+                &#34;link&#34;: link,
+                &#34;title&#34;: title,
+            }
+        )
+        return await self.api_call(&#34;bookmarks.edit&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_list(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List bookmark for the channel.
+        https://api.slack.com/methods/bookmarks.list
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return await self.api_call(&#34;bookmarks.list&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    async def bookmarks_remove(
+        self,
+        *,
+        bookmark_id: str,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Remove bookmark from the channel.
+        https://api.slack.com/methods/bookmarks.remove
+        &#34;&#34;&#34;
+        kwargs.update({&#34;bookmark_id&#34;: bookmark_id, &#34;channel_id&#34;: channel_id})
+        return await self.api_call(&#34;bookmarks.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def bots_info(
         self,
@@ -11134,6 +11330,39 @@ and what happens when the client closes—for one or more users.
     return await self.api_call(&#34;admin.users.setRegular&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_users_unsupportedVersions_export"><code class="name flex">
+<span>async def <span class="ident">admin_users_unsupportedVersions_export</span></span>(<span>self, *, date_end_of_support: Union[str, int, ForwardRef(None)] = None, date_sessions_started: Union[str, int, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Ask Slackbot to send you an export listing all workspace members using unsupported software,
+presented as a zipped CSV file.
+<a href="https://api.slack.com/methods/admin.users.unsupportedVersions.export">https://api.slack.com/methods/admin.users.unsupportedVersions.export</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_users_unsupportedVersions_export(
+    self,
+    *,
+    date_end_of_support: Optional[Union[str, int]] = None,
+    date_sessions_started: Optional[Union[str, int]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Ask Slackbot to send you an export listing all workspace members using unsupported software,
+    presented as a zipped CSV file.
+    https://api.slack.com/methods/admin.users.unsupportedVersions.export
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;date_end_of_support&#34;: date_end_of_support,
+            &#34;date_sessions_started&#34;: date_sessions_started,
+        }
+    )
+    return await self.api_call(
+        &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
+    )</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.api_test"><code class="name flex">
 <span>async def <span class="ident">api_test</span></span>(<span>self, *, error: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -11278,6 +11507,127 @@ Each authorization represents an app installation that the event is visible to.
     https://api.slack.com/methods/auth.test
     &#34;&#34;&#34;
     return await self.api_call(&#34;auth.test&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.bookmarks_add"><code class="name flex">
+<span>async def <span class="ident">bookmarks_add</span></span>(<span>self, *, channel_id: str, title: str, type: str, emoji: Optional[str] = None, entity_id: Optional[str] = None, link: Optional[str] = None, parent_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add bookmark to a channel.
+<a href="https://api.slack.com/methods/bookmarks.add">https://api.slack.com/methods/bookmarks.add</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def bookmarks_add(
+    self,
+    *,
+    channel_id: str,
+    title: str,
+    type: str,
+    emoji: Optional[str] = None,
+    entity_id: Optional[str] = None,
+    link: Optional[str] = None,  # include when type is &#39;link&#39;
+    parent_id: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Add bookmark to a channel.
+    https://api.slack.com/methods/bookmarks.add
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;title&#34;: title,
+            &#34;type&#34;: type,
+            &#34;emoji&#34;: emoji,
+            &#34;entity_id&#34;: entity_id,
+            &#34;link&#34;: link,
+            &#34;parent_id&#34;: parent_id,
+        }
+    )
+    return await self.api_call(&#34;bookmarks.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.bookmarks_edit"><code class="name flex">
+<span>async def <span class="ident">bookmarks_edit</span></span>(<span>self, *, bookmark_id: str, channel_id: str, emoji: Optional[str] = None, link: Optional[str] = None, title: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Edit bookmark.
+<a href="https://api.slack.com/methods/bookmarks.edit">https://api.slack.com/methods/bookmarks.edit</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def bookmarks_edit(
+    self,
+    *,
+    bookmark_id: str,
+    channel_id: str,
+    emoji: Optional[str] = None,
+    link: Optional[str] = None,
+    title: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Edit bookmark.
+    https://api.slack.com/methods/bookmarks.edit
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;bookmark_id&#34;: bookmark_id,
+            &#34;channel_id&#34;: channel_id,
+            &#34;emoji&#34;: emoji,
+            &#34;link&#34;: link,
+            &#34;title&#34;: title,
+        }
+    )
+    return await self.api_call(&#34;bookmarks.edit&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.bookmarks_list"><code class="name flex">
+<span>async def <span class="ident">bookmarks_list</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>List bookmark for the channel.
+<a href="https://api.slack.com/methods/bookmarks.list">https://api.slack.com/methods/bookmarks.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def bookmarks_list(
+    self,
+    *,
+    channel_id: str,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;List bookmark for the channel.
+    https://api.slack.com/methods/bookmarks.list
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    return await self.api_call(&#34;bookmarks.list&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.bookmarks_remove"><code class="name flex">
+<span>async def <span class="ident">bookmarks_remove</span></span>(<span>self, *, bookmark_id: str, channel_id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove bookmark from the channel.
+<a href="https://api.slack.com/methods/bookmarks.remove">https://api.slack.com/methods/bookmarks.remove</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def bookmarks_remove(
+    self,
+    *,
+    bookmark_id: str,
+    channel_id: str,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Remove bookmark from the channel.
+    https://api.slack.com/methods/bookmarks.remove
+    &#34;&#34;&#34;
+    kwargs.update({&#34;bookmark_id&#34;: bookmark_id, &#34;channel_id&#34;: channel_id})
+    return await self.api_call(&#34;bookmarks.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.bots_info"><code class="name flex">
@@ -14852,7 +15202,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.team_accessLogs"><code class="name flex">
-<span>async def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[int, str, ForwardRef(None)] = None, count: Union[int, str, ForwardRef(None)] = None, page: Union[int, str, ForwardRef(None)] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[str, int, ForwardRef(None)] = None, count: Union[str, int, ForwardRef(None)] = None, page: Union[str, int, ForwardRef(None)] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the access logs for the current team.
@@ -14952,7 +15302,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.team_integrationLogs"><code class="name flex">
-<span>async def <span class="ident">team_integrationLogs</span></span>(<span>self, *, app_id: Optional[str] = None, change_type: Optional[str] = None, count: Union[int, str, ForwardRef(None)] = None, page: Union[int, str, ForwardRef(None)] = None, service_id: Optional[str] = None, team_id: Optional[str] = None, user: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">team_integrationLogs</span></span>(<span>self, *, app_id: Optional[str] = None, change_type: Optional[str] = None, count: Union[str, int, ForwardRef(None)] = None, page: Union[str, int, ForwardRef(None)] = None, service_id: Optional[str] = None, team_id: Optional[str] = None, user: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the integration logs for the current team.
@@ -15520,7 +15870,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.users_setPhoto"><code class="name flex">
-<span>async def <span class="ident">users_setPhoto</span></span>(<span>self, *, image: Union[str, io.IOBase], crop_w: Union[int, str, ForwardRef(None)] = None, crop_x: Union[int, str, ForwardRef(None)] = None, crop_y: Union[int, str, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">users_setPhoto</span></span>(<span>self, *, image: Union[str, io.IOBase], crop_w: Union[str, int, ForwardRef(None)] = None, crop_x: Union[str, int, ForwardRef(None)] = None, crop_y: Union[str, int, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set the user profile photo
@@ -15917,12 +16267,17 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_setExpiration" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_setExpiration">admin_users_setExpiration</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_setOwner" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_setOwner">admin_users_setOwner</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_setRegular" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_setRegular">admin_users_setRegular</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_unsupportedVersions_export" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_unsupportedVersions_export">admin_users_unsupportedVersions_export</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.api_test" href="#slack_sdk.web.async_client.AsyncWebClient.api_test">api_test</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.apps_connections_open" href="#slack_sdk.web.async_client.AsyncWebClient.apps_connections_open">apps_connections_open</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.apps_event_authorizations_list" href="#slack_sdk.web.async_client.AsyncWebClient.apps_event_authorizations_list">apps_event_authorizations_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.apps_uninstall" href="#slack_sdk.web.async_client.AsyncWebClient.apps_uninstall">apps_uninstall</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.auth_revoke" href="#slack_sdk.web.async_client.AsyncWebClient.auth_revoke">auth_revoke</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.auth_test" href="#slack_sdk.web.async_client.AsyncWebClient.auth_test">auth_test</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.bookmarks_add" href="#slack_sdk.web.async_client.AsyncWebClient.bookmarks_add">bookmarks_add</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.bookmarks_edit" href="#slack_sdk.web.async_client.AsyncWebClient.bookmarks_edit">bookmarks_edit</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.bookmarks_list" href="#slack_sdk.web.async_client.AsyncWebClient.bookmarks_list">bookmarks_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.bookmarks_remove" href="#slack_sdk.web.async_client.AsyncWebClient.bookmarks_remove">bookmarks_remove</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.bots_info" href="#slack_sdk.web.async_client.AsyncWebClient.bots_info">bots_info</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.calls_add" href="#slack_sdk.web.async_client.AsyncWebClient.calls_add">calls_add</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.calls_end" href="#slack_sdk.web.async_client.AsyncWebClient.calls_end">calls_end</a></code></li>

@@ -353,7 +353,7 @@ class LinkButtonElement(ButtonElement):
     def __init__(
         self,
         *,
-        text: str,
+        text: Union[str, dict, PlainTextObject],
         url: str,
         action_id: Optional[str] = None,
         style: Optional[str] = None,
@@ -3480,7 +3480,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.LinkButtonElement"><code class="flex name class">
 <span>class <span class="ident">LinkButtonElement</span></span>
-<span>(</span><span>*, text: str, url: str, action_id: Optional[str] = None, style: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], url: str, action_id: Optional[str] = None, style: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3521,7 +3521,7 @@ If you don't include this field, the default button style will be used.</dd>
     def __init__(
         self,
         *,
-        text: str,
+        text: Union[str, dict, PlainTextObject],
         url: str,
         action_id: Optional[str] = None,
         style: Optional[str] = None,

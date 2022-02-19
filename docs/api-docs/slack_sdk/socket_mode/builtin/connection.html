@@ -92,6 +92,7 @@ class Connection:
         on_error_listener: Optional[Callable[[Exception], None]] = None,
         on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
         connection_type_name: str = &#34;Socket Mode&#34;,
+        ssl_context: Optional[ssl.SSLContext] = None,
     ):
         self.url = url
         self.logger = logger
@@ -122,6 +123,8 @@ class Connection:
         self.on_close_listener = on_close_listener
         self.connection_type_name = connection_type_name
 
+        self.ssl_context = ssl_context
+
     def connect(self) -&gt; None:
         try:
             parsed_url = urlparse(self.url.strip())
@@ -142,6 +145,7 @@ class Connection:
                 proxy=self.proxy,
                 proxy_headers=self.proxy_headers,
                 trace_enabled=self.trace_enabled,
+                ssl_context=self.ssl_context,
             )
 
             # WebSocket handshake
@@ -191,15 +195,23 @@ class Connection:
                 if e.args and len(e.args) &gt; 1 and isinstance(e.args[0], int):
                     code = e.args[0]
                 if code is not None:
-                    self.logger.exception(
-                        f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
-                    )
+                    error_message = f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
                 raise
 
         except Exception as e:
-            self.logger.exception(
-                f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
-            )
+            error_message = f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
+            if self.on_error_listener is not None:
+                self.on_error_listener(e)
+
             self.disconnect()
 
     def disconnect(self) -&gt; None:
@@ -318,10 +330,15 @@ class Connection:
                 )
             self.consecutive_check_state_error_count = 0
         except Exception as e:
-            self.logger.exception(
+            error_message = (
                 &#34;Failed to check the state of sock &#34;
                 f&#34;(session id: {self.session_id}, error: {type(e).__name__}, message: {e})&#34;
             )
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
             self.consecutive_check_state_error_count += 1
             if self.consecutive_check_state_error_count &gt;= 5:
                 self.disconnect()
@@ -470,29 +487,42 @@ class Connection:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        self.logger.exception(
+                        error_message = (
                             &#34;Got an OSError while receiving data&#34;
                             f&#34; (session id: {self.session_id}, error: {e})&#34;
                         )
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
+
                 # As this connection no longer works in any way, terminating it
                 if self.is_active():
                     try:
                         self.disconnect()
                     except Exception as disconnection_error:
-                        self.logger.exception(
+                        error_message = (
                             &#34;Failed to disconnect&#34;
                             f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                         )
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
                 state.terminated = True
                 break
             except Exception as e:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    self.logger.exception(
+                    error_message = (
                         &#34;Got an exception while receiving data&#34;
                         f&#34; (session id: {self.session_id}, error: {e})&#34;
                     )
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
 
         state.terminated = True</code></pre>
 </details>
@@ -508,7 +538,7 @@ class Connection:
 <dl>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection"><code class="flex name class">
 <span>class <span class="ident">Connection</span></span>
-<span>(</span><span>url: str, logger: logging.Logger, proxy: Optional[str] = None, proxy_headers: Optional[Dict[str, str]] = None, ping_interval: float = 5, receive_timeout: float = 3, receive_buffer_size: int = 1024, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False, on_message_listener: Optional[Callable[[str], None]] = None, on_error_listener: Optional[Callable[[Exception], None]] = None, on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None, connection_type_name: str = 'Socket Mode')</span>
+<span>(</span><span>url: str, logger: logging.Logger, proxy: Optional[str] = None, proxy_headers: Optional[Dict[str, str]] = None, ping_interval: float = 5, receive_timeout: float = 3, receive_buffer_size: int = 1024, trace_enabled: bool = False, all_message_trace_enabled: bool = False, ping_pong_trace_enabled: bool = False, on_message_listener: Optional[Callable[[str], None]] = None, on_error_listener: Optional[Callable[[Exception], None]] = None, on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None, connection_type_name: str = 'Socket Mode', ssl_context: Optional[ssl.SSLContext] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -549,6 +579,7 @@ class Connection:
         on_error_listener: Optional[Callable[[Exception], None]] = None,
         on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
         connection_type_name: str = &#34;Socket Mode&#34;,
+        ssl_context: Optional[ssl.SSLContext] = None,
     ):
         self.url = url
         self.logger = logger
@@ -579,6 +610,8 @@ class Connection:
         self.on_close_listener = on_close_listener
         self.connection_type_name = connection_type_name
 
+        self.ssl_context = ssl_context
+
     def connect(self) -&gt; None:
         try:
             parsed_url = urlparse(self.url.strip())
@@ -599,6 +632,7 @@ class Connection:
                 proxy=self.proxy,
                 proxy_headers=self.proxy_headers,
                 trace_enabled=self.trace_enabled,
+                ssl_context=self.ssl_context,
             )
 
             # WebSocket handshake
@@ -648,15 +682,23 @@ class Connection:
                 if e.args and len(e.args) &gt; 1 and isinstance(e.args[0], int):
                     code = e.args[0]
                 if code is not None:
-                    self.logger.exception(
-                        f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
-                    )
+                    error_message = f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
                 raise
 
         except Exception as e:
-            self.logger.exception(
-                f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
-            )
+            error_message = f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
+            if self.on_error_listener is not None:
+                self.on_error_listener(e)
+
             self.disconnect()
 
     def disconnect(self) -&gt; None:
@@ -775,10 +817,15 @@ class Connection:
                 )
             self.consecutive_check_state_error_count = 0
         except Exception as e:
-            self.logger.exception(
+            error_message = (
                 &#34;Failed to check the state of sock &#34;
                 f&#34;(session id: {self.session_id}, error: {type(e).__name__}, message: {e})&#34;
             )
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
             self.consecutive_check_state_error_count += 1
             if self.consecutive_check_state_error_count &gt;= 5:
                 self.disconnect()
@@ -927,29 +974,42 @@ class Connection:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        self.logger.exception(
+                        error_message = (
                             &#34;Got an OSError while receiving data&#34;
                             f&#34; (session id: {self.session_id}, error: {e})&#34;
                         )
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
+
                 # As this connection no longer works in any way, terminating it
                 if self.is_active():
                     try:
                         self.disconnect()
                     except Exception as disconnection_error:
-                        self.logger.exception(
+                        error_message = (
                             &#34;Failed to disconnect&#34;
                             f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                         )
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
                 state.terminated = True
                 break
             except Exception as e:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    self.logger.exception(
+                    error_message = (
                         &#34;Got an exception while receiving data&#34;
                         f&#34; (session id: {self.session_id}, error: {e})&#34;
                     )
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
 
         state.terminated = True</code></pre>
 </details>
@@ -1054,10 +1114,15 @@ class Connection:
             )
         self.consecutive_check_state_error_count = 0
     except Exception as e:
-        self.logger.exception(
+        error_message = (
             &#34;Failed to check the state of sock &#34;
             f&#34;(session id: {self.session_id}, error: {type(e).__name__}, message: {e})&#34;
         )
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
         self.consecutive_check_state_error_count += 1
         if self.consecutive_check_state_error_count &gt;= 5:
             self.disconnect()</code></pre>
@@ -1105,6 +1170,7 @@ class Connection:
             proxy=self.proxy,
             proxy_headers=self.proxy_headers,
             trace_enabled=self.trace_enabled,
+            ssl_context=self.ssl_context,
         )
 
         # WebSocket handshake
@@ -1154,15 +1220,23 @@ class Connection:
             if e.args and len(e.args) &gt; 1 and isinstance(e.args[0], int):
                 code = e.args[0]
             if code is not None:
-                self.logger.exception(
-                    f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
-                )
+                error_message = f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
             raise
 
     except Exception as e:
-        self.logger.exception(
-            f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
-        )
+        error_message = f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
+        if self.on_error_listener is not None:
+            self.on_error_listener(e)
+
         self.disconnect()</code></pre>
 </details>
 </dd>
@@ -1411,29 +1485,42 @@ class Connection:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    self.logger.exception(
+                    error_message = (
                         &#34;Got an OSError while receiving data&#34;
                         f&#34; (session id: {self.session_id}, error: {e})&#34;
                     )
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
+
             # As this connection no longer works in any way, terminating it
             if self.is_active():
                 try:
                     self.disconnect()
                 except Exception as disconnection_error:
-                    self.logger.exception(
+                    error_message = (
                         &#34;Failed to disconnect&#34;
                         f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                     )
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
             state.terminated = True
             break
         except Exception as e:
             if self.on_error_listener is not None:
                 self.on_error_listener(e)
             else:
-                self.logger.exception(
+                error_message = (
                     &#34;Got an exception while receiving data&#34;
                     f&#34; (session id: {self.session_id}, error: {e})&#34;
                 )
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
 
     state.terminated = True</code></pre>
 </details>
