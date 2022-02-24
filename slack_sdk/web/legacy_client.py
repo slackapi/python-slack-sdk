@@ -2171,6 +2171,7 @@ class LegacyWebClient(LegacyBaseClient):
         attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
         blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         as_user: Optional[bool] = None,
+        file_ids: Optional[Union[str, Sequence[str]]] = None,
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
@@ -2192,6 +2193,10 @@ class LegacyWebClient(LegacyBaseClient):
                 "reply_broadcast": reply_broadcast,
             }
         )
+        if isinstance(file_ids, (list, Tuple)):
+            kwargs.update({"file_ids": ",".join(file_ids)})
+        else:
+            kwargs.update({"file_ids": file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing("chat.update", kwargs)
@@ -2406,7 +2411,7 @@ class LegacyWebClient(LegacyBaseClient):
         else:
             kwargs.update({"emails": emails})
         if isinstance(user_ids, (list, Tuple)):
-            kwargs.update({"emails": ",".join(user_ids)})
+            kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
         return self.api_call(
