@@ -178,6 +178,10 @@ class Details:
     who_can_post: Optional[ConversationPref]
     can_thread: Optional[ConversationPref]
     is_external_limited: Optional[bool]
+    exporting_team_id: Optional[int]
+    session_search_start: Optional[int]
+    deprecation_search_end: Optional[int]
+    is_error: Optional[bool]
 
     def __init__(
         self,
@@ -240,6 +244,10 @@ class Details:
         who_can_post: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
         can_thread: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
         is_external_limited: Optional[bool] = None,
+        exporting_team_id: Optional[int] = None,
+        session_search_start: Optional[int] = None,
+        deprecation_search_end: Optional[int] = None,
+        is_error: Optional[bool] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -317,6 +325,10 @@ class Details:
             else ConversationPref(**can_thread)
         )
         self.is_external_limited = is_external_limited
+        self.exporting_team_id = exporting_team_id
+        self.session_search_start = session_search_start
+        self.deprecation_search_end = deprecation_search_end
+        self.is_error = is_error
 
 
 class App:
