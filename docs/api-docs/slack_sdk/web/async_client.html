@@ -2240,6 +2240,7 @@ class AsyncWebClient(AsyncBaseClient):
         attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
         blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         as_user: Optional[bool] = None,
+        file_ids: Optional[Union[str, Sequence[str]]] = None,
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
@@ -2261,6 +2262,10 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;reply_broadcast&#34;: reply_broadcast,
             }
         )
+        if isinstance(file_ids, (list, Tuple)):
+            kwargs.update({&#34;file_ids&#34;: &#34;,&#34;.join(file_ids)})
+        else:
+            kwargs.update({&#34;file_ids&#34;: file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
@@ -2477,7 +2482,7 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             kwargs.update({&#34;emails&#34;: emails})
         if isinstance(user_ids, (list, Tuple)):
-            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
         else:
             kwargs.update({&#34;user_ids&#34;: user_ids})
         return await self.api_call(
@@ -6779,6 +6784,7 @@ removed at anytime.</p></div>
         attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
         blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         as_user: Optional[bool] = None,
+        file_ids: Optional[Union[str, Sequence[str]]] = None,
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
@@ -6800,6 +6806,10 @@ removed at anytime.</p></div>
                 &#34;reply_broadcast&#34;: reply_broadcast,
             }
         )
+        if isinstance(file_ids, (list, Tuple)):
+            kwargs.update({&#34;file_ids&#34;: &#34;,&#34;.join(file_ids)})
+        else:
+            kwargs.update({&#34;file_ids&#34;: file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
@@ -7016,7 +7026,7 @@ removed at anytime.</p></div>
         else:
             kwargs.update({&#34;emails&#34;: emails})
         if isinstance(user_ids, (list, Tuple)):
-            kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
         else:
             kwargs.update({&#34;user_ids&#34;: user_ids})
         return await self.api_call(
@@ -12499,7 +12509,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_update"><code class="name flex">
-<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, as_user: Optional[bool] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, as_user: Optional[bool] = None, file_ids: Union[str, Sequence[str], ForwardRef(None)] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates a message in a channel.
@@ -12517,6 +12527,7 @@ Each authorization represents an app installation that the event is visible to.
     attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
     blocks: Optional[Sequence[Union[Dict, Block]]] = None,
     as_user: Optional[bool] = None,
+    file_ids: Optional[Union[str, Sequence[str]]] = None,
     link_names: Optional[bool] = None,
     parse: Optional[str] = None,  # none, full
     reply_broadcast: Optional[bool] = None,
@@ -12538,6 +12549,10 @@ Each authorization represents an app installation that the event is visible to.
             &#34;reply_broadcast&#34;: reply_broadcast,
         }
     )
+    if isinstance(file_ids, (list, Tuple)):
+        kwargs.update({&#34;file_ids&#34;: &#34;,&#34;.join(file_ids)})
+    else:
+        kwargs.update({&#34;file_ids&#34;: file_ids})
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
     _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
@@ -12838,7 +12853,7 @@ Each authorization represents an app installation that the event is visible to.
     else:
         kwargs.update({&#34;emails&#34;: emails})
     if isinstance(user_ids, (list, Tuple)):
-        kwargs.update({&#34;emails&#34;: &#34;,&#34;.join(user_ids)})
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
     else:
         kwargs.update({&#34;user_ids&#34;: user_ids})
     return await self.api_call(
