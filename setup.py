@@ -23,10 +23,12 @@ validate_dependencies = [
     "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "Werkzeug<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "itsdangerous==2.0.1",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
+    "Jinja2==3.0.3",  # https://github.com/pallets/flask/issues/4494
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=4,<5",
-    "black==22.1.0",
+    "black==22.3.0",
+    "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
     "psutil>=5,<6",
     "databases>=0.5",
     # used only under slack_sdk/*_store
