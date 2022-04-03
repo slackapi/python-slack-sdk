@@ -3904,12 +3904,13 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         team: Optional[str] = None,
+        domain: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about the current team.
         https://api.slack.com/methods/team.info
         """
-        kwargs.update({"team": team})
+        kwargs.update({"team": team, "domain": domain})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
     def team_integrationLogs(
