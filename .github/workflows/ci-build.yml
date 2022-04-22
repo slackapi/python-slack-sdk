@@ -3,7 +3,7 @@ name: CI Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ v2 ]
   pull_request:
 
 jobs:
