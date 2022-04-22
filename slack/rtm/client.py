@@ -569,7 +569,7 @@ class RTMClient:
         """
         wait_time = exception.response.get("headers", {}).get(
             "Retry-After",
-            min((2 ** self._connection_attempts) + random.random(), max_wait_time),
+            min((2**self._connection_attempts) + random.random(), max_wait_time),
         )
         self._logger.debug("Waiting %s seconds before reconnecting.", wait_time)
         await asyncio.sleep(float(wait_time))
@@ -580,7 +580,8 @@ class RTMClient:
         close_method = getattr(self._websocket, "close", None)
         if callable(close_method):
             future = asyncio.ensure_future(
-                close_method(), loop=self._event_loop,  # skipcq: PYL-E1102
+                close_method(),
+                loop=self._event_loop,  # skipcq: PYL-E1102
             )
             futures.append(future)
         self._websocket = None
