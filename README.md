@@ -19,7 +19,7 @@ The **Python slackclient** allows interaction with:
 - The Slack web api methods available at our [Api Docs site][api-methods]
 - Interaction with our [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs], please check the [Slack Events API adapter for Python][python-slack-events-api].
+If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slack-sdk/installation/).
 
 Details on the Tokens and Authentication can be found in our [Auth Guide](https://slack.dev/python-slackclient/auth.html).
 
@@ -328,10 +328,7 @@ If you're migrating from v1.x of slackclient to v2.x, Please follow our migratio
 
 ---
 
-We no longer provide support for v1 or v2 of this SDK and only maintain the latest v3 version. If you would like support
-from this project's maintainers please consider updating to the latest version of the SDK first. Otherwise, you may visit the
-[Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your
-fellow Slack developers.
+We no longer provide support for v1 or v2 of this SDK and only maintain the latest v3 version. If you would like support from this project's maintainers please consider updating to the latest version of the SDK first. Otherwise, you may visit the [Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
 
 <!-- Markdown links -->
 
