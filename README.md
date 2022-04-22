@@ -1,14 +1,16 @@
 # Python slackclient
 
+## Important Notice
+
+**This [`slackclient`](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode now** and [`slack-sdk`](https://pypi.org/project/slack-sdk/) project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, retry handlers, and many more.
+
+Refer to [the migration guide](https://slack.dev/python-slack-sdk/v3-migration/index.html#from-slackclient-2-x) to learn how to smoothly migrate your existing code.
+
+## Overview
+
 The Python `slackclient` library is a developer kit for interfacing with the Slack Web API and Real Time Messaging (RTM) API on Python 3.6 and above.
 
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slackclient/](https://slack.dev/python-slackclient/)**
-
-[![pypi package][pypi-image]][pypi-url]
-[![Build Status][travis-image]][travis-url]
-[![Python Version][python-version]][pypi-url]
-[![codecov][codecov-image]][codecov-url]
-[![contact][contact-image]][contact-url]
 
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
@@ -189,7 +191,7 @@ When in async mode its important to remember to await or run/run_until_complete 
 
 #### Slackclient as a script
 
-```python 
+```python
 import asyncio
 import os
 from slack import WebClient
@@ -326,10 +328,10 @@ If you're migrating from v1.x of slackclient to v2.x, Please follow our migratio
 
 ---
 
-If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
-
-Use our [Github Issue Tracker][gh-issues] for reporting bugs or requesting features.
-Visit the [Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your fellow Slack developers.
+We no longer provide support for v1 or v2 of this SDK and only maintain the latest v3 version. If you would like support
+from this project's maintainers please consider updating to the latest version of the SDK first. Otherwise, you may visit the
+[Slack Community][slack-community] for getting help using Slack Developer Kit for Python or just generally bond with your
+fellow Slack developers.
 
 <!-- Markdown links -->
 
