@@ -39,6 +39,7 @@ from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
+from slack_sdk.models.metadata import Metadata
 
 
 def convert_bool_to_0_or_1(
@@ -208,10 +209,12 @@ def _build_req_args(
 
 
 def _parse_web_class_objects(kwargs) -&gt; None:
-    def to_dict(obj: Union[Dict, Block, Attachment]):
+    def to_dict(obj: Union[Dict, Block, Attachment, Metadata]):
         if isinstance(obj, Block):
             return obj.to_dict()
         if isinstance(obj, Attachment):
+            return obj.to_dict()
+        if isinstance(obj, Metadata):
             return obj.to_dict()
         return obj
 
@@ -224,6 +227,10 @@ def _parse_web_class_objects(kwargs) -&gt; None:
     if attachments is not None and isinstance(attachments, list):
         dict_attachments = [to_dict(a) for a in attachments]
         kwargs.update({&#34;attachments&#34;: dict_attachments})
+
+    metadata = kwargs.get(&#34;metadata&#34;, None)
+    if metadata is not None and isinstance(metadata, Metadata):
+        kwargs.update({&#34;metadata&#34;: to_dict(metadata)})
 
 
 def _update_call_participants(

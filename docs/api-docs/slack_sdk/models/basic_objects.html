@@ -28,7 +28,7 @@
 </summary>
 <pre><code class="python">from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Callable, Iterable, Set, Union, Any
+from typing import Callable, Iterable, Set, Union, Any, Tuple
 
 from slack_sdk.errors import SlackObjectFormationError
 
@@ -66,9 +66,9 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         &#34;&#34;&#34;
 
         def to_dict_compatible(
-            value: Union[dict, list, object]
+            value: Union[dict, list, object, Tuple]
         ) -&gt; Union[dict, list, Any]:
-            if isinstance(value, list):  # skipcq: PYL-R1705
+            if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, &#34;to_dict&#34;, None)
@@ -243,9 +243,9 @@ functions should return true if valid, false if not.</p>
         &#34;&#34;&#34;
 
         def to_dict_compatible(
-            value: Union[dict, list, object]
+            value: Union[dict, list, object, Tuple]
         ) -&gt; Union[dict, list, Any]:
-            if isinstance(value, list):  # skipcq: PYL-R1705
+            if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, &#34;to_dict&#34;, None)
@@ -318,6 +318,7 @@ functions should return true if valid, false if not.</p>
 <li><a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></li>
 <li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
 <li><a title="slack_sdk.models.messages.message.Message" href="messages/message.html#slack_sdk.models.messages.message.Message">Message</a></li>
+<li><a title="slack_sdk.models.metadata.Metadata" href="metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a></li>
 <li><a title="slack_sdk.models.views.View" href="views/index.html#slack_sdk.models.views.View">View</a></li>
 <li><a title="slack_sdk.models.views.ViewState" href="views/index.html#slack_sdk.models.views.ViewState">ViewState</a></li>
 <li><a title="slack_sdk.models.views.ViewStateValue" href="views/index.html#slack_sdk.models.views.ViewStateValue">ViewStateValue</a></li>
@@ -358,9 +359,9 @@ present on this object</p></div>
     &#34;&#34;&#34;
 
     def to_dict_compatible(
-        value: Union[dict, list, object]
+        value: Union[dict, list, object, Tuple]
     ) -&gt; Union[dict, list, Any]:
-        if isinstance(value, list):  # skipcq: PYL-R1705
+        if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
             return [to_dict_compatible(v) for v in value]
         else:
             to_dict = getattr(value, &#34;to_dict&#34;, None)

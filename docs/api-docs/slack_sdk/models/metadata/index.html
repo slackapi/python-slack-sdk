@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>slack_sdk.version API documentation</title>
-<meta name="description" content="Check the latest version at https://pypi.org/project/slack-sdk/" />
+<title>slack_sdk.models.metadata API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,16 +19,43 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>slack_sdk.version</code></h1>
+<h1 class="title">Module <code>slack_sdk.models.metadata</code></h1>
 </header>
 <section id="section-intro">
-<p>Check the latest version at <a href="https://pypi.org/project/slack-sdk/">https://pypi.org/project/slack-sdk/</a></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Check the latest version at https://pypi.org/project/slack-sdk/&#34;&#34;&#34;
-__version__ = &#34;3.16.0&#34;</code></pre>
+<pre><code class="python">from typing import Dict, Any
+from slack_sdk.models.basic_objects import JsonObject
+
+
+class Metadata(JsonObject):
+    &#34;&#34;&#34;Message metadata
+
+    https://api.slack.com/metadata
+    &#34;&#34;&#34;
+
+    attributes = {
+        &#34;event_type&#34;,
+        &#34;event_payload&#34;,
+    }
+
+    def __init__(
+        self,
+        event_type: str,
+        event_payload: Dict[str, Any],
+        **kwargs,
+    ):
+        self.event_type = event_type
+        self.event_payload = event_payload
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
 </details>
 </section>
 <section>
@@ -38,6 +65,64 @@ __version__ = &#34;3.16.0&#34;</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.models.metadata.Metadata"><code class="flex name class">
+<span>class <span class="ident">Metadata</span></span>
+<span>(</span><span>event_type: str, event_payload: Dict[str, Any], **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Message metadata</p>
+<p><a href="https://api.slack.com/metadata">https://api.slack.com/metadata</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Metadata(JsonObject):
+    &#34;&#34;&#34;Message metadata
+
+    https://api.slack.com/metadata
+    &#34;&#34;&#34;
+
+    attributes = {
+        &#34;event_type&#34;,
+        &#34;event_payload&#34;,
+    }
+
+    def __init__(
+        self,
+        event_type: str,
+        event_payload: Dict[str, Any],
+        **kwargs,
+    ):
+        self.event_type = event_type
+        self.event_payload = event_payload
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -48,7 +133,14 @@ __version__ = &#34;3.16.0&#34;</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="slack_sdk" href="index.html">slack_sdk</a></code></li>
+<li><code><a title="slack_sdk.models" href="../index.html">slack_sdk.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.Metadata" href="#slack_sdk.models.metadata.Metadata">Metadata</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

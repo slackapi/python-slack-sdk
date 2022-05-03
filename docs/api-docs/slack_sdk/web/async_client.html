@@ -53,6 +53,7 @@ from .internal_utils import (
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
+from ..models.metadata import Metadata
 
 
 class AsyncWebClient(AsyncBaseClient):
@@ -2127,6 +2128,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Sends a message to a channel.
@@ -2151,6 +2153,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;link_names&#34;: link_names,
                 &#34;username&#34;: username,
                 &#34;parse&#34;: parse,
+                &#34;metadata&#34;: metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2174,6 +2177,7 @@ class AsyncWebClient(AsyncBaseClient):
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Schedules a message.
@@ -2193,6 +2197,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;unfurl_links&#34;: unfurl_links,
                 &#34;unfurl_media&#34;: unfurl_media,
                 &#34;link_names&#34;: link_names,
+                &#34;metadata&#34;: metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2244,6 +2249,7 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Updates a message in a channel.
@@ -2260,6 +2266,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;link_names&#34;: link_names,
                 &#34;parse&#34;: parse,
                 &#34;reply_broadcast&#34;: reply_broadcast,
+                &#34;metadata&#34;: metadata,
             }
         )
         if isinstance(file_ids, (list, Tuple)):
@@ -2404,6 +2411,7 @@ class AsyncWebClient(AsyncBaseClient):
         channel: str,
         cursor: Optional[str] = None,
         inclusive: Optional[bool] = None,
+        include_all_metadata: Optional[bool] = None,
         latest: Optional[str] = None,
         limit: Optional[int] = None,
         oldest: Optional[str] = None,
@@ -2417,6 +2425,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;channel&#34;: channel,
                 &#34;cursor&#34;: cursor,
                 &#34;inclusive&#34;: inclusive,
+                &#34;include_all_metadata&#34;: include_all_metadata,
                 &#34;limit&#34;: limit,
                 &#34;latest&#34;: latest,
                 &#34;oldest&#34;: oldest,
@@ -3983,12 +3992,13 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         team: Optional[str] = None,
+        domain: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets information about the current team.
         https://api.slack.com/methods/team.info
         &#34;&#34;&#34;
-        kwargs.update({&#34;team&#34;: team})
+        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
         return await self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def team_integrationLogs(
@@ -6671,6 +6681,7 @@ removed at anytime.</p></div>
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Sends a message to a channel.
@@ -6695,6 +6706,7 @@ removed at anytime.</p></div>
                 &#34;link_names&#34;: link_names,
                 &#34;username&#34;: username,
                 &#34;parse&#34;: parse,
+                &#34;metadata&#34;: metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -6718,6 +6730,7 @@ removed at anytime.</p></div>
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Schedules a message.
@@ -6737,6 +6750,7 @@ removed at anytime.</p></div>
                 &#34;unfurl_links&#34;: unfurl_links,
                 &#34;unfurl_media&#34;: unfurl_media,
                 &#34;link_names&#34;: link_names,
+                &#34;metadata&#34;: metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -6788,6 +6802,7 @@ removed at anytime.</p></div>
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Updates a message in a channel.
@@ -6804,6 +6819,7 @@ removed at anytime.</p></div>
                 &#34;link_names&#34;: link_names,
                 &#34;parse&#34;: parse,
                 &#34;reply_broadcast&#34;: reply_broadcast,
+                &#34;metadata&#34;: metadata,
             }
         )
         if isinstance(file_ids, (list, Tuple)):
@@ -6948,6 +6964,7 @@ removed at anytime.</p></div>
         channel: str,
         cursor: Optional[str] = None,
         inclusive: Optional[bool] = None,
+        include_all_metadata: Optional[bool] = None,
         latest: Optional[str] = None,
         limit: Optional[int] = None,
         oldest: Optional[str] = None,
@@ -6961,6 +6978,7 @@ removed at anytime.</p></div>
                 &#34;channel&#34;: channel,
                 &#34;cursor&#34;: cursor,
                 &#34;inclusive&#34;: inclusive,
+                &#34;include_all_metadata&#34;: include_all_metadata,
                 &#34;limit&#34;: limit,
                 &#34;latest&#34;: latest,
                 &#34;oldest&#34;: oldest,
@@ -8527,12 +8545,13 @@ removed at anytime.</p></div>
         self,
         *,
         team: Optional[str] = None,
+        domain: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets information about the current team.
         https://api.slack.com/methods/team.info
         &#34;&#34;&#34;
-        kwargs.update({&#34;team&#34;: team})
+        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
         return await self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def team_integrationLogs(
@@ -12315,7 +12334,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postMessage"><code class="name flex">
-<span>async def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, file_annotation: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, file_annotation: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sends a message to a channel.
@@ -12344,6 +12363,7 @@ Each authorization represents an app installation that the event is visible to.
     link_names: Optional[bool] = None,
     username: Optional[str] = None,
     parse: Optional[str] = None,  # none, full
+    metadata: Optional[Union[Dict, Metadata]] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Sends a message to a channel.
@@ -12368,6 +12388,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;link_names&#34;: link_names,
             &#34;username&#34;: username,
             &#34;parse&#34;: parse,
+            &#34;metadata&#34;: metadata,
         }
     )
     _parse_web_class_objects(kwargs)
@@ -12378,7 +12399,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_scheduleMessage"><code class="name flex">
-<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self, *, channel: str, post_at: Union[str, int], text: str, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, link_names: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self, *, channel: str, post_at: Union[str, int], text: str, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, link_names: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Schedules a message.
@@ -12402,6 +12423,7 @@ Each authorization represents an app installation that the event is visible to.
     unfurl_links: Optional[bool] = None,
     unfurl_media: Optional[bool] = None,
     link_names: Optional[bool] = None,
+    metadata: Optional[Union[Dict, Metadata]] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Schedules a message.
@@ -12421,6 +12443,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;unfurl_links&#34;: unfurl_links,
             &#34;unfurl_media&#34;: unfurl_media,
             &#34;link_names&#34;: link_names,
+            &#34;metadata&#34;: metadata,
         }
     )
     _parse_web_class_objects(kwargs)
@@ -12509,7 +12532,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_update"><code class="name flex">
-<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, as_user: Optional[bool] = None, file_ids: Union[str, Sequence[str], ForwardRef(None)] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, as_user: Optional[bool] = None, file_ids: Union[str, Sequence[str], ForwardRef(None)] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates a message in a channel.
@@ -12531,6 +12554,7 @@ Each authorization represents an app installation that the event is visible to.
     link_names: Optional[bool] = None,
     parse: Optional[str] = None,  # none, full
     reply_broadcast: Optional[bool] = None,
+    metadata: Optional[Union[Dict, Metadata]] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Updates a message in a channel.
@@ -12547,6 +12571,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;link_names&#34;: link_names,
             &#34;parse&#34;: parse,
             &#34;reply_broadcast&#34;: reply_broadcast,
+            &#34;metadata&#34;: metadata,
         }
     )
     if isinstance(file_ids, (list, Tuple)):
@@ -12727,7 +12752,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_history"><code class="name flex">
-<span>async def <span class="ident">conversations_history</span></span>(<span>self, *, channel: str, cursor: Optional[str] = None, inclusive: Optional[bool] = None, latest: Optional[str] = None, limit: Optional[int] = None, oldest: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">conversations_history</span></span>(<span>self, *, channel: str, cursor: Optional[str] = None, inclusive: Optional[bool] = None, include_all_metadata: Optional[bool] = None, latest: Optional[str] = None, limit: Optional[int] = None, oldest: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Fetches a conversation's history of messages and events.
@@ -12742,6 +12767,7 @@ Each authorization represents an app installation that the event is visible to.
     channel: str,
     cursor: Optional[str] = None,
     inclusive: Optional[bool] = None,
+    include_all_metadata: Optional[bool] = None,
     latest: Optional[str] = None,
     limit: Optional[int] = None,
     oldest: Optional[str] = None,
@@ -12755,6 +12781,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;channel&#34;: channel,
             &#34;cursor&#34;: cursor,
             &#34;inclusive&#34;: inclusive,
+            &#34;include_all_metadata&#34;: include_all_metadata,
             &#34;limit&#34;: limit,
             &#34;latest&#34;: latest,
             &#34;oldest&#34;: oldest,
@@ -15294,7 +15321,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.team_info"><code class="name flex">
-<span>async def <span class="ident">team_info</span></span>(<span>self, *, team: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">team_info</span></span>(<span>self, *, team: Optional[str] = None, domain: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets information about the current team.
@@ -15307,12 +15334,13 @@ multiparty direct message.</p></div>
     self,
     *,
     team: Optional[str] = None,
+    domain: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Gets information about the current team.
     https://api.slack.com/methods/team.info
     &#34;&#34;&#34;
-    kwargs.update({&#34;team&#34;: team})
+    kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
     return await self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
