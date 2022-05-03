@@ -641,6 +641,28 @@ class StaticSelectElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, StaticSelectElement(**input).to_dict())
 
+    def test_issue_1200(self):
+        expected = {
+            "options": [
+                {
+                    "text": {"emoji": True, "text": "X", "type": "plain_text"},
+                    "value": "x",
+                }
+            ],
+            "type": "static_select",
+        }
+        option = Option(value="x", text="X")
+        # List
+        self.assertDictEqual(
+            expected,
+            StaticSelectElement(options=[option]).to_dict(),
+        )
+        # Tuple (this pattern used to be failing)
+        self.assertDictEqual(
+            expected,
+            StaticSelectElement(options=(option,)).to_dict(),
+        )
+
 
 # -------------------------------------------------
 # External Data Source Select
