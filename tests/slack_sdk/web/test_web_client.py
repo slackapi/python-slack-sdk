@@ -1,9 +1,11 @@
 import re
 import socket
 import unittest
+import time
 
 import slack_sdk.errors as err
 from slack_sdk import WebClient
+from slack_sdk.models.metadata import Metadata
 from tests.slack_sdk.web.mock_web_api_server import (
     setup_mock_web_api_server,
     cleanup_mock_web_api_server,
@@ -177,3 +179,54 @@ class TestWebClient(unittest.TestCase):
         client = WebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
         resp = client.users_list(token="xoxb-users_list_pagination")
         self.assertIsNone(resp["error"])
+
+    def test_message_metadata(self):
+        client = self.client
+        new_message = client.chat_postMessage(
+            channel="#random",
+            text="message with metadata",
+            metadata=Metadata(
+                event_type="procurement-task",
+                event_payload={
+                    "id": "11111",
+                    "amount": 5000,
+                    "tags": ["foo", "bar", "baz"],
+                },
+            ),
+        )
+        self.assertIsNone(new_message.get("error"))
+
+        history = client.conversations_history(
+            channel=new_message.get("channel"),
+            limit=1,
+            include_all_metadata=True,
+        )
+        self.assertIsNone(history.get("error"))
+
+        modification = client.chat_update(
+            channel=new_message.get("channel"),
+            ts=new_message.get("ts"),
+            text="message with metadata (modified)",
+            metadata=Metadata(
+                event_type="procurement-task",
+                event_payload={
+                    "id": "11111",
+                    "amount": 6000,
+                },
+            ),
+        )
+        self.assertIsNone(modification.get("error"))
+
+        scheduled = client.chat_scheduleMessage(
+            channel=new_message.get("channel"),
+            post_at=int(time.time()) + 30,
+            text="message with metadata (scheduled)",
+            metadata=Metadata(
+                event_type="procurement-task",
+                event_payload={
+                    "id": "11111",
+                    "amount": 10,
+                },
+            ),
+        )
+        self.assertIsNone(scheduled.get("error"))
