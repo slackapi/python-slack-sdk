@@ -26,6 +26,7 @@ from .internal_utils import (
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
+from ..models.metadata import Metadata
 
 
 class LegacyWebClient(LegacyBaseClient):
@@ -2058,6 +2059,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends a message to a channel.
@@ -2082,6 +2084,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2105,6 +2108,7 @@ class LegacyWebClient(LegacyBaseClient):
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Schedules a message.
@@ -2124,6 +2128,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "unfurl_links": unfurl_links,
                 "unfurl_media": unfurl_media,
                 "link_names": link_names,
+                "metadata": metadata,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2175,6 +2180,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates a message in a channel.
@@ -2191,6 +2197,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "link_names": link_names,
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
+                "metadata": metadata,
             }
         )
         if isinstance(file_ids, (list, Tuple)):
@@ -2335,6 +2342,7 @@ class LegacyWebClient(LegacyBaseClient):
         channel: str,
         cursor: Optional[str] = None,
         inclusive: Optional[bool] = None,
+        include_all_metadata: Optional[bool] = None,
         latest: Optional[str] = None,
         limit: Optional[int] = None,
         oldest: Optional[str] = None,
@@ -2348,6 +2356,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "channel": channel,
                 "cursor": cursor,
                 "inclusive": inclusive,
+                "include_all_metadata": include_all_metadata,
                 "limit": limit,
                 "latest": latest,
                 "oldest": oldest,
