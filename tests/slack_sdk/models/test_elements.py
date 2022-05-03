@@ -641,7 +641,7 @@ class StaticSelectElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, StaticSelectElement(**input).to_dict())
 
-    def test_issue_1200(self):
+    def test_lists_and_tuples_serialize_to_dict_equally(self):
         expected = {
             "options": [
                 {
