@@ -33,6 +33,7 @@ class TestWebClient_Issue_971(unittest.TestCase):
         client = WebClient(
             base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
         )
+        # this generates a warning because "text" is missing
         with self.assertWarns(UserWarning):
             resp = client.chat_postMessage(channel="C111", blocks=[])
         self.assertTrue(resp["ok"])
@@ -41,6 +42,7 @@ class TestWebClient_Issue_971(unittest.TestCase):
         client = WebClient(
             base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
         )
+        # this generates a warning because "text" is missing
         resp = client.chat_postMessage(
             channel="C111", attachments=[{"fallback": "test"}]
         )
@@ -50,6 +52,7 @@ class TestWebClient_Issue_971(unittest.TestCase):
         client = WebClient(
             base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
         )
+        # this generates two warnings: "text" is missing, and also one attachment with no fallback
         with self.assertWarns(UserWarning):
             resp = client.chat_postMessage(
                 channel="C111", attachments=[{"fallback": ""}]
@@ -60,25 +63,16 @@ class TestWebClient_Issue_971(unittest.TestCase):
         client = WebClient(
             base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
         )
+        # this generates two warnings: "text" is missing, and also one attachment with no fallback
         with self.assertWarns(UserWarning):
             resp = client.chat_postMessage(channel="C111", attachments=[{}])
-        self.assertTrue(resp["ok"])
-
-    def test_attachments_without_fallback_with_text_arg(self):
-        client = WebClient(
-            base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
-        )
-        # this warns because each attachment should have its own fallback, even with "text"
-        with self.assertWarns(UserWarning):
-            resp = client.chat_postMessage(
-                channel="C111", text="test", attachments=[{}]
-            )
         self.assertTrue(resp["ok"])
 
     def test_multiple_attachments_one_without_fallback(self):
         client = WebClient(
             base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
         )
+        # this generates two warnings: "text" is missing, and also one attachment with no fallback
         with self.assertWarns(UserWarning):
             resp = client.chat_postMessage(
                 channel="C111", attachments=[{"fallback": "test"}, {}]
