@@ -21,7 +21,7 @@ from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
     _update_call_participants,
-    _warn_if_text_is_missing,
+    _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
 )
 from ..models.attachments import Attachment
@@ -2035,7 +2035,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing("chat.postEphemeral", kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing("chat.postEphemeral", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postEphemeral", json=kwargs)
 
@@ -2089,7 +2089,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing("chat.postMessage", kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing("chat.postMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postMessage", json=kwargs)
 
@@ -2133,7 +2133,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing("chat.scheduleMessage", kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing("chat.scheduleMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
@@ -2206,7 +2206,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"file_ids": file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing("chat.update", kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
 
