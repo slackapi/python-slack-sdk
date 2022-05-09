@@ -1,6 +1,35 @@
 from typing import Optional, List, Union, Any, Dict
 
 
+class App:
+    id: Optional[str]
+    name: Optional[str]
+    is_distributed: Optional[bool]
+    is_directory_approved: Optional[bool]
+    is_workflow_app: Optional[bool]
+    scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_distributed: Optional[bool] = None,
+        is_directory_approved: Optional[bool] = None,
+        is_workflow_app: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.is_distributed = is_distributed
+        self.is_directory_approved = is_directory_approved
+        self.is_workflow_app = is_workflow_app
+        self.scopes = scopes
+        self.unknown_fields = kwargs
+
+
 class User:
     id: Optional[str]
     name: Optional[str]
@@ -68,6 +97,7 @@ class Context:
     ua: Optional[str]
     ip_address: Optional[str]
     session_id: Optional[str]
+    app: Optional[App]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -77,12 +107,14 @@ class Context:
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
+        app: Optional[App] = None,
         **kwargs,
     ) -> None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
+        self.app = app
         self.unknown_fields = kwargs
 
 
@@ -142,6 +174,7 @@ class Details:
     previous_scopes: Optional[List[str]]
     granular_bot_token: Optional[bool]
     scopes: Optional[List[str]]
+    scopes_bot: Optional[List[str]]
     resolution: Optional[str]
     app_previously_resolved: Optional[bool]
     admin_app_id: Optional[str]
@@ -182,6 +215,9 @@ class Details:
     session_search_start: Optional[int]
     deprecation_search_end: Optional[int]
     is_error: Optional[bool]
+    creator: Optional[str]
+    team: Optional[str]
+    app_id: Optional[str]
 
     def __init__(
         self,
@@ -209,6 +245,7 @@ class Details:
         previous_scopes: Optional[List[str]] = None,
         granular_bot_token: Optional[bool] = None,
         scopes: Optional[List[str]] = None,
+        scopes_bot: Optional[List[str]] = None,
         resolution: Optional[str] = None,
         app_previously_resolved: Optional[bool] = None,
         admin_app_id: Optional[str] = None,
@@ -248,6 +285,9 @@ class Details:
         session_search_start: Optional[int] = None,
         deprecation_search_end: Optional[int] = None,
         is_error: Optional[bool] = None,
+        creator: Optional[str] = None,
+        team: Optional[str] = None,
+        app_id: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -273,6 +313,7 @@ class Details:
         self.previous_scopes = previous_scopes
         self.granular_bot_token = granular_bot_token
         self.scopes = scopes
+        self.scopes_bot = scopes_bot
         self.resolution = resolution
         self.app_previously_resolved = app_previously_resolved
         self.admin_app_id = admin_app_id
@@ -329,35 +370,9 @@ class Details:
         self.session_search_start = session_search_start
         self.deprecation_search_end = deprecation_search_end
         self.is_error = is_error
-
-
-class App:
-    id: Optional[str]
-    name: Optional[str]
-    is_distributed: Optional[bool]
-    is_directory_approved: Optional[bool]
-    is_workflow_app: Optional[bool]
-    scopes: Optional[List[str]]
-    unknown_fields: Dict[str, Any]
-
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        is_distributed: Optional[bool] = None,
-        is_directory_approved: Optional[bool] = None,
-        is_workflow_app: Optional[bool] = None,
-        scopes: Optional[List[str]] = None,
-        **kwargs,
-    ) -> None:
-        self.id = id
-        self.name = name
-        self.is_distributed = is_distributed
-        self.is_directory_approved = is_directory_approved
-        self.is_workflow_app = is_workflow_app
-        self.scopes = scopes
-        self.unknown_fields = kwargs
+        self.creator = creator
+        self.team = team
+        self.app_id = app_id
 
 
 class Channel:
