@@ -150,6 +150,19 @@ class ConversationPref:
         self.unknown_fields = kwargs
 
 
+class FeatureEnablement:
+    enabled: Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        enabled: Optional[bool] = None,
+        **kwargs,
+    ) -> None:
+        self.enabled = enabled
+        self.unknown_fields = kwargs
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -218,6 +231,9 @@ class Details:
     creator: Optional[str]
     team: Optional[str]
     app_id: Optional[str]
+    enable_at_here: Optional[FeatureEnablement]
+    enable_at_channel: Optional[FeatureEnablement]
+    can_huddle: Optional[FeatureEnablement]
 
     def __init__(
         self,
@@ -288,6 +304,9 @@ class Details:
         creator: Optional[str] = None,
         team: Optional[str] = None,
         app_id: Optional[str] = None,
+        enable_at_here: Optional[FeatureEnablement] = None,
+        enable_at_channel: Optional[FeatureEnablement] = None,
+        can_huddle: Optional[FeatureEnablement] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -299,8 +318,12 @@ class Details:
         self.non_sso_only = non_sso_only
         self.type = type
         self.is_workflow = is_workflow
-        self.inviter = inviter if isinstance(inviter, User) else User(**inviter)
-        self.kicker = kicker if isinstance(kicker, User) else User(**kicker)
+        self.inviter = (
+            inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
+        )
+        self.kicker = (
+            kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
+        )
         self.shared_to = shared_to
         self.reason = reason
         self.origin_team = origin_team
@@ -347,22 +370,24 @@ class Details:
         self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
         self.old_retention_policy = (
             old_retention_policy
-            if isinstance(old_retention_policy, RetentionPolicy)
+            if old_retention_policy is None
+            or isinstance(old_retention_policy, RetentionPolicy)
             else RetentionPolicy(**old_retention_policy)
         )
         self.new_retention_policy = (
             new_retention_policy
-            if isinstance(new_retention_policy, RetentionPolicy)
+            if new_retention_policy is None
+            or isinstance(new_retention_policy, RetentionPolicy)
             else RetentionPolicy(**new_retention_policy)
         )
         self.who_can_post = (
             who_can_post
-            if isinstance(who_can_post, ConversationPref)
+            if who_can_post is None or isinstance(who_can_post, ConversationPref)
             else ConversationPref(**who_can_post)
         )
         self.can_thread = (
             can_thread
-            if isinstance(can_thread, ConversationPref)
+            if can_thread is None or isinstance(can_thread, ConversationPref)
             else ConversationPref(**can_thread)
         )
         self.is_external_limited = is_external_limited
@@ -373,6 +398,22 @@ class Details:
         self.creator = creator
         self.team = team
         self.app_id = app_id
+        self.enable_at_here = (
+            enable_at_here
+            if enable_at_here is None or isinstance(enable_at_here, FeatureEnablement)
+            else FeatureEnablement(**enable_at_here)
+        )
+        self.enable_at_channel = (
+            enable_at_channel
+            if enable_at_channel is None
+            or isinstance(enable_at_channel, FeatureEnablement)
+            else FeatureEnablement(**enable_at_channel)
+        )
+        self.can_huddle = (
+            can_huddle
+            if can_huddle is None or isinstance(can_huddle, FeatureEnablement)
+            else FeatureEnablement(**can_huddle)
+        )
 
 
 class Channel:

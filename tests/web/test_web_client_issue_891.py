@@ -43,25 +43,35 @@ class TestWebClient_Issue_891(unittest.TestCase):
     def test_missing_fallback_warning_chat_postMessage(self):
         client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test")
         with self.assertWarnsRegex(UserWarning, "`fallback` argument is missing"):
-            resp = client.chat_postMessage(channel="C111", blocks=[], attachments=[{"text": "hi"}])
+            resp = client.chat_postMessage(
+                channel="C111", blocks=[], attachments=[{"text": "hi"}]
+            )
         self.assertIsNone(resp["error"])
 
     def test_missing_fallback_warning_chat_postEphemeral(self):
         client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test")
         with self.assertWarnsRegex(UserWarning, "`fallback` argument is missing"):
-            resp = client.chat_postEphemeral(channel="C111", user="U111", blocks=[], attachments=[{"text": "hi"}])
+            resp = client.chat_postEphemeral(
+                channel="C111", user="U111", blocks=[], attachments=[{"text": "hi"}]
+            )
         self.assertIsNone(resp["error"])
 
     def test_missing_fallback_warning_chat_scheduleMessage(self):
         client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test")
         with self.assertWarnsRegex(UserWarning, "`fallback` argument is missing"):
             resp = client.chat_scheduleMessage(
-                channel="C111", post_at="299876400", text="", blocks=[], attachments=[{"text": "hi"}]
+                channel="C111",
+                post_at="299876400",
+                text="",
+                blocks=[],
+                attachments=[{"text": "hi"}],
             )
         self.assertIsNone(resp["error"])
 
     def test_missing_fallback_warning_chat_update(self):
         client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test")
         with self.assertWarnsRegex(UserWarning, "`fallback` argument is missing"):
-            resp = client.chat_update(channel="C111", ts="111.222", blocks=[], attachments=[{"text": "hi"}])
+            resp = client.chat_update(
+                channel="C111", ts="111.222", blocks=[], attachments=[{"text": "hi"}]
+            )
         self.assertIsNone(resp["error"])
