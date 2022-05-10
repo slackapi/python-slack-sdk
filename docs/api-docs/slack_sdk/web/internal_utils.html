@@ -269,41 +269,55 @@ def _to_0_or_1_if_bool(v: Any) -&gt; Union[Any, str]:
     return v
 
 
-def _warn_if_text_is_missing(endpoint: str, kwargs: Dict[str, Any]) -&gt; None:
-    missing = &#34;text&#34;
+def _warn_if_text_or_attachment_fallback_is_missing(
+    endpoint: str, kwargs: Dict[str, Any]
+) -&gt; None:
+    text = kwargs.get(&#34;text&#34;)
+    if text and len(text.strip()) &gt; 0:
+        # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
+        return
+
+    # for unit tests etc.
+    skip_deprecation = os.environ.get(&#34;SKIP_SLACK_SDK_WARNING&#34;)
+    if skip_deprecation:
+        return
+
+    # At this point, at a minimum, text argument is missing. Warn the user about this.
+    message = (
+        f&#34;The top-level `text` argument is missing in the request payload for a {endpoint} call - &#34;
+        f&#34;It&#39;s a best practice to always provide a `text` argument when posting a message. &#34;
+        f&#34;The `text` argument is used in places where content cannot be rendered such as: &#34;
+        &#34;system push notifications, assistive technology such as screen readers, etc.&#34;
+    )
+    warnings.warn(message, UserWarning)
+
+    # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
+    # Even with a missing text, one can provide a `fallback` per attachment.
+    # More details here: https://api.slack.com/reference/messaging/attachments#legacy_fields
     attachments = kwargs.get(&#34;attachments&#34;)
     # Note that this method does not verify attachments
     # if the value is already serialized as a single str value.
-    if attachments is not None and isinstance(attachments, list):
-        # https://api.slack.com/reference/messaging/attachments
-        # Check if the fallback field exists for all the attachments
-        if all(
+    if (
+        attachments is not None
+        and isinstance(attachments, list)
+        and not all(
             [
                 isinstance(attachment, dict)
                 and len(attachment.get(&#34;fallback&#34;, &#34;&#34;).strip()) &gt; 0
                 for attachment in attachments
             ]
-        ):
-            # The attachments are all good
-            return
-        missing = &#34;fallback&#34;
-    else:
-        text = kwargs.get(&#34;text&#34;)
-        if text and len(text.strip()) &gt; 0:
-            # Note that this is applicable only for blocks.
-            return
-
-    message = (
-        f&#34;The `{missing}` argument is missing in the request payload for a {endpoint} call - &#34;
-        f&#34;It&#39;s a best practice to always provide a `{missing}` argument when posting a message. &#34;
-        f&#34;The `{missing}` argument is used in places where content cannot be rendered such as: &#34;
-        &#34;system push notifications, assistive technology such as screen readers, etc.&#34;
-    )
-    # for unit tests etc.
-    skip_deprecation = os.environ.get(&#34;SKIP_SLACK_SDK_WARNING&#34;)
-    if skip_deprecation:
-        return
-    warnings.warn(message, UserWarning)
+        )
+    ):
+        # https://api.slack.com/reference/messaging/attachments
+        # Check if the fallback field exists for all the attachments
+        # Not all attachments have a fallback property; warn about this too!
+        message = (
+            f&#34;Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call&#34;
+            f&#34; - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a&#34;
+            f&#34; message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered&#34;
+            f&#34; a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details).&#34;
+        )
+        warnings.warn(message, UserWarning)
 
 
 def _build_unexpected_body_error_message(body: str) -&gt; str:

@@ -49,7 +49,7 @@ from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
     _update_call_participants,
-    _warn_if_text_is_missing,
+    _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
 )
 from ..models.attachments import Attachment
@@ -2063,7 +2063,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.postEphemeral&#34;, json=kwargs)
 
@@ -2117,7 +2117,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.postMessage&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.postMessage&#34;, json=kwargs)
 
@@ -2161,7 +2161,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)
 
@@ -2234,7 +2234,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({&#34;file_ids&#34;: file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.update&#34;, kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call(&#34;chat.update&#34;, json=kwargs)
 
@@ -6554,7 +6554,7 @@ removed at anytime.</p></div>
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.postEphemeral&#34;, json=kwargs)
 
@@ -6608,7 +6608,7 @@ removed at anytime.</p></div>
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.postMessage&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.postMessage&#34;, json=kwargs)
 
@@ -6652,7 +6652,7 @@ removed at anytime.</p></div>
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)
 
@@ -6725,7 +6725,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;file_ids&#34;: file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
+        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.update&#34;, kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call(&#34;chat.update&#34;, json=kwargs)
 
@@ -12163,7 +12163,7 @@ Each authorization represents an app installation that the event is visible to.
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
+    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return self.api_call(&#34;chat.postEphemeral&#34;, json=kwargs)</code></pre>
 </details>
@@ -12228,7 +12228,7 @@ Each authorization represents an app installation that the event is visible to.
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_is_missing(&#34;chat.postMessage&#34;, kwargs)
+    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postMessage&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return self.api_call(&#34;chat.postMessage&#34;, json=kwargs)</code></pre>
 </details>
@@ -12283,7 +12283,7 @@ Each authorization represents an app installation that the event is visible to.
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
+    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)</code></pre>
 </details>
@@ -12415,7 +12415,7 @@ Each authorization represents an app installation that the event is visible to.
         kwargs.update({&#34;file_ids&#34;: file_ids})
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_is_missing(&#34;chat.update&#34;, kwargs)
+    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.update&#34;, kwargs)
     # NOTE: intentionally using json over params for API methods using blocks/attachments
     return self.api_call(&#34;chat.update&#34;, json=kwargs)</code></pre>
 </details>

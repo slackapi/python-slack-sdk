@@ -29,6 +29,35 @@
 <pre><code class="python">from typing import Optional, List, Union, Any, Dict
 
 
+class App:
+    id: Optional[str]
+    name: Optional[str]
+    is_distributed: Optional[bool]
+    is_directory_approved: Optional[bool]
+    is_workflow_app: Optional[bool]
+    scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_distributed: Optional[bool] = None,
+        is_directory_approved: Optional[bool] = None,
+        is_workflow_app: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.is_distributed = is_distributed
+        self.is_directory_approved = is_directory_approved
+        self.is_workflow_app = is_workflow_app
+        self.scopes = scopes
+        self.unknown_fields = kwargs
+
+
 class User:
     id: Optional[str]
     name: Optional[str]
@@ -96,6 +125,7 @@ class Context:
     ua: Optional[str]
     ip_address: Optional[str]
     session_id: Optional[str]
+    app: Optional[App]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -105,12 +135,14 @@ class Context:
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
+        app: Optional[App] = None,
         **kwargs,
     ) -&gt; None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
+        self.app = app
         self.unknown_fields = kwargs
 
 
@@ -146,6 +178,19 @@ class ConversationPref:
         self.unknown_fields = kwargs
 
 
+class FeatureEnablement:
+    enabled: Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        enabled: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.enabled = enabled
+        self.unknown_fields = kwargs
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -170,6 +215,7 @@ class Details:
     previous_scopes: Optional[List[str]]
     granular_bot_token: Optional[bool]
     scopes: Optional[List[str]]
+    scopes_bot: Optional[List[str]]
     resolution: Optional[str]
     app_previously_resolved: Optional[bool]
     admin_app_id: Optional[str]
@@ -210,6 +256,12 @@ class Details:
     session_search_start: Optional[int]
     deprecation_search_end: Optional[int]
     is_error: Optional[bool]
+    creator: Optional[str]
+    team: Optional[str]
+    app_id: Optional[str]
+    enable_at_here: Optional[FeatureEnablement]
+    enable_at_channel: Optional[FeatureEnablement]
+    can_huddle: Optional[FeatureEnablement]
 
     def __init__(
         self,
@@ -237,6 +289,7 @@ class Details:
         previous_scopes: Optional[List[str]] = None,
         granular_bot_token: Optional[bool] = None,
         scopes: Optional[List[str]] = None,
+        scopes_bot: Optional[List[str]] = None,
         resolution: Optional[str] = None,
         app_previously_resolved: Optional[bool] = None,
         admin_app_id: Optional[str] = None,
@@ -276,6 +329,12 @@ class Details:
         session_search_start: Optional[int] = None,
         deprecation_search_end: Optional[int] = None,
         is_error: Optional[bool] = None,
+        creator: Optional[str] = None,
+        team: Optional[str] = None,
+        app_id: Optional[str] = None,
+        enable_at_here: Optional[FeatureEnablement] = None,
+        enable_at_channel: Optional[FeatureEnablement] = None,
+        can_huddle: Optional[FeatureEnablement] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -287,8 +346,12 @@ class Details:
         self.non_sso_only = non_sso_only
         self.type = type
         self.is_workflow = is_workflow
-        self.inviter = inviter if isinstance(inviter, User) else User(**inviter)
-        self.kicker = kicker if isinstance(kicker, User) else User(**kicker)
+        self.inviter = (
+            inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
+        )
+        self.kicker = (
+            kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
+        )
         self.shared_to = shared_to
         self.reason = reason
         self.origin_team = origin_team
@@ -301,6 +364,7 @@ class Details:
         self.previous_scopes = previous_scopes
         self.granular_bot_token = granular_bot_token
         self.scopes = scopes
+        self.scopes_bot = scopes_bot
         self.resolution = resolution
         self.app_previously_resolved = app_previously_resolved
         self.admin_app_id = admin_app_id
@@ -334,22 +398,24 @@ class Details:
         self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
         self.old_retention_policy = (
             old_retention_policy
-            if isinstance(old_retention_policy, RetentionPolicy)
+            if old_retention_policy is None
+            or isinstance(old_retention_policy, RetentionPolicy)
             else RetentionPolicy(**old_retention_policy)
         )
         self.new_retention_policy = (
             new_retention_policy
-            if isinstance(new_retention_policy, RetentionPolicy)
+            if new_retention_policy is None
+            or isinstance(new_retention_policy, RetentionPolicy)
             else RetentionPolicy(**new_retention_policy)
         )
         self.who_can_post = (
             who_can_post
-            if isinstance(who_can_post, ConversationPref)
+            if who_can_post is None or isinstance(who_can_post, ConversationPref)
             else ConversationPref(**who_can_post)
         )
         self.can_thread = (
             can_thread
-            if isinstance(can_thread, ConversationPref)
+            if can_thread is None or isinstance(can_thread, ConversationPref)
             else ConversationPref(**can_thread)
         )
         self.is_external_limited = is_external_limited
@@ -357,35 +423,25 @@ class Details:
         self.session_search_start = session_search_start
         self.deprecation_search_end = deprecation_search_end
         self.is_error = is_error
-
-
-class App:
-    id: Optional[str]
-    name: Optional[str]
-    is_distributed: Optional[bool]
-    is_directory_approved: Optional[bool]
-    is_workflow_app: Optional[bool]
-    scopes: Optional[List[str]]
-    unknown_fields: Dict[str, Any]
-
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        is_distributed: Optional[bool] = None,
-        is_directory_approved: Optional[bool] = None,
-        is_workflow_app: Optional[bool] = None,
-        scopes: Optional[List[str]] = None,
-        **kwargs,
-    ) -&gt; None:
-        self.id = id
-        self.name = name
-        self.is_distributed = is_distributed
-        self.is_directory_approved = is_directory_approved
-        self.is_workflow_app = is_workflow_app
-        self.scopes = scopes
-        self.unknown_fields = kwargs
+        self.creator = creator
+        self.team = team
+        self.app_id = app_id
+        self.enable_at_here = (
+            enable_at_here
+            if enable_at_here is None or isinstance(enable_at_here, FeatureEnablement)
+            else FeatureEnablement(**enable_at_here)
+        )
+        self.enable_at_channel = (
+            enable_at_channel
+            if enable_at_channel is None
+            or isinstance(enable_at_channel, FeatureEnablement)
+            else FeatureEnablement(**enable_at_channel)
+        )
+        self.can_huddle = (
+            can_huddle
+            if can_huddle is None or isinstance(can_huddle, FeatureEnablement)
+            else FeatureEnablement(**can_huddle)
+        )
 
 
 class Channel:
@@ -830,7 +886,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Context"><code class="flex name class">
 <span>class <span class="ident">Context</span></span>
-<span>(</span><span>*, location: Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, location: Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, app: Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -843,6 +899,7 @@ class LogsResponse:
     ua: Optional[str]
     ip_address: Optional[str]
     session_id: Optional[str]
+    app: Optional[App]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -852,16 +909,22 @@ class LogsResponse:
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
+        app: Optional[App] = None,
         **kwargs,
     ) -&gt; None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
+        self.app = app
         self.unknown_fields = kwargs</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.app"><code class="name">var <span class="ident">app</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Context.ip_address"><code class="name">var <span class="ident">ip_address</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -923,7 +986,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
 <span>class <span class="ident">Details</span></span>
-<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, kicker: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, **kwargs)</span>
+<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, kicker: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, enable_at_channel: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, can_huddle: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -955,6 +1018,7 @@ class LogsResponse:
     previous_scopes: Optional[List[str]]
     granular_bot_token: Optional[bool]
     scopes: Optional[List[str]]
+    scopes_bot: Optional[List[str]]
     resolution: Optional[str]
     app_previously_resolved: Optional[bool]
     admin_app_id: Optional[str]
@@ -995,6 +1059,12 @@ class LogsResponse:
     session_search_start: Optional[int]
     deprecation_search_end: Optional[int]
     is_error: Optional[bool]
+    creator: Optional[str]
+    team: Optional[str]
+    app_id: Optional[str]
+    enable_at_here: Optional[FeatureEnablement]
+    enable_at_channel: Optional[FeatureEnablement]
+    can_huddle: Optional[FeatureEnablement]
 
     def __init__(
         self,
@@ -1022,6 +1092,7 @@ class LogsResponse:
         previous_scopes: Optional[List[str]] = None,
         granular_bot_token: Optional[bool] = None,
         scopes: Optional[List[str]] = None,
+        scopes_bot: Optional[List[str]] = None,
         resolution: Optional[str] = None,
         app_previously_resolved: Optional[bool] = None,
         admin_app_id: Optional[str] = None,
@@ -1061,6 +1132,12 @@ class LogsResponse:
         session_search_start: Optional[int] = None,
         deprecation_search_end: Optional[int] = None,
         is_error: Optional[bool] = None,
+        creator: Optional[str] = None,
+        team: Optional[str] = None,
+        app_id: Optional[str] = None,
+        enable_at_here: Optional[FeatureEnablement] = None,
+        enable_at_channel: Optional[FeatureEnablement] = None,
+        can_huddle: Optional[FeatureEnablement] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -1072,8 +1149,12 @@ class LogsResponse:
         self.non_sso_only = non_sso_only
         self.type = type
         self.is_workflow = is_workflow
-        self.inviter = inviter if isinstance(inviter, User) else User(**inviter)
-        self.kicker = kicker if isinstance(kicker, User) else User(**kicker)
+        self.inviter = (
+            inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
+        )
+        self.kicker = (
+            kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
+        )
         self.shared_to = shared_to
         self.reason = reason
         self.origin_team = origin_team
@@ -1086,6 +1167,7 @@ class LogsResponse:
         self.previous_scopes = previous_scopes
         self.granular_bot_token = granular_bot_token
         self.scopes = scopes
+        self.scopes_bot = scopes_bot
         self.resolution = resolution
         self.app_previously_resolved = app_previously_resolved
         self.admin_app_id = admin_app_id
@@ -1119,29 +1201,50 @@ class LogsResponse:
         self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
         self.old_retention_policy = (
             old_retention_policy
-            if isinstance(old_retention_policy, RetentionPolicy)
+            if old_retention_policy is None
+            or isinstance(old_retention_policy, RetentionPolicy)
             else RetentionPolicy(**old_retention_policy)
         )
         self.new_retention_policy = (
             new_retention_policy
-            if isinstance(new_retention_policy, RetentionPolicy)
+            if new_retention_policy is None
+            or isinstance(new_retention_policy, RetentionPolicy)
             else RetentionPolicy(**new_retention_policy)
         )
         self.who_can_post = (
             who_can_post
-            if isinstance(who_can_post, ConversationPref)
+            if who_can_post is None or isinstance(who_can_post, ConversationPref)
             else ConversationPref(**who_can_post)
         )
         self.can_thread = (
             can_thread
-            if isinstance(can_thread, ConversationPref)
+            if can_thread is None or isinstance(can_thread, ConversationPref)
             else ConversationPref(**can_thread)
         )
         self.is_external_limited = is_external_limited
         self.exporting_team_id = exporting_team_id
         self.session_search_start = session_search_start
         self.deprecation_search_end = deprecation_search_end
-        self.is_error = is_error</code></pre>
+        self.is_error = is_error
+        self.creator = creator
+        self.team = team
+        self.app_id = app_id
+        self.enable_at_here = (
+            enable_at_here
+            if enable_at_here is None or isinstance(enable_at_here, FeatureEnablement)
+            else FeatureEnablement(**enable_at_here)
+        )
+        self.enable_at_channel = (
+            enable_at_channel
+            if enable_at_channel is None
+            or isinstance(enable_at_channel, FeatureEnablement)
+            else FeatureEnablement(**enable_at_channel)
+        )
+        self.can_huddle = (
+            can_huddle
+            if can_huddle is None or isinstance(can_huddle, FeatureEnablement)
+            else FeatureEnablement(**can_huddle)
+        )</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -1150,6 +1253,10 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.admin_app_id"><code class="name">var <span class="ident">admin_app_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_id"><code class="name">var <span class="ident">app_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1189,6 +1296,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.can_huddle"><code class="name">var <span class="ident">can_huddle</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.can_thread"><code class="name">var <span class="ident">can_thread</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1205,6 +1316,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.creator"><code class="name">var <span class="ident">creator</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end"><code class="name">var <span class="ident">deprecation_search_end</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1214,6 +1329,14 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.duration"><code class="name">var <span class="ident">duration</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel"><code class="name">var <span class="ident">enable_at_channel</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_here"><code class="name">var <span class="ident">enable_at_here</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1365,6 +1488,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes_bot"><code class="name">var <span class="ident">scopes_bot</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.session_search_start"><code class="name">var <span class="ident">session_search_start</span> : Optional[int]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1374,6 +1501,10 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.team"><code class="name">var <span class="ident">team</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1577,6 +1708,36 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement"><code class="flex name class">
+<span>class <span class="ident">FeatureEnablement</span></span>
+<span>(</span><span>*, enabled: Optional[bool] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FeatureEnablement:
+    enabled: Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        enabled: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.enabled = enabled
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled"><code class="name">var <span class="ident">enabled</span> : Optional[bool]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2094,7 +2255,8 @@ class LogsResponse:
 </li>
 <li>
 <h4><code><a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.app" href="#slack_sdk.audit_logs.v1.logs.Context.app">app</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Context.ip_address" href="#slack_sdk.audit_logs.v1.logs.Context.ip_address">ip_address</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Context.location" href="#slack_sdk.audit_logs.v1.logs.Context.location">location</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Context.session_id" href="#slack_sdk.audit_logs.v1.logs.Context.session_id">session_id</a></code></li>
@@ -2114,6 +2276,7 @@ class LogsResponse:
 <ul class="">
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.added_team_id" href="#slack_sdk.audit_logs.v1.logs.Details.added_team_id">added_team_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.admin_app_id" href="#slack_sdk.audit_logs.v1.logs.Details.admin_app_id">admin_app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_id" href="#slack_sdk.audit_logs.v1.logs.Details.app_id">app_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_owner_id" href="#slack_sdk.audit_logs.v1.logs.Details.app_owner_id">app_owner_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_approved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_approved">app_previously_approved</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved">app_previously_resolved</a></code></li>
@@ -2123,13 +2286,17 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids" href="#slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids">barriered_from_usergroup_ids</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_id" href="#slack_sdk.audit_logs.v1.logs.Details.bot_id">bot_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.bot_scopes">bot_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_huddle" href="#slack_sdk.audit_logs.v1.logs.Details.can_huddle">can_huddle</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_thread" href="#slack_sdk.audit_logs.v1.logs.Details.can_thread">can_thread</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channel_id" href="#slack_sdk.audit_logs.v1.logs.Details.channel_id">channel_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channels" href="#slack_sdk.audit_logs.v1.logs.Details.channels">channels</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution" href="#slack_sdk.audit_logs.v1.logs.Details.cleared_resolution">cleared_resolution</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.creator" href="#slack_sdk.audit_logs.v1.logs.Details.creator">creator</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end" href="#slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end">deprecation_search_end</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit" href="#slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit">desktop_app_browser_quit</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.duration" href="#slack_sdk.audit_logs.v1.logs.Details.duration">duration</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel" href="#slack_sdk.audit_logs.v1.logs.Details.enable_at_channel">enable_at_channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.enable_at_here" href="#slack_sdk.audit_logs.v1.logs.Details.enable_at_here">enable_at_here</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.expires_on" href="#slack_sdk.audit_logs.v1.logs.Details.expires_on">expires_on</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.export_end_ts" href="#slack_sdk.audit_logs.v1.logs.Details.export_end_ts">export_end_ts</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.export_start_ts" href="#slack_sdk.audit_logs.v1.logs.Details.export_start_ts">export_start_ts</a></code></li>
@@ -2167,9 +2334,11 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.resolution" href="#slack_sdk.audit_logs.v1.logs.Details.resolution">resolution</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.restricted_subjects" href="#slack_sdk.audit_logs.v1.logs.Details.restricted_subjects">restricted_subjects</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.scopes" href="#slack_sdk.audit_logs.v1.logs.Details.scopes">scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.scopes_bot" href="#slack_sdk.audit_logs.v1.logs.Details.scopes_bot">scopes_bot</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.session_search_start" href="#slack_sdk.audit_logs.v1.logs.Details.session_search_start">session_search_start</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_to" href="#slack_sdk.audit_logs.v1.logs.Details.shared_to">shared_to</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_team" href="#slack_sdk.audit_logs.v1.logs.Details.target_team">target_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.team" href="#slack_sdk.audit_logs.v1.logs.Details.team">team</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.trigger" href="#slack_sdk.audit_logs.v1.logs.Details.trigger">trigger</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.type" href="#slack_sdk.audit_logs.v1.logs.Details.type">type</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Details.unknown_fields">unknown_fields</a></code></li>
@@ -2204,6 +2373,12 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.entity" href="#slack_sdk.audit_logs.v1.logs.Entry.entity">entity</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.id" href="#slack_sdk.audit_logs.v1.logs.Entry.id">id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Entry.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled">enabled</a></code></li>
 </ul>
 </li>
 <li>
