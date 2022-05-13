@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import List, Optional, Set, Union, Sequence
+from typing import List, Optional, Set, Union, Sequence, Dict, Any
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -32,7 +32,9 @@ class TextObject(JsonObject):
 
     @classmethod
     def parse(
-        cls, text: Union[str, dict, "TextObject"], default_type: str = "mrkdwn"
+        cls,
+        text: Union[str, Dict[str, Any], "TextObject"],
+        default_type: str = "mrkdwn",
     ) -> Optional["TextObject"]:
         if not text:  # skipcq: PYL-R1705
             return None
@@ -101,7 +103,7 @@ class PlainTextObject(TextObject):
         return PlainTextObject(text=text, emoji=True)
 
     @staticmethod
-    def direct_from_string(text: str) -> dict:
+    def direct_from_string(text: str) -> Dict[str, Any]:
         """Transforms a string into the required object shape to act as a PlainTextObject"""
         return PlainTextObject.from_str(text).to_dict()
 
@@ -137,7 +139,7 @@ class MarkdownTextObject(TextObject):
         return MarkdownTextObject(text=text)
 
     @staticmethod
-    def direct_from_string(text: str) -> dict:
+    def direct_from_string(text: str) -> Dict[str, Any]:
         """Transforms a string into the required object shape to act as a MarkdownTextObject"""
         return MarkdownTextObject.from_str(text).to_dict()
 
@@ -152,7 +154,7 @@ class MarkdownTextObject(TextObject):
         return MarkdownTextObject(text=f"{link}{title}")
 
     @staticmethod
-    def direct_from_link(link: Link, title: str = "") -> dict:
+    def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
         """
         Transform a Link object directly into the required object shape
         to act as a MarkdownTextObject
@@ -177,10 +179,10 @@ class Option(JsonObject):
         *,
         value: str,
         label: Optional[str] = None,
-        text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, Dict[str, Any], TextObject]] = None,  # Block Kit
+        description: Optional[Union[str, Dict[str, Any], TextObject]] = None,
         url: Optional[str] = None,
-        **others: dict,
+        **others: Dict[str, Any],
     ):
         """
         An object that represents a single selectable item in a block element (
@@ -247,11 +249,11 @@ class Option(JsonObject):
         show_unknown_key_warning(self, others)
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
-    def _validate_label_length(self):
+    def _validate_label_length(self) -> bool:
         return self._label is None or len(self._label) <= self.label_max_length
 
     @JsonValidator(f"text attribute cannot exceed {label_max_length} characters")
-    def _validate_text_length(self):
+    def _validate_text_length(self) -> bool:
         return (
             self._text is None
             or self._text.text is None
@@ -259,12 +261,12 @@ class Option(JsonObject):
         )
 
     @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
-    def _validate_value_length(self):
+    def _validate_value_length(self) -> bool:
         return len(self.value) <= self.value_max_length
 
     @classmethod
     def parse_all(
-        cls, options: Optional[Sequence[Union[dict, "Option"]]]
+        cls, options: Optional[Sequence[Union[Dict[str, Any], "Option"]]]
     ) -> Optional[List["Option"]]:
         if options is None:
             return None
@@ -279,7 +281,9 @@ class Option(JsonObject):
                 cls.logger.warning(f"Unknown option object detected and skipped ({o})")
         return option_objects
 
-    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = "block"
+    ) -> Dict[str, Any]:  # skipcq: PYL-W0221
         """
         Different parent classes must call this with a valid value from OptionTypes -
         either "dialog", "action", or "block", so that JSON is returned in the
@@ -297,7 +301,7 @@ class Option(JsonObject):
             return json
         else:  # if option_type == "block"; this should be the most common case
             text: TextObject = self._text or PlainTextObject.from_str(self.label)
-            json: dict = {
+            json: Dict[str, Any] = {
                 "text": text.to_dict(),
                 "value": self.value,
             }
@@ -327,9 +331,9 @@ class OptionGroup(JsonObject):
     def __init__(
         self,
         *,
-        label: Optional[Union[str, dict, TextObject]] = None,
-        options: Sequence[Union[dict, Option]],
-        **others: dict,
+        label: Optional[Union[str, Dict[str, Any], TextObject]] = None,
+        options: Sequence[Union[Dict[str, Any], Option]],
+        **others: Dict[str, Any],
     ):
         """
         Create a group of Option objects - pass in a label (that will be part of the
@@ -366,7 +370,7 @@ class OptionGroup(JsonObject):
 
     @classmethod
     def parse_all(
-        cls, option_groups: Optional[Sequence[Union[dict, "OptionGroup"]]]
+        cls, option_groups: Optional[Sequence[Union[Dict[str, Any], "OptionGroup"]]]
     ) -> Optional[List["OptionGroup"]]:
         if option_groups is None:
             return None
@@ -383,7 +387,9 @@ class OptionGroup(JsonObject):
                 )
         return option_group_objects
 
-    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = "block"
+    ) -> Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == "dialog":  # skipcq: PYL-R1705
@@ -397,7 +403,7 @@ class OptionGroup(JsonObject):
                 "options": dict_options,
             }
         else:  # if option_type == "block"; this should be the most common case
-            dict_label: dict = self._label.to_dict()
+            dict_label: Dict[str, Any] = self._label.to_dict()
             return {
                 "label": dict_label,
                 "options": dict_options,
@@ -413,7 +419,7 @@ class ConfirmObject(JsonObject):
     deny_max_length = 30
 
     @classmethod
-    def parse(cls, confirm: Union["ConfirmObject", dict]):
+    def parse(cls, confirm: Union["ConfirmObject", Dict[str, Any]]):
         if confirm:
             if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
                 return confirm
@@ -427,10 +433,10 @@ class ConfirmObject(JsonObject):
     def __init__(
         self,
         *,
-        title: Union[str, dict, PlainTextObject],
-        text: Union[str, dict, TextObject],
-        confirm: Union[str, dict, PlainTextObject] = "Yes",
-        deny: Union[str, dict, PlainTextObject] = "No",
+        title: Union[str, Dict[str, Any], PlainTextObject],
+        text: Union[str, Dict[str, Any], TextObject],
+        confirm: Union[str, Dict[str, Any], PlainTextObject] = "Yes",
+        deny: Union[str, Dict[str, Any], PlainTextObject] = "No",
         style: Optional[str] = None,
     ):
         """
@@ -474,7 +480,9 @@ class ConfirmObject(JsonObject):
     def _validate_confirm_style(self) -> bool:
         return self._style is None or self._style in ["primary", "danger"]
 
-    def to_dict(self, option_type: str = "block") -> dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = "block"
+    ) -> Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == "action":  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
@@ -512,7 +520,7 @@ class DispatchActionConfig(JsonObject):
     attributes = {"trigger_actions_on"}
 
     @classmethod
-    def parse(cls, config: Union["DispatchActionConfig", dict]):
+    def parse(cls, config: Union["DispatchActionConfig", Dict[str, Any]]):
         if config:
             if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
                 return config
@@ -526,7 +534,7 @@ class DispatchActionConfig(JsonObject):
     def __init__(
         self,
         *,
-        trigger_actions_on: Optional[list] = None,
+        trigger_actions_on: Optional[List[Any]] = None,
     ):
         """
         Determines when a plain-text input element will return a block_actions interaction payload.
@@ -534,7 +542,7 @@ class DispatchActionConfig(JsonObject):
         """
         self._trigger_actions_on = trigger_actions_on or []
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         json = {}
         if self._trigger_actions_on:

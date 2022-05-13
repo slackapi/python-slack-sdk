@@ -1,1 +1,5 @@
-from .v1.async_client import AsyncSCIMClient  # noqa
+from .v1.async_client import AsyncSCIMClient
+
+__all__ = [
+    "AsyncSCIMClient",
+]

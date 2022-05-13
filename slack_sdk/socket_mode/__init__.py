@@ -4,4 +4,8 @@ and performing interactions with Slack.
 
 https://api.slack.com/apis/connections/socket
 """
-from .builtin import SocketModeClient  # noqa
+from .builtin import SocketModeClient
+
+__all__ = [
+    "SocketModeClient",
+]
