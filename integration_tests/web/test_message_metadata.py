@@ -9,7 +9,6 @@ from slack_sdk.web import WebClient
 
 
 class TestWebClient(unittest.TestCase):
-
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.bot_token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
@@ -20,16 +19,16 @@ class TestWebClient(unittest.TestCase):
     def test_publishing_message_metadata(self):
         client: WebClient = WebClient(token=self.bot_token)
         new_message = client.chat_postMessage(
-            channel='#random',
+            channel="#random",
             text="message with metadata",
             metadata={
                 "event_type": "procurement-task",
                 "event_payload": {
                     "id": "11111",
                     "amount": 5000,
-                    "tags": ["foo", "bar", "baz"]
+                    "tags": ["foo", "bar", "baz"],
                 },
-            }
+            },
         )
         self.assertIsNone(new_message.get("error"))
         self.assertIsNotNone(new_message.get("message").get("metadata"))
@@ -52,7 +51,7 @@ class TestWebClient(unittest.TestCase):
                     "id": "11111",
                     "amount": 6000,
                 },
-            }
+            },
         )
         self.assertIsNone(modification.get("error"))
         self.assertIsNotNone(modification.get("message").get("metadata"))
@@ -67,7 +66,7 @@ class TestWebClient(unittest.TestCase):
                     "id": "11111",
                     "amount": 10,
                 },
-            }
+            },
         )
         self.assertIsNone(scheduled.get("error"))
         self.assertIsNotNone(scheduled.get("message").get("metadata"))
@@ -75,16 +74,16 @@ class TestWebClient(unittest.TestCase):
     def test_publishing_message_metadata_using_models(self):
         client: WebClient = WebClient(token=self.bot_token)
         new_message = client.chat_postMessage(
-            channel='#random',
+            channel="#random",
             text="message with metadata",
             metadata=Metadata(
                 event_type="procurement-task",
                 event_payload={
                     "id": "11111",
                     "amount": 5000,
-                    "tags": ["foo", "bar", "baz"]
-                }
-            )
+                    "tags": ["foo", "bar", "baz"],
+                },
+            ),
         )
         self.assertIsNone(new_message.get("error"))
         self.assertIsNotNone(new_message.get("message").get("metadata"))
@@ -106,8 +105,8 @@ class TestWebClient(unittest.TestCase):
                 event_payload={
                     "id": "11111",
                     "amount": 6000,
-                }
-            )
+                },
+            ),
         )
         self.assertIsNone(modification.get("error"))
         self.assertIsNotNone(modification.get("message").get("metadata"))
@@ -121,8 +120,8 @@ class TestWebClient(unittest.TestCase):
                 event_payload={
                     "id": "11111",
                     "amount": 10,
-                }
-            )
+                },
+            ),
         )
         self.assertIsNone(scheduled.get("error"))
         self.assertIsNotNone(scheduled.get("message").get("metadata"))
