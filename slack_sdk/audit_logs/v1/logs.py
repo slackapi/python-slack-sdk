@@ -114,7 +114,7 @@ class Context:
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
-        self.app = app
+        self.app = App(**app) if isinstance(app, dict) else app
         self.unknown_fields = kwargs
 
 
