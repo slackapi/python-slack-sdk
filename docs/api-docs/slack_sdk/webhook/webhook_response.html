@@ -26,14 +26,17 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class WebhookResponse:
+<pre><code class="python">from typing import Dict, Any
+
+
+class WebhookResponse:
     def __init__(
         self,
         *,
         url: str,
         status_code: int,
         body: str,
-        headers: dict,
+        headers: Dict[str, Any],
     ):
         self.api_url = url
         self.status_code = status_code
@@ -52,7 +55,7 @@
 <dl>
 <dt id="slack_sdk.webhook.webhook_response.WebhookResponse"><code class="flex name class">
 <span>class <span class="ident">WebhookResponse</span></span>
-<span>(</span><span>*, url: str, status_code: int, body: str, headers: dict)</span>
+<span>(</span><span>*, url: str, status_code: int, body: str, headers: Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -67,7 +70,7 @@
         url: str,
         status_code: int,
         body: str,
-        headers: dict,
+        headers: Dict[str, Any],
     ):
         self.api_url = url
         self.status_code = status_code

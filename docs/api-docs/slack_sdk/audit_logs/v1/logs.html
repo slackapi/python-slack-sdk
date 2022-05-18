@@ -89,7 +89,7 @@ class Actor:
     def __init__(
         self,
         type: Optional[str] = None,
-        user: Optional[User] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -131,18 +131,18 @@ class Context:
     def __init__(
         self,
         *,
-        location: Optional[Location] = None,
+        location: Optional[Union[Location, Dict[str, Any]]] = None,
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
-        app: Optional[App] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
-        self.app = app
+        self.app = App(**app) if isinstance(app, dict) else app
         self.unknown_fields = kwargs
 
 
@@ -332,9 +332,9 @@ class Details:
         creator: Optional[str] = None,
         team: Optional[str] = None,
         app_id: Optional[str] = None,
-        enable_at_here: Optional[FeatureEnablement] = None,
-        enable_at_channel: Optional[FeatureEnablement] = None,
-        can_huddle: Optional[FeatureEnablement] = None,
+        enable_at_here: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        enable_at_channel: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        can_huddle: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -576,15 +576,15 @@ class Entity:
         self,
         *,
         type: Optional[str] = None,
-        user: Optional[Union[User, dict]] = None,
-        workspace: Optional[Union[Location, dict]] = None,
-        enterprise: Optional[Union[Location, dict]] = None,
-        channel: Optional[Union[Channel, dict]] = None,
-        file: Optional[Union[File, dict]] = None,
-        app: Optional[Union[App, dict]] = None,
-        usergroup: Optional[Usergroup] = None,
-        workflow: Optional[Workflow] = None,
-        barrier: Optional[InformationBarrier] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
+        workspace: Optional[Union[Location, Dict[str, Any]]] = None,
+        enterprise: Optional[Union[Location, Dict[str, Any]]] = None,
+        channel: Optional[Union[Channel, Dict[str, Any]]] = None,
+        file: Optional[Union[File, Dict[str, Any]]] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
+        usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
+        workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
+        barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -624,10 +624,10 @@ class Entry:
         id: Optional[str] = None,
         date_create: Optional[int] = None,
         action: Optional[str] = None,
-        actor: Optional[Actor] = None,
-        entity: Optional[Entity] = None,
-        context: Optional[Context] = None,
-        details: Optional[Details] = None,
+        actor: Optional[Union[Actor, Dict[str, Any]]] = None,
+        entity: Optional[Union[Entity, Dict[str, Any]]] = None,
+        context: Optional[Union[Context, Dict[str, Any]]] = None,
+        details: Optional[Union[Details, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.id = id
@@ -666,8 +666,8 @@ class LogsResponse:
     def __init__(
         self,
         *,
-        entries: Optional[List[Union[Entry, dict]]] = None,
-        response_metadata: Optional[Union[ResponseMetadata, dict]] = None,
+        entries: Optional[List[Union[Entry, Dict[str, Any]]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, Dict[str, Any]]] = None,
         ok: Optional[bool] = None,
         error: Optional[str] = None,
         needed: Optional[str] = None,
@@ -698,7 +698,7 @@ class LogsResponse:
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Actor"><code class="flex name class">
 <span>class <span class="ident">Actor</span></span>
-<span>(</span><span>type: Optional[str] = None, user: Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>] = None, **kwargs)</span>
+<span>(</span><span>type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -714,7 +714,7 @@ class LogsResponse:
     def __init__(
         self,
         type: Optional[str] = None,
-        user: Optional[User] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -886,7 +886,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Context"><code class="flex name class">
 <span>class <span class="ident">Context</span></span>
-<span>(</span><span>*, location: Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, app: Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>] = None, **kwargs)</span>
+<span>(</span><span>*, location: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -905,18 +905,18 @@ class LogsResponse:
     def __init__(
         self,
         *,
-        location: Optional[Location] = None,
+        location: Optional[Union[Location, Dict[str, Any]]] = None,
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
-        app: Optional[App] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
-        self.app = app
+        self.app = App(**app) if isinstance(app, dict) else app
         self.unknown_fields = kwargs</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -986,7 +986,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
 <span>class <span class="ident">Details</span></span>
-<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, kicker: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, enable_at_channel: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, can_huddle: Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>] = None, **kwargs)</span>
+<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, kicker: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, enable_at_channel: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, can_huddle: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1135,9 +1135,9 @@ class LogsResponse:
         creator: Optional[str] = None,
         team: Optional[str] = None,
         app_id: Optional[str] = None,
-        enable_at_here: Optional[FeatureEnablement] = None,
-        enable_at_channel: Optional[FeatureEnablement] = None,
-        can_huddle: Optional[FeatureEnablement] = None,
+        enable_at_here: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        enable_at_channel: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        can_huddle: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -1532,7 +1532,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entity"><code class="flex name class">
 <span>class <span class="ident">Entity</span></span>
-<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, dict, ForwardRef(None)] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, dict, ForwardRef(None)] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, dict, ForwardRef(None)] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, dict, ForwardRef(None)] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, dict, ForwardRef(None)] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, dict, ForwardRef(None)] = None, usergroup: Optional[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>] = None, workflow: Optional[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>] = None, barrier: Optional[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>] = None, **kwargs)</span>
+<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, Dict[str, Any], ForwardRef(None)] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, Dict[str, Any], ForwardRef(None)] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, usergroup: Union[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>, Dict[str, Any], ForwardRef(None)] = None, workflow: Union[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>, Dict[str, Any], ForwardRef(None)] = None, barrier: Union[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1557,15 +1557,15 @@ class LogsResponse:
         self,
         *,
         type: Optional[str] = None,
-        user: Optional[Union[User, dict]] = None,
-        workspace: Optional[Union[Location, dict]] = None,
-        enterprise: Optional[Union[Location, dict]] = None,
-        channel: Optional[Union[Channel, dict]] = None,
-        file: Optional[Union[File, dict]] = None,
-        app: Optional[Union[App, dict]] = None,
-        usergroup: Optional[Usergroup] = None,
-        workflow: Optional[Workflow] = None,
-        barrier: Optional[InformationBarrier] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
+        workspace: Optional[Union[Location, Dict[str, Any]]] = None,
+        enterprise: Optional[Union[Location, Dict[str, Any]]] = None,
+        channel: Optional[Union[Channel, Dict[str, Any]]] = None,
+        file: Optional[Union[File, Dict[str, Any]]] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
+        usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
+        workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
+        barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -1638,7 +1638,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entry"><code class="flex name class">
 <span>class <span class="ident">Entry</span></span>
-<span>(</span><span>*, id: Optional[str] = None, date_create: Optional[int] = None, action: Optional[str] = None, actor: Optional[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>] = None, entity: Optional[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>] = None, context: Optional[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>] = None, details: Optional[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>] = None, **kwargs)</span>
+<span>(</span><span>*, id: Optional[str] = None, date_create: Optional[int] = None, action: Optional[str] = None, actor: Union[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>, Dict[str, Any], ForwardRef(None)] = None, entity: Union[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>, Dict[str, Any], ForwardRef(None)] = None, context: Union[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>, Dict[str, Any], ForwardRef(None)] = None, details: Union[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1662,10 +1662,10 @@ class LogsResponse:
         id: Optional[str] = None,
         date_create: Optional[int] = None,
         action: Optional[str] = None,
-        actor: Optional[Actor] = None,
-        entity: Optional[Entity] = None,
-        context: Optional[Context] = None,
-        details: Optional[Details] = None,
+        actor: Optional[Union[Actor, Dict[str, Any]]] = None,
+        entity: Optional[Union[Entity, Dict[str, Any]]] = None,
+        context: Optional[Union[Context, Dict[str, Any]]] = None,
+        details: Optional[Union[Details, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.id = id
@@ -1913,7 +1913,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.LogsResponse"><code class="flex name class">
 <span>class <span class="ident">LogsResponse</span></span>
-<span>(</span><span>*, entries: Optional[List[Union[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>, dict]]] = None, response_metadata: Union[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>, dict, ForwardRef(None)] = None, ok: Optional[bool] = None, error: Optional[str] = None, needed: Optional[str] = None, provided: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, entries: Optional[List[Union[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>, Dict[str, Any]]]] = None, response_metadata: Union[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>, Dict[str, Any], ForwardRef(None)] = None, ok: Optional[bool] = None, error: Optional[str] = None, needed: Optional[str] = None, provided: Optional[str] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1933,8 +1933,8 @@ class LogsResponse:
     def __init__(
         self,
         *,
-        entries: Optional[List[Union[Entry, dict]]] = None,
-        response_metadata: Optional[Union[ResponseMetadata, dict]] = None,
+        entries: Optional[List[Union[Entry, Dict[str, Any]]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, Dict[str, Any]]] = None,
         ok: Optional[bool] = None,
         error: Optional[str] = None,
         needed: Optional[str] = None,

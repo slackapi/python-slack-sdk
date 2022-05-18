@@ -29,7 +29,7 @@
 <pre><code class="python">import copy
 import logging
 import warnings
-from typing import List, Optional, Set, Union, Sequence
+from typing import List, Optional, Set, Union, Sequence, Dict, Any
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -60,7 +60,9 @@ class TextObject(JsonObject):
 
     @classmethod
     def parse(
-        cls, text: Union[str, dict, &#34;TextObject&#34;], default_type: str = &#34;mrkdwn&#34;
+        cls,
+        text: Union[str, Dict[str, Any], &#34;TextObject&#34;],
+        default_type: str = &#34;mrkdwn&#34;,
     ) -&gt; Optional[&#34;TextObject&#34;]:
         if not text:  # skipcq: PYL-R1705
             return None
@@ -129,7 +131,7 @@ class PlainTextObject(TextObject):
         return PlainTextObject(text=text, emoji=True)
 
     @staticmethod
-    def direct_from_string(text: str) -&gt; dict:
+    def direct_from_string(text: str) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
         return PlainTextObject.from_str(text).to_dict()
 
@@ -165,7 +167,7 @@ class MarkdownTextObject(TextObject):
         return MarkdownTextObject(text=text)
 
     @staticmethod
-    def direct_from_string(text: str) -&gt; dict:
+    def direct_from_string(text: str) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
         return MarkdownTextObject.from_str(text).to_dict()
 
@@ -180,7 +182,7 @@ class MarkdownTextObject(TextObject):
         return MarkdownTextObject(text=f&#34;{link}{title}&#34;)
 
     @staticmethod
-    def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; dict:
+    def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;
         Transform a Link object directly into the required object shape
         to act as a MarkdownTextObject
@@ -205,10 +207,10 @@ class Option(JsonObject):
         *,
         value: str,
         label: Optional[str] = None,
-        text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, Dict[str, Any], TextObject]] = None,  # Block Kit
+        description: Optional[Union[str, Dict[str, Any], TextObject]] = None,
         url: Optional[str] = None,
-        **others: dict,
+        **others: Dict[str, Any],
     ):
         &#34;&#34;&#34;
         An object that represents a single selectable item in a block element (
@@ -275,11 +277,11 @@ class Option(JsonObject):
         show_unknown_key_warning(self, others)
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def _validate_label_length(self):
+    def _validate_label_length(self) -&gt; bool:
         return self._label is None or len(self._label) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;text attribute cannot exceed {label_max_length} characters&#34;)
-    def _validate_text_length(self):
+    def _validate_text_length(self) -&gt; bool:
         return (
             self._text is None
             or self._text.text is None
@@ -287,12 +289,12 @@ class Option(JsonObject):
         )
 
     @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
-    def _validate_value_length(self):
+    def _validate_value_length(self) -&gt; bool:
         return len(self.value) &lt;= self.value_max_length
 
     @classmethod
     def parse_all(
-        cls, options: Optional[Sequence[Union[dict, &#34;Option&#34;]]]
+        cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
     ) -&gt; Optional[List[&#34;Option&#34;]]:
         if options is None:
             return None
@@ -307,7 +309,9 @@ class Option(JsonObject):
                 cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
         return option_objects
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         &#34;&#34;&#34;
         Different parent classes must call this with a valid value from OptionTypes -
         either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -325,7 +329,7 @@ class Option(JsonObject):
             return json
         else:  # if option_type == &#34;block&#34;; this should be the most common case
             text: TextObject = self._text or PlainTextObject.from_str(self.label)
-            json: dict = {
+            json: Dict[str, Any] = {
                 &#34;text&#34;: text.to_dict(),
                 &#34;value&#34;: self.value,
             }
@@ -355,9 +359,9 @@ class OptionGroup(JsonObject):
     def __init__(
         self,
         *,
-        label: Optional[Union[str, dict, TextObject]] = None,
-        options: Sequence[Union[dict, Option]],
-        **others: dict,
+        label: Optional[Union[str, Dict[str, Any], TextObject]] = None,
+        options: Sequence[Union[Dict[str, Any], Option]],
+        **others: Dict[str, Any],
     ):
         &#34;&#34;&#34;
         Create a group of Option objects - pass in a label (that will be part of the
@@ -394,7 +398,7 @@ class OptionGroup(JsonObject):
 
     @classmethod
     def parse_all(
-        cls, option_groups: Optional[Sequence[Union[dict, &#34;OptionGroup&#34;]]]
+        cls, option_groups: Optional[Sequence[Union[Dict[str, Any], &#34;OptionGroup&#34;]]]
     ) -&gt; Optional[List[&#34;OptionGroup&#34;]]:
         if option_groups is None:
             return None
@@ -411,7 +415,9 @@ class OptionGroup(JsonObject):
                 )
         return option_group_objects
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
@@ -425,7 +431,7 @@ class OptionGroup(JsonObject):
                 &#34;options&#34;: dict_options,
             }
         else:  # if option_type == &#34;block&#34;; this should be the most common case
-            dict_label: dict = self._label.to_dict()
+            dict_label: Dict[str, Any] = self._label.to_dict()
             return {
                 &#34;label&#34;: dict_label,
                 &#34;options&#34;: dict_options,
@@ -441,7 +447,7 @@ class ConfirmObject(JsonObject):
     deny_max_length = 30
 
     @classmethod
-    def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, dict]):
+    def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
         if confirm:
             if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
                 return confirm
@@ -455,10 +461,10 @@ class ConfirmObject(JsonObject):
     def __init__(
         self,
         *,
-        title: Union[str, dict, PlainTextObject],
-        text: Union[str, dict, TextObject],
-        confirm: Union[str, dict, PlainTextObject] = &#34;Yes&#34;,
-        deny: Union[str, dict, PlainTextObject] = &#34;No&#34;,
+        title: Union[str, Dict[str, Any], PlainTextObject],
+        text: Union[str, Dict[str, Any], TextObject],
+        confirm: Union[str, Dict[str, Any], PlainTextObject] = &#34;Yes&#34;,
+        deny: Union[str, Dict[str, Any], PlainTextObject] = &#34;No&#34;,
         style: Optional[str] = None,
     ):
         &#34;&#34;&#34;
@@ -502,7 +508,9 @@ class ConfirmObject(JsonObject):
     def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == &#34;action&#34;:  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can&#39;t find documentation
             # on actual limits here
@@ -540,7 +548,7 @@ class DispatchActionConfig(JsonObject):
     attributes = {&#34;trigger_actions_on&#34;}
 
     @classmethod
-    def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, dict]):
+    def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, Dict[str, Any]]):
         if config:
             if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
                 return config
@@ -554,7 +562,7 @@ class DispatchActionConfig(JsonObject):
     def __init__(
         self,
         *,
-        trigger_actions_on: Optional[list] = None,
+        trigger_actions_on: Optional[List[Any]] = None,
     ):
         &#34;&#34;&#34;
         Determines when a plain-text input element will return a block_actions interaction payload.
@@ -562,7 +570,7 @@ class DispatchActionConfig(JsonObject):
         &#34;&#34;&#34;
         self._trigger_actions_on = trigger_actions_on or []
 
-    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         json = {}
         if self._trigger_actions_on:
@@ -581,7 +589,7 @@ class DispatchActionConfig(JsonObject):
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject"><code class="flex name class">
 <span>class <span class="ident">ConfirmObject</span></span>
-<span>(</span><span>*, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: Optional[str] = None)</span>
+<span>(</span><span>*, title: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -602,7 +610,7 @@ offering a confirm and deny button.
     deny_max_length = 30
 
     @classmethod
-    def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, dict]):
+    def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
         if confirm:
             if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
                 return confirm
@@ -616,10 +624,10 @@ offering a confirm and deny button.
     def __init__(
         self,
         *,
-        title: Union[str, dict, PlainTextObject],
-        text: Union[str, dict, TextObject],
-        confirm: Union[str, dict, PlainTextObject] = &#34;Yes&#34;,
-        deny: Union[str, dict, PlainTextObject] = &#34;No&#34;,
+        title: Union[str, Dict[str, Any], PlainTextObject],
+        text: Union[str, Dict[str, Any], TextObject],
+        confirm: Union[str, Dict[str, Any], PlainTextObject] = &#34;Yes&#34;,
+        deny: Union[str, Dict[str, Any], PlainTextObject] = &#34;No&#34;,
         style: Optional[str] = None,
     ):
         &#34;&#34;&#34;
@@ -663,7 +671,9 @@ offering a confirm and deny button.
     def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == &#34;action&#34;:  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can&#39;t find documentation
             # on actual limits here
@@ -723,7 +733,7 @@ offering a confirm and deny button.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>confirm: Union[ForwardRef('<a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>'), dict])</span>
+<span>def <span class="ident">parse</span></span>(<span>confirm: Union[ForwardRef('<a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>'), Dict[str, Any]])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -732,7 +742,7 @@ offering a confirm and deny button.
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, dict]):
+def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
     if confirm:
         if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
             return confirm
@@ -820,7 +830,7 @@ def title_length(self) -&gt; bool:
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.DispatchActionConfig"><code class="flex name class">
 <span>class <span class="ident">DispatchActionConfig</span></span>
-<span>(</span><span>*, trigger_actions_on: Optional[list] = None)</span>
+<span>(</span><span>*, trigger_actions_on: Optional[List[Any]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -834,7 +844,7 @@ def title_length(self) -&gt; bool:
     attributes = {&#34;trigger_actions_on&#34;}
 
     @classmethod
-    def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, dict]):
+    def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, Dict[str, Any]]):
         if config:
             if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
                 return config
@@ -848,7 +858,7 @@ def title_length(self) -&gt; bool:
     def __init__(
         self,
         *,
-        trigger_actions_on: Optional[list] = None,
+        trigger_actions_on: Optional[List[Any]] = None,
     ):
         &#34;&#34;&#34;
         Determines when a plain-text input element will return a block_actions interaction payload.
@@ -856,7 +866,7 @@ def title_length(self) -&gt; bool:
         &#34;&#34;&#34;
         self._trigger_actions_on = trigger_actions_on or []
 
-    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         json = {}
         if self._trigger_actions_on:
@@ -871,7 +881,7 @@ def title_length(self) -&gt; bool:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.DispatchActionConfig.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>config: Union[ForwardRef('<a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>'), dict])</span>
+<span>def <span class="ident">parse</span></span>(<span>config: Union[ForwardRef('<a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>'), Dict[str, Any]])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -880,7 +890,7 @@ def title_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, dict]):
+def parse(cls, config: Union[&#34;DispatchActionConfig&#34;, Dict[str, Any]]):
     if config:
         if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
             return config
@@ -960,7 +970,7 @@ although you can still include manual parsing strings. This field is only usable
         return MarkdownTextObject(text=text)
 
     @staticmethod
-    def direct_from_string(text: str) -&gt; dict:
+    def direct_from_string(text: str) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
         return MarkdownTextObject.from_str(text).to_dict()
 
@@ -975,7 +985,7 @@ although you can still include manual parsing strings. This field is only usable
         return MarkdownTextObject(text=f&#34;{link}{title}&#34;)
 
     @staticmethod
-    def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; dict:
+    def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;
         Transform a Link object directly into the required object shape
         to act as a MarkdownTextObject
@@ -998,7 +1008,7 @@ although you can still include manual parsing strings. This field is only usable
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.MarkdownTextObject.direct_from_link"><code class="name flex">
-<span>def <span class="ident">direct_from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> dict</span>
+<span>def <span class="ident">direct_from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transform a Link object directly into the required object shape
@@ -1008,7 +1018,7 @@ to act as a MarkdownTextObject</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
-def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; dict:
+def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
     &#34;&#34;&#34;
     Transform a Link object directly into the required object shape
     to act as a MarkdownTextObject
@@ -1017,7 +1027,7 @@ def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; dict:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.MarkdownTextObject.direct_from_string"><code class="name flex">
-<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> dict</span>
+<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
@@ -1026,7 +1036,7 @@ def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; dict:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
-def direct_from_string(text: str) -&gt; dict:
+def direct_from_string(text: str) -&gt; Dict[str, Any]:
     &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
     return MarkdownTextObject.from_str(text).to_dict()</code></pre>
 </details>
@@ -1098,7 +1108,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.Option"><code class="flex name class">
 <span>class <span class="ident">Option</span></span>
-<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, url: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, description: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, url: Optional[str] = None, **others: Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments),
@@ -1148,10 +1158,10 @@ dialogs.</dd>
         *,
         value: str,
         label: Optional[str] = None,
-        text: Optional[Union[str, dict, TextObject]] = None,  # Block Kit
-        description: Optional[Union[str, dict, TextObject]] = None,
+        text: Optional[Union[str, Dict[str, Any], TextObject]] = None,  # Block Kit
+        description: Optional[Union[str, Dict[str, Any], TextObject]] = None,
         url: Optional[str] = None,
-        **others: dict,
+        **others: Dict[str, Any],
     ):
         &#34;&#34;&#34;
         An object that represents a single selectable item in a block element (
@@ -1218,11 +1228,11 @@ dialogs.</dd>
         show_unknown_key_warning(self, others)
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
-    def _validate_label_length(self):
+    def _validate_label_length(self) -&gt; bool:
         return self._label is None or len(self._label) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;text attribute cannot exceed {label_max_length} characters&#34;)
-    def _validate_text_length(self):
+    def _validate_text_length(self) -&gt; bool:
         return (
             self._text is None
             or self._text.text is None
@@ -1230,12 +1240,12 @@ dialogs.</dd>
         )
 
     @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
-    def _validate_value_length(self):
+    def _validate_value_length(self) -&gt; bool:
         return len(self.value) &lt;= self.value_max_length
 
     @classmethod
     def parse_all(
-        cls, options: Optional[Sequence[Union[dict, &#34;Option&#34;]]]
+        cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
     ) -&gt; Optional[List[&#34;Option&#34;]]:
         if options is None:
             return None
@@ -1250,7 +1260,9 @@ dialogs.</dd>
                 cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
         return option_objects
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         &#34;&#34;&#34;
         Different parent classes must call this with a valid value from OptionTypes -
         either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -1268,7 +1280,7 @@ dialogs.</dd>
             return json
         else:  # if option_type == &#34;block&#34;; this should be the most common case
             text: TextObject = self._text or PlainTextObject.from_str(self.label)
-            json: dict = {
+            json: Dict[str, Any] = {
                 &#34;text&#34;: text.to_dict(),
                 &#34;value&#34;: self.value,
             }
@@ -1321,7 +1333,7 @@ def from_single_value(value_and_label: str):
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.Option.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>options: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>]]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>options: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1331,7 +1343,7 @@ def from_single_value(value_and_label: str):
 </summary>
 <pre><code class="python">@classmethod
 def parse_all(
-    cls, options: Optional[Sequence[Union[dict, &#34;Option&#34;]]]
+    cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
 ) -&gt; Optional[List[&#34;Option&#34;]]:
     if options is None:
         return None
@@ -1351,7 +1363,7 @@ def parse_all(
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.Option.to_dict"><code class="name flex">
-<span>def <span class="ident">to_dict</span></span>(<span>self, option_type: str = 'block') ‑> dict</span>
+<span>def <span class="ident">to_dict</span></span>(<span>self, option_type: str = 'block') ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Different parent classes must call this with a valid value from OptionTypes -
@@ -1361,7 +1373,9 @@ correct shape.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+<pre><code class="python">def to_dict(
+    self, option_type: str = &#34;block&#34;
+) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
     &#34;&#34;&#34;
     Different parent classes must call this with a valid value from OptionTypes -
     either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -1379,7 +1393,7 @@ correct shape.</p></div>
         return json
     else:  # if option_type == &#34;block&#34;; this should be the most common case
         text: TextObject = self._text or PlainTextObject.from_str(self.label)
-        json: dict = {
+        json: Dict[str, Any] = {
             &#34;text&#34;: text.to_dict(),
             &#34;value&#34;: self.value,
         }
@@ -1404,7 +1418,7 @@ correct shape.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.OptionGroup"><code class="flex name class">
 <span>class <span class="ident">OptionGroup</span></span>
-<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, options: Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>]], **others: dict)</span>
+<span>(</span><span>*, label: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, options: Sequence[Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>]], **others: Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>JSON must be retrieved with an explicit option_type - the Slack API has
@@ -1442,9 +1456,9 @@ UI) and a list of Option objects.</p>
     def __init__(
         self,
         *,
-        label: Optional[Union[str, dict, TextObject]] = None,
-        options: Sequence[Union[dict, Option]],
-        **others: dict,
+        label: Optional[Union[str, Dict[str, Any], TextObject]] = None,
+        options: Sequence[Union[Dict[str, Any], Option]],
+        **others: Dict[str, Any],
     ):
         &#34;&#34;&#34;
         Create a group of Option objects - pass in a label (that will be part of the
@@ -1481,7 +1495,7 @@ UI) and a list of Option objects.</p>
 
     @classmethod
     def parse_all(
-        cls, option_groups: Optional[Sequence[Union[dict, &#34;OptionGroup&#34;]]]
+        cls, option_groups: Optional[Sequence[Union[Dict[str, Any], &#34;OptionGroup&#34;]]]
     ) -&gt; Optional[List[&#34;OptionGroup&#34;]]:
         if option_groups is None:
             return None
@@ -1498,7 +1512,9 @@ UI) and a list of Option objects.</p>
                 )
         return option_group_objects
 
-    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(
+        self, option_type: str = &#34;block&#34;
+    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
@@ -1512,7 +1528,7 @@ UI) and a list of Option objects.</p>
                 &#34;options&#34;: dict_options,
             }
         else:  # if option_type == &#34;block&#34;; this should be the most common case
-            dict_label: dict = self._label.to_dict()
+            dict_label: Dict[str, Any] = self._label.to_dict()
             return {
                 &#34;label&#34;: dict_label,
                 &#34;options&#34;: dict_options,
@@ -1541,7 +1557,7 @@ UI) and a list of Option objects.</p>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.OptionGroup.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1551,7 +1567,7 @@ UI) and a list of Option objects.</p>
 </summary>
 <pre><code class="python">@classmethod
 def parse_all(
-    cls, option_groups: Optional[Sequence[Union[dict, &#34;OptionGroup&#34;]]]
+    cls, option_groups: Optional[Sequence[Union[Dict[str, Any], &#34;OptionGroup&#34;]]]
 ) -&gt; Optional[List[&#34;OptionGroup&#34;]]:
     if option_groups is None:
         return None
@@ -1632,7 +1648,7 @@ This field is only usable when type is plain_text.</dd>
         return PlainTextObject(text=text, emoji=True)
 
     @staticmethod
-    def direct_from_string(text: str) -&gt; dict:
+    def direct_from_string(text: str) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
         return PlainTextObject.from_str(text).to_dict()</code></pre>
 </details>
@@ -1652,7 +1668,7 @@ This field is only usable when type is plain_text.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.PlainTextObject.direct_from_string"><code class="name flex">
-<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> dict</span>
+<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a PlainTextObject</p></div>
@@ -1661,7 +1677,7 @@ This field is only usable when type is plain_text.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
-def direct_from_string(text: str) -&gt; dict:
+def direct_from_string(text: str) -&gt; Dict[str, Any]:
     &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
     return PlainTextObject.from_str(text).to_dict()</code></pre>
 </details>
@@ -1738,7 +1754,9 @@ def attributes(self) -&gt; Set[str]:
 
     @classmethod
     def parse(
-        cls, text: Union[str, dict, &#34;TextObject&#34;], default_type: str = &#34;mrkdwn&#34;
+        cls,
+        text: Union[str, Dict[str, Any], &#34;TextObject&#34;],
+        default_type: str = &#34;mrkdwn&#34;,
     ) -&gt; Optional[&#34;TextObject&#34;]:
         if not text:  # skipcq: PYL-R1705
             return None
@@ -1798,7 +1816,7 @@ def attributes(self) -&gt; Set[str]:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.TextObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>text: Union[str, dict, ForwardRef('<a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>')], default_type: str = 'mrkdwn') ‑> Optional[<a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
+<span>def <span class="ident">parse</span></span>(<span>text: Union[str, Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>')], default_type: str = 'mrkdwn') ‑> Optional[<a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1808,7 +1826,9 @@ def attributes(self) -&gt; Set[str]:
 </summary>
 <pre><code class="python">@classmethod
 def parse(
-    cls, text: Union[str, dict, &#34;TextObject&#34;], default_type: str = &#34;mrkdwn&#34;
+    cls,
+    text: Union[str, Dict[str, Any], &#34;TextObject&#34;],
+    default_type: str = &#34;mrkdwn&#34;,
 ) -&gt; Optional[&#34;TextObject&#34;]:
     if not text:  # skipcq: PYL-R1705
         return None

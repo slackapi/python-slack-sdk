@@ -37,12 +37,23 @@ including Slack.
 
 Refer to https://slack.dev/python-slack-sdk/scim/ for details.
 &#34;&#34;&#34;
-from .v1.client import SCIMClient  # noqa
-from .v1.response import SCIMResponse  # noqa
-from .v1.response import SearchUsersResponse, ReadUserResponse  # noqa
-from .v1.response import SearchGroupsResponse, ReadGroupResponse  # noqa
-from .v1.user import User  # noqa
-from .v1.group import Group  # noqa</code></pre>
+from .v1.client import SCIMClient
+from .v1.response import SCIMResponse
+from .v1.response import SearchUsersResponse, ReadUserResponse
+from .v1.response import SearchGroupsResponse, ReadGroupResponse
+from .v1.user import User
+from .v1.group import Group
+
+__all__ = [
+    &#34;SCIMClient&#34;,
+    &#34;SCIMResponse&#34;,
+    &#34;SearchUsersResponse&#34;,
+    &#34;ReadUserResponse&#34;,
+    &#34;SearchGroupsResponse&#34;,
+    &#34;ReadGroupResponse&#34;,
+    &#34;User&#34;,
+    &#34;Group&#34;,
+]</code></pre>
 </details>
 </section>
 <section>
@@ -64,6 +75,1419 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.scim.Group"><code class="flex name class">
+<span>class <span class="ident">Group</span></span>
+<span>(</span><span>*, display_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, id: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, members: Union[List[<a title="slack_sdk.scim.v1.group.GroupMember" href="v1/group.html#slack_sdk.scim.v1.group.GroupMember">GroupMember</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, meta: Union[<a title="slack_sdk.scim.v1.group.GroupMeta" href="v1/group.html#slack_sdk.scim.v1.group.GroupMeta">GroupMeta</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, schemas: Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Group:
+    display_name: Union[Optional[str], DefaultArg]
+    id: Union[Optional[str], DefaultArg]
+    members: Union[Optional[List[GroupMember]], DefaultArg]
+    meta: Union[Optional[GroupMeta], DefaultArg]
+    schemas: Union[Optional[List[str]], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        display_name: Union[Optional[str], DefaultArg] = NotGiven,
+        id: Union[Optional[str], DefaultArg] = NotGiven,
+        members: Union[Optional[List[GroupMember]], DefaultArg] = NotGiven,
+        meta: Union[Optional[GroupMeta], DefaultArg] = NotGiven,
+        schemas: Union[Optional[List[str]], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.display_name = display_name
+        self.id = id
+        self.members = (
+            [a if isinstance(a, GroupMember) else GroupMember(**a) for a in members]
+            if _is_iterable(members)
+            else members
+        )
+        self.meta = (
+            GroupMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
+        )
+        self.schemas = schemas
+        self.unknown_fields = kwargs
+
+    def to_dict(self):
+        return _to_dict_without_not_given(self)
+
+    def __repr__(self):
+        return f&#34;&lt;slack_sdk.scim.{self.__class__.__name__}: {self.to_dict()}&gt;&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.Group.display_name"><code class="name">var <span class="ident">display_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.Group.id"><code class="name">var <span class="ident">id</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.Group.members"><code class="name">var <span class="ident">members</span> : Union[List[<a title="slack_sdk.scim.v1.group.GroupMember" href="v1/group.html#slack_sdk.scim.v1.group.GroupMember">GroupMember</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.Group.meta"><code class="name">var <span class="ident">meta</span> : Union[<a title="slack_sdk.scim.v1.group.GroupMeta" href="v1/group.html#slack_sdk.scim.v1.group.GroupMeta">GroupMeta</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.Group.schemas"><code class="name">var <span class="ident">schemas</span> : Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.Group.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.Group.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.ReadGroupResponse"><code class="flex name class">
+<span>class <span class="ident">ReadGroupResponse</span></span>
+<span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ReadGroupResponse(SCIMResponse):
+    group: Group
+
+    @property
+    def group(self) -&gt; Group:  # type: ignore
+        return Group(**self.snake_cased_body)
+
+    def __init__(self, underlying: SCIMResponse):
+        self.underlying = underlying
+        self.url = underlying.url
+        self.status_code = underlying.status_code
+        self.headers = underlying.headers
+        self.raw_body = underlying.raw_body
+        self.body = underlying.body
+        self._snake_cased_body = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.scim.ReadGroupResponse.group"><code class="name">var <span class="ident">group</span> : <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def group(self) -&gt; Group:  # type: ignore
+    return Group(**self.snake_cased_body)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.ReadUserResponse"><code class="flex name class">
+<span>class <span class="ident">ReadUserResponse</span></span>
+<span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ReadUserResponse(SCIMResponse):
+    user: User
+
+    @property
+    def user(self) -&gt; User:  # type: ignore
+        return User(**self.snake_cased_body)
+
+    def __init__(self, underlying: SCIMResponse):
+        self.underlying = underlying
+        self.url = underlying.url
+        self.status_code = underlying.status_code
+        self.headers = underlying.headers
+        self.raw_body = underlying.raw_body
+        self.body = underlying.body
+        self._snake_cased_body = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.scim.ReadUserResponse.user"><code class="name">var <span class="ident">user</span> : <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user(self) -&gt; User:  # type: ignore
+    return User(**self.snake_cased_body)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient"><code class="flex name class">
+<span>class <span class="ident">SCIMClient</span></span>
+<span>(</span><span>token: str, timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, base_url: str = 'https://api.slack.com/scim/v1/', default_headers: Optional[Dict[str, str]] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>API client for SCIM API
+See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more details</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>token</code></strong></dt>
+<dd>An admin user's token, which starts with <code>xoxp-</code></dd>
+<dt><strong><code>timeout</code></strong></dt>
+<dd>Request timeout (in seconds)</dd>
+<dt><strong><code>ssl</code></strong></dt>
+<dd><code>ssl.SSLContext</code> to use for requests</dd>
+<dt><strong><code>proxy</code></strong></dt>
+<dd>Proxy URL (e.g., <code>localhost:9000</code>, <code>http://localhost:9000</code>)</dd>
+<dt><strong><code>base_url</code></strong></dt>
+<dd>The base URL for API calls</dd>
+<dt><strong><code>default_headers</code></strong></dt>
+<dd>Request headers to add to all requests</dd>
+<dt><strong><code>user_agent_prefix</code></strong></dt>
+<dd>Prefix for User-Agent header value</dd>
+<dt><strong><code>user_agent_suffix</code></strong></dt>
+<dd>Suffix for User-Agent header value</dd>
+<dt><strong><code>logger</code></strong></dt>
+<dd>Custom logger</dd>
+<dt><strong><code>retry_handlers</code></strong></dt>
+<dd>Retry handlers</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SCIMClient:
+    BASE_URL = &#34;https://api.slack.com/scim/v1/&#34;
+
+    token: str
+    timeout: int
+    ssl: Optional[SSLContext]
+    proxy: Optional[str]
+    base_url: str
+    default_headers: Dict[str, str]
+    logger: logging.Logger
+    retry_handlers: List[RetryHandler]
+
+    def __init__(
+        self,
+        token: str,
+        timeout: int = 30,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
+        base_url: str = BASE_URL,
+        default_headers: Optional[Dict[str, str]] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
+        retry_handlers: Optional[List[RetryHandler]] = None,
+    ):
+        &#34;&#34;&#34;API client for SCIM API
+        See https://api.slack.com/scim for more details
+
+        Args:
+            token: An admin user&#39;s token, which starts with `xoxp-`
+            timeout: Request timeout (in seconds)
+            ssl: `ssl.SSLContext` to use for requests
+            proxy: Proxy URL (e.g., `localhost:9000`, `http://localhost:9000`)
+            base_url: The base URL for API calls
+            default_headers: Request headers to add to all requests
+            user_agent_prefix: Prefix for User-Agent header value
+            user_agent_suffix: Suffix for User-Agent header value
+            logger: Custom logger
+            retry_handlers: Retry handlers
+        &#34;&#34;&#34;
+        self.token = token
+        self.timeout = timeout
+        self.ssl = ssl
+        self.proxy = proxy
+        self.base_url = base_url
+        self.default_headers = default_headers if default_headers else {}
+        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(
+            user_agent_prefix, user_agent_suffix
+        )
+        self.logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = (
+            retry_handlers if retry_handlers is not None else default_retry_handlers()
+        )
+
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self.logger)
+            if env_variable is not None:
+                self.proxy = env_variable
+
+    # -------------------------
+    # Users
+    # -------------------------
+
+    def search_users(
+        self,
+        *,
+        # Pagination required as of August 30, 2019.
+        count: int,
+        start_index: int,
+        filter: Optional[str] = None,
+    ) -&gt; SearchUsersResponse:
+        return SearchUsersResponse(
+            self.api_call(
+                http_verb=&#34;GET&#34;,
+                path=&#34;Users&#34;,
+                query_params={
+                    &#34;filter&#34;: filter,
+                    &#34;count&#34;: count,
+                    &#34;startIndex&#34;: start_index,
+                },
+            )
+        )
+
+    def read_user(self, id: str) -&gt; ReadUserResponse:
+        return ReadUserResponse(
+            self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;)
+        )
+
+    def create_user(self, user: Union[Dict[str, Any], User]) -&gt; UserCreateResponse:
+        return UserCreateResponse(
+            self.api_call(
+                http_verb=&#34;POST&#34;,
+                path=&#34;Users&#34;,
+                body_params=user.to_dict()
+                if isinstance(user, User)
+                else _to_dict_without_not_given(user),
+            )
+        )
+
+    def patch_user(
+        self, id: str, partial_user: Union[Dict[str, Any], User]
+    ) -&gt; UserPatchResponse:
+        return UserPatchResponse(
+            self.api_call(
+                http_verb=&#34;PATCH&#34;,
+                path=f&#34;Users/{quote(id)}&#34;,
+                body_params=partial_user.to_dict()
+                if isinstance(partial_user, User)
+                else _to_dict_without_not_given(partial_user),
+            )
+        )
+
+    def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+        user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
+        return UserUpdateResponse(
+            self.api_call(
+                http_verb=&#34;PUT&#34;,
+                path=f&#34;Users/{quote(user_id)}&#34;,
+                body_params=user.to_dict()
+                if isinstance(user, User)
+                else _to_dict_without_not_given(user),
+            )
+        )
+
+    def delete_user(self, id: str) -&gt; UserDeleteResponse:
+        return UserDeleteResponse(
+            self.api_call(
+                http_verb=&#34;DELETE&#34;,
+                path=f&#34;Users/{quote(id)}&#34;,
+            )
+        )
+
+    # -------------------------
+    # Groups
+    # -------------------------
+
+    def search_groups(
+        self,
+        *,
+        # Pagination required as of August 30, 2019.
+        count: int,
+        start_index: int,
+        filter: Optional[str] = None,
+    ) -&gt; SearchGroupsResponse:
+        return SearchGroupsResponse(
+            self.api_call(
+                http_verb=&#34;GET&#34;,
+                path=&#34;Groups&#34;,
+                query_params={
+                    &#34;filter&#34;: filter,
+                    &#34;count&#34;: count,
+                    &#34;startIndex&#34;: start_index,
+                },
+            )
+        )
+
+    def read_group(self, id: str) -&gt; ReadGroupResponse:
+        return ReadGroupResponse(
+            self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;)
+        )
+
+    def create_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupCreateResponse:
+        return GroupCreateResponse(
+            self.api_call(
+                http_verb=&#34;POST&#34;,
+                path=&#34;Groups&#34;,
+                body_params=group.to_dict()
+                if isinstance(group, Group)
+                else _to_dict_without_not_given(group),
+            )
+        )
+
+    def patch_group(
+        self, id: str, partial_group: Union[Dict[str, Any], Group]
+    ) -&gt; GroupPatchResponse:
+        return GroupPatchResponse(
+            self.api_call(
+                http_verb=&#34;PATCH&#34;,
+                path=f&#34;Groups/{quote(id)}&#34;,
+                body_params=partial_group.to_dict()
+                if isinstance(partial_group, Group)
+                else _to_dict_without_not_given(partial_group),
+            )
+        )
+
+    def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+        group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
+        return GroupUpdateResponse(
+            self.api_call(
+                http_verb=&#34;PUT&#34;,
+                path=f&#34;Groups/{quote(group_id)}&#34;,
+                body_params=group.to_dict()
+                if isinstance(group, Group)
+                else _to_dict_without_not_given(group),
+            )
+        )
+
+    def delete_group(self, id: str) -&gt; GroupDeleteResponse:
+        return GroupDeleteResponse(
+            self.api_call(
+                http_verb=&#34;DELETE&#34;,
+                path=f&#34;Groups/{quote(id)}&#34;,
+            )
+        )
+
+    # -------------------------
+
+    def api_call(
+        self,
+        *,
+        http_verb: str,
+        path: str,
+        query_params: Optional[Dict[str, Any]] = None,
+        body_params: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
+    ) -&gt; SCIMResponse:
+        &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
+        url = f&#34;{self.base_url}{path}&#34;
+        query = _build_query(query_params)
+        if len(query) &gt; 0:
+            url += f&#34;?{query}&#34;
+
+        return self._perform_http_request(
+            http_verb=http_verb,
+            url=url,
+            body=body_params,
+            headers=_build_request_headers(
+                token=self.token,
+                default_headers=self.default_headers,
+                additional_headers=headers,
+            ),
+        )
+
+    def _perform_http_request(
+        self,
+        *,
+        http_verb: str = &#34;GET&#34;,
+        url: str,
+        body: Optional[Dict[str, Any]] = None,
+        headers: Dict[str, str],
+    ) -&gt; SCIMResponse:
+        if body is not None:
+            if body.get(&#34;schemas&#34;) is None:
+                body[&#34;schemas&#34;] = [&#34;urn:scim:schemas:core:1.0&#34;]
+            body = json.dumps(body)
+        headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
+
+        if self.logger.level &lt;= logging.DEBUG:
+            headers_for_logging = {
+                k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
+                for k, v in headers.items()
+            }
+            self.logger.debug(
+                f&#34;Sending a request - {http_verb} url: {url}, body: {body}, headers: {headers_for_logging}&#34;
+            )
+
+        # NOTE: Intentionally ignore the `http_verb` here
+        # Slack APIs accepts any API method requests with POST methods
+        req = Request(
+            method=http_verb,
+            url=url,
+            data=body.encode(&#34;utf-8&#34;) if body is not None else None,
+            headers=headers,
+        )
+        resp = None
+        last_error = None
+
+        retry_state = RetryState()
+        counter_for_safety = 0
+        while counter_for_safety &lt; 100:
+            counter_for_safety += 1
+            # If this is a retry, the next try started here. We can reset the flag.
+            retry_state.next_attempt_requested = False
+
+            try:
+                resp = self._perform_http_request_internal(url, req)
+                # The resp is a 200 OK response
+                return resp
+
+            except HTTPError as e:
+                # read the response body here
+                charset = e.headers.get_content_charset() or &#34;utf-8&#34;
+                response_body: str = e.read().decode(charset)
+                # As adding new values to HTTPError#headers can be ignored, building a new dict object here
+                response_headers = dict(e.headers.items())
+                resp = SCIMResponse(
+                    url=url,
+                    status_code=e.code,
+                    raw_body=response_body,
+                    headers=response_headers,
+                )
+                if e.code == 429:
+                    # for backward-compatibility with WebClient (v.2.5.0 or older)
+                    if (
+                        &#34;retry-after&#34; not in resp.headers
+                        and &#34;Retry-After&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
+                    if (
+                        &#34;Retry-After&#34; not in resp.headers
+                        and &#34;retry-after&#34; in resp.headers
+                    ):
+                        resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
+                _debug_log_response(self.logger, resp)
+
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                retry_response = RetryHttpResponse(
+                    status_code=e.code,
+                    headers={k: [v] for k, v in e.headers.items()},
+                    data=response_body.encode(&#34;utf-8&#34;)
+                    if response_body is not None
+                    else None,
+                )
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=retry_response,
+                        error=e,
+                    ):
+                        if self.logger.level &lt;= logging.DEBUG:
+                            self.logger.info(
+                                f&#34;A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}&#34;
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        )
+                        break
+
+                if retry_state.next_attempt_requested is False:
+                    return resp
+
+            except Exception as err:
+                last_error = err
+                self.logger.error(
+                    f&#34;Failed to send a request to Slack API server: {err}&#34;
+                )
+
+                # Try to find a retry handler for this error
+                retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=None,
+                        error=err,
+                    ):
+                        if self.logger.level &lt;= logging.DEBUG:
+                            self.logger.info(
+                                f&#34;A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}&#34;
+                            )
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=None,
+                            error=err,
+                        )
+                        self.logger.info(
+                            f&#34;Going to retry the same request: {req.method} {req.full_url}&#34;
+                        )
+                        break
+
+                if retry_state.next_attempt_requested is False:
+                    raise err
+
+        if resp is not None:
+            return resp
+        raise last_error
+
+    def _perform_http_request_internal(self, url: str, req: Request) -&gt; SCIMResponse:
+        opener: Optional[OpenerDirector] = None
+        # for security (BAN-B310)
+        if url.lower().startswith(&#34;http&#34;):
+            if self.proxy is not None:
+                if isinstance(self.proxy, str):
+                    opener = urllib.request.build_opener(
+                        ProxyHandler({&#34;http&#34;: self.proxy, &#34;https&#34;: self.proxy}),
+                        HTTPSHandler(context=self.ssl),
+                    )
+                else:
+                    raise SlackRequestError(
+                        f&#34;Invalid proxy detected: {self.proxy} must be a str value&#34;
+                    )
+        else:
+            raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
+
+        # NOTE: BAN-B310 is already checked above
+        http_resp: Optional[HTTPResponse] = None
+        if opener:
+            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+        else:
+            http_resp = urlopen(  # skipcq: BAN-B310
+                req, context=self.ssl, timeout=self.timeout
+            )
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
+        resp = SCIMResponse(
+            url=url,
+            status_code=http_resp.status,
+            raw_body=response_body,
+            headers=http_resp.headers,
+        )
+        _debug_log_response(self.logger, resp)
+        return resp</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.SCIMClient.BASE_URL"><code class="name">var <span class="ident">BASE_URL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.base_url"><code class="name">var <span class="ident">base_url</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.default_headers"><code class="name">var <span class="ident">default_headers</span> : Dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.logger"><code class="name">var <span class="ident">logger</span> : logging.Logger</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.proxy"><code class="name">var <span class="ident">proxy</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.retry_handlers"><code class="name">var <span class="ident">retry_handlers</span> : List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.ssl"><code class="name">var <span class="ident">ssl</span> : Optional[ssl.SSLContext]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.timeout"><code class="name">var <span class="ident">timeout</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.token"><code class="name">var <span class="ident">token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.SCIMClient.api_call"><code class="name flex">
+<span>def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str, path: str, query_params: Optional[Dict[str, Any]] = None, body_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs a Slack API request and returns the result.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def api_call(
+    self,
+    *,
+    http_verb: str,
+    path: str,
+    query_params: Optional[Dict[str, Any]] = None,
+    body_params: Optional[Dict[str, Any]] = None,
+    headers: Optional[Dict[str, str]] = None,
+) -&gt; SCIMResponse:
+    &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
+    url = f&#34;{self.base_url}{path}&#34;
+    query = _build_query(query_params)
+    if len(query) &gt; 0:
+        url += f&#34;?{query}&#34;
+
+    return self._perform_http_request(
+        http_verb=http_verb,
+        url=url,
+        body=body_params,
+        headers=_build_request_headers(
+            token=self.token,
+            default_headers=self.default_headers,
+            additional_headers=headers,
+        ),
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.create_group"><code class="name flex">
+<span>def <span class="ident">create_group</span></span>(<span>self, group: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>]) ‑> <a title="slack_sdk.scim.v1.response.GroupCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupCreateResponse">GroupCreateResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupCreateResponse:
+    return GroupCreateResponse(
+        self.api_call(
+            http_verb=&#34;POST&#34;,
+            path=&#34;Groups&#34;,
+            body_params=group.to_dict()
+            if isinstance(group, Group)
+            else _to_dict_without_not_given(group),
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.create_user"><code class="name flex">
+<span>def <span class="ident">create_user</span></span>(<span>self, user: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>]) ‑> <a title="slack_sdk.scim.v1.response.UserCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserCreateResponse">UserCreateResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_user(self, user: Union[Dict[str, Any], User]) -&gt; UserCreateResponse:
+    return UserCreateResponse(
+        self.api_call(
+            http_verb=&#34;POST&#34;,
+            path=&#34;Users&#34;,
+            body_params=user.to_dict()
+            if isinstance(user, User)
+            else _to_dict_without_not_given(user),
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.delete_group"><code class="name flex">
+<span>def <span class="ident">delete_group</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.GroupDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupDeleteResponse">GroupDeleteResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_group(self, id: str) -&gt; GroupDeleteResponse:
+    return GroupDeleteResponse(
+        self.api_call(
+            http_verb=&#34;DELETE&#34;,
+            path=f&#34;Groups/{quote(id)}&#34;,
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.delete_user"><code class="name flex">
+<span>def <span class="ident">delete_user</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.UserDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserDeleteResponse">UserDeleteResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_user(self, id: str) -&gt; UserDeleteResponse:
+    return UserDeleteResponse(
+        self.api_call(
+            http_verb=&#34;DELETE&#34;,
+            path=f&#34;Users/{quote(id)}&#34;,
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.patch_group"><code class="name flex">
+<span>def <span class="ident">patch_group</span></span>(<span>self, id: str, partial_group: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>]) ‑> <a title="slack_sdk.scim.v1.response.GroupPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupPatchResponse">GroupPatchResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def patch_group(
+    self, id: str, partial_group: Union[Dict[str, Any], Group]
+) -&gt; GroupPatchResponse:
+    return GroupPatchResponse(
+        self.api_call(
+            http_verb=&#34;PATCH&#34;,
+            path=f&#34;Groups/{quote(id)}&#34;,
+            body_params=partial_group.to_dict()
+            if isinstance(partial_group, Group)
+            else _to_dict_without_not_given(partial_group),
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.patch_user"><code class="name flex">
+<span>def <span class="ident">patch_user</span></span>(<span>self, id: str, partial_user: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>]) ‑> <a title="slack_sdk.scim.v1.response.UserPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserPatchResponse">UserPatchResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def patch_user(
+    self, id: str, partial_user: Union[Dict[str, Any], User]
+) -&gt; UserPatchResponse:
+    return UserPatchResponse(
+        self.api_call(
+            http_verb=&#34;PATCH&#34;,
+            path=f&#34;Users/{quote(id)}&#34;,
+            body_params=partial_user.to_dict()
+            if isinstance(partial_user, User)
+            else _to_dict_without_not_given(partial_user),
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.read_group"><code class="name flex">
+<span>def <span class="ident">read_group</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.ReadGroupResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadGroupResponse">ReadGroupResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_group(self, id: str) -&gt; ReadGroupResponse:
+    return ReadGroupResponse(
+        self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;)
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.read_user"><code class="name flex">
+<span>def <span class="ident">read_user</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.ReadUserResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadUserResponse">ReadUserResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_user(self, id: str) -&gt; ReadUserResponse:
+    return ReadUserResponse(
+        self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;)
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.search_groups"><code class="name flex">
+<span>def <span class="ident">search_groups</span></span>(<span>self, *, count: int, start_index: int, filter: Optional[str] = None) ‑> <a title="slack_sdk.scim.v1.response.SearchGroupsResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchGroupsResponse">SearchGroupsResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_groups(
+    self,
+    *,
+    # Pagination required as of August 30, 2019.
+    count: int,
+    start_index: int,
+    filter: Optional[str] = None,
+) -&gt; SearchGroupsResponse:
+    return SearchGroupsResponse(
+        self.api_call(
+            http_verb=&#34;GET&#34;,
+            path=&#34;Groups&#34;,
+            query_params={
+                &#34;filter&#34;: filter,
+                &#34;count&#34;: count,
+                &#34;startIndex&#34;: start_index,
+            },
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.search_users"><code class="name flex">
+<span>def <span class="ident">search_users</span></span>(<span>self, *, count: int, start_index: int, filter: Optional[str] = None) ‑> <a title="slack_sdk.scim.v1.response.SearchUsersResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchUsersResponse">SearchUsersResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_users(
+    self,
+    *,
+    # Pagination required as of August 30, 2019.
+    count: int,
+    start_index: int,
+    filter: Optional[str] = None,
+) -&gt; SearchUsersResponse:
+    return SearchUsersResponse(
+        self.api_call(
+            http_verb=&#34;GET&#34;,
+            path=&#34;Users&#34;,
+            query_params={
+                &#34;filter&#34;: filter,
+                &#34;count&#34;: count,
+                &#34;startIndex&#34;: start_index,
+            },
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.update_group"><code class="name flex">
+<span>def <span class="ident">update_group</span></span>(<span>self, group: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>]) ‑> <a title="slack_sdk.scim.v1.response.GroupUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupUpdateResponse">GroupUpdateResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+    group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
+    return GroupUpdateResponse(
+        self.api_call(
+            http_verb=&#34;PUT&#34;,
+            path=f&#34;Groups/{quote(group_id)}&#34;,
+            body_params=group.to_dict()
+            if isinstance(group, Group)
+            else _to_dict_without_not_given(group),
+        )
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMClient.update_user"><code class="name flex">
+<span>def <span class="ident">update_user</span></span>(<span>self, user: Union[Dict[str, Any], <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>]) ‑> <a title="slack_sdk.scim.v1.response.UserUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserUpdateResponse">UserUpdateResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+    user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
+    return UserUpdateResponse(
+        self.api_call(
+            http_verb=&#34;PUT&#34;,
+            path=f&#34;Users/{quote(user_id)}&#34;,
+            body_params=user.to_dict()
+            if isinstance(user, User)
+            else _to_dict_without_not_given(user),
+        )
+    )</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse"><code class="flex name class">
+<span>class <span class="ident">SCIMResponse</span></span>
+<span>(</span><span>*, url: str, status_code: int, raw_body: Optional[str], headers: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SCIMResponse:
+    url: str
+    status_code: int
+    headers: Dict[str, Any]
+    raw_body: Optional[str]
+    body: Optional[Dict[str, Any]]
+    snake_cased_body: Optional[Dict[str, Any]]
+
+    errors: Optional[Errors]
+
+    @property
+    def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
+        if self._snake_cased_body is None:
+            self._snake_cased_body = _to_snake_cased(self.body)
+        return self._snake_cased_body
+
+    @property
+    def errors(self) -&gt; Optional[Errors]:  # type: ignore
+        errors = self.snake_cased_body.get(&#34;errors&#34;)
+        if errors is None:
+            return None
+        return Errors(**errors)
+
+    def __init__(
+        self,
+        *,
+        url: str,
+        status_code: int,
+        raw_body: Optional[str],
+        headers: dict,
+    ):
+        self.url = url
+        self.status_code = status_code
+        self.headers = headers
+        self.raw_body = raw_body
+        self.body = (
+            json.loads(raw_body)
+            if raw_body is not None and raw_body.startswith(&#34;{&#34;)
+            else None
+        )
+        self._snake_cased_body = (
+            None  # build this when it&#39;s accessed for the first time
+        )
+
+    def __repr__(self):
+        dict_value = {}
+        for key, value in vars(self).items():
+            dict_value[key] = value.to_dict() if hasattr(value, &#34;to_dict&#34;) else value
+
+        if dict_value:  # skipcq: PYL-R1705
+            return f&#34;&lt;slack_sdk.scim.v1.{self.__class__.__name__}: {dict_value}&gt;&#34;
+        else:
+            return self.__str__()</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.response.GroupCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupCreateResponse">GroupCreateResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.GroupDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupDeleteResponse">GroupDeleteResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.GroupPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupPatchResponse">GroupPatchResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.GroupUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupUpdateResponse">GroupUpdateResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.ReadGroupResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadGroupResponse">ReadGroupResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.ReadUserResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadUserResponse">ReadUserResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.SearchGroupsResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchGroupsResponse">SearchGroupsResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.SearchUsersResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchUsersResponse">SearchUsersResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.UserCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserCreateResponse">UserCreateResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.UserDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserDeleteResponse">UserDeleteResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.UserPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserPatchResponse">UserPatchResponse</a></li>
+<li><a title="slack_sdk.scim.v1.response.UserUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserUpdateResponse">UserUpdateResponse</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.SCIMResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse.headers"><code class="name">var <span class="ident">headers</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse.status_code"><code class="name">var <span class="ident">status_code</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse.url"><code class="name">var <span class="ident">url</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.scim.SCIMResponse.errors"><code class="name">var <span class="ident">errors</span> : Optional[<a title="slack_sdk.scim.v1.response.Errors" href="v1/response.html#slack_sdk.scim.v1.response.Errors">Errors</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def errors(self) -&gt; Optional[Errors]:  # type: ignore
+    errors = self.snake_cased_body.get(&#34;errors&#34;)
+    if errors is None:
+        return None
+    return Errors(**errors)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.scim.SCIMResponse.snake_cased_body"><code class="name">var <span class="ident">snake_cased_body</span> : Optional[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
+    if self._snake_cased_body is None:
+        self._snake_cased_body = _to_snake_cased(self.body)
+    return self._snake_cased_body</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.SearchGroupsResponse"><code class="flex name class">
+<span>class <span class="ident">SearchGroupsResponse</span></span>
+<span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SearchGroupsResponse(SCIMResponse):
+    groups: List[Group]
+
+    @property
+    def groups(self) -&gt; List[Group]:  # type: ignore
+        return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
+
+    def __init__(self, underlying: SCIMResponse):
+        self.underlying = underlying
+        self.url = underlying.url
+        self.status_code = underlying.status_code
+        self.headers = underlying.headers
+        self.raw_body = underlying.raw_body
+        self.body = underlying.body
+        self._snake_cased_body = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.scim.SearchGroupsResponse.groups"><code class="name">var <span class="ident">groups</span> : List[<a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def groups(self) -&gt; List[Group]:  # type: ignore
+    return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.SearchUsersResponse"><code class="flex name class">
+<span>class <span class="ident">SearchUsersResponse</span></span>
+<span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SearchUsersResponse(SCIMResponse):
+    users: List[User]
+
+    @property
+    def users(self) -&gt; List[User]:  # type: ignore
+        return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
+
+    def __init__(self, underlying: SCIMResponse):
+        self.underlying = underlying
+        self.url = underlying.url
+        self.status_code = underlying.status_code
+        self.headers = underlying.headers
+        self.raw_body = underlying.raw_body
+        self.body = underlying.body
+        self._snake_cased_body = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.scim.SearchUsersResponse.users"><code class="name">var <span class="ident">users</span> : List[<a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def users(self) -&gt; List[User]:  # type: ignore
+    return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.User"><code class="flex name class">
+<span>class <span class="ident">User</span></span>
+<span>(</span><span>*, active: Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, addresses: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserAddress" href="v1/user.html#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, display_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, emails: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, external_id: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, groups: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserGroup" href="v1/user.html#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, id: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, meta: Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="v1/user.html#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, Dict[str, Any], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, name: Union[<a title="slack_sdk.scim.v1.user.UserName" href="v1/user.html#slack_sdk.scim.v1.user.UserName">UserName</a>, Dict[str, Any], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, nick_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, phone_numbers: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, photos: Union[List[Union[<a title="slack_sdk.scim.v1.user.UserPhoto" href="v1/user.html#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, profile_url: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, roles: Union[List[Union[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>, Dict[str, Any]]], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, schemas: Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, timezone: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, title: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, user_name: Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>] = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class User:
+    active: Union[Optional[bool], DefaultArg]
+    addresses: Union[Optional[List[UserAddress]], DefaultArg]
+    display_name: Union[Optional[str], DefaultArg]
+    emails: Union[Optional[List[TypeAndValue]], DefaultArg]
+    external_id: Union[Optional[str], DefaultArg]
+    groups: Union[Optional[List[UserGroup]], DefaultArg]
+    id: Union[Optional[str], DefaultArg]
+    meta: Union[Optional[UserMeta], DefaultArg]
+    name: Union[Optional[UserName], DefaultArg]
+    nick_name: Union[Optional[str], DefaultArg]
+    phone_numbers: Union[Optional[List[TypeAndValue]], DefaultArg]
+    photos: Union[Optional[List[UserPhoto]], DefaultArg]
+    profile_url: Union[Optional[str], DefaultArg]
+    roles: Union[Optional[List[TypeAndValue]], DefaultArg]
+    schemas: Union[Optional[List[str]], DefaultArg]
+    timezone: Union[Optional[str], DefaultArg]
+    title: Union[Optional[str], DefaultArg]
+    user_name: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        active: Union[Optional[bool], DefaultArg] = NotGiven,
+        addresses: Union[
+            Optional[List[Union[UserAddress, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        display_name: Union[Optional[str], DefaultArg] = NotGiven,
+        emails: Union[
+            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        external_id: Union[Optional[str], DefaultArg] = NotGiven,
+        groups: Union[
+            Optional[List[Union[UserGroup, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        id: Union[Optional[str], DefaultArg] = NotGiven,
+        meta: Union[Optional[Union[UserMeta, Dict[str, Any]]], DefaultArg] = NotGiven,
+        name: Union[Optional[Union[UserName, Dict[str, Any]]], DefaultArg] = NotGiven,
+        nick_name: Union[Optional[str], DefaultArg] = NotGiven,
+        phone_numbers: Union[
+            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        photos: Union[
+            Optional[List[Union[UserPhoto, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        profile_url: Union[Optional[str], DefaultArg] = NotGiven,
+        roles: Union[
+            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
+        ] = NotGiven,
+        schemas: Union[Optional[List[str]], DefaultArg] = NotGiven,
+        timezone: Union[Optional[str], DefaultArg] = NotGiven,
+        title: Union[Optional[str], DefaultArg] = NotGiven,
+        user_name: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.active = active
+        self.addresses = (  # type: ignore
+            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]
+            if _is_iterable(addresses)
+            else addresses
+        )
+        self.display_name = display_name
+        self.emails = (  # type: ignore
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]
+            if _is_iterable(emails)
+            else emails
+        )
+        self.external_id = external_id
+        self.groups = (  # type: ignore
+            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]
+            if _is_iterable(groups)
+            else groups
+        )
+        self.id = id
+        self.meta = (  # type: ignore
+            UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
+        )
+        self.name = (  # type: ignore
+            UserName(**name) if name is not None and isinstance(name, dict) else name
+        )
+        self.nick_name = nick_name
+        self.phone_numbers = (  # type: ignore
+            [
+                a if isinstance(a, TypeAndValue) else TypeAndValue(**a)
+                for a in phone_numbers
+            ]
+            if _is_iterable(phone_numbers)
+            else phone_numbers
+        )
+        self.photos = (  # type: ignore
+            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]
+            if _is_iterable(photos)
+            else photos
+        )
+        self.profile_url = profile_url
+        self.roles = (  # type: ignore
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]
+            if _is_iterable(roles)
+            else roles
+        )
+        self.schemas = schemas
+        self.timezone = timezone
+        self.title = title
+        self.user_name = user_name
+
+        self.unknown_fields = kwargs
+
+    def to_dict(self):
+        return _to_dict_without_not_given(self)
+
+    def __repr__(self):
+        return f&#34;&lt;slack_sdk.scim.{self.__class__.__name__}: {self.to_dict()}&gt;&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.User.active"><code class="name">var <span class="ident">active</span> : Union[bool, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.addresses"><code class="name">var <span class="ident">addresses</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserAddress" href="v1/user.html#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.display_name"><code class="name">var <span class="ident">display_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.emails"><code class="name">var <span class="ident">emails</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.external_id"><code class="name">var <span class="ident">external_id</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.groups"><code class="name">var <span class="ident">groups</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserGroup" href="v1/user.html#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.id"><code class="name">var <span class="ident">id</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.meta"><code class="name">var <span class="ident">meta</span> : Union[<a title="slack_sdk.scim.v1.user.UserMeta" href="v1/user.html#slack_sdk.scim.v1.user.UserMeta">UserMeta</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.name"><code class="name">var <span class="ident">name</span> : Union[<a title="slack_sdk.scim.v1.user.UserName" href="v1/user.html#slack_sdk.scim.v1.user.UserName">UserName</a>, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.nick_name"><code class="name">var <span class="ident">nick_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.phone_numbers"><code class="name">var <span class="ident">phone_numbers</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.photos"><code class="name">var <span class="ident">photos</span> : Union[List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="v1/user.html#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.profile_url"><code class="name">var <span class="ident">profile_url</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.roles"><code class="name">var <span class="ident">roles</span> : Union[List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.schemas"><code class="name">var <span class="ident">schemas</span> : Union[List[str], ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.timezone"><code class="name">var <span class="ident">timezone</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.title"><code class="name">var <span class="ident">title</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.scim.User.user_name"><code class="name">var <span class="ident">user_name</span> : Union[str, ForwardRef(None), <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.User.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -81,6 +1505,110 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <ul>
 <li><code><a title="slack_sdk.scim.async_client" href="async_client.html">slack_sdk.scim.async_client</a></code></li>
 <li><code><a title="slack_sdk.scim.v1" href="v1/index.html">slack_sdk.scim.v1</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.scim.Group" href="#slack_sdk.scim.Group">Group</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.Group.display_name" href="#slack_sdk.scim.Group.display_name">display_name</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.id" href="#slack_sdk.scim.Group.id">id</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.members" href="#slack_sdk.scim.Group.members">members</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.meta" href="#slack_sdk.scim.Group.meta">meta</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.schemas" href="#slack_sdk.scim.Group.schemas">schemas</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.to_dict" href="#slack_sdk.scim.Group.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.Group.unknown_fields" href="#slack_sdk.scim.Group.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.ReadGroupResponse" href="#slack_sdk.scim.ReadGroupResponse">ReadGroupResponse</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.ReadGroupResponse.group" href="#slack_sdk.scim.ReadGroupResponse.group">group</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.ReadUserResponse" href="#slack_sdk.scim.ReadUserResponse">ReadUserResponse</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.ReadUserResponse.user" href="#slack_sdk.scim.ReadUserResponse.user">user</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.SCIMClient" href="#slack_sdk.scim.SCIMClient">SCIMClient</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.SCIMClient.BASE_URL" href="#slack_sdk.scim.SCIMClient.BASE_URL">BASE_URL</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.api_call" href="#slack_sdk.scim.SCIMClient.api_call">api_call</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.base_url" href="#slack_sdk.scim.SCIMClient.base_url">base_url</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.create_group" href="#slack_sdk.scim.SCIMClient.create_group">create_group</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.create_user" href="#slack_sdk.scim.SCIMClient.create_user">create_user</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.default_headers" href="#slack_sdk.scim.SCIMClient.default_headers">default_headers</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.delete_group" href="#slack_sdk.scim.SCIMClient.delete_group">delete_group</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.delete_user" href="#slack_sdk.scim.SCIMClient.delete_user">delete_user</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.logger" href="#slack_sdk.scim.SCIMClient.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.patch_group" href="#slack_sdk.scim.SCIMClient.patch_group">patch_group</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.patch_user" href="#slack_sdk.scim.SCIMClient.patch_user">patch_user</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.proxy" href="#slack_sdk.scim.SCIMClient.proxy">proxy</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.read_group" href="#slack_sdk.scim.SCIMClient.read_group">read_group</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.read_user" href="#slack_sdk.scim.SCIMClient.read_user">read_user</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.retry_handlers" href="#slack_sdk.scim.SCIMClient.retry_handlers">retry_handlers</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.search_groups" href="#slack_sdk.scim.SCIMClient.search_groups">search_groups</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.search_users" href="#slack_sdk.scim.SCIMClient.search_users">search_users</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.ssl" href="#slack_sdk.scim.SCIMClient.ssl">ssl</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.timeout" href="#slack_sdk.scim.SCIMClient.timeout">timeout</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.token" href="#slack_sdk.scim.SCIMClient.token">token</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.update_group" href="#slack_sdk.scim.SCIMClient.update_group">update_group</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMClient.update_user" href="#slack_sdk.scim.SCIMClient.update_user">update_user</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.SCIMResponse" href="#slack_sdk.scim.SCIMResponse">SCIMResponse</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.SCIMResponse.body" href="#slack_sdk.scim.SCIMResponse.body">body</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.errors" href="#slack_sdk.scim.SCIMResponse.errors">errors</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.headers" href="#slack_sdk.scim.SCIMResponse.headers">headers</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.raw_body" href="#slack_sdk.scim.SCIMResponse.raw_body">raw_body</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.snake_cased_body" href="#slack_sdk.scim.SCIMResponse.snake_cased_body">snake_cased_body</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.status_code" href="#slack_sdk.scim.SCIMResponse.status_code">status_code</a></code></li>
+<li><code><a title="slack_sdk.scim.SCIMResponse.url" href="#slack_sdk.scim.SCIMResponse.url">url</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.SearchGroupsResponse" href="#slack_sdk.scim.SearchGroupsResponse">SearchGroupsResponse</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.SearchGroupsResponse.groups" href="#slack_sdk.scim.SearchGroupsResponse.groups">groups</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.SearchUsersResponse" href="#slack_sdk.scim.SearchUsersResponse">SearchUsersResponse</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.SearchUsersResponse.users" href="#slack_sdk.scim.SearchUsersResponse.users">users</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.User" href="#slack_sdk.scim.User">User</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.User.active" href="#slack_sdk.scim.User.active">active</a></code></li>
+<li><code><a title="slack_sdk.scim.User.addresses" href="#slack_sdk.scim.User.addresses">addresses</a></code></li>
+<li><code><a title="slack_sdk.scim.User.display_name" href="#slack_sdk.scim.User.display_name">display_name</a></code></li>
+<li><code><a title="slack_sdk.scim.User.emails" href="#slack_sdk.scim.User.emails">emails</a></code></li>
+<li><code><a title="slack_sdk.scim.User.external_id" href="#slack_sdk.scim.User.external_id">external_id</a></code></li>
+<li><code><a title="slack_sdk.scim.User.groups" href="#slack_sdk.scim.User.groups">groups</a></code></li>
+<li><code><a title="slack_sdk.scim.User.id" href="#slack_sdk.scim.User.id">id</a></code></li>
+<li><code><a title="slack_sdk.scim.User.meta" href="#slack_sdk.scim.User.meta">meta</a></code></li>
+<li><code><a title="slack_sdk.scim.User.name" href="#slack_sdk.scim.User.name">name</a></code></li>
+<li><code><a title="slack_sdk.scim.User.nick_name" href="#slack_sdk.scim.User.nick_name">nick_name</a></code></li>
+<li><code><a title="slack_sdk.scim.User.phone_numbers" href="#slack_sdk.scim.User.phone_numbers">phone_numbers</a></code></li>
+<li><code><a title="slack_sdk.scim.User.photos" href="#slack_sdk.scim.User.photos">photos</a></code></li>
+<li><code><a title="slack_sdk.scim.User.profile_url" href="#slack_sdk.scim.User.profile_url">profile_url</a></code></li>
+<li><code><a title="slack_sdk.scim.User.roles" href="#slack_sdk.scim.User.roles">roles</a></code></li>
+<li><code><a title="slack_sdk.scim.User.schemas" href="#slack_sdk.scim.User.schemas">schemas</a></code></li>
+<li><code><a title="slack_sdk.scim.User.timezone" href="#slack_sdk.scim.User.timezone">timezone</a></code></li>
+<li><code><a title="slack_sdk.scim.User.title" href="#slack_sdk.scim.User.title">title</a></code></li>
+<li><code><a title="slack_sdk.scim.User.to_dict" href="#slack_sdk.scim.User.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.User.unknown_fields" href="#slack_sdk.scim.User.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.User.user_name" href="#slack_sdk.scim.User.user_name">user_name</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

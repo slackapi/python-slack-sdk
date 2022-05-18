@@ -109,7 +109,17 @@ class AsyncRetryHandler:
             state.current_attempt
         )
         await asyncio.sleep(duration)
-        state.increment_current_attempt()</code></pre>
+        state.increment_current_attempt()
+
+
+__all__ = [
+    &#34;RetryState&#34;,
+    &#34;HttpRequest&#34;,
+    &#34;HttpResponse&#34;,
+    &#34;RetryIntervalCalculator&#34;,
+    &#34;BackoffRetryIntervalCalculator&#34;,
+    &#34;default_interval_calculator&#34;,
+]</code></pre>
 </details>
 </section>
 <section>
@@ -121,109 +131,326 @@ class AsyncRetryHandler:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="slack_sdk.http_retry.async_handler.AsyncRetryHandler"><code class="flex name class">
-<span>class <span class="ident">AsyncRetryHandler</span></span>
-<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;)</span>
+<dt id="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator"><code class="flex name class">
+<span>class <span class="ident">BackoffRetryIntervalCalculator</span></span>
+<span>(</span><span>backoff_factor: float = 0.5, jitter: Optional[<a title="slack_sdk.http_retry.jitter.Jitter" href="jitter.html#slack_sdk.http_retry.jitter.Jitter">Jitter</a>] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>asyncio compatible RetryHandler interface.
-You can pass an array of handlers to customize retry logics in supported API clients.</p>
-<p>RetryHandler interface.</p>
+<div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
+<p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>max_retry_count</code></strong></dt>
-<dd>The maximum times to do retries</dd>
-<dt><strong><code>interval_calculator</code></strong></dt>
-<dd>Pass an interval calculator for customizing the logic</dd>
+<dt><strong><code>backoff_factor</code></strong></dt>
+<dd>The factor for the backoff interval calculation</dd>
+<dt><strong><code>jitter</code></strong></dt>
+<dd>The jitter logic implementation</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AsyncRetryHandler:
-    &#34;&#34;&#34;asyncio compatible RetryHandler interface.
-    You can pass an array of handlers to customize retry logics in supported API clients.
+<pre><code class="python">class BackoffRetryIntervalCalculator(RetryIntervalCalculator):
+    &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+    see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
     &#34;&#34;&#34;
 
-    max_retry_count: int
-    interval_calculator: RetryIntervalCalculator
+    backoff_factor: float
+    jitter: Jitter
 
-    def __init__(
-        self,
-        max_retry_count: int = 1,
-        interval_calculator: RetryIntervalCalculator = default_interval_calculator,
-    ):
-        &#34;&#34;&#34;RetryHandler interface.
+    def __init__(self, backoff_factor: float = 0.5, jitter: Optional[Jitter] = None):
+        &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
 
         Args:
-            max_retry_count: The maximum times to do retries
-            interval_calculator: Pass an interval calculator for customizing the logic
+            backoff_factor: The factor for the backoff interval calculation
+            jitter: The jitter logic implementation
         &#34;&#34;&#34;
-        self.max_retry_count = max_retry_count
-        self.interval_calculator = interval_calculator
+        self.backoff_factor = backoff_factor
+        self.jitter = jitter if jitter is not None else RandomJitter()
 
-    async def can_retry_async(
-        self,
-        *,
-        state: RetryState,
-        request: HttpRequest,
-        response: Optional[HttpResponse] = None,
-        error: Optional[Exception] = None,
-    ) -&gt; bool:
-        if state.current_attempt &gt;= self.max_retry_count:
-            return False
-        return await self._can_retry_async(
-            state=state,
-            request=request,
-            response=response,
-            error=error,
-        )
-
-    async def _can_retry_async(
-        self,
-        *,
-        state: RetryState,
-        request: HttpRequest,
-        response: Optional[HttpResponse] = None,
-        error: Optional[Exception] = None,
-    ) -&gt; bool:
-        raise NotImplementedError()
-
-    async def prepare_for_next_attempt_async(
-        self,
-        *,
-        state: RetryState,
-        request: HttpRequest,
-        response: Optional[HttpResponse] = None,
-        error: Optional[Exception] = None,
-    ) -&gt; None:
-        state.next_attempt_requested = True
-        duration = self.interval_calculator.calculate_sleep_duration(
-            state.current_attempt
-        )
-        await asyncio.sleep(duration)
-        state.increment_current_attempt()</code></pre>
+    def calculate_sleep_duration(self, current_attempt: int) -&gt; float:
+        interval = self.backoff_factor * (2 ** (current_attempt))
+        sleep_duration = self.jitter.recalculate(interval)
+        return sleep_duration</code></pre>
 </details>
-<h3>Subclasses</h3>
+<h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncConnectionErrorRetryHandler" href="builtin_async_handlers.html#slack_sdk.http_retry.builtin_async_handlers.AsyncConnectionErrorRetryHandler">AsyncConnectionErrorRetryHandler</a></li>
-<li><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler" href="builtin_async_handlers.html#slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler">AsyncRateLimitErrorRetryHandler</a></li>
+<li><a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.http_retry.async_handler.AsyncRetryHandler.interval_calculator"><code class="name">var <span class="ident">interval_calculator</span> : <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></code></dt>
+<dt id="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.backoff_factor"><code class="name">var <span class="ident">backoff_factor</span> : float</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.http_retry.async_handler.AsyncRetryHandler.max_retry_count"><code class="name">var <span class="ident">max_retry_count</span> : int</code></dt>
+<dt id="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.jitter"><code class="name">var <span class="ident">jitter</span> : <a title="slack_sdk.http_retry.jitter.Jitter" href="jitter.html#slack_sdk.http_retry.jitter.Jitter">Jitter</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator.calculate_sleep_duration" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator.calculate_sleep_duration">calculate_sleep_duration</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest"><code class="flex name class">
+<span>class <span class="ident">HttpRequest</span></span>
+<span>(</span><span>*, method: str, url: str, headers: Dict[str, Union[str, List[str]]], body_params: Optional[Dict[str, Any]] = None, data: Optional[bytes] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>HTTP request representation</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HttpRequest:
+    &#34;&#34;&#34;HTTP request representation&#34;&#34;&#34;
+
+    method: str
+    url: str
+    headers: Dict[str, Union[str, List[str]]]
+    body_params: Optional[Dict[str, Any]]
+    data: Optional[bytes]
+
+    def __init__(
+        self,
+        *,
+        method: str,
+        url: str,
+        headers: Dict[str, Union[str, List[str]]],
+        body_params: Optional[Dict[str, Any]] = None,
+        data: Optional[bytes] = None,
+    ):
+        self.method = method
+        self.url = url
+        self.headers = {
+            k: v if isinstance(v, list) else [v] for k, v in headers.items()
+        }
+        self.body_params = body_params
+        self.data = data
+
+    @classmethod
+    def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
+        return HttpRequest(
+            method=req.method,
+            url=req.full_url,
+            headers={
+                k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
+            },
+            data=req.data,
+        )</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.body_params"><code class="name">var <span class="ident">body_params</span> : Optional[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.data"><code class="name">var <span class="ident">data</span> : Optional[bytes]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.headers"><code class="name">var <span class="ident">headers</span> : Dict[str, Union[str, List[str]]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.method"><code class="name">var <span class="ident">method</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.url"><code class="name">var <span class="ident">url</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.http_retry.async_handler.HttpRequest.from_urllib_http_request"><code class="name flex">
+<span>def <span class="ident">from_urllib_http_request</span></span>(<span>req: urllib.request.Request) ‑> <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
+    return HttpRequest(
+        method=req.method,
+        url=req.full_url,
+        headers={
+            k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
+        },
+        data=req.data,
+    )</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpResponse"><code class="flex name class">
+<span>class <span class="ident">HttpResponse</span></span>
+<span>(</span><span>*, status_code: Union[str, int], headers: Dict[str, Union[str, List[str]]], body: Optional[Dict[str, Any]] = None, data: Optional[bytes] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>HTTP response representation</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class HttpResponse:
+    &#34;&#34;&#34;HTTP response representation&#34;&#34;&#34;
+
+    status_code: int
+    headers: Dict[str, List[str]]
+    body: Optional[Dict[str, Any]]
+    data: Optional[bytes]
+
+    def __init__(
+        self,
+        *,
+        status_code: Union[int, str],
+        headers: Dict[str, Union[str, List[str]]],
+        body: Optional[Dict[str, Any]] = None,
+        data: Optional[bytes] = None,
+    ):
+        self.status_code = int(status_code)
+        self.headers = {
+            k: v if isinstance(v, list) else [v] for k, v in headers.items()
+        }
+        self.body = body
+        self.data = data</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.async_handler.HttpResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpResponse.data"><code class="name">var <span class="ident">data</span> : Optional[bytes]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpResponse.headers"><code class="name">var <span class="ident">headers</span> : Dict[str, List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.HttpResponse.status_code"><code class="name">var <span class="ident">status_code</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.RetryIntervalCalculator"><code class="flex name class">
+<span>class <span class="ident">RetryIntervalCalculator</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Retry interval calculator interface.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RetryIntervalCalculator:
+    &#34;&#34;&#34;Retry interval calculator interface.&#34;&#34;&#34;
+
+    def calculate_sleep_duration(self, current_attempt: int) -&gt; float:
+        &#34;&#34;&#34;Calculates an interval duration in seconds.
+
+        Args:
+            current_attempt: the number of the current attempt (zero-origin; 0 means no retries are done so far)
+        Returns:
+            calculated interval duration in seconds
+        &#34;&#34;&#34;
+        raise NotImplementedError()</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator" href="builtin_interval_calculators.html#slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator">BackoffRetryIntervalCalculator</a></li>
+<li><a title="slack_sdk.http_retry.builtin_interval_calculators.FixedValueRetryIntervalCalculator" href="builtin_interval_calculators.html#slack_sdk.http_retry.builtin_interval_calculators.FixedValueRetryIntervalCalculator">FixedValueRetryIntervalCalculator</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.http_retry.async_handler.RetryIntervalCalculator.calculate_sleep_duration"><code class="name flex">
+<span>def <span class="ident">calculate_sleep_duration</span></span>(<span>self, current_attempt: int) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculates an interval duration in seconds.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>current_attempt</code></strong></dt>
+<dd>the number of the current attempt (zero-origin; 0 means no retries are done so far)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>calculated interval duration in seconds</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_sleep_duration(self, current_attempt: int) -&gt; float:
+    &#34;&#34;&#34;Calculates an interval duration in seconds.
+
+    Args:
+        current_attempt: the number of the current attempt (zero-origin; 0 means no retries are done so far)
+    Returns:
+        calculated interval duration in seconds
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.RetryState"><code class="flex name class">
+<span>class <span class="ident">RetryState</span></span>
+<span>(</span><span>*, current_attempt: int = 0, custom_values: Optional[Dict[str, Any]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RetryState:
+    next_attempt_requested: bool
+    current_attempt: int  # zero-origin
+    custom_values: Optional[Dict[str, Any]]
+
+    def __init__(
+        self,
+        *,
+        current_attempt: int = 0,
+        custom_values: Optional[Dict[str, Any]] = None,
+    ):
+        self.next_attempt_requested = False
+        self.current_attempt = current_attempt
+        self.custom_values = custom_values
+
+    def increment_current_attempt(self) -&gt; int:
+        self.current_attempt += 1
+        return self.current_attempt</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.async_handler.RetryState.current_attempt"><code class="name">var <span class="ident">current_attempt</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.RetryState.custom_values"><code class="name">var <span class="ident">custom_values</span> : Optional[Dict[str, Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.async_handler.RetryState.next_attempt_requested"><code class="name">var <span class="ident">next_attempt_requested</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="slack_sdk.http_retry.async_handler.AsyncRetryHandler.can_retry_async"><code class="name flex">
-<span>async def <span class="ident">can_retry_async</span></span>(<span>self, *, state: <a title="slack_sdk.http_retry.state.RetryState" href="state.html#slack_sdk.http_retry.state.RetryState">RetryState</a>, request: <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a>, response: Optional[<a title="slack_sdk.http_retry.response.HttpResponse" href="response.html#slack_sdk.http_retry.response.HttpResponse">HttpResponse</a>] = None, error: Optional[Exception] = None) ‑> bool</span>
+<dt id="slack_sdk.http_retry.async_handler.RetryState.increment_current_attempt"><code class="name flex">
+<span>def <span class="ident">increment_current_attempt</span></span>(<span>self) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -231,47 +458,9 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def can_retry_async(
-    self,
-    *,
-    state: RetryState,
-    request: HttpRequest,
-    response: Optional[HttpResponse] = None,
-    error: Optional[Exception] = None,
-) -&gt; bool:
-    if state.current_attempt &gt;= self.max_retry_count:
-        return False
-    return await self._can_retry_async(
-        state=state,
-        request=request,
-        response=response,
-        error=error,
-    )</code></pre>
-</details>
-</dd>
-<dt id="slack_sdk.http_retry.async_handler.AsyncRetryHandler.prepare_for_next_attempt_async"><code class="name flex">
-<span>async def <span class="ident">prepare_for_next_attempt_async</span></span>(<span>self, *, state: <a title="slack_sdk.http_retry.state.RetryState" href="state.html#slack_sdk.http_retry.state.RetryState">RetryState</a>, request: <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a>, response: Optional[<a title="slack_sdk.http_retry.response.HttpResponse" href="response.html#slack_sdk.http_retry.response.HttpResponse">HttpResponse</a>] = None, error: Optional[Exception] = None) ‑> None</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">async def prepare_for_next_attempt_async(
-    self,
-    *,
-    state: RetryState,
-    request: HttpRequest,
-    response: Optional[HttpResponse] = None,
-    error: Optional[Exception] = None,
-) -&gt; None:
-    state.next_attempt_requested = True
-    duration = self.interval_calculator.calculate_sleep_duration(
-        state.current_attempt
-    )
-    await asyncio.sleep(duration)
-    state.increment_current_attempt()</code></pre>
+<pre><code class="python">def increment_current_attempt(self) -&gt; int:
+    self.current_attempt += 1
+    return self.current_attempt</code></pre>
 </details>
 </dd>
 </dl>
@@ -293,12 +482,45 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler" href="#slack_sdk.http_retry.async_handler.AsyncRetryHandler">AsyncRetryHandler</a></code></h4>
+<h4><code><a title="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator" href="#slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator">BackoffRetryIntervalCalculator</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler.can_retry_async" href="#slack_sdk.http_retry.async_handler.AsyncRetryHandler.can_retry_async">can_retry_async</a></code></li>
-<li><code><a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler.interval_calculator" href="#slack_sdk.http_retry.async_handler.AsyncRetryHandler.interval_calculator">interval_calculator</a></code></li>
-<li><code><a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler.max_retry_count" href="#slack_sdk.http_retry.async_handler.AsyncRetryHandler.max_retry_count">max_retry_count</a></code></li>
-<li><code><a title="slack_sdk.http_retry.async_handler.AsyncRetryHandler.prepare_for_next_attempt_async" href="#slack_sdk.http_retry.async_handler.AsyncRetryHandler.prepare_for_next_attempt_async">prepare_for_next_attempt_async</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.backoff_factor" href="#slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.backoff_factor">backoff_factor</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.jitter" href="#slack_sdk.http_retry.async_handler.BackoffRetryIntervalCalculator.jitter">jitter</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.http_retry.async_handler.HttpRequest" href="#slack_sdk.http_retry.async_handler.HttpRequest">HttpRequest</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.body_params" href="#slack_sdk.http_retry.async_handler.HttpRequest.body_params">body_params</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.data" href="#slack_sdk.http_retry.async_handler.HttpRequest.data">data</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.from_urllib_http_request" href="#slack_sdk.http_retry.async_handler.HttpRequest.from_urllib_http_request">from_urllib_http_request</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.headers" href="#slack_sdk.http_retry.async_handler.HttpRequest.headers">headers</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.method" href="#slack_sdk.http_retry.async_handler.HttpRequest.method">method</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpRequest.url" href="#slack_sdk.http_retry.async_handler.HttpRequest.url">url</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.http_retry.async_handler.HttpResponse" href="#slack_sdk.http_retry.async_handler.HttpResponse">HttpResponse</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpResponse.body" href="#slack_sdk.http_retry.async_handler.HttpResponse.body">body</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpResponse.data" href="#slack_sdk.http_retry.async_handler.HttpResponse.data">data</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpResponse.headers" href="#slack_sdk.http_retry.async_handler.HttpResponse.headers">headers</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.HttpResponse.status_code" href="#slack_sdk.http_retry.async_handler.HttpResponse.status_code">status_code</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.http_retry.async_handler.RetryIntervalCalculator" href="#slack_sdk.http_retry.async_handler.RetryIntervalCalculator">RetryIntervalCalculator</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.async_handler.RetryIntervalCalculator.calculate_sleep_duration" href="#slack_sdk.http_retry.async_handler.RetryIntervalCalculator.calculate_sleep_duration">calculate_sleep_duration</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.http_retry.async_handler.RetryState" href="#slack_sdk.http_retry.async_handler.RetryState">RetryState</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.async_handler.RetryState.current_attempt" href="#slack_sdk.http_retry.async_handler.RetryState.current_attempt">current_attempt</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.RetryState.custom_values" href="#slack_sdk.http_retry.async_handler.RetryState.custom_values">custom_values</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.RetryState.increment_current_attempt" href="#slack_sdk.http_retry.async_handler.RetryState.increment_current_attempt">increment_current_attempt</a></code></li>
+<li><code><a title="slack_sdk.http_retry.async_handler.RetryState.next_attempt_requested" href="#slack_sdk.http_retry.async_handler.RetryState.next_attempt_requested">next_attempt_requested</a></code></li>
 </ul>
 </li>
 </ul>

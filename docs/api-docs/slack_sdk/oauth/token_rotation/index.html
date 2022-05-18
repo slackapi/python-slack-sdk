@@ -26,7 +26,11 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .rotator import TokenRotator  # noqa</code></pre>
+<pre><code class="python">from .rotator import TokenRotator
+
+__all__ = [
+    &#34;TokenRotator&#34;,
+]</code></pre>
 </details>
 </section>
 <section>
@@ -47,6 +51,355 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator"><code class="flex name class">
+<span>class <span class="ident">TokenRotator</span></span>
+<span>(</span><span>*, client_id: str, client_secret: str, client: Optional[<a title="slack_sdk.web.client.WebClient" href="../../web/client.html#slack_sdk.web.client.WebClient">WebClient</a>] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TokenRotator:
+    client: WebClient
+    client_id: str
+    client_secret: str
+
+    def __init__(
+        self, *, client_id: str, client_secret: str, client: Optional[WebClient] = None
+    ):
+        self.client = client if client is not None else WebClient(token=None)
+        self.client_id = client_id
+        self.client_secret = client_secret
+
+    def perform_token_rotation(  # type: ignore
+        self,
+        *,
+        installation: Installation,
+        minutes_before_expiration: int = 120,  # 2 hours by default
+    ) -&gt; Optional[Installation]:
+        &#34;&#34;&#34;Performs token rotation if the underlying tokens (bot / user) are expired / expiring.
+
+        Args:
+            installation: the current installation data
+            minutes_before_expiration: the minutes before the token expiration
+
+        Returns:
+            None if no rotation is necessary for now.
+        &#34;&#34;&#34;
+
+        # TODO: make the following two calls in parallel for better performance
+
+        # bot
+        rotated_bot: Optional[Bot] = self.perform_bot_token_rotation(  # type: ignore
+            bot=installation.to_bot(),
+            minutes_before_expiration=minutes_before_expiration,
+        )
+
+        # user
+        rotated_installation: Optional[Installation] = self.perform_user_token_rotation(  # type: ignore
+            installation=installation,
+            minutes_before_expiration=minutes_before_expiration,
+        )
+
+        if rotated_bot is not None:
+            if rotated_installation is None:
+                rotated_installation = Installation(**installation.to_dict())  # type: ignore
+            rotated_installation.bot_token = rotated_bot.bot_token
+            rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
+            rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
+
+        return rotated_installation
+
+    def perform_bot_token_rotation(  # type: ignore
+        self,
+        *,
+        bot: Bot,
+        minutes_before_expiration: int = 120,  # 2 hours by default
+    ) -&gt; Optional[Bot]:
+        &#34;&#34;&#34;Performs bot token rotation if the underlying bot token is expired / expiring.
+
+        Args:
+            bot: the current bot installation data
+            minutes_before_expiration: the minutes before the token expiration
+
+        Returns:
+            None if no rotation is necessary for now.
+        &#34;&#34;&#34;
+        if bot.bot_token_expires_at is None:
+            return None
+        if bot.bot_token_expires_at &gt; time() + minutes_before_expiration * 60:
+            return None
+
+        try:
+            refresh_response = self.client.oauth_v2_access(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                grant_type=&#34;refresh_token&#34;,
+                refresh_token=bot.bot_refresh_token,
+            )
+            if refresh_response.get(&#34;token_type&#34;) != &#34;bot&#34;:
+                return None
+
+            refreshed_bot = Bot(**bot.to_dict())  # type: ignore
+            refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
+            refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
+            refreshed_bot.bot_token_expires_at = int(time()) + int(
+                refresh_response.get(&#34;expires_in&#34;)
+            )
+            return refreshed_bot
+
+        except SlackApiError as e:
+            raise SlackTokenRotationError(e)
+
+    def perform_user_token_rotation(  # type: ignore
+        self,
+        *,
+        installation: Installation,
+        minutes_before_expiration: int = 120,  # 2 hours by default
+    ) -&gt; Optional[Installation]:
+        &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
+
+        Args:
+            installation: the current installation data
+            minutes_before_expiration: the minutes before the token expiration
+
+        Returns:
+            None if no rotation is necessary for now.
+        &#34;&#34;&#34;
+        if installation.user_token_expires_at is None:
+            return None
+        if installation.user_token_expires_at &gt; time() + minutes_before_expiration * 60:
+            return None
+
+        try:
+            refresh_response = self.client.oauth_v2_access(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                grant_type=&#34;refresh_token&#34;,
+                refresh_token=installation.user_refresh_token,
+            )
+
+            if refresh_response.get(&#34;token_type&#34;) != &#34;user&#34;:
+                return None
+
+            refreshed_installation = Installation(**installation.to_dict())  # type: ignore
+            refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
+            refreshed_installation.user_refresh_token = refresh_response.get(
+                &#34;refresh_token&#34;
+            )
+            refreshed_installation.user_token_expires_at = int(time()) + int(
+                refresh_response.get(&#34;expires_in&#34;)
+            )
+            return refreshed_installation
+
+        except SlackApiError as e:
+            raise SlackTokenRotationError(e)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.client"><code class="name">var <span class="ident">client</span> : <a title="slack_sdk.web.client.WebClient" href="../../web/client.html#slack_sdk.web.client.WebClient">WebClient</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.client_id"><code class="name">var <span class="ident">client_id</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.client_secret"><code class="name">var <span class="ident">client_secret</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.perform_bot_token_rotation"><code class="name flex">
+<span>def <span class="ident">perform_bot_token_rotation</span></span>(<span>self, *, bot: <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../installation_store/models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>, minutes_before_expiration: int = 120) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../installation_store/models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs bot token rotation if the underlying bot token is expired / expiring.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>bot</code></strong></dt>
+<dd>the current bot installation data</dd>
+<dt><strong><code>minutes_before_expiration</code></strong></dt>
+<dd>the minutes before the token expiration</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None if no rotation is necessary for now.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def perform_bot_token_rotation(  # type: ignore
+    self,
+    *,
+    bot: Bot,
+    minutes_before_expiration: int = 120,  # 2 hours by default
+) -&gt; Optional[Bot]:
+    &#34;&#34;&#34;Performs bot token rotation if the underlying bot token is expired / expiring.
+
+    Args:
+        bot: the current bot installation data
+        minutes_before_expiration: the minutes before the token expiration
+
+    Returns:
+        None if no rotation is necessary for now.
+    &#34;&#34;&#34;
+    if bot.bot_token_expires_at is None:
+        return None
+    if bot.bot_token_expires_at &gt; time() + minutes_before_expiration * 60:
+        return None
+
+    try:
+        refresh_response = self.client.oauth_v2_access(
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            grant_type=&#34;refresh_token&#34;,
+            refresh_token=bot.bot_refresh_token,
+        )
+        if refresh_response.get(&#34;token_type&#34;) != &#34;bot&#34;:
+            return None
+
+        refreshed_bot = Bot(**bot.to_dict())  # type: ignore
+        refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
+        refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
+        refreshed_bot.bot_token_expires_at = int(time()) + int(
+            refresh_response.get(&#34;expires_in&#34;)
+        )
+        return refreshed_bot
+
+    except SlackApiError as e:
+        raise SlackTokenRotationError(e)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.perform_token_rotation"><code class="name flex">
+<span>def <span class="ident">perform_token_rotation</span></span>(<span>self, *, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>, minutes_before_expiration: int = 120) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs token rotation if the underlying tokens (bot / user) are expired / expiring.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>installation</code></strong></dt>
+<dd>the current installation data</dd>
+<dt><strong><code>minutes_before_expiration</code></strong></dt>
+<dd>the minutes before the token expiration</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None if no rotation is necessary for now.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def perform_token_rotation(  # type: ignore
+    self,
+    *,
+    installation: Installation,
+    minutes_before_expiration: int = 120,  # 2 hours by default
+) -&gt; Optional[Installation]:
+    &#34;&#34;&#34;Performs token rotation if the underlying tokens (bot / user) are expired / expiring.
+
+    Args:
+        installation: the current installation data
+        minutes_before_expiration: the minutes before the token expiration
+
+    Returns:
+        None if no rotation is necessary for now.
+    &#34;&#34;&#34;
+
+    # TODO: make the following two calls in parallel for better performance
+
+    # bot
+    rotated_bot: Optional[Bot] = self.perform_bot_token_rotation(  # type: ignore
+        bot=installation.to_bot(),
+        minutes_before_expiration=minutes_before_expiration,
+    )
+
+    # user
+    rotated_installation: Optional[Installation] = self.perform_user_token_rotation(  # type: ignore
+        installation=installation,
+        minutes_before_expiration=minutes_before_expiration,
+    )
+
+    if rotated_bot is not None:
+        if rotated_installation is None:
+            rotated_installation = Installation(**installation.to_dict())  # type: ignore
+        rotated_installation.bot_token = rotated_bot.bot_token
+        rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
+        rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
+
+    return rotated_installation</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.oauth.token_rotation.TokenRotator.perform_user_token_rotation"><code class="name flex">
+<span>def <span class="ident">perform_user_token_rotation</span></span>(<span>self, *, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>, minutes_before_expiration: int = 120) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs user token rotation if the underlying user token is expired / expiring.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>installation</code></strong></dt>
+<dd>the current installation data</dd>
+<dt><strong><code>minutes_before_expiration</code></strong></dt>
+<dd>the minutes before the token expiration</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None if no rotation is necessary for now.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def perform_user_token_rotation(  # type: ignore
+    self,
+    *,
+    installation: Installation,
+    minutes_before_expiration: int = 120,  # 2 hours by default
+) -&gt; Optional[Installation]:
+    &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
+
+    Args:
+        installation: the current installation data
+        minutes_before_expiration: the minutes before the token expiration
+
+    Returns:
+        None if no rotation is necessary for now.
+    &#34;&#34;&#34;
+    if installation.user_token_expires_at is None:
+        return None
+    if installation.user_token_expires_at &gt; time() + minutes_before_expiration * 60:
+        return None
+
+    try:
+        refresh_response = self.client.oauth_v2_access(
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            grant_type=&#34;refresh_token&#34;,
+            refresh_token=installation.user_refresh_token,
+        )
+
+        if refresh_response.get(&#34;token_type&#34;) != &#34;user&#34;:
+            return None
+
+        refreshed_installation = Installation(**installation.to_dict())  # type: ignore
+        refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
+        refreshed_installation.user_refresh_token = refresh_response.get(
+            &#34;refresh_token&#34;
+        )
+        refreshed_installation.user_token_expires_at = int(time()) + int(
+            refresh_response.get(&#34;expires_in&#34;)
+        )
+        return refreshed_installation
+
+    except SlackApiError as e:
+        raise SlackTokenRotationError(e)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -64,6 +417,21 @@
 <ul>
 <li><code><a title="slack_sdk.oauth.token_rotation.async_rotator" href="async_rotator.html">slack_sdk.oauth.token_rotation.async_rotator</a></code></li>
 <li><code><a title="slack_sdk.oauth.token_rotation.rotator" href="rotator.html">slack_sdk.oauth.token_rotation.rotator</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.oauth.token_rotation.TokenRotator" href="#slack_sdk.oauth.token_rotation.TokenRotator">TokenRotator</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.client" href="#slack_sdk.oauth.token_rotation.TokenRotator.client">client</a></code></li>
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.client_id" href="#slack_sdk.oauth.token_rotation.TokenRotator.client_id">client_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.client_secret" href="#slack_sdk.oauth.token_rotation.TokenRotator.client_secret">client_secret</a></code></li>
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.perform_bot_token_rotation" href="#slack_sdk.oauth.token_rotation.TokenRotator.perform_bot_token_rotation">perform_bot_token_rotation</a></code></li>
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.perform_token_rotation" href="#slack_sdk.oauth.token_rotation.TokenRotator.perform_token_rotation">perform_token_rotation</a></code></li>
+<li><code><a title="slack_sdk.oauth.token_rotation.TokenRotator.perform_user_token_rotation" href="#slack_sdk.oauth.token_rotation.TokenRotator.perform_user_token_rotation">perform_user_token_rotation</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

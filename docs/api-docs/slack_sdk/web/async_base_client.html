@@ -36,7 +36,7 @@ from aiohttp import FormData, BasicAuth
 from .async_internal_utils import (
     _files_to_data,
     _request_with_session,
-)
+)  # type: ignore
 from .async_slack_response import AsyncSlackResponse
 from .deprecation import show_2020_01_deprecation
 from .internal_utils import (

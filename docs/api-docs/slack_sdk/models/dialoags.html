@@ -26,21 +26,35 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from slack_sdk.models.dialogs import AbstractDialogSelector  # noqa
-from slack_sdk.models.dialogs import DialogChannelSelector  # noqa
-from slack_sdk.models.dialogs import DialogConversationSelector  # noqa
-from slack_sdk.models.dialogs import DialogExternalSelector  # noqa
-from slack_sdk.models.dialogs import DialogStaticSelector  # noqa
-from slack_sdk.models.dialogs import DialogTextArea  # noqa
-from slack_sdk.models.dialogs import DialogTextComponent  # noqa
-from slack_sdk.models.dialogs import DialogTextField  # noqa
-from slack_sdk.models.dialogs import DialogUserSelector  # noqa
-from slack_sdk.models.dialogs import TextElementSubtypes  # noqa
-from slack_sdk.models.dialogs import DialogBuilder  # noqa
+<pre><code class="python">from slack_sdk.models.dialogs import AbstractDialogSelector
+from slack_sdk.models.dialogs import DialogChannelSelector
+from slack_sdk.models.dialogs import DialogConversationSelector
+from slack_sdk.models.dialogs import DialogExternalSelector
+from slack_sdk.models.dialogs import DialogStaticSelector
+from slack_sdk.models.dialogs import DialogTextArea
+from slack_sdk.models.dialogs import DialogTextComponent
+from slack_sdk.models.dialogs import DialogTextField
+from slack_sdk.models.dialogs import DialogUserSelector
+from slack_sdk.models.dialogs import TextElementSubtypes
+from slack_sdk.models.dialogs import DialogBuilder
 
 from slack import deprecation
 
-deprecation.show_message(__name__, &#34;slack_sdk.models.dialogs&#34;)</code></pre>
+deprecation.show_message(__name__, &#34;slack_sdk.models.dialogs&#34;)
+
+__all__ = [
+    &#34;AbstractDialogSelector&#34;,
+    &#34;DialogChannelSelector&#34;,
+    &#34;DialogConversationSelector&#34;,
+    &#34;DialogExternalSelector&#34;,
+    &#34;DialogStaticSelector&#34;,
+    &#34;DialogTextArea&#34;,
+    &#34;DialogTextComponent&#34;,
+    &#34;DialogTextField&#34;,
+    &#34;DialogUserSelector&#34;,
+    &#34;TextElementSubtypes&#34;,
+    &#34;DialogBuilder&#34;,
+]</code></pre>
 </details>
 </section>
 <section>
@@ -50,6 +64,2490 @@ deprecation.show_message(__name__, &#34;slack_sdk.models.dialogs&#34;)</code></p
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector"><code class="flex name class">
+<span>class <span class="ident">AbstractDialogSelector</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str, ForwardRef(None)] = None, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
+    DataSourceTypes = DynamicSelectElementTypes.union({&#34;external&#34;, &#34;static&#34;})
+
+    attributes = {&#34;data_source&#34;, &#34;label&#34;, &#34;name&#34;, &#34;optional&#34;, &#34;placeholder&#34;, &#34;type&#34;}
+
+    name_max_length = 300
+    label_max_length = 48
+    placeholder_max_length = 150
+
+    @property
+    @abstractmethod
+    def data_source(self) -&gt; str:
+        pass
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
+    ):
+        self.name = name
+        self.label = label
+        self.optional = optional
+        self.value = value
+        self.placeholder = placeholder
+        self.type = &#34;select&#34;
+
+    @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
+    def name_length(self) -&gt; bool:
+        return len(self.name) &lt; self.name_max_length
+
+    @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+    def label_length(self) -&gt; bool:
+        return len(self.label) &lt; self.label_max_length
+
+    @JsonValidator(
+        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+    )
+    def placeholder_length(self) -&gt; bool:
+        return (
+            self.placeholder is None
+            or len(self.placeholder) &lt; self.placeholder_max_length
+        )
+
+    @EnumValidator(&#34;data_source&#34;, DataSourceTypes)
+    def data_source_valid(self) -&gt; bool:
+        return self.data_source in self.DataSourceTypes
+
+    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+        json = super().to_dict()
+        if self.data_source == &#34;external&#34;:
+            if isinstance(self.value, Option):
+                json[&#34;selected_options&#34;] = extract_json([self.value], &#34;dialog&#34;)
+            elif self.value is not None:
+                json[&#34;selected_options&#34;] = Option.from_single_value(self.value)
+        else:
+            if isinstance(self.value, Option):
+                json[&#34;value&#34;] = self.value.value
+            elif self.value is not None:
+                json[&#34;value&#34;] = self.value
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.DialogChannelSelector" href="dialogs/index.html#slack_sdk.models.dialogs.DialogChannelSelector">DialogChannelSelector</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogConversationSelector" href="dialogs/index.html#slack_sdk.models.dialogs.DialogConversationSelector">DialogConversationSelector</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogExternalSelector" href="dialogs/index.html#slack_sdk.models.dialogs.DialogExternalSelector">DialogExternalSelector</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogStaticSelector" href="dialogs/index.html#slack_sdk.models.dialogs.DialogStaticSelector">DialogStaticSelector</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogUserSelector" href="dialogs/index.html#slack_sdk.models.dialogs.DialogUserSelector">DialogUserSelector</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.DataSourceTypes"><code class="name">var <span class="ident">DataSourceTypes</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.label_max_length"><code class="name">var <span class="ident">label_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.name_max_length"><code class="name">var <span class="ident">name_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_max_length"><code class="name">var <span class="ident">placeholder_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.data_source"><code class="name">var <span class="ident">data_source</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@abstractmethod
+def data_source(self) -&gt; str:
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.data_source_valid"><code class="name flex">
+<span>def <span class="ident">data_source_valid</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;data_source&#34;, DataSourceTypes)
+def data_source_valid(self) -&gt; bool:
+    return self.data_source in self.DataSourceTypes</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.label_length"><code class="name flex">
+<span>def <span class="ident">label_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+def label_length(self) -&gt; bool:
+    return len(self.label) &lt; self.label_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.name_length"><code class="name flex">
+<span>def <span class="ident">name_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
+def name_length(self) -&gt; bool:
+    return len(self.name) &lt; self.name_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_length"><code class="name flex">
+<span>def <span class="ident">placeholder_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(
+    f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+)
+def placeholder_length(self) -&gt; bool:
+    return (
+        self.placeholder is None
+        or len(self.placeholder) &lt; self.placeholder_max_length
+    )</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder"><code class="flex name class">
+<span>class <span class="ident">DialogBuilder</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Create a DialogBuilder to more easily construct the JSON required to submit a
+dialog to Slack</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogBuilder(JsonObject):
+    attributes = {}  # no attributes because to_dict has unique implementation
+
+    _callback_id: Optional[str]
+    _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]
+    _submit_label: Optional[str]
+    _notify_on_cancel: bool
+    _state: Optional[str]
+
+    title_max_length = 24
+    submit_label_max_length = 24
+    elements_max_length = 10
+    state_max_length = 3000
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Create a DialogBuilder to more easily construct the JSON required to submit a
+        dialog to Slack
+        &#34;&#34;&#34;
+        self._title = None
+        self._callback_id = None
+        self._elements = []
+        self._submit_label = None
+        self._notify_on_cancel = False
+        self._state = None
+
+    def title(self, title: str) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Specify a title for this dialog
+
+        Args:
+          title: must not exceed 24 characters
+        &#34;&#34;&#34;
+        self._title = title
+        return self
+
+    def state(self, state: Union[dict, str]) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Pass state into this dialog - dictionaries will be automatically formatted to
+        JSON
+
+        Args:
+            state: Extra state information that you need to pass from this dialog
+                back to your application on submission
+        &#34;&#34;&#34;
+        if isinstance(state, dict):
+            self._state = dumps(state)
+        else:
+            self._state = state
+        return self
+
+    def callback_id(self, callback_id: str) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Specify a callback ID for this dialog, which your application will then
+        receive upon dialog submission
+
+        Args:
+          callback_id: a string identifying this particular dialog
+        &#34;&#34;&#34;
+        self._callback_id = callback_id
+        return self
+
+    def submit_label(self, label: str) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        The label to use on the &#39;Submit&#39; button on the dialog. Defaults to &#39;Submit&#39;
+        if not specified.
+
+        Args:
+            label: must not exceed 24 characters, and must be a single word (no
+                spaces)
+        &#34;&#34;&#34;
+        self._submit_label = label
+        return self
+
+    def notify_on_cancel(self, notify: bool) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Whether this dialog should send a request to your application even if the
+        user cancels their interaction. Defaults to False.
+
+        Args:
+            notify: Set to True to indicate that your application should receive a
+                request even if the user cancels interaction with the dialog.
+        &#34;&#34;&#34;
+        self._notify_on_cancel = notify
+        return self
+
+    def text_field(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        placeholder: Optional[str] = None,
+        hint: Optional[str] = None,
+        value: Optional[str] = None,
+        min_length: int = 0,
+        max_length: int = 150,
+        subtype: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Text elements are single-line plain text fields.
+
+        https://api.slack.com/dialogs#attributes_text_elements
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. 48 character maximum.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+            hint: Helpful text provided to assist users in answering a question.
+                Up to 150 characters.
+            value: A default value for this field. Up to 150 characters.
+            min_length: Minimum input length allowed for element. Up to 150
+                characters. Defaults to 0.
+            max_length: Maximum input length allowed for element. Up to 150
+                characters. Defaults to 150.
+            subtype: A subtype for this text input. Accepts email, number, tel,
+                    or url. In some form factors, optimized input is provided for this
+                    subtype.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogTextField(
+                name=name,
+                label=label,
+                optional=optional,
+                placeholder=placeholder,
+                hint=hint,
+                value=value,
+                min_length=min_length,
+                max_length=max_length,
+                subtype=subtype,
+            )
+        )
+        return self
+
+    def text_area(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        placeholder: Optional[str] = None,
+        hint: Optional[str] = None,
+        value: Optional[str] = None,
+        min_length: int = 0,
+        max_length: int = 3000,
+        subtype: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        A textarea is a multi-line plain text editing control. You&#39;ve likely
+        encountered these on the world wide web. Use this element if you want a
+        relatively long answer from users. The element UI provides a remaining
+        character count to the max_length you have set or the default,
+        3000.
+
+        https://api.slack.com/dialogs#attributes_textarea_elements
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. 48 character maximum.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+            hint: Helpful text provided to assist users in answering a question.
+                Up to 150 characters.
+            value: A default value for this field. Up to 3000 characters.
+            min_length: Minimum input length allowed for element. 1-3000
+                characters. Defaults to 0.
+            max_length: Maximum input length allowed for element. 0-3000
+                characters. Defaults to 3000.
+            subtype: A subtype for this text input. Accepts email, number, tel,
+                or url. In some form factors, optimized input is provided for this
+                subtype.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogTextArea(
+                name=name,
+                label=label,
+                optional=optional,
+                placeholder=placeholder,
+                hint=hint,
+                value=value,
+                min_length=min_length,
+                max_length=max_length,
+                subtype=subtype,
+            )
+        )
+        return self
+
+    def static_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        options: Union[Sequence[Option], Sequence[OptionGroup]],
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A select element may contain up to 100 selections, provided as a list of
+        Option or OptionGroup objects
+
+        https://api.slack.com/dialogs#attributes_select_elements
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            options: A list of up to 100 Option or OptionGroup objects. Object
+                types cannot be mixed.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogStaticSelector(
+                name=name,
+                label=label,
+                options=options,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    def external_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[Option] = None,
+        placeholder: Optional[str] = None,
+        min_query_length: Optional[int] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A list of options can be loaded from an external URL and used in your dialog
+        menus.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_external
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            min_query_length: Specify the number of characters that must be
+                typed by a user into a dynamic select menu before dispatching to your
+                application.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value. This should be a single
+                Option or OptionGroup that exactly matches one that will be returned
+                from your external endpoint.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogExternalSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+                min_query_length=min_query_length,
+            )
+        )
+        return self
+
+    def user_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        Now you can easily populate a select menu with a list of users. For example,
+        when you are creating a bug tracking app, you want to include a field for an
+        assignee. Slack pre-populates the user list in client-side, so your app
+        doesn&#39;t need access to a related OAuth scope.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_users
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogUserSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    def channel_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        You can also provide a select menu with a list of channels. Specify your
+        data_source as channels to limit only to public channels
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogChannelSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    def conversation_selector(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ) -&gt; &#34;DialogBuilder&#34;:
+        &#34;&#34;&#34;
+        You can also provide a select menu with a list of conversations - including
+        private channels, direct messages, MPIMs, and whatever else we consider a
+        conversation-like thing.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        self._elements.append(
+            DialogConversationSelector(
+                name=name,
+                label=label,
+                optional=optional,
+                value=value,
+                placeholder=placeholder,
+            )
+        )
+        return self
+
+    @JsonValidator(&#34;title attribute is required&#34;)
+    def title_present(self) -&gt; bool:
+        return self._title is not None
+
+    @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+    def title_length(self) -&gt; bool:
+        return self._title is not None and len(self._title) &lt;= self.title_max_length
+
+    @JsonValidator(&#34;callback_id attribute is required&#34;)
+    def callback_id_present(self) -&gt; bool:
+        return self._callback_id is not None
+
+    @JsonValidator(f&#34;dialogs must contain between 1 and {elements_max_length} elements&#34;)
+    def elements_length(self) -&gt; bool:
+        return 0 &lt; len(self._elements) &lt;= self.elements_max_length
+
+    @JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
+    def submit_label_length(self) -&gt; bool:
+        return (
+            self._submit_label is None
+            or len(self._submit_label) &lt;= self.submit_label_max_length
+        )
+
+    @JsonValidator(&#34;submit_label can only be one word&#34;)
+    def submit_label_valid(self) -&gt; bool:
+        return self._submit_label is None or &#34; &#34; not in self._submit_label
+
+    @JsonValidator(f&#34;state cannot exceed {state_max_length} characters&#34;)
+    def state_length(self) -&gt; bool:
+        return not self._state or len(self._state) &lt;= self.state_max_length
+
+    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {
+            &#34;title&#34;: self._title,
+            &#34;callback_id&#34;: self._callback_id,
+            &#34;elements&#34;: extract_json(self._elements),
+            &#34;notify_on_cancel&#34;: self._notify_on_cancel,
+        }
+        if self._submit_label is not None:
+            json[&#34;submit_label&#34;] = self._submit_label
+        if self._state is not None:
+            json[&#34;state&#34;] = self._state
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.elements_max_length"><code class="name">var <span class="ident">elements_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.state_max_length"><code class="name">var <span class="ident">state_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.submit_label_max_length"><code class="name">var <span class="ident">submit_label_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.title_max_length"><code class="name">var <span class="ident">title_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.callback_id"><code class="name flex">
+<span>def <span class="ident">callback_id</span></span>(<span>self, callback_id: str) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Specify a callback ID for this dialog, which your application will then
+receive upon dialog submission</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>callback_id</code></strong></dt>
+<dd>a string identifying this particular dialog</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def callback_id(self, callback_id: str) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Specify a callback ID for this dialog, which your application will then
+    receive upon dialog submission
+
+    Args:
+      callback_id: a string identifying this particular dialog
+    &#34;&#34;&#34;
+    self._callback_id = callback_id
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.callback_id_present"><code class="name flex">
+<span>def <span class="ident">callback_id_present</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;callback_id attribute is required&#34;)
+def callback_id_present(self) -&gt; bool:
+    return self._callback_id is not None</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.channel_selector"><code class="name flex">
+<span>def <span class="ident">channel_selector</span></span>(<span>self, *, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>You can also provide a select menu with a list of channels. Specify your
+data_source as channels to limit only to public channels</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def channel_selector(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    value: Optional[str] = None,
+    placeholder: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    You can also provide a select menu with a list of channels. Specify your
+    data_source as channels to limit only to public channels
+
+    https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. No more than 48 characters.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        value: Provide a default selected value.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogChannelSelector(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.conversation_selector"><code class="name flex">
+<span>def <span class="ident">conversation_selector</span></span>(<span>self, *, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>You can also provide a select menu with a list of conversations - including
+private channels, direct messages, MPIMs, and whatever else we consider a
+conversation-like thing.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def conversation_selector(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    value: Optional[str] = None,
+    placeholder: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    You can also provide a select menu with a list of conversations - including
+    private channels, direct messages, MPIMs, and whatever else we consider a
+    conversation-like thing.
+
+    https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. No more than 48 characters.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        value: Provide a default selected value.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogConversationSelector(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.elements_length"><code class="name flex">
+<span>def <span class="ident">elements_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;dialogs must contain between 1 and {elements_max_length} elements&#34;)
+def elements_length(self) -&gt; bool:
+    return 0 &lt; len(self._elements) &lt;= self.elements_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.external_selector"><code class="name flex">
+<span>def <span class="ident">external_selector</span></span>(<span>self, *, name: str, label: str, optional: bool = False, value: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, placeholder: Optional[str] = None, min_query_length: Optional[int] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick
+a single item from a list. True to web roots, this selection is displayed as
+a dropdown menu.</p>
+<p>A list of options can be loaded from an external URL and used in your dialog
+menus.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_external">https://api.slack.com/dialogs#dynamic_select_elements_external</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>min_query_length</code></strong></dt>
+<dd>Specify the number of characters that must be
+typed by a user into a dynamic select menu before dispatching to your
+application.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value. This should be a single
+Option or OptionGroup that exactly matches one that will be returned
+from your external endpoint.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def external_selector(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    value: Optional[Option] = None,
+    placeholder: Optional[str] = None,
+    min_query_length: Optional[int] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Use the select element for multiple choice selections allowing users to pick
+    a single item from a list. True to web roots, this selection is displayed as
+    a dropdown menu.
+
+    A list of options can be loaded from an external URL and used in your dialog
+    menus.
+
+    https://api.slack.com/dialogs#dynamic_select_elements_external
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. No more than 48 characters.
+        min_query_length: Specify the number of characters that must be
+            typed by a user into a dynamic select menu before dispatching to your
+            application.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        value: Provide a default selected value. This should be a single
+            Option or OptionGroup that exactly matches one that will be returned
+            from your external endpoint.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogExternalSelector(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+            min_query_length=min_query_length,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.notify_on_cancel"><code class="name flex">
+<span>def <span class="ident">notify_on_cancel</span></span>(<span>self, notify: bool) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Whether this dialog should send a request to your application even if the
+user cancels their interaction. Defaults to False.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>notify</code></strong></dt>
+<dd>Set to True to indicate that your application should receive a
+request even if the user cancels interaction with the dialog.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def notify_on_cancel(self, notify: bool) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Whether this dialog should send a request to your application even if the
+    user cancels their interaction. Defaults to False.
+
+    Args:
+        notify: Set to True to indicate that your application should receive a
+            request even if the user cancels interaction with the dialog.
+    &#34;&#34;&#34;
+    self._notify_on_cancel = notify
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.state"><code class="name flex">
+<span>def <span class="ident">state</span></span>(<span>self, state: Union[dict, str]) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Pass state into this dialog - dictionaries will be automatically formatted to
+JSON</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>state</code></strong></dt>
+<dd>Extra state information that you need to pass from this dialog
+back to your application on submission</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def state(self, state: Union[dict, str]) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Pass state into this dialog - dictionaries will be automatically formatted to
+    JSON
+
+    Args:
+        state: Extra state information that you need to pass from this dialog
+            back to your application on submission
+    &#34;&#34;&#34;
+    if isinstance(state, dict):
+        self._state = dumps(state)
+    else:
+        self._state = state
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.state_length"><code class="name flex">
+<span>def <span class="ident">state_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;state cannot exceed {state_max_length} characters&#34;)
+def state_length(self) -&gt; bool:
+    return not self._state or len(self._state) &lt;= self.state_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.static_selector"><code class="name flex">
+<span>def <span class="ident">static_selector</span></span>(<span>self, *, name: str, label: str, options: Union[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]], optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick
+a single item from a list. True to web roots, this selection is displayed as
+a dropdown menu.</p>
+<p>A select element may contain up to 100 selections, provided as a list of
+Option or OptionGroup objects</p>
+<p><a href="https://api.slack.com/dialogs#attributes_select_elements">https://api.slack.com/dialogs#attributes_select_elements</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>options</code></strong></dt>
+<dd>A list of up to 100 Option or OptionGroup objects. Object
+types cannot be mixed.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def static_selector(
+    self,
+    *,
+    name: str,
+    label: str,
+    options: Union[Sequence[Option], Sequence[OptionGroup]],
+    optional: bool = False,
+    value: Optional[str] = None,
+    placeholder: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Use the select element for multiple choice selections allowing users to pick
+    a single item from a list. True to web roots, this selection is displayed as
+    a dropdown menu.
+
+    A select element may contain up to 100 selections, provided as a list of
+    Option or OptionGroup objects
+
+    https://api.slack.com/dialogs#attributes_select_elements
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. No more than 48 characters.
+        options: A list of up to 100 Option or OptionGroup objects. Object
+            types cannot be mixed.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        value: Provide a default selected value.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogStaticSelector(
+            name=name,
+            label=label,
+            options=options,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.submit_label"><code class="name flex">
+<span>def <span class="ident">submit_label</span></span>(<span>self, label: str) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>The label to use on the 'Submit' button on the dialog. Defaults to 'Submit'
+if not specified.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>label</code></strong></dt>
+<dd>must not exceed 24 characters, and must be a single word (no
+spaces)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def submit_label(self, label: str) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    The label to use on the &#39;Submit&#39; button on the dialog. Defaults to &#39;Submit&#39;
+    if not specified.
+
+    Args:
+        label: must not exceed 24 characters, and must be a single word (no
+            spaces)
+    &#34;&#34;&#34;
+    self._submit_label = label
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.submit_label_length"><code class="name flex">
+<span>def <span class="ident">submit_label_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
+def submit_label_length(self) -&gt; bool:
+    return (
+        self._submit_label is None
+        or len(self._submit_label) &lt;= self.submit_label_max_length
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.submit_label_valid"><code class="name flex">
+<span>def <span class="ident">submit_label_valid</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;submit_label can only be one word&#34;)
+def submit_label_valid(self) -&gt; bool:
+    return self._submit_label is None or &#34; &#34; not in self._submit_label</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.text_area"><code class="name flex">
+<span>def <span class="ident">text_area</span></span>(<span>self, *, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: int = 3000, subtype: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A textarea is a multi-line plain text editing control. You've likely
+encountered these on the world wide web. Use this element if you want a
+relatively long answer from users. The element UI provides a remaining
+character count to the max_length you have set or the default,
+3000.</p>
+<p><a href="https://api.slack.com/dialogs#attributes_textarea_elements">https://api.slack.com/dialogs#attributes_textarea_elements</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. 48 character maximum.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+<dt><strong><code>hint</code></strong></dt>
+<dd>Helpful text provided to assist users in answering a question.
+Up to 150 characters.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>A default value for this field. Up to 3000 characters.</dd>
+<dt><strong><code>min_length</code></strong></dt>
+<dd>Minimum input length allowed for element. 1-3000
+characters. Defaults to 0.</dd>
+<dt><strong><code>max_length</code></strong></dt>
+<dd>Maximum input length allowed for element. 0-3000
+characters. Defaults to 3000.</dd>
+<dt><strong><code>subtype</code></strong></dt>
+<dd>A subtype for this text input. Accepts email, number, tel,
+or url. In some form factors, optimized input is provided for this
+subtype.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def text_area(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    placeholder: Optional[str] = None,
+    hint: Optional[str] = None,
+    value: Optional[str] = None,
+    min_length: int = 0,
+    max_length: int = 3000,
+    subtype: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    A textarea is a multi-line plain text editing control. You&#39;ve likely
+    encountered these on the world wide web. Use this element if you want a
+    relatively long answer from users. The element UI provides a remaining
+    character count to the max_length you have set or the default,
+    3000.
+
+    https://api.slack.com/dialogs#attributes_textarea_elements
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. 48 character maximum.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        hint: Helpful text provided to assist users in answering a question.
+            Up to 150 characters.
+        value: A default value for this field. Up to 3000 characters.
+        min_length: Minimum input length allowed for element. 1-3000
+            characters. Defaults to 0.
+        max_length: Maximum input length allowed for element. 0-3000
+            characters. Defaults to 3000.
+        subtype: A subtype for this text input. Accepts email, number, tel,
+            or url. In some form factors, optimized input is provided for this
+            subtype.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogTextArea(
+            name=name,
+            label=label,
+            optional=optional,
+            placeholder=placeholder,
+            hint=hint,
+            value=value,
+            min_length=min_length,
+            max_length=max_length,
+            subtype=subtype,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.text_field"><code class="name flex">
+<span>def <span class="ident">text_field</span></span>(<span>self, *, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: int = 150, subtype: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Text elements are single-line plain text fields.</p>
+<p><a href="https://api.slack.com/dialogs#attributes_text_elements">https://api.slack.com/dialogs#attributes_text_elements</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. 48 character maximum.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+<dt><strong><code>hint</code></strong></dt>
+<dd>Helpful text provided to assist users in answering a question.
+Up to 150 characters.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>A default value for this field. Up to 150 characters.</dd>
+<dt><strong><code>min_length</code></strong></dt>
+<dd>Minimum input length allowed for element. Up to 150
+characters. Defaults to 0.</dd>
+<dt><strong><code>max_length</code></strong></dt>
+<dd>Maximum input length allowed for element. Up to 150
+characters. Defaults to 150.</dd>
+<dt><strong><code>subtype</code></strong></dt>
+<dd>A subtype for this text input. Accepts email, number, tel,
+or url. In some form factors, optimized input is provided for this
+subtype.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def text_field(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    placeholder: Optional[str] = None,
+    hint: Optional[str] = None,
+    value: Optional[str] = None,
+    min_length: int = 0,
+    max_length: int = 150,
+    subtype: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Text elements are single-line plain text fields.
+
+    https://api.slack.com/dialogs#attributes_text_elements
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. 48 character maximum.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+        hint: Helpful text provided to assist users in answering a question.
+            Up to 150 characters.
+        value: A default value for this field. Up to 150 characters.
+        min_length: Minimum input length allowed for element. Up to 150
+            characters. Defaults to 0.
+        max_length: Maximum input length allowed for element. Up to 150
+            characters. Defaults to 150.
+        subtype: A subtype for this text input. Accepts email, number, tel,
+                or url. In some form factors, optimized input is provided for this
+                subtype.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogTextField(
+            name=name,
+            label=label,
+            optional=optional,
+            placeholder=placeholder,
+            hint=hint,
+            value=value,
+            min_length=min_length,
+            max_length=max_length,
+            subtype=subtype,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.title"><code class="name flex">
+<span>def <span class="ident">title</span></span>(<span>self, title: str) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Specify a title for this dialog</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>title</code></strong></dt>
+<dd>must not exceed 24 characters</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def title(self, title: str) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Specify a title for this dialog
+
+    Args:
+      title: must not exceed 24 characters
+    &#34;&#34;&#34;
+    self._title = title
+    return self</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.title_length"><code class="name flex">
+<span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+def title_length(self) -&gt; bool:
+    return self._title is not None and len(self._title) &lt;= self.title_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.title_present"><code class="name flex">
+<span>def <span class="ident">title_present</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;title attribute is required&#34;)
+def title_present(self) -&gt; bool:
+    return self._title is not None</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogBuilder.user_selector"><code class="name flex">
+<span>def <span class="ident">user_selector</span></span>(<span>self, *, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None) ‑> <a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Now you can easily populate a select menu with a list of users. For example,
+when you are creating a bug tracking app, you want to include a field for an
+assignee. Slack pre-populates the user list in client-side, so your app
+doesn't need access to a related OAuth scope.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_users">https://api.slack.com/dialogs#dynamic_select_elements_users</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def user_selector(
+    self,
+    *,
+    name: str,
+    label: str,
+    optional: bool = False,
+    value: Optional[str] = None,
+    placeholder: Optional[str] = None,
+) -&gt; &#34;DialogBuilder&#34;:
+    &#34;&#34;&#34;
+    Now you can easily populate a select menu with a list of users. For example,
+    when you are creating a bug tracking app, you want to include a field for an
+    assignee. Slack pre-populates the user list in client-side, so your app
+    doesn&#39;t need access to a related OAuth scope.
+
+    https://api.slack.com/dialogs#dynamic_select_elements_users
+
+    Args:
+        name: Name of form element. Required. No more than 300 characters.
+        label: Label displayed to user. Required. No more than 48 characters.
+        optional: Provide true when the form element is not required. By
+            default, form elements are required.
+        value: Provide a default selected value.
+        placeholder: A string displayed as needed to help guide users in
+            completing the element. 150 character maximum.
+    &#34;&#34;&#34;
+    self._elements.append(
+        DialogUserSelector(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+    )
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogChannelSelector"><code class="flex name class">
+<span>class <span class="ident">DialogChannelSelector</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>You can also provide a select menu with a list of channels. Specify your
+data_source as channels to limit only to public channels</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogChannelSelector(AbstractDialogSelector):
+    data_source = &#34;channels&#34;
+
+    def __init__(  # skipcq: PYL-W0235
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        You can also provide a select menu with a list of channels. Specify your
+        data_source as channels to limit only to public channels
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogChannelSelector.data_source"><code class="name">var <span class="ident">data_source</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogConversationSelector"><code class="flex name class">
+<span>class <span class="ident">DialogConversationSelector</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>You can also provide a select menu with a list of conversations - including
+private channels, direct messages, MPIMs, and whatever else we consider a
+conversation-like thing.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogConversationSelector(AbstractDialogSelector):
+    data_source = &#34;conversations&#34;
+
+    def __init__(  # skipcq: PYL-W0235
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        You can also provide a select menu with a list of conversations - including
+        private channels, direct messages, MPIMs, and whatever else we consider a
+        conversation-like thing.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogConversationSelector.data_source"><code class="name">var <span class="ident">data_source</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogExternalSelector"><code class="flex name class">
+<span>class <span class="ident">DialogExternalSelector</span></span>
+<span>(</span><span>*, name: str, label: str, value: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, min_query_length: Optional[int] = None, optional: Optional[bool] = False, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Use the select element for multiple choice selections allowing users to pick
+a single item from a list. True to web roots, this selection is displayed as
+a dropdown menu.</p>
+<p>A list of options can be loaded from an external URL and used in your dialog
+menus.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_external">https://api.slack.com/dialogs#dynamic_select_elements_external</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>min_query_length</code></strong></dt>
+<dd>Specify the number of characters that must be typed
+by a user into a dynamic select menu before dispatching to the app.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value. This should be a single
+Option or OptionGroup that exactly matches one that will be returned
+from your external endpoint.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogExternalSelector(AbstractDialogSelector):
+    data_source = &#34;external&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;min_query_length&#34;})
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        value: Optional[Option] = None,
+        min_query_length: Optional[int] = None,
+        optional: Optional[bool] = False,
+        placeholder: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A list of options can be loaded from an external URL and used in your dialog
+        menus.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_external
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            min_query_length: Specify the number of characters that must be typed
+                by a user into a dynamic select menu before dispatching to the app.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value. This should be a single
+                Option or OptionGroup that exactly matches one that will be returned
+                from your external endpoint.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        super().__init__(
+            name=name,
+            label=label,
+            value=value,
+            optional=optional,
+            placeholder=placeholder,
+        )
+        self.min_query_length = min_query_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogExternalSelector.data_source"><code class="name">var <span class="ident">data_source</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogExternalSelector.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;min_query_length&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogStaticSelector"><code class="flex name class">
+<span>class <span class="ident">DialogStaticSelector</span></span>
+<span>(</span><span>*, name: str, label: str, options: Union[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]], optional: bool = False, value: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, str, ForwardRef(None)] = None, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a
+single item from a list. True to web roots, this selection is displayed as a
+dropdown menu.</p>
+<p><a href="https://api.slack.com/dialogs#select_elements">https://api.slack.com/dialogs#select_elements</a></p>
+<p>Use the select element for multiple choice selections allowing users to pick
+a single item from a list. True to web roots, this selection is displayed as
+a dropdown menu.</p>
+<p>A select element may contain up to 100 selections, provided as a list of
+Option or OptionGroup objects</p>
+<p><a href="https://api.slack.com/dialogs#attributes_select_elements">https://api.slack.com/dialogs#attributes_select_elements</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>options</code></strong></dt>
+<dd>A list of up to 100 Option or OptionGroup objects. Object
+types cannot be mixed.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogStaticSelector(AbstractDialogSelector):
+    &#34;&#34;&#34;
+    Use the select element for multiple choice selections allowing users to pick a
+    single item from a list. True to web roots, this selection is displayed as a
+    dropdown menu.
+
+    https://api.slack.com/dialogs#select_elements
+    &#34;&#34;&#34;
+
+    data_source = &#34;static&#34;
+
+    options_max_length = 100
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        options: Union[Sequence[Option], Sequence[OptionGroup]],
+        optional: bool = False,
+        value: Optional[Union[Option, str]] = None,
+        placeholder: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        Use the select element for multiple choice selections allowing users to pick
+        a single item from a list. True to web roots, this selection is displayed as
+        a dropdown menu.
+
+        A select element may contain up to 100 selections, provided as a list of
+        Option or OptionGroup objects
+
+        https://api.slack.com/dialogs#attributes_select_elements
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            options: A list of up to 100 Option or OptionGroup objects. Object
+                types cannot be mixed.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )
+        self.options = options
+
+    @JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
+    def options_length(self) -&gt; bool:
+        return len(self.options) &lt; self.options_max_length
+
+    def to_dict(self) -&gt; dict:
+        json = super().to_dict()
+        if isinstance(self.options[0], OptionGroup):
+            json[&#34;option_groups&#34;] = extract_json(self.options, &#34;dialog&#34;)
+        else:
+            json[&#34;options&#34;] = extract_json(self.options, &#34;dialog&#34;)
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogStaticSelector.data_source"><code class="name">var <span class="ident">data_source</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogStaticSelector.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogStaticSelector.options_length"><code class="name flex">
+<span>def <span class="ident">options_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;options attribute cannot exceed {options_max_length} items&#34;)
+def options_length(self) -&gt; bool:
+    return len(self.options) &lt; self.options_max_length</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextArea"><code class="flex name class">
+<span>class <span class="ident">DialogTextArea</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: Optional[int] = None, subtype: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A textarea is a multi-line plain text editing control. You've likely encountered
+these on the world wide web. Use this element if you want a relatively long
+answer from users. The element UI provides a remaining character count to the
+max_length you have set or the default, 3000.</p>
+<p><a href="https://api.slack.com/dialogs#textarea_elements">https://api.slack.com/dialogs#textarea_elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogTextArea(DialogTextComponent):
+    &#34;&#34;&#34;
+    A textarea is a multi-line plain text editing control. You&#39;ve likely encountered
+    these on the world wide web. Use this element if you want a relatively long
+    answer from users. The element UI provides a remaining character count to the
+    max_length you have set or the default, 3000.
+
+    https://api.slack.com/dialogs#textarea_elements
+    &#34;&#34;&#34;
+
+    type = &#34;textarea&#34;
+    max_value_length = 3000</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogTextArea.max_value_length"><code class="name">var <span class="ident">max_value_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextArea.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent"><code class="flex name class">
+<span>class <span class="ident">DialogTextComponent</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: Optional[int] = None, subtype: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogTextComponent(JsonObject, metaclass=ABCMeta):
+    attributes = {
+        &#34;hint&#34;,
+        &#34;label&#34;,
+        &#34;max_length&#34;,
+        &#34;min_length&#34;,
+        &#34;name&#34;,
+        &#34;optional&#34;,
+        &#34;placeholder&#34;,
+        &#34;subtype&#34;,
+        &#34;type&#34;,
+        &#34;value&#34;,
+    }
+
+    name_max_length = 300
+    label_max_length = 48
+    placeholder_max_length = 150
+    hint_max_length = 150
+
+    @property
+    @abstractmethod
+    def type(self):
+        pass
+
+    @property
+    @abstractmethod
+    def max_value_length(self):
+        pass
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        placeholder: Optional[str] = None,
+        hint: Optional[str] = None,
+        value: Optional[str] = None,
+        min_length: int = 0,
+        max_length: Optional[int] = None,
+        subtype: Optional[str] = None,
+    ):
+        self.name = name
+        self.label = label
+        self.optional = optional
+        self.placeholder = placeholder
+        self.hint = hint
+        self.value = value
+        self.min_length = min_length
+        self.max_length = max_length or self.max_value_length
+        self.subtype = subtype
+
+    @JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
+    def name_length(self) -&gt; bool:
+        return len(self.name) &lt; self.name_max_length
+
+    @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+    def label_length(self) -&gt; bool:
+        return len(self.label) &lt; self.label_max_length
+
+    @JsonValidator(
+        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+    )
+    def placeholder_length(self) -&gt; bool:
+        return (
+            self.placeholder is None
+            or len(self.placeholder) &lt; self.placeholder_max_length
+        )
+
+    @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
+    def hint_length(self) -&gt; bool:
+        return self.hint is None or len(self.hint) &lt; self.hint_max_length
+
+    @JsonValidator(&#34;value attribute exceeded bounds&#34;)
+    def value_length(self) -&gt; bool:
+        return self.value is None or len(self.value) &lt; self.max_value_length
+
+    @JsonValidator(&#34;min_length attribute must be greater than or equal to 0&#34;)
+    def min_length_above_zero(self) -&gt; bool:
+        return self.min_length is None or self.min_length &gt;= 0
+
+    @JsonValidator(&#34;min_length attribute exceed bounds&#34;)
+    def min_length_length(self) -&gt; bool:
+        return self.min_length is None or self.min_length &lt;= self.max_value_length
+
+    @JsonValidator(&#34;min_length attribute must be less than max value attribute&#34;)
+    def min_length_below_max_length(self) -&gt; bool:
+        return self.min_length is None or self.min_length &lt; self.max_length
+
+    @JsonValidator(&#34;max_length attribute must be greater than or equal to 0&#34;)
+    def max_length_above_zero(self) -&gt; bool:
+        return self.max_length is None or self.max_length &gt; 0
+
+    @JsonValidator(&#34;max_length attribute exceeded bounds&#34;)
+    def max_length_length(self) -&gt; bool:
+        return self.max_length is None or self.max_length &lt;= self.max_value_length
+
+    @EnumValidator(&#34;subtype&#34;, TextElementSubtypes)
+    def subtype_valid(self) -&gt; bool:
+        return self.subtype is None or self.subtype in TextElementSubtypes</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.DialogTextArea" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextArea">DialogTextArea</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogTextField" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextField">DialogTextField</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.hint_max_length"><code class="name">var <span class="ident">hint_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.label_max_length"><code class="name">var <span class="ident">label_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.name_max_length"><code class="name">var <span class="ident">name_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.placeholder_max_length"><code class="name">var <span class="ident">placeholder_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.max_value_length"><code class="name">var <span class="ident">max_value_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@abstractmethod
+def max_value_length(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@abstractmethod
+def type(self):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.hint_length"><code class="name flex">
+<span>def <span class="ident">hint_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
+def hint_length(self) -&gt; bool:
+    return self.hint is None or len(self.hint) &lt; self.hint_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.label_length"><code class="name flex">
+<span>def <span class="ident">label_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
+def label_length(self) -&gt; bool:
+    return len(self.label) &lt; self.label_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.max_length_above_zero"><code class="name flex">
+<span>def <span class="ident">max_length_above_zero</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;max_length attribute must be greater than or equal to 0&#34;)
+def max_length_above_zero(self) -&gt; bool:
+    return self.max_length is None or self.max_length &gt; 0</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.max_length_length"><code class="name flex">
+<span>def <span class="ident">max_length_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;max_length attribute exceeded bounds&#34;)
+def max_length_length(self) -&gt; bool:
+    return self.max_length is None or self.max_length &lt;= self.max_value_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.min_length_above_zero"><code class="name flex">
+<span>def <span class="ident">min_length_above_zero</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;min_length attribute must be greater than or equal to 0&#34;)
+def min_length_above_zero(self) -&gt; bool:
+    return self.min_length is None or self.min_length &gt;= 0</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.min_length_below_max_length"><code class="name flex">
+<span>def <span class="ident">min_length_below_max_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;min_length attribute must be less than max value attribute&#34;)
+def min_length_below_max_length(self) -&gt; bool:
+    return self.min_length is None or self.min_length &lt; self.max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.min_length_length"><code class="name flex">
+<span>def <span class="ident">min_length_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;min_length attribute exceed bounds&#34;)
+def min_length_length(self) -&gt; bool:
+    return self.min_length is None or self.min_length &lt;= self.max_value_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.name_length"><code class="name flex">
+<span>def <span class="ident">name_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;name attribute cannot exceed {name_max_length} characters&#34;)
+def name_length(self) -&gt; bool:
+    return len(self.name) &lt; self.name_max_length</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.placeholder_length"><code class="name flex">
+<span>def <span class="ident">placeholder_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(
+    f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
+)
+def placeholder_length(self) -&gt; bool:
+    return (
+        self.placeholder is None
+        or len(self.placeholder) &lt; self.placeholder_max_length
+    )</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.subtype_valid"><code class="name flex">
+<span>def <span class="ident">subtype_valid</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;subtype&#34;, TextElementSubtypes)
+def subtype_valid(self) -&gt; bool:
+    return self.subtype is None or self.subtype in TextElementSubtypes</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextComponent.value_length"><code class="name flex">
+<span>def <span class="ident">value_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;value attribute exceeded bounds&#34;)
+def value_length(self) -&gt; bool:
+    return self.value is None or len(self.value) &lt; self.max_value_length</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextField"><code class="flex name class">
+<span>class <span class="ident">DialogTextField</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, placeholder: Optional[str] = None, hint: Optional[str] = None, value: Optional[str] = None, min_length: int = 0, max_length: Optional[int] = None, subtype: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Text elements are single-line plain text fields.</p>
+<p><a href="https://api.slack.com/dialogs#text_elements">https://api.slack.com/dialogs#text_elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogTextField(DialogTextComponent):
+    &#34;&#34;&#34;
+    Text elements are single-line plain text fields.
+
+    https://api.slack.com/dialogs#text_elements
+    &#34;&#34;&#34;
+
+    type = &#34;text&#34;
+    max_value_length = 150</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogTextField.max_value_length"><code class="name">var <span class="ident">max_value_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogTextField.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.DialogTextComponent.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.dialoags.DialogUserSelector"><code class="flex name class">
+<span>class <span class="ident">DialogUserSelector</span></span>
+<span>(</span><span>*, name: str, label: str, optional: bool = False, value: Optional[str] = None, placeholder: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>Now you can easily populate a select menu with a list of users. For example,
+when you are creating a bug tracking app, you want to include a field for an
+assignee. Slack pre-populates the user list in client-side, so your app
+doesn't need access to a related OAuth scope.</p>
+<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_users">https://api.slack.com/dialogs#dynamic_select_elements_users</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name of form element. Required. No more than 300 characters.</dd>
+<dt><strong><code>label</code></strong></dt>
+<dd>Label displayed to user. Required. No more than 48 characters.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>Provide true when the form element is not required. By
+default, form elements are required.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a default selected value.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A string displayed as needed to help guide users in
+completing the element. 150 character maximum.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogUserSelector(AbstractDialogSelector):
+    data_source = &#34;users&#34;
+
+    def __init__(  # skipcq: PYL-W0235
+        self,
+        *,
+        name: str,
+        label: str,
+        optional: bool = False,
+        value: Optional[str] = None,
+        placeholder: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        Now you can easily populate a select menu with a list of users. For example,
+        when you are creating a bug tracking app, you want to include a field for an
+        assignee. Slack pre-populates the user list in client-side, so your app
+        doesn&#39;t need access to a related OAuth scope.
+
+        https://api.slack.com/dialogs#dynamic_select_elements_users
+
+        Args:
+            name: Name of form element. Required. No more than 300 characters.
+            label: Label displayed to user. Required. No more than 48 characters.
+            optional: Provide true when the form element is not required. By
+                default, form elements are required.
+            value: Provide a default selected value.
+            placeholder: A string displayed as needed to help guide users in
+                completing the element. 150 character maximum.
+        &#34;&#34;&#34;
+        super().__init__(
+            name=name,
+            label=label,
+            optional=optional,
+            value=value,
+            placeholder=placeholder,
+        )</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.dialoags.DialogUserSelector.data_source"><code class="name">var <span class="ident">data_source</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.get_non_null_attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.to_dict" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs.AbstractDialogSelector.validate_json" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -61,6 +2559,121 @@ deprecation.show_message(__name__, &#34;slack_sdk.models.dialogs&#34;)</code></p
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="slack_sdk.models" href="index.html">slack_sdk.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector" href="#slack_sdk.models.dialoags.AbstractDialogSelector">AbstractDialogSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.DataSourceTypes" href="#slack_sdk.models.dialoags.AbstractDialogSelector.DataSourceTypes">DataSourceTypes</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.data_source" href="#slack_sdk.models.dialoags.AbstractDialogSelector.data_source">data_source</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.data_source_valid" href="#slack_sdk.models.dialoags.AbstractDialogSelector.data_source_valid">data_source_valid</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.label_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.label_length">label_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.label_max_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.label_max_length">label_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.name_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.name_length">name_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.name_max_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.name_max_length">name_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_length">placeholder_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_max_length" href="#slack_sdk.models.dialoags.AbstractDialogSelector.placeholder_max_length">placeholder_max_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogBuilder" href="#slack_sdk.models.dialoags.DialogBuilder">DialogBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.callback_id" href="#slack_sdk.models.dialoags.DialogBuilder.callback_id">callback_id</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.callback_id_present" href="#slack_sdk.models.dialoags.DialogBuilder.callback_id_present">callback_id_present</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.channel_selector" href="#slack_sdk.models.dialoags.DialogBuilder.channel_selector">channel_selector</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.conversation_selector" href="#slack_sdk.models.dialoags.DialogBuilder.conversation_selector">conversation_selector</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.elements_length" href="#slack_sdk.models.dialoags.DialogBuilder.elements_length">elements_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.elements_max_length" href="#slack_sdk.models.dialoags.DialogBuilder.elements_max_length">elements_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.external_selector" href="#slack_sdk.models.dialoags.DialogBuilder.external_selector">external_selector</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.notify_on_cancel" href="#slack_sdk.models.dialoags.DialogBuilder.notify_on_cancel">notify_on_cancel</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.state" href="#slack_sdk.models.dialoags.DialogBuilder.state">state</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.state_length" href="#slack_sdk.models.dialoags.DialogBuilder.state_length">state_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.state_max_length" href="#slack_sdk.models.dialoags.DialogBuilder.state_max_length">state_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.static_selector" href="#slack_sdk.models.dialoags.DialogBuilder.static_selector">static_selector</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.submit_label" href="#slack_sdk.models.dialoags.DialogBuilder.submit_label">submit_label</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.submit_label_length" href="#slack_sdk.models.dialoags.DialogBuilder.submit_label_length">submit_label_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.submit_label_max_length" href="#slack_sdk.models.dialoags.DialogBuilder.submit_label_max_length">submit_label_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.submit_label_valid" href="#slack_sdk.models.dialoags.DialogBuilder.submit_label_valid">submit_label_valid</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.text_area" href="#slack_sdk.models.dialoags.DialogBuilder.text_area">text_area</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.text_field" href="#slack_sdk.models.dialoags.DialogBuilder.text_field">text_field</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.title" href="#slack_sdk.models.dialoags.DialogBuilder.title">title</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.title_length" href="#slack_sdk.models.dialoags.DialogBuilder.title_length">title_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.title_max_length" href="#slack_sdk.models.dialoags.DialogBuilder.title_max_length">title_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.title_present" href="#slack_sdk.models.dialoags.DialogBuilder.title_present">title_present</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogBuilder.user_selector" href="#slack_sdk.models.dialoags.DialogBuilder.user_selector">user_selector</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogChannelSelector" href="#slack_sdk.models.dialoags.DialogChannelSelector">DialogChannelSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogChannelSelector.data_source" href="#slack_sdk.models.dialoags.DialogChannelSelector.data_source">data_source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogConversationSelector" href="#slack_sdk.models.dialoags.DialogConversationSelector">DialogConversationSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogConversationSelector.data_source" href="#slack_sdk.models.dialoags.DialogConversationSelector.data_source">data_source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogExternalSelector" href="#slack_sdk.models.dialoags.DialogExternalSelector">DialogExternalSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogExternalSelector.attributes" href="#slack_sdk.models.dialoags.DialogExternalSelector.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogExternalSelector.data_source" href="#slack_sdk.models.dialoags.DialogExternalSelector.data_source">data_source</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogStaticSelector" href="#slack_sdk.models.dialoags.DialogStaticSelector">DialogStaticSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogStaticSelector.data_source" href="#slack_sdk.models.dialoags.DialogStaticSelector.data_source">data_source</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogStaticSelector.options_length" href="#slack_sdk.models.dialoags.DialogStaticSelector.options_length">options_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogStaticSelector.options_max_length" href="#slack_sdk.models.dialoags.DialogStaticSelector.options_max_length">options_max_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogTextArea" href="#slack_sdk.models.dialoags.DialogTextArea">DialogTextArea</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogTextArea.max_value_length" href="#slack_sdk.models.dialoags.DialogTextArea.max_value_length">max_value_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextArea.type" href="#slack_sdk.models.dialoags.DialogTextArea.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogTextComponent" href="#slack_sdk.models.dialoags.DialogTextComponent">DialogTextComponent</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.hint_length" href="#slack_sdk.models.dialoags.DialogTextComponent.hint_length">hint_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.hint_max_length" href="#slack_sdk.models.dialoags.DialogTextComponent.hint_max_length">hint_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.label_length" href="#slack_sdk.models.dialoags.DialogTextComponent.label_length">label_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.label_max_length" href="#slack_sdk.models.dialoags.DialogTextComponent.label_max_length">label_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.max_length_above_zero" href="#slack_sdk.models.dialoags.DialogTextComponent.max_length_above_zero">max_length_above_zero</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.max_length_length" href="#slack_sdk.models.dialoags.DialogTextComponent.max_length_length">max_length_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.max_value_length" href="#slack_sdk.models.dialoags.DialogTextComponent.max_value_length">max_value_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.min_length_above_zero" href="#slack_sdk.models.dialoags.DialogTextComponent.min_length_above_zero">min_length_above_zero</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.min_length_below_max_length" href="#slack_sdk.models.dialoags.DialogTextComponent.min_length_below_max_length">min_length_below_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.min_length_length" href="#slack_sdk.models.dialoags.DialogTextComponent.min_length_length">min_length_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.name_length" href="#slack_sdk.models.dialoags.DialogTextComponent.name_length">name_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.name_max_length" href="#slack_sdk.models.dialoags.DialogTextComponent.name_max_length">name_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.placeholder_length" href="#slack_sdk.models.dialoags.DialogTextComponent.placeholder_length">placeholder_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.placeholder_max_length" href="#slack_sdk.models.dialoags.DialogTextComponent.placeholder_max_length">placeholder_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.subtype_valid" href="#slack_sdk.models.dialoags.DialogTextComponent.subtype_valid">subtype_valid</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.type" href="#slack_sdk.models.dialoags.DialogTextComponent.type">type</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextComponent.value_length" href="#slack_sdk.models.dialoags.DialogTextComponent.value_length">value_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogTextField" href="#slack_sdk.models.dialoags.DialogTextField">DialogTextField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogTextField.max_value_length" href="#slack_sdk.models.dialoags.DialogTextField.max_value_length">max_value_length</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags.DialogTextField.type" href="#slack_sdk.models.dialoags.DialogTextField.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.dialoags.DialogUserSelector" href="#slack_sdk.models.dialoags.DialogUserSelector">DialogUserSelector</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.dialoags.DialogUserSelector.data_source" href="#slack_sdk.models.dialoags.DialogUserSelector.data_source">data_source</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
