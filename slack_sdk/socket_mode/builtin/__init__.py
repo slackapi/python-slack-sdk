@@ -1,1 +1,5 @@
-from .client import SocketModeClient  # noqa
+from .client import SocketModeClient
+
+__all__ = [
+    "SocketModeClient",
+]

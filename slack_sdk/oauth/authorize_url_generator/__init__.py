@@ -17,7 +17,7 @@ class AuthorizeUrlGenerator:
         self.user_scopes = user_scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str):
+    def generate(self, state: str) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
         url = (
@@ -48,7 +48,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
         self.scopes = scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str, nonce: Optional[str] = None):
+    def generate(self, state: str, nonce: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         url = (
             f"{self.authorization_url}?"

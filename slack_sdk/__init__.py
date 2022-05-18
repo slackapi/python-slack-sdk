@@ -40,9 +40,14 @@ Here is the list of key modules in this SDK:
 import logging
 from logging import NullHandler
 
-# from .rtm import RTMClient  # noqa
-from .web import WebClient  # noqa
-from .webhook import WebhookClient  # noqa
+# from .rtm import RTMClient
+from .web import WebClient
+from .webhook import WebhookClient
+
+__all__ = [
+    "WebClient",
+    "WebhookClient",
+]
 
 # Set default logging handler to avoid "No handler found" warnings.
 logging.getLogger(__name__).addHandler(NullHandler())

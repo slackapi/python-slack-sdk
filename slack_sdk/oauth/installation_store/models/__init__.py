@@ -1,2 +1,7 @@
-from .bot import Bot  # noqa
-from .installation import Installation  # noqa
+from .bot import Bot
+from .installation import Installation
+
+__all__ = [
+    "Bot",
+    "Installation",
+]

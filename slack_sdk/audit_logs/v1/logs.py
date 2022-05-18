@@ -61,7 +61,7 @@ class Actor:
     def __init__(
         self,
         type: Optional[str] = None,
-        user: Optional[User] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.type = type
@@ -103,18 +103,18 @@ class Context:
     def __init__(
         self,
         *,
-        location: Optional[Location] = None,
+        location: Optional[Union[Location, Dict[str, Any]]] = None,
         ua: Optional[str] = None,
         ip_address: Optional[str] = None,
         session_id: Optional[str] = None,
-        app: Optional[App] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.location = Location(**location) if isinstance(location, dict) else location
         self.ua = ua
         self.ip_address = ip_address
         self.session_id = session_id
-        self.app = app
+        self.app = App(**app) if isinstance(app, dict) else app
         self.unknown_fields = kwargs
 
 
@@ -304,9 +304,9 @@ class Details:
         creator: Optional[str] = None,
         team: Optional[str] = None,
         app_id: Optional[str] = None,
-        enable_at_here: Optional[FeatureEnablement] = None,
-        enable_at_channel: Optional[FeatureEnablement] = None,
-        can_huddle: Optional[FeatureEnablement] = None,
+        enable_at_here: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        enable_at_channel: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        can_huddle: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -548,15 +548,15 @@ class Entity:
         self,
         *,
         type: Optional[str] = None,
-        user: Optional[Union[User, dict]] = None,
-        workspace: Optional[Union[Location, dict]] = None,
-        enterprise: Optional[Union[Location, dict]] = None,
-        channel: Optional[Union[Channel, dict]] = None,
-        file: Optional[Union[File, dict]] = None,
-        app: Optional[Union[App, dict]] = None,
-        usergroup: Optional[Usergroup] = None,
-        workflow: Optional[Workflow] = None,
-        barrier: Optional[InformationBarrier] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
+        workspace: Optional[Union[Location, Dict[str, Any]]] = None,
+        enterprise: Optional[Union[Location, Dict[str, Any]]] = None,
+        channel: Optional[Union[Channel, Dict[str, Any]]] = None,
+        file: Optional[Union[File, Dict[str, Any]]] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
+        usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
+        workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
+        barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.type = type
@@ -596,10 +596,10 @@ class Entry:
         id: Optional[str] = None,
         date_create: Optional[int] = None,
         action: Optional[str] = None,
-        actor: Optional[Actor] = None,
-        entity: Optional[Entity] = None,
-        context: Optional[Context] = None,
-        details: Optional[Details] = None,
+        actor: Optional[Union[Actor, Dict[str, Any]]] = None,
+        entity: Optional[Union[Entity, Dict[str, Any]]] = None,
+        context: Optional[Union[Context, Dict[str, Any]]] = None,
+        details: Optional[Union[Details, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.id = id
@@ -638,8 +638,8 @@ class LogsResponse:
     def __init__(
         self,
         *,
-        entries: Optional[List[Union[Entry, dict]]] = None,
-        response_metadata: Optional[Union[ResponseMetadata, dict]] = None,
+        entries: Optional[List[Union[Entry, Dict[str, Any]]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, Dict[str, Any]]] = None,
         ok: Optional[bool] = None,
         error: Optional[str] = None,
         needed: Optional[str] = None,

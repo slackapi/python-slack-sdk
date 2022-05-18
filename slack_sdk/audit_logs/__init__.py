@@ -2,5 +2,10 @@
 
 Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
 """
-from .v1.client import AuditLogsClient  # noqa
-from .v1.response import AuditLogsResponse  # noqa
+from .v1.client import AuditLogsClient
+from .v1.response import AuditLogsResponse
+
+__all__ = [
+    "AuditLogsClient",
+    "AuditLogsResponse",
+]
