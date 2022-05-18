@@ -40,7 +40,6 @@ class TestWebClientCoverage(unittest.TestCase):
         for api_method in self.all_api_methods:
             if api_method.startswith("apps.permissions.") or api_method in [
                 "apps.connections.open",  # app-level token
-                "auth.teams.list",  # app-level token
                 "oauth.access",
                 "oauth.v2.access",
                 "oauth.v2.exchange",

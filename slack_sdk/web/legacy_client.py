@@ -1564,6 +1564,19 @@ class LegacyWebClient(LegacyBaseClient):
         """
         return self.api_call("auth.test", params=kwargs)
 
+    def auth_teams_list(
+        self,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        include_icon: Optional[bool] = False,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List the workspaces a token can access.
+        https://api.slack.com/methods/auth.teams.list
+        """
+        kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
+        return self.api_call("auth.teams.list", params=kwargs)
+
     def bookmarks_add(
         self,
         *,

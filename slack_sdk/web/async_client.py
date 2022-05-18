@@ -1602,6 +1602,19 @@ class AsyncWebClient(AsyncBaseClient):
         """
         return await self.api_call("auth.test", params=kwargs)
 
+    async def auth_teams_list(
+        self,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        include_icon: Optional[bool] = False,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List the workspaces a token can access.
+        https://api.slack.com/methods/auth.teams.list
+        """
+        kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
+        return await self.api_call("auth.teams.list", params=kwargs)
+
     async def bookmarks_add(
         self,
         *,
