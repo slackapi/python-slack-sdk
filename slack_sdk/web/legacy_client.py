@@ -1568,7 +1568,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
-        include_icon: Optional[bool] = False,
+        include_icon: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List the workspaces a token can access.
