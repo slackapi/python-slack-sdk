@@ -39,15 +39,28 @@ class AsyncWebClient(AsyncBaseClient):
     as well as parsing any responses received into a `SlackResponse`.
 
     Attributes:
-        token (str): A string specifying an xoxp or xoxb token.
+        token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is 'https://www.slack.com/api/'
+            Default is `'https://www.slack.com/api/'`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
+        ssl (SSLContext): An [`ssl.SSLContext`][1] instance, helpful for specifying
+            your own custom certificate chain.
+        proxy (str): String representing a fully-qualified URL to a proxy through
+            which to route all requests to the Slack API. Even if this parameter
+            is not specified, if any of the following environment variables are
+            present, they will be loaded into this parameter: `HTTPS_PROXY`,
+            `https_proxy`, `HTTP_PROXY` or `http_proxy`.
+        session (ClientSession): [`aiohttp.ClientSession`][2] to attach to all outgoing requests.
+        trust_env_in_session (bool): Boolean setting whether aiohttp outgoing requests
+            are allowed to read environment variables. Commonly used in conjunction
+            with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
+            `http_proxy` environment variables.
+        headers (dict): Additional request headers to attach to all requests.
 
     Methods:
-        api_call: Constructs a request and executes the API call to Slack.
+        `api_call`: Constructs a request and executes the API call to Slack.
 
     Example of recommended usage:
     ```python
@@ -80,6 +93,9 @@ class AsyncWebClient(AsyncBaseClient):
         Any attributes or methods prefixed with _underscores are
         intended to be "private" internal use only. They may be changed or
         removed at anytime.
+
+    [1]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext
+    [2]: https://docs.aiohttp.org/en/stable/client_reference.html#client-session
     """
 
     async def admin_analytics_getFile(

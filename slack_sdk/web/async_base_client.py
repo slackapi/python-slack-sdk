@@ -44,14 +44,35 @@ class AsyncBaseClient:
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
+        """A string specifying an `xoxp-*` or `xoxb-*` token."""
         self.base_url = base_url
+        """A string representing the Slack API base URL.
+        Default is `'https://www.slack.com/api/'`."""
         self.timeout = timeout
+        """The maximum number of seconds the client will wait
+        to connect and receive a response from Slack.
+        Default is 30 seconds."""
         self.ssl = ssl
+        """An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
+        instance, helpful for specifying your own custom
+        certificate chain."""
         self.proxy = proxy
+        """String representing a fully-qualified URL to a proxy through which
+        to route all requests to the Slack API. Even if this parameter
+        is not specified, if any of the following environment variables are
+        present, they will be loaded into this parameter: `HTTPS_PROXY`,
+        `https_proxy`, `HTTP_PROXY` or `http_proxy`."""
         self.session = session
+        """An [`aiohttp.ClientSession`](https://docs.aiohttp.org/en/stable/client_reference.html#client-session)
+        to attach to all outgoing requests."""
         # https://github.com/slackapi/python-slack-sdk/issues/738
         self.trust_env_in_session = trust_env_in_session
+        """Boolean setting whether aiohttp outgoing requests
+        are allowed to read environment variables. Commonly used in conjunction
+        with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
+        `http_proxy` environment variables."""
         self.headers = headers or {}
+        """`dict` representing additional request headers to attach to all requests."""
         self.headers["User-Agent"] = get_user_agent(
             user_agent_prefix, user_agent_suffix
         )
