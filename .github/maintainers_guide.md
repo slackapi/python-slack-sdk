@@ -97,7 +97,7 @@ You can generate the documentation by running `./scripts/docs.sh`.
 1. Create the commit for the release:
 
 - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
-- Build the docs with `./scripts/docs.sh`.
+- Build the docs with `./scripts/docs.sh` and then `./scripts/generate_api_docs.sh`.
 - Create a branch for the release with `git checkout -b v2.5.0`
 - Make a commit that includes the new version number: `git commit -m 'version 2.5.0'`.
 - Open a PR and merge after receiving at least one approval from other maintainers.
