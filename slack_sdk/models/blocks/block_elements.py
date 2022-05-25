@@ -1490,7 +1490,7 @@ class RadioButtonsElement(InputInteractiveElement):
 
 class OverflowMenuElement(InteractiveElement):
     type = "overflow"
-    options_min_length = 2
+    options_min_length = 1
     options_max_length = 5
 
     @property
@@ -1501,7 +1501,7 @@ class OverflowMenuElement(InteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        options: Sequence[Union[Option]],
+        options: Sequence[Option],
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
@@ -1524,7 +1524,7 @@ class OverflowMenuElement(InteractiveElement):
                 Should be unique among all other action_ids in the containing block.
                 Maximum length for this field is 255 characters.
             options (required): An array of option objects to display in the menu.
-                Maximum number of options is 5, minimum is 2.
+                Maximum number of options is 5, minimum is 1.
             confirm: A confirm object that defines an optional confirmation dialog that appears
                 after a menu item is selected.
         """
