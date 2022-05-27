@@ -209,17 +209,28 @@ as well as parsing any responses received into a <code>SlackResponse</code>.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>token</code></strong> :&ensp;<code>str</code></dt>
-<dd>A string specifying an xoxp or xoxb token.</dd>
+<dd>A string specifying an <code>xoxp-*</code> or <code>xoxb-*</code> token.</dd>
 <dt><strong><code>base_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string representing the Slack API base URL.
-Default is 'https://www.slack.com/api/'</dd>
+Default is <code>'https://www.slack.com/api/'</code></dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>The maximum number of seconds the client will wait
 to connect and receive a response from Slack.
 Default is 30 seconds.</dd>
+<dt><strong><code>ssl</code></strong> :&ensp;<code>SSLContext</code></dt>
+<dd>An <a href="https://docs.python.org/3/library/ssl.html#ssl.SSLContext"><code>ssl.SSLContext</code></a> instance, helpful for specifying
+your own custom certificate chain.</dd>
+<dt><strong><code>proxy</code></strong> :&ensp;<code>str</code></dt>
+<dd>String representing a fully-qualified URL to a proxy through
+which to route all requests to the Slack API. Even if this parameter
+is not specified, if any of the following environment variables are
+present, they will be loaded into this parameter: <code>HTTPS_PROXY</code>,
+<code>https_proxy</code>, <code>HTTP_PROXY</code> or <code>http_proxy</code>.</dd>
+<dt><strong><code>headers</code></strong> :&ensp;<code>dict</code></dt>
+<dd>Additional request headers to attach to all requests.</dd>
 </dl>
 <h2 id="methods">Methods</h2>
-<p>api_call: Constructs a request and executes the API call to Slack.</p>
+<p><code>api_call</code>: Constructs a request and executes the API call to Slack.</p>
 <p>Example of recommended usage:</p>
 <pre><code class="language-python">    import os
     from slack_sdk import WebClient
@@ -263,15 +274,23 @@ removed at anytime.</p></div>
     as well as parsing any responses received into a `SlackResponse`.
 
     Attributes:
-        token (str): A string specifying an xoxp or xoxb token.
+        token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is &#39;https://www.slack.com/api/&#39;
+            Default is `&#39;https://www.slack.com/api/&#39;`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
+        ssl (SSLContext): An [`ssl.SSLContext`][1] instance, helpful for specifying
+            your own custom certificate chain.
+        proxy (str): String representing a fully-qualified URL to a proxy through
+            which to route all requests to the Slack API. Even if this parameter
+            is not specified, if any of the following environment variables are
+            present, they will be loaded into this parameter: `HTTPS_PROXY`,
+            `https_proxy`, `HTTP_PROXY` or `http_proxy`.
+        headers (dict): Additional request headers to attach to all requests.
 
     Methods:
-        api_call: Constructs a request and executes the API call to Slack.
+        `api_call`: Constructs a request and executes the API call to Slack.
 
     Example of recommended usage:
     ```python
@@ -304,6 +323,8 @@ removed at anytime.</p></div>
         Any attributes or methods prefixed with _underscores are
         intended to be &#34;private&#34; internal use only. They may be changed or
         removed at anytime.
+
+    [1]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext
     &#34;&#34;&#34;
 
     def admin_analytics_getFile(
@@ -1785,6 +1806,19 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/auth.test
         &#34;&#34;&#34;
         return self.api_call(&#34;auth.test&#34;, params=kwargs)
+
+    def auth_teams_list(
+        self,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        include_icon: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;List the workspaces a token can access.
+        https://api.slack.com/methods/auth.teams.list
+        &#34;&#34;&#34;
+        kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;include_icon&#34;: include_icon})
+        return self.api_call(&#34;auth.teams.list&#34;, params=kwargs)
 
     def bookmarks_add(
         self,
@@ -7058,6 +7092,30 @@ Each authorization represents an app installation that the event is visible to.
     return self.api_call(&#34;auth.revoke&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.WebClient.auth_teams_list"><code class="name flex">
+<span>def <span class="ident">auth_teams_list</span></span>(<span>self, cursor: Optional[str] = None, limit: Optional[int] = None, include_icon: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>List the workspaces a token can access.
+<a href="https://api.slack.com/methods/auth.teams.list">https://api.slack.com/methods/auth.teams.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def auth_teams_list(
+    self,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    include_icon: Optional[bool] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;List the workspaces a token can access.
+    https://api.slack.com/methods/auth.teams.list
+    &#34;&#34;&#34;
+    kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;include_icon&#34;: include_icon})
+    return self.api_call(&#34;auth.teams.list&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.WebClient.auth_test"><code class="name flex">
 <span>def <span class="ident">auth_test</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -11730,6 +11788,12 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><b><a title="slack_sdk.web.base_client.BaseClient" href="web/base_client.html#slack_sdk.web.base_client.BaseClient">BaseClient</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.web.base_client.BaseClient.api_call" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.api_call">api_call</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.base_url" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.base_url">base_url</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.headers" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.headers">headers</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.proxy" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.proxy">proxy</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.ssl" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.ssl">ssl</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.timeout" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.timeout">timeout</a></code></li>
+<li><code><a title="slack_sdk.web.base_client.BaseClient.token" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.token">token</a></code></li>
 <li><code><a title="slack_sdk.web.base_client.BaseClient.validate_slack_signature" href="web/base_client.html#slack_sdk.web.base_client.BaseClient.validate_slack_signature">validate_slack_signature</a></code></li>
 </ul>
 </li>
@@ -12319,6 +12383,7 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.WebClient.apps_event_authorizations_list" href="#slack_sdk.WebClient.apps_event_authorizations_list">apps_event_authorizations_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.apps_uninstall" href="#slack_sdk.WebClient.apps_uninstall">apps_uninstall</a></code></li>
 <li><code><a title="slack_sdk.WebClient.auth_revoke" href="#slack_sdk.WebClient.auth_revoke">auth_revoke</a></code></li>
+<li><code><a title="slack_sdk.WebClient.auth_teams_list" href="#slack_sdk.WebClient.auth_teams_list">auth_teams_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.auth_test" href="#slack_sdk.WebClient.auth_test">auth_test</a></code></li>
 <li><code><a title="slack_sdk.WebClient.bookmarks_add" href="#slack_sdk.WebClient.bookmarks_add">bookmarks_add</a></code></li>
 <li><code><a title="slack_sdk.WebClient.bookmarks_edit" href="#slack_sdk.WebClient.bookmarks_edit">bookmarks_edit</a></code></li>

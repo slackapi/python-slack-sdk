@@ -88,14 +88,29 @@ class LegacyBaseClient:
         logger: Optional[logging.Logger] = None,
     ):
         self.token = None if token is None else token.strip()
+        &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
+        &#34;&#34;&#34;A string representing the Slack API base URL.
+        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
+        &#34;&#34;&#34;The maximum number of seconds the client will wait
+        to connect and receive a response from Slack.
+        Default is 30 seconds.&#34;&#34;&#34;
         self.ssl = ssl
+        &#34;&#34;&#34;An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
+        instance, helpful for specifying your own custom
+        certificate chain.&#34;&#34;&#34;
         self.proxy = proxy
+        &#34;&#34;&#34;String representing a fully-qualified URL to a proxy through which
+        to route all requests to the Slack API. Even if this parameter
+        is not specified, if any of the following environment variables are
+        present, they will be loaded into this parameter: `HTTPS_PROXY`,
+        `https_proxy`, `HTTP_PROXY` or `http_proxy`.&#34;&#34;&#34;
         self.run_async = run_async
         self.use_sync_aiohttp = use_sync_aiohttp
         self.session = session
         self.headers = headers or {}
+        &#34;&#34;&#34;`dict` representing additional request headers to attach to all requests.&#34;&#34;&#34;
         self.headers[&#34;User-Agent&#34;] = get_user_agent(
             user_agent_prefix, user_agent_suffix
         )
@@ -656,14 +671,29 @@ class LegacyBaseClient:
         logger: Optional[logging.Logger] = None,
     ):
         self.token = None if token is None else token.strip()
+        &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
+        &#34;&#34;&#34;A string representing the Slack API base URL.
+        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
+        &#34;&#34;&#34;The maximum number of seconds the client will wait
+        to connect and receive a response from Slack.
+        Default is 30 seconds.&#34;&#34;&#34;
         self.ssl = ssl
+        &#34;&#34;&#34;An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
+        instance, helpful for specifying your own custom
+        certificate chain.&#34;&#34;&#34;
         self.proxy = proxy
+        &#34;&#34;&#34;String representing a fully-qualified URL to a proxy through which
+        to route all requests to the Slack API. Even if this parameter
+        is not specified, if any of the following environment variables are
+        present, they will be loaded into this parameter: `HTTPS_PROXY`,
+        `https_proxy`, `HTTP_PROXY` or `http_proxy`.&#34;&#34;&#34;
         self.run_async = run_async
         self.use_sync_aiohttp = use_sync_aiohttp
         self.session = session
         self.headers = headers or {}
+        &#34;&#34;&#34;`dict` representing additional request headers to attach to all requests.&#34;&#34;&#34;
         self.headers[&#34;User-Agent&#34;] = get_user_agent(
             user_agent_prefix, user_agent_suffix
         )
@@ -1260,6 +1290,42 @@ def validate_slack_signature(
 </details>
 </dd>
 </dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
+<dd>
+<div class="desc"><p>A string representing the Slack API base URL.
+Default is <code>'https://www.slack.com/api/'</code>.</p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.headers"><code class="name">var <span class="ident">headers</span></code></dt>
+<dd>
+<div class="desc"><p><code>dict</code> representing additional request headers to attach to all requests.</p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.proxy"><code class="name">var <span class="ident">proxy</span></code></dt>
+<dd>
+<div class="desc"><p>String representing a fully-qualified URL to a proxy through which
+to route all requests to the Slack API. Even if this parameter
+is not specified, if any of the following environment variables are
+present, they will be loaded into this parameter: <code>HTTPS_PROXY</code>,
+<code>https_proxy</code>, <code>HTTP_PROXY</code> or <code>http_proxy</code>.</p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.ssl"><code class="name">var <span class="ident">ssl</span></code></dt>
+<dd>
+<div class="desc"><p>An <a href="https://docs.python.org/3/library/ssl.html#ssl.SSLContext"><code>ssl.SSLContext</code></a>
+instance, helpful for specifying your own custom
+certificate chain.</p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.timeout"><code class="name">var <span class="ident">timeout</span></code></dt>
+<dd>
+<div class="desc"><p>The maximum number of seconds the client will wait
+to connect and receive a response from Slack.
+Default is 30 seconds.</p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.token"><code class="name">var <span class="ident">token</span></code></dt>
+<dd>
+<div class="desc"><p>A string specifying an <code>xoxp-*</code> or <code>xoxb-*</code> token.</p></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.web.legacy_base_client.LegacyBaseClient.api_call"><code class="name flex">
@@ -1421,6 +1487,12 @@ POST requests.</dd>
 <ul class="">
 <li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.BASE_URL" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.BASE_URL">BASE_URL</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.api_call" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.api_call">api_call</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.base_url" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.base_url">base_url</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.headers" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.headers">headers</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.proxy" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.proxy">proxy</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.ssl" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.ssl">ssl</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.timeout" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.timeout">timeout</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.token" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.token">token</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_base_client.LegacyBaseClient.validate_slack_signature" href="#slack_sdk.web.legacy_base_client.LegacyBaseClient.validate_slack_signature">validate_slack_signature</a></code></li>
 </ul>
 </li>
