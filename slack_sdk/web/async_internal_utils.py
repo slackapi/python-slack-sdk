@@ -91,14 +91,10 @@ async def _request_with_session(
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):
                         return {}
-                    return {
-                        k: ("(bytes)" if isinstance(v, bytes) else v)
-                        for k, v in values.items()
-                    }
+                    return {k: ("(bytes)" if isinstance(v, bytes) else v) for k, v in values.items()}
 
                 headers = {
-                    k: "(redacted)" if k.lower() == "authorization" else v
-                    for k, v in req_args.get("headers", {}).items()
+                    k: "(redacted)" if k.lower() == "authorization" else v for k, v in req_args.get("headers", {}).items()
                 }
                 logger.debug(
                     f"Sending a request - url: {http_verb} {api_url}, "
@@ -130,9 +126,7 @@ async def _request_with_session(
                                 body=data,
                             )
                         except aiohttp.ContentTypeError:
-                            logger.debug(
-                                f"No response data returned from the following API call: {api_url}."
-                            )
+                            logger.debug(f"No response data returned from the following API call: {api_url}.")
                         except json.decoder.JSONDecodeError:
                             try:
                                 body: str = await res.text()
@@ -191,8 +185,7 @@ async def _request_with_session(
                     ):
                         if logger.level <= logging.DEBUG:
                             logger.info(
-                                f"A retry handler found: {type(handler).__name__} "
-                                f"for {http_verb} {api_url} - {e}"
+                                f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {api_url} - {e}"
                             )
                         await handler.prepare_for_next_attempt_async(
                             state=retry_state,

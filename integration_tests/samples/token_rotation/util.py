@@ -6,9 +6,7 @@ from urllib.parse import parse_qsl
 def parse_body(body: str, content_type: Optional[str]) -> Dict[str, Any]:
     if not body:
         return {}
-    if (
-        content_type is not None and content_type == "application/json"
-    ) or body.startswith("{"):
+    if (content_type is not None and content_type == "application/json") or body.startswith("{"):
         return json.loads(body)
     else:
         if "payload" in body:  # This is not JSON format yet
@@ -24,9 +22,7 @@ def parse_body(body: str, content_type: Optional[str]) -> Dict[str, Any]:
 def extract_is_enterprise_install(payload: Dict[str, Any]) -> Optional[bool]:
     if "is_enterprise_install" in payload:
         is_enterprise_install = payload.get("is_enterprise_install")
-        return is_enterprise_install is not None and (
-            is_enterprise_install is True or is_enterprise_install == "true"
-        )
+        return is_enterprise_install is not None and (is_enterprise_install is True or is_enterprise_install == "true")
     return False
 
 

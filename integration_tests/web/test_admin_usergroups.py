@@ -27,14 +27,10 @@ class TestWebClient(unittest.TestCase):
         self.idp_usergroup_id = os.environ[SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID]
 
         if not hasattr(self, "channel_ids"):
-            team_admin_token = os.environ[
-                SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN
-            ]
+            team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
             client = WebClient(token=team_admin_token)
             convs = client.conversations_list(exclude_archived=True, limit=100)
-            self.channel_ids = [
-                c["id"] for c in convs["channels"] if c["name"] == "general"
-            ]
+            self.channel_ids = [c["id"] for c in convs["channels"] if c["name"] == "general"]
 
     def tearDown(self):
         pass

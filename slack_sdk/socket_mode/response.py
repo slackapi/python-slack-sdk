@@ -7,9 +7,7 @@ class SocketModeResponse:
     envelope_id: str
     payload: dict
 
-    def __init__(
-        self, envelope_id: str, payload: Optional[Union[dict, JsonObject, str]] = None
-    ):
+    def __init__(self, envelope_id: str, payload: Optional[Union[dict, JsonObject, str]] = None):
         self.envelope_id = envelope_id
 
         if payload is None:

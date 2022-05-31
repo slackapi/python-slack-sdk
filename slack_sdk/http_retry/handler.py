@@ -75,8 +75,6 @@ class RetryHandler:
         error: Optional[Exception] = None,
     ) -> None:
         state.next_attempt_requested = True
-        duration = self.interval_calculator.calculate_sleep_duration(
-            state.current_attempt
-        )
+        duration = self.interval_calculator.calculate_sleep_duration(state.current_attempt)
         time.sleep(duration)
         state.increment_current_attempt()

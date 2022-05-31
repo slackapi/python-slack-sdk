@@ -16,7 +16,5 @@ class TestWebClient_Issue_900(unittest.TestCase):
         cleanup_mock_web_api_server(self)
 
     def test_if_it_works_with_default_params(self):
-        client = WebClient(
-            base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111"
-        )
+        client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111")
         client.files_upload(file=f"{dirname(__file__)}/test_web_client_issue_900.py")

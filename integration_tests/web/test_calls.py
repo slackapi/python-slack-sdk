@@ -24,12 +24,9 @@ class TestWebClient(unittest.TestCase):
 
     def test_sync(self):
         client = self.sync_client
-        user_id = list(
-            filter(
-                lambda u: not u["deleted"] and "bot_id" not in u,
-                client.users_list(limit=50)["members"],
-            )
-        )[0]["id"]
+        user_id = list(filter(lambda u: not u["deleted"] and "bot_id" not in u, client.users_list(limit=50)["members"],))[
+            0
+        ]["id"]
 
         new_call = client.calls_add(
             external_unique_id=str(uuid.uuid4()),
@@ -57,9 +54,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(channel_message)
 
-        channel_message = client.chat_postMessage(
-            channel="#random", blocks=[CallBlock(call_id=call_id)]
-        )
+        channel_message = client.chat_postMessage(channel="#random", blocks=[CallBlock(call_id=call_id)])
         self.assertIsNotNone(channel_message)
 
         call_info = client.calls_info(id=call_id)
@@ -89,9 +84,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(participants_removal)
 
-        modified_call = client.calls_update(
-            id=call_id, join_url="https://www.example.com/calls/99999"
-        )
+        modified_call = client.calls_update(id=call_id, join_url="https://www.example.com/calls/99999")
         self.assertIsNotNone(modified_call)
 
         ended_call = client.calls_end(id=call_id)
@@ -101,9 +94,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         client = self.async_client
         users = await client.users_list(limit=50)
-        user_id = list(
-            filter(lambda u: not u["deleted"] and "bot_id" not in u, users["members"])
-        )[0]["id"]
+        user_id = list(filter(lambda u: not u["deleted"] and "bot_id" not in u, users["members"]))[0]["id"]
 
         new_call = await client.calls_add(
             external_unique_id=str(uuid.uuid4()),
@@ -146,9 +137,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(new_participants)
 
-        modified_call = await client.calls_update(
-            id=call_id, join_url="https://www.example.com/calls/99999"
-        )
+        modified_call = await client.calls_update(id=call_id, join_url="https://www.example.com/calls/99999")
         self.assertIsNotNone(modified_call)
 
         ended_call = await client.calls_end(id=call_id)

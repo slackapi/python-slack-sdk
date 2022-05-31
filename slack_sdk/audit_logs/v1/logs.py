@@ -318,12 +318,8 @@ class Details:
         self.non_sso_only = non_sso_only
         self.type = type
         self.is_workflow = is_workflow
-        self.inviter = (
-            inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
-        )
-        self.kicker = (
-            kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
-        )
+        self.inviter = inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
+        self.kicker = kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
         self.shared_to = shared_to
         self.reason = reason
         self.origin_team = origin_team
@@ -370,14 +366,12 @@ class Details:
         self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
         self.old_retention_policy = (
             old_retention_policy
-            if old_retention_policy is None
-            or isinstance(old_retention_policy, RetentionPolicy)
+            if old_retention_policy is None or isinstance(old_retention_policy, RetentionPolicy)
             else RetentionPolicy(**old_retention_policy)
         )
         self.new_retention_policy = (
             new_retention_policy
-            if new_retention_policy is None
-            or isinstance(new_retention_policy, RetentionPolicy)
+            if new_retention_policy is None or isinstance(new_retention_policy, RetentionPolicy)
             else RetentionPolicy(**new_retention_policy)
         )
         self.who_can_post = (
@@ -386,9 +380,7 @@ class Details:
             else ConversationPref(**who_can_post)
         )
         self.can_thread = (
-            can_thread
-            if can_thread is None or isinstance(can_thread, ConversationPref)
-            else ConversationPref(**can_thread)
+            can_thread if can_thread is None or isinstance(can_thread, ConversationPref) else ConversationPref(**can_thread)
         )
         self.is_external_limited = is_external_limited
         self.exporting_team_id = exporting_team_id
@@ -405,8 +397,7 @@ class Details:
         )
         self.enable_at_channel = (
             enable_at_channel
-            if enable_at_channel is None
-            or isinstance(enable_at_channel, FeatureEnablement)
+            if enable_at_channel is None or isinstance(enable_at_channel, FeatureEnablement)
             else FeatureEnablement(**enable_at_channel)
         )
         self.can_huddle = (
@@ -561,22 +552,14 @@ class Entity:
     ) -> None:
         self.type = type
         self.user = User(**user) if isinstance(user, dict) else user
-        self.workspace = (
-            Location(**workspace) if isinstance(workspace, dict) else workspace
-        )
-        self.enterprise = (
-            Location(**enterprise) if isinstance(enterprise, dict) else enterprise
-        )
+        self.workspace = Location(**workspace) if isinstance(workspace, dict) else workspace
+        self.enterprise = Location(**enterprise) if isinstance(enterprise, dict) else enterprise
         self.channel = Channel(**channel) if isinstance(channel, dict) else channel
         self.file = File(**file) if isinstance(file, dict) else file
         self.app = App(**app) if isinstance(app, dict) else app
-        self.usergroup = (
-            Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
-        )
+        self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
-        self.barrier = (
-            InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
-        )
+        self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
         self.unknown_fields = kwargs
 
 
@@ -648,9 +631,7 @@ class LogsResponse:
     ) -> None:
         self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
         self.response_metadata = (
-            ResponseMetadata(**response_metadata)
-            if isinstance(response_metadata, dict)
-            else response_metadata
+            ResponseMetadata(**response_metadata) if isinstance(response_metadata, dict) else response_metadata
         )
         self.ok = ok
         self.error = error

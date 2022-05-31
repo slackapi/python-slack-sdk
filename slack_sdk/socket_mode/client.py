@@ -87,9 +87,7 @@ class BaseSocketModeClient:
     def send_message(self, message: str) -> None:
         raise NotImplementedError()
 
-    def send_socket_mode_response(
-        self, response: Union[Dict[str, Any], SocketModeResponse]
-    ) -> None:
+    def send_socket_mode_response(self, response: Union[Dict[str, Any], SocketModeResponse]) -> None:
         if isinstance(response, SocketModeResponse):
             self.send_message(json.dumps(response.to_dict()))
         else:
@@ -98,17 +96,13 @@ class BaseSocketModeClient:
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"A new message enqueued (current queue size: {self.message_queue.qsize()})"
-            )
+            self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
             if self.logger.level <= logging.DEBUG:
-                self.logger.debug(
-                    f"A message dequeued (current queue size: {self.message_queue.qsize()})"
-                )
+                self.logger.debug(f"A message dequeued (current queue size: {self.message_queue.qsize()})")
 
             if raw_message is not None:
                 message: dict = {}
@@ -128,9 +122,7 @@ class BaseSocketModeClient:
     def run_message_listeners(self, message: dict, raw_message: str) -> None:
         type, envelope_id = message.get("type"), message.get("envelope_id")
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Message processing started (type: {type}, envelope_id: {envelope_id})"
-            )
+            self.logger.debug(f"Message processing started (type: {type}, envelope_id: {envelope_id})")
         try:
             # just in case, adding the same logic to reconnect here
             if message.get("type") == "disconnect":
@@ -150,16 +142,12 @@ class BaseSocketModeClient:
                         try:
                             listener(self, request)  # type: ignore
                         except Exception as e:
-                            self.logger.exception(
-                                f"Failed to run a request listener: {e}"
-                            )
+                            self.logger.exception(f"Failed to run a request listener: {e}")
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}")
         finally:
             if self.logger.level <= logging.DEBUG:
-                self.logger.debug(
-                    f"Message processing completed (type: {type}, envelope_id: {envelope_id})"
-                )
+                self.logger.debug(f"Message processing completed (type: {type}, envelope_id: {envelope_id})")
 
     def process_messages(self) -> None:
         while not self.closed:

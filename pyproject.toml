@@ -1,0 +1,4 @@
+# black project prefers pyproject.toml
+# that's why we have this file in addition to other setting files
+[tool.black]
+line-length = 125

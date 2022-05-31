@@ -11,9 +11,7 @@ from tests.slack_sdk.audit_logs.mock_web_api_server import (
 
 class TestAsyncAuditLogsClient(unittest.TestCase):
     def setUp(self):
-        self.client = AsyncAuditLogsClient(
-            token="xoxp-", base_url="http://localhost:8888/"
-        )
+        self.client = AsyncAuditLogsClient(token="xoxp-", base_url="http://localhost:8888/")
         setup_mock_web_api_server(self)
 
     def tearDown(self):
@@ -29,9 +27,7 @@ class TestAsyncAuditLogsClient(unittest.TestCase):
 
     @async_test
     async def test_logs_pagination(self):
-        resp: AuditLogsResponse = await self.client.logs(
-            limit=1, action="user_login", cursor="XXXXXXXXXXX"
-        )
+        resp: AuditLogsResponse = await self.client.logs(limit=1, action="user_login", cursor="XXXXXXXXXXX")
         self.assertEqual(200, resp.status_code)
         self.assertIsNotNone(resp.body.get("entries"))
 

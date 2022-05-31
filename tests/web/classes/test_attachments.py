@@ -25,9 +25,7 @@ class AttachmentTests(unittest.TestCase):
         self.simple = Attachment(text="some_text")
 
     def test_basic_json(self):
-        self.assertDictEqual(
-            Attachment(text="some text").to_dict(), {"text": "some text", "fields": []}
-        )
+        self.assertDictEqual(Attachment(text="some text").to_dict(), {"text": "some text", "fields": []})
 
         self.assertDictEqual(
             Attachment(
@@ -36,10 +34,7 @@ class AttachmentTests(unittest.TestCase):
                 fallback="fallback_text",
                 pretext="some_pretext",
                 title_link="link in title",
-                fields=[
-                    AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value")
-                    for i in range(5)
-                ],
+                fields=[AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value") for i in range(5)],
                 color="#FFFF00",
                 author_name="John Doe",
                 author_link="http://johndoeisthebest.com",
@@ -138,9 +133,7 @@ class InteractiveAttachmentTests(unittest.TestCase):
             ActionLinkButton(text="navigate", url="http://google.com"),
         ]
         self.assertDictEqual(
-            InteractiveAttachment(
-                text="some text", callback_id="abc123", actions=actions
-            ).to_dict(),
+            InteractiveAttachment(text="some text", callback_id="abc123", actions=actions).to_dict(),
             {
                 "text": "some text",
                 "fields": [],
@@ -158,10 +151,7 @@ class InteractiveAttachmentTests(unittest.TestCase):
                 fallback="fallback_text",
                 pretext="some_pretext",
                 title_link="link in title",
-                fields=[
-                    AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value")
-                    for i in range(5)
-                ],
+                fields=[AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value") for i in range(5)],
                 color="#FFFF00",
                 author_name="John Doe",
                 author_link="http://johndoeisthebest.com",
@@ -200,14 +190,10 @@ class InteractiveAttachmentTests(unittest.TestCase):
         )
 
     def test_actions_length(self):
-        actions = [
-            ActionButton(name="button_1", text="Click me", value="button_value_1")
-        ] * 6
+        actions = [ActionButton(name="button_1", text="Click me", value="button_value_1")] * 6
 
         with self.assertRaises(SlackObjectFormationError):
-            InteractiveAttachment(
-                text="some text", callback_id="abc123", actions=actions
-            ).to_dict(),
+            InteractiveAttachment(text="some text", callback_id="abc123", actions=actions).to_dict(),
 
 
 class BlockAttachmentTests(unittest.TestCase):

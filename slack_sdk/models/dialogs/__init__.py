@@ -70,14 +70,9 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def label_length(self) -> bool:
         return len(self.label) < self.label_max_length
 
-    @JsonValidator(
-        f"placeholder attribute cannot exceed {placeholder_max_length} characters"
-    )
+    @JsonValidator(f"placeholder attribute cannot exceed {placeholder_max_length} characters")
     def placeholder_length(self) -> bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) < self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) < self.placeholder_max_length
 
     @JsonValidator(f"hint attribute cannot exceed {hint_max_length} characters")
     def hint_length(self) -> bool:
@@ -175,14 +170,9 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     def label_length(self) -> bool:
         return len(self.label) < self.label_max_length
 
-    @JsonValidator(
-        f"placeholder attribute cannot exceed {placeholder_max_length} characters"
-    )
+    @JsonValidator(f"placeholder attribute cannot exceed {placeholder_max_length} characters")
     def placeholder_length(self) -> bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) < self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) < self.placeholder_max_length
 
     @EnumValidator("data_source", DataSourceTypes)
     def data_source_valid(self) -> bool:
@@ -837,10 +827,7 @@ class DialogBuilder(JsonObject):
 
     @JsonValidator(f"submit_label cannot exceed {submit_label_max_length} characters")
     def submit_label_length(self) -> bool:
-        return (
-            self._submit_label is None
-            or len(self._submit_label) <= self.submit_label_max_length
-        )
+        return self._submit_label is None or len(self._submit_label) <= self.submit_label_max_length
 
     @JsonValidator("submit_label can only be one word")
     def submit_label_valid(self) -> bool:

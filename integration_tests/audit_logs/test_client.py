@@ -9,9 +9,7 @@ from slack_sdk.audit_logs import AuditLogsClient
 
 class TestAuditLogsClient(unittest.TestCase):
     def setUp(self):
-        self.client = AuditLogsClient(
-            token=os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
-        )
+        self.client = AuditLogsClient(token=os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN])
 
     def tearDown(self):
         pass

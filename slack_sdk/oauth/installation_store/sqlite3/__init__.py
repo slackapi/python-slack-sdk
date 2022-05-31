@@ -36,9 +36,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute("select count(1) from slack_installations;")
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f"{row_num} installations are stored in {self.database}"
-                )
+                self.logger.debug(f"{row_num} installations are stored in {self.database}")
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -207,9 +205,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
-                    ",".join(installation.user_scopes)
-                    if installation.user_scopes
-                    else None,
+                    ",".join(installation.user_scopes) if installation.user_scopes else None,
                     installation.user_refresh_token,
                     installation.user_token_expires_at,
                     installation.incoming_webhook_url,
@@ -337,9 +333,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 )
                 row = cur.fetchone()
                 result = "found" if row and len(row) > 0 else "not found"
-                self.logger.debug(
-                    f"find_bot's query result: {result} (database: {self.database})"
-                )
+                self.logger.debug(f"find_bot's query result: {result} (database: {self.database})")
                 if row and len(row) > 0:
                     bot = Bot(
                         app_id=row[0],
@@ -467,9 +461,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     return None
 
                 result = "found" if row and len(row) > 0 else "not found"
-                self.logger.debug(
-                    f"find_installation's query result: {result} (database: {self.database})"
-                )
+                self.logger.debug(f"find_installation's query result: {result} (database: {self.database})")
                 if row and len(row) > 0:
                     installation = Installation(
                         app_id=row[0],
@@ -508,9 +500,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 self.logger.warning(message)
             return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         try:
             with self.connect() as conn:
                 conn.execute(

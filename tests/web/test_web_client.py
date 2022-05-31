@@ -156,14 +156,10 @@ class TestWebClient(unittest.TestCase):
 
     def test_issue_690_oauth_v2_access(self):
         self.client.token = ""
-        resp = self.client.oauth_v2_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
-        )
+        resp = self.client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            self.client.oauth_v2_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
-            )
+            self.client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
     @async_test
     async def test_issue_690_oauth_v2_access_async(self):
@@ -183,26 +179,18 @@ class TestWebClient(unittest.TestCase):
 
     def test_issue_690_oauth_access(self):
         self.client.token = ""
-        resp = self.client.oauth_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
-        )
+        resp = self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            self.client.oauth_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
-            )
+            self.client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
     @async_test
     async def test_issue_690_oauth_access_async(self):
         self.async_client.token = ""
-        resp = await self.async_client.oauth_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
-        )
+        resp = await self.async_client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            await self.async_client.oauth_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
-            )
+            await self.async_client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
     def test_issue_705_no_param_request_pagination(self):
         self.client.token = "xoxb-users_list_pagination"
@@ -286,8 +274,7 @@ class TestWebClient(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertEqual(
-                "The request to the Slack API failed.\n"
-                "The server responded with: {}",
+                "The request to the Slack API failed.\n" "The server responded with: {}",
                 str(e),
             )
 

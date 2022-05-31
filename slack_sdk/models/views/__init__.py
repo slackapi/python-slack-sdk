@@ -101,9 +101,7 @@ class View(JsonObject):
 
     @JsonValidator("home view cannot have submit and close")
     def _validate_home_tab_structure(self):
-        return self.type != "home" or (
-            self.type == "home" and self.close is None and self.submit is None
-        )
+        return self.type != "home" or (self.type == "home" and self.close is None and self.submit is None)
 
     @JsonValidator(f"close cannot exceed {close_max_length} characters")
     def _validate_close_length(self):
@@ -111,25 +109,15 @@ class View(JsonObject):
 
     @JsonValidator(f"submit cannot exceed {submit_max_length} characters")
     def _validate_submit_length(self):
-        return self.submit is None or len(self.submit.text) <= int(
-            self.submit_max_length
-        )
+        return self.submit is None or len(self.submit.text) <= int(self.submit_max_length)
 
-    @JsonValidator(
-        f"private_metadata cannot exceed {private_metadata_max_length} characters"
-    )
+    @JsonValidator(f"private_metadata cannot exceed {private_metadata_max_length} characters")
     def _validate_private_metadata_max_length(self):
-        return (
-            self.private_metadata is None
-            or len(self.private_metadata) <= self.private_metadata_max_length
-        )
+        return self.private_metadata is None or len(self.private_metadata) <= self.private_metadata_max_length
 
     @JsonValidator(f"callback_id cannot exceed {callback_id_max_length} characters")
     def _validate_callback_id_max_length(self):
-        return (
-            self.callback_id is None
-            or len(self.callback_id) <= self.callback_id_max_length
-        )
+        return self.callback_id is None or len(self.callback_id) <= self.callback_id_max_length
 
     def __str__(self):
         return str(self.get_non_null_attributes())
@@ -146,9 +134,7 @@ class ViewState(JsonObject):
     def _show_warning_about_unknown(cls, value):
         c = value.__class__
         name = ".".join([c.__module__, c.__name__])
-        cls.logger.warning(
-            f"Unknown type for view.state.values detected ({name}) and ViewState skipped to add it"
-        )
+        cls.logger.warning(f"Unknown type for view.state.values detected ({name}) and ViewState skipped to add it")
 
     def __init__(
         self,
@@ -162,9 +148,7 @@ class ViewState(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
-                        actions
-                    )
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)

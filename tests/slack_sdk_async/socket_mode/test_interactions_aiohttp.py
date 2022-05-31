@@ -82,11 +82,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
                 await client.send_message("bar")
                 await client.send_message("baz")
 
-            expected = (
-                socket_mode_envelopes
-                + [socket_mode_hello_message]
-                + ["foo", "bar", "baz"] * 10
-            )
+            expected = socket_mode_envelopes + [socket_mode_hello_message] + ["foo", "bar", "baz"] * 10
             expected.sort()
             expected.sort()
 
@@ -98,9 +94,7 @@ class TestInteractionsAiohttp(unittest.TestCase):
             received_messages.sort()
             self.assertEqual(received_messages, expected)
 
-            self.assertEqual(
-                len(socket_mode_envelopes), len(received_socket_mode_requests)
-            )
+            self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             await client.close()
             self.server.stop()

@@ -66,13 +66,9 @@ class WebhookClient:
         self.ssl = ssl
         self.proxy = proxy
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else default_retry_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else default_retry_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -125,9 +121,7 @@ class WebhookClient:
             headers=headers,
         )
 
-    def send_dict(
-        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
-    ) -> WebhookResponse:
+    def send_dict(self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
 
         Args:
@@ -142,23 +136,17 @@ class WebhookClient:
             headers=_build_request_headers(self.default_headers, headers),
         )
 
-    def _perform_http_request(
-        self, *, body: Dict[str, Any], headers: Dict[str, str]
-    ) -> WebhookResponse:
+    def _perform_http_request(self, *, body: Dict[str, Any], headers: Dict[str, str]) -> WebhookResponse:
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
-            )
+            self.logger.debug(f"Sending a request - url: {self.url}, body: {body}, headers: {headers}")
 
         url = self.url
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
-        req = Request(
-            method="POST", url=url, data=body.encode("utf-8"), headers=headers
-        )
+        req = Request(method="POST", url=url, data=body.encode("utf-8"), headers=headers)
         resp = None
         last_error = None
 
@@ -188,15 +176,9 @@ class WebhookClient:
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    if (
-                        "retry-after" not in resp.headers
-                        and "Retry-After" in resp.headers
-                    ):
+                    if "retry-after" not in resp.headers and "Retry-After" in resp.headers:
                         resp.headers["retry-after"] = resp.headers["Retry-After"]
-                    if (
-                        "Retry-After" not in resp.headers
-                        and "retry-after" in resp.headers
-                    ):
+                    if "Retry-After" not in resp.headers and "retry-after" in resp.headers:
                         resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
@@ -205,9 +187,7 @@ class WebhookClient:
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
                     headers={k: [v] for k, v in e.headers.items()},
-                    data=response_body.encode("utf-8")
-                    if response_body is not None
-                    else None,
+                    data=response_body.encode("utf-8") if response_body is not None else None,
                 )
                 for handler in self.retry_handlers:
                     if handler.can_retry(
@@ -233,9 +213,7 @@ class WebhookClient:
 
             except Exception as err:
                 last_error = err
-                self.logger.error(
-                    f"Failed to send a request to Slack API server: {err}"
-                )
+                self.logger.error(f"Failed to send a request to Slack API server: {err}")
 
                 # Try to find a retry handler for this error
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
@@ -256,9 +234,7 @@ class WebhookClient:
                             response=None,
                             error=err,
                         )
-                        self.logger.info(
-                            f"Going to retry the same request: {req.method} {req.full_url}"
-                        )
+                        self.logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:
@@ -279,9 +255,7 @@ class WebhookClient:
                         HTTPSHandler(context=self.ssl),
                     )
                 else:
-                    raise SlackRequestError(
-                        f"Invalid proxy detected: {self.proxy} must be a str value"
-                    )
+                    raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
@@ -290,9 +264,7 @@ class WebhookClient:
         if opener:
             http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            http_resp = urlopen(  # skipcq: BAN-B310
-                req, context=self.ssl, timeout=self.timeout
-            )
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(

@@ -26,15 +26,9 @@ class TestWebClientCoverage(unittest.TestCase):
 
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = slack_sdk.web.WebClient(
-            token="xoxb-coverage", base_url="http://localhost:8888"
-        )
-        self.legacy_client = LegacyWebClient(
-            token="xoxb-coverage", base_url="http://localhost:8888"
-        )
-        self.async_client = AsyncWebClient(
-            token="xoxb-coverage", base_url="http://localhost:8888"
-        )
+        self.client = slack_sdk.web.WebClient(token="xoxb-coverage", base_url="http://localhost:8888")
+        self.legacy_client = LegacyWebClient(token="xoxb-coverage", base_url="http://localhost:8888")
+        self.async_client = AsyncWebClient(token="xoxb-coverage", base_url="http://localhost:8888")
 
         self.api_methods_to_call = []
         for api_method in self.all_api_methods:
@@ -65,45 +59,27 @@ class TestWebClientCoverage(unittest.TestCase):
         # Run the api calls with required arguments
         if callable(method):
             if method_name == "admin_analytics_getFile":
-                self.api_methods_to_call.remove(
-                    method(date="2020-09-01", type="member")["method"]
-                )
+                self.api_methods_to_call.remove(method(date="2020-09-01", type="member")["method"])
                 await async_method(date="2020-09-01", type="member")
             elif method_name == "admin_apps_approve":
-                self.api_methods_to_call.remove(
-                    method(app_id="AID123", request_id="RID123")["method"]
-                )
+                self.api_methods_to_call.remove(method(app_id="AID123", request_id="RID123")["method"])
                 await async_method(app_id="AID123", request_id="RID123")
             elif method_name == "admin_apps_restrict":
-                self.api_methods_to_call.remove(
-                    method(app_id="AID123", request_id="RID123")["method"]
-                )
+                self.api_methods_to_call.remove(method(app_id="AID123", request_id="RID123")["method"])
                 await async_method(app_id="AID123", request_id="RID123")
             elif method_name == "admin_apps_uninstall":
                 self.api_methods_to_call.remove(
-                    method(
-                        app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"]
-                    )["method"]
+                    method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])["method"]
                 )
-                await async_method(
-                    app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"]
-                )
+                await async_method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])
             elif method_name == "admin_apps_requests_cancel":
-                self.api_methods_to_call.remove(
-                    method(request_id="XXX", enterprise_id="E111", team_id="T123")[
-                        "method"
-                    ]
-                )
-                await async_method(
-                    request_id="XXX", enterprise_id="E111", team_id="T123"
-                )
+                self.api_methods_to_call.remove(method(request_id="XXX", enterprise_id="E111", team_id="T123")["method"])
+                await async_method(request_id="XXX", enterprise_id="E111", team_id="T123")
             elif method_name == "admin_apps_clearResolution":
                 self.api_methods_to_call.remove(method(app_id="AID123")["method"])
                 await async_method(app_id="AID123")
             elif method_name == "admin_auth_policy_getEntities":
-                self.api_methods_to_call.remove(
-                    method(policy_name="policyname")["method"]
-                )
+                self.api_methods_to_call.remove(method(policy_name="policyname")["method"])
                 await async_method(policy_name="policyname")
             elif method_name == "admin_auth_policy_assignEntities":
                 self.api_methods_to_call.remove(
@@ -113,9 +89,7 @@ class TestWebClientCoverage(unittest.TestCase):
                         policy_name="policyname",
                     )["method"]
                 )
-                await async_method(
-                    entity_ids=["1", "2"], entity_type="type", policy_name="policyname"
-                )
+                await async_method(entity_ids=["1", "2"], entity_type="type", policy_name="policyname")
             elif method_name == "admin_auth_policy_removeEntities":
                 self.api_methods_to_call.remove(
                     method(
@@ -124,9 +98,7 @@ class TestWebClientCoverage(unittest.TestCase):
                         policy_name="policyname",
                     )["method"]
                 )
-                await async_method(
-                    entity_ids=["1", "2"], entity_type="type", policy_name="policyname"
-                )
+                await async_method(entity_ids=["1", "2"], entity_type="type", policy_name="policyname")
             elif method_name == "admin_barriers_create":
                 self.api_methods_to_call.remove(
                     method(
@@ -159,42 +131,28 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(barrier_id="AAA")["method"])
                 await async_method(barrier_id="AAA")
             elif method_name == "admin_emoji_add":
-                self.api_methods_to_call.remove(
-                    method(name="eyes", url="https://www.example.com/")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="eyes", url="https://www.example.com/")["method"])
                 await async_method(name="eyes", url="https://www.example.com/")
             elif method_name == "admin_emoji_addAlias":
-                self.api_methods_to_call.remove(
-                    method(name="watching", alias_for="eyes")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="watching", alias_for="eyes")["method"])
                 await async_method(name="watching", alias_for="eyes")
             elif method_name == "admin_emoji_remove":
                 self.api_methods_to_call.remove(method(name="eyes")["method"])
                 await async_method(name="eyes")
             elif method_name == "admin_emoji_rename":
-                self.api_methods_to_call.remove(
-                    method(name="eyes", new_name="eyez")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="eyes", new_name="eyez")["method"])
                 await async_method(name="eyes", new_name="eyez")
             elif method_name == "admin_inviteRequests_approve":
-                self.api_methods_to_call.remove(
-                    method(invite_request_id="ID123")["method"]
-                )
+                self.api_methods_to_call.remove(method(invite_request_id="ID123")["method"])
                 await async_method(invite_request_id="ID123")
             elif method_name == "admin_inviteRequests_deny":
-                self.api_methods_to_call.remove(
-                    method(invite_request_id="ID123")["method"]
-                )
+                self.api_methods_to_call.remove(method(invite_request_id="ID123")["method"])
                 await async_method(invite_request_id="ID123")
             elif method_name == "admin_teams_admins_list":
                 self.api_methods_to_call.remove(method(team_id="T123")["method"])
                 await async_method(team_id="T123")
             elif method_name == "admin_teams_create":
-                self.api_methods_to_call.remove(
-                    method(team_domain="awesome-team", team_name="Awesome Team")[
-                        "method"
-                    ]
-                )
+                self.api_methods_to_call.remove(method(team_domain="awesome-team", team_name="Awesome Team")["method"])
                 await async_method(team_domain="awesome-team", team_name="Awesome Team")
             elif method_name == "admin_teams_owners_list":
                 self.api_methods_to_call.remove(method(team_id="T123")["method"])
@@ -203,26 +161,18 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(team_id="T123")["method"])
                 await async_method(team_id="T123")
             elif method_name == "admin_teams_settings_setDefaultChannels":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", channel_ids=["C123", "C234"])["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", channel_ids=["C123", "C234"])["method"])
                 # checking tuple compatibility as sample
                 method(team_id="T123", channel_ids=("C123", "C234"))
                 method(team_id="T123", channel_ids="C123,C234")
                 await async_method(team_id="T123", channel_ids="C123,C234")
             elif method_name == "admin_teams_settings_setDescription":
                 self.api_methods_to_call.remove(
-                    method(team_id="T123", description="Workspace for an awesome team")[
-                        "method"
-                    ]
+                    method(team_id="T123", description="Workspace for an awesome team")["method"]
                 )
-                await async_method(
-                    team_id="T123", description="Workspace for an awesome team"
-                )
+                await async_method(team_id="T123", description="Workspace for an awesome team")
             elif method_name == "admin_teams_settings_setDiscoverability":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", discoverability="invite_only")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", discoverability="invite_only")["method"])
                 await async_method(team_id="T123", discoverability="invite_only")
             elif method_name == "admin_teams_settings_setIcon":
                 self.api_methods_to_call.remove(
@@ -236,9 +186,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     image_url="https://www.example.com/images/dummy.png",
                 )
             elif method_name == "admin_teams_settings_setName":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", name="Awesome Engineering Team")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", name="Awesome Engineering Team")["method"])
                 await async_method(team_id="T123", name="Awesome Engineering Team")
             elif method_name == "admin_usergroups_addChannels":
                 self.api_methods_to_call.remove(
@@ -284,9 +232,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 method(usergroup_id="S123", include_num_members=False, team_id="T123")
                 method(usergroup_id="S123", include_num_members="0", team_id="T123")
                 method(usergroup_id="S123", include_num_members=0, team_id="T123")
-                await async_method(
-                    usergroup_id="S123", include_num_members=0, team_id="T123"
-                )
+                await async_method(usergroup_id="S123", include_num_members=0, team_id="T123")
             elif method_name == "admin_usergroups_removeChannels":
                 self.api_methods_to_call.remove(
                     method(
@@ -306,9 +252,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     channel_ids="C1A2B3C4D,C26Z25Y24",
                 )
             elif method_name == "admin_users_assign":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123")["method"])
                 await async_method(team_id="T123", user_id="W123")
             elif method_name == "admin_users_invite":
                 self.api_methods_to_call.remove(
@@ -332,34 +276,22 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(team_id="T123")["method"])
                 await async_method(team_id="T123")
             elif method_name == "admin_users_remove":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123")["method"])
                 await async_method(team_id="T123", user_id="W123")
             elif method_name == "admin_users_setAdmin":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123")["method"])
                 await async_method(team_id="T123", user_id="W123")
             elif method_name == "admin_users_setExpiration":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123", expiration_ts=123)["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123", expiration_ts=123)["method"])
                 await async_method(team_id="T123", user_id="W123", expiration_ts=123)
             elif method_name == "admin_users_setOwner":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123")["method"])
                 await async_method(team_id="T123", user_id="W123")
             elif method_name == "admin_users_setRegular":
-                self.api_methods_to_call.remove(
-                    method(team_id="T123", user_id="W123")["method"]
-                )
+                self.api_methods_to_call.remove(method(team_id="T123", user_id="W123")["method"])
                 await async_method(team_id="T123", user_id="W123")
             elif method_name == "admin_users_session_invalidate":
-                self.api_methods_to_call.remove(
-                    method(session_id="XXX", team_id="T111")["method"]
-                )
+                self.api_methods_to_call.remove(method(session_id="XXX", team_id="T111")["method"])
                 await async_method(session_id="XXX", team_id="T111")
             elif method_name == "admin_users_session_reset":
                 self.api_methods_to_call.remove(method(user_id="W123")["method"])
@@ -382,31 +314,19 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(event_context="xxx")["method"])
                 await async_method(event_context="xxx")
             elif method_name == "apps_uninstall":
-                self.api_methods_to_call.remove(
-                    method(client_id="111.222", client_secret="xxx")["method"]
-                )
+                self.api_methods_to_call.remove(method(client_id="111.222", client_secret="xxx")["method"])
                 await async_method(client_id="111.222", client_secret="xxx")
             elif method_name == "bookmarks_add":
-                self.api_methods_to_call.remove(
-                    method(channel_id="C1234", title="bedtime story", type="article")[
-                        "method"
-                    ]
-                )
-                await async_method(
-                    channel_id="C1234", title="bedtime story", type="article"
-                )
+                self.api_methods_to_call.remove(method(channel_id="C1234", title="bedtime story", type="article")["method"])
+                await async_method(channel_id="C1234", title="bedtime story", type="article")
             elif method_name == "bookmarks_edit":
-                self.api_methods_to_call.remove(
-                    method(bookmark_id="B1234", channel_id="C1234")["method"]
-                )
+                self.api_methods_to_call.remove(method(bookmark_id="B1234", channel_id="C1234")["method"])
                 await async_method(bookmark_id="B1234", channel_id="C1234")
             elif method_name == "bookmarks_list":
                 self.api_methods_to_call.remove(method(channel_id="C1234")["method"])
                 await async_method(channel_id="C1234")
             elif method_name == "bookmarks_remove":
-                self.api_methods_to_call.remove(
-                    method(bookmark_id="B1234", channel_id="C1234")["method"]
-                )
+                self.api_methods_to_call.remove(method(bookmark_id="B1234", channel_id="C1234")["method"])
                 await async_method(bookmark_id="B1234", channel_id="C1234")
             elif method_name == "calls_add":
                 self.api_methods_to_call.remove(
@@ -479,71 +399,47 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(id="R111")["method"])
                 await async_method(id="R111")
             elif method_name == "chat_delete":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "chat_deleteScheduledMessage":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", scheduled_message_id="123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", scheduled_message_id="123")["method"])
                 await async_method(channel="C123", scheduled_message_id="123")
             elif method_name == "chat_getPermalink":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", message_ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", message_ts="123.123")["method"])
                 await async_method(channel="C123", message_ts="123.123")
             elif method_name == "chat_meMessage":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", text=":wave: Hi there!")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", text=":wave: Hi there!")["method"])
                 await async_method(channel="C123", text=":wave: Hi there!")
             elif method_name == "chat_postEphemeral":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", user="U123")["method"])
                 await async_method(channel="C123", user="U123")
             elif method_name == "chat_postMessage":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "chat_scheduleMessage":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", post_at=123, text="Hi")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", post_at=123, text="Hi")["method"])
                 await async_method(channel="C123", post_at=123, text="Hi")
             elif method_name == "chat_unfurl":
                 self.api_methods_to_call.remove(
                     method(
                         channel="C123",
                         ts="123.123",
-                        unfurls={
-                            "https://example.com/": {"text": "Every day is the test."}
-                        },
+                        unfurls={"https://example.com/": {"text": "Every day is the test."}},
                     )["method"]
                 )
                 await async_method(
                     channel="C123",
                     ts="123.123",
-                    unfurls={
-                        "https://example.com/": {"text": "Every day is the test."}
-                    },
+                    unfurls={"https://example.com/": {"text": "Every day is the test."}},
                 )
             elif method_name == "chat_update":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "conversations_acceptSharedInvite":
-                self.api_methods_to_call.remove(
-                    method(channel_name="test-channel-name", channel_id="C123")[
-                        "method"
-                    ]
-                )
+                self.api_methods_to_call.remove(method(channel_name="test-channel-name", channel_id="C123")["method"])
                 method(channel_name="test-channel-name", invite_id="123")
                 # either invite_id or channel_id supplied or exception
-                self.assertRaises(
-                    e.SlackRequestError, method, channel_name="test-channel-name"
-                )
+                self.assertRaises(e.SlackRequestError, method, channel_name="test-channel-name")
                 await async_method(channel_name="test-channel-name", channel_id="C123")
                 await async_method(channel_name="test-channel-name", invite_id="123")
                 with self.assertRaises(e.SlackRequestError):
@@ -573,20 +469,12 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "conversations_invite":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", users=["U2345678901", "U3456789012"])[
-                        "method"
-                    ]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", users=["U2345678901", "U3456789012"])["method"])
                 method(channel="C123", users="U2345678901,U3456789012")
                 await async_method(channel="C123", users=["U2345678901", "U3456789012"])
             elif method_name == "conversations_inviteShared":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", emails="test@example.com")["method"]
-                )
-                method(
-                    channel="C123", emails=["test2@example.com", "test3@example.com"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", emails="test@example.com")["method"])
+                method(channel="C123", emails=["test2@example.com", "test3@example.com"])
                 method(channel="C123", user_ids="U2345678901")
                 method(channel="C123", user_ids=["U2345678901", "U3456789012"])
                 self.assertRaises(e.SlackRequestError, method, channel="C123")
@@ -597,9 +485,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "conversations_kick":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", user="U123")["method"])
                 await async_method(channel="C123", user="U123")
             elif method_name == "conversations_listConnectInvites":
                 self.api_methods_to_call.remove(method()["method"])
@@ -608,40 +494,28 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "conversations_mark":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "conversations_members":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "conversations_rename":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", name="new-name")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", name="new-name")["method"])
                 await async_method(channel="C123", name="new-name")
             elif method_name == "conversations_replies":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "conversations_setPurpose":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", purpose="The purpose")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", purpose="The purpose")["method"])
                 await async_method(channel="C123", purpose="The purpose")
             elif method_name == "conversations_setTopic":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", topic="The topic")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", topic="The topic")["method"])
                 await async_method(channel="C123", topic="The topic")
             elif method_name == "conversations_unarchive":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "dialog_open":
-                self.api_methods_to_call.remove(
-                    method(dialog={}, trigger_id="123")["method"]
-                )
+                self.api_methods_to_call.remove(method(dialog={}, trigger_id="123")["method"])
                 await async_method(dialog={}, trigger_id="123")
             elif method_name == "dnd_setSnooze":
                 self.api_methods_to_call.remove(method(num_minutes=120)["method"])
@@ -651,9 +525,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 method(users="U123,U234")
                 await async_method(users=["123", "U234"])
             elif method_name == "files_comments_delete":
-                self.api_methods_to_call.remove(
-                    method(file="F123", id="FC123")["method"]
-                )
+                self.api_methods_to_call.remove(method(file="F123", id="FC123")["method"])
                 await async_method(file="F123", id="FC123")
             elif method_name == "files_delete":
                 self.api_methods_to_call.remove(method(file="F123")["method"])
@@ -668,9 +540,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(file="F123")["method"])
                 await async_method(file="F123")
             elif method_name == "files_upload":
-                self.api_methods_to_call.remove(
-                    method(content="This is the content")["method"]
-                )
+                self.api_methods_to_call.remove(method(content="This is the content")["method"])
                 await async_method(content="This is the content")
             elif method_name == "files_remote_add":
                 self.api_methods_to_call.remove(
@@ -686,9 +556,7 @@ class TestWebClientCoverage(unittest.TestCase):
                     title="File title",
                 )
             elif method_name == "files_remote_share":
-                self.api_methods_to_call.remove(
-                    method(external_id="xxx", channels="C123,G123")["method"]
-                )
+                self.api_methods_to_call.remove(method(external_id="xxx", channels="C123,G123")["method"])
                 method(external_id="xxx", channels=["C123", "G123"])
                 method(external_id="xxx", channels="C123,G123")
                 await async_method(external_id="xxx", channels="C123,G123")
@@ -710,17 +578,13 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "reactions_add":
-                self.api_methods_to_call.remove(
-                    method(name="eyes", channel="C111", timestamp="111.222")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="eyes", channel="C111", timestamp="111.222")["method"])
                 await async_method(name="eyes", channel="C111", timestamp="111.222")
             elif method_name == "reactions_remove":
                 self.api_methods_to_call.remove(method(name="eyes")["method"])
                 await async_method(name="eyes")
             elif method_name == "reminders_add":
-                self.api_methods_to_call.remove(
-                    method(text="The task", time=123)["method"]
-                )
+                self.api_methods_to_call.remove(method(text="The task", time=123)["method"])
                 await async_method(text="The task", time=123)
             elif method_name == "reminders_complete":
                 self.api_methods_to_call.remove(method(reminder="R123")["method"])
@@ -741,9 +605,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(query="Slack")["method"])
                 await async_method(query="Slack")
             elif method_name == "usergroups_create":
-                self.api_methods_to_call.remove(
-                    method(name="Engineering Team")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="Engineering Team")["method"])
                 await async_method(name="Engineering Team")
             elif method_name == "usergroups_disable":
                 self.api_methods_to_call.remove(method(usergroup="UG123")["method"])
@@ -758,9 +620,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(usergroup="UG123")["method"])
                 await async_method(usergroup="UG123")
             elif method_name == "usergroups_users_update":
-                self.api_methods_to_call.remove(
-                    method(usergroup="UG123", users=["U123", "U234"])["method"]
-                )
+                self.api_methods_to_call.remove(method(usergroup="UG123", users=["U123", "U234"])["method"])
                 method(usergroup="UG123", users="U123,U234")
                 await async_method(usergroup="UG123", users="U123,U234")
             elif method_name == "users_getPresence":
@@ -770,9 +630,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(user="U123")["method"])
                 await async_method(user="U123")
             elif method_name == "users_lookupByEmail":
-                self.api_methods_to_call.remove(
-                    method(email="test@example.com")["method"]
-                )
+                self.api_methods_to_call.remove(method(email="test@example.com")["method"])
                 await async_method(email="test@example.com")
             elif method_name == "users_setPhoto":
                 self.api_methods_to_call.remove(method(image="README.md")["method"])
@@ -781,9 +639,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(presence="away")["method"])
                 await async_method(presence="away")
             elif method_name == "views_open":
-                self.api_methods_to_call.remove(
-                    method(trigger_id="123123", view={})["method"]
-                )
+                self.api_methods_to_call.remove(method(trigger_id="123123", view={})["method"])
                 method(
                     trigger_id="123123",
                     view=View(type="modal", blocks=[DividerBlock()]),
@@ -793,36 +649,22 @@ class TestWebClientCoverage(unittest.TestCase):
                     view=View(type="modal", blocks=[DividerBlock()]),
                 )
             elif method_name == "views_publish":
-                self.api_methods_to_call.remove(
-                    method(user_id="U123", view={})["method"]
-                )
+                self.api_methods_to_call.remove(method(user_id="U123", view={})["method"])
                 await async_method(user_id="U123", view={})
             elif method_name == "views_push":
-                self.api_methods_to_call.remove(
-                    method(trigger_id="123123", view={})["method"]
-                )
+                self.api_methods_to_call.remove(method(trigger_id="123123", view={})["method"])
                 await async_method(trigger_id="123123", view={})
             elif method_name == "views_update":
-                self.api_methods_to_call.remove(
-                    method(view_id="V123", view={})["method"]
-                )
+                self.api_methods_to_call.remove(method(view_id="V123", view={})["method"])
                 await async_method(view_id="V123", view={})
             elif method_name == "workflows_stepCompleted":
-                self.api_methods_to_call.remove(
-                    method(workflow_step_execute_id="S123", outputs={})["method"]
-                )
+                self.api_methods_to_call.remove(method(workflow_step_execute_id="S123", outputs={})["method"])
                 await async_method(workflow_step_execute_id="S123", outputs={})
             elif method_name == "workflows_stepFailed":
-                self.api_methods_to_call.remove(
-                    method(workflow_step_execute_id="S456", error={})["method"]
-                )
+                self.api_methods_to_call.remove(method(workflow_step_execute_id="S456", error={})["method"])
                 await async_method(workflow_step_execute_id="S456", error={})
             elif method_name == "workflows_updateStep":
-                self.api_methods_to_call.remove(
-                    method(workflow_step_edit_id="S789", inputs={}, outputs=[])[
-                        "method"
-                    ]
-                )
+                self.api_methods_to_call.remove(method(workflow_step_edit_id="S789", inputs={}, outputs=[])["method"])
                 await async_method(workflow_step_edit_id="S789", inputs={}, outputs=[])
             elif method_name == "channels_archive":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
@@ -837,45 +679,31 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "channels_invite":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", user="U123")["method"])
                 await async_method(channel="C123", user="U123")
             elif method_name == "channels_join":
                 self.api_methods_to_call.remove(method(name="channel-name")["method"])
                 await async_method(name="channel-name")
             elif method_name == "channels_kick":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", user="U123")["method"])
                 await async_method(channel="C123", user="U123")
             elif method_name == "channels_leave":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "channels_mark":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "channels_rename":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", name="new-name")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", name="new-name")["method"])
                 await async_method(channel="C123", name="new-name")
             elif method_name == "channels_replies":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", thread_ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", thread_ts="123.123")["method"])
                 await async_method(channel="C123", thread_ts="123.123")
             elif method_name == "channels_setPurpose":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", purpose="The purpose")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", purpose="The purpose")["method"])
                 await async_method(channel="C123", purpose="The purpose")
             elif method_name == "channels_setTopic":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", topic="The topic")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", topic="The topic")["method"])
                 await async_method(channel="C123", topic="The topic")
             elif method_name == "channels_unarchive":
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
@@ -884,9 +712,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
                 await async_method(channel="G123")
             elif method_name == "groups_create":
-                self.api_methods_to_call.remove(
-                    method(name="private-channel-name")["method"]
-                )
+                self.api_methods_to_call.remove(method(name="private-channel-name")["method"])
                 await async_method(name="private-channel-name")
             elif method_name == "groups_createChild":
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
@@ -898,45 +724,31 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
                 await async_method(channel="G123")
             elif method_name == "groups_invite":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", user="U123")["method"])
                 await async_method(channel="G123", user="U123")
             elif method_name == "groups_kick":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", user="U123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", user="U123")["method"])
                 await async_method(channel="G123", user="U123")
             elif method_name == "groups_leave":
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
                 await async_method(channel="G123")
             elif method_name == "groups_mark":
-                self.api_methods_to_call.remove(
-                    method(channel="C123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
             elif method_name == "groups_open":
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
                 await async_method(channel="G123")
             elif method_name == "groups_rename":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", name="new-name")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", name="new-name")["method"])
                 await async_method(channel="G123", name="x")
             elif method_name == "groups_replies":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", thread_ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", thread_ts="123.123")["method"])
                 await async_method(channel="G123", thread_ts="x")
             elif method_name == "groups_setPurpose":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", purpose="The purpose")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", purpose="The purpose")["method"])
                 await async_method(channel="G123", purpose="x")
             elif method_name == "groups_setTopic":
-                self.api_methods_to_call.remove(
-                    method(channel="G123", topic="The topic")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="G123", topic="The topic")["method"])
                 await async_method(channel="G123", topic="x")
             elif method_name == "groups_unarchive":
                 self.api_methods_to_call.remove(method(channel="G123")["method"])
@@ -948,17 +760,13 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="D123")["method"])
                 await async_method(channel="D123")
             elif method_name == "im_mark":
-                self.api_methods_to_call.remove(
-                    method(channel="D123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="D123", ts="123.123")["method"])
                 await async_method(channel="D123", ts="x")
             elif method_name == "im_open":
                 self.api_methods_to_call.remove(method(user="U123")["method"])
                 await async_method(user="U123")
             elif method_name == "im_replies":
-                self.api_methods_to_call.remove(
-                    method(channel="D123", thread_ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="D123", thread_ts="123.123")["method"])
                 await async_method(channel="D123", thread_ts="x")
             elif method_name == "mpim_close":
                 self.api_methods_to_call.remove(method(channel="D123")["method"])
@@ -967,48 +775,32 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="D123")["method"])
                 await async_method(channel="D123")
             elif method_name == "mpim_mark":
-                self.api_methods_to_call.remove(
-                    method(channel="D123", ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="D123", ts="123.123")["method"])
                 await async_method(channel="D123", ts="x")
             elif method_name == "mpim_open":
-                self.api_methods_to_call.remove(
-                    method(users=["U123", "U234"])["method"]
-                )
+                self.api_methods_to_call.remove(method(users=["U123", "U234"])["method"])
                 method(users="U123,U234")
                 await async_method(users=["U123", "U234"])
             elif method_name == "mpim_replies":
-                self.api_methods_to_call.remove(
-                    method(channel="D123", thread_ts="123.123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel="D123", thread_ts="123.123")["method"])
                 await async_method(channel="D123", thread_ts="123.123")
             elif method_name == "admin_conversations_restrictAccess_addGroup":
-                self.api_methods_to_call.remove(
-                    method(channel_id="D123", group_id="G123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123")["method"])
                 await async_method(channel_id="D123", group_id="G123")
             elif method_name == "admin_conversations_restrictAccess_listGroups":
-                self.api_methods_to_call.remove(
-                    method(channel_id="D123", group_id="G123")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123")["method"])
                 await async_method(channel_id="D123", group_id="G123")
             elif method_name == "admin_conversations_restrictAccess_removeGroup":
-                self.api_methods_to_call.remove(
-                    method(channel_id="D123", group_id="G123", team_id="T13")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="D123", group_id="G123", team_id="T13")["method"])
                 await async_method(channel_id="D123", group_id="G123", team_id="T123")
             elif method_name == "admin_conversations_create":
-                self.api_methods_to_call.remove(
-                    method(is_private=False, name="Foo", team_id="T123")["method"]
-                )
+                self.api_methods_to_call.remove(method(is_private=False, name="Foo", team_id="T123")["method"])
                 await async_method(is_private=False, name="Foo", team_id="T123")
             elif method_name == "admin_conversations_delete":
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
             elif method_name == "admin_conversations_invite":
-                self.api_methods_to_call.remove(
-                    method(channel_id="C123", user_ids=["U123", "U456"])["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="C123", user_ids=["U123", "U456"])["method"])
                 await async_method(channel_id="C123", user_ids=["U123", "U456"])
             elif method_name == "admin_conversations_archive":
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
@@ -1017,9 +809,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
             elif method_name == "admin_conversations_rename":
-                self.api_methods_to_call.remove(
-                    method(channel_id="C123", name="Foo")["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="C123", name="Foo")["method"])
                 await async_method(channel_id="C123", name="Foo")
             elif method_name == "admin_conversations_search":
                 self.api_methods_to_call.remove(method()["method"])
@@ -1050,10 +840,7 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "admin_conversations_disconnectShared":
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
-            elif (
-                method_name
-                == "admin_conversations_ekm_listOriginalConnectedChannelInfo"
-            ):
+            elif method_name == "admin_conversations_ekm_listOriginalConnectedChannelInfo":
                 self.api_methods_to_call.remove(method()["method"])
                 await async_method()
             elif method_name == "admin_conversations_getCustomRetention":
@@ -1063,9 +850,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
             elif method_name == "admin_conversations_setCustomRetention":
-                self.api_methods_to_call.remove(
-                    method(channel_id="C123", duration_days=365)["method"]
-                )
+                self.api_methods_to_call.remove(method(channel_id="C123", duration_days=365)["method"])
                 await async_method(channel_id="C123", duration_days=365)
             else:
                 self.api_methods_to_call.remove(method(*{})["method"])
@@ -1085,9 +870,7 @@ class TestWebClientCoverage(unittest.TestCase):
             async_method = getattr(self.async_client, method_name, None)
             await self.run_method(method_name, method, async_method)
 
-        self.assertEqual(
-            self.api_methods_to_call, [], "All methods should be supported"
-        )
+        self.assertEqual(self.api_methods_to_call, [], "All methods should be supported")
 
     @async_test
     async def test_legacy_coverage(self):
@@ -1099,6 +882,4 @@ class TestWebClientCoverage(unittest.TestCase):
             async_method = getattr(self.async_client, method_name, None)
             await self.run_method(method_name, method, async_method)
 
-        self.assertEqual(
-            self.api_methods_to_call, [], "All methods should be supported"
-        )
+        self.assertEqual(self.api_methods_to_call, [], "All methods should be supported")

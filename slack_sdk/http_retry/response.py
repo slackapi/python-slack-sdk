@@ -18,8 +18,6 @@ class HttpResponse:
         data: Optional[bytes] = None,
     ):
         self.status_code = int(status_code)
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body = body
         self.data = data

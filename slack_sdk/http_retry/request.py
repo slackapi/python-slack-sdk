@@ -22,9 +22,7 @@ class HttpRequest:
     ):
         self.method = method
         self.url = url
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body_params = body_params
         self.data = data
 
@@ -33,8 +31,6 @@ class HttpRequest:
         return HttpRequest(
             method=req.method,
             url=req.full_url,
-            headers={
-                k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
-            },
+            headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
             data=req.data,
         )

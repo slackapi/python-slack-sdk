@@ -32,16 +32,12 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
-        return self.pattern_for_language.search(
-            user_agent
-        ) and self.pattern_for_package_identifier.search(user_agent)
+        return self.pattern_for_language.search(user_agent) and self.pattern_for_package_identifier.search(user_agent)
 
     def is_valid_token(self):
         if self.path.startswith("oauth"):
             return True
-        return "Authorization" in self.headers and str(
-            self.headers["Authorization"]
-        ).startswith("Bearer xoxb-")
+        return "Authorization" in self.headers and str(self.headers["Authorization"]).startswith("Bearer xoxb-")
 
     def set_common_headers(self):
         self.send_header("content-type", "application/json;charset=utf-8")
@@ -94,16 +90,11 @@ class MockHandler(SimpleHTTPRequestHandler):
                 if self.headers["authorization"] == "Basic MTExLjIyMjpzZWNyZXQ=":
                     self.wfile.write("""{"ok":true}""".encode("utf-8"))
                     return
-                elif (
-                    self.headers["authorization"]
-                    == "Basic MTExLjIyMjp0b2tlbl9yb3RhdGlvbl9zZWNyZXQ="
-                ):
+                elif self.headers["authorization"] == "Basic MTExLjIyMjp0b2tlbl9yb3RhdGlvbl9zZWNyZXQ=":
                     self.wfile.write(json.dumps(self.token_refresh).encode("utf-8"))
                     return
                 else:
-                    self.wfile.write(
-                        """{"ok":false, "error":"invalid"}""".encode("utf-8")
-                    )
+                    self.wfile.write("""{"ok":false, "error":"invalid"}""".encode("utf-8"))
                     return
 
             header = self.headers["Authorization"]
@@ -117,9 +108,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.send_response(429)
                     self.send_header("retry-after", 1)
                     self.set_common_headers()
-                    self.wfile.write(
-                        """{"ok": false, "error": "ratelimited"}""".encode("utf-8")
-                    )
+                    self.wfile.write("""{"ok": false, "error": "ratelimited"}""".encode("utf-8"))
                     return
 
             if self.is_valid_token() and self.is_valid_user_agent():
@@ -135,16 +124,12 @@ class MockHandler(SimpleHTTPRequestHandler):
                         if post_body.startswith("{"):
                             request_body = json.loads(post_body)
                         else:
-                            request_body = {
-                                k: v[0] for k, v in parse_qs(post_body).items()
-                            }
+                            request_body = {k: v[0] for k, v in parse_qs(post_body).items()}
                     except UnicodeDecodeError:
                         pass
                 else:
                     if parsed_path and parsed_path.query:
-                        request_body = {
-                            k: v[0] for k, v in parse_qs(parsed_path.query).items()
-                        }
+                        request_body = {k: v[0] for k, v in parse_qs(parsed_path.query).items()}
 
                 header = self.headers["authorization"]
                 pattern = str(header).split("xoxb-", 1)[1]
@@ -155,8 +140,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                     return
 
                 if pattern == "rate_limited" or (
-                    pattern == "rate_limited_only_once"
-                    and self.state["rate_limited_count"] == 0
+                    pattern == "rate_limited_only_once" and self.state["rate_limited_count"] == 0
                 ):
                     self.state["rate_limited_count"] += 1
                     self.send_response(429)
@@ -164,9 +148,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.send_header("content-type", "application/json;charset=utf-8")
                     self.send_header("connection", "close")
                     self.end_headers()
-                    self.wfile.write(
-                        """{"ok":false,"error":"rate_limited"}""".encode("utf-8")
-                    )
+                    self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
                     self.wfile.close()
                     return
 
@@ -208,11 +190,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                     else:
                         self.send_response(400)
                         self.set_common_headers()
-                        self.wfile.write(
-                            """{"ok":false, "error":"invalid_user_agent"}""".encode(
-                                "utf-8"
-                            )
-                        )
+                        self.wfile.write("""{"ok":false, "error":"invalid_user_agent"}""".encode("utf-8"))
                         self.wfile.close()
                         return
 
@@ -232,17 +210,11 @@ class MockHandler(SimpleHTTPRequestHandler):
                         if request_body:
                             for k, v in request_body.items():
                                 if k in ids:
-                                    if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(
-                                        v
-                                    ):
-                                        raise Exception(
-                                            f"The parameter {k} is not a comma-separated string value: {v}"
-                                        )
+                                    if not re.compile(r"^[^,\[\]]+?,[^,\[\]]+$").match(v):
+                                        raise Exception(f"The parameter {k} is not a comma-separated string value: {v}")
                     body = {"ok": True, "method": parsed_path.path.replace("/", "")}
                 else:
-                    with open(
-                        f"tests/slack_sdk_fixture/web_response_{pattern}.json"
-                    ) as file:
+                    with open(f"tests/slack_sdk_fixture/web_response_{pattern}.json") as file:
                         body = json.load(file)
 
                     if self.path == "/api.test" and request_body:
@@ -291,9 +263,7 @@ class MockServerProcessTarget:
 
 
 class MonitorThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self, daemon=True)
         self.handler = handler
         self.test = test
@@ -305,9 +275,7 @@ class MonitorThread(threading.Thread):
             try:
                 req = Request(f"{self.test.server_url}/received_requests.json")
                 resp = urlopen(req, timeout=1)
-                self.test.mock_received_requests = json.loads(
-                    resp.read().decode("utf-8")
-                )
+                self.test.mock_received_requests = json.loads(resp.read().decode("utf-8"))
             except Exception as e:
                 # skip logging for the initial request
                 if self.test.mock_received_requests is not None:
@@ -320,9 +288,7 @@ class MonitorThread(threading.Thread):
 
 
 class MockServerThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test

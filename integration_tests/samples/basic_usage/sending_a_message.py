@@ -18,17 +18,13 @@ else:
     channel_id = "C0XXXXXX"
     user_id = "U0XXXXXXX"
 
-response = client.chat_postMessage(
-    channel=channel_id, text="Hello from your app! :tada:"
-)
+response = client.chat_postMessage(channel=channel_id, text="Hello from your app! :tada:")
 # Ensure the channel_id is not a name
 channel_id = response["channel"]
 
 thread_ts = response["message"]["ts"]
 
-response = client.chat_postEphemeral(
-    channel=channel_id, user=user_id, text="Hello silently from your app! :tada:"
-)
+response = client.chat_postEphemeral(channel=channel_id, user=user_id, text="Hello silently from your app! :tada:")
 
 response = client.chat_postMessage(
     channel=channel_id,
@@ -61,9 +57,7 @@ response = client.chat_postMessage(
 )
 
 # Threading Messages
-response = client.chat_postMessage(
-    channel=channel_id, text="Hello from your app! :tada:", thread_ts=thread_ts
-)
+response = client.chat_postMessage(channel=channel_id, text="Hello from your app! :tada:", thread_ts=thread_ts)
 
 response = client.chat_postMessage(
     channel=channel_id,
@@ -76,9 +70,7 @@ response = client.chat_postMessage(
 response = client.chat_postMessage(channel=channel_id, text="To be modified :eyes:")
 ts = response["message"]["ts"]
 
-response = client.chat_update(
-    channel=channel_id, ts=ts, text="updates from your app! :tada:"
-)
+response = client.chat_update(channel=channel_id, ts=ts, text="updates from your app! :tada:")
 
 # Deleting a message
 response = client.chat_postMessage(channel=channel_id, text="To be deleted :eyes:")

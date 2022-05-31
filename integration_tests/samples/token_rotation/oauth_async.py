@@ -135,20 +135,13 @@ async def slack_app(req: Request):
             return HTTPResponse(status=200, body="")
         except SlackApiError as e:
             code = e.response["error"]
-            return HTTPResponse(
-                status=200, body=f"Failed to open a modal due to {code}"
-            )
+            return HTTPResponse(status=200, body=f"Failed to open a modal due to {code}")
 
     elif "payload" in req.form:
         payload = json.loads(req.form.get("payload"))
-        if (
-            payload.get("type") == "view_submission"
-            and payload.get("view").get("callback_id") == "modal-id"
-        ):
+        if payload.get("type") == "view_submission" and payload.get("view").get("callback_id") == "modal-id":
             submitted_data = payload.get("view").get("state").get("values")
-            print(
-                submitted_data
-            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return HTTPResponse(status=200, body="")
 
     else:
@@ -200,9 +193,7 @@ async def oauth_callback(req: Request):
         if state_store.consume(state):
             code = req.args.get("code")
             client = AsyncWebClient()  # no prepared token needed for this app
-            oauth_response = await client.oauth_v2_access(
-                client_id=client_id, client_secret=client_secret, code=code
-            )
+            oauth_response = await client.oauth_v2_access(client_id=client_id, client_secret=client_secret, code=code)
             logger.info(f"oauth.v2.access response: {oauth_response}")
 
             installed_enterprise = oauth_response.get("enterprise") or {}
@@ -233,9 +224,7 @@ async def oauth_callback(req: Request):
                 user_token_expires_in=installer.get("expires_in"),
                 incoming_webhook_url=incoming_webhook.get("url"),
                 incoming_webhook_channel_id=incoming_webhook.get("channel_id"),
-                incoming_webhook_configuration_url=incoming_webhook.get(
-                    "configuration_url"
-                ),
+                incoming_webhook_configuration_url=incoming_webhook.get("configuration_url"),
             )
             await installation_store.async_save(installation)
             html = redirect_page_renderer.render_success_page(
@@ -252,9 +241,7 @@ async def oauth_callback(req: Request):
                 body=html,
             )
         else:
-            html = redirect_page_renderer.render_failure_page(
-                "the state value is already expired"
-            )
+            html = redirect_page_renderer.render_failure_page("the state value is already expired")
             return HTTPResponse(
                 status=400,
                 headers={
@@ -264,9 +251,7 @@ async def oauth_callback(req: Request):
             )
 
     error = req.args.get("error") if "error" in req.args else ""
-    return HTTPResponse(
-        status=400, body=f"Something is wrong with the installation (error: {error})"
-    )
+    return HTTPResponse(status=400, body=f"Something is wrong with the installation (error: {error})")
 
 
 if __name__ == "__main__":

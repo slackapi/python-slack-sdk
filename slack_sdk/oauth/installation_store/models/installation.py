@@ -104,12 +104,8 @@ class Installation:
             if type(bot_token_expires_at) == datetime:
                 ts: float = bot_token_expires_at.timestamp()  # type: ignore
                 self.bot_token_expires_at = int(ts)
-            elif type(bot_token_expires_at) == str and not re.match(
-                "^\\d+$", bot_token_expires_at
-            ):
-                self.bot_token_expires_at = int(
-                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
-                )
+            elif type(bot_token_expires_at) == str and not re.match("^\\d+$", bot_token_expires_at):
+                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
             else:
                 self.bot_token_expires_at = bot_token_expires_at  # type: ignore
         elif bot_token_expires_in is not None:
@@ -128,12 +124,8 @@ class Installation:
             if type(user_token_expires_at) == datetime:
                 ts: float = user_token_expires_at.timestamp()  # type: ignore
                 self.user_token_expires_at = int(ts)
-            elif type(user_token_expires_at) == str and not re.match(
-                "^\\d+$", user_token_expires_at
-            ):
-                self.user_token_expires_at = int(
-                    _from_iso_format_to_unix_timestamp(user_token_expires_at)
-                )
+            elif type(user_token_expires_at) == str and not re.match("^\\d+$", user_token_expires_at):
+                self.user_token_expires_at = int(_from_iso_format_to_unix_timestamp(user_token_expires_at))
             else:
                 self.user_token_expires_at = user_token_expires_at  # type: ignore
         elif user_token_expires_in is not None:
@@ -209,9 +201,7 @@ class Installation:
             "user_token": self.user_token,
             "user_scopes": ",".join(self.user_scopes) if self.user_scopes else None,
             "user_refresh_token": self.user_refresh_token,
-            "user_token_expires_at": datetime.utcfromtimestamp(
-                self.user_token_expires_at
-            )
+            "user_token_expires_at": datetime.utcfromtimestamp(self.user_token_expires_at)
             if self.user_token_expires_at is not None
             else None,
             "incoming_webhook_url": self.incoming_webhook_url,

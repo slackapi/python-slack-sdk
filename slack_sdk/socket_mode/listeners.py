@@ -13,7 +13,5 @@ class WebSocketMessageListener:
 
 
 class SocketModeRequestListener:
-    def __call__(  # type: ignore
-        client: "BaseSocketModeClient", request: SocketModeRequest  # noqa: F821
-    ):  # noqa: F821
+    def __call__(client: "BaseSocketModeClient", request: SocketModeRequest):  # type: ignore  # noqa: F821  # noqa: F821
         raise NotImplementedError()

@@ -26,9 +26,7 @@ class TestWebClient(unittest.TestCase):
         self.idp_usergroup_id = os.environ[SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID]
 
         if not hasattr(self, "user_ids"):
-            team_admin_token = os.environ[
-                SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN
-            ]
+            team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
             client = WebClient(token=team_admin_token)
             users = client.users_list(exclude_archived=True, limit=50)
             self.user_ids = [
@@ -49,9 +47,7 @@ class TestWebClient(unittest.TestCase):
 
         response = client.admin_users_session_getSettings(user_ids=self.user_ids)
         self.assertIsNotNone(response["session_settings"])
-        client.admin_users_session_setSettings(
-            user_ids=self.user_ids, duration=60 * 60 * 24 * 30
-        )
+        client.admin_users_session_setSettings(user_ids=self.user_ids, duration=60 * 60 * 24 * 30)
         client.admin_users_session_clearSettings(user_ids=self.user_ids)
 
     @async_test
@@ -60,7 +56,5 @@ class TestWebClient(unittest.TestCase):
 
         response = await client.admin_users_session_getSettings(user_ids=self.user_ids)
         self.assertIsNotNone(response["session_settings"])
-        await client.admin_users_session_setSettings(
-            user_ids=self.user_ids, duration=60 * 60 * 24 * 30
-        )
+        await client.admin_users_session_setSettings(user_ids=self.user_ids, duration=60 * 60 * 24 * 30)
         await client.admin_users_session_clearSettings(user_ids=self.user_ids)

@@ -75,9 +75,7 @@ class AsyncSlackResponse:
     def __str__(self):
         """Return the Response data if object is converted to a string."""
         if isinstance(self.data, bytes):
-            raise ValueError(
-                "As the response.data is binary data, this operation is unsupported"
-            )
+            raise ValueError("As the response.data is binary data, this operation is unsupported")
         return f"{self.data}"
 
     def __contains__(self, key: str) -> bool:
@@ -95,13 +93,9 @@ class AsyncSlackResponse:
             The value from data or None.
         """
         if isinstance(self.data, bytes):
-            raise ValueError(
-                "As the response.data is binary data, this operation is unsupported"
-            )
+            raise ValueError("As the response.data is binary data, this operation is unsupported")
         if self.data is None:
-            raise ValueError(
-                "As the response.data is empty, this operation is unsupported"
-            )
+            raise ValueError("As the response.data is empty, this operation is unsupported")
         return self.data.get(key, None)
 
     def __aiter__(self):
@@ -172,9 +166,7 @@ class AsyncSlackResponse:
             The value from data or the specified default.
         """
         if isinstance(self.data, bytes):
-            raise ValueError(
-                "As the response.data is binary data, this operation is unsupported"
-            )
+            raise ValueError("As the response.data is binary data, this operation is unsupported")
         if self.data is None:
             return None
         return self.data.get(key, default)

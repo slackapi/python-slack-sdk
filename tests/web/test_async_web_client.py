@@ -105,14 +105,10 @@ class TestAsyncWebClient(unittest.TestCase):
     @async_test
     async def test_issue_690_oauth_access_async(self):
         self.client.token = ""
-        resp = await self.client.oauth_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
-        )
+        resp = await self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            await self.client.oauth_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
-            )
+            await self.client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
     @async_test
     async def test_token_param_async(self):

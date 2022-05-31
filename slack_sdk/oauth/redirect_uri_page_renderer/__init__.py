@@ -24,11 +24,7 @@ class RedirectUriPageRenderer:
     ) -> str:
         url = self.success_url
         if url is None:
-            if (
-                is_enterprise_install is True
-                and enterprise_url is not None
-                and app_id is not None
-            ):
+            if is_enterprise_install is True and enterprise_url is not None and app_id is not None:
                 url = f"{enterprise_url}manage/organization/apps/profile/{app_id}/workspaces/add"
             elif team_id is None or app_id is None:
                 url = "slack://open"

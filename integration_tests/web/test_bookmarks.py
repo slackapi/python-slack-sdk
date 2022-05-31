@@ -38,11 +38,7 @@ class TestBookmarks(unittest.TestCase):
         # make sure we find the bookmark we just added
         all_bookmarks = client.bookmarks_list(channel_id=self.channel_id)
         self.assertIsNotNone(all_bookmarks)
-        self.assertIsNotNone(
-            next(
-                (b for b in all_bookmarks["bookmarks"] if b["id"] == bookmark_id), None
-            )
-        )
+        self.assertIsNotNone(next((b for b in all_bookmarks["bookmarks"] if b["id"] == bookmark_id), None))
         # edit the bookmark
         bookmark = client.bookmarks_edit(
             bookmark_id=bookmark_id,
@@ -55,19 +51,13 @@ class TestBookmarks(unittest.TestCase):
         # make sure we find the edited bookmark we just added
         all_bookmarks = client.bookmarks_list(channel_id=self.channel_id)
         self.assertIsNotNone(all_bookmarks)
-        edited_bookmark = next(
-            (b for b in all_bookmarks["bookmarks"] if b["id"] == bookmark_id), None
-        )
+        edited_bookmark = next((b for b in all_bookmarks["bookmarks"] if b["id"] == bookmark_id), None)
         self.assertIsNotNone(edited_bookmark)
         self.assertEqual(edited_bookmark["title"], "slack api!")
         # remove the bookmark
-        removed_bookmark = client.bookmarks_remove(
-            bookmark_id=bookmark_id, channel_id=self.channel_id
-        )
+        removed_bookmark = client.bookmarks_remove(bookmark_id=bookmark_id, channel_id=self.channel_id)
         self.assertIsNotNone(removed_bookmark)
         # make sure we cannot find the bookmark we just removed
         all_bookmarks = client.bookmarks_list(channel_id=self.channel_id)
         self.assertIsNotNone(all_bookmarks)
-        self.assertIsNone(
-            next((b for b in all_bookmarks if b["id"] == bookmark_id), None)
-        )
+        self.assertIsNone(next((b for b in all_bookmarks if b["id"] == bookmark_id), None))

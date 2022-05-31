@@ -94,9 +94,7 @@ class Block(JsonObject):
                 return None
 
     @classmethod
-    def parse_all(
-        cls, blocks: Optional[Sequence[Union[dict, "Block"]]]
-    ) -> List["Block"]:
+    def parse_all(cls, blocks: Optional[Sequence[Union[dict, "Block"]]]) -> List["Block"]:
         return [cls.parse(b) for b in blocks or []]
 
 
@@ -242,9 +240,7 @@ class ImageBlock(Block):
         self.alt_text = alt_text
         self.title = TextObject.parse(title)
 
-    @JsonValidator(
-        f"image_url attribute cannot exceed {image_url_max_length} characters"
-    )
+    @JsonValidator(f"image_url attribute cannot exceed {image_url_max_length} characters")
     def _validate_image_url_length(self):
         return len(self.image_url) <= self.image_url_max_length
 
@@ -254,11 +250,7 @@ class ImageBlock(Block):
 
     @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
     def _validate_title_length(self):
-        return (
-            self.title is None
-            or self.title.text is None
-            or len(self.title.text) <= self.title_max_length
-        )
+        return self.title is None or self.title.text is None or len(self.title.text) <= self.title_max_length
 
 
 class ActionsBlock(Block):
@@ -341,9 +333,7 @@ class InputBlock(Block):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union(
-            {"label", "hint", "element", "optional", "dispatch_action"}
-        )
+        return super().attributes.union({"label", "hint", "element", "optional", "dispatch_action"})
 
     def __init__(
         self,
@@ -388,19 +378,11 @@ class InputBlock(Block):
 
     @JsonValidator(f"label attribute cannot exceed {label_max_length} characters")
     def _validate_label_length(self):
-        return (
-            self.label is None
-            or self.label.text is None
-            or len(self.label.text) <= self.label_max_length
-        )
+        return self.label is None or self.label.text is None or len(self.label.text) <= self.label_max_length
 
     @JsonValidator(f"hint attribute cannot exceed {hint_max_length} characters")
     def _validate_hint_length(self):
-        return (
-            self.hint is None
-            or self.hint.text is None
-            or len(self.hint.text) <= self.label_max_length
-        )
+        return self.hint is None or self.hint.text is None or len(self.hint.text) <= self.label_max_length
 
     @JsonValidator(
         (
@@ -409,9 +391,7 @@ class InputBlock(Block):
         )
     )
     def _validate_element_type(self):
-        return self.element is None or isinstance(
-            self.element, (str, InputInteractiveElement)
-        )
+        return self.element is None or isinstance(self.element, (str, InputInteractiveElement))
 
 
 class FileBlock(Block):

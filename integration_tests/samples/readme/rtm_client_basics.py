@@ -21,9 +21,7 @@ def say_hello(**payload):
         user = data["user"]
 
         try:
-            response = web_client.chat_postMessage(
-                channel=channel_id, text=f"Hi <@{user}>!", thread_ts=thread_ts
-            )
+            response = web_client.chat_postMessage(channel=channel_id, text=f"Hi <@{user}>!", thread_ts=thread_ts)
         except SlackApiError as e:
             # You will get a SlackApiError if "ok" is False
             assert e.response["ok"] is False

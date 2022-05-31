@@ -28,30 +28,21 @@ class TestWebClient(unittest.TestCase):
         self.idp_group_id = os.environ[SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID]
 
         if not hasattr(self, "channel_id"):
-            team_admin_token = os.environ[
-                SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN
-            ]
+            team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
             client = WebClient(token=team_admin_token)
             # Only fetching private channels since admin.conversations.restrictAccess methods
             # do not work for public channels
-            convs = client.conversations_list(
-                exclude_archived=True, limit=100, types="private_channel"
-            )
+            convs = client.conversations_list(exclude_archived=True, limit=100, types="private_channel")
             self.channel_id = next(
-                (
-                    c["id"]
-                    for c in convs["channels"]
-                    if c["name"] != "general" and not c["is_ext_shared"]
-                ),
+                (c["id"] for c in convs["channels"] if c["name"] != "general" and not c["is_ext_shared"]),
                 None,
             )
             if self.channel_id is None:
                 millis = int(round(time.time() * 1000))
                 channel_name = f"private-test-channel-{millis}"
-                self.channel_id = client.conversations_create(
-                    name=channel_name,
-                    is_private=True,
-                )["channel"]["id"]
+                self.channel_id = client.conversations_create(name=channel_name, is_private=True,)[
+                    "channel"
+                ]["id"]
 
     def tearDown(self):
         pass
@@ -67,9 +58,7 @@ class TestWebClient(unittest.TestCase):
         # To avoid rate limiting errors
         time.sleep(10)
 
-        list_groups = client.admin_conversations_restrictAccess_listGroups(
-            team_id=self.team_id, channel_id=self.channel_id
-        )
+        list_groups = client.admin_conversations_restrictAccess_listGroups(team_id=self.team_id, channel_id=self.channel_id)
         self.assertIsNotNone(list_groups)
         # To avoid rate limiting errors
         time.sleep(10)

@@ -14,19 +14,13 @@ deprecated_method_prefixes_2020_01 = [
 def show_2020_01_deprecation(method_name: str):
     """Prints a warning if the given method is deprecated"""
 
-    skip_deprecation = os.environ.get(
-        "SLACKCLIENT_SKIP_DEPRECATION"
-    )  # for unit tests etc.
+    skip_deprecation = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
     if skip_deprecation:
         return
     if not method_name:
         return
 
-    matched_prefixes = [
-        prefix
-        for prefix in deprecated_method_prefixes_2020_01
-        if method_name.startswith(prefix)
-    ]
+    matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2020_01 if method_name.startswith(prefix)]
     if len(matched_prefixes) > 0:
         message = (
             f"{method_name} is deprecated. Please use the Conversations API instead. "

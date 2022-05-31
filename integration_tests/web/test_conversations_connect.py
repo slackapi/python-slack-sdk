@@ -29,20 +29,12 @@ class TestWebClient(unittest.TestCase):
 
     def setUp(self):
         self.logger = logging.getLogger(__name__)
-        self.sender_bot_token = os.environ[
-            SLACK_SDK_TEST_CONNECT_INVITE_SENDER_BOT_TOKEN
-        ]
-        self.receiver_bot_token = os.environ[
-            SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_TOKEN
-        ]
+        self.sender_bot_token = os.environ[SLACK_SDK_TEST_CONNECT_INVITE_SENDER_BOT_TOKEN]
+        self.receiver_bot_token = os.environ[SLACK_SDK_TEST_CONNECT_INVITE_RECEIVER_BOT_TOKEN]
         self.sender_sync_client: WebClient = WebClient(token=self.sender_bot_token)
-        self.sender_async_client: AsyncWebClient = AsyncWebClient(
-            token=self.sender_bot_token
-        )
+        self.sender_async_client: AsyncWebClient = AsyncWebClient(token=self.sender_bot_token)
         self.receiver_sync_client: WebClient = WebClient(token=self.receiver_bot_token)
-        self.receiver_async_client: AsyncWebClient = AsyncWebClient(
-            token=self.receiver_bot_token
-        )
+        self.receiver_async_client: AsyncWebClient = AsyncWebClient(token=self.receiver_bot_token)
 
     def tearDown(self):
         pass
@@ -59,9 +51,7 @@ class TestWebClient(unittest.TestCase):
 
             # creates channel in sender workspace to share
             unique_channel_name = str(int(time.time())) + "-shared"
-            new_channel: SlackResponse = sender.conversations_create(
-                name=unique_channel_name
-            )
+            new_channel: SlackResponse = sender.conversations_create(name=unique_channel_name)
             self.assertIsNotNone(new_channel["channel"])
             self.assertIsNotNone(new_channel["channel"]["id"])
             channel_id = new_channel["channel"]["id"]
@@ -89,9 +79,7 @@ class TestWebClient(unittest.TestCase):
         finally:
             if channel_id is not None:
                 # clean up created channel
-                delete_channel: SlackResponse = sender.conversations_archive(
-                    channel=new_channel["channel"]["id"]
-                )
+                delete_channel: SlackResponse = sender.conversations_archive(channel=new_channel["channel"]["id"])
                 self.assertIsNotNone(delete_channel)
 
     @async_test
@@ -102,16 +90,12 @@ class TestWebClient(unittest.TestCase):
 
         try:
             # list senders pending connect invites
-            connect_invites: SlackResponse = (
-                await sender.conversations_listConnectInvites()
-            )
+            connect_invites: SlackResponse = await sender.conversations_listConnectInvites()
             self.assertIsNotNone(connect_invites["invites"])
 
             # creates channel in sender workspace to share
             unique_channel_name = str(int(time.time())) + "-shared"
-            new_channel: SlackResponse = await sender.conversations_create(
-                name=unique_channel_name
-            )
+            new_channel: SlackResponse = await sender.conversations_create(name=unique_channel_name)
             self.assertIsNotNone(new_channel["channel"])
             self.assertIsNotNone(new_channel["channel"]["id"])
             channel_id = new_channel["channel"]["id"]
@@ -132,13 +116,9 @@ class TestWebClient(unittest.TestCase):
 
             # receiver attempt to approve invite already accepted by an admin level token should fail
             with self.assertRaises(SlackApiError):
-                await receiver.conversations_approveSharedInvite(
-                    invite_id=invite["invite_id"]
-                )
+                await receiver.conversations_approveSharedInvite(invite_id=invite["invite_id"])
         finally:
             if channel_id is not None:
                 # clean up created channel
-                delete_channel: SlackResponse = await sender.conversations_archive(
-                    channel=new_channel["channel"]["id"]
-                )
+                delete_channel: SlackResponse = await sender.conversations_archive(channel=new_channel["channel"]["id"])
                 self.assertIsNotNone(delete_channel)

@@ -84,13 +84,9 @@ class AsyncAuditLogsClient:
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -271,8 +267,7 @@ class AsyncAuditLogsClient:
 
                 if self.logger.level <= logging.DEBUG:
                     headers_for_logging = {
-                        k: "(redacted)" if k.lower() == "authorization" else v
-                        for k, v in headers.items()
+                        k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()
                     }
                     self.logger.debug(
                         f"Sending a request - "
@@ -289,14 +284,10 @@ class AsyncAuditLogsClient:
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode("utf-8")
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode("utf-8") if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f"No response data returned from the following API call: {url}."
-                            )
+                            self.logger.debug(f"No response data returned from the following API call: {url}.")
                         except json.decoder.JSONDecodeError as e:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
@@ -341,8 +332,7 @@ class AsyncAuditLogsClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} "
-                                    f"for {http_verb} {url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

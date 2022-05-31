@@ -99,13 +99,9 @@ class AsyncSCIMClient:
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -137,26 +133,18 @@ class AsyncSCIMClient:
         )
 
     async def read_user(self, id: str) -> ReadUserResponse:
-        return ReadUserResponse(
-            await self.api_call(http_verb="GET", path=f"Users/{quote(id)}")
-        )
+        return ReadUserResponse(await self.api_call(http_verb="GET", path=f"Users/{quote(id)}"))
 
-    async def create_user(
-        self, user: Union[Dict[str, Any], User]
-    ) -> UserCreateResponse:
+    async def create_user(self, user: Union[Dict[str, Any], User]) -> UserCreateResponse:
         return UserCreateResponse(
             await self.api_call(
                 http_verb="POST",
                 path="Users",
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
-    async def patch_user(
-        self, id: str, partial_user: Union[Dict[str, Any], User]
-    ) -> UserPatchResponse:
+    async def patch_user(self, id: str, partial_user: Union[Dict[str, Any], User]) -> UserPatchResponse:
         return UserPatchResponse(
             await self.api_call(
                 http_verb="PATCH",
@@ -167,17 +155,13 @@ class AsyncSCIMClient:
             )
         )
 
-    async def update_user(
-        self, user: Union[Dict[str, Any], User]
-    ) -> UserUpdateResponse:
+    async def update_user(self, user: Union[Dict[str, Any], User]) -> UserUpdateResponse:
         user_id = user.id if isinstance(user, User) else user["id"]
         return UserUpdateResponse(
             await self.api_call(
                 http_verb="PUT",
                 path=f"Users/{quote(user_id)}",
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
@@ -214,26 +198,18 @@ class AsyncSCIMClient:
         )
 
     async def read_group(self, id: str) -> ReadGroupResponse:
-        return ReadGroupResponse(
-            await self.api_call(http_verb="GET", path=f"Groups/{quote(id)}")
-        )
+        return ReadGroupResponse(await self.api_call(http_verb="GET", path=f"Groups/{quote(id)}"))
 
-    async def create_group(
-        self, group: Union[Dict[str, Any], Group]
-    ) -> GroupCreateResponse:
+    async def create_group(self, group: Union[Dict[str, Any], Group]) -> GroupCreateResponse:
         return GroupCreateResponse(
             await self.api_call(
                 http_verb="POST",
                 path="Groups",
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
-    async def patch_group(
-        self, id: str, partial_group: Union[Dict[str, Any], Group]
-    ) -> GroupPatchResponse:
+    async def patch_group(self, id: str, partial_group: Union[Dict[str, Any], Group]) -> GroupPatchResponse:
         return GroupPatchResponse(
             await self.api_call(
                 http_verb="PATCH",
@@ -244,17 +220,13 @@ class AsyncSCIMClient:
             )
         )
 
-    async def update_group(
-        self, group: Union[Dict[str, Any], Group]
-    ) -> GroupUpdateResponse:
+    async def update_group(self, group: Union[Dict[str, Any], Group]) -> GroupUpdateResponse:
         group_id = group.id if isinstance(group, Group) else group["id"]
         return GroupUpdateResponse(
             await self.api_call(
                 http_verb="PUT",
                 path=f"Groups/{quote(group_id)}",
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
@@ -344,8 +316,7 @@ class AsyncSCIMClient:
 
                 if self.logger.level <= logging.DEBUG:
                     headers_for_logging = {
-                        k: "(redacted)" if k.lower() == "authorization" else v
-                        for k, v in headers.items()
+                        k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()
                     }
                     self.logger.debug(
                         f"Sending a request - url: {url}, params: {body_params}, headers: {headers_for_logging}"
@@ -358,14 +329,10 @@ class AsyncSCIMClient:
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode("utf-8")
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode("utf-8") if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f"No response data returned from the following API call: {url}."
-                            )
+                            self.logger.debug(f"No response data returned from the following API call: {url}.")
 
                         if res.status == 429:
                             for handler in self.retry_handlers:
@@ -407,8 +374,7 @@ class AsyncSCIMClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} "
-                                    f"for {http_verb} {url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

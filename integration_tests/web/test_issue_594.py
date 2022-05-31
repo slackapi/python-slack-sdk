@@ -45,9 +45,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(creation)
 
-        sharing = client.files_remote_share(
-            channels=self.channel_id, external_id=external_id
-        )
+        sharing = client.files_remote_share(channels=self.channel_id, external_id=external_id)
         self.assertIsNotNone(sharing)
 
         message = client.chat_postEphemeral(
@@ -82,9 +80,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(creation)
 
-        sharing = client.files_remote_share(
-            channels=self.channel_id, external_id=external_id
-        )
+        sharing = client.files_remote_share(channels=self.channel_id, external_id=external_id)
         self.assertIsNotNone(sharing)
 
         message = client.chat_postEphemeral(

@@ -13,9 +13,7 @@ from tests.rtm.mock_web_api_server import (
 class TestRTMClient(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = slack.RTMClient(
-            token="xoxp-1234", base_url="http://localhost:8888", auto_reconnect=False
-        )
+        self.client = slack.RTMClient(token="xoxp-1234", base_url="http://localhost:8888", auto_reconnect=False)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
@@ -70,9 +68,7 @@ class TestRTMClient(unittest.TestCase):
         with self.assertRaises(e.SlackClientError) as context:
             self.client.on(event="message", callback=invalid_cb)
 
-        expected_error = (
-            "The callback 'invalid_cb' must accept keyword arguments (**kwargs)."
-        )
+        expected_error = "The callback 'invalid_cb' must accept keyword arguments (**kwargs)."
         error = str(context.exception)
         self.assertIn(expected_error, error)
 
@@ -90,7 +86,6 @@ class TestRTMClient(unittest.TestCase):
             slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
         expected_error = (
-            "The request to the Slack API failed.\n"
-            "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
+            "The request to the Slack API failed.\n" "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
         )
         self.assertIn(expected_error, str(context.exception))

@@ -30,9 +30,7 @@ class AsyncBaseSocketModeClient:
     message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
-            Callable[
-                ["AsyncBaseSocketModeClient", dict, Optional[str]], Awaitable[None]
-            ],
+            Callable[["AsyncBaseSocketModeClient", dict, Optional[str]], Awaitable[None]],
         ]
     ]
     socket_mode_request_listeners: List[
@@ -44,9 +42,7 @@ class AsyncBaseSocketModeClient:
 
     async def issue_new_wss_url(self) -> str:
         try:
-            response = await self.web_client.apps_connections_open(
-                app_token=self.app_token
-            )
+            response = await self.web_client.apps_connections_open(app_token=self.app_token)
             return response["url"]
         except SlackApiError as e:
             if e.response["error"] == "ratelimited":
@@ -78,9 +74,7 @@ class AsyncBaseSocketModeClient:
         try:
             await self.connect_operation_lock.acquire()
             if self.trace_enabled:
-                self.logger.debug(
-                    f"For reconnection, the connect_operation_lock was acquired (session: {session_id})"
-                )
+                self.logger.debug(f"For reconnection, the connect_operation_lock was acquired (session: {session_id})")
             if force or not await self.is_connected():
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
@@ -88,9 +82,7 @@ class AsyncBaseSocketModeClient:
             if self.connect_operation_lock.locked() is True:
                 self.connect_operation_lock.release()
                 if self.trace_enabled:
-                    self.logger.debug(
-                        f"The connect_operation_lock for reconnection was released (session: {session_id})"
-                    )
+                    self.logger.debug(f"The connect_operation_lock for reconnection was released (session: {session_id})")
 
     async def close(self):
         self.closed = True
@@ -99,9 +91,7 @@ class AsyncBaseSocketModeClient:
     async def send_message(self, message: str):
         raise NotImplementedError()
 
-    async def send_socket_mode_response(
-        self, response: Union[Dict[str, Any], SocketModeResponse]
-    ):
+    async def send_socket_mode_response(self, response: Union[Dict[str, Any], SocketModeResponse]):
         if isinstance(response, SocketModeResponse):
             await self.send_message(json.dumps(response.to_dict()))
         else:
@@ -112,9 +102,7 @@ class AsyncBaseSocketModeClient:
         if self.logger.level <= logging.DEBUG:
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
-            self.logger.debug(
-                f"A new message enqueued (current queue size: {queue_size}, session: {session_id})"
-            )
+            self.logger.debug(f"A new message enqueued (current queue size: {queue_size}, session: {session_id})")
 
     async def process_messages(self):
         session_id = await self.session_id()
@@ -128,14 +116,10 @@ class AsyncBaseSocketModeClient:
                     if not self.closed:
                         raise
                 except Exception as e:
-                    self.logger.exception(
-                        f"Failed to process a message: {e}, session: {session_id}"
-                    )
+                    self.logger.exception(f"Failed to process a message: {e}, session: {session_id}")
         except asyncio.CancelledError:
             if self.trace_enabled:
-                self.logger.debug(
-                    f"The running process_messages task for {session_id} is now cancelled"
-                )
+                self.logger.debug(f"The running process_messages task for {session_id} is now cancelled")
             raise
 
     async def process_message(self):
@@ -144,9 +128,7 @@ class AsyncBaseSocketModeClient:
             message: dict = {}
             if raw_message.startswith("{"):
                 message = json.loads(raw_message)
-            _: Future[None] = asyncio.ensure_future(
-                self.run_message_listeners(message, raw_message)
-            )
+            _: Future[None] = asyncio.ensure_future(self.run_message_listeners(message, raw_message))
 
     async def run_message_listeners(self, message: dict, raw_message: str) -> None:
         session_id = await self.session_id()
@@ -164,9 +146,7 @@ class AsyncBaseSocketModeClient:
                 try:
                     await listener(self, message, raw_message)  # type: ignore
                 except Exception as e:
-                    self.logger.exception(
-                        f"Failed to run a message listener: {e}, session: {session_id}"
-                    )
+                    self.logger.exception(f"Failed to run a message listener: {e}, session: {session_id}")
 
             if len(self.socket_mode_request_listeners) > 0:
                 request = SocketModeRequest.from_dict(message)
@@ -175,13 +155,9 @@ class AsyncBaseSocketModeClient:
                         try:
                             await listener(self, request)  # type: ignore
                         except Exception as e:
-                            self.logger.exception(
-                                f"Failed to run a request listener: {e}, session: {session_id}"
-                            )
+                            self.logger.exception(f"Failed to run a request listener: {e}, session: {session_id}")
         except Exception as e:
-            self.logger.exception(
-                f"Failed to run message listeners: {e}, session: {session_id}"
-            )
+            self.logger.exception(f"Failed to run message listeners: {e}, session: {session_id}")
         finally:
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(

@@ -50,32 +50,24 @@ class WebhookClient:
             headers=headers,
         )
 
-    def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
-    ) -> WebhookResponse:
+    def send_dict(self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None) -> WebhookResponse:
         return self._perform_http_request(
             body=_build_body(body),
             headers=_build_request_headers(self.default_headers, headers),
         )
 
-    def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
-    ) -> WebhookResponse:
+    def _perform_http_request(self, *, body: Dict[str, any], headers: Dict[str, str]) -> WebhookResponse:
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
-            )
+            self.logger.debug(f"Sending a request - url: {self.url}, body: {body}, headers: {headers}")
         try:
             url = self.url
             opener: Optional[OpenerDirector] = None
             # for security (BAN-B310)
             if url.lower().startswith("http"):
-                req = Request(
-                    method="POST", url=url, data=body.encode("utf-8"), headers=headers
-                )
+                req = Request(method="POST", url=url, data=body.encode("utf-8"), headers=headers)
                 if self.proxy is not None:
                     if isinstance(self.proxy, str):
                         opener = urllib.request.build_opener(
@@ -83,9 +75,7 @@ class WebhookClient:
                             HTTPSHandler(context=self.ssl),
                         )
                     else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
-                        )
+                        raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
             else:
                 raise SlackRequestError(f"Invalid URL detected: {url}")
 
@@ -94,9 +84,7 @@ class WebhookClient:
             if opener:
                 resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
             else:
-                resp = urlopen(  # skipcq: BAN-B310
-                    req, context=self.ssl, timeout=self.timeout
-                )
+                resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
             charset: str = resp.headers.get_content_charset() or "utf-8"
             response_body: str = resp.read().decode(charset)
             resp = WebhookResponse(

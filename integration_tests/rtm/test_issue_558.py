@@ -61,9 +61,7 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(3)
 
         try:
-            first_reaction = await web_client.reactions_add(
-                channel=channel_id, timestamp=ts, name="eyes"
-            )
+            first_reaction = await web_client.reactions_add(channel=channel_id, timestamp=ts, name="eyes")
             self.assertFalse("error" in first_reaction)
             await asyncio.sleep(2)
 
@@ -72,9 +70,7 @@ class TestRTMClient(unittest.TestCase):
             # used to start blocking here
 
             # This reaction_add event won't be handled due to a bug
-            second_reaction = await web_client.reactions_add(
-                channel=channel_id, timestamp=ts, name="tada"
-            )
+            second_reaction = await web_client.reactions_add(channel=channel_id, timestamp=ts, name="tada")
             self.assertFalse("error" in second_reaction)
             await asyncio.sleep(2)
 

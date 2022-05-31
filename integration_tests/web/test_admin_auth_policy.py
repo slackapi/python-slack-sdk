@@ -27,9 +27,7 @@ class TestWebClient(unittest.TestCase):
     def test_sync(self):
         client = self.sync_client
 
-        list = client.admin_auth_policy_getEntities(
-            policy_name="email_password", limit=3
-        )
+        list = client.admin_auth_policy_getEntities(policy_name="email_password", limit=3)
         self.assertIsNotNone(list)
 
         assignment = client.admin_auth_policy_assignEntities(
@@ -38,9 +36,7 @@ class TestWebClient(unittest.TestCase):
             entity_type="USER",
         )
         self.assertIsNotNone(assignment)
-        self.assertEqual(
-            list["entity_total_count"] + 1, assignment["entity_total_count"]
-        )
+        self.assertEqual(list["entity_total_count"] + 1, assignment["entity_total_count"])
 
         removal = client.admin_auth_policy_removeEntities(
             entity_ids=self.user_ids,
@@ -54,9 +50,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         client = self.async_client
 
-        list = await client.admin_auth_policy_getEntities(
-            policy_name="email_password", limit=3
-        )
+        list = await client.admin_auth_policy_getEntities(policy_name="email_password", limit=3)
         self.assertIsNotNone(list)
 
         assignment = await client.admin_auth_policy_assignEntities(
@@ -65,9 +59,7 @@ class TestWebClient(unittest.TestCase):
             entity_type="USER",
         )
         self.assertIsNotNone(assignment)
-        self.assertEqual(
-            list["entity_total_count"] + 1, assignment["entity_total_count"]
-        )
+        self.assertEqual(list["entity_total_count"] + 1, assignment["entity_total_count"])
 
         removal = await client.admin_auth_policy_removeEntities(
             entity_ids=self.user_ids,

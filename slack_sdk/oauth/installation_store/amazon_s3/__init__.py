@@ -205,11 +205,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             t_id = none
         workspace_path = f"{self.client_id}/{e_id}-{t_id}"
         try:
-            key = (
-                f"{workspace_path}/installer-{user_id}-latest"
-                if user_id
-                else f"{workspace_path}/installer-latest"
-            )
+            key = f"{workspace_path}/installer-{user_id}-latest" if user_id else f"{workspace_path}/installer-latest"
             fetch_response = self.s3_client.get_object(
                 Bucket=self.bucket_name,
                 Key=key,
@@ -223,17 +219,13 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.warning(message)
             return None
 
-    async def async_delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         return self.delete_bot(
             enterprise_id=enterprise_id,
             team_id=team_id,
         )
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         none = "none"
         e_id = enterprise_id or none
         t_id = team_id or none
@@ -316,11 +308,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             Prefix=f"{workspace_path}/installer-",
             MaxKeys=10,  # the small number would be enough for this purpose
         )
-        keys = [
-            c.get("Key")
-            for c in objects.get("Contents", [])
-            if c.get("Key") not in deleted_keys
-        ]
+        keys = [c.get("Key") for c in objects.get("Contents", []) if c.get("Key") not in deleted_keys]
         # If only installer-latest remains, we should delete the one as well
         if len(keys) == 1 and keys[0].endswith("installer-latest"):
             content = objects.get("Contents", [])[0]

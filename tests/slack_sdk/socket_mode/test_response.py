@@ -21,6 +21,4 @@ class TestResponse(unittest.TestCase):
 
     def test_to_dict(self):
         response = SocketModeResponse(envelope_id="xxx", payload={"text": "hi"})
-        self.assertDictEqual(
-            response.to_dict(), {"envelope_id": "xxx", "payload": {"text": "hi"}}
-        )
+        self.assertDictEqual(response.to_dict(), {"envelope_id": "xxx", "payload": {"text": "hi"}})

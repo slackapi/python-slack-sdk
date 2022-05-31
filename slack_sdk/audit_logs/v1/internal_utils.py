@@ -8,13 +8,7 @@ from .response import AuditLogsResponse
 
 def _build_query(params: Optional[Dict[str, Any]]) -> str:
     if params is not None and len(params) > 0:
-        return "&".join(
-            {
-                f"{quote(str(k))}={quote(str(v))}"
-                for k, v in params.items()
-                if v is not None
-            }
-        )
+        return "&".join({f"{quote(str(k))}={quote(str(v))}" for k, v in params.items() if v is not None})
     return ""
 
 

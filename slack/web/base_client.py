@@ -63,9 +63,7 @@ class BaseClient:
         self.use_sync_aiohttp = use_sync_aiohttp
         self.session = session
         self.headers = headers or {}
-        self.headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self._logger = logging.getLogger(__name__)
         self._event_loop = loop
 
@@ -153,9 +151,7 @@ class BaseClient:
     # aiohttp based async WebClient
     # =================================================================
 
-    async def _send(
-        self, http_verb: str, api_url: str, req_args: dict
-    ) -> SlackResponse:
+    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> SlackResponse:
         """Sends the request out for transmission.
 
         Args:
@@ -178,9 +174,7 @@ class BaseClient:
                 # True/False -> "1"/"0"
                 req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
-            res = await self._request(
-                http_verb=http_verb, api_url=api_url, req_args=req_args
-            )
+            res = await self._request(http_verb=http_verb, api_url=api_url, req_args=req_args)
         finally:
             for f in open_files:
                 f.close()
@@ -219,18 +213,14 @@ class BaseClient:
         _json = req_args["json"] if "json" in req_args else None
         headers = req_args["headers"] if "headers" in req_args else None
         token = params.get("token") if params and "token" in params else None
-        auth = (
-            req_args["auth"] if "auth" in req_args else None
-        )  # Basic Auth for oauth.v2.access / oauth.access
+        auth = req_args["auth"] if "auth" in req_args else None  # Basic Auth for oauth.v2.access / oauth.access
         if auth is not None:
             if isinstance(auth, BasicAuth):
                 headers["Authorization"] = auth.encode()
             elif isinstance(auth, str):
                 headers["Authorization"] = auth
             else:
-                self._logger.warning(
-                    f"As the auth: {auth}: {type(auth)} is unsupported, skipped"
-                )
+                self._logger.warning(f"As the auth: {auth}: {type(auth)} is unsupported, skipped")
 
         body_params = {}
         if params:
@@ -285,15 +275,9 @@ class BaseClient:
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):
                         return {}
-                    return {
-                        k: ("(bytes)" if isinstance(v, bytes) else v)
-                        for k, v in values.items()
-                    }
+                    return {k: ("(bytes)" if isinstance(v, bytes) else v) for k, v in values.items()}
 
-                headers = {
-                    k: "(redacted)" if k.lower() == "authorization" else v
-                    for k, v in additional_headers.items()
-                }
+                headers = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in additional_headers.items()}
                 self._logger.debug(
                     f"Sending a request - url: {url}, "
                     f"query_params: {convert_params(query_params)}, "
@@ -368,9 +352,7 @@ class BaseClient:
                 if not f.closed:
                     f.close()
 
-    def _perform_urllib_http_request(
-        self, *, url: str, args: Dict[str, Dict[str, any]]
-    ) -> Dict[str, any]:
+    def _perform_urllib_http_request(self, *, url: str, args: Dict[str, Dict[str, any]]) -> Dict[str, any]:
         headers = args["headers"]
         if args["json"]:
             body = json.dumps(args["json"])
@@ -387,16 +369,10 @@ class BaseClient:
                     filename = "Uploaded file"
                     name_attr = getattr(value, "name", None)
                     if name_attr:
-                        filename = (
-                            name_attr.decode("utf-8")
-                            if isinstance(name_attr, bytes)
-                            else name_attr
-                        )
+                        filename = name_attr.decode("utf-8") if isinstance(name_attr, bytes) else name_attr
                     if "filename" in data:
                         filename = data["filename"]
-                    mimetype = (
-                        mimetypes.guess_type(filename)[0] or "application/octet-stream"
-                    )
+                    mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
                     title = (
                         f'\r\nContent-Disposition: form-data; name="{key}"; filename="{filename}"\r\n'
                         + f"Content-Type: {mimetype}\r\n"
@@ -440,18 +416,14 @@ class BaseClient:
                             HTTPSHandler(context=self.ssl),
                         )
                     else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
-                        )
+                        raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
 
                 # NOTE: BAN-B310 is already checked above
                 resp: Optional[HTTPResponse] = None
                 if opener:
                     resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
                 else:
-                    resp = urlopen(  # skipcq: BAN-B310
-                        req, context=self.ssl, timeout=self.timeout
-                    )
+                    resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
                 charset = resp.headers.get_content_charset() or "utf-8"
                 body: str = resp.read().decode(charset)  # read the response body here
                 return {"status": resp.code, "headers": resp.headers, "body": body}
@@ -490,9 +462,7 @@ class BaseClient:
     # =================================================================
 
     @staticmethod
-    def validate_slack_signature(
-        *, signing_secret: str, data: str, timestamp: str, signature: str
-    ) -> bool:
+    def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -> bool:
         """
         Slack creates a unique string for your app and shares it with you. Verify
         requests from Slack with confidence by verifying signatures using your

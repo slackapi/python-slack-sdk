@@ -28,54 +28,34 @@ class CommonTextComponentTests(unittest.TestCase):
                 with self.assertRaises(SlackObjectFormationError, msg="label length"):
                     component(name="dialog", label=STRING_51_CHARS).to_dict()
 
-                with self.assertRaises(
-                    SlackObjectFormationError, msg="placeholder length"
-                ):
-                    component(
-                        name="dialog", label="Dialog", placeholder=STRING_301_CHARS
-                    ).to_dict()
+                with self.assertRaises(SlackObjectFormationError, msg="placeholder length"):
+                    component(name="dialog", label="Dialog", placeholder=STRING_301_CHARS).to_dict()
 
                 with self.assertRaises(SlackObjectFormationError, msg="hint length"):
-                    component(
-                        name="dialog", label="Dialog", hint=STRING_301_CHARS
-                    ).to_dict()
+                    component(name="dialog", label="Dialog", hint=STRING_301_CHARS).to_dict()
 
                 with self.assertRaises(SlackObjectFormationError, msg="value length"):
-                    component(
-                        name="dialog", label="Dialog", value=STRING_3001_CHARS
-                    ).to_dict()
+                    component(name="dialog", label="Dialog", value=STRING_3001_CHARS).to_dict()
 
-                with self.assertRaises(
-                    SlackObjectFormationError, msg="min_length out of bounds"
-                ):
+                with self.assertRaises(SlackObjectFormationError, msg="min_length out of bounds"):
                     component(
                         name="dialog",
                         label="Dialog",
                         min_length=component.max_value_length + 1,
                     ).to_dict()
 
-                with self.assertRaises(
-                    SlackObjectFormationError, msg="max_length out of bounds"
-                ):
+                with self.assertRaises(SlackObjectFormationError, msg="max_length out of bounds"):
                     component(
                         name="dialog",
                         label="Dialog",
                         max_length=component.max_value_length + 1,
                     ).to_dict()
 
-                with self.assertRaises(
-                    SlackObjectFormationError, msg="min_length > max length"
-                ):
-                    component(
-                        name="dialog", label="Dialog", min_length=100, max_length=50
-                    ).to_dict()
+                with self.assertRaises(SlackObjectFormationError, msg="min_length > max length"):
+                    component(name="dialog", label="Dialog", min_length=100, max_length=50).to_dict()
 
-                with self.assertRaises(
-                    SlackObjectFormationError, msg="subtype invalid"
-                ):
-                    component(
-                        name="dialog", label="Dialog", subtype="abcdefg"
-                    ).to_dict()
+                with self.assertRaises(SlackObjectFormationError, msg="subtype invalid"):
+                    component(name="dialog", label="Dialog", subtype="abcdefg").to_dict()
 
 
 class TextFieldComponentTests(unittest.TestCase):
@@ -158,9 +138,7 @@ class StaticDropdownTests(unittest.TestCase):
             Option.from_single_value("three"),
         ]
         self.assertDictEqual(
-            DialogStaticSelector(
-                name="dialog", label="Dialog", options=options
-            ).to_dict(),
+            DialogStaticSelector(name="dialog", label="Dialog", options=options).to_dict(),
             {
                 "optional": False,
                 "label": "Dialog",
@@ -197,13 +175,9 @@ class DynamicSelectorTests(unittest.TestCase):
                     },
                 )
 
-                passing_obj = component(
-                    name="select_1", label="selector_1", value=self.selected_opt
-                ).to_dict()
+                passing_obj = component(name="select_1", label="selector_1", value=self.selected_opt).to_dict()
 
-                passing_str = component(
-                    name="select_1", label="selector_1", value="U12345"
-                ).to_dict()
+                passing_str = component(name="select_1", label="selector_1", value="U12345").to_dict()
 
                 expected = {
                     "name": "select_1",
@@ -256,9 +230,7 @@ class DialogBuilderTests(unittest.TestCase):
                 optional=True,
                 hint="Enter your signature",
             )
-            .text_area(
-                name="message", label="Message", hint="Enter message to broadcast"
-            )
+            .text_area(name="message", label="Message", hint="Enter message to broadcast")
             .conversation_selector(name="target", label="Choose Target")
         )
 
