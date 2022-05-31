@@ -47,9 +47,8 @@ class LegacyWebClient(LegacyBaseClient):
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
-        ssl (SSLContext): An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
-            instance, helpful for specifying your own custom certificate
-            chain.
+        ssl (SSLContext): An [`ssl.SSLContext`][1] instance, helpful for specifying
+            your own custom certificate chain.
         proxy (str): String representing a fully-qualified URL to a proxy through
             which to route all requests to the Slack API. Even if this parameter
             is not specified, if any of the following environment variables are
@@ -91,6 +90,8 @@ class LegacyWebClient(LegacyBaseClient):
         Any attributes or methods prefixed with _underscores are
         intended to be "private" internal use only. They may be changed or
         removed at anytime.
+
+    [1]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext
     """
 
     def admin_analytics_getFile(
@@ -131,9 +132,7 @@ class LegacyWebClient(LegacyBaseClient):
         elif request_id:
             kwargs.update({"request_id": request_id})
         else:
-            raise e.SlackRequestError(
-                "The app_id or request_id argument must be specified."
-            )
+            raise e.SlackRequestError("The app_id or request_id argument must be specified.")
 
         kwargs.update(
             {
@@ -183,9 +182,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        return self.api_call(
-            "admin.apps.clearResolution", http_verb="POST", params=kwargs
-        )
+        return self.api_call("admin.apps.clearResolution", http_verb="POST", params=kwargs)
 
     def admin_apps_requests_cancel(
         self,
@@ -205,9 +202,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        return self.api_call(
-            "admin.apps.requests.cancel", http_verb="POST", params=kwargs
-        )
+        return self.api_call("admin.apps.requests.cancel", http_verb="POST", params=kwargs)
 
     def admin_apps_requests_list(
         self,
@@ -249,9 +244,7 @@ class LegacyWebClient(LegacyBaseClient):
         elif request_id:
             kwargs.update({"request_id": request_id})
         else:
-            raise e.SlackRequestError(
-                "The app_id or request_id argument must be specified."
-            )
+            raise e.SlackRequestError("The app_id or request_id argument must be specified.")
 
         kwargs.update(
             {
@@ -281,9 +274,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        return self.api_call(
-            "admin.apps.restricted.list", http_verb="GET", params=kwargs
-        )
+        return self.api_call("admin.apps.restricted.list", http_verb="GET", params=kwargs)
 
     def admin_apps_uninstall(
         self,
@@ -326,9 +317,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"entity_type": entity_type})
         if limit is not None:
             kwargs.update({"limit": limit})
-        return self.api_call(
-            "admin.auth.policy.getEntities", http_verb="POST", params=kwargs
-        )
+        return self.api_call("admin.auth.policy.getEntities", http_verb="POST", params=kwargs)
 
     def admin_auth_policy_assignEntities(
         self,
@@ -347,9 +336,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"entity_ids": entity_ids})
         kwargs.update({"policy_name": policy_name})
         kwargs.update({"entity_type": entity_type})
-        return self.api_call(
-            "admin.auth.policy.assignEntities", http_verb="POST", params=kwargs
-        )
+        return self.api_call("admin.auth.policy.assignEntities", http_verb="POST", params=kwargs)
 
     def admin_auth_policy_removeEntities(
         self,
@@ -368,9 +355,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"entity_ids": entity_ids})
         kwargs.update({"policy_name": policy_name})
         kwargs.update({"entity_type": entity_type})
-        return self.api_call(
-            "admin.auth.policy.removeEntities", http_verb="POST", params=kwargs
-        )
+        return self.api_call("admin.auth.policy.removeEntities", http_verb="POST", params=kwargs)
 
     def admin_barriers_create(
         self,
@@ -385,13 +370,9 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"primary_usergroup_id": primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
-            )
+            kwargs.update({"barriered_from_usergroup_ids": barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
         else:
@@ -422,17 +403,11 @@ class LegacyWebClient(LegacyBaseClient):
         """Update an existing Information Barrier
         https://api.slack.com/methods/admin.barriers.update
         """
-        kwargs.update(
-            {"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id}
-        )
+        kwargs.update({"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {"barriered_from_usergroup_ids": barriered_from_usergroup_ids}
-            )
+            kwargs.update({"barriered_from_usergroup_ids": barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
         else:
@@ -670,9 +645,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
-        return self.api_call(
-            "admin.conversations.ekm.listOriginalConnectedChannelInfo", params=kwargs
-        )
+        return self.api_call("admin.conversations.ekm.listOriginalConnectedChannelInfo", params=kwargs)
 
     def admin_conversations_restrictAccess_addGroup(
         self,
@@ -983,9 +956,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        return self.api_call(
-            "admin.teams.settings.setDefaultChannels", http_verb="GET", params=kwargs
-        )
+        return self.api_call("admin.teams.settings.setDefaultChannels", http_verb="GET", params=kwargs)
 
     def admin_users_session_getSettings(
         self,
@@ -1253,9 +1224,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.teams.settings.setIcon
         """
         kwargs.update({"team_id": team_id, "image_url": image_url})
-        return self.api_call(
-            "admin.teams.settings.setIcon", http_verb="GET", params=kwargs
-        )
+        return self.api_call("admin.teams.settings.setIcon", http_verb="GET", params=kwargs)
 
     def admin_teams_settings_setName(
         self,
@@ -1394,9 +1363,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "email": email,
                 "custom_message": custom_message,
                 "email_password_policy_enabled": email_password_policy_enabled,
-                "guest_expiration_ts": str(guest_expiration_ts)
-                if guest_expiration_ts is not None
-                else None,
+                "guest_expiration_ts": str(guest_expiration_ts) if guest_expiration_ts is not None else None,
                 "is_restricted": is_restricted,
                 "is_ultra_restricted": is_ultra_restricted,
                 "real_name": real_name,
@@ -1466,9 +1433,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Set an expiration for a guest user.
         https://api.slack.com/methods/admin.users.setExpiration
         """
-        kwargs.update(
-            {"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id}
-        )
+        kwargs.update({"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id})
         return self.api_call("admin.users.setExpiration", params=kwargs)
 
     def admin_users_setOwner(
@@ -1534,9 +1499,7 @@ class LegacyWebClient(LegacyBaseClient):
         Each authorization represents an app installation that the event is visible to.
         https://api.slack.com/methods/apps.event.authorizations.list
         """
-        kwargs.update(
-            {"event_context": event_context, "cursor": cursor, "limit": limit}
-        )
+        kwargs.update({"event_context": event_context, "cursor": cursor, "limit": limit})
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
     def apps_uninstall(
@@ -1760,9 +1723,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"id": id})
         _update_call_participants(kwargs, users)
-        return self.api_call(
-            "calls.participants.remove", http_verb="POST", params=kwargs
-        )
+        return self.api_call("calls.participants.remove", http_verb="POST", params=kwargs)
 
     def calls_update(
         self,
@@ -2273,9 +2234,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/conversations.acceptSharedInvite
         """
         if channel_id is None and invite_id is None:
-            raise e.SlackRequestError(
-                "Either channel_id or invite_id must be provided."
-            )
+            raise e.SlackRequestError("Either channel_id or invite_id must be provided.")
         kwargs.update(
             {
                 "channel_name": channel_name,
@@ -2286,9 +2245,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        return self.api_call(
-            "conversations.acceptSharedInvite", http_verb="POST", params=kwargs
-        )
+        return self.api_call("conversations.acceptSharedInvite", http_verb="POST", params=kwargs)
 
     def conversations_approveSharedInvite(
         self,
@@ -2301,9 +2258,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/conversations.approveSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
-        return self.api_call(
-            "conversations.approveSharedInvite", http_verb="POST", params=kwargs
-        )
+        return self.api_call("conversations.approveSharedInvite", http_verb="POST", params=kwargs)
 
     def conversations_archive(
         self,
@@ -2354,9 +2309,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/conversations.declineSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
-        return self.api_call(
-            "conversations.declineSharedInvite", http_verb="GET", params=kwargs
-        )
+        return self.api_call("conversations.declineSharedInvite", http_verb="GET", params=kwargs)
 
     def conversations_history(
         self,
@@ -2445,9 +2398,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
-        return self.api_call(
-            "conversations.inviteShared", http_verb="GET", params=kwargs
-        )
+        return self.api_call("conversations.inviteShared", http_verb="GET", params=kwargs)
 
     def conversations_join(
         self,
@@ -3012,9 +2963,7 @@ class LegacyWebClient(LegacyBaseClient):
         if file is None and content is None:
             raise e.SlackRequestError("The file or content argument must be specified.")
         if file is not None and content is not None:
-            raise e.SlackRequestError(
-                "You cannot specify both the file and the content argument."
-            )
+            raise e.SlackRequestError("You cannot specify both the file and the content argument.")
 
         if isinstance(channels, (list, Tuple)):
             kwargs.update({"channels": ",".join(channels)})
@@ -3446,9 +3395,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Exchanges a legacy access token for a new expiring access token and refresh token
         https://api.slack.com/methods/oauth.v2.exchange
         """
-        kwargs.update(
-            {"client_id": client_id, "client_secret": client_secret, "token": token}
-        )
+        kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token})
         return self.api_call("oauth.v2.exchange", params=kwargs)
 
     def openid_connect_token(
@@ -3700,9 +3647,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Starts a Real Time Messaging session.
         https://api.slack.com/methods/rtm.connect
         """
-        kwargs.update(
-            {"batch_presence_aware": batch_presence_aware, "presence_sub": presence_sub}
-        )
+        kwargs.update({"batch_presence_aware": batch_presence_aware, "presence_sub": presence_sub})
         return self.api_call("rtm.connect", http_verb="GET", params=kwargs)
 
     def rtm_start(
@@ -4033,9 +3978,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Disable an existing User Group
         https://api.slack.com/methods/usergroups.disable
         """
-        kwargs.update(
-            {"usergroup": usergroup, "include_count": include_count, "team_id": team_id}
-        )
+        kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
         return self.api_call("usergroups.disable", params=kwargs)
 
     def usergroups_enable(
@@ -4049,9 +3992,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Enable a User Group
         https://api.slack.com/methods/usergroups.enable
         """
-        kwargs.update(
-            {"usergroup": usergroup, "include_count": include_count, "team_id": team_id}
-        )
+        kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
         return self.api_call("usergroups.enable", params=kwargs)
 
     def usergroups_list(

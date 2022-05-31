@@ -82,9 +82,7 @@ class LegacyBaseClient:
         self.session = session
         self.headers = headers or {}
         """`dict` representing additional request headers to attach to all requests."""
-        self.headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.default_params = {}
         if team_id is not None:
             self.default_params["team_id"] = team_id
@@ -185,9 +183,7 @@ class LegacyBaseClient:
     # aiohttp based async WebClient
     # =================================================================
 
-    async def _send(
-        self, http_verb: str, api_url: str, req_args: dict
-    ) -> SlackResponse:
+    async def _send(self, http_verb: str, api_url: str, req_args: dict) -> SlackResponse:
         """Sends the request out for transmission.
         Args:
             http_verb (str): The HTTP verb. e.g. 'GET' or 'POST'.
@@ -209,9 +205,7 @@ class LegacyBaseClient:
                 # True/False -> "1"/"0"
                 req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
-            res = await self._request(
-                http_verb=http_verb, api_url=api_url, req_args=req_args
-            )
+            res = await self._request(http_verb=http_verb, api_url=api_url, req_args=req_args)
         finally:
             for f in open_files:
                 f.close()
@@ -250,9 +244,7 @@ class LegacyBaseClient:
         _json = req_args["json"] if "json" in req_args else None
         headers = req_args["headers"] if "headers" in req_args else None
         token = params.get("token") if params and "token" in params else None
-        auth = (
-            req_args["auth"] if "auth" in req_args else None
-        )  # Basic Auth for oauth.v2.access / oauth.access
+        auth = req_args["auth"] if "auth" in req_args else None  # Basic Auth for oauth.v2.access / oauth.access
         if auth is not None:
             headers = {}
             if isinstance(auth, BasicAuth):
@@ -260,9 +252,7 @@ class LegacyBaseClient:
             elif isinstance(auth, str):
                 headers["Authorization"] = auth
             else:
-                self._logger.warning(
-                    f"As the auth: {auth}: {type(auth)} is unsupported, skipped"
-                )
+                self._logger.warning(f"As the auth: {auth}: {type(auth)} is unsupported, skipped")
 
         body_params = {}
         if params:
@@ -280,9 +270,7 @@ class LegacyBaseClient:
             additional_headers=headers,
         )
 
-    def _request_for_pagination(
-        self, api_url: str, req_args: Dict[str, Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         """This method is supposed to be used only for SlackResponse pagination
         You can paginate using Python's for iterator as below:
           for response in client.conversations_list(limit=100):
@@ -331,15 +319,9 @@ class LegacyBaseClient:
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):
                         return {}
-                    return {
-                        k: ("(bytes)" if isinstance(v, bytes) else v)
-                        for k, v in values.items()
-                    }
+                    return {k: ("(bytes)" if isinstance(v, bytes) else v) for k, v in values.items()}
 
-                headers = {
-                    k: "(redacted)" if k.lower() == "authorization" else v
-                    for k, v in additional_headers.items()
-                }
+                headers = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in additional_headers.items()}
                 self._logger.debug(
                     f"Sending a request - url: {url}, "
                     f"query_params: {convert_params(query_params)}, "
@@ -389,14 +371,10 @@ class LegacyBaseClient:
                 try:
                     response_body_data = json.loads(response["body"])
                 except json.decoder.JSONDecodeError:
-                    message = _build_unexpected_body_error_message(
-                        response.get("body", "")
-                    )
+                    message = _build_unexpected_body_error_message(response.get("body", ""))
                     raise err.SlackApiError(message, response)
 
-            all_params: Dict[str, Any] = (
-                copy.copy(body_params) if body_params is not None else {}
-            )
+            all_params: Dict[str, Any] = copy.copy(body_params) if body_params is not None else {}
             if query_params:
                 all_params.update(query_params)
             request_args["params"] = all_params  # for backward-compatibility
@@ -416,9 +394,7 @@ class LegacyBaseClient:
                 if not f.closed:
                     f.close()
 
-    def _perform_urllib_http_request(
-        self, *, url: str, args: Dict[str, Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def _perform_urllib_http_request(self, *, url: str, args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         """Performs an HTTP request and parses the response.
 
         Args:
@@ -448,16 +424,10 @@ class LegacyBaseClient:
                     filename = "Uploaded file"
                     name_attr = getattr(value, "name", None)
                     if name_attr:
-                        filename = (
-                            name_attr.decode("utf-8")
-                            if isinstance(name_attr, bytes)
-                            else name_attr
-                        )
+                        filename = name_attr.decode("utf-8") if isinstance(name_attr, bytes) else name_attr
                     if "filename" in data:
                         filename = data["filename"]
-                    mimetype = (
-                        mimetypes.guess_type(filename)[0] or "application/octet-stream"
-                    )
+                    mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
                     title = (
                         f'\r\nContent-Disposition: form-data; name="{key}"; filename="{filename}"\r\n'
                         + f"Content-Type: {mimetype}\r\n"
@@ -501,18 +471,14 @@ class LegacyBaseClient:
                             HTTPSHandler(context=self.ssl),
                         )
                     else:
-                        raise SlackRequestError(
-                            f"Invalid proxy detected: {self.proxy} must be a str value"
-                        )
+                        raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
 
                 # NOTE: BAN-B310 is already checked above
                 resp: Optional[HTTPResponse] = None
                 if opener:
                     resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
                 else:
-                    resp = urlopen(  # skipcq: BAN-B310
-                        req, context=self.ssl, timeout=self.timeout
-                    )
+                    resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
                 if resp.headers.get_content_type() == "application/gzip":
                     # admin.analytics.getFile
                     body: bytes = resp.read()
@@ -528,15 +494,9 @@ class LegacyBaseClient:
             resp = {"status": e.code, "headers": response_headers}
             if e.code == 429:
                 # for compatibility with aiohttp
-                if (
-                    "retry-after" not in response_headers
-                    and "Retry-After" in response_headers
-                ):
+                if "retry-after" not in response_headers and "Retry-After" in response_headers:
                     response_headers["retry-after"] = response_headers["Retry-After"]
-                if (
-                    "Retry-After" not in response_headers
-                    and "retry-after" in response_headers
-                ):
+                if "Retry-After" not in response_headers and "retry-after" in response_headers:
                     response_headers["Retry-After"] = response_headers["retry-after"]
 
             # read the response body here
@@ -568,9 +528,7 @@ class LegacyBaseClient:
     # =================================================================
 
     @staticmethod
-    def validate_slack_signature(
-        *, signing_secret: str, data: str, timestamp: str, signature: str
-    ) -> bool:
+    def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -> bool:
         """
         Slack creates a unique string for your app and shares it with you. Verify
         requests from Slack with confidence by verifying signatures using your

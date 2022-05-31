@@ -95,13 +95,9 @@ class SCIMClient:
         self.proxy = proxy
         self.base_url = base_url
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else default_retry_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else default_retry_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -133,24 +129,18 @@ class SCIMClient:
         )
 
     def read_user(self, id: str) -> ReadUserResponse:
-        return ReadUserResponse(
-            self.api_call(http_verb="GET", path=f"Users/{quote(id)}")
-        )
+        return ReadUserResponse(self.api_call(http_verb="GET", path=f"Users/{quote(id)}"))
 
     def create_user(self, user: Union[Dict[str, Any], User]) -> UserCreateResponse:
         return UserCreateResponse(
             self.api_call(
                 http_verb="POST",
                 path="Users",
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
-    def patch_user(
-        self, id: str, partial_user: Union[Dict[str, Any], User]
-    ) -> UserPatchResponse:
+    def patch_user(self, id: str, partial_user: Union[Dict[str, Any], User]) -> UserPatchResponse:
         return UserPatchResponse(
             self.api_call(
                 http_verb="PATCH",
@@ -167,9 +157,7 @@ class SCIMClient:
             self.api_call(
                 http_verb="PUT",
                 path=f"Users/{quote(user_id)}",
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
@@ -206,24 +194,18 @@ class SCIMClient:
         )
 
     def read_group(self, id: str) -> ReadGroupResponse:
-        return ReadGroupResponse(
-            self.api_call(http_verb="GET", path=f"Groups/{quote(id)}")
-        )
+        return ReadGroupResponse(self.api_call(http_verb="GET", path=f"Groups/{quote(id)}"))
 
     def create_group(self, group: Union[Dict[str, Any], Group]) -> GroupCreateResponse:
         return GroupCreateResponse(
             self.api_call(
                 http_verb="POST",
                 path="Groups",
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
-    def patch_group(
-        self, id: str, partial_group: Union[Dict[str, Any], Group]
-    ) -> GroupPatchResponse:
+    def patch_group(self, id: str, partial_group: Union[Dict[str, Any], Group]) -> GroupPatchResponse:
         return GroupPatchResponse(
             self.api_call(
                 http_verb="PATCH",
@@ -240,9 +222,7 @@ class SCIMClient:
             self.api_call(
                 http_verb="PUT",
                 path=f"Groups/{quote(group_id)}",
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
@@ -297,13 +277,8 @@ class SCIMClient:
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            headers_for_logging = {
-                k: "(redacted)" if k.lower() == "authorization" else v
-                for k, v in headers.items()
-            }
-            self.logger.debug(
-                f"Sending a request - {http_verb} url: {url}, body: {body}, headers: {headers_for_logging}"
-            )
+            headers_for_logging = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()}
+            self.logger.debug(f"Sending a request - {http_verb} url: {url}, body: {body}, headers: {headers_for_logging}")
 
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
@@ -342,15 +317,9 @@ class SCIMClient:
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    if (
-                        "retry-after" not in resp.headers
-                        and "Retry-After" in resp.headers
-                    ):
+                    if "retry-after" not in resp.headers and "Retry-After" in resp.headers:
                         resp.headers["retry-after"] = resp.headers["Retry-After"]
-                    if (
-                        "Retry-After" not in resp.headers
-                        and "retry-after" in resp.headers
-                    ):
+                    if "Retry-After" not in resp.headers and "retry-after" in resp.headers:
                         resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
@@ -359,9 +328,7 @@ class SCIMClient:
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
                     headers={k: [v] for k, v in e.headers.items()},
-                    data=response_body.encode("utf-8")
-                    if response_body is not None
-                    else None,
+                    data=response_body.encode("utf-8") if response_body is not None else None,
                 )
                 for handler in self.retry_handlers:
                     if handler.can_retry(
@@ -387,9 +354,7 @@ class SCIMClient:
 
             except Exception as err:
                 last_error = err
-                self.logger.error(
-                    f"Failed to send a request to Slack API server: {err}"
-                )
+                self.logger.error(f"Failed to send a request to Slack API server: {err}")
 
                 # Try to find a retry handler for this error
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
@@ -410,9 +375,7 @@ class SCIMClient:
                             response=None,
                             error=err,
                         )
-                        self.logger.info(
-                            f"Going to retry the same request: {req.method} {req.full_url}"
-                        )
+                        self.logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:
@@ -433,9 +396,7 @@ class SCIMClient:
                         HTTPSHandler(context=self.ssl),
                     )
                 else:
-                    raise SlackRequestError(
-                        f"Invalid proxy detected: {self.proxy} must be a str value"
-                    )
+                    raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
@@ -444,9 +405,7 @@ class SCIMClient:
         if opener:
             http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            http_resp = urlopen(  # skipcq: BAN-B310
-                req, context=self.ssl, timeout=self.timeout
-            )
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(

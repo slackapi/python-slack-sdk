@@ -127,9 +127,7 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
     def data_source(self) -> str:
         pass
 
-    def __init__(
-        self, *, name: str, text: str, selected_option: Optional[Option] = None
-    ):
+    def __init__(self, *, name: str, text: str, selected_option: Optional[Option] = None):
         super().__init__(text=text, name=name, subtype="select")
         self.selected_option = selected_option
 
@@ -191,9 +189,7 @@ class ActionChannelSelector(AbstractActionSelector):
 class ActionConversationSelector(AbstractActionSelector):
     data_source = "conversations"
 
-    def __init__(
-        self, name: str, text: str, selected_conversation: Optional[Option] = None
-    ):
+    def __init__(self, name: str, text: str, selected_conversation: Optional[Option] = None):
         """
         Automatically populate the selector with a list of conversations they have in
         the workspace.
@@ -396,13 +392,9 @@ class Attachment(JsonObject):
 
     @EnumValidator("markdown_in", MarkdownFields)
     def markdown_in_valid(self):
-        return not self.markdown_in or all(
-            e in self.MarkdownFields for e in self.markdown_in
-        )
+        return not self.markdown_in or all(e in self.MarkdownFields for e in self.markdown_in)
 
-    @JsonValidator(
-        "color attribute must be 'good', 'warning', 'danger', or a hex color code"
-    )
+    @JsonValidator("color attribute must be 'good', 'warning', 'danger', or a hex color code")
     def color_valid(self) -> bool:
         return (
             self.color is None

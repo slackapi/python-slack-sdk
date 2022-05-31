@@ -21,6 +21,4 @@ class TestWebClient_Issue_829(unittest.TestCase):
             client.users_list(token="xoxb-error_html_response")
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
-            self.assertTrue(
-                str(e).startswith("Received a response in a non-JSON format: "), e
-            )
+            self.assertTrue(str(e).startswith("Received a response in a non-JSON format: "), e)

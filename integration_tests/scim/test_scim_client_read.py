@@ -48,9 +48,7 @@ class TestSCIMClient(unittest.TestCase):
         # error
         error_result = self.client.search_users(start_index=1, count=1, filter="foo")
         self.assertEqual(error_result.errors.code, 400)
-        self.assertEqual(
-            error_result.errors.description, "no_filters (is_aggregate_call=1)"
-        )
+        self.assertEqual(error_result.errors.description, "no_filters (is_aggregate_call=1)")
 
     def test_lookup_groups(self):
         search_result = self.client.search_groups(start_index=1, count=1)
@@ -73,6 +71,4 @@ class TestSCIMClient(unittest.TestCase):
         # error
         error_result = self.client.search_groups(start_index=1, count=-1, filter="foo")
         self.assertEqual(error_result.errors.code, 400)
-        self.assertEqual(
-            error_result.errors.description, "no_filters (is_aggregate_call=1)"
-        )
+        self.assertEqual(error_result.errors.description, "no_filters (is_aggregate_call=1)")

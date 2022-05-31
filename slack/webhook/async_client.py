@@ -66,24 +66,18 @@ class AsyncWebhookClient:
             headers=headers,
         )
 
-    async def send_dict(
-        self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None
-    ) -> WebhookResponse:
+    async def send_dict(self, body: Dict[str, any], headers: Optional[Dict[str, str]] = None) -> WebhookResponse:
         return await self._perform_http_request(
             body=_build_body(body),
             headers=_build_request_headers(self.default_headers, headers),
         )
 
-    async def _perform_http_request(
-        self, *, body: Dict[str, any], headers: Dict[str, str]
-    ) -> WebhookResponse:
+    async def _perform_http_request(self, *, body: Dict[str, any], headers: Dict[str, str]) -> WebhookResponse:
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a request - url: {self.url}, body: {body}, headers: {headers}"
-            )
+            self.logger.debug(f"Sending a request - url: {self.url}, body: {body}, headers: {headers}")
         session: Optional[ClientSession] = None
         use_running_session = self.session and not self.session.closed
         if use_running_session:
@@ -107,9 +101,7 @@ class AsyncWebhookClient:
                 try:
                     response_body = await res.text()
                 except aiohttp.ContentTypeError:
-                    self._logger.debug(
-                        f"No response data returned from the following API call: {self.url}."
-                    )
+                    self._logger.debug(f"No response data returned from the following API call: {self.url}.")
                 except json.decoder.JSONDecodeError as e:
                     message = f"Failed to parse the response body: {str(e)}"
                     raise SlackApiError(message, res)

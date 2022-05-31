@@ -10,9 +10,7 @@ from slack_sdk.oauth.installation_store.sqlite3 import SQLite3InstallationStore
 
 class TestCacheable(unittest.TestCase):
     def test_save_and_find(self):
-        sqlite3_store = SQLite3InstallationStore(
-            database="logs/cacheable.db", client_id="111.222"
-        )
+        sqlite3_store = SQLite3InstallationStore(database="logs/cacheable.db", client_id="111.222")
         sqlite3_store.init()
         store = CacheableInstallationStore(sqlite3_store)
 
@@ -39,9 +37,7 @@ class TestCacheable(unittest.TestCase):
         self.assertIsNotNone(bot)
 
         # delete and find
-        sqlite3_store = SQLite3InstallationStore(
-            database="logs/cacheable.db", client_id="111.222"
-        )
+        sqlite3_store = SQLite3InstallationStore(database="logs/cacheable.db", client_id="111.222")
         sqlite3_store.init()
         store = CacheableInstallationStore(sqlite3_store)
 
@@ -56,9 +52,7 @@ class TestCacheable(unittest.TestCase):
         self.assertIsNotNone(bot)
 
     def test_save_and_find_token_rotation(self):
-        sqlite3_store = SQLite3InstallationStore(
-            database="logs/cacheable.db", client_id="111.222"
-        )
+        sqlite3_store = SQLite3InstallationStore(database="logs/cacheable.db", client_id="111.222")
         sqlite3_store.init()
         store = CacheableInstallationStore(sqlite3_store)
 
@@ -117,24 +111,16 @@ class TestCacheable(unittest.TestCase):
         i = store.find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(i)
 
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNotNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U222"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U222")
         self.assertIsNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T222", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T222", user_id="U111")
         self.assertIsNone(i)
 
         # delete installations
         store.delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNone(i)
         i = store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNone(i)
@@ -145,9 +131,7 @@ class TestCacheable(unittest.TestCase):
 
         i = store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNone(i)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)

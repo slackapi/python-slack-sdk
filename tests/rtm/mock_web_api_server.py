@@ -13,9 +13,7 @@ class MockHandler(SimpleHTTPRequestHandler):
     logger = logging.getLogger(__name__)
 
     def is_valid_token(self):
-        return "authorization" in self.headers and str(
-            self.headers["authorization"]
-        ).startswith("Bearer xoxb-")
+        return "authorization" in self.headers and str(self.headers["authorization"]).startswith("Bearer xoxb-")
 
     def is_invalid_rtm_start(self):
         return (
@@ -53,9 +51,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
         self.send_response(HTTPStatus.OK)
         self.set_common_headers()
-        body = (
-            self.rtm_start_success if self.is_valid_token() else self.rtm_start_failure
-        )
+        body = self.rtm_start_success if self.is_valid_token() else self.rtm_start_failure
         self.wfile.write(json.dumps(body).encode("utf-8"))
         self.wfile.close()
 
@@ -67,9 +63,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
 
 class MockServerThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test

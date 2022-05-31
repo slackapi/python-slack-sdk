@@ -24,9 +24,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
-        return self.pattern_for_language.search(
-            user_agent
-        ) and self.pattern_for_package_identifier.search(user_agent)
+        return self.pattern_for_language.search(user_agent) and self.pattern_for_package_identifier.search(user_agent)
 
     def set_common_headers(self):
         self.send_header("content-type", "application/json;charset=utf-8")
@@ -51,9 +49,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                 self.send_response(429)
                 self.send_header("retry-after", 1)
                 self.set_common_headers()
-                self.wfile.write(
-                    """{"ok": false, "error": "ratelimited"}""".encode("utf-8")
-                )
+                self.wfile.write("""{"ok": false, "error": "ratelimited"}""".encode("utf-8"))
                 return
 
         try:
@@ -122,9 +118,7 @@ class MockServerProcessTarget:
 
 
 class MonitorThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self, daemon=True)
         self.handler = handler
         self.test = test
@@ -136,9 +130,7 @@ class MonitorThread(threading.Thread):
             try:
                 req = Request(f"{self.test.server_url}/received_requests.json")
                 resp = urlopen(req, timeout=1)
-                self.test.mock_received_requests = json.loads(
-                    resp.read().decode("utf-8")
-                )
+                self.test.mock_received_requests = json.loads(resp.read().decode("utf-8"))
             except Exception as e:
                 # skip logging for the initial request
                 if self.test.mock_received_requests is not None:
@@ -151,9 +143,7 @@ class MonitorThread(threading.Thread):
 
 
 class MockServerThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test

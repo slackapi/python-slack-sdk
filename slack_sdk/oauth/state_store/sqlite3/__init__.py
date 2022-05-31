@@ -33,9 +33,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute("select count(1) from oauth_states;")
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f"{row_num} oauth states are stored in {self.database}"
-                )
+                self.logger.debug(f"{row_num} oauth states are stored in {self.database}")
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -72,12 +70,8 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 state,
                 time.time() + self.expiration_seconds,
             ]
-            conn.execute(
-                "insert into oauth_states (state, expire_at) values (?, ?);", parameters
-            )
-            self.logger.debug(
-                f"issue's insertion result: {parameters} (database: {self.database})"
-            )
+            conn.execute("insert into oauth_states (state, expire_at) values (?, ?);", parameters)
+            self.logger.debug(f"issue's insertion result: {parameters} (database: {self.database})")
             conn.commit()
         return state
 
@@ -89,9 +83,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                     [state, time.time()],
                 )
                 row = cur.fetchone()
-                self.logger.debug(
-                    f"consume's query result: {row} (database: {self.database})"
-                )
+                self.logger.debug(f"consume's query result: {row} (database: {self.database})")
                 if row and len(row) > 0:
                     id = row[0]  # skipcq: PYL-W0622
                     conn.execute("delete from oauth_states where id = ?;", [id])

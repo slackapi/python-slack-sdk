@@ -26,9 +26,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
-        return self.pattern_for_language.search(
-            user_agent
-        ) and self.pattern_for_package_identifier.search(user_agent)
+        return self.pattern_for_language.search(user_agent) and self.pattern_for_package_identifier.search(user_agent)
 
     def is_valid_token(self):
         if self.path.startswith("oauth"):
@@ -68,16 +66,12 @@ class MockHandler(SimpleHTTPRequestHandler):
                         if post_body.startswith("{"):
                             request_body = json.loads(post_body)
                         else:
-                            request_body = {
-                                k: v[0] for k, v in parse_qs(post_body).items()
-                            }
+                            request_body = {k: v[0] for k, v in parse_qs(post_body).items()}
                     except UnicodeDecodeError:
                         pass
                 else:
                     if parsed_path and parsed_path.query:
-                        request_body = {
-                            k: v[0] for k, v in parse_qs(parsed_path.query).items()
-                        }
+                        request_body = {k: v[0] for k, v in parse_qs(parsed_path.query).items()}
 
                 body = {"ok": False, "error": "internal_error"}
                 if self.path == "/auth.test":
@@ -144,9 +138,7 @@ class MockServerProcessTarget:
 
 
 class MonitorThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self, daemon=True)
         self.handler = handler
         self.test = test
@@ -158,9 +150,7 @@ class MonitorThread(threading.Thread):
             try:
                 req = Request(f"{self.test.server_url}/received_requests.json")
                 resp = urlopen(req, timeout=1)
-                self.test.mock_received_requests = json.loads(
-                    resp.read().decode("utf-8")
-                )
+                self.test.mock_received_requests = json.loads(resp.read().decode("utf-8"))
             except Exception as e:
                 # skip logging for the initial request
                 if self.test.mock_received_requests is not None:
@@ -173,9 +163,7 @@ class MonitorThread(threading.Thread):
 
 
 class MockServerThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test

@@ -58,15 +58,11 @@ def oauth_callback():
                 )
                 logger.info(f"openid.connect.token response: {token_response}")
                 id_token = token_response.get("id_token")
-                claims = jwt.decode(
-                    id_token, options={"verify_signature": False}, algorithms=["RS256"]
-                )
+                claims = jwt.decode(id_token, options={"verify_signature": False}, algorithms=["RS256"])
                 logger.info(f"claims (decoded id_token): {claims}")
 
                 user_token = token_response.get("access_token")
-                user_info_response = WebClient(
-                    token=user_token
-                ).openid_connect_userInfo()
+                user_info_response = WebClient(token=user_token).openid_connect_userInfo()
                 logger.info(f"openid.connect.userInfo response: {user_info_response}")
                 return f"""
             <html>
@@ -90,18 +86,12 @@ def oauth_callback():
 
             except Exception:
                 logger.exception("Failed to perform openid.connect.token API call")
-                return redirect_page_renderer.render_failure_page(
-                    "Failed to perform openid.connect.token API call"
-                )
+                return redirect_page_renderer.render_failure_page("Failed to perform openid.connect.token API call")
         else:
-            return redirect_page_renderer.render_failure_page(
-                "The state value is already expired"
-            )
+            return redirect_page_renderer.render_failure_page("The state value is already expired")
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(
-        f"Something is wrong with the installation (error: {error})", 400
-    )
+    return make_response(f"Something is wrong with the installation (error: {error})", 400)
 
 
 if __name__ == "__main__":

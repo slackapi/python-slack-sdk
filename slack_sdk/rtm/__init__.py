@@ -204,9 +204,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
 
-        future: Future[Any] = asyncio.ensure_future(
-            self._connect_and_read(), loop=self._event_loop
-        )
+        future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
         if self.run_async:
             return future
@@ -261,9 +259,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
 
     async def _send_json(self, payload):
         if self._websocket is None or self._event_loop is None:
-            raise client_err.SlackClientNotConnectedError(
-                "Websocket connection is closed."
-            )
+            raise client_err.SlackClientNotConnectedError("Websocket connection is closed.")
         if "id" not in payload:
             payload["id"] = self._next_msg_id()
 
@@ -314,12 +310,8 @@ class RTMClient(object):  # skipcq: PYL-R0205
             msg = "The specified callback '{}' is not callable.".format(cb_name)
             raise client_err.SlackClientError(msg)
         callback_params = inspect.signature(callback).parameters.values()
-        if not any(
-            param for param in callback_params if param.kind == param.VAR_KEYWORD
-        ):
-            msg = "The callback '{}' must accept keyword arguments (**kwargs).".format(
-                cb_name
-            )
+        if not any(param for param in callback_params if param.kind == param.VAR_KEYWORD):
+            msg = "The callback '{}' must accept keyword arguments (**kwargs).".format(cb_name)
             raise client_err.SlackClientError(msg)
 
     def _next_msg_id(self):
@@ -352,9 +344,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         while not self._stopped:
             try:
                 self._connection_attempts += 1
-                async with aiohttp.ClientSession(
-                    timeout=aiohttp.ClientTimeout(total=self.timeout)
-                ) as session:
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=self.timeout)) as session:
                     self._session = session
                     url, data = await self._retrieve_websocket_info()
                     async with session.ws_connect(
@@ -369,9 +359,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                         await self._read_messages()
                         # The websocket has been disconnected, or self._stopped is True
                         if not self._stopped and not self.auto_reconnect:
-                            self._logger.warning(
-                                "Not reconnecting the Websocket because auto_reconnect is False"
-                            )
+                            self._logger.warning("Not reconnecting the Websocket because auto_reconnect is False")
                             return
                         # No need to wait exponentially here, since the connection was
                         # established OK, but timed out, or was closed remotely
@@ -381,11 +369,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                 # Not yet implemented: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 await self._dispatch_event(event="error", data=exception)
-                error_code = (
-                    exception.response.get("error", None)
-                    if hasattr(exception, "response")
-                    else None
-                )
+                error_code = exception.response.get("error", None) if hasattr(exception, "response") else None
                 if (
                     self.auto_reconnect
                     and not self._stopped
@@ -393,9 +377,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                 ):
                     await self._wait_exponentially(exception)
                     continue
-                self._logger.exception(
-                    "The Websocket encountered an error. Closing the connection..."
-                )
+                self._logger.exception("The Websocket encountered an error. Closing the connection...")
                 self._close_websocket()
                 raise
 
@@ -432,9 +414,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     await self._dispatch_event(event, data=payload)
                 except Exception as err:  # skipcq: PYL-W0703
                     data = message.data if message else message
-                    self._logger.info(
-                        f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})"
-                    )
+                    self._logger.info(f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})")
                     # Raised exceptions here happen in users' code and were just unhandled.
                     # As they're not intended for closing current WebSocket connection,
                     # this exception should not be propagated to higher level (#_connect_and_read()).
@@ -486,9 +466,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     break
 
                 if inspect.iscoroutinefunction(callback):
-                    await callback(
-                        rtm_client=self, web_client=self._web_client, data=data
-                    )
+                    await callback(rtm_client=self, web_client=self._web_client, data=data)
                 else:
                     if self.run_async is True:
                         raise client_err.SlackRequestError(
@@ -589,8 +567,6 @@ class RTMClient(object):  # skipcq: PYL-R0205
             )  # skipcq: PYL-E1102
             futures.append(future)
         self._websocket = None
-        event_f = asyncio.ensure_future(
-            self._dispatch_event(event="close"), loop=self._event_loop
-        )
+        event_f = asyncio.ensure_future(self._dispatch_event(event="close"), loop=self._event_loop)
         futures.append(event_f)
         return futures

@@ -14,9 +14,7 @@ from slack_sdk.models.blocks import Block
 from slack_sdk.models.metadata import Metadata
 
 
-def convert_bool_to_0_or_1(
-    params: Optional[Dict[str, Any]]
-) -> Optional[Dict[str, Any]]:
+def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Converts all bool values in dict to "0" or "1".
 
     Slack APIs safely accept "0"/"1" as boolean values.
@@ -205,9 +203,7 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"metadata": to_dict(metadata)})
 
 
-def _update_call_participants(
-    kwargs, users: Union[str, Sequence[Dict[str, str]]]
-) -> None:
+def _update_call_participants(kwargs, users: Union[str, Sequence[Dict[str, str]]]) -> None:
     if users is None:
         return
 
@@ -241,9 +237,7 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
     return v
 
 
-def _warn_if_text_or_attachment_fallback_is_missing(
-    endpoint: str, kwargs: Dict[str, Any]
-) -> None:
+def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
     text = kwargs.get("text")
     if text and len(text.strip()) > 0:
         # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
@@ -273,11 +267,7 @@ def _warn_if_text_or_attachment_fallback_is_missing(
         attachments is not None
         and isinstance(attachments, list)
         and not all(
-            [
-                isinstance(attachment, dict)
-                and len(attachment.get("fallback", "").strip()) > 0
-                for attachment in attachments
-            ]
+            [isinstance(attachment, dict) and len(attachment.get("fallback", "").strip()) > 0 for attachment in attachments]
         )
     ):
         # https://api.slack.com/reference/messaging/attachments
@@ -293,9 +283,7 @@ def _warn_if_text_or_attachment_fallback_is_missing(
 
 
 def _build_unexpected_body_error_message(body: str) -> str:
-    body_for_logging = "".join(
-        [line.strip() for line in body.replace("\r", "\n").split("\n")]
-    )
+    body_for_logging = "".join([line.strip() for line in body.replace("\r", "\n").split("\n")])
     if len(body_for_logging) > 100:
         body_for_logging = body_for_logging[:100] + "..."
     message = f"Received a response in a non-JSON format: {body_for_logging}"

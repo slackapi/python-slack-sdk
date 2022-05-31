@@ -54,9 +54,7 @@ def oauth_callback():
         if state_store.consume(state):
             code = request.args["code"]
             client = WebClient()  # no prepared token needed for this app
-            oauth_response = client.oauth_v2_access(
-                client_id=client_id, client_secret=client_secret, code=code
-            )
+            oauth_response = client.oauth_v2_access(client_id=client_id, client_secret=client_secret, code=code)
             logger.info(f"oauth.v2.access response: {oauth_response}")
 
             installed_enterprise = oauth_response.get("enterprise", {})
@@ -92,9 +90,7 @@ def oauth_callback():
                 incoming_webhook_url=incoming_webhook.get("url"),
                 incoming_webhook_channel=incoming_webhook.get("channel"),
                 incoming_webhook_channel_id=incoming_webhook.get("channel_id"),
-                incoming_webhook_configuration_url=incoming_webhook.get(
-                    "configuration_url"
-                ),
+                incoming_webhook_configuration_url=incoming_webhook.get("configuration_url"),
                 is_enterprise_install=is_enterprise_install,
                 token_type=oauth_response.get("token_type"),
             )
@@ -106,14 +102,10 @@ def oauth_callback():
                 enterprise_url=installation.enterprise_url,
             )
         else:
-            return redirect_page_renderer.render_failure_page(
-                "the state value is already expired"
-            )
+            return redirect_page_renderer.render_failure_page("the state value is already expired")
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(
-        f"Something is wrong with the installation (error: {error})", 400
-    )
+    return make_response(f"Something is wrong with the installation (error: {error})", 400)
 
 
 # ---------------------
@@ -182,14 +174,9 @@ def slack_app():
 
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if (
-            payload["type"] == "view_submission"
-            and payload["view"]["callback_id"] == "modal-id"
-        ):
+        if payload["type"] == "view_submission" and payload["view"]["callback_id"] == "modal-id":
             submitted_data = payload["view"]["state"]["values"]
-            print(
-                submitted_data
-            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
 
     return make_response("", 404)

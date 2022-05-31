@@ -53,14 +53,8 @@ class SCIMResponse:
         self.status_code = status_code
         self.headers = headers
         self.raw_body = raw_body
-        self.body = (
-            json.loads(raw_body)
-            if raw_body is not None and raw_body.startswith("{")
-            else None
-        )
-        self._snake_cased_body = (
-            None  # build this when it's accessed for the first time
-        )
+        self.body = json.loads(raw_body) if raw_body is not None and raw_body.startswith("{") else None
+        self._snake_cased_body = None  # build this when it's accessed for the first time
 
     def __repr__(self):
         dict_value = {}

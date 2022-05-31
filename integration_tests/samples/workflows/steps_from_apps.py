@@ -48,12 +48,8 @@ def slack_app():
                         workflow_step_execute_id=step["workflow_step_execute_id"],
                         outputs={
                             "taskName": step["inputs"]["taskName"]["value"],
-                            "taskDescription": step["inputs"]["taskDescription"][
-                                "value"
-                            ],
-                            "taskAuthorEmail": step["inputs"]["taskAuthorEmail"][
-                                "value"
-                            ],
+                            "taskDescription": step["inputs"]["taskDescription"]["value"],
+                            "taskAuthorEmail": step["inputs"]["taskAuthorEmail"]["value"],
                         },
                     )
                 except Exception as err:
@@ -130,10 +126,7 @@ def slack_app():
             )
             return make_response("", 200)
 
-        if (
-            body["type"] == "view_submission"
-            and body["view"]["callback_id"] == "copy_review_view"
-        ):
+        if body["type"] == "view_submission" and body["view"]["callback_id"] == "copy_review_view":
             state_values = body["view"]["state"]["values"]
 
             client.workflows_updateStep(
@@ -143,14 +136,10 @@ def slack_app():
                         "value": state_values["task_name_input"]["task_name"]["value"],
                     },
                     "taskDescription": {
-                        "value": state_values["task_description_input"][
-                            "task_description"
-                        ]["value"],
+                        "value": state_values["task_description_input"]["task_description"]["value"],
                     },
                     "taskAuthorEmail": {
-                        "value": state_values["task_author_input"]["task_author"][
-                            "value"
-                        ],
+                        "value": state_values["task_author_input"]["task_author"]["value"],
                     },
                 },
                 outputs=[

@@ -9,7 +9,5 @@ import os
 from slack_sdk.web import WebClient
 
 client = WebClient(token=os.environ["SLACK_API_TOKEN"])
-response = client.api_call(
-    api_method="chat.postMessage", json={"channel": "#random", "text": "Hello world!"}
-)
+response = client.api_call(api_method="chat.postMessage", json={"channel": "#random", "text": "Hello world!"})
 assert response["message"]["text"] == "Hello world!"

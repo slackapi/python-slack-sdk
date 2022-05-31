@@ -31,9 +31,7 @@ class TestWebClient(unittest.TestCase):
     def test_bytes_for_file_param_bytes(self):
         client: WebClient = WebClient(token=self.bot_token)
         bytes = BytesIO(bytearray("This is a test (bytes)", "utf-8")).getvalue()
-        upload = client.files_upload(
-            file=bytes, filename="test.txt", channels=self.channel_ids
-        )
+        upload = client.files_upload(file=bytes, filename="test.txt", channels=self.channel_ids)
         self.assertIsNotNone(upload)
         deletion = client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
@@ -42,9 +40,7 @@ class TestWebClient(unittest.TestCase):
     async def test_bytes_for_file_param_bytes_async(self):
         client: AsyncWebClient = AsyncWebClient(token=self.bot_token)
         bytes = BytesIO(bytearray("This is a test (bytes)", "utf-8")).getvalue()
-        upload = await client.files_upload(
-            file=bytes, filename="test.txt", channels=self.channel_ids
-        )
+        upload = await client.files_upload(file=bytes, filename="test.txt", channels=self.channel_ids)
         self.assertIsNotNone(upload)
         deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)

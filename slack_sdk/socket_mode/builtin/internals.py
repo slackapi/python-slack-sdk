@@ -67,9 +67,7 @@ def _establish_new_socket_connection(
         message = [f"CONNECT {server_hostname}:{server_port} HTTP/1.0"]
         if parsed_proxy.username is not None and parsed_proxy.password is not None:
             # In the case where the proxy is "http://{username}:{password}@{hostname}:{port}"
-            raw_value = (
-                f"{unquote(parsed_proxy.username)}:{unquote(parsed_proxy.password)}"
-            )
+            raw_value = f"{unquote(parsed_proxy.username)}:{unquote(parsed_proxy.password)}"
             auth = b64encode(raw_value.encode("utf-8")).decode("ascii")
             message.append(f"Proxy-Authorization: Basic {auth}")
         if proxy_headers is not None:
@@ -87,9 +85,7 @@ def _establish_new_socket_connection(
             log_message = f"Proxy connect response (session id: {session_id}):\n{text}"
             logger.debug(log_message)
         if status != 200:
-            raise Exception(
-                f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})"
-            )
+            raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
 
         sock = ssl_context.wrap_socket(
             sock,
@@ -101,9 +97,7 @@ def _establish_new_socket_connection(
 
     if server_port != 443:
         # only for library testing
-        logger.info(
-            f"Using non-ssl socket to connect ({server_hostname}:{server_port})"
-        )
+        logger.info(f"Using non-ssl socket to connect ({server_hostname}:{server_port})")
         sock = socket.create_connection((server_hostname, server_port), timeout=3)
         return sock
 
@@ -203,11 +197,7 @@ def _receive_messages(
     all_message_trace_enabled: bool = False,
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
     def receive(specific_buffer_size: Optional[int] = None):
-        size = (
-            specific_buffer_size
-            if specific_buffer_size is not None
-            else receive_buffer_size
-        )
+        size = specific_buffer_size if specific_buffer_size is not None else receive_buffer_size
         with sock_receive_lock:
             try:
                 received_bytes = sock.recv(size)
@@ -397,9 +387,7 @@ def _build_data_frame_for_sending(
     b1 = fin << 7 | rsv1 << 6 | rsv2 << 5 | rsv3 << 4 | opcode
     header: bytes = bytes([b1])
 
-    original_payload_data: bytes = (
-        payload.encode("utf-8") if isinstance(payload, str) else payload
-    )
+    original_payload_data: bytes = payload.encode("utf-8") if isinstance(payload, str) else payload
     payload_length = len(original_payload_data)
     if payload_length <= 125:
         b2 = masked << 7 | payload_length
@@ -411,8 +399,5 @@ def _build_data_frame_for_sending(
     mask_key: List[int] = random.choices(range(256), k=4)
     header += bytes(mask_key)
 
-    payload_data: bytes = bytes(
-        byte ^ mask
-        for byte, mask in zip(original_payload_data, itertools.cycle(mask_key))
-    )
+    payload_data: bytes = bytes(byte ^ mask for byte, mask in zip(original_payload_data, itertools.cycle(mask_key)))
     return header + payload_data

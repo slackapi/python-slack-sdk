@@ -52,9 +52,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             time.sleep(randint(50, 200) / 1000)
             received_messages.append(message)
 
-        def socket_mode_request_handler(
-            client: BaseSocketModeClient, request: SocketModeRequest
-        ):
+        def socket_mode_request_handler(client: BaseSocketModeClient, request: SocketModeRequest):
             self.logger.info(f"Socket Mode Request: {request}")
             time.sleep(randint(50, 200) / 1000)
             received_socket_mode_requests.append(request)
@@ -81,11 +79,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
                 client.send_message("baz")
             self.assertTrue(client.is_connected())
 
-            expected = (
-                socket_mode_envelopes
-                + [socket_mode_hello_message]
-                + ["foo", "bar", "baz"] * 10
-            )
+            expected = socket_mode_envelopes + [socket_mode_hello_message] + ["foo", "bar", "baz"] * 10
             expected.sort()
 
             count = 0
@@ -96,9 +90,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             received_messages.sort()
             self.assertEqual(received_messages, expected)
 
-            self.assertEqual(
-                len(socket_mode_envelopes), len(received_socket_mode_requests)
-            )
+            self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             client.close()
             self.server.stop()

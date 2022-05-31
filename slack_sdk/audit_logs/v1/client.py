@@ -73,13 +73,9 @@ class AuditLogsClient:
         self.proxy = proxy
         self.base_url = base_url
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else default_retry_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else default_retry_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -225,13 +221,8 @@ class AuditLogsClient:
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            headers_for_logging = {
-                k: "(redacted)" if k.lower() == "authorization" else v
-                for k, v in headers.items()
-            }
-            self.logger.debug(
-                f"Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}"
-            )
+            headers_for_logging = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()}
+            self.logger.debug(f"Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}")
 
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
@@ -270,15 +261,9 @@ class AuditLogsClient:
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    if (
-                        "retry-after" not in resp.headers
-                        and "Retry-After" in resp.headers
-                    ):
+                    if "retry-after" not in resp.headers and "Retry-After" in resp.headers:
                         resp.headers["retry-after"] = resp.headers["Retry-After"]
-                    if (
-                        "Retry-After" not in resp.headers
-                        and "retry-after" in resp.headers
-                    ):
+                    if "Retry-After" not in resp.headers and "retry-after" in resp.headers:
                         resp.headers["Retry-After"] = resp.headers["retry-after"]
                 _debug_log_response(self.logger, resp)
 
@@ -287,9 +272,7 @@ class AuditLogsClient:
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
                     headers={k: [v] for k, v in e.headers.items()},
-                    data=response_body.encode("utf-8")
-                    if response_body is not None
-                    else None,
+                    data=response_body.encode("utf-8") if response_body is not None else None,
                 )
                 for handler in self.retry_handlers:
                     if handler.can_retry(
@@ -315,9 +298,7 @@ class AuditLogsClient:
 
             except Exception as err:
                 last_error = err
-                self.logger.error(
-                    f"Failed to send a request to Slack API server: {err}"
-                )
+                self.logger.error(f"Failed to send a request to Slack API server: {err}")
 
                 # Try to find a retry handler for this error
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
@@ -338,9 +319,7 @@ class AuditLogsClient:
                             response=None,
                             error=err,
                         )
-                        self.logger.info(
-                            f"Going to retry the same request: {req.method} {req.full_url}"
-                        )
+                        self.logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:
@@ -350,9 +329,7 @@ class AuditLogsClient:
             return resp
         raise last_error
 
-    def _perform_http_request_internal(
-        self, url: str, req: Request
-    ) -> AuditLogsResponse:
+    def _perform_http_request_internal(self, url: str, req: Request) -> AuditLogsResponse:
         opener: Optional[OpenerDirector] = None
         # for security (BAN-B310)
         if url.lower().startswith("http"):
@@ -363,9 +340,7 @@ class AuditLogsClient:
                         HTTPSHandler(context=self.ssl),
                     )
                 else:
-                    raise SlackRequestError(
-                        f"Invalid proxy detected: {self.proxy} must be a str value"
-                    )
+                    raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
@@ -374,9 +349,7 @@ class AuditLogsClient:
         if opener:
             http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            http_resp = urlopen(  # skipcq: BAN-B310
-                req, context=self.ssl, timeout=self.timeout
-            )
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(

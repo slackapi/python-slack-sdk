@@ -21,13 +21,9 @@ class TestBuiltin(unittest.TestCase):
         self.assertEqual(len(messages), 3)
         self.assertEqual(messages[0], (None, b"\n"))
         self.assertEqual(messages[1][0].opcode, FrameHeader.OPCODE_PONG)
-        self.assertEqual(
-            messages[1][1], b"230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.3950982"
-        )
+        self.assertEqual(messages[1][1], b"230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.3950982")
         self.assertEqual(messages[2][0].opcode, FrameHeader.OPCODE_PONG)
-        self.assertEqual(
-            messages[2][1], b"230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.395274"
-        )
+        self.assertEqual(messages[2][1], b"230b6da2-4280-46b3-9ab0-986d4093c5a1:1610196543.395274")
 
     def test_parse_test_server_response_2(self):
         socket_data = [

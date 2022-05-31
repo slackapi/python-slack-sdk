@@ -36,9 +36,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
-            Callable[
-                ["AsyncBaseSocketModeClient", dict, Optional[str]], Awaitable[None]
-            ],
+            Callable[["AsyncBaseSocketModeClient", dict, Optional[str]], Awaitable[None]],
         ]
     ]
     socket_mode_request_listeners: List[
@@ -78,15 +76,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 5,
         trace_enabled: bool = False,
-        on_message_listeners: Optional[
-            List[Callable[[WSMessage], Awaitable[None]]]
-        ] = None,
-        on_error_listeners: Optional[
-            List[Callable[[WSMessage], Awaitable[None]]]
-        ] = None,
-        on_close_listeners: Optional[
-            List[Callable[[WSMessage], Awaitable[None]]]
-        ] = None,
+        on_message_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
+        on_error_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
+        on_close_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
     ):
         """Socket Mode client
 
@@ -149,9 +141,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session_id: str = self.build_session_id(session)
 
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"A new monitor_current_session() execution loop for {session_id} started"
-            )
+            self.logger.debug(f"A new monitor_current_session() execution loop for {session_id} started")
         try:
             logging_interval = 100
             counter_for_logging = 0
@@ -159,9 +149,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level <= logging.DEBUG:
-                        self.logger.debug(
-                            f"The monitor_current_session task for {session_id} is now cancelled"
-                        )
+                        self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
                     break
                 try:
                     if self.trace_enabled and self.logger.level <= logging.DEBUG:
@@ -189,22 +177,16 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             # The ping() method can fail for some reason.
                             # To establish a new connection even in this scenario,
                             # we ignore the exception here.
-                            self.logger.warning(
-                                f"Failed to send a ping message ({session_id}): {e}"
-                            )
+                            self.logger.warning(f"Failed to send a ping message ({session_id}): {e}")
 
                     if self.auto_reconnect_enabled:
                         should_reconnect = False
                         if session is None or session.closed:
-                            self.logger.info(
-                                f"The session ({session_id}) seems to be already closed. Reconnecting..."
-                            )
+                            self.logger.info(f"The session ({session_id}) seems to be already closed. Reconnecting...")
                             should_reconnect = True
 
                         if await self.is_ping_pong_failing():
-                            disconnected_seconds = int(
-                                time.time() - self.last_ping_pong_time
-                            )
+                            disconnected_seconds = int(time.time() - self.last_ping_pong_time)
                             self.logger.info(
                                 f"The session ({session_id}) seems to be stale. Reconnecting..."
                                 f" reason: disconnected for {disconnected_seconds}+ seconds)"
@@ -223,9 +205,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     )
         except asyncio.CancelledError:
             if self.logger.level <= logging.DEBUG:
-                self.logger.debug(
-                    f"The monitor_current_session task for {session_id} is now cancelled"
-                )
+                self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
             raise
 
     async def receive_messages(self) -> None:
@@ -235,9 +215,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session = self.current_session
         session_id = self.build_session_id(session)
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"A new receive_messages() execution loop with {session_id} started"
-            )
+            self.logger.debug(f"A new receive_messages() execution loop with {session_id} started")
         try:
             consecutive_error_count = 0
             logging_interval = 100
@@ -246,9 +224,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level <= logging.DEBUG:
-                        self.logger.debug(
-                            f"The running receive_messages task for {session_id} is now cancelled"
-                        )
+                        self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
                     break
                 try:
                     message: WSMessage = await session.receive()
@@ -258,9 +234,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             # The following logging prints every single received message
                             # except empty message data ones.
                             type = WSMsgType(message.type)
-                            message_type = (
-                                type.name if type is not None else message.type
-                            )
+                            message_type = type.name if type is not None else message.type
                             message_data = message.data
                             if isinstance(message_data, bytes):
                                 message_data = message_data.decode("utf-8")
@@ -294,9 +268,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                 await listener(message)
                         elif message.type == WSMsgType.CLOSE:
                             if self.auto_reconnect_enabled:
-                                self.logger.info(
-                                    f"Received CLOSE event from {session_id}. Reconnecting..."
-                                )
+                                self.logger.info(f"Received CLOSE event from {session_id}. Reconnecting...")
                                 await self.connect_to_new_endpoint()
                             for listener in self.on_close_listeners:
                                 await listener(message)
@@ -313,10 +285,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             if message.data is not None:
                                 str_message_data = message.data.decode("utf-8")
                                 elements = str_message_data.split(":")
-                                if (
-                                    len(elements) == 2
-                                    and elements[0] == "sdk-ping-pong"
-                                ):
+                                if len(elements) == 2 and elements[0] == "sdk-ping-pong":
                                     try:
                                         self.last_ping_pong_time = float(elements[1])
                                     except Exception as e:
@@ -330,18 +299,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
                 except Exception as e:
                     consecutive_error_count += 1
-                    self.logger.error(
-                        f"Failed to receive or enqueue a message: {type(e).__name__}, {e} ({session_id})"
-                    )
+                    self.logger.error(f"Failed to receive or enqueue a message: {type(e).__name__}, {e} ({session_id})")
                     if isinstance(e, ClientConnectionError):
                         await asyncio.sleep(self.ping_interval)
                     else:
                         await asyncio.sleep(consecutive_error_count)
         except asyncio.CancelledError:
             if self.logger.level <= logging.DEBUG:
-                self.logger.debug(
-                    f"The running receive_messages task for {session_id} is now cancelled"
-                )
+                self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
             raise
 
     async def is_ping_pong_failing(self) -> bool:
@@ -377,9 +342,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         return self.build_session_id(self.current_session)
 
     async def connect(self):
-        old_session: Optional[ClientWebSocketResponse] = (
-            None if self.current_session is None else self.current_session
-        )
+        old_session: Optional[ClientWebSocketResponse] = None if self.current_session is None else self.current_session
         if self.wss_uri is None:
             # If the underlying WSS URL does not exist,
             # acquiring a new active WSS URL from the server-side first
@@ -398,31 +361,23 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
         # The first ping from the new connection
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a ping message with the newly established connection ({session_id})..."
-            )
+            self.logger.debug(f"Sending a ping message with the newly established connection ({session_id})...")
         t = time.time()
         await self.current_session.ping(f"sdk-ping-pong:{t}")
 
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
 
-        self.current_session_monitor = asyncio.ensure_future(
-            self.monitor_current_session()
-        )
+        self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"A new monitor_current_session() executor has been recreated for {session_id}"
-            )
+            self.logger.debug(f"A new monitor_current_session() executor has been recreated for {session_id}")
 
         if self.message_receiver is not None:
             self.message_receiver.cancel()
 
         self.message_receiver = asyncio.ensure_future(self.receive_messages())
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"A new receive_messages() executor has been recreated for {session_id}"
-            )
+            self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
 
         if old_session is not None:
             await old_session.close()
@@ -433,16 +388,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         if self.current_session is not None:
             await self.current_session.close()
         session_id = await self.session_id()
-        self.logger.info(
-            f"The current session ({session_id}) has been abandoned by disconnect() method call"
-        )
+        self.logger.info(f"The current session ({session_id}) has been abandoned by disconnect() method call")
 
     async def send_message(self, message: str):
         session_id = await self.session_id()
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a message: {message} from session: {session_id}"
-            )
+            self.logger.debug(f"Sending a message: {message} from session: {session_id}")
         try:
             await self.current_session.send_str(message)
         except ConnectionError as e:
@@ -461,8 +412,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     await self.current_session.send_str(message)
                 else:
                     self.logger.warning(
-                        f"The current session ({session_id}) is no longer active. "
-                        "Failed to send a message"
+                        f"The current session ({session_id}) is no longer active. " "Failed to send a message"
                     )
                     raise e
             finally:

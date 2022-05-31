@@ -63,15 +63,11 @@ async def oauth_callback(req: Request):
                 )
                 logger.info(f"openid.connect.token response: {token_response}")
                 id_token = token_response.get("id_token")
-                claims = jwt.decode(
-                    id_token, options={"verify_signature": False}, algorithms=["RS256"]
-                )
+                claims = jwt.decode(id_token, options={"verify_signature": False}, algorithms=["RS256"])
                 logger.info(f"claims (decoded id_token): {claims}")
 
                 user_token = token_response.get("access_token")
-                user_info_response = await AsyncWebClient(
-                    token=user_token
-                ).openid_connect_userInfo()
+                user_info_response = await AsyncWebClient(token=user_token).openid_connect_userInfo()
                 logger.info(f"openid.connect.userInfo response: {user_info_response}")
                 html = f"""
             <html>
@@ -102,14 +98,10 @@ async def oauth_callback(req: Request):
 
             except Exception:
                 logger.exception("Failed to perform openid.connect.token API call")
-                return redirect_page_renderer.render_failure_page(
-                    "Failed to perform openid.connect.token API call"
-                )
+                return redirect_page_renderer.render_failure_page("Failed to perform openid.connect.token API call")
 
         else:
-            html = redirect_page_renderer.render_failure_page(
-                "The state value is already expired"
-            )
+            html = redirect_page_renderer.render_failure_page("The state value is already expired")
             return HTTPResponse(
                 status=400,
                 headers={
@@ -119,9 +111,7 @@ async def oauth_callback(req: Request):
             )
 
     error = req.args.get("error") if "error" in req.args else ""
-    return HTTPResponse(
-        status=400, body=f"Something is wrong with the installation (error: {error})"
-    )
+    return HTTPResponse(status=400, body=f"Something is wrong with the installation (error: {error})")
 
 
 if __name__ == "__main__":

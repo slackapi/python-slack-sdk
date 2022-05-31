@@ -32,9 +32,7 @@ class TestRTMClient(unittest.TestCase):
         # Reset the decorators by @RTMClient.run_on
         RTMClient._callbacks = collections.defaultdict(list)
 
-    @pytest.mark.skipif(
-        condition=is_not_specified(), reason="To avoid rate_limited errors"
-    )
+    @pytest.mark.skipif(condition=is_not_specified(), reason="To avoid rate_limited errors")
     def test_issue_605(self):
         self.text = "This message was sent to verify issue #605"
         self.called = False
@@ -60,9 +58,7 @@ class TestRTMClient(unittest.TestCase):
                 token=self.bot_token,
                 run_async=False,
             )
-            new_message = self.web_client.chat_postMessage(
-                channel=self.channel_id, text=self.text
-            )
+            new_message = self.web_client.chat_postMessage(channel=self.channel_id, text=self.text)
             self.assertFalse("error" in new_message)
 
             time.sleep(5)

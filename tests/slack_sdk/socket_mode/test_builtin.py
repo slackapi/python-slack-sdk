@@ -42,9 +42,7 @@ class TestBuiltin(unittest.TestCase):
 
     def test_init_close(self):
         on_message_listeners = [lambda message: None]
-        client = SocketModeClient(
-            app_token="xapp-A111-222-xyz", on_message_listeners=on_message_listeners
-        )
+        client = SocketModeClient(app_token="xapp-A111-222-xyz", on_message_listeners=on_message_listeners)
         try:
             self.assertIsNotNone(client)
             self.assertFalse(client.is_connected())
@@ -60,9 +58,7 @@ class TestBuiltin(unittest.TestCase):
         url = client.issue_new_wss_url()
         self.assertTrue(url.startswith("wss://"))
 
-        legacy_client = LegacyWebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888"
-        )
+        legacy_client = LegacyWebClient(token="xoxb-api_test", base_url="http://localhost:8888")
         response = legacy_client.apps_connections_open(app_token="xapp-A111-222-xyz")
         self.assertIsNotNone(response["url"])
 

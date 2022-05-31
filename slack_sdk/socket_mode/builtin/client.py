@@ -112,9 +112,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.ping_interval = ping_interval
         self.receive_buffer_size = receive_buffer_size
         if self.receive_buffer_size < 16:
-            raise SlackClientConfigurationError(
-                "Too small receive_buffer_size detected."
-            )
+            raise SlackClientConfigurationError("Too small receive_buffer_size detected.")
 
         self.wss_uri = None
         self.message_queue = Queue()
@@ -123,14 +121,10 @@ class SocketModeClient(BaseSocketModeClient):
 
         self.current_session = None
         self.current_session_state = ConnectionState()
-        self.current_session_runner = IntervalRunner(
-            self._run_current_session, 0.1
-        ).start()
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.1).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(
-            self._monitor_current_session, self.ping_interval
-        )
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.closed = False
         self.connect_operation_lock = Lock()
@@ -194,9 +188,7 @@ class SocketModeClient(BaseSocketModeClient):
             self.current_app_monitor_started = True
             self.current_app_monitor.start()
 
-        self.logger.info(
-            f"A new session has been established (session id: {self.session_id()})"
-        )
+        self.logger.info(f"A new session has been established (session id: {self.session_id()})")
 
     def disconnect(self) -> None:
         if self.current_session is not None:
@@ -204,9 +196,7 @@ class SocketModeClient(BaseSocketModeClient):
 
     def send_message(self, message: str) -> None:
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(
-                f"Sending a message (session id: {self.session_id()}, message: {message})"
-            )
+            self.logger.debug(f"Sending a message (session id: {self.session_id()}, message: {message})")
         try:
             self.current_session.send(message)
         except SlackClientNotConnectedError as e:
@@ -248,8 +238,7 @@ class SocketModeClient(BaseSocketModeClient):
 
     def _on_error(self, error: Exception):
         error_message = (
-            f"on_error invoked (session id: {self.session_id()}, "
-            f"error: {type(error).__name__}, message: {error})"
+            f"on_error invoked (session id: {self.session_id()}, " f"error: {type(error).__name__}, message: {error})"
         )
         if self.trace_enabled:
             self.logger.exception(error_message)
@@ -263,10 +252,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
         if self.auto_reconnect_enabled:
-            self.logger.info(
-                "Received CLOSE event. Reconnecting... "
-                f"(session id: {self.session_id()})"
-            )
+            self.logger.info("Received CLOSE event. Reconnecting... " f"(session id: {self.session_id()})")
             self.connect_to_new_endpoint()
         for listener in self.on_close_listeners:
             listener(code, reason)
@@ -275,21 +261,12 @@ class SocketModeClient(BaseSocketModeClient):
         if self.current_session is not None and self.current_session.is_active():
             session_id = self.session_id()
             try:
-                self.logger.info(
-                    "Starting to receive messages from a new connection"
-                    f" (session id: {session_id})"
-                )
+                self.logger.info("Starting to receive messages from a new connection" f" (session id: {session_id})")
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info(
-                    "Stopped receiving messages from a connection"
-                    f" (session id: {session_id})"
-                )
+                self.logger.info("Stopped receiving messages from a connection" f" (session id: {session_id})")
             except Exception as e:
-                error_message = (
-                    "Failed to start or stop the current session"
-                    f" (session id: {session_id}, error: {e})"
-                )
+                error_message = "Failed to start or stop the current session" f" (session id: {session_id}, error: {e})"
                 if self.trace_enabled:
                     self.logger.exception(error_message)
                 else:
@@ -300,12 +277,9 @@ class SocketModeClient(BaseSocketModeClient):
             try:
                 self.current_session.check_state()
 
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or not self.current_session.is_active()
-                ):
+                if self.auto_reconnect_enabled and (self.current_session is None or not self.current_session.is_active()):
                     self.logger.info(
-                        "The session seems to be already closed. Reconnecting... "
-                        f"(session id: {self.session_id()})"
+                        "The session seems to be already closed. Reconnecting... " f"(session id: {self.session_id()})"
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:

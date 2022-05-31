@@ -138,12 +138,7 @@ class TestWebhook(unittest.TestCase):
                     fallback="fallback_text",
                     pretext="some_pretext",
                     title_link="link in title",
-                    fields=[
-                        AttachmentField(
-                            title=f"field_{i}_title", value=f"field_{i}_value"
-                        )
-                        for i in range(5)
-                    ],
+                    fields=[AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value") for i in range(5)],
                     color="#FFFF00",
                     author_name="John Doe",
                     author_link="http://johndoeisthebest.com",
@@ -176,9 +171,7 @@ class TestWebhook(unittest.TestCase):
         self.assertTrue(resp.body.startswith("<!DOCTYPE html>"))
 
     def test_proxy_issue_714(self):
-        client = WebhookClient(
-            url="http://localhost:8888", proxy="http://invalid-host:9999"
-        )
+        client = WebhookClient(url="http://localhost:8888", proxy="http://invalid-host:9999")
         with self.assertRaises(urllib.error.URLError):
             client.send_dict({"text": "hello!"})
 

@@ -37,17 +37,13 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         present on this object
         """
 
-        def to_dict_compatible(
-            value: Union[dict, list, object, Tuple]
-        ) -> Union[dict, list, Any]:
+        def to_dict_compatible(value: Union[dict, list, object, Tuple]) -> Union[dict, list, Any]:
             if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, "to_dict", None)
                 if to_dict and callable(to_dict):  # skipcq: PYL-R1705
-                    return {
-                        k: to_dict_compatible(v) for k, v in value.to_dict().items()  # type: ignore
-                    }
+                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore
                 else:
                     return value
 
@@ -62,9 +58,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                 return value is not None
 
         return {
-            key: to_dict_compatible(getattr(self, key, None))
-            for key in sorted(self.attributes)
-            if is_not_empty(self, key)
+            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -> dict:
@@ -116,7 +110,4 @@ class JsonValidator:
 
 class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(
-            f"{attribute} attribute must be one of the following values: "
-            f"{', '.join(enum)}"
-        )
+        super().__init__(f"{attribute} attribute must be one of the following values: " f"{', '.join(enum)}")

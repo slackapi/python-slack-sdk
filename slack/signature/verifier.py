@@ -55,9 +55,7 @@ class SignatureVerifier:
             return False
         return hmac.compare_digest(calculated_signature, signature)
 
-    def generate_signature(
-        self, *, timestamp: str, body: Union[str, bytes]
-    ) -> Optional[str]:
+    def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -> Optional[str]:
         """Generates a signature"""
         if timestamp is None:
             return None

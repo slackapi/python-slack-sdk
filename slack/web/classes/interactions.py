@@ -42,9 +42,7 @@ class MessageInteractiveEvent(InteractiveEvent):
         super().__init__(event)
         self.user = IDNamePair(event["user"]["id"], event["user"]["username"])
         self.team: IDNamePair = IDNamePair(event["team"]["id"], event["team"]["domain"])
-        self.channel: IDNamePair = IDNamePair(
-            event["channel"]["id"], event["channel"]["name"]
-        )
+        self.channel: IDNamePair = IDNamePair(event["channel"]["id"], event["channel"]["name"])
         self.event_type = event["type"]
         self.message_ts = event["message"]["ts"]
         self.trigger_id = event["trigger_id"]
@@ -92,9 +90,7 @@ class DialogInteractiveEvent(InteractiveEvent):
         Args:
           requirements: List of required dialog components, by name
         """
-        if any(  # skipcq: PYL-R1705
-            self.submission.get(requirement, "") for requirement in requirements
-        ):
+        if any(self.submission.get(requirement, "") for requirement in requirements):  # skipcq: PYL-R1705
             return {}
         else:
             errors = []

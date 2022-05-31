@@ -66,9 +66,7 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             entity: str = json.dumps(installation.__dict__)
             with open(f"{team_installation_dir}/installer-{u_id}-latest", "w") as f:
                 f.write(entity)
-            with open(
-                f"{team_installation_dir}/installer-{u_id}-{history_version}", "w"
-            ) as f:
+            with open(f"{team_installation_dir}/installer-{u_id}-{history_version}", "w") as f:
                 f.write(entity)
 
         else:
@@ -129,9 +127,7 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 return Bot(**data)
         except FileNotFoundError as e:
-            message = (
-                f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
-            )
+            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.debug(message)
             return None
 
@@ -165,29 +161,21 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
             t_id = none
         installation_filepath = f"{self.base_dir}/{e_id}-{t_id}/installer-latest"
         if user_id is not None:
-            installation_filepath = (
-                f"{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-latest"
-            )
+            installation_filepath = f"{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-latest"
 
         try:
             with open(installation_filepath) as f:
                 data = json.loads(f.read())
                 return Installation(**data)
         except FileNotFoundError as e:
-            message = (
-                f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
-            )
+            message = f"Installation data missing for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.debug(message)
             return None
 
-    async def async_delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         none = "none"
         e_id = enterprise_id or none
         t_id = team_id or none
@@ -201,9 +189,7 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
         team_id: Optional[str],
         user_id: Optional[str] = None,
     ) -> None:
-        return self.delete_installation(
-            enterprise_id=enterprise_id, team_id=team_id, user_id=user_id
-        )
+        return self.delete_installation(enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
 
     def delete_installation(
         self,

@@ -52,9 +52,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
         time.sleep(2)  # wait for the server
 
         try:
-            buffer_size_list = [1024, 9000, 35, 49] + list(
-                [randint(16, 128) for _ in range(10)]
-            )
+            buffer_size_list = [1024, 9000, 35, 49] + list([randint(16, 128) for _ in range(10)])
             for buffer_size in buffer_size_list:
                 self.reset_sever_state()
 
@@ -66,9 +64,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
                     time.sleep(randint(50, 200) / 1000)
                     received_messages.append(message)
 
-                def socket_mode_request_handler(
-                    client: BaseSocketModeClient, request: SocketModeRequest
-                ):
+                def socket_mode_request_handler(client: BaseSocketModeClient, request: SocketModeRequest):
                     self.logger.info(f"Socket Mode Request: {request}")
                     time.sleep(randint(50, 200) / 1000)
                     received_socket_mode_requests.append(request)
@@ -83,9 +79,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
                     trace_enabled=True,
                 )
                 try:
-                    client.socket_mode_request_listeners.append(
-                        socket_mode_request_handler
-                    )
+                    client.socket_mode_request_listeners.append(socket_mode_request_handler)
                     client.wss_uri = "ws://0.0.0.0:3011/link"
                     client.connect()
                     self.assertTrue(client.is_connected())
@@ -98,28 +92,20 @@ class TestInteractionsBuiltin(unittest.TestCase):
                         client.send_message("baz")
                     self.assertTrue(client.is_connected())
 
-                    expected = (
-                        socket_mode_envelopes
-                        + [socket_mode_hello_message]
-                        + ["foo", "bar", "baz"] * repeat
-                    )
+                    expected = socket_mode_envelopes + [socket_mode_hello_message] + ["foo", "bar", "baz"] * repeat
                     expected.sort()
 
                     count = 0
                     while count < 5 and len(received_messages) < len(expected):
                         time.sleep(0.1)
-                        self.logger.debug(
-                            f"Received messages: {len(received_messages)}"
-                        )
+                        self.logger.debug(f"Received messages: {len(received_messages)}")
                         count += 0.1
 
                     received_messages.sort()
                     self.assertEqual(len(received_messages), len(expected))
                     self.assertEqual(received_messages, expected)
 
-                    self.assertEqual(
-                        len(socket_mode_envelopes), len(received_socket_mode_requests)
-                    )
+                    self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
                 finally:
                     pass
                     # client.close()

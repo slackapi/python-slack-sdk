@@ -18,33 +18,17 @@ class OAuthStateUtils:
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -> str:
-        return (
-            f"{self.cookie_name}={state}; "
-            "Secure; "
-            "HttpOnly; "
-            "Path=/; "
-            f"Max-Age={self.expiration_seconds}"
-        )
+        return f"{self.cookie_name}={state}; " "Secure; " "HttpOnly; " "Path=/; " f"Max-Age={self.expiration_seconds}"
 
     def build_set_cookie_for_deletion(self) -> str:
-        return (
-            f"{self.cookie_name}=deleted; "
-            "Secure; "
-            "HttpOnly; "
-            "Path=/; "
-            "Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-        )
+        return f"{self.cookie_name}=deleted; " "Secure; " "HttpOnly; " "Path=/; " "Expires=Thu, 01 Jan 1970 00:00:00 GMT"
 
     def is_valid_browser(
         self,
         state: Optional[str],
         request_headers: Dict[str, Union[str, Sequence[str]]],
     ) -> bool:
-        if (
-            state is None
-            or request_headers is None
-            or request_headers.get("cookie", None) is None
-        ):
+        if state is None or request_headers is None or request_headers.get("cookie", None) is None:
             return False
         cookies = request_headers["cookie"]
         if isinstance(cookies, str):

@@ -14,9 +14,7 @@ class TestWebClient(unittest.TestCase):
         self.client: WebClient = WebClient(token=self.org_admin_token)
 
         if not hasattr(self, "user_ids"):
-            team_admin_token = os.environ[
-                SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN
-            ]
+            team_admin_token = os.environ[SLACK_SDK_TEST_GRID_WORKSPACE_ADMIN_USER_TOKEN]
             client = WebClient(token=team_admin_token)
             users = client.users_list(exclude_archived=True, limit=50)
             self.user_ids = [
@@ -41,7 +39,5 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNone(response.get("error"))
 
     def test_resetBulk_str(self):
-        response = self.client.admin_users_session_resetBulk(
-            user_ids=",".join(self.user_ids)
-        )
+        response = self.client.admin_users_session_resetBulk(user_ids=",".join(self.user_ids))
         self.assertIsNone(response.get("error"))

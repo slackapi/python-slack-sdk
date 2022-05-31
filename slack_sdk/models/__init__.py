@@ -25,14 +25,11 @@ def extract_json(
     """
     try:
         return [  # type: ignore
-            elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem
-            for elem in item_or_items
+            elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem for elem in item_or_items
         ]
     except TypeError:  # not iterable, so try returning it as a single item
         return (  # type: ignore
-            item_or_items.to_dict(*format_args)
-            if isinstance(item_or_items, JsonObject)
-            else item_or_items
+            item_or_items.to_dict(*format_args) if isinstance(item_or_items, JsonObject) else item_or_items
         )
 
 

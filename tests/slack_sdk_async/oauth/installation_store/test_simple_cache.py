@@ -12,9 +12,7 @@ from tests.helpers import async_test
 class TestCacheable(unittest.TestCase):
     @async_test
     async def test_save_and_find(self):
-        sqlite3_store = SQLite3InstallationStore(
-            database="logs/cacheable.db", client_id="111.222"
-        )
+        sqlite3_store = SQLite3InstallationStore(database="logs/cacheable.db", client_id="111.222")
         sqlite3_store.init()
         store = AsyncCacheableInstallationStore(sqlite3_store)
 
@@ -42,9 +40,7 @@ class TestCacheable(unittest.TestCase):
 
     @async_test
     async def test_save_and_find_token_rotation(self):
-        sqlite3_store = SQLite3InstallationStore(
-            database="logs/cacheable.db", client_id="111.222"
-        )
+        sqlite3_store = SQLite3InstallationStore(database="logs/cacheable.db", client_id="111.222")
         sqlite3_store.init()
         store = AsyncCacheableInstallationStore(sqlite3_store)
 

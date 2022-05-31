@@ -120,12 +120,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
         logger: Logger = logging.getLogger(__name__),
     ):
         self.metadata = sqlalchemy.MetaData()
-        self.bots = self.build_bots_table(
-            metadata=self.metadata, table_name=bots_table_name
-        )
-        self.installations = self.build_installations_table(
-            metadata=self.metadata, table_name=installations_table_name
-        )
+        self.bots = self.build_bots_table(metadata=self.metadata, table_name=bots_table_name)
+        self.installations = self.build_installations_table(metadata=self.metadata, table_name=installations_table_name)
         self.client_id = client_id
         self._logger = logger
         self.engine = engine
@@ -161,11 +157,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
             else:
-                update_statement = (
-                    self.installations.update()
-                    .where(i_column.id == installations_row_id)
-                    .values(**i)
-                )
+                update_statement = self.installations.update().where(i_column.id == installations_row_id).values(**i)
                 conn.execute(update_statement, i)
 
         # bots
@@ -196,9 +188,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
             else:
-                update_statement = (
-                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
-                )
+                update_statement = self.bots.update().where(b_column.id == bots_row_id).values(**b)
                 conn.execute(update_statement, b)
 
     def find_bot(
@@ -266,12 +256,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 c.user_id == user_id,
             )
 
-        query = (
-            self.installations.select()
-            .where(where_clause)
-            .order_by(desc(c.installed_at))
-            .limit(1)
-        )
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
@@ -298,18 +283,14 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     incoming_webhook_url=row["incoming_webhook_url"],
                     incoming_webhook_channel=row["incoming_webhook_channel"],
                     incoming_webhook_channel_id=row["incoming_webhook_channel_id"],
-                    incoming_webhook_configuration_url=row[
-                        "incoming_webhook_configuration_url"
-                    ],
+                    incoming_webhook_configuration_url=row["incoming_webhook_configuration_url"],
                     is_enterprise_install=row["is_enterprise_install"],
                     token_type=row["token_type"],
                     installed_at=row["installed_at"],
                 )
             return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -> None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         table = self.bots
         c = table.c
         with self.engine.begin() as conn:

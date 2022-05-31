@@ -141,12 +141,7 @@ class TestAsyncWebhook(unittest.TestCase):
                     fallback="fallback_text",
                     pretext="some_pretext",
                     title_link="link in title",
-                    fields=[
-                        AttachmentField(
-                            title=f"field_{i}_title", value=f"field_{i}_value"
-                        )
-                        for i in range(5)
-                    ],
+                    fields=[AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value") for i in range(5)],
                     color="#FFFF00",
                     author_name="John Doe",
                     author_link="http://johndoeisthebest.com",
@@ -176,9 +171,7 @@ class TestAsyncWebhook(unittest.TestCase):
 
     @async_test
     async def test_proxy_issue_714(self):
-        client = AsyncWebhookClient(
-            url="http://localhost:8888", proxy="http://invalid-host:9999"
-        )
+        client = AsyncWebhookClient(url="http://localhost:8888", proxy="http://invalid-host:9999")
         with self.assertRaises(Exception):
             await client.send_dict({"text": "hello!"})
 

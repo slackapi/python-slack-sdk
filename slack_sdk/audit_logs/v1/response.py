@@ -31,8 +31,4 @@ class AuditLogsResponse:
         self.status_code = status_code
         self.headers = headers
         self.raw_body = raw_body
-        self.body = (
-            json.loads(raw_body)
-            if raw_body is not None and raw_body.startswith("{")
-            else None
-        )
+        self.body = json.loads(raw_body) if raw_body is not None and raw_body.startswith("{") else None

@@ -65,13 +65,9 @@ class Group:
         self.display_name = display_name
         self.id = id
         self.members = (
-            [a if isinstance(a, GroupMember) else GroupMember(**a) for a in members]
-            if _is_iterable(members)
-            else members
+            [a if isinstance(a, GroupMember) else GroupMember(**a) for a in members] if _is_iterable(members) else members
         )
-        self.meta = (
-            GroupMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
-        )
+        self.meta = GroupMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
         self.schemas = schemas
         self.unknown_fields = kwargs
 

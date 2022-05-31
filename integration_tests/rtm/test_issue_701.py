@@ -40,9 +40,7 @@ class TestRTMClient(unittest.TestCase):
         def send_reply(**payload):
             self.logger.debug(payload)
             web_client, data = payload["web_client"], payload["data"]
-            web_client.reactions_add(
-                channel=data["channel"], timestamp=data["ts"], name="eyes"
-            )
+            web_client.reactions_add(channel=data["channel"], timestamp=data["ts"], name="eyes")
             self.call_count += 1
 
         def connect():
@@ -84,13 +82,9 @@ class TestRTMClient(unittest.TestCase):
             time.sleep(1)
             wait_seconds += 1
 
-        self.assertEqual(
-            total_num * num_of_senders, self.call_count, "The RTM handler failed"
-        )
+        self.assertEqual(total_num * num_of_senders, self.call_count, "The RTM handler failed")
 
-    @pytest.mark.skipif(
-        condition=is_not_specified(), reason="to avoid rate_limited errors"
-    )
+    @pytest.mark.skipif(condition=is_not_specified(), reason="to avoid rate_limited errors")
     @async_test
     async def test_receiving_all_messages_async(self):
         self.rtm_client = RTMClient(token=self.bot_token, run_async=True)
@@ -102,9 +96,7 @@ class TestRTMClient(unittest.TestCase):
         async def send_reply(**payload):
             self.logger.debug(payload)
             web_client, data = payload["web_client"], payload["data"]
-            await web_client.reactions_add(
-                channel=data["channel"], timestamp=data["ts"], name="eyes"
-            )
+            await web_client.reactions_add(channel=data["channel"], timestamp=data["ts"], name="eyes")
             self.call_count += 1
 
         # intentionally not waiting here
@@ -141,6 +133,4 @@ class TestRTMClient(unittest.TestCase):
             await asyncio.sleep(1)
             wait_seconds += 1
 
-        self.assertEqual(
-            total_num * num_of_senders, self.call_count, "The RTM handler failed"
-        )
+        self.assertEqual(total_num * num_of_senders, self.call_count, "The RTM handler failed")

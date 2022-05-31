@@ -96,9 +96,7 @@ class AsyncTokenRotator:
             refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get("access_token")
             refreshed_bot.bot_refresh_token = refresh_response.get("refresh_token")
-            refreshed_bot.bot_token_expires_at = int(time()) + int(
-                refresh_response.get("expires_in")
-            )
+            refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))
             return refreshed_bot
 
         except SlackApiError as e:
@@ -136,12 +134,8 @@ class AsyncTokenRotator:
 
             refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get("access_token")
-            refreshed_installation.user_refresh_token = refresh_response.get(
-                "refresh_token"
-            )
-            refreshed_installation.user_token_expires_at = int(time()) + int(
-                refresh_response.get("expires_in")
-            )
+            refreshed_installation.user_refresh_token = refresh_response.get("refresh_token")
+            refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))
             return refreshed_installation  # type: ignore
 
         except SlackApiError as e:

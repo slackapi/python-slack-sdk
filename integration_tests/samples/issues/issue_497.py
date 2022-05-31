@@ -22,9 +22,7 @@ from slack_sdk.errors import SlackApiError
 singleton_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=False)
 
 singleton_loop = asyncio.new_event_loop()
-singleton_async_client = WebClient(
-    token=os.environ["SLACK_BOT_TOKEN"], run_async=True, loop=singleton_loop
-)
+singleton_async_client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=True, loop=singleton_loop)
 
 
 # Fixed in 2.6.0: This doesn't work
@@ -47,9 +45,7 @@ def singleton():
 def per_request():
     try:
         client = WebClient(token=os.environ["SLACK_BOT_TOKEN"], run_async=False)
-        response = client.chat_postMessage(
-            channel="#random", text="You used a new WebClient for posting this message!"
-        )
+        response = client.chat_postMessage(channel="#random", text="You used a new WebClient for posting this message!")
         return str(response)
     except SlackApiError as e:
         return make_response(str(e), 400)

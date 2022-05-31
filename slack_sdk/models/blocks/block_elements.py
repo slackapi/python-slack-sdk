@@ -57,9 +57,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
         show_unknown_key_warning(self, others)
 
     @classmethod
-    def parse(
-        cls, block_element: Union[dict, "BlockElement"]
-    ) -> Optional[Union["BlockElement", TextObject]]:
+    def parse(cls, block_element: Union[dict, "BlockElement"]) -> Optional[Union["BlockElement", TextObject]]:
         if block_element is None:  # skipcq: PYL-R1705
             return None
         elif isinstance(block_element, dict):
@@ -107,27 +105,19 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                 elif t == TimePickerElement.type:
                     return TimePickerElement(**d)
                 else:
-                    cls.logger.warning(
-                        f"Unknown element detected and skipped ({block_element})"
-                    )
+                    cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
                     return None
             else:
-                cls.logger.warning(
-                    f"Unknown element detected and skipped ({block_element})"
-                )
+                cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
                 return None
         elif isinstance(block_element, (TextObject, BlockElement)):
             return block_element
         else:
-            cls.logger.warning(
-                f"Unknown element detected and skipped ({block_element})"
-            )
+            cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
             return None
 
     @classmethod
-    def parse_all(
-        cls, block_elements: Sequence[Union[dict, "BlockElement"]]
-    ) -> List["BlockElement"]:
+    def parse_all(cls, block_elements: Sequence[Union[dict, "BlockElement"]]) -> List["BlockElement"]:
         return [cls.parse(e) for e in block_elements or []]
 
 
@@ -165,13 +155,9 @@ class InteractiveElement(BlockElement):
 
         self.action_id = action_id
 
-    @JsonValidator(
-        f"action_id attribute cannot exceed {action_id_max_length} characters"
-    )
+    @JsonValidator(f"action_id attribute cannot exceed {action_id_max_length} characters")
     def _validate_action_id_length(self) -> bool:
-        return (
-            self.action_id is None or len(self.action_id) <= self.action_id_max_length
-        )
+        return self.action_id is None or len(self.action_id) <= self.action_id_max_length
 
 
 # This is a base class
@@ -211,9 +197,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         self.confirm = ConfirmObject.parse(confirm)
         self.focus_on_load = focus_on_load
 
-    @JsonValidator(
-        f"placeholder attribute cannot exceed {placeholder_max_length} characters"
-    )
+    @JsonValidator(f"placeholder attribute cannot exceed {placeholder_max_length} characters")
     def _validate_placeholder_length(self) -> bool:
         return (
             self.placeholder is None
@@ -235,9 +219,7 @@ class ButtonElement(InteractiveElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union(
-            {"text", "url", "value", "style", "confirm", "accessibility_label"}
-        )
+        return super().attributes.union({"text", "url", "value", "style", "confirm", "accessibility_label"})
 
     def __init__(
         self,
@@ -293,11 +275,7 @@ class ButtonElement(InteractiveElement):
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_text_length(self) -> bool:
-        return (
-            self.text is None
-            or self.text.text is None
-            or len(self.text.text) <= self.text_max_length
-        )
+        return self.text is None or self.text.text is None or len(self.text.text) <= self.text_max_length
 
     @JsonValidator(f"url attribute cannot exceed {url_max_length} characters")
     def _validate_url_length(self) -> bool:
@@ -311,14 +289,9 @@ class ButtonElement(InteractiveElement):
     def _validate_style_valid(self):
         return self.style is None or self.style in ButtonStyles
 
-    @JsonValidator(
-        f"accessibility_label attribute cannot exceed {text_max_length} characters"
-    )
+    @JsonValidator(f"accessibility_label attribute cannot exceed {text_max_length} characters")
     def _validate_accessibility_label_length(self) -> bool:
-        return (
-            self.accessibility_label is None
-            or len(self.accessibility_label) <= self.text_max_length
-        )
+        return self.accessibility_label is None or len(self.accessibility_label) <= self.text_max_length
 
 
 class LinkButtonElement(ButtonElement):
@@ -472,10 +445,7 @@ class DatePickerElement(InputInteractiveElement):
     def _validate_initial_date_valid(self) -> bool:
         return (
             self.initial_date is None
-            or re.match(
-                r"\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", self.initial_date
-            )
-            is not None
+            or re.match(r"\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", self.initial_date) is not None
         )
 
 
@@ -536,11 +506,7 @@ class TimePickerElement(InputInteractiveElement):
 
     @JsonValidator("initial_time attribute must be in format 'HH:mm'")
     def _validate_initial_time_valid(self) -> bool:
-        return (
-            self.initial_time is None
-            or re.match(r"([0-1][0-9]|2[0-3]):([0-5][0-9])", self.initial_time)
-            is not None
-        )
+        return self.initial_time is None or re.match(r"([0-1][0-9]|2[0-3]):([0-5][0-9])", self.initial_time) is not None
 
 
 # -------------------------------------------------
@@ -579,9 +545,7 @@ class ImageElement(BlockElement):
         self.image_url = image_url
         self.alt_text = alt_text
 
-    @JsonValidator(
-        f"image_url attribute cannot exceed {image_url_max_length} characters"
-    )
+    @JsonValidator(f"image_url attribute cannot exceed {image_url_max_length} characters")
     def _validate_image_url_length(self) -> bool:
         return len(self.image_url) <= self.image_url_max_length
 
@@ -656,14 +620,9 @@ class StaticSelectElement(InputInteractiveElement):
     def _validate_options_length(self) -> bool:
         return self.options is None or len(self.options) <= self.options_max_length
 
-    @JsonValidator(
-        f"option_groups attribute cannot exceed {option_groups_max_length} elements"
-    )
+    @JsonValidator(f"option_groups attribute cannot exceed {option_groups_max_length} elements")
     def _validate_option_groups_length(self) -> bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) <= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) <= self.option_groups_max_length
 
     @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self) -> bool:
@@ -681,9 +640,7 @@ class StaticMultiSelectElement(InputInteractiveElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union(
-            {"options", "option_groups", "initial_options", "max_selected_items"}
-        )
+        return super().attributes.union({"options", "option_groups", "initial_options", "max_selected_items"})
 
     def __init__(
         self,
@@ -742,14 +699,9 @@ class StaticMultiSelectElement(InputInteractiveElement):
     def _validate_options_length(self) -> bool:
         return self.options is None or len(self.options) <= self.options_max_length
 
-    @JsonValidator(
-        f"option_groups attribute cannot exceed {option_groups_max_length} elements"
-    )
+    @JsonValidator(f"option_groups attribute cannot exceed {option_groups_max_length} elements")
     def _validate_option_groups_length(self) -> bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) <= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) <= self.option_groups_max_length
 
     @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self) -> bool:
@@ -822,14 +774,9 @@ class SelectElement(InputInteractiveElement):
     def _validate_options_length(self) -> bool:
         return self.options is None or len(self.options) <= self.options_max_length
 
-    @JsonValidator(
-        f"option_groups attribute cannot exceed {option_groups_max_length} elements"
-    )
+    @JsonValidator(f"option_groups attribute cannot exceed {option_groups_max_length} elements")
     def _validate_option_groups_length(self) -> bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) <= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) <= self.option_groups_max_length
 
     @JsonValidator("options and option_groups cannot both be specified")
     def _validate_options_and_option_groups_both_specified(self) -> bool:
@@ -906,9 +853,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union(
-            {"min_query_length", "initial_options", "max_selected_items"}
-        )
+        return super().attributes.union({"min_query_length", "initial_options", "max_selected_items"})
 
     def __init__(
         self,
@@ -1108,9 +1053,7 @@ class ConversationFilter(JsonObject):
             d = copy.copy(filter)
             return ConversationFilter(**d)
         else:
-            cls.logger.warning(
-                f"Unknown conversation filter object detected and skipped ({filter})"
-            )
+            cls.logger.warning(f"Unknown conversation filter object detected and skipped ({filter})")
             return None
 
 
@@ -1534,9 +1477,6 @@ class OverflowMenuElement(InteractiveElement):
         self.options = options
         self.confirm = ConfirmObject.parse(confirm)
 
-    @JsonValidator(
-        f"options attribute must have between {options_min_length} "
-        f"and {options_max_length} items"
-    )
+    @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
     def _validate_options_length(self) -> bool:
         return self.options_min_length <= len(self.options) <= self.options_max_length

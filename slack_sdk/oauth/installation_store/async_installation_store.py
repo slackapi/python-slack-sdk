@@ -89,6 +89,4 @@ class AsyncInstallationStore:
     ):
         """Deletes all installation data for the given workspace / org"""
         await self.async_delete_bot(enterprise_id=enterprise_id, team_id=team_id)
-        await self.async_delete_installation(
-            enterprise_id=enterprise_id, team_id=team_id
-        )
+        await self.async_delete_installation(enterprise_id=enterprise_id, team_id=team_id)

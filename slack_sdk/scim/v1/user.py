@@ -151,31 +151,19 @@ class User:
         self,
         *,
         active: Union[Optional[bool], DefaultArg] = NotGiven,
-        addresses: Union[
-            Optional[List[Union[UserAddress, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
+        addresses: Union[Optional[List[Union[UserAddress, Dict[str, Any]]]], DefaultArg] = NotGiven,
         display_name: Union[Optional[str], DefaultArg] = NotGiven,
-        emails: Union[
-            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
+        emails: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
         external_id: Union[Optional[str], DefaultArg] = NotGiven,
-        groups: Union[
-            Optional[List[Union[UserGroup, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
+        groups: Union[Optional[List[Union[UserGroup, Dict[str, Any]]]], DefaultArg] = NotGiven,
         id: Union[Optional[str], DefaultArg] = NotGiven,
         meta: Union[Optional[Union[UserMeta, Dict[str, Any]]], DefaultArg] = NotGiven,
         name: Union[Optional[Union[UserName, Dict[str, Any]]], DefaultArg] = NotGiven,
         nick_name: Union[Optional[str], DefaultArg] = NotGiven,
-        phone_numbers: Union[
-            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
-        photos: Union[
-            Optional[List[Union[UserPhoto, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
+        phone_numbers: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        photos: Union[Optional[List[Union[UserPhoto, Dict[str, Any]]]], DefaultArg] = NotGiven,
         profile_url: Union[Optional[str], DefaultArg] = NotGiven,
-        roles: Union[
-            Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg
-        ] = NotGiven,
+        roles: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
         schemas: Union[Optional[List[str]], DefaultArg] = NotGiven,
         timezone: Union[Optional[str], DefaultArg] = NotGiven,
         title: Union[Optional[str], DefaultArg] = NotGiven,
@@ -190,42 +178,27 @@ class User:
         )
         self.display_name = display_name
         self.emails = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]
-            if _is_iterable(emails)
-            else emails
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails] if _is_iterable(emails) else emails
         )
         self.external_id = external_id
         self.groups = (  # type: ignore
-            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]
-            if _is_iterable(groups)
-            else groups
+            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups] if _is_iterable(groups) else groups
         )
         self.id = id
-        self.meta = (  # type: ignore
-            UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
-        )
-        self.name = (  # type: ignore
-            UserName(**name) if name is not None and isinstance(name, dict) else name
-        )
+        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta  # type: ignore
+        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name  # type: ignore
         self.nick_name = nick_name
         self.phone_numbers = (  # type: ignore
-            [
-                a if isinstance(a, TypeAndValue) else TypeAndValue(**a)
-                for a in phone_numbers
-            ]
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]
             if _is_iterable(phone_numbers)
             else phone_numbers
         )
         self.photos = (  # type: ignore
-            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]
-            if _is_iterable(photos)
-            else photos
+            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos] if _is_iterable(photos) else photos
         )
         self.profile_url = profile_url
         self.roles = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]
-            if _is_iterable(roles)
-            else roles
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles] if _is_iterable(roles) else roles
         )
         self.schemas = schemas
         self.timezone = timezone

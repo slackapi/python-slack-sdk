@@ -73,12 +73,8 @@ class Bot:
         if bot_token_expires_at is not None:
             if type(bot_token_expires_at) == datetime:
                 self.bot_token_expires_at = int(bot_token_expires_at.timestamp())  # type: ignore
-            elif type(bot_token_expires_at) == str and not re.match(
-                "^\\d+$", bot_token_expires_at
-            ):
-                self.bot_token_expires_at = int(
-                    _from_iso_format_to_unix_timestamp(bot_token_expires_at)
-                )
+            elif type(bot_token_expires_at) == str and not re.match("^\\d+$", bot_token_expires_at):
+                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
             else:
                 self.bot_token_expires_at = int(bot_token_expires_at)
         elif bot_token_expires_in is not None:

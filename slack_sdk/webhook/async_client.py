@@ -76,13 +76,9 @@ class AsyncWebhookClient:
         self.session = session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers["User-Agent"] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -134,9 +130,7 @@ class AsyncWebhookClient:
             headers=headers,
         )
 
-    async def send_dict(
-        self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None
-    ) -> WebhookResponse:
+    async def send_dict(self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
 
         Args:
@@ -151,9 +145,7 @@ class AsyncWebhookClient:
             headers=_build_request_headers(self.default_headers, headers),
         )
 
-    async def _perform_http_request(
-        self, *, body: Dict[str, Any], headers: Dict[str, str]
-    ) -> WebhookResponse:
+    async def _perform_http_request(self, *, body: Dict[str, Any], headers: Dict[str, str]) -> WebhookResponse:
         str_body: str = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
@@ -194,27 +186,19 @@ class AsyncWebhookClient:
                 response_body = ""
 
                 if self.logger.level <= logging.DEBUG:
-                    self.logger.debug(
-                        f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}"
-                    )
+                    self.logger.debug(f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}")
 
                 try:
-                    async with session.request(
-                        "POST", self.url, **request_kwargs
-                    ) as res:
+                    async with session.request("POST", self.url, **request_kwargs) as res:
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode("utf-8")
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode("utf-8") if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f"No response data returned from the following API call: {self.url}"
-                            )
+                            self.logger.debug(f"No response data returned from the following API call: {self.url}")
 
                         if res.status == 429:
                             for handler in self.retry_handlers:
@@ -256,8 +240,7 @@ class AsyncWebhookClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} "
-                                    f"for POST {self.url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} " f"for POST {self.url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

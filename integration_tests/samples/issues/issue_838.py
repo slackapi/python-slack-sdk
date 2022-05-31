@@ -33,9 +33,7 @@ def slack_app():
 
     if request.headers["content-type"] == "application/json":
         body = json.loads(request_body)
-        response = app_token_client.apps_event_authorizations_list(
-            event_context=body["event_context"]
-        )
+        response = app_token_client.apps_event_authorizations_list(event_context=body["event_context"])
         print(response)
         return make_response("", 200)
 

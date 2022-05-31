@@ -69,9 +69,7 @@ class ViewTests(unittest.TestCase):
                 ),
                 SectionBlock(
                     block_id="sb-id",
-                    text=MarkdownTextObject(
-                        text="This is a mrkdwn text section block."
-                    ),
+                    text=MarkdownTextObject(text="This is a mrkdwn text section block."),
                     fields=[
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
                         MarkdownTextObject(text="*this is mrkdwn text*"),
@@ -81,31 +79,23 @@ class ViewTests(unittest.TestCase):
                 DividerBlock(),
                 SectionBlock(
                     block_id="rb-id",
-                    text=MarkdownTextObject(
-                        text="This is a section block with radio button accessory"
-                    ),
+                    text=MarkdownTextObject(text="This is a section block with radio button accessory"),
                     accessory=RadioButtonsElement(
                         initial_option=Option(
                             text=PlainTextObject(text="Option 1"),
                             value="option 1",
-                            description=PlainTextObject(
-                                text="Description for option 1"
-                            ),
+                            description=PlainTextObject(text="Description for option 1"),
                         ),
                         options=[
                             Option(
                                 text=PlainTextObject(text="Option 1"),
                                 value="option 1",
-                                description=PlainTextObject(
-                                    text="Description for option 1"
-                                ),
+                                description=PlainTextObject(text="Description for option 1"),
                             ),
                             Option(
                                 text=PlainTextObject(text="Option 2"),
                                 value="option 2",
-                                description=PlainTextObject(
-                                    text="Description for option 2"
-                                ),
+                                description=PlainTextObject(text="Description for option 2"),
                             ),
                         ],
                     ),
@@ -113,14 +103,8 @@ class ViewTests(unittest.TestCase):
             ],
             state=ViewState(
                 values={
-                    "b1": {
-                        "a1": ViewStateValue(type="plain_text_input", value="Title")
-                    },
-                    "b2": {
-                        "a2": ViewStateValue(
-                            type="plain_text_input", value="Description"
-                        )
-                    },
+                    "b1": {"a1": ViewStateValue(type="plain_text_input", value="Title")},
+                    "b2": {"a2": ViewStateValue(type="plain_text_input", value="Description")},
                 }
             ),
         )
@@ -268,14 +252,8 @@ class ViewTests(unittest.TestCase):
         }
         state = ViewState(
             values={
-                "b1": {
-                    "a1": ViewStateValue(type="datepicker", selected_date="1990-04-12")
-                },
-                "b2": {
-                    "a2": ViewStateValue(
-                        type="plain_text_input", value="This is a test"
-                    )
-                },
+                "b1": {"a1": ViewStateValue(type="datepicker", selected_date="1990-04-12")},
+                "b2": {"a2": ViewStateValue(type="plain_text_input", value="This is a test")},
                 "b3": {
                     "a3": ViewStateValue(
                         type="plain_text_input",
@@ -283,46 +261,26 @@ class ViewTests(unittest.TestCase):
                     )
                 },
                 "b4": {"a4": ViewStateValue(type="users_select", selected_user="U123")},
-                "b4-2": {
-                    "a4-2": ViewStateValue(
-                        type="multi_users_select", selected_users=["U123", "U234"]
-                    )
-                },
-                "b5": {
-                    "a5": ViewStateValue(
-                        type="conversations_select", selected_conversation="C123"
-                    )
-                },
+                "b4-2": {"a4-2": ViewStateValue(type="multi_users_select", selected_users=["U123", "U234"])},
+                "b5": {"a5": ViewStateValue(type="conversations_select", selected_conversation="C123")},
                 "b5-2": {
                     "a5-2": ViewStateValue(
                         type="multi_conversations_select",
                         selected_conversations=["C123", "C234"],
                     )
                 },
-                "b6": {
-                    "a6": ViewStateValue(
-                        type="channels_select", selected_channel="C123"
-                    )
-                },
-                "b6-2": {
-                    "a6-2": ViewStateValue(
-                        type="multi_channels_select", selected_channels=["C123", "C234"]
-                    )
-                },
+                "b6": {"a6": ViewStateValue(type="channels_select", selected_channel="C123")},
+                "b6-2": {"a6-2": ViewStateValue(type="multi_channels_select", selected_channels=["C123", "C234"])},
                 "b7": {
                     "a7": ViewStateValue(
                         type="multi_static_select",
                         selected_options=[
                             Option(
-                                text=PlainTextObject(
-                                    text="*this is plain_text text*", emoji=True
-                                ),
+                                text=PlainTextObject(text="*this is plain_text text*", emoji=True),
                                 value="value-0",
                             ),
                             Option(
-                                text=PlainTextObject(
-                                    text="*this is plain_text text*", emoji=True
-                                ),
+                                text=PlainTextObject(text="*this is plain_text text*", emoji=True),
                                 value="value-1",
                             ),
                         ],
@@ -333,15 +291,11 @@ class ViewTests(unittest.TestCase):
                         type="checkboxes",
                         selected_options=[
                             Option(
-                                text=PlainTextObject(
-                                    text="*this is plain_text text*", emoji=True
-                                ),
+                                text=PlainTextObject(text="*this is plain_text text*", emoji=True),
                                 value="value-0",
                             ),
                             Option(
-                                text=PlainTextObject(
-                                    text="*this is plain_text text*", emoji=True
-                                ),
+                                text=PlainTextObject(text="*this is plain_text text*", emoji=True),
                                 value="value-1",
                             ),
                         ],
@@ -353,9 +307,7 @@ class ViewTests(unittest.TestCase):
                         selected_option=Option(
                             text=PlainTextObject(text="Option 1", emoji=True),
                             value="option 1",
-                            description=PlainTextObject(
-                                text="Description for option 1", emoji=True
-                            ),
+                            description=PlainTextObject(text="Description for option 1", emoji=True),
                         ),
                     )
                 },
@@ -442,9 +394,7 @@ class ViewTests(unittest.TestCase):
             type="home",
             blocks=[
                 SectionBlock(
-                    text=MarkdownTextObject(
-                        text="*Here's what you can do with Project Tracker:*"
-                    ),
+                    text=MarkdownTextObject(text="*Here's what you can do with Project Tracker:*"),
                 ),
                 ActionsBlock(
                     elements=[

@@ -39,9 +39,7 @@ class TestWebClient(unittest.TestCase):
                 and u.get("is_ultra_restricted", False) is False
                 and u.get("is_email_confirmed", False) is True
             ]
-            invitations = client.conversations_invite(
-                channel=channel_id, users=user_ids
-            )
+            invitations = client.conversations_invite(channel=channel_id, users=user_ids)
             self.assertIsNone(invitations.get("error"))
         finally:
             if channel_id is not None:

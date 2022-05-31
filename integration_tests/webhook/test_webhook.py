@@ -21,9 +21,7 @@ class TestWebhook(unittest.TestCase):
     def setUp(self):
         if not hasattr(self, "channel_id"):
             token = os.environ[SLACK_SDK_TEST_BOT_TOKEN]
-            channel_name = os.environ[
-                SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME
-            ].replace("#", "")
+            channel_name = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_CHANNEL_NAME].replace("#", "")
             client = WebClient(token=token)
             self.channel_id = None
             for resp in client.conversations_list(limit=1000):
@@ -102,9 +100,7 @@ class TestWebhook(unittest.TestCase):
             blocks=[
                 SectionBlock(
                     block_id="sb-id",
-                    text=MarkdownTextObject(
-                        text="This is a mrkdwn text section block."
-                    ),
+                    text=MarkdownTextObject(text="This is a mrkdwn text section block."),
                     fields=[
                         PlainTextObject(text="*this is plain_text text*", emoji=True),
                         MarkdownTextObject(text="*this is mrkdwn text*"),
@@ -214,12 +210,7 @@ class TestWebhook(unittest.TestCase):
                     fallback="fallback_text",
                     pretext="some_pretext",
                     title_link="link in title",
-                    fields=[
-                        AttachmentField(
-                            title=f"field_{i}_title", value=f"field_{i}_value"
-                        )
-                        for i in range(5)
-                    ],
+                    fields=[AttachmentField(title=f"field_{i}_title", value=f"field_{i}_value") for i in range(5)],
                     color="#FFFF00",
                     author_name="John Doe",
                     author_link="http://johndoeisthebest.com",

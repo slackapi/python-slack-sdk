@@ -66,15 +66,10 @@ def slack_app():
                 code = e.response["error"]
                 return make_response(f"Failed to open a modal due to {code}", 200)
 
-        if (
-            payload["type"] == "view_submission"
-            and payload["view"]["callback_id"] == "modal-id"
-        ):
+        if payload["type"] == "view_submission" and payload["view"]["callback_id"] == "modal-id":
             # Handle a data submission request from the modal
             submitted_data = payload["view"]["state"]["values"]
-            print(
-                submitted_data
-            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response(
                 jsonify(
                     {

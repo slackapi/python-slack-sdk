@@ -77,9 +77,7 @@ class TestAsyncWebClient(unittest.TestCase):
     @async_test
     async def test_the_api_call_files_argument_creates_the_expected_data(self):
         self.client.token = "xoxb-users_setPhoto"
-        resp = await self.client.users_setPhoto(
-            image="tests/slack_sdk_fixture/slack_logo.png"
-        )
+        resp = await self.client.users_setPhoto(image="tests/slack_sdk_fixture/slack_logo.png")
         self.assertEqual(200, resp.status_code)
 
     @async_test
@@ -108,14 +106,10 @@ class TestAsyncWebClient(unittest.TestCase):
     @async_test
     async def test_issue_690_oauth_access_async(self):
         self.client.token = ""
-        resp = await self.client.oauth_access(
-            client_id="111.222", client_secret="secret", code="codeeeeeeeeee"
-        )
+        resp = await self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
         self.assertIsNone(resp["error"])
         with self.assertRaises(err.SlackApiError):
-            await self.client.oauth_access(
-                client_id="999.999", client_secret="secret", code="codeeeeeeeeee"
-            )
+            await self.client.oauth_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
     @async_test
     async def test_token_param_async(self):

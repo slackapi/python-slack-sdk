@@ -50,9 +50,7 @@ class Database:
             "bot_token": oauth_v2_response["access_token"],
             "bot_user_id": oauth_v2_response["bot_user_id"],
             "user_id": installer["id"],
-            "user_token": installer["access_token"]
-            if "access_token" in installer
-            else None,
+            "user_token": installer["access_token"] if "access_token" in installer else None,
         }
         logger.debug(f"all rows: {list(self.tokens.keys())}")
 
@@ -102,14 +100,10 @@ def oauth_callback():
             database.save(response)
             return "Thanks for installing this app!"
         else:
-            return make_response(
-                f"Try the installation again (the state value is already expired)", 400
-            )
+            return make_response(f"Try the installation again (the state value is already expired)", 400)
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(
-        f"Something is wrong with the installation (error: {error})", 400
-    )
+    return make_response(f"Something is wrong with the installation (error: {error})", 400)
 
 
 # ---------------------
@@ -122,9 +116,7 @@ from time import time
 import json
 
 
-def verify_slack_request(
-    signing_secret: str, request_body: str, timestamp: str, signature: str
-) -> bool:
+def verify_slack_request(signing_secret: str, request_body: str, timestamp: str, signature: str) -> bool:
     """Slack Request Verification
 
     For more information: https://github.com/slackapi/python-slack-events-api
@@ -135,18 +127,12 @@ def verify_slack_request(
 
     if hasattr(hmac, "compare_digest"):
         req = str.encode("v0:" + str(timestamp) + ":") + request_body
-        request_hash = (
-            "v0="
-            + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
-        )
+        request_hash = "v0=" + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
         return hmac.compare_digest(request_hash, signature)
     else:
         # So, we'll compare the signatures explicitly
         req = str.encode("v0:" + str(timestamp) + ":") + request_body
-        request_hash = (
-            "v0="
-            + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
-        )
+        request_hash = "v0=" + hmac.new(str.encode(signing_secret), req, hashlib.sha256).hexdigest()
 
         if len(request_hash) != len(signature):
             return False
@@ -216,14 +202,9 @@ def slack_app():
 
     elif "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if (
-            payload["type"] == "view_submission"
-            and payload["view"]["callback_id"] == "modal-id"
-        ):
+        if payload["type"] == "view_submission" and payload["view"]["callback_id"] == "modal-id":
             submitted_data = payload["view"]["state"]["values"]
-            print(
-                submitted_data
-            )  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
+            print(submitted_data)  # {'b-id': {'a-id': {'type': 'plain_text_input', 'value': 'your input'}}}
             return make_response("", 200)
 
     return make_response("", 404)

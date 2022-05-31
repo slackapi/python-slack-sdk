@@ -63,9 +63,7 @@ class TestSCIMClient(unittest.TestCase):
         await client.create_group(group)
         # The mock server does not work for PATH requests
         try:
-            await client.patch_group(
-                "S111", partial_group=Group(display_name=f"TestGroup_{now}_2")
-            )
+            await client.patch_group("S111", partial_group=Group(display_name=f"TestGroup_{now}_2"))
         except:
             pass
         group.id = "S111"

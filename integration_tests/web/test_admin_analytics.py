@@ -18,9 +18,7 @@ class TestWebClient(unittest.TestCase):
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.org_admin_token = os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
-        self.legacy_client: LegacyWebClient = LegacyWebClient(
-            token=self.org_admin_token
-        )
+        self.legacy_client: LegacyWebClient = LegacyWebClient(token=self.org_admin_token)
         self.sync_client: WebClient = WebClient(token=self.org_admin_token)
         self.async_client: WebClient = AsyncWebClient(token=self.org_admin_token)
 
@@ -46,18 +44,14 @@ class TestWebClient(unittest.TestCase):
     def test_sync_public_channel(self):
         client = self.sync_client
 
-        response = client.admin_analytics_getFile(
-            date="2020-10-20", type="public_channel"
-        )
+        response = client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
     def test_sync_public_channel_medata_only(self):
         client = self.sync_client
 
-        response = client.admin_analytics_getFile(
-            type="public_channel", metadata_only=True
-        )
+        response = client.admin_analytics_getFile(type="public_channel", metadata_only=True)
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -65,9 +59,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         client = self.async_client
 
-        response = await client.admin_analytics_getFile(
-            date="2020-10-20", type="member"
-        )
+        response = await client.admin_analytics_getFile(date="2020-10-20", type="member")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -85,9 +77,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async_public_channel(self):
         client = self.async_client
 
-        response = await client.admin_analytics_getFile(
-            date="2020-10-20", type="public_channel"
-        )
+        response = await client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -112,17 +102,13 @@ class TestWebClient(unittest.TestCase):
     def test_legacy_public_channel(self):
         client = self.legacy_client
 
-        response = client.admin_analytics_getFile(
-            date="2020-10-20", type="public_channel"
-        )
+        response = client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
     def test_legacy_public_channel_metadata_only(self):
         client = self.legacy_client
 
-        response = client.admin_analytics_getFile(
-            type="public_channel", metadata_only=True
-        )
+        response = client.admin_analytics_getFile(type="public_channel", metadata_only=True)
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)

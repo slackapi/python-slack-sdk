@@ -10,9 +10,7 @@ from tests.web.mock_web_api_server import (
 class TestWebClientFunctional(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
-        self.client = slack.WebClient(
-            token="xoxb-api_test", base_url="http://localhost:8888"
-        )
+        self.client = slack.WebClient(token="xoxb-api_test", base_url="http://localhost:8888")
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)

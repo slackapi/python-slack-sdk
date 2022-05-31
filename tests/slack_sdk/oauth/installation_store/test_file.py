@@ -49,24 +49,16 @@ class TestFile(unittest.TestCase):
         i = store.find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(i)
 
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNotNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U222"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U222")
         self.assertIsNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T222", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T222", user_id="U111")
         self.assertIsNone(i)
 
         # delete installations
         store.delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNone(i)
         i = store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(i)
@@ -81,9 +73,7 @@ class TestFile(unittest.TestCase):
 
         i = store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNone(i)
-        i = store.find_installation(
-            enterprise_id="E111", team_id="T111", user_id="U111"
-        )
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
         self.assertIsNone(i)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
@@ -105,9 +95,7 @@ class TestFile(unittest.TestCase):
         # find bots
         bot = store.find_bot(enterprise_id="EO111", team_id=None)
         self.assertIsNotNone(bot)
-        bot = store.find_bot(
-            enterprise_id="EO111", team_id="TO222", is_enterprise_install=True
-        )
+        bot = store.find_bot(enterprise_id="EO111", team_id="TO222", is_enterprise_install=True)
         self.assertIsNotNone(bot)
         bot = store.find_bot(enterprise_id="EO111", team_id="TO222")
         self.assertIsNone(bot)
@@ -126,18 +114,14 @@ class TestFile(unittest.TestCase):
         # find installations
         i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNotNone(i)
-        i = store.find_installation(
-            enterprise_id="EO111", team_id="T111", is_enterprise_install=True
-        )
+        i = store.find_installation(enterprise_id="EO111", team_id="T111", is_enterprise_install=True)
         self.assertIsNotNone(i)
         i = store.find_installation(enterprise_id="EO111", team_id="T222")
         self.assertIsNone(i)
         i = store.find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(i)
 
-        i = store.find_installation(
-            enterprise_id="EO111", team_id=None, user_id="UO111"
-        )
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
         self.assertIsNotNone(i)
         i = store.find_installation(
             enterprise_id="E111",

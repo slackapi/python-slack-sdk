@@ -58,9 +58,7 @@ class TestRTMClient(unittest.TestCase):
             time.sleep(5)
 
             text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_basic_operations)"
-            new_message = self.web_client.chat_postMessage(
-                channel=self.channel_id, text=text
-            )
+            new_message = self.web_client.chat_postMessage(channel=self.channel_id, text=text)
             self.assertFalse("error" in new_message)
 
             time.sleep(5)
@@ -86,9 +84,7 @@ class TestRTMClient(unittest.TestCase):
         await asyncio.sleep(5)
 
         text = "This message was sent by <https://slack.dev/python-slackclient/|python-slackclient>! (test_basic_operations_async)"
-        new_message = await self.async_web_client.chat_postMessage(
-            channel=self.channel_id, text=text
-        )
+        new_message = await self.async_web_client.chat_postMessage(channel=self.channel_id, text=text)
         self.assertFalse("error" in new_message)
         await asyncio.sleep(5)
         self.assertEqual(self.sent_text, text)

@@ -131,9 +131,7 @@ class SectionBlockTests(unittest.TestCase):
                 ],
                 "type": "section",
             },
-            SectionBlock(
-                text="some text", fields=[f"field{i}" for i in range(5)]
-            ).to_dict(),
+            SectionBlock(text="some text", fields=[f"field{i}" for i in range(5)]).to_dict(),
         )
 
         button = LinkButtonElement(text="Click me!", url="http://google.com")
@@ -171,9 +169,7 @@ class SectionBlockTests(unittest.TestCase):
             {"type": "section", "fields": []},
         ]
         names = list(set(data.keys()) - set("user_comments"))
-        fields = [
-            {"type": "mrkdwn", "text": f"*{name}*:\n{data[name]}"} for name in names
-        ]
+        fields = [{"type": "mrkdwn", "text": f"*{name}*:\n{data[name]}"} for name in names]
         blocks[1]["fields"] = fields
         return blocks
 
@@ -184,9 +180,7 @@ class SectionBlockTests(unittest.TestCase):
             SectionBlock(fields=[]),
         ]
         names: List[str] = list(set(data.keys()) - set("user_comments"))
-        fields = [
-            MarkdownTextObject.parse(f"*{name}*:\n{data[name]}") for name in names
-        ]
+        fields = [MarkdownTextObject.parse(f"*{name}*:\n{data[name]}") for name in names]
         blocks[1].fields = fields
         return list(b.to_dict() for b in blocks)
 
@@ -215,9 +209,7 @@ class DividerBlockTests(unittest.TestCase):
 
     def test_json(self):
         self.assertDictEqual({"type": "divider"}, DividerBlock().to_dict())
-        self.assertDictEqual(
-            {"type": "divider"}, DividerBlock(**{"type": "divider"}).to_dict()
-        )
+        self.assertDictEqual({"type": "divider"}, DividerBlock(**{"type": "divider"}).to_dict())
 
     def test_json_with_block_id(self):
         self.assertDictEqual(
@@ -257,9 +249,7 @@ class ImageBlockTests(unittest.TestCase):
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageBlock(
-                image_url="http://google.com", alt_text="not really an image"
-            ).to_dict(),
+            ImageBlock(image_url="http://google.com", alt_text="not really an image").to_dict(),
         )
 
     def test_image_url_length(self):
@@ -268,15 +258,11 @@ class ImageBlockTests(unittest.TestCase):
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(
-                image_url="http://google.com", alt_text=STRING_3001_CHARS
-            ).to_dict()
+            ImageBlock(image_url="http://google.com", alt_text=STRING_3001_CHARS).to_dict()
 
     def test_title_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(
-                image_url="http://google.com", alt_text="text", title=STRING_3001_CHARS
-            ).to_dict()
+            ImageBlock(image_url="http://google.com", alt_text="text", title=STRING_3001_CHARS).to_dict()
 
 
 # ----------------------------------------------

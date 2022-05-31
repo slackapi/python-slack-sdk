@@ -90,6 +90,4 @@ class TestTokenRotator(unittest.TestCase):
             bot_token_expires_in=43200,
         )
         with self.assertRaises(SlackTokenRotationError):
-            await token_rotator.perform_token_rotation(
-                installation=installation, minutes_before_expiration=60 * 24 * 365
-            )
+            await token_rotator.perform_token_rotation(installation=installation, minutes_before_expiration=60 * 24 * 365)

@@ -45,9 +45,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                 self.send_response(429)
                 self.send_header("retry-after", 1)
                 self.set_common_headers()
-                self.wfile.write(
-                    """{"ok":false,"error":"rate_limited"}""".encode("utf-8")
-                )
+                self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
                 self.wfile.close()
                 return
 
@@ -93,9 +91,7 @@ class MockServerProcessTarget:
 
 
 class MockServerThread(threading.Thread):
-    def __init__(
-        self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
-    ):
+    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
         threading.Thread.__init__(self)
         self.handler = handler
         self.test = test

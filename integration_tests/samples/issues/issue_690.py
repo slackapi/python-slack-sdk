@@ -25,9 +25,7 @@ def endpoint():
         client = WebClient(token="")
         client_id = os.environ["SLACK_CLIENT_ID"]
         client_secret = os.environ["SLACK_CLIENT_SECRET"]
-        response = client.oauth_v2_access(
-            client_id=client_id, client_secret=client_secret, code=code
-        )
+        response = client.oauth_v2_access(client_id=client_id, client_secret=client_secret, code=code)
         result = response.get("error", "success!")
         return str(result)
     except SlackApiError as e:

@@ -31,9 +31,7 @@ class SocketModeRequest:
             self.payload = {"text": payload}
         else:
             unexpected_payload_type = type(payload)  # type: ignore
-            raise ValueError(
-                f"Unsupported payload data type ({unexpected_payload_type})"
-            )
+            raise ValueError(f"Unsupported payload data type ({unexpected_payload_type})")
 
         self.accepts_response_payload = accepts_response_payload or False
         self.retry_attempt = retry_attempt
@@ -46,8 +44,7 @@ class SocketModeRequest:
                 type=message.get("type"),
                 envelope_id=message.get("envelope_id"),
                 payload=message.get("payload"),
-                accepts_response_payload=message.get("accepts_response_payload")
-                or False,
+                accepts_response_payload=message.get("accepts_response_payload") or False,
                 retry_attempt=message.get("retry_attempt"),
                 retry_reason=message.get("retry_reason"),
             )

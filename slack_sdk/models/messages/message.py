@@ -15,10 +15,7 @@ LOGGER = logging.getLogger(__name__)
 
 skip_warn = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
 if not skip_warn:
-    message = (
-        "This class is no longer actively maintained. "
-        "Please use a dict object for building message data instead."
-    )
+    message = "This class is no longer actively maintained. " "Please use a dict object for building message data instead."
     warnings.warn(message)
 
 
@@ -56,21 +53,14 @@ class Message(JsonObject):
         self.blocks = blocks or []
         self.markdown = markdown
 
-    @JsonValidator(
-        f"attachments attribute cannot exceed {attachments_max_length} items"
-    )
+    @JsonValidator(f"attachments attribute cannot exceed {attachments_max_length} items")
     def attachments_length(self):
-        return (
-            self.attachments is None
-            or len(self.attachments) <= self.attachments_max_length
-        )
+        return self.attachments is None or len(self.attachments) <= self.attachments_max_length
 
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if len(self.text) > 40000:
-            LOGGER.error(
-                "Messages over 40,000 characters are automatically truncated by Slack"
-            )
+            LOGGER.error("Messages over 40,000 characters are automatically truncated by Slack")
         # The following limitation used to be true in the past.
         # As of Feb 2021, having both is recommended
         # -----------------

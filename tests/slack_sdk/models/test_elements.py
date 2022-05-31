@@ -35,9 +35,7 @@ class BlockElementTests(unittest.TestCase):
     def test_eq(self):
         self.assertEqual(BlockElement(), BlockElement())
         self.assertEqual(BlockElement(type="test"), BlockElement(type="test"))
-        self.assertNotEqual(
-            BlockElement(type="test"), BlockElement(type="another test")
-        )
+        self.assertNotEqual(BlockElement(type="test"), BlockElement(type="another test"))
 
     def test_parse_timepicker(self):
         timepicker = BlockElement.parse(
@@ -84,9 +82,7 @@ class InteractiveElementTests(unittest.TestCase):
 class InteractiveElementTests(unittest.TestCase):
     def test_action_id(self):
         with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(
-                text="click me!", action_id=STRING_301_CHARS, value="clickable button"
-            ).to_dict()
+            ButtonElement(text="click me!", action_id=STRING_301_CHARS, value="clickable button").to_dict()
 
 
 class ButtonElementTests(unittest.TestCase):
@@ -137,9 +133,7 @@ class ButtonElementTests(unittest.TestCase):
                 "value": "button_123",
                 "type": "button",
             },
-            ButtonElement(
-                text="button text", action_id="some_button", value="button_123"
-            ).to_dict(),
+            ButtonElement(text="button text", action_id="some_button", value="button_123").to_dict(),
         )
 
         confirm = ConfirmObject(title="really?", text="are you sure?")
@@ -163,27 +157,19 @@ class ButtonElementTests(unittest.TestCase):
 
     def test_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(
-                text=STRING_301_CHARS, action_id="button", value="click_me"
-            ).to_dict()
+            ButtonElement(text=STRING_301_CHARS, action_id="button", value="click_me").to_dict()
 
     def test_action_id_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(
-                text="test", action_id="1234567890" * 26, value="click_me"
-            ).to_dict()
+            ButtonElement(text="test", action_id="1234567890" * 26, value="click_me").to_dict()
 
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(
-                text="Button", action_id="button", value=STRING_3001_CHARS
-            ).to_dict()
+            ButtonElement(text="Button", action_id="button", value=STRING_3001_CHARS).to_dict()
 
     def test_invalid_style(self):
         with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(
-                text="Button", action_id="button", value="button", style="invalid"
-            ).to_dict()
+            ButtonElement(text="Button", action_id="button", value="button", style="invalid").to_dict()
 
     def test_accessibility_label_length(self):
         with self.assertRaises(SlackObjectFormationError):
@@ -197,9 +183,7 @@ class ButtonElementTests(unittest.TestCase):
 
 class LinkButtonElementTests(unittest.TestCase):
     def test_json(self):
-        button = LinkButtonElement(
-            action_id="test", text="button text", url="http://google.com"
-        )
+        button = LinkButtonElement(action_id="test", text="button text", url="http://google.com")
         self.assertDictEqual(
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
@@ -251,9 +235,7 @@ class CheckboxesElementTests(unittest.TestCase):
         input = {
             "type": "checkboxes",
             "action_id": "this_is_an_action_id",
-            "initial_options": [
-                {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}}
-            ],
+            "initial_options": [{"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}}],
             "options": [
                 {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}},
                 {"value": "A2", "text": {"type": "plain_text", "text": "Checkbox 2"}},
@@ -265,9 +247,7 @@ class CheckboxesElementTests(unittest.TestCase):
         input = {
             "type": "checkboxes",
             "action_id": "this_is_an_action_id",
-            "initial_options": [
-                {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}}
-            ],
+            "initial_options": [{"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}}],
             "options": [
                 {"value": "A1", "text": {"type": "plain_text", "text": "Checkbox 1"}},
             ],
@@ -424,9 +404,7 @@ class ImageElementTests(unittest.TestCase):
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageElement(
-                image_url="http://google.com", alt_text="not really an image"
-            ).to_dict(),
+            ImageElement(image_url="http://google.com", alt_text="not really an image").to_dict(),
         )
 
     def test_image_url_length(self):
@@ -435,9 +413,7 @@ class ImageElementTests(unittest.TestCase):
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageElement(
-                image_url="http://google.com", alt_text=STRING_3001_CHARS
-            ).to_dict()
+            ImageElement(image_url="http://google.com", alt_text=STRING_3001_CHARS).to_dict()
 
 
 # -------------------------------------------------
@@ -753,9 +729,7 @@ class ExternalDataSelectElementTests(unittest.TestCase):
                 "min_query_length": 5,
                 "type": "external_select",
             },
-            ExternalDataSelectElement(
-                placeholder="selectedValue", action_id="dropdown", min_query_length=5
-            ).to_dict(),
+            ExternalDataSelectElement(placeholder="selectedValue", action_id="dropdown", min_query_length=5).to_dict(),
         )
         self.assertDictEqual(
             {

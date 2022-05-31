@@ -47,9 +47,7 @@ class ButtonTests(unittest.TestCase):
 
     def test_value_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ActionButton(
-                name="button_1", text="Click me!", value=STRING_3001_CHARS
-            ).to_dict()
+            ActionButton(name="button_1", text="Click me!", value=STRING_3001_CHARS).to_dict()
 
     def test_style_validator(self):
         b = ActionButton(name="button_1", text="Click me!", value="btn_1")
@@ -81,9 +79,7 @@ class StaticActionSelectorTests(unittest.TestCase):
 
     def test_json(self):
         self.assertDictEqual(
-            ActionStaticSelector(
-                name="select_1", text="selector_1", options=self.options
-            ).to_dict(),
+            ActionStaticSelector(name="select_1", text="selector_1", options=self.options).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
@@ -94,9 +90,7 @@ class StaticActionSelectorTests(unittest.TestCase):
         )
 
         self.assertDictEqual(
-            ActionStaticSelector(
-                name="select_1", text="selector_1", options=self.option_group
-            ).to_dict(),
+            ActionStaticSelector(name="select_1", text="selector_1", options=self.option_group).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
@@ -108,9 +102,7 @@ class StaticActionSelectorTests(unittest.TestCase):
 
     def test_options_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ActionStaticSelector(
-                name="select_1", text="selector_1", options=self.options * 34
-            ).to_dict()
+            ActionStaticSelector(name="select_1", text="selector_1", options=self.options * 34).to_dict()
 
 
 class DynamicActionSelectorTests(unittest.TestCase):
@@ -155,9 +147,7 @@ class ExternalActionSelectorTests(unittest.TestCase):
         option = Option.from_single_value("one")
 
         self.assertDictEqual(
-            ActionExternalSelector(
-                name="select_1", text="selector_1", min_query_length=3
-            ).to_dict(),
+            ActionExternalSelector(name="select_1", text="selector_1", min_query_length=3).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
@@ -168,9 +158,7 @@ class ExternalActionSelectorTests(unittest.TestCase):
         )
 
         self.assertDictEqual(
-            ActionExternalSelector(
-                name="select_1", text="selector_1", selected_option=option
-            ).to_dict(),
+            ActionExternalSelector(name="select_1", text="selector_1", selected_option=option).to_dict(),
             {
                 "name": "select_1",
                 "text": "selector_1",
