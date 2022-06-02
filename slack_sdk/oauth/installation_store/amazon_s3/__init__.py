@@ -213,7 +213,29 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f"S3 get_object response: {fetch_response}")
             body = fetch_response["Body"].read().decode("utf-8")
             data = json.loads(body)
-            return Installation(**data)
+            installation = Installation(**data)
+
+            if installation is not None and user_id is not None:
+                # Retrieve the latest bot token, just in case
+                # See also: https://github.com/slackapi/bolt-python/issues/664
+                latest_bot_installation = self.find_installation(
+                    enterprise_id=enterprise_id,
+                    team_id=team_id,
+                    is_enterprise_install=is_enterprise_install,
+                )
+                if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                    # NOTE: this logic is based on the assumption that every single installation has bot scopes
+                    # If you need to installation patterns without bot scopes in the same S3 bucket,
+                    # please fork this code and implement your own logic.
+                    installation.bot_id = latest_bot_installation.bot_id
+                    installation.bot_user_id = latest_bot_installation.bot_user_id
+                    installation.bot_token = latest_bot_installation.bot_token
+                    installation.bot_scopes = latest_bot_installation.bot_scopes
+                    installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                    installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+            return installation
+
         except Exception as e:  # skipcq: PYL-W0703
             message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)

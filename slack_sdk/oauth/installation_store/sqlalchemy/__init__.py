@@ -258,10 +258,11 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
 
+        installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result:  # type: ignore
-                return Installation(
+                installation = Installation(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
                     enterprise_name=row["enterprise_name"],
@@ -288,7 +289,28 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     token_type=row["token_type"],
                     installed_at=row["installed_at"],
                 )
-            return None
+
+        if user_id is not None and installation is not None:
+            # Retrieve the latest bot token, just in case
+            # See also: https://github.com/slackapi/bolt-python/issues/664
+            where_clause = and_(
+                c.client_id == self.client_id,
+                c.enterprise_id == enterprise_id,
+                c.team_id == team_id,
+                c.bot_token.is_not(None),  # the latest one that has a bot token
+            )
+            query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+            with self.engine.connect() as conn:
+                result: object = conn.execute(query)
+                for row in result:  # type: ignore
+                    installation.bot_token = row["bot_token"]
+                    installation.bot_id = row["bot_id"]
+                    installation.bot_user_id = row["bot_user_id"]
+                    installation.bot_scopes = row["bot_scopes"]
+                    installation.bot_refresh_token = row["bot_refresh_token"]
+                    installation.bot_token_expires_at = row["bot_token_expires_at"]
+
+        return installation
 
     def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         table = self.bots
