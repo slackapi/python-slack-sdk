@@ -40,7 +40,7 @@ $ pyenv rehash
 
 Then, you can create a new [Virtual Environment](https://docs.python.org/3/tutorial/venv.html) specific to the Python version you just installed by running:
 
-```
+```bash
 $ python -m venv env_3.9.6
 $ source env_3.9.6/bin/activate
 ```
@@ -53,10 +53,14 @@ do so after you are done working in this project. To come back to development
 work for this project again in the future, `cd` into this project directory and
 run `source env_3.9.6/bin/activate` again.
 
-The last step is to install this project's dependencies; to do so, check out [how
-we configure GitHub Actions to install dependencies for this project for use in
-our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml#L26-L30). You can also run `./scripts/run_validation.sh` to install the dependencies and run the unit tests in one command!
+The last step is to install this project's dependencies and run all unit tests; to do so, you can run
+```bash
+$ ./scripts/run_validation.sh 
+```
 
+Also check out [how
+we configure GitHub Actions to install dependencies for this project for use in
+our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml#L26-L30).
 ## Tasks
 
 ### Testing (Unit Tests)
@@ -64,11 +68,10 @@ our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/ma
 When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests by running the command. The `validate` command runs Flake8 (static code analyzer), Black (code formatter), and unit tests in the `tests` directory for you.
 
 ```bash
-python setup.py validate # run all
+$ ./scripts/run_unit_tests.sh # run all
 
 # run a single test
-python setup.py validate \
-  --test-target tests/web/test_web_client.py
+$ ./scripts/run_unit_tests.sh tests/web/test_web_client.py
 ```
 
 You can rely on GitHub Actions builds for running the tests on a variety of Python runtimes.
@@ -78,11 +81,10 @@ You can rely on GitHub Actions builds for running the tests on a variety of Pyth
 This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
 ```bash
-python setup.py integration_tests # run all
+$ ./scripts/run_integration_tests.sh # run all
 
 # run a single test
-python setup.py integration_tests \
-  --test-target integration_tests/web/test_web_client.py
+$ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 ```
 
 ### Generating Documentation
@@ -90,7 +92,17 @@ python setup.py integration_tests \
 The documentation is generated from the source and templates in the `docs-src` directory. The generated documentation
 gets committed to the repo in `docs` and also published to a GitHub Pages website.
 
-You can generate the documentation by running `./scripts/docs.sh`.
+You can generate and preview the **slack api documentation** by running
+```bash
+$ ./scripts/docs.sh
+$ open docs/index.html
+```
+
+Similarly you can generate and preview the **Package slack_sdk documentation** by running
+```bash
+$ ./scripts/generate_api_docs.sh
+$ open docs/api-docs/slack_sdk/index.html
+```
 
 ### Releasing
 
