@@ -60,17 +60,25 @@ $ ./scripts/run_validation.sh
 
 Also check out [how
 we configure GitHub Actions to install dependencies for this project for use in
-our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml#L26-L30).
+our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/v3.17.0/.github/workflows/ci-build.yml#L28-L32).
 ## Tasks
 
 ### Testing (Unit Tests)
 
-When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests by running the command. The `validate` command runs Flake8 (static code analyzer), Black (code formatter), and unit tests in the `tests` directory for you.
+When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests and formatting/linter with the below scripts.
 
+Run all the unit tests, code formatter, and code analyzer:
 ```bash
-$ ./scripts/run_unit_tests.sh # run all
+$ ./scripts/run_validation.sh 
+```
 
-# run a single test
+Run all the unit tests (no formatter nor code analyzer):
+```bash
+$ ./scripts/run_unit_tests.sh
+```
+
+Run a specific unit test:
+```bash
 $ ./scripts/run_unit_tests.sh tests/web/test_web_client.py
 ```
 
@@ -80,10 +88,13 @@ You can rely on GitHub Actions builds for running the tests on a variety of Pyth
 
 This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
+Run all integration tests:
 ```bash
-$ ./scripts/run_integration_tests.sh # run all
+$ ./scripts/run_integration_tests.sh
+```
 
-# run a single test
+Run a specific integration test:
+```bash
 $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 ```
 
@@ -92,16 +103,15 @@ $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client
 The documentation is generated from the source and templates in the `docs-src` directory. The generated documentation
 gets committed to the repo in `docs` and also published to a GitHub Pages website.
 
-You can generate and preview the **slack api documentation** by running
+You can generate and preview the **SDK document pages** by running
 ```bash
 $ ./scripts/docs.sh
 $ open docs/index.html
 ```
 
-Similarly you can generate and preview the **Package slack_sdk documentation** by running
+Similarly you can generate and preview the **API documents for `slack_sdk` package modules** by running
 ```bash
 $ ./scripts/generate_api_docs.sh
-$ open docs/api-docs/slack_sdk/index.html
 ```
 
 ### Releasing
