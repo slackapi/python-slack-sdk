@@ -489,6 +489,42 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         token_type=row[22],
                         installed_at=row[23],
                     )
+
+                    if user_id is not None:
+                        # Retrieve the latest bot token, just in case
+                        # See also: https://github.com/slackapi/bolt-python/issues/664
+                        cur = conn.execute(
+                            """
+                            select
+                                bot_token,
+                                bot_id,
+                                bot_user_id,
+                                bot_scopes,
+                                bot_refresh_token,
+                                bot_token_expires_at
+                            from
+                                slack_installations
+                            where
+                                client_id = ?
+                                and
+                                enterprise_id = ?
+                                and
+                                team_id = ?
+                                and
+                                bot_token is not null
+                            order by installed_at desc
+                            limit 1
+                            """,
+                            [self.client_id, enterprise_id or "", team_id],
+                        )
+                        row = cur.fetchone()
+                        installation.bot_token = row[0]
+                        installation.bot_id = row[1]
+                        installation.bot_user_id = row[2]
+                        installation.bot_scopes = row[3]
+                        installation.bot_refresh_token = row[4]
+                        installation.bot_token_expires_at = row[5]
+
                     return installation
                 return None
 
