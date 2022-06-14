@@ -105,9 +105,7 @@ class AsyncRetryHandler:
         error: Optional[Exception] = None,
     ) -&gt; None:
         state.next_attempt_requested = True
-        duration = self.interval_calculator.calculate_sleep_duration(
-            state.current_attempt
-        )
+        duration = self.interval_calculator.calculate_sleep_duration(state.current_attempt)
         await asyncio.sleep(duration)
         state.increment_current_attempt()
 
@@ -227,9 +225,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
     ):
         self.method = method
         self.url = url
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body_params = body_params
         self.data = data
 
@@ -238,9 +234,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         return HttpRequest(
             method=req.method,
             url=req.full_url,
-            headers={
-                k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
-            },
+            headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
             data=req.data,
         )</code></pre>
 </details>
@@ -283,9 +277,7 @@ def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
     return HttpRequest(
         method=req.method,
         url=req.full_url,
-        headers={
-            k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
-        },
+        headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
         data=req.data,
     )</code></pre>
 </details>
@@ -319,9 +311,7 @@ def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
         data: Optional[bytes] = None,
     ):
         self.status_code = int(status_code)
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body = body
         self.data = data</code></pre>
 </details>

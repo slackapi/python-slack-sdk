@@ -122,9 +122,7 @@ class Block(JsonObject):
                 return None
 
     @classmethod
-    def parse_all(
-        cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
-    ) -&gt; List[&#34;Block&#34;]:
+    def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
         return [cls.parse(b) for b in blocks or []]
 
 
@@ -270,9 +268,7 @@ class ImageBlock(Block):
         self.alt_text = alt_text
         self.title = TextObject.parse(title)
 
-    @JsonValidator(
-        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):
         return len(self.image_url) &lt;= self.image_url_max_length
 
@@ -282,11 +278,7 @@ class ImageBlock(Block):
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
     def _validate_title_length(self):
-        return (
-            self.title is None
-            or self.title.text is None
-            or len(self.title.text) &lt;= self.title_max_length
-        )
+        return self.title is None or self.title.text is None or len(self.title.text) &lt;= self.title_max_length
 
 
 class ActionsBlock(Block):
@@ -369,9 +361,7 @@ class InputBlock(Block):
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
-        )
+        return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})
 
     def __init__(
         self,
@@ -416,19 +406,11 @@ class InputBlock(Block):
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_label_length(self):
-        return (
-            self.label is None
-            or self.label.text is None
-            or len(self.label.text) &lt;= self.label_max_length
-        )
+        return self.label is None or self.label.text is None or len(self.label.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
     def _validate_hint_length(self):
-        return (
-            self.hint is None
-            or self.hint.text is None
-            or len(self.hint.text) &lt;= self.label_max_length
-        )
+        return self.hint is None or self.hint.text is None or len(self.hint.text) &lt;= self.label_max_length
 
     @JsonValidator(
         (
@@ -437,9 +419,7 @@ class InputBlock(Block):
         )
     )
     def _validate_element_type(self):
-        return self.element is None or isinstance(
-            self.element, (str, InputInteractiveElement)
-        )
+        return self.element is None or isinstance(self.element, (str, InputInteractiveElement))
 
 
 class FileBlock(Block):
@@ -744,9 +724,7 @@ to create visually rich and compellingly interactive messages.
                 return None
 
     @classmethod
-    def parse_all(
-        cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
-    ) -&gt; List[&#34;Block&#34;]:
+    def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
         return [cls.parse(b) for b in blocks or []]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -833,9 +811,7 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(
-    cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
-) -&gt; List[&#34;Block&#34;]:
+def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
     return [cls.parse(b) for b in blocks or []]</code></pre>
 </details>
 </dd>
@@ -1406,9 +1382,7 @@ If a message is updated, use a new block_id.</dd>
         self.alt_text = alt_text
         self.title = TextObject.parse(title)
 
-    @JsonValidator(
-        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):
         return len(self.image_url) &lt;= self.image_url_max_length
 
@@ -1418,11 +1392,7 @@ If a message is updated, use a new block_id.</dd>
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
     def _validate_title_length(self):
-        return (
-            self.title is None
-            or self.title.text is None
-            or len(self.title.text) &lt;= self.title_max_length
-        )</code></pre>
+        return self.title is None or self.title.text is None or len(self.title.text) &lt;= self.title_max_length</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1523,9 +1493,7 @@ Defaults to false.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
-        )
+        return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})
 
     def __init__(
         self,
@@ -1570,19 +1538,11 @@ Defaults to false.</dd>
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_label_length(self):
-        return (
-            self.label is None
-            or self.label.text is None
-            or len(self.label.text) &lt;= self.label_max_length
-        )
+        return self.label is None or self.label.text is None or len(self.label.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
     def _validate_hint_length(self):
-        return (
-            self.hint is None
-            or self.hint.text is None
-            or len(self.hint.text) &lt;= self.label_max_length
-        )
+        return self.hint is None or self.hint.text is None or len(self.hint.text) &lt;= self.label_max_length
 
     @JsonValidator(
         (
@@ -1591,9 +1551,7 @@ Defaults to false.</dd>
         )
     )
     def _validate_element_type(self):
-        return self.element is None or isinstance(
-            self.element, (str, InputInteractiveElement)
-        )</code></pre>
+        return self.element is None or isinstance(self.element, (str, InputInteractiveElement))</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1629,9 +1587,7 @@ set(iterable) -&gt; new set object</p>
 </summary>
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:
-    return super().attributes.union(
-        {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
-    )</code></pre>
+    return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})</code></pre>
 </details>
 </dd>
 </dl>

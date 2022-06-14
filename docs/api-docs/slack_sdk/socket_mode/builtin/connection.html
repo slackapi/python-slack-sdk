@@ -103,9 +103,7 @@ class Connection:
         self.receive_timeout = receive_timeout
         self.receive_buffer_size = receive_buffer_size
         if self.receive_buffer_size &lt; 16:
-            raise SlackClientConfigurationError(
-                &#34;Too small receive_buffer_size detected.&#34;
-            )
+            raise SlackClientConfigurationError(&#34;Too small receive_buffer_size detected.&#34;)
 
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
@@ -132,8 +130,7 @@ class Connection:
             port: int = parsed_url.port or (443 if parsed_url.scheme == &#34;wss&#34; else 80)
             if self.trace_enabled:
                 self.logger.debug(
-                    f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
-                    f&#34;(session id: {self.session_id})&#34;
+                    f&#34;Connecting to the address for handshake: {hostname}:{port} &#34; f&#34;(session id: {self.session_id})&#34;
                 )
             sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
                 session_id=self.session_id,
@@ -223,9 +220,7 @@ class Connection:
                     self.sock = None
                     # After this, all operations using self.sock will be skipped
 
-        self.logger.info(
-            f&#34;The connection has been closed (session id: {self.session_id})&#34;
-        )
+        self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)
 
     def is_active(self) -&gt; bool:
         return self.sock is not None
@@ -237,46 +232,33 @@ class Connection:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a ping data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a ping data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
             if self.sock is not None:
                 self.sock.send(data)
             else:
                 if self.ping_pong_trace_enabled:
-                    self.logger.debug(
-                        &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
-                    )
+                    self.logger.debug(&#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;)
 
     def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a pong data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a pong data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
             if self.sock is not None:
                 self.sock.send(data)
             else:
                 if self.ping_pong_trace_enabled:
-                    self.logger.debug(
-                        &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
-                    )
+                    self.logger.debug(&#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;)
 
     def send(self, payload: str) -&gt; None:
         if self.trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a text data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a text data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
             try:
@@ -324,10 +306,7 @@ class Connection:
                         self.disconnect()
                         return
             else:
-                self.logger.debug(
-                    &#34;This connection is already closed.&#34;
-                    f&#34; (session id: {self.session_id})&#34;
-                )
+                self.logger.debug(&#34;This connection is already closed.&#34; f&#34; (session id: {self.session_id})&#34;)
             self.consecutive_check_state_error_count = 0
         except Exception as e:
             error_message = (
@@ -351,9 +330,7 @@ class Connection:
         while not state.terminated:
             try:
                 if self.is_active():
-                    received_messages: List[
-                        Tuple[Optional[FrameHeader], bytes]
-                    ] = _receive_messages(
+                    received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
                         sock=self.sock,
                         sock_receive_lock=self.sock_receive_lock,
                         logger=self.logger,
@@ -367,9 +344,7 @@ class Connection:
                         # trace logging
 
                         if self.trace_enabled is True:
-                            opcode: str = (
-                                _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                            )
+                            opcode: str = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                             payload: str = _parse_text_payload(data, self.logger)
                             count: Optional[int] = repeated_messages.get(payload)
                             if count is None:
@@ -377,11 +352,7 @@ class Connection:
                             else:
                                 count += 1
                             repeated_messages = {payload: count}
-                            if (
-                                not self.ping_pong_trace_enabled
-                                and header is not None
-                                and header.opcode is not None
-                            ):
+                            if not self.ping_pong_trace_enabled and header is not None and header.opcode is not None:
                                 if header.opcode == FrameHeader.OPCODE_PING:
                                     ping_count += 1
                                     if ping_count % ping_pong_log_summary_size == 0:
@@ -402,10 +373,7 @@ class Connection:
                             ping_pong_to_skip = (
                                 header is not None
                                 and header.opcode is not None
-                                and (
-                                    header.opcode == FrameHeader.OPCODE_PING
-                                    or header.opcode == FrameHeader.OPCODE_PONG
-                                )
+                                and (header.opcode == FrameHeader.OPCODE_PING or header.opcode == FrameHeader.OPCODE_PONG)
                                 and not self.ping_pong_trace_enabled
                             )
                             if not ping_pong_to_skip and count &lt; 5:
@@ -435,8 +403,7 @@ class Connection:
                                         self.last_ping_pong_time = float(ping_time)
                                     except Exception as e:
                                         self.logger.debug(
-                                            &#34;Failed to parse a pong message &#34;
-                                            f&#34; (message: {str_message}, error: {e}&#34;
+                                            &#34;Failed to parse a pong message &#34; f&#34; (message: {str_message}, error: {e}&#34;
                                         )
                         elif header.opcode == FrameHeader.OPCODE_TEXT:
                             if self.on_message_listener is not None:
@@ -454,19 +421,13 @@ class Connection:
                             state.terminated = True
                         else:
                             # Just warn logging
-                            opcode = (
-                                _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                            )
+                            opcode = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                             payload: Union[bytes, str] = data
                             if header.opcode != FrameHeader.OPCODE_BINARY:
                                 try:
-                                    payload = (
-                                        data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
-                                    )
+                                    payload = data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
                                 except Exception as e:
-                                    self.logger.info(
-                                        f&#34;Failed to convert the data to text {e}&#34;
-                                    )
+                                    self.logger.info(f&#34;Failed to convert the data to text {e}&#34;)
                             message = (
                                 &#34;Received an unsupported data frame &#34;
                                 f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
@@ -480,17 +441,13 @@ class Connection:
                 # getting errno.EBADF and the socket is no longer available
                 if e.errno == 9 and state.terminated:
                     self.logger.debug(
-                        &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34;
-                        &#34;the socket is no longer available.&#34;
+                        &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34; &#34;the socket is no longer available.&#34;
                     )
                 else:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        error_message = (
-                            &#34;Got an OSError while receiving data&#34;
-                            f&#34; (session id: {self.session_id}, error: {e})&#34;
-                        )
+                        error_message = &#34;Got an OSError while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                         if self.trace_enabled:
                             self.logger.exception(error_message)
                         else:
@@ -502,8 +459,7 @@ class Connection:
                         self.disconnect()
                     except Exception as disconnection_error:
                         error_message = (
-                            &#34;Failed to disconnect&#34;
-                            f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
+                            &#34;Failed to disconnect&#34; f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                         )
                         if self.trace_enabled:
                             self.logger.exception(error_message)
@@ -515,10 +471,7 @@ class Connection:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    error_message = (
-                        &#34;Got an exception while receiving data&#34;
-                        f&#34; (session id: {self.session_id}, error: {e})&#34;
-                    )
+                    error_message = &#34;Got an exception while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                     if self.trace_enabled:
                         self.logger.exception(error_message)
                     else:
@@ -590,9 +543,7 @@ class Connection:
         self.receive_timeout = receive_timeout
         self.receive_buffer_size = receive_buffer_size
         if self.receive_buffer_size &lt; 16:
-            raise SlackClientConfigurationError(
-                &#34;Too small receive_buffer_size detected.&#34;
-            )
+            raise SlackClientConfigurationError(&#34;Too small receive_buffer_size detected.&#34;)
 
         self.session_id = str(uuid4())
         self.trace_enabled = trace_enabled
@@ -619,8 +570,7 @@ class Connection:
             port: int = parsed_url.port or (443 if parsed_url.scheme == &#34;wss&#34; else 80)
             if self.trace_enabled:
                 self.logger.debug(
-                    f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
-                    f&#34;(session id: {self.session_id})&#34;
+                    f&#34;Connecting to the address for handshake: {hostname}:{port} &#34; f&#34;(session id: {self.session_id})&#34;
                 )
             sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
                 session_id=self.session_id,
@@ -710,9 +660,7 @@ class Connection:
                     self.sock = None
                     # After this, all operations using self.sock will be skipped
 
-        self.logger.info(
-            f&#34;The connection has been closed (session id: {self.session_id})&#34;
-        )
+        self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)
 
     def is_active(self) -&gt; bool:
         return self.sock is not None
@@ -724,46 +672,33 @@ class Connection:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a ping data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a ping data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
             if self.sock is not None:
                 self.sock.send(data)
             else:
                 if self.ping_pong_trace_enabled:
-                    self.logger.debug(
-                        &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
-                    )
+                    self.logger.debug(&#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;)
 
     def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a pong data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a pong data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
             if self.sock is not None:
                 self.sock.send(data)
             else:
                 if self.ping_pong_trace_enabled:
-                    self.logger.debug(
-                        &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
-                    )
+                    self.logger.debug(&#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;)
 
     def send(self, payload: str) -&gt; None:
         if self.trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode(&#34;utf-8&#34;)
-            self.logger.debug(
-                &#34;Sending a text data frame &#34;
-                f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-            )
+            self.logger.debug(&#34;Sending a text data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
             try:
@@ -811,10 +746,7 @@ class Connection:
                         self.disconnect()
                         return
             else:
-                self.logger.debug(
-                    &#34;This connection is already closed.&#34;
-                    f&#34; (session id: {self.session_id})&#34;
-                )
+                self.logger.debug(&#34;This connection is already closed.&#34; f&#34; (session id: {self.session_id})&#34;)
             self.consecutive_check_state_error_count = 0
         except Exception as e:
             error_message = (
@@ -838,9 +770,7 @@ class Connection:
         while not state.terminated:
             try:
                 if self.is_active():
-                    received_messages: List[
-                        Tuple[Optional[FrameHeader], bytes]
-                    ] = _receive_messages(
+                    received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
                         sock=self.sock,
                         sock_receive_lock=self.sock_receive_lock,
                         logger=self.logger,
@@ -854,9 +784,7 @@ class Connection:
                         # trace logging
 
                         if self.trace_enabled is True:
-                            opcode: str = (
-                                _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                            )
+                            opcode: str = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                             payload: str = _parse_text_payload(data, self.logger)
                             count: Optional[int] = repeated_messages.get(payload)
                             if count is None:
@@ -864,11 +792,7 @@ class Connection:
                             else:
                                 count += 1
                             repeated_messages = {payload: count}
-                            if (
-                                not self.ping_pong_trace_enabled
-                                and header is not None
-                                and header.opcode is not None
-                            ):
+                            if not self.ping_pong_trace_enabled and header is not None and header.opcode is not None:
                                 if header.opcode == FrameHeader.OPCODE_PING:
                                     ping_count += 1
                                     if ping_count % ping_pong_log_summary_size == 0:
@@ -889,10 +813,7 @@ class Connection:
                             ping_pong_to_skip = (
                                 header is not None
                                 and header.opcode is not None
-                                and (
-                                    header.opcode == FrameHeader.OPCODE_PING
-                                    or header.opcode == FrameHeader.OPCODE_PONG
-                                )
+                                and (header.opcode == FrameHeader.OPCODE_PING or header.opcode == FrameHeader.OPCODE_PONG)
                                 and not self.ping_pong_trace_enabled
                             )
                             if not ping_pong_to_skip and count &lt; 5:
@@ -922,8 +843,7 @@ class Connection:
                                         self.last_ping_pong_time = float(ping_time)
                                     except Exception as e:
                                         self.logger.debug(
-                                            &#34;Failed to parse a pong message &#34;
-                                            f&#34; (message: {str_message}, error: {e}&#34;
+                                            &#34;Failed to parse a pong message &#34; f&#34; (message: {str_message}, error: {e}&#34;
                                         )
                         elif header.opcode == FrameHeader.OPCODE_TEXT:
                             if self.on_message_listener is not None:
@@ -941,19 +861,13 @@ class Connection:
                             state.terminated = True
                         else:
                             # Just warn logging
-                            opcode = (
-                                _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                            )
+                            opcode = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                             payload: Union[bytes, str] = data
                             if header.opcode != FrameHeader.OPCODE_BINARY:
                                 try:
-                                    payload = (
-                                        data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
-                                    )
+                                    payload = data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
                                 except Exception as e:
-                                    self.logger.info(
-                                        f&#34;Failed to convert the data to text {e}&#34;
-                                    )
+                                    self.logger.info(f&#34;Failed to convert the data to text {e}&#34;)
                             message = (
                                 &#34;Received an unsupported data frame &#34;
                                 f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
@@ -967,17 +881,13 @@ class Connection:
                 # getting errno.EBADF and the socket is no longer available
                 if e.errno == 9 and state.terminated:
                     self.logger.debug(
-                        &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34;
-                        &#34;the socket is no longer available.&#34;
+                        &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34; &#34;the socket is no longer available.&#34;
                     )
                 else:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        error_message = (
-                            &#34;Got an OSError while receiving data&#34;
-                            f&#34; (session id: {self.session_id}, error: {e})&#34;
-                        )
+                        error_message = &#34;Got an OSError while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                         if self.trace_enabled:
                             self.logger.exception(error_message)
                         else:
@@ -989,8 +899,7 @@ class Connection:
                         self.disconnect()
                     except Exception as disconnection_error:
                         error_message = (
-                            &#34;Failed to disconnect&#34;
-                            f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
+                            &#34;Failed to disconnect&#34; f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                         )
                         if self.trace_enabled:
                             self.logger.exception(error_message)
@@ -1002,10 +911,7 @@ class Connection:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    error_message = (
-                        &#34;Got an exception while receiving data&#34;
-                        f&#34; (session id: {self.session_id}, error: {e})&#34;
-                    )
+                    error_message = &#34;Got an exception while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                     if self.trace_enabled:
                         self.logger.exception(error_message)
                     else:
@@ -1108,10 +1014,7 @@ class Connection:
                     self.disconnect()
                     return
         else:
-            self.logger.debug(
-                &#34;This connection is already closed.&#34;
-                f&#34; (session id: {self.session_id})&#34;
-            )
+            self.logger.debug(&#34;This connection is already closed.&#34; f&#34; (session id: {self.session_id})&#34;)
         self.consecutive_check_state_error_count = 0
     except Exception as e:
         error_message = (
@@ -1157,8 +1060,7 @@ class Connection:
         port: int = parsed_url.port or (443 if parsed_url.scheme == &#34;wss&#34; else 80)
         if self.trace_enabled:
             self.logger.debug(
-                f&#34;Connecting to the address for handshake: {hostname}:{port} &#34;
-                f&#34;(session id: {self.session_id})&#34;
+                f&#34;Connecting to the address for handshake: {hostname}:{port} &#34; f&#34;(session id: {self.session_id})&#34;
             )
         sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
             session_id=self.session_id,
@@ -1258,9 +1160,7 @@ class Connection:
                 self.sock = None
                 # After this, all operations using self.sock will be skipped
 
-    self.logger.info(
-        f&#34;The connection has been closed (session id: {self.session_id})&#34;
-    )</code></pre>
+    self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.is_active"><code class="name flex">
@@ -1289,19 +1189,14 @@ class Connection:
     if self.trace_enabled and self.ping_pong_trace_enabled:
         if isinstance(payload, bytes):
             payload = payload.decode(&#34;utf-8&#34;)
-        self.logger.debug(
-            &#34;Sending a ping data frame &#34;
-            f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-        )
+        self.logger.debug(&#34;Sending a ping data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
     with self.sock_send_lock:
         if self.sock is not None:
             self.sock.send(data)
         else:
             if self.ping_pong_trace_enabled:
-                self.logger.debug(
-                    &#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;
-                )</code></pre>
+                self.logger.debug(&#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.pong"><code class="name flex">
@@ -1317,19 +1212,14 @@ class Connection:
     if self.trace_enabled and self.ping_pong_trace_enabled:
         if isinstance(payload, bytes):
             payload = payload.decode(&#34;utf-8&#34;)
-        self.logger.debug(
-            &#34;Sending a pong data frame &#34;
-            f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-        )
+        self.logger.debug(&#34;Sending a pong data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
     with self.sock_send_lock:
         if self.sock is not None:
             self.sock.send(data)
         else:
             if self.ping_pong_trace_enabled:
-                self.logger.debug(
-                    &#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;
-                )</code></pre>
+                self.logger.debug(&#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.run_until_completion"><code class="name flex">
@@ -1349,9 +1239,7 @@ class Connection:
     while not state.terminated:
         try:
             if self.is_active():
-                received_messages: List[
-                    Tuple[Optional[FrameHeader], bytes]
-                ] = _receive_messages(
+                received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
                     sock=self.sock,
                     sock_receive_lock=self.sock_receive_lock,
                     logger=self.logger,
@@ -1365,9 +1253,7 @@ class Connection:
                     # trace logging
 
                     if self.trace_enabled is True:
-                        opcode: str = (
-                            _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                        )
+                        opcode: str = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                         payload: str = _parse_text_payload(data, self.logger)
                         count: Optional[int] = repeated_messages.get(payload)
                         if count is None:
@@ -1375,11 +1261,7 @@ class Connection:
                         else:
                             count += 1
                         repeated_messages = {payload: count}
-                        if (
-                            not self.ping_pong_trace_enabled
-                            and header is not None
-                            and header.opcode is not None
-                        ):
+                        if not self.ping_pong_trace_enabled and header is not None and header.opcode is not None:
                             if header.opcode == FrameHeader.OPCODE_PING:
                                 ping_count += 1
                                 if ping_count % ping_pong_log_summary_size == 0:
@@ -1400,10 +1282,7 @@ class Connection:
                         ping_pong_to_skip = (
                             header is not None
                             and header.opcode is not None
-                            and (
-                                header.opcode == FrameHeader.OPCODE_PING
-                                or header.opcode == FrameHeader.OPCODE_PONG
-                            )
+                            and (header.opcode == FrameHeader.OPCODE_PING or header.opcode == FrameHeader.OPCODE_PONG)
                             and not self.ping_pong_trace_enabled
                         )
                         if not ping_pong_to_skip and count &lt; 5:
@@ -1433,8 +1312,7 @@ class Connection:
                                     self.last_ping_pong_time = float(ping_time)
                                 except Exception as e:
                                     self.logger.debug(
-                                        &#34;Failed to parse a pong message &#34;
-                                        f&#34; (message: {str_message}, error: {e}&#34;
+                                        &#34;Failed to parse a pong message &#34; f&#34; (message: {str_message}, error: {e}&#34;
                                     )
                     elif header.opcode == FrameHeader.OPCODE_TEXT:
                         if self.on_message_listener is not None:
@@ -1452,19 +1330,13 @@ class Connection:
                         state.terminated = True
                     else:
                         # Just warn logging
-                        opcode = (
-                            _to_readable_opcode(header.opcode) if header else &#34;-&#34;
-                        )
+                        opcode = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
                         payload: Union[bytes, str] = data
                         if header.opcode != FrameHeader.OPCODE_BINARY:
                             try:
-                                payload = (
-                                    data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
-                                )
+                                payload = data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
                             except Exception as e:
-                                self.logger.info(
-                                    f&#34;Failed to convert the data to text {e}&#34;
-                                )
+                                self.logger.info(f&#34;Failed to convert the data to text {e}&#34;)
                         message = (
                             &#34;Received an unsupported data frame &#34;
                             f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
@@ -1478,17 +1350,13 @@ class Connection:
             # getting errno.EBADF and the socket is no longer available
             if e.errno == 9 and state.terminated:
                 self.logger.debug(
-                    &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34;
-                    &#34;the socket is no longer available.&#34;
+                    &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34; &#34;the socket is no longer available.&#34;
                 )
             else:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    error_message = (
-                        &#34;Got an OSError while receiving data&#34;
-                        f&#34; (session id: {self.session_id}, error: {e})&#34;
-                    )
+                    error_message = &#34;Got an OSError while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                     if self.trace_enabled:
                         self.logger.exception(error_message)
                     else:
@@ -1500,8 +1368,7 @@ class Connection:
                     self.disconnect()
                 except Exception as disconnection_error:
                     error_message = (
-                        &#34;Failed to disconnect&#34;
-                        f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
+                        &#34;Failed to disconnect&#34; f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
                     )
                     if self.trace_enabled:
                         self.logger.exception(error_message)
@@ -1513,10 +1380,7 @@ class Connection:
             if self.on_error_listener is not None:
                 self.on_error_listener(e)
             else:
-                error_message = (
-                    &#34;Got an exception while receiving data&#34;
-                    f&#34; (session id: {self.session_id}, error: {e})&#34;
-                )
+                error_message = &#34;Got an exception while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
                 if self.trace_enabled:
                     self.logger.exception(error_message)
                 else:
@@ -1538,10 +1402,7 @@ class Connection:
     if self.trace_enabled:
         if isinstance(payload, bytes):
             payload = payload.decode(&#34;utf-8&#34;)
-        self.logger.debug(
-            &#34;Sending a text data frame &#34;
-            f&#34;(session id: {self.session_id}, payload: {payload})&#34;
-        )
+        self.logger.debug(&#34;Sending a text data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
     data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
     with self.sock_send_lock:
         try:

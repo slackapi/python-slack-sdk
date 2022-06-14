@@ -114,13 +114,9 @@ class AsyncAuditLogsClient:
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -301,8 +297,7 @@ class AsyncAuditLogsClient:
 
                 if self.logger.level &lt;= logging.DEBUG:
                     headers_for_logging = {
-                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
-                        for k, v in headers.items()
+                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v for k, v in headers.items()
                     }
                     self.logger.debug(
                         f&#34;Sending a request - &#34;
@@ -319,14 +314,10 @@ class AsyncAuditLogsClient:
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode(&#34;utf-8&#34;)
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode(&#34;utf-8&#34;) if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f&#34;No response data returned from the following API call: {url}.&#34;
-                            )
+                            self.logger.debug(f&#34;No response data returned from the following API call: {url}.&#34;)
                         except json.decoder.JSONDecodeError as e:
                             message = f&#34;Failed to parse the response body: {str(e)}&#34;
                             raise SlackApiError(message, res)
@@ -371,8 +362,7 @@ class AsyncAuditLogsClient:
                         ):
                             if self.logger.level &lt;= logging.DEBUG:
                                 self.logger.info(
-                                    f&#34;A retry handler found: {type(handler).__name__} &#34;
-                                    f&#34;for {http_verb} {url} - {e}&#34;
+                                    f&#34;A retry handler found: {type(handler).__name__} &#34; f&#34;for {http_verb} {url} - {e}&#34;
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
@@ -503,13 +493,9 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -690,8 +676,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 
                 if self.logger.level &lt;= logging.DEBUG:
                     headers_for_logging = {
-                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
-                        for k, v in headers.items()
+                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v for k, v in headers.items()
                     }
                     self.logger.debug(
                         f&#34;Sending a request - &#34;
@@ -708,14 +693,10 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode(&#34;utf-8&#34;)
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode(&#34;utf-8&#34;) if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f&#34;No response data returned from the following API call: {url}.&#34;
-                            )
+                            self.logger.debug(f&#34;No response data returned from the following API call: {url}.&#34;)
                         except json.decoder.JSONDecodeError as e:
                             message = f&#34;Failed to parse the response body: {str(e)}&#34;
                             raise SlackApiError(message, res)
@@ -760,8 +741,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                         ):
                             if self.logger.level &lt;= logging.DEBUG:
                                 self.logger.info(
-                                    f&#34;A retry handler found: {type(handler).__name__} &#34;
-                                    f&#34;for {http_verb} {url} - {e}&#34;
+                                    f&#34;A retry handler found: {type(handler).__name__} &#34; f&#34;for {http_verb} {url} - {e}&#34;
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

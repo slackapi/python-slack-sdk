@@ -43,10 +43,7 @@ LOGGER = logging.getLogger(__name__)
 
 skip_warn = os.environ.get(&#34;SLACKCLIENT_SKIP_DEPRECATION&#34;)  # for unit tests etc.
 if not skip_warn:
-    message = (
-        &#34;This class is no longer actively maintained. &#34;
-        &#34;Please use a dict object for building message data instead.&#34;
-    )
+    message = &#34;This class is no longer actively maintained. &#34; &#34;Please use a dict object for building message data instead.&#34;
     warnings.warn(message)
 
 
@@ -84,21 +81,14 @@ class Message(JsonObject):
         self.blocks = blocks or []
         self.markdown = markdown
 
-    @JsonValidator(
-        f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;
-    )
+    @JsonValidator(f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;)
     def attachments_length(self):
-        return (
-            self.attachments is None
-            or len(self.attachments) &lt;= self.attachments_max_length
-        )
+        return self.attachments is None or len(self.attachments) &lt;= self.attachments_max_length
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if len(self.text) &gt; 40000:
-            LOGGER.error(
-                &#34;Messages over 40,000 characters are automatically truncated by Slack&#34;
-            )
+            LOGGER.error(&#34;Messages over 40,000 characters are automatically truncated by Slack&#34;)
         # The following limitation used to be true in the past.
         # As of Feb 2021, having both is recommended
         # -----------------
@@ -186,21 +176,14 @@ bold/italics, or leave text completely unmodified.</dd>
         self.blocks = blocks or []
         self.markdown = markdown
 
-    @JsonValidator(
-        f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;
-    )
+    @JsonValidator(f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;)
     def attachments_length(self):
-        return (
-            self.attachments is None
-            or len(self.attachments) &lt;= self.attachments_max_length
-        )
+        return self.attachments is None or len(self.attachments) &lt;= self.attachments_max_length
 
     def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
         json = super().to_dict()
         if len(self.text) &gt; 40000:
-            LOGGER.error(
-                &#34;Messages over 40,000 characters are automatically truncated by Slack&#34;
-            )
+            LOGGER.error(&#34;Messages over 40,000 characters are automatically truncated by Slack&#34;)
         # The following limitation used to be true in the past.
         # As of Feb 2021, having both is recommended
         # -----------------
@@ -239,14 +222,9 @@ bold/italics, or leave text completely unmodified.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@JsonValidator(
-    f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;
-)
+<pre><code class="python">@JsonValidator(f&#34;attachments attribute cannot exceed {attachments_max_length} items&#34;)
 def attachments_length(self):
-    return (
-        self.attachments is None
-        or len(self.attachments) &lt;= self.attachments_max_length
-    )</code></pre>
+    return self.attachments is None or len(self.attachments) &lt;= self.attachments_max_length</code></pre>
 </details>
 </dd>
 </dl>

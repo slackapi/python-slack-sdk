@@ -115,9 +115,7 @@ class BaseSocketModeClient:
     def send_message(self, message: str) -&gt; None:
         raise NotImplementedError()
 
-    def send_socket_mode_response(
-        self, response: Union[Dict[str, Any], SocketModeResponse]
-    ) -&gt; None:
+    def send_socket_mode_response(self, response: Union[Dict[str, Any], SocketModeResponse]) -&gt; None:
         if isinstance(response, SocketModeResponse):
             self.send_message(json.dumps(response.to_dict()))
         else:
@@ -126,17 +124,13 @@ class BaseSocketModeClient:
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;
-            )
+            self.logger.debug(f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;)
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;
-                )
+                self.logger.debug(f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;)
 
             if raw_message is not None:
                 message: dict = {}
@@ -156,9 +150,7 @@ class BaseSocketModeClient:
     def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
         type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;
-            )
+            self.logger.debug(f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;)
         try:
             # just in case, adding the same logic to reconnect here
             if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
@@ -178,16 +170,12 @@ class BaseSocketModeClient:
                         try:
                             listener(self, request)  # type: ignore
                         except Exception as e:
-                            self.logger.exception(
-                                f&#34;Failed to run a request listener: {e}&#34;
-                            )
+                            self.logger.exception(f&#34;Failed to run a request listener: {e}&#34;)
         except Exception as e:
             self.logger.exception(f&#34;Failed to run message listeners: {e}&#34;)
         finally:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;
-                )
+                self.logger.debug(f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;)
 
     def process_messages(self) -&gt; None:
         while not self.closed:
@@ -284,9 +272,7 @@ class BaseSocketModeClient:
     def send_message(self, message: str) -&gt; None:
         raise NotImplementedError()
 
-    def send_socket_mode_response(
-        self, response: Union[Dict[str, Any], SocketModeResponse]
-    ) -&gt; None:
+    def send_socket_mode_response(self, response: Union[Dict[str, Any], SocketModeResponse]) -&gt; None:
         if isinstance(response, SocketModeResponse):
             self.send_message(json.dumps(response.to_dict()))
         else:
@@ -295,17 +281,13 @@ class BaseSocketModeClient:
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;
-            )
+            self.logger.debug(f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;)
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;
-                )
+                self.logger.debug(f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;)
 
             if raw_message is not None:
                 message: dict = {}
@@ -325,9 +307,7 @@ class BaseSocketModeClient:
     def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
         type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;
-            )
+            self.logger.debug(f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;)
         try:
             # just in case, adding the same logic to reconnect here
             if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
@@ -347,16 +327,12 @@ class BaseSocketModeClient:
                         try:
                             listener(self, request)  # type: ignore
                         except Exception as e:
-                            self.logger.exception(
-                                f&#34;Failed to run a request listener: {e}&#34;
-                            )
+                            self.logger.exception(f&#34;Failed to run a request listener: {e}&#34;)
         except Exception as e:
             self.logger.exception(f&#34;Failed to run message listeners: {e}&#34;)
         finally:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;
-                )
+                self.logger.debug(f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;)
 
     def process_messages(self) -&gt; None:
         while not self.closed:
@@ -492,9 +468,7 @@ class BaseSocketModeClient:
 <pre><code class="python">def enqueue_message(self, message: str):
     self.message_queue.put(message)
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;
-        )</code></pre>
+        self.logger.debug(f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.is_connected"><code class="name flex">
@@ -550,9 +524,7 @@ class BaseSocketModeClient:
     try:
         raw_message = self.message_queue.get(timeout=1)
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;
-            )
+            self.logger.debug(f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;)
 
         if raw_message is not None:
             message: dict = {}
@@ -599,9 +571,7 @@ class BaseSocketModeClient:
 <pre><code class="python">def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
     type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;
-        )
+        self.logger.debug(f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;)
     try:
         # just in case, adding the same logic to reconnect here
         if message.get(&#34;type&#34;) == &#34;disconnect&#34;:
@@ -621,16 +591,12 @@ class BaseSocketModeClient:
                     try:
                         listener(self, request)  # type: ignore
                     except Exception as e:
-                        self.logger.exception(
-                            f&#34;Failed to run a request listener: {e}&#34;
-                        )
+                        self.logger.exception(f&#34;Failed to run a request listener: {e}&#34;)
     except Exception as e:
         self.logger.exception(f&#34;Failed to run message listeners: {e}&#34;)
     finally:
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;
-            )</code></pre>
+            self.logger.debug(f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.client.BaseSocketModeClient.send_message"><code class="name flex">
@@ -655,9 +621,7 @@ class BaseSocketModeClient:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def send_socket_mode_response(
-    self, response: Union[Dict[str, Any], SocketModeResponse]
-) -&gt; None:
+<pre><code class="python">def send_socket_mode_response(self, response: Union[Dict[str, Any], SocketModeResponse]) -&gt; None:
     if isinstance(response, SocketModeResponse):
         self.send_message(json.dumps(response.to_dict()))
     else:

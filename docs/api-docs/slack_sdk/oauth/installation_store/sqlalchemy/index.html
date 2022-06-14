@@ -148,12 +148,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
         logger: Logger = logging.getLogger(__name__),
     ):
         self.metadata = sqlalchemy.MetaData()
-        self.bots = self.build_bots_table(
-            metadata=self.metadata, table_name=bots_table_name
-        )
-        self.installations = self.build_installations_table(
-            metadata=self.metadata, table_name=installations_table_name
-        )
+        self.bots = self.build_bots_table(metadata=self.metadata, table_name=bots_table_name)
+        self.installations = self.build_installations_table(metadata=self.metadata, table_name=installations_table_name)
         self.client_id = client_id
         self._logger = logger
         self.engine = engine
@@ -189,11 +185,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
             else:
-                update_statement = (
-                    self.installations.update()
-                    .where(i_column.id == installations_row_id)
-                    .values(**i)
-                )
+                update_statement = self.installations.update().where(i_column.id == installations_row_id).values(**i)
                 conn.execute(update_statement, i)
 
         # bots
@@ -224,9 +216,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
             else:
-                update_statement = (
-                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
-                )
+                update_statement = self.bots.update().where(b_column.id == bots_row_id).values(**b)
                 conn.execute(update_statement, b)
 
     def find_bot(
@@ -294,17 +284,13 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 c.user_id == user_id,
             )
 
-        query = (
-            self.installations.select()
-            .where(where_clause)
-            .order_by(desc(c.installed_at))
-            .limit(1)
-        )
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
 
+        installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result:  # type: ignore
-                return Installation(
+                installation = Installation(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
                     enterprise_name=row[&#34;enterprise_name&#34;],
@@ -326,18 +312,35 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
                     incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
                     incoming_webhook_channel_id=row[&#34;incoming_webhook_channel_id&#34;],
-                    incoming_webhook_configuration_url=row[
-                        &#34;incoming_webhook_configuration_url&#34;
-                    ],
+                    incoming_webhook_configuration_url=row[&#34;incoming_webhook_configuration_url&#34;],
                     is_enterprise_install=row[&#34;is_enterprise_install&#34;],
                     token_type=row[&#34;token_type&#34;],
                     installed_at=row[&#34;installed_at&#34;],
                 )
-            return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+        if user_id is not None and installation is not None:
+            # Retrieve the latest bot token, just in case
+            # See also: https://github.com/slackapi/bolt-python/issues/664
+            where_clause = and_(
+                c.client_id == self.client_id,
+                c.enterprise_id == enterprise_id,
+                c.team_id == team_id,
+                c.bot_token.is_not(None),  # the latest one that has a bot token
+            )
+            query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+            with self.engine.connect() as conn:
+                result: object = conn.execute(query)
+                for row in result:  # type: ignore
+                    installation.bot_token = row[&#34;bot_token&#34;]
+                    installation.bot_id = row[&#34;bot_id&#34;]
+                    installation.bot_user_id = row[&#34;bot_user_id&#34;]
+                    installation.bot_scopes = row[&#34;bot_scopes&#34;]
+                    installation.bot_refresh_token = row[&#34;bot_refresh_token&#34;]
+                    installation.bot_token_expires_at = row[&#34;bot_token_expires_at&#34;]
+
+        return installation
+
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         table = self.bots
         c = table.c
         with self.engine.begin() as conn:
@@ -516,12 +519,8 @@ the following methods should be implemented.</p>
         logger: Logger = logging.getLogger(__name__),
     ):
         self.metadata = sqlalchemy.MetaData()
-        self.bots = self.build_bots_table(
-            metadata=self.metadata, table_name=bots_table_name
-        )
-        self.installations = self.build_installations_table(
-            metadata=self.metadata, table_name=installations_table_name
-        )
+        self.bots = self.build_bots_table(metadata=self.metadata, table_name=bots_table_name)
+        self.installations = self.build_installations_table(metadata=self.metadata, table_name=installations_table_name)
         self.client_id = client_id
         self._logger = logger
         self.engine = engine
@@ -557,11 +556,7 @@ the following methods should be implemented.</p>
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
             else:
-                update_statement = (
-                    self.installations.update()
-                    .where(i_column.id == installations_row_id)
-                    .values(**i)
-                )
+                update_statement = self.installations.update().where(i_column.id == installations_row_id).values(**i)
                 conn.execute(update_statement, i)
 
         # bots
@@ -592,9 +587,7 @@ the following methods should be implemented.</p>
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
             else:
-                update_statement = (
-                    self.bots.update().where(b_column.id == bots_row_id).values(**b)
-                )
+                update_statement = self.bots.update().where(b_column.id == bots_row_id).values(**b)
                 conn.execute(update_statement, b)
 
     def find_bot(
@@ -662,17 +655,13 @@ the following methods should be implemented.</p>
                 c.user_id == user_id,
             )
 
-        query = (
-            self.installations.select()
-            .where(where_clause)
-            .order_by(desc(c.installed_at))
-            .limit(1)
-        )
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
 
+        installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result:  # type: ignore
-                return Installation(
+                installation = Installation(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
                     enterprise_name=row[&#34;enterprise_name&#34;],
@@ -694,18 +683,35 @@ the following methods should be implemented.</p>
                     incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
                     incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
                     incoming_webhook_channel_id=row[&#34;incoming_webhook_channel_id&#34;],
-                    incoming_webhook_configuration_url=row[
-                        &#34;incoming_webhook_configuration_url&#34;
-                    ],
+                    incoming_webhook_configuration_url=row[&#34;incoming_webhook_configuration_url&#34;],
                     is_enterprise_install=row[&#34;is_enterprise_install&#34;],
                     token_type=row[&#34;token_type&#34;],
                     installed_at=row[&#34;installed_at&#34;],
                 )
-            return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+        if user_id is not None and installation is not None:
+            # Retrieve the latest bot token, just in case
+            # See also: https://github.com/slackapi/bolt-python/issues/664
+            where_clause = and_(
+                c.client_id == self.client_id,
+                c.enterprise_id == enterprise_id,
+                c.team_id == team_id,
+                c.bot_token.is_not(None),  # the latest one that has a bot token
+            )
+            query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+            with self.engine.connect() as conn:
+                result: object = conn.execute(query)
+                for row in result:  # type: ignore
+                    installation.bot_token = row[&#34;bot_token&#34;]
+                    installation.bot_id = row[&#34;bot_id&#34;]
+                    installation.bot_user_id = row[&#34;bot_user_id&#34;]
+                    installation.bot_scopes = row[&#34;bot_scopes&#34;]
+                    installation.bot_refresh_token = row[&#34;bot_refresh_token&#34;]
+                    installation.bot_token_expires_at = row[&#34;bot_token_expires_at&#34;]
+
+        return installation
+
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         table = self.bots
         c = table.c
         with self.engine.begin() as conn:

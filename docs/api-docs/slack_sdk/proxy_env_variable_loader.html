@@ -46,9 +46,7 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -&gt; Opt
         return None
     if len(proxy_url.strip()) == 0:
         # If the value is an empty string, the intention should be unsetting it
-        logger.debug(
-            &#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;
-        )
+        logger.debug(&#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;)
         return None
 
     logger.debug(f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;)
@@ -82,9 +80,7 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -&gt; Opt
         return None
     if len(proxy_url.strip()) == 0:
         # If the value is an empty string, the intention should be unsetting it
-        logger.debug(
-            &#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;
-        )
+        logger.debug(&#34;The Slack SDK ignored the proxy env variable as an empty value is set.&#34;)
         return None
 
     logger.debug(f&#34;HTTP proxy URL has been loaded from an env variable: {proxy_url}&#34;)

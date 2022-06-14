@@ -52,11 +52,7 @@ class RedirectUriPageRenderer:
     ) -&gt; str:
         url = self.success_url
         if url is None:
-            if (
-                is_enterprise_install is True
-                and enterprise_url is not None
-                and app_id is not None
-            ):
+            if is_enterprise_install is True and enterprise_url is not None and app_id is not None:
                 url = f&#34;{enterprise_url}manage/organization/apps/profile/{app_id}/workspaces/add&#34;
             elif team_id is None or app_id is None:
                 url = &#34;slack://open&#34;
@@ -145,11 +141,7 @@ body {{
     ) -&gt; str:
         url = self.success_url
         if url is None:
-            if (
-                is_enterprise_install is True
-                and enterprise_url is not None
-                and app_id is not None
-            ):
+            if is_enterprise_install is True and enterprise_url is not None and app_id is not None:
                 url = f&#34;{enterprise_url}manage/organization/apps/profile/{app_id}/workspaces/add&#34;
             elif team_id is None or app_id is None:
                 url = &#34;slack://open&#34;
@@ -244,11 +236,7 @@ body {{
     ) -&gt; str:
         url = self.success_url
         if url is None:
-            if (
-                is_enterprise_install is True
-                and enterprise_url is not None
-                and app_id is not None
-            ):
+            if is_enterprise_install is True and enterprise_url is not None and app_id is not None:
                 url = f&#34;{enterprise_url}manage/organization/apps/profile/{app_id}/workspaces/add&#34;
             elif team_id is None or app_id is None:
                 url = &#34;slack://open&#34;

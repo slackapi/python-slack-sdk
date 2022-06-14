@@ -347,9 +347,7 @@ to create visually rich and compellingly interactive messages.
                 return None
 
     @classmethod
-    def parse_all(
-        cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
-    ) -&gt; List[&#34;Block&#34;]:
+    def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
         return [cls.parse(b) for b in blocks or []]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -436,9 +434,7 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(
-    cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]
-) -&gt; List[&#34;Block&#34;]:
+def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
     return [cls.parse(b) for b in blocks or []]</code></pre>
 </details>
 </dd>
@@ -512,9 +508,7 @@ def subtype(self) -&gt; Optional[str]:
         show_unknown_key_warning(self, others)
 
     @classmethod
-    def parse(
-        cls, block_element: Union[dict, &#34;BlockElement&#34;]
-    ) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
+    def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
         if block_element is None:  # skipcq: PYL-R1705
             return None
         elif isinstance(block_element, dict):
@@ -562,27 +556,19 @@ def subtype(self) -&gt; Optional[str]:
                 elif t == TimePickerElement.type:
                     return TimePickerElement(**d)
                 else:
-                    cls.logger.warning(
-                        f&#34;Unknown element detected and skipped ({block_element})&#34;
-                    )
+                    cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
                     return None
             else:
-                cls.logger.warning(
-                    f&#34;Unknown element detected and skipped ({block_element})&#34;
-                )
+                cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
                 return None
         elif isinstance(block_element, (TextObject, BlockElement)):
             return block_element
         else:
-            cls.logger.warning(
-                f&#34;Unknown element detected and skipped ({block_element})&#34;
-            )
+            cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
             return None
 
     @classmethod
-    def parse_all(
-        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]
-    ) -&gt; List[&#34;BlockElement&#34;]:
+    def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
         return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -614,9 +600,7 @@ def subtype(self) -&gt; Optional[str]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse(
-    cls, block_element: Union[dict, &#34;BlockElement&#34;]
-) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
+def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
     if block_element is None:  # skipcq: PYL-R1705
         return None
     elif isinstance(block_element, dict):
@@ -664,21 +648,15 @@ def parse(
             elif t == TimePickerElement.type:
                 return TimePickerElement(**d)
             else:
-                cls.logger.warning(
-                    f&#34;Unknown element detected and skipped ({block_element})&#34;
-                )
+                cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
                 return None
         else:
-            cls.logger.warning(
-                f&#34;Unknown element detected and skipped ({block_element})&#34;
-            )
+            cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
             return None
     elif isinstance(block_element, (TextObject, BlockElement)):
         return block_element
     else:
-        cls.logger.warning(
-            f&#34;Unknown element detected and skipped ({block_element})&#34;
-        )
+        cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
         return None</code></pre>
 </details>
 </dd>
@@ -692,9 +670,7 @@ def parse(
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(
-    cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]
-) -&gt; List[&#34;BlockElement&#34;]:
+def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
     return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 </dd>
@@ -781,9 +757,7 @@ Maximum length for this field is 75 characters.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;, &#34;accessibility_label&#34;}
-        )
+        return super().attributes.union({&#34;text&#34;, &#34;url&#34;, &#34;value&#34;, &#34;style&#34;, &#34;confirm&#34;, &#34;accessibility_label&#34;})
 
     def __init__(
         self,
@@ -839,11 +813,7 @@ Maximum length for this field is 75 characters.</dd>
 
     @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
-        return (
-            self.text is None
-            or self.text.text is None
-            or len(self.text.text) &lt;= self.text_max_length
-        )
+        return self.text is None or self.text.text is None or len(self.text.text) &lt;= self.text_max_length
 
     @JsonValidator(f&#34;url attribute cannot exceed {url_max_length} characters&#34;)
     def _validate_url_length(self) -&gt; bool:
@@ -857,14 +827,9 @@ Maximum length for this field is 75 characters.</dd>
     def _validate_style_valid(self):
         return self.style is None or self.style in ButtonStyles
 
-    @JsonValidator(
-        f&#34;accessibility_label attribute cannot exceed {text_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;accessibility_label attribute cannot exceed {text_max_length} characters&#34;)
     def _validate_accessibility_label_length(self) -&gt; bool:
-        return (
-            self.accessibility_label is None
-            or len(self.accessibility_label) &lt;= self.text_max_length
-        )</code></pre>
+        return self.accessibility_label is None or len(self.accessibility_label) &lt;= self.text_max_length</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1408,9 +1373,7 @@ offering a confirm and deny button.
 
     @JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
     def confirm_length(self) -&gt; bool:
-        return (
-            self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
-        )
+        return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
 
     @JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
     def deny_length(self) -&gt; bool:
@@ -1420,19 +1383,13 @@ offering a confirm and deny button.
     def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == &#34;action&#34;:  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can&#39;t find documentation
             # on actual limits here
             json = {
-                &#34;ok_text&#34;: self._confirm.text
-                if self._confirm and self._confirm.text != &#34;Yes&#34;
-                else &#34;Okay&#34;,
-                &#34;dismiss_text&#34;: self._deny.text
-                if self._deny and self._deny.text != &#34;No&#34;
-                else &#34;Cancel&#34;,
+                &#34;ok_text&#34;: self._confirm.text if self._confirm and self._confirm.text != &#34;Yes&#34; else &#34;Okay&#34;,
+                &#34;dismiss_text&#34;: self._deny.text if self._deny and self._deny.text != &#34;No&#34; else &#34;Cancel&#34;,
             }
             if self._title:
                 json[&#34;title&#34;] = self._title.text
@@ -1517,9 +1474,7 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
 def confirm_length(self) -&gt; bool:
-    return (
-        self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
-    )</code></pre>
+    return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.deny_length"><code class="name flex">
@@ -1744,9 +1699,7 @@ from conversation lists. Defaults to false.</dd>
             d = copy.copy(filter)
             return ConversationFilter(**d)
         else:
-            cls.logger.warning(
-                f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;
-            )
+            cls.logger.warning(f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;)
             return None</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1782,9 +1735,7 @@ def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PY
         d = copy.copy(filter)
         return ConversationFilter(**d)
     else:
-        cls.logger.warning(
-            f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;
-        )
+        cls.logger.warning(f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;)
         return None</code></pre>
 </details>
 </dd>
@@ -2168,10 +2119,7 @@ Only one element can be set to true. Defaults to false.</dd>
     def _validate_initial_date_valid(self) -&gt; bool:
         return (
             self.initial_date is None
-            or re.match(
-                r&#34;\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])&#34;, self.initial_date
-            )
-            is not None
+            or re.match(r&#34;\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])&#34;, self.initial_date) is not None
         )</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -2327,9 +2275,7 @@ Only one element can be set to true. Defaults to false.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;min_query_length&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
-        )
+        return super().attributes.union({&#34;min_query_length&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;})
 
     def __init__(
         self,
@@ -2821,9 +2767,7 @@ If a message is updated, use a new block_id.</dd>
         self.alt_text = alt_text
         self.title = TextObject.parse(title)
 
-    @JsonValidator(
-        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):
         return len(self.image_url) &lt;= self.image_url_max_length
 
@@ -2833,11 +2777,7 @@ If a message is updated, use a new block_id.</dd>
 
     @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
     def _validate_title_length(self):
-        return (
-            self.title is None
-            or self.title.text is None
-            or len(self.title.text) &lt;= self.title_max_length
-        )</code></pre>
+        return self.title is None or self.title.text is None or len(self.title.text) &lt;= self.title_max_length</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2945,9 +2885,7 @@ you're looking for the image block.
         self.image_url = image_url
         self.alt_text = alt_text
 
-    @JsonValidator(
-        f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self) -&gt; bool:
         return len(self.image_url) &lt;= self.image_url_max_length
 
@@ -3050,9 +2988,7 @@ Defaults to false.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
-        )
+        return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})
 
     def __init__(
         self,
@@ -3097,19 +3033,11 @@ Defaults to false.</dd>
 
     @JsonValidator(f&#34;label attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_label_length(self):
-        return (
-            self.label is None
-            or self.label.text is None
-            or len(self.label.text) &lt;= self.label_max_length
-        )
+        return self.label is None or self.label.text is None or len(self.label.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
     def _validate_hint_length(self):
-        return (
-            self.hint is None
-            or self.hint.text is None
-            or len(self.hint.text) &lt;= self.label_max_length
-        )
+        return self.hint is None or self.hint.text is None or len(self.hint.text) &lt;= self.label_max_length
 
     @JsonValidator(
         (
@@ -3118,9 +3046,7 @@ Defaults to false.</dd>
         )
     )
     def _validate_element_type(self):
-        return self.element is None or isinstance(
-            self.element, (str, InputInteractiveElement)
-        )</code></pre>
+        return self.element is None or isinstance(self.element, (str, InputInteractiveElement))</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3156,9 +3082,7 @@ set(iterable) -&gt; new set object</p>
 </summary>
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:
-    return super().attributes.union(
-        {&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;}
-    )</code></pre>
+    return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})</code></pre>
 </details>
 </dd>
 </dl>
@@ -3222,9 +3146,7 @@ def attributes(self) -&gt; Set[str]:
         self.confirm = ConfirmObject.parse(confirm)
         self.focus_on_load = focus_on_load
 
-    @JsonValidator(
-        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
     def _validate_placeholder_length(self) -&gt; bool:
         return (
             self.placeholder is None
@@ -3334,13 +3256,9 @@ def subtype(self) -&gt; Optional[str]:
 
         self.action_id = action_id
 
-    @JsonValidator(
-        f&#34;action_id attribute cannot exceed {action_id_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;action_id attribute cannot exceed {action_id_max_length} characters&#34;)
     def _validate_action_id_length(self) -&gt; bool:
-        return (
-            self.action_id is None or len(self.action_id) &lt;= self.action_id_max_length
-        )</code></pre>
+        return self.action_id is None or len(self.action_id) &lt;= self.action_id_max_length</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3810,20 +3728,14 @@ dialogs.</dd>
 
     @JsonValidator(f&#34;text attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
-        return (
-            self._text is None
-            or self._text.text is None
-            or len(self._text.text) &lt;= self.label_max_length
-        )
+        return self._text is None or self._text.text is None or len(self._text.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
     def _validate_value_length(self) -&gt; bool:
         return len(self.value) &lt;= self.value_max_length
 
     @classmethod
-    def parse_all(
-        cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
-    ) -&gt; Optional[List[&#34;Option&#34;]]:
+    def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
         if options is None:
             return None
         option_objects: List[Option] = []
@@ -3837,9 +3749,7 @@ dialogs.</dd>
                 cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
         return option_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         &#34;&#34;&#34;
         Different parent classes must call this with a valid value from OptionTypes -
         either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -3919,9 +3829,7 @@ def from_single_value(value_and_label: str):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(
-    cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
-) -&gt; Optional[List[&#34;Option&#34;]]:
+def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
     if options is None:
         return None
     option_objects: List[Option] = []
@@ -3950,9 +3858,7 @@ correct shape.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def to_dict(
-    self, option_type: str = &#34;block&#34;
-) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+<pre><code class="python">def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
     &#34;&#34;&#34;
     Different parent classes must call this with a valid value from OptionTypes -
     either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -4055,9 +3961,7 @@ UI) and a list of Option objects.</p>
             options: A list of no more than 100 Option objects.
         &#34;&#34;&#34;  # noqa prevent flake8 blowing up on the long URL
         # default_type=PlainTextObject.type is for backward-compatibility
-        self._label: Optional[TextObject] = TextObject.parse(
-            label, default_type=PlainTextObject.type
-        )
+        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)
         self.label: Optional[str] = self._label.text if self._label else None
         self.options = Option.parse_all(options)  # compatible with version 2.5
         show_unknown_key_warning(self, others)
@@ -4084,14 +3988,10 @@ UI) and a list of Option objects.</p>
             elif isinstance(o, OptionGroup):
                 option_group_objects.append(o)
             else:
-                cls.logger.warning(
-                    f&#34;Unknown option group object detected and skipped ({o})&#34;
-                )
+                cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
         return option_group_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
@@ -4156,9 +4056,7 @@ def parse_all(
         elif isinstance(o, OptionGroup):
             option_group_objects.append(o)
         else:
-            cls.logger.warning(
-                f&#34;Unknown option group object detected and skipped ({o})&#34;
-            )
+            cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
     return option_group_objects</code></pre>
 </details>
 </dd>
@@ -4255,10 +4153,7 @@ after a menu item is selected.</dd>
         self.options = options
         self.confirm = ConfirmObject.parse(confirm)
 
-    @JsonValidator(
-        f&#34;options attribute must have between {options_min_length} &#34;
-        f&#34;and {options_max_length} items&#34;
-    )
+    @JsonValidator(f&#34;options attribute must have between {options_min_length} &#34; f&#34;and {options_max_length} items&#34;)
     def _validate_options_length(self) -&gt; bool:
         return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length</code></pre>
 </details>
@@ -4930,14 +4825,9 @@ Only one element can be set to true. Defaults to false.</dd>
     def _validate_options_length(self) -&gt; bool:
         return self.options is None or len(self.options) &lt;= self.options_max_length
 
-    @JsonValidator(
-        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
-    )
+    @JsonValidator(f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;)
     def _validate_option_groups_length(self) -&gt; bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) &lt;= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) &lt;= self.option_groups_max_length
 
     @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
     def _validate_options_and_option_groups_both_specified(self) -&gt; bool:
@@ -5037,9 +4927,7 @@ Only one element can be set to true. Defaults to false.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union(
-            {&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;}
-        )
+        return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;})
 
     def __init__(
         self,
@@ -5098,14 +4986,9 @@ Only one element can be set to true. Defaults to false.</dd>
     def _validate_options_length(self) -&gt; bool:
         return self.options is None or len(self.options) &lt;= self.options_max_length
 
-    @JsonValidator(
-        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
-    )
+    @JsonValidator(f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;)
     def _validate_option_groups_length(self) -&gt; bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) &lt;= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) &lt;= self.option_groups_max_length
 
     @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
     def _validate_options_and_option_groups_both_specified(self) -&gt; bool:
@@ -5256,14 +5139,9 @@ Only one element can be set to true. Defaults to false.</dd>
     def _validate_options_length(self) -&gt; bool:
         return self.options is None or len(self.options) &lt;= self.options_max_length
 
-    @JsonValidator(
-        f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;
-    )
+    @JsonValidator(f&#34;option_groups attribute cannot exceed {option_groups_max_length} elements&#34;)
     def _validate_option_groups_length(self) -&gt; bool:
-        return (
-            self.option_groups is None
-            or len(self.option_groups) &lt;= self.option_groups_max_length
-        )
+        return self.option_groups is None or len(self.option_groups) &lt;= self.option_groups_max_length
 
     @JsonValidator(&#34;options and option_groups cannot both be specified&#34;)
     def _validate_options_and_option_groups_both_specified(self) -&gt; bool:
@@ -5362,9 +5240,7 @@ Only one element can be set to true. Defaults to false.</dd>
         elif isinstance(text, TextObject):
             return text
         else:
-            cls.logger.warning(
-                f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;
-            )
+            cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
             return None
 
     def __init__(
@@ -5434,9 +5310,7 @@ def parse(
     elif isinstance(text, TextObject):
         return text
     else:
-        cls.logger.warning(
-            f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;
-        )
+        cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
         return None</code></pre>
 </details>
 </dd>
@@ -5557,11 +5431,7 @@ Only one element can be set to true. Defaults to false.</dd>
 
     @JsonValidator(&#34;initial_time attribute must be in format &#39;HH:mm&#39;&#34;)
     def _validate_initial_time_valid(self) -&gt; bool:
-        return (
-            self.initial_time is None
-            or re.match(r&#34;([0-1][0-9]|2[0-3]):([0-5][0-9])&#34;, self.initial_time)
-            is not None
-        )</code></pre>
+        return self.initial_time is None or re.match(r&#34;([0-1][0-9]|2[0-3]):([0-5][0-9])&#34;, self.initial_time) is not None</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

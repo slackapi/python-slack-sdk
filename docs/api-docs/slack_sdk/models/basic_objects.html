@@ -65,17 +65,13 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         present on this object
         &#34;&#34;&#34;
 
-        def to_dict_compatible(
-            value: Union[dict, list, object, Tuple]
-        ) -&gt; Union[dict, list, Any]:
+        def to_dict_compatible(value: Union[dict, list, object, Tuple]) -&gt; Union[dict, list, Any]:
             if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, &#34;to_dict&#34;, None)
                 if to_dict and callable(to_dict):  # skipcq: PYL-R1705
-                    return {
-                        k: to_dict_compatible(v) for k, v in value.to_dict().items()  # type: ignore
-                    }
+                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore
                 else:
                     return value
 
@@ -90,9 +86,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                 return value is not None
 
         return {
-            key: to_dict_compatible(getattr(self, key, None))
-            for key in sorted(self.attributes)
-            if is_not_empty(self, key)
+            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -&gt; dict:
@@ -144,10 +138,7 @@ class JsonValidator:
 
 class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(
-            f&#34;{attribute} attribute must be one of the following values: &#34;
-            f&#34;{&#39;, &#39;.join(enum)}&#34;
-        )</code></pre>
+        super().__init__(f&#34;{attribute} attribute must be one of the following values: &#34; f&#34;{&#39;, &#39;.join(enum)}&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -198,10 +189,7 @@ functions should return true if valid, false if not.</p>
 </summary>
 <pre><code class="python">class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(
-            f&#34;{attribute} attribute must be one of the following values: &#34;
-            f&#34;{&#39;, &#39;.join(enum)}&#34;
-        )</code></pre>
+        super().__init__(f&#34;{attribute} attribute must be one of the following values: &#34; f&#34;{&#39;, &#39;.join(enum)}&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -242,17 +230,13 @@ functions should return true if valid, false if not.</p>
         present on this object
         &#34;&#34;&#34;
 
-        def to_dict_compatible(
-            value: Union[dict, list, object, Tuple]
-        ) -&gt; Union[dict, list, Any]:
+        def to_dict_compatible(value: Union[dict, list, object, Tuple]) -&gt; Union[dict, list, Any]:
             if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, &#34;to_dict&#34;, None)
                 if to_dict and callable(to_dict):  # skipcq: PYL-R1705
-                    return {
-                        k: to_dict_compatible(v) for k, v in value.to_dict().items()  # type: ignore
-                    }
+                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore
                 else:
                     return value
 
@@ -267,9 +251,7 @@ functions should return true if valid, false if not.</p>
                 return value is not None
 
         return {
-            key: to_dict_compatible(getattr(self, key, None))
-            for key in sorted(self.attributes)
-            if is_not_empty(self, key)
+            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -&gt; dict:
@@ -358,17 +340,13 @@ present on this object</p></div>
     present on this object
     &#34;&#34;&#34;
 
-    def to_dict_compatible(
-        value: Union[dict, list, object, Tuple]
-    ) -&gt; Union[dict, list, Any]:
+    def to_dict_compatible(value: Union[dict, list, object, Tuple]) -&gt; Union[dict, list, Any]:
         if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
             return [to_dict_compatible(v) for v in value]
         else:
             to_dict = getattr(value, &#34;to_dict&#34;, None)
             if to_dict and callable(to_dict):  # skipcq: PYL-R1705
-                return {
-                    k: to_dict_compatible(v) for k, v in value.to_dict().items()  # type: ignore
-                }
+                return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore
             else:
                 return value
 
@@ -383,9 +361,7 @@ present on this object</p></div>
             return value is not None
 
     return {
-        key: to_dict_compatible(getattr(self, key, None))
-        for key in sorted(self.attributes)
-        if is_not_empty(self, key)
+        key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
     }</code></pre>
 </details>
 </dd>

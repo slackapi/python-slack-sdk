@@ -155,9 +155,7 @@ class AbstractActionSelector(Action, metaclass=ABCMeta):
     def data_source(self) -&gt; str:
         pass
 
-    def __init__(
-        self, *, name: str, text: str, selected_option: Optional[Option] = None
-    ):
+    def __init__(self, *, name: str, text: str, selected_option: Optional[Option] = None):
         super().__init__(text=text, name=name, subtype=&#34;select&#34;)
         self.selected_option = selected_option
 
@@ -219,9 +217,7 @@ class ActionChannelSelector(AbstractActionSelector):
 class ActionConversationSelector(AbstractActionSelector):
     data_source = &#34;conversations&#34;
 
-    def __init__(
-        self, name: str, text: str, selected_conversation: Optional[Option] = None
-    ):
+    def __init__(self, name: str, text: str, selected_conversation: Optional[Option] = None):
         &#34;&#34;&#34;
         Automatically populate the selector with a list of conversations they have in
         the workspace.
@@ -424,13 +420,9 @@ class Attachment(JsonObject):
 
     @EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
     def markdown_in_valid(self):
-        return not self.markdown_in or all(
-            e in self.MarkdownFields for e in self.markdown_in
-        )
+        return not self.markdown_in or all(e in self.MarkdownFields for e in self.markdown_in)
 
-    @JsonValidator(
-        &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
-    )
+    @JsonValidator(&#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;)
     def color_valid(self) -&gt; bool:
         return (
             self.color is None
@@ -655,9 +647,7 @@ class InteractiveAttachment(Attachment):
     def data_source(self) -&gt; str:
         pass
 
-    def __init__(
-        self, *, name: str, text: str, selected_option: Optional[Option] = None
-    ):
+    def __init__(self, *, name: str, text: str, selected_option: Optional[Option] = None):
         super().__init__(text=text, name=name, subtype=&#34;select&#34;)
         self.selected_option = selected_option
 
@@ -1098,9 +1088,7 @@ value.</dd>
 <pre><code class="python">class ActionConversationSelector(AbstractActionSelector):
     data_source = &#34;conversations&#34;
 
-    def __init__(
-        self, name: str, text: str, selected_conversation: Optional[Option] = None
-    ):
+    def __init__(self, name: str, text: str, selected_conversation: Optional[Option] = None):
         &#34;&#34;&#34;
         Automatically populate the selector with a list of conversations they have in
         the workspace.
@@ -1599,13 +1587,9 @@ desktop may also transform its rendered appearance.</dd>
 
     @EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
     def markdown_in_valid(self):
-        return not self.markdown_in or all(
-            e in self.MarkdownFields for e in self.markdown_in
-        )
+        return not self.markdown_in or all(e in self.MarkdownFields for e in self.markdown_in)
 
-    @JsonValidator(
-        &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
-    )
+    @JsonValidator(&#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;)
     def color_valid(self) -&gt; bool:
         return (
             self.color is None
@@ -1697,9 +1681,7 @@ def author_link_without_author_name(self) -&gt; bool:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@JsonValidator(
-    &#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;
-)
+<pre><code class="python">@JsonValidator(&#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;)
 def color_valid(self) -&gt; bool:
     return (
         self.color is None
@@ -1747,9 +1729,7 @@ def image_url_and_thumb_url_populated(self) -&gt; bool:
 </summary>
 <pre><code class="python">@EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
 def markdown_in_valid(self):
-    return not self.markdown_in or all(
-        e in self.MarkdownFields for e in self.markdown_in
-    )</code></pre>
+    return not self.markdown_in or all(e in self.MarkdownFields for e in self.markdown_in)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment.ts_without_footer"><code class="name flex">

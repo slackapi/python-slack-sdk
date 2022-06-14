@@ -381,9 +381,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
     ):
         self.method = method
         self.url = url
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body_params = body_params
         self.data = data
 
@@ -392,9 +390,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         return HttpRequest(
             method=req.method,
             url=req.full_url,
-            headers={
-                k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
-            },
+            headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
             data=req.data,
         )</code></pre>
 </details>
@@ -437,9 +433,7 @@ def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
     return HttpRequest(
         method=req.method,
         url=req.full_url,
-        headers={
-            k: v if isinstance(v, list) else [v] for k, v in req.headers.items()
-        },
+        headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
         data=req.data,
     )</code></pre>
 </details>
@@ -473,9 +467,7 @@ def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
         data: Optional[bytes] = None,
     ):
         self.status_code = int(status_code)
-        self.headers = {
-            k: v if isinstance(v, list) else [v] for k, v in headers.items()
-        }
+        self.headers = {k: v if isinstance(v, list) else [v] for k, v in headers.items()}
         self.body = body
         self.data = data</code></pre>
 </details>
@@ -614,9 +606,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
             # This situation usually does not arise. Just in case.
             duration += random.random()
         else:
-            duration = (
-                int(response.headers.get(retry_after_header_name)[0]) + random.random()
-            )
+            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
         time.sleep(duration)
         state.increment_current_attempt()</code></pre>
 </details>
@@ -668,9 +658,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         # This situation usually does not arise. Just in case.
         duration += random.random()
     else:
-        duration = (
-            int(response.headers.get(retry_after_header_name)[0]) + random.random()
-        )
+        duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
     time.sleep(duration)
     state.increment_current_attempt()</code></pre>
 </details>
@@ -754,9 +742,7 @@ You can pass an array of handlers to customize retry logics in supported API cli
         error: Optional[Exception] = None,
     ) -&gt; None:
         state.next_attempt_requested = True
-        duration = self.interval_calculator.calculate_sleep_duration(
-            state.current_attempt
-        )
+        duration = self.interval_calculator.calculate_sleep_duration(state.current_attempt)
         time.sleep(duration)
         state.increment_current_attempt()</code></pre>
 </details>
@@ -823,9 +809,7 @@ You can pass an array of handlers to customize retry logics in supported API cli
     error: Optional[Exception] = None,
 ) -&gt; None:
     state.next_attempt_requested = True
-    duration = self.interval_calculator.calculate_sleep_duration(
-        state.current_attempt
-    )
+    duration = self.interval_calculator.calculate_sleep_duration(state.current_attempt)
     time.sleep(duration)
     state.increment_current_attempt()</code></pre>
 </details>

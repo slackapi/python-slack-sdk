@@ -59,11 +59,7 @@ class AuditLogsResponse:
         self.status_code = status_code
         self.headers = headers
         self.raw_body = raw_body
-        self.body = (
-            json.loads(raw_body)
-            if raw_body is not None and raw_body.startswith(&#34;{&#34;)
-            else None
-        )</code></pre>
+        self.body = json.loads(raw_body) if raw_body is not None and raw_body.startswith(&#34;{&#34;) else None</code></pre>
 </details>
 </section>
 <section>
@@ -111,11 +107,7 @@ class AuditLogsResponse:
         self.status_code = status_code
         self.headers = headers
         self.raw_body = raw_body
-        self.body = (
-            json.loads(raw_body)
-            if raw_body is not None and raw_body.startswith(&#34;{&#34;)
-            else None
-        )</code></pre>
+        self.body = json.loads(raw_body) if raw_body is not None and raw_body.startswith(&#34;{&#34;) else None</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>

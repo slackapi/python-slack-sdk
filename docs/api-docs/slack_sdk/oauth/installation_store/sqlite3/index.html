@@ -64,9 +64,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute(&#34;select count(1) from slack_installations;&#34;)
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f&#34;{row_num} installations are stored in {self.database}&#34;
-                )
+                self.logger.debug(f&#34;{row_num} installations are stored in {self.database}&#34;)
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -235,9 +233,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
-                    &#34;,&#34;.join(installation.user_scopes)
-                    if installation.user_scopes
-                    else None,
+                    &#34;,&#34;.join(installation.user_scopes) if installation.user_scopes else None,
                     installation.user_refresh_token,
                     installation.user_token_expires_at,
                     installation.incoming_webhook_url,
@@ -365,9 +361,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 )
                 row = cur.fetchone()
                 result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-                self.logger.debug(
-                    f&#34;find_bot&#39;s query result: {result} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;find_bot&#39;s query result: {result} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     bot = Bot(
                         app_id=row[0],
@@ -495,9 +489,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     return None
 
                 result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-                self.logger.debug(
-                    f&#34;find_installation&#39;s query result: {result} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;find_installation&#39;s query result: {result} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     installation = Installation(
                         app_id=row[0],
@@ -525,6 +517,42 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         token_type=row[22],
                         installed_at=row[23],
                     )
+
+                    if user_id is not None:
+                        # Retrieve the latest bot token, just in case
+                        # See also: https://github.com/slackapi/bolt-python/issues/664
+                        cur = conn.execute(
+                            &#34;&#34;&#34;
+                            select
+                                bot_token,
+                                bot_id,
+                                bot_user_id,
+                                bot_scopes,
+                                bot_refresh_token,
+                                bot_token_expires_at
+                            from
+                                slack_installations
+                            where
+                                client_id = ?
+                                and
+                                enterprise_id = ?
+                                and
+                                team_id = ?
+                                and
+                                bot_token is not null
+                            order by installed_at desc
+                            limit 1
+                            &#34;&#34;&#34;,
+                            [self.client_id, enterprise_id or &#34;&#34;, team_id],
+                        )
+                        row = cur.fetchone()
+                        installation.bot_token = row[0]
+                        installation.bot_id = row[1]
+                        installation.bot_user_id = row[2]
+                        installation.bot_scopes = row[3]
+                        installation.bot_refresh_token = row[4]
+                        installation.bot_token_expires_at = row[5]
+
                     return installation
                 return None
 
@@ -536,9 +564,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 self.logger.warning(message)
             return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         try:
             with self.connect() as conn:
                 conn.execute(
@@ -674,9 +700,7 @@ the following methods should be implemented.</p>
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute(&#34;select count(1) from slack_installations;&#34;)
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f&#34;{row_num} installations are stored in {self.database}&#34;
-                )
+                self.logger.debug(f&#34;{row_num} installations are stored in {self.database}&#34;)
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -845,9 +869,7 @@ the following methods should be implemented.</p>
                     installation.bot_token_expires_at,
                     installation.user_id,
                     installation.user_token,
-                    &#34;,&#34;.join(installation.user_scopes)
-                    if installation.user_scopes
-                    else None,
+                    &#34;,&#34;.join(installation.user_scopes) if installation.user_scopes else None,
                     installation.user_refresh_token,
                     installation.user_token_expires_at,
                     installation.incoming_webhook_url,
@@ -975,9 +997,7 @@ the following methods should be implemented.</p>
                 )
                 row = cur.fetchone()
                 result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-                self.logger.debug(
-                    f&#34;find_bot&#39;s query result: {result} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;find_bot&#39;s query result: {result} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     bot = Bot(
                         app_id=row[0],
@@ -1105,9 +1125,7 @@ the following methods should be implemented.</p>
                     return None
 
                 result = &#34;found&#34; if row and len(row) &gt; 0 else &#34;not found&#34;
-                self.logger.debug(
-                    f&#34;find_installation&#39;s query result: {result} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;find_installation&#39;s query result: {result} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     installation = Installation(
                         app_id=row[0],
@@ -1135,6 +1153,42 @@ the following methods should be implemented.</p>
                         token_type=row[22],
                         installed_at=row[23],
                     )
+
+                    if user_id is not None:
+                        # Retrieve the latest bot token, just in case
+                        # See also: https://github.com/slackapi/bolt-python/issues/664
+                        cur = conn.execute(
+                            &#34;&#34;&#34;
+                            select
+                                bot_token,
+                                bot_id,
+                                bot_user_id,
+                                bot_scopes,
+                                bot_refresh_token,
+                                bot_token_expires_at
+                            from
+                                slack_installations
+                            where
+                                client_id = ?
+                                and
+                                enterprise_id = ?
+                                and
+                                team_id = ?
+                                and
+                                bot_token is not null
+                            order by installed_at desc
+                            limit 1
+                            &#34;&#34;&#34;,
+                            [self.client_id, enterprise_id or &#34;&#34;, team_id],
+                        )
+                        row = cur.fetchone()
+                        installation.bot_token = row[0]
+                        installation.bot_id = row[1]
+                        installation.bot_user_id = row[2]
+                        installation.bot_scopes = row[3]
+                        installation.bot_refresh_token = row[4]
+                        installation.bot_token_expires_at = row[5]
+
                     return installation
                 return None
 
@@ -1146,9 +1200,7 @@ the following methods should be implemented.</p>
                 self.logger.warning(message)
             return None
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         try:
             with self.connect() as conn:
                 conn.execute(
@@ -1364,9 +1416,7 @@ def logger(self) -&gt; Logger:
         with sqlite3.connect(database=self.database) as conn:
             cur = conn.execute(&#34;select count(1) from slack_installations;&#34;)
             row_num = cur.fetchone()[0]
-            self.logger.debug(
-                f&#34;{row_num} installations are stored in {self.database}&#34;
-            )
+            self.logger.debug(f&#34;{row_num} installations are stored in {self.database}&#34;)
     except Exception:  # skipcq: PYL-W0703
         self.create_tables()
     self.init_called = True</code></pre>

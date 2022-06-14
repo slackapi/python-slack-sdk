@@ -71,9 +71,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
-            Callable[
-                [&#34;AsyncBaseSocketModeClient&#34;, dict, Optional[str]], Awaitable[None]
-            ],
+            Callable[[&#34;AsyncBaseSocketModeClient&#34;, dict, Optional[str]], Awaitable[None]],
         ]
     ]
     socket_mode_request_listeners: List[
@@ -142,25 +140,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session: WebSocketClientProtocol = self.current_session
         session_id: str = await self.session_id()
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;
-            )
+            self.logger.debug(f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;)
         try:
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(
-                            f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-                        )
+                        self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
                     break
                 await asyncio.sleep(self.ping_interval)
                 try:
-                    if self.auto_reconnect_enabled and (
-                        session is None or session.closed
-                    ):
-                        self.logger.info(
-                            f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;
-                        )
+                    if self.auto_reconnect_enabled and (session is None or session.closed):
+                        self.logger.info(f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;)
                         await self.connect_to_new_endpoint()
                 except Exception as e:
                     self.logger.error(
@@ -169,9 +159,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     )
         except asyncio.CancelledError:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-                )
+                self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
             raise
 
     async def receive_messages(self) -&gt; None:
@@ -182,16 +170,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session_id: str = await self.session_id()
         consecutive_error_count = 0
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new receive_messages() execution loop with {session_id} started&#34;
-            )
+            self.logger.debug(f&#34;A new receive_messages() execution loop with {session_id} started&#34;)
         try:
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(
-                            f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-                        )
+                        self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
                     break
                 try:
                     message = await session.recv()
@@ -199,9 +183,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if isinstance(message, bytes):
                             message = message.decode(&#34;utf-8&#34;)
                         if self.logger.level &lt;= logging.DEBUG:
-                            self.logger.debug(
-                                f&#34;Received message: {message}, session: {session_id}&#34;
-                            )
+                            self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:
@@ -215,17 +197,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         await asyncio.sleep(consecutive_error_count)
         except asyncio.CancelledError:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-                )
+                self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
             raise
 
     async def is_connected(self) -&gt; bool:
-        return (
-            not self.closed
-            and self.current_session is not None
-            and not self.current_session.closed
-        )
+        return not self.closed and self.current_session is not None and not self.current_session.closed
 
     async def session_id(self) -&gt; str:
         return self.build_session_id(self.current_session)
@@ -233,9 +209,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def connect(self):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        old_session: Optional[WebSocketClientProtocol] = (
-            None if self.current_session is None else self.current_session
-        )
+        old_session: Optional[WebSocketClientProtocol] = None if self.current_session is None else self.current_session
         # NOTE: websockets does not support proxy settings
         self.current_session = await websockets.connect(
             uri=self.wss_uri,
@@ -247,23 +221,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
-        self.current_session_monitor = asyncio.ensure_future(
-            self.monitor_current_session()
-        )
+        self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
 
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;
-            )
+            self.logger.debug(f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;)
 
         if self.message_receiver is not None:
             self.message_receiver.cancel()
         self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;
-            )
+            self.logger.debug(f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;)
 
         if old_session is not None:
             await old_session.close()
@@ -295,9 +263,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if await self.is_connected():
                     await self.current_session.send(message)
                 else:
-                    self.logger.warning(
-                        f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;
-                    )
+                    self.logger.warning(f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;)
                     raise e
             finally:
                 if self.connect_operation_lock.locked() is True:
@@ -364,9 +330,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     message_listeners: List[
         Union[
             AsyncWebSocketMessageListener,
-            Callable[
-                [&#34;AsyncBaseSocketModeClient&#34;, dict, Optional[str]], Awaitable[None]
-            ],
+            Callable[[&#34;AsyncBaseSocketModeClient&#34;, dict, Optional[str]], Awaitable[None]],
         ]
     ]
     socket_mode_request_listeners: List[
@@ -435,25 +399,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session: WebSocketClientProtocol = self.current_session
         session_id: str = await self.session_id()
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;
-            )
+            self.logger.debug(f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;)
         try:
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(
-                            f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-                        )
+                        self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
                     break
                 await asyncio.sleep(self.ping_interval)
                 try:
-                    if self.auto_reconnect_enabled and (
-                        session is None or session.closed
-                    ):
-                        self.logger.info(
-                            f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;
-                        )
+                    if self.auto_reconnect_enabled and (session is None or session.closed):
+                        self.logger.info(f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;)
                         await self.connect_to_new_endpoint()
                 except Exception as e:
                     self.logger.error(
@@ -462,9 +418,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     )
         except asyncio.CancelledError:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-                )
+                self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
             raise
 
     async def receive_messages(self) -&gt; None:
@@ -475,16 +429,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session_id: str = await self.session_id()
         consecutive_error_count = 0
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new receive_messages() execution loop with {session_id} started&#34;
-            )
+            self.logger.debug(f&#34;A new receive_messages() execution loop with {session_id} started&#34;)
         try:
             while not self.closed:
                 if session != self.current_session:
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(
-                            f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-                        )
+                        self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
                     break
                 try:
                     message = await session.recv()
@@ -492,9 +442,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if isinstance(message, bytes):
                             message = message.decode(&#34;utf-8&#34;)
                         if self.logger.level &lt;= logging.DEBUG:
-                            self.logger.debug(
-                                f&#34;Received message: {message}, session: {session_id}&#34;
-                            )
+                            self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:
@@ -508,17 +456,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         await asyncio.sleep(consecutive_error_count)
         except asyncio.CancelledError:
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-                )
+                self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
             raise
 
     async def is_connected(self) -&gt; bool:
-        return (
-            not self.closed
-            and self.current_session is not None
-            and not self.current_session.closed
-        )
+        return not self.closed and self.current_session is not None and not self.current_session.closed
 
     async def session_id(self) -&gt; str:
         return self.build_session_id(self.current_session)
@@ -526,9 +468,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def connect(self):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        old_session: Optional[WebSocketClientProtocol] = (
-            None if self.current_session is None else self.current_session
-        )
+        old_session: Optional[WebSocketClientProtocol] = None if self.current_session is None else self.current_session
         # NOTE: websockets does not support proxy settings
         self.current_session = await websockets.connect(
             uri=self.wss_uri,
@@ -540,23 +480,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
         if self.current_session_monitor is not None:
             self.current_session_monitor.cancel()
-        self.current_session_monitor = asyncio.ensure_future(
-            self.monitor_current_session()
-        )
+        self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
 
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;
-            )
+            self.logger.debug(f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;)
 
         if self.message_receiver is not None:
             self.message_receiver.cancel()
         self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;
-            )
+            self.logger.debug(f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;)
 
         if old_session is not None:
             await old_session.close()
@@ -588,9 +522,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if await self.is_connected():
                     await self.current_session.send(message)
                 else:
-                    self.logger.warning(
-                        f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;
-                    )
+                    self.logger.warning(f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;)
                     raise e
             finally:
                 if self.connect_operation_lock.locked() is True:
@@ -740,9 +672,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
 <pre><code class="python">async def connect(self):
     if self.wss_uri is None:
         self.wss_uri = await self.issue_new_wss_url()
-    old_session: Optional[WebSocketClientProtocol] = (
-        None if self.current_session is None else self.current_session
-    )
+    old_session: Optional[WebSocketClientProtocol] = None if self.current_session is None else self.current_session
     # NOTE: websockets does not support proxy settings
     self.current_session = await websockets.connect(
         uri=self.wss_uri,
@@ -754,23 +684,17 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
 
     if self.current_session_monitor is not None:
         self.current_session_monitor.cancel()
-    self.current_session_monitor = asyncio.ensure_future(
-        self.monitor_current_session()
-    )
+    self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
 
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;
-        )
+        self.logger.debug(f&#34;A new monitor_current_session() executor has been recreated for {session_id}&#34;)
 
     if self.message_receiver is not None:
         self.message_receiver.cancel()
     self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;
-        )
+        self.logger.debug(f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;)
 
     if old_session is not None:
         await old_session.close()
@@ -802,11 +726,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def is_connected(self) -&gt; bool:
-    return (
-        not self.closed
-        and self.current_session is not None
-        and not self.current_session.closed
-    )</code></pre>
+    return not self.closed and self.current_session is not None and not self.current_session.closed</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.monitor_current_session"><code class="name flex">
@@ -825,25 +745,17 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
     session: WebSocketClientProtocol = self.current_session
     session_id: str = await self.session_id()
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;
-        )
+        self.logger.debug(f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;)
     try:
         while not self.closed:
             if session != self.current_session:
                 if self.logger.level &lt;= logging.DEBUG:
-                    self.logger.debug(
-                        f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-                    )
+                    self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
                 break
             await asyncio.sleep(self.ping_interval)
             try:
-                if self.auto_reconnect_enabled and (
-                    session is None or session.closed
-                ):
-                    self.logger.info(
-                        f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;
-                    )
+                if self.auto_reconnect_enabled and (session is None or session.closed):
+                    self.logger.info(f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;)
                     await self.connect_to_new_endpoint()
             except Exception as e:
                 self.logger.error(
@@ -852,9 +764,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
                 )
     except asyncio.CancelledError:
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;
-            )
+            self.logger.debug(f&#34;The monitor_current_session task for {session_id} is now cancelled&#34;)
         raise</code></pre>
 </details>
 </dd>
@@ -875,16 +785,12 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
     session_id: str = await self.session_id()
     consecutive_error_count = 0
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;A new receive_messages() execution loop with {session_id} started&#34;
-        )
+        self.logger.debug(f&#34;A new receive_messages() execution loop with {session_id} started&#34;)
     try:
         while not self.closed:
             if session != self.current_session:
                 if self.logger.level &lt;= logging.DEBUG:
-                    self.logger.debug(
-                        f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-                    )
+                    self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
                 break
             try:
                 message = await session.recv()
@@ -892,9 +798,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
                     if isinstance(message, bytes):
                         message = message.decode(&#34;utf-8&#34;)
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(
-                            f&#34;Received message: {message}, session: {session_id}&#34;
-                        )
+                        self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
                     await self.enqueue_message(message)
                 consecutive_error_count = 0
             except Exception as e:
@@ -908,9 +812,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
                     await asyncio.sleep(consecutive_error_count)
     except asyncio.CancelledError:
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;The running receive_messages task for {session_id} is now cancelled&#34;
-            )
+            self.logger.debug(f&#34;The running receive_messages task for {session_id} is now cancelled&#34;)
         raise</code></pre>
 </details>
 </dd>
@@ -944,9 +846,7 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
             if await self.is_connected():
                 await self.current_session.send(message)
             else:
-                self.logger.warning(
-                    f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;
-                )
+                self.logger.warning(f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;)
                 raise e
         finally:
             if self.connect_operation_lock.locked() is True:

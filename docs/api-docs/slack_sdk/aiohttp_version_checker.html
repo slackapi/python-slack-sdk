@@ -45,9 +45,7 @@ def validate_aiohttp_version(
         if len(elements) &gt;= 3:
             # patch version can be a non-numeric value
             major, minor, patch = int(elements[0]), int(elements[1]), elements[2]
-            if major &lt;= 2 or (
-                major == 3 and (minor == 6 or (minor == 7 and patch == &#34;0&#34;))
-            ):
+            if major &lt;= 2 or (major == 3 and (minor == 6 or (minor == 7 and patch == &#34;0&#34;))):
                 print_warning(
                     &#34;We highly recommend upgrading aiohttp to 3.7.3 or higher versions.&#34;
                     &#34;An older version of the library may not work with the Slack server-side in the future.&#34;
@@ -79,9 +77,7 @@ def validate_aiohttp_version(
         if len(elements) &gt;= 3:
             # patch version can be a non-numeric value
             major, minor, patch = int(elements[0]), int(elements[1]), elements[2]
-            if major &lt;= 2 or (
-                major == 3 and (minor == 6 or (minor == 7 and patch == &#34;0&#34;))
-            ):
+            if major &lt;= 2 or (major == 3 and (minor == 6 or (minor == 7 and patch == &#34;0&#34;))):
                 print_warning(
                     &#34;We highly recommend upgrading aiohttp to 3.7.3 or higher versions.&#34;
                     &#34;An older version of the library may not work with the Slack server-side in the future.&#34;

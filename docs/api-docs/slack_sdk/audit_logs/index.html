@@ -141,13 +141,9 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         self.proxy = proxy
         self.base_url = base_url
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else default_retry_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else default_retry_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -293,13 +289,8 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         headers[&#34;Content-Type&#34;] = &#34;application/json;charset=utf-8&#34;
 
         if self.logger.level &lt;= logging.DEBUG:
-            headers_for_logging = {
-                k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
-                for k, v in headers.items()
-            }
-            self.logger.debug(
-                f&#34;Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}&#34;
-            )
+            headers_for_logging = {k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v for k, v in headers.items()}
+            self.logger.debug(f&#34;Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}&#34;)
 
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
@@ -338,15 +329,9 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                 )
                 if e.code == 429:
                     # for backward-compatibility with WebClient (v.2.5.0 or older)
-                    if (
-                        &#34;retry-after&#34; not in resp.headers
-                        and &#34;Retry-After&#34; in resp.headers
-                    ):
+                    if &#34;retry-after&#34; not in resp.headers and &#34;Retry-After&#34; in resp.headers:
                         resp.headers[&#34;retry-after&#34;] = resp.headers[&#34;Retry-After&#34;]
-                    if (
-                        &#34;Retry-After&#34; not in resp.headers
-                        and &#34;retry-after&#34; in resp.headers
-                    ):
+                    if &#34;Retry-After&#34; not in resp.headers and &#34;retry-after&#34; in resp.headers:
                         resp.headers[&#34;Retry-After&#34;] = resp.headers[&#34;retry-after&#34;]
                 _debug_log_response(self.logger, resp)
 
@@ -355,9 +340,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                 retry_response = RetryHttpResponse(
                     status_code=e.code,
                     headers={k: [v] for k, v in e.headers.items()},
-                    data=response_body.encode(&#34;utf-8&#34;)
-                    if response_body is not None
-                    else None,
+                    data=response_body.encode(&#34;utf-8&#34;) if response_body is not None else None,
                 )
                 for handler in self.retry_handlers:
                     if handler.can_retry(
@@ -383,9 +366,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 
             except Exception as err:
                 last_error = err
-                self.logger.error(
-                    f&#34;Failed to send a request to Slack API server: {err}&#34;
-                )
+                self.logger.error(f&#34;Failed to send a request to Slack API server: {err}&#34;)
 
                 # Try to find a retry handler for this error
                 retry_request = RetryHttpRequest.from_urllib_http_request(req)
@@ -406,9 +387,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                             response=None,
                             error=err,
                         )
-                        self.logger.info(
-                            f&#34;Going to retry the same request: {req.method} {req.full_url}&#34;
-                        )
+                        self.logger.info(f&#34;Going to retry the same request: {req.method} {req.full_url}&#34;)
                         break
 
                 if retry_state.next_attempt_requested is False:
@@ -418,9 +397,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
             return resp
         raise last_error
 
-    def _perform_http_request_internal(
-        self, url: str, req: Request
-    ) -&gt; AuditLogsResponse:
+    def _perform_http_request_internal(self, url: str, req: Request) -&gt; AuditLogsResponse:
         opener: Optional[OpenerDirector] = None
         # for security (BAN-B310)
         if url.lower().startswith(&#34;http&#34;):
@@ -431,9 +408,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                         HTTPSHandler(context=self.ssl),
                     )
                 else:
-                    raise SlackRequestError(
-                        f&#34;Invalid proxy detected: {self.proxy} must be a str value&#34;
-                    )
+                    raise SlackRequestError(f&#34;Invalid proxy detected: {self.proxy} must be a str value&#34;)
         else:
             raise SlackRequestError(f&#34;Invalid URL detected: {url}&#34;)
 
@@ -442,9 +417,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
         if opener:
             http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
         else:
-            http_resp = urlopen(  # skipcq: BAN-B310
-                req, context=self.ssl, timeout=self.timeout
-            )
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
         charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
         response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(
@@ -753,11 +726,7 @@ Authentication not required.</p>
         self.status_code = status_code
         self.headers = headers
         self.raw_body = raw_body
-        self.body = (
-            json.loads(raw_body)
-            if raw_body is not None and raw_body.startswith(&#34;{&#34;)
-            else None
-        )</code></pre>
+        self.body = json.loads(raw_body) if raw_body is not None and raw_body.startswith(&#34;{&#34;) else None</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>

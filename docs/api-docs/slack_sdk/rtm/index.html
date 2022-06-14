@@ -233,9 +233,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
 
-        future: Future[Any] = asyncio.ensure_future(
-            self._connect_and_read(), loop=self._event_loop
-        )
+        future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
         if self.run_async:
             return future
@@ -290,9 +288,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
 
     async def _send_json(self, payload):
         if self._websocket is None or self._event_loop is None:
-            raise client_err.SlackClientNotConnectedError(
-                &#34;Websocket connection is closed.&#34;
-            )
+            raise client_err.SlackClientNotConnectedError(&#34;Websocket connection is closed.&#34;)
         if &#34;id&#34; not in payload:
             payload[&#34;id&#34;] = self._next_msg_id()
 
@@ -343,12 +339,8 @@ class RTMClient(object):  # skipcq: PYL-R0205
             msg = &#34;The specified callback &#39;{}&#39; is not callable.&#34;.format(cb_name)
             raise client_err.SlackClientError(msg)
         callback_params = inspect.signature(callback).parameters.values()
-        if not any(
-            param for param in callback_params if param.kind == param.VAR_KEYWORD
-        ):
-            msg = &#34;The callback &#39;{}&#39; must accept keyword arguments (**kwargs).&#34;.format(
-                cb_name
-            )
+        if not any(param for param in callback_params if param.kind == param.VAR_KEYWORD):
+            msg = &#34;The callback &#39;{}&#39; must accept keyword arguments (**kwargs).&#34;.format(cb_name)
             raise client_err.SlackClientError(msg)
 
     def _next_msg_id(self):
@@ -381,9 +373,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         while not self._stopped:
             try:
                 self._connection_attempts += 1
-                async with aiohttp.ClientSession(
-                    timeout=aiohttp.ClientTimeout(total=self.timeout)
-                ) as session:
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=self.timeout)) as session:
                     self._session = session
                     url, data = await self._retrieve_websocket_info()
                     async with session.ws_connect(
@@ -398,9 +388,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                         await self._read_messages()
                         # The websocket has been disconnected, or self._stopped is True
                         if not self._stopped and not self.auto_reconnect:
-                            self._logger.warning(
-                                &#34;Not reconnecting the Websocket because auto_reconnect is False&#34;
-                            )
+                            self._logger.warning(&#34;Not reconnecting the Websocket because auto_reconnect is False&#34;)
                             return
                         # No need to wait exponentially here, since the connection was
                         # established OK, but timed out, or was closed remotely
@@ -410,11 +398,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                 # Not yet implemented: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 await self._dispatch_event(event=&#34;error&#34;, data=exception)
-                error_code = (
-                    exception.response.get(&#34;error&#34;, None)
-                    if hasattr(exception, &#34;response&#34;)
-                    else None
-                )
+                error_code = exception.response.get(&#34;error&#34;, None) if hasattr(exception, &#34;response&#34;) else None
                 if (
                     self.auto_reconnect
                     and not self._stopped
@@ -422,9 +406,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                 ):
                     await self._wait_exponentially(exception)
                     continue
-                self._logger.exception(
-                    &#34;The Websocket encountered an error. Closing the connection...&#34;
-                )
+                self._logger.exception(&#34;The Websocket encountered an error. Closing the connection...&#34;)
                 self._close_websocket()
                 raise
 
@@ -461,9 +443,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     await self._dispatch_event(event, data=payload)
                 except Exception as err:  # skipcq: PYL-W0703
                     data = message.data if message else message
-                    self._logger.info(
-                        f&#34;Caught a raised exception ({err}) while dispatching a TEXT message ({data})&#34;
-                    )
+                    self._logger.info(f&#34;Caught a raised exception ({err}) while dispatching a TEXT message ({data})&#34;)
                     # Raised exceptions here happen in users&#39; code and were just unhandled.
                     # As they&#39;re not intended for closing current WebSocket connection,
                     # this exception should not be propagated to higher level (#_connect_and_read()).
@@ -515,9 +495,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     break
 
                 if inspect.iscoroutinefunction(callback):
-                    await callback(
-                        rtm_client=self, web_client=self._web_client, data=data
-                    )
+                    await callback(rtm_client=self, web_client=self._web_client, data=data)
                 else:
                     if self.run_async is True:
                         raise client_err.SlackRequestError(
@@ -618,9 +596,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
             )  # skipcq: PYL-E1102
             futures.append(future)
         self._websocket = None
-        event_f = asyncio.ensure_future(
-            self._dispatch_event(event=&#34;close&#34;), loop=self._event_loop
-        )
+        event_f = asyncio.ensure_future(self._dispatch_event(event=&#34;close&#34;), loop=self._event_loop)
         futures.append(event_f)
         return futures</code></pre>
 </details>
@@ -912,9 +888,7 @@ removed at anytime.</p></div>
             for s in signals:
                 self._event_loop.add_signal_handler(s, self.stop)
 
-        future: Future[Any] = asyncio.ensure_future(
-            self._connect_and_read(), loop=self._event_loop
-        )
+        future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
         if self.run_async:
             return future
@@ -969,9 +943,7 @@ removed at anytime.</p></div>
 
     async def _send_json(self, payload):
         if self._websocket is None or self._event_loop is None:
-            raise client_err.SlackClientNotConnectedError(
-                &#34;Websocket connection is closed.&#34;
-            )
+            raise client_err.SlackClientNotConnectedError(&#34;Websocket connection is closed.&#34;)
         if &#34;id&#34; not in payload:
             payload[&#34;id&#34;] = self._next_msg_id()
 
@@ -1022,12 +994,8 @@ removed at anytime.</p></div>
             msg = &#34;The specified callback &#39;{}&#39; is not callable.&#34;.format(cb_name)
             raise client_err.SlackClientError(msg)
         callback_params = inspect.signature(callback).parameters.values()
-        if not any(
-            param for param in callback_params if param.kind == param.VAR_KEYWORD
-        ):
-            msg = &#34;The callback &#39;{}&#39; must accept keyword arguments (**kwargs).&#34;.format(
-                cb_name
-            )
+        if not any(param for param in callback_params if param.kind == param.VAR_KEYWORD):
+            msg = &#34;The callback &#39;{}&#39; must accept keyword arguments (**kwargs).&#34;.format(cb_name)
             raise client_err.SlackClientError(msg)
 
     def _next_msg_id(self):
@@ -1060,9 +1028,7 @@ removed at anytime.</p></div>
         while not self._stopped:
             try:
                 self._connection_attempts += 1
-                async with aiohttp.ClientSession(
-                    timeout=aiohttp.ClientTimeout(total=self.timeout)
-                ) as session:
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=self.timeout)) as session:
                     self._session = session
                     url, data = await self._retrieve_websocket_info()
                     async with session.ws_connect(
@@ -1077,9 +1043,7 @@ removed at anytime.</p></div>
                         await self._read_messages()
                         # The websocket has been disconnected, or self._stopped is True
                         if not self._stopped and not self.auto_reconnect:
-                            self._logger.warning(
-                                &#34;Not reconnecting the Websocket because auto_reconnect is False&#34;
-                            )
+                            self._logger.warning(&#34;Not reconnecting the Websocket because auto_reconnect is False&#34;)
                             return
                         # No need to wait exponentially here, since the connection was
                         # established OK, but timed out, or was closed remotely
@@ -1089,11 +1053,7 @@ removed at anytime.</p></div>
                 # Not yet implemented: Catch websocket exceptions thrown by aiohttp.
             ) as exception:
                 await self._dispatch_event(event=&#34;error&#34;, data=exception)
-                error_code = (
-                    exception.response.get(&#34;error&#34;, None)
-                    if hasattr(exception, &#34;response&#34;)
-                    else None
-                )
+                error_code = exception.response.get(&#34;error&#34;, None) if hasattr(exception, &#34;response&#34;) else None
                 if (
                     self.auto_reconnect
                     and not self._stopped
@@ -1101,9 +1061,7 @@ removed at anytime.</p></div>
                 ):
                     await self._wait_exponentially(exception)
                     continue
-                self._logger.exception(
-                    &#34;The Websocket encountered an error. Closing the connection...&#34;
-                )
+                self._logger.exception(&#34;The Websocket encountered an error. Closing the connection...&#34;)
                 self._close_websocket()
                 raise
 
@@ -1140,9 +1098,7 @@ removed at anytime.</p></div>
                     await self._dispatch_event(event, data=payload)
                 except Exception as err:  # skipcq: PYL-W0703
                     data = message.data if message else message
-                    self._logger.info(
-                        f&#34;Caught a raised exception ({err}) while dispatching a TEXT message ({data})&#34;
-                    )
+                    self._logger.info(f&#34;Caught a raised exception ({err}) while dispatching a TEXT message ({data})&#34;)
                     # Raised exceptions here happen in users&#39; code and were just unhandled.
                     # As they&#39;re not intended for closing current WebSocket connection,
                     # this exception should not be propagated to higher level (#_connect_and_read()).
@@ -1194,9 +1150,7 @@ removed at anytime.</p></div>
                     break
 
                 if inspect.iscoroutinefunction(callback):
-                    await callback(
-                        rtm_client=self, web_client=self._web_client, data=data
-                    )
+                    await callback(rtm_client=self, web_client=self._web_client, data=data)
                 else:
                     if self.run_async is True:
                         raise client_err.SlackRequestError(
@@ -1297,9 +1251,7 @@ removed at anytime.</p></div>
             )  # skipcq: PYL-E1102
             futures.append(future)
         self._websocket = None
-        event_f = asyncio.ensure_future(
-            self._dispatch_event(event=&#34;close&#34;), loop=self._event_loop
-        )
+        event_f = asyncio.ensure_future(self._dispatch_event(event=&#34;close&#34;), loop=self._event_loop)
         futures.append(event_f)
         return futures</code></pre>
 </details>
@@ -1527,9 +1479,7 @@ is lost unintentionally or an exception is thrown.</p>
         for s in signals:
             self._event_loop.add_signal_handler(s, self.stop)
 
-    future: Future[Any] = asyncio.ensure_future(
-        self._connect_and_read(), loop=self._event_loop
-    )
+    future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
 
     if self.run_async:
         return future

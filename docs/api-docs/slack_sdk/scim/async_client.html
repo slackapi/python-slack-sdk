@@ -140,13 +140,9 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
         self.default_headers = default_headers if default_headers else {}
-        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(
-            user_agent_prefix, user_agent_suffix
-        )
+        self.default_headers[&#34;User-Agent&#34;] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
-        self.retry_handlers = (
-            retry_handlers if retry_handlers is not None else async_default_handlers()
-        )
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
 
         if self.proxy is None or len(self.proxy.strip()) == 0:
             env_variable = load_http_proxy_from_env(self.logger)
@@ -178,26 +174,18 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         )
 
     async def read_user(self, id: str) -&gt; ReadUserResponse:
-        return ReadUserResponse(
-            await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;)
-        )
+        return ReadUserResponse(await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;))
 
-    async def create_user(
-        self, user: Union[Dict[str, Any], User]
-    ) -&gt; UserCreateResponse:
+    async def create_user(self, user: Union[Dict[str, Any], User]) -&gt; UserCreateResponse:
         return UserCreateResponse(
             await self.api_call(
                 http_verb=&#34;POST&#34;,
                 path=&#34;Users&#34;,
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
-    async def patch_user(
-        self, id: str, partial_user: Union[Dict[str, Any], User]
-    ) -&gt; UserPatchResponse:
+    async def patch_user(self, id: str, partial_user: Union[Dict[str, Any], User]) -&gt; UserPatchResponse:
         return UserPatchResponse(
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
@@ -208,17 +196,13 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
             )
         )
 
-    async def update_user(
-        self, user: Union[Dict[str, Any], User]
-    ) -&gt; UserUpdateResponse:
+    async def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
         user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
         return UserUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
                 path=f&#34;Users/{quote(user_id)}&#34;,
-                body_params=user.to_dict()
-                if isinstance(user, User)
-                else _to_dict_without_not_given(user),
+                body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
             )
         )
 
@@ -255,26 +239,18 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         )
 
     async def read_group(self, id: str) -&gt; ReadGroupResponse:
-        return ReadGroupResponse(
-            await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;)
-        )
+        return ReadGroupResponse(await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;))
 
-    async def create_group(
-        self, group: Union[Dict[str, Any], Group]
-    ) -&gt; GroupCreateResponse:
+    async def create_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupCreateResponse:
         return GroupCreateResponse(
             await self.api_call(
                 http_verb=&#34;POST&#34;,
                 path=&#34;Groups&#34;,
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
-    async def patch_group(
-        self, id: str, partial_group: Union[Dict[str, Any], Group]
-    ) -&gt; GroupPatchResponse:
+    async def patch_group(self, id: str, partial_group: Union[Dict[str, Any], Group]) -&gt; GroupPatchResponse:
         return GroupPatchResponse(
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
@@ -285,17 +261,13 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
             )
         )
 
-    async def update_group(
-        self, group: Union[Dict[str, Any], Group]
-    ) -&gt; GroupUpdateResponse:
+    async def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
         group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
         return GroupUpdateResponse(
             await self.api_call(
                 http_verb=&#34;PUT&#34;,
                 path=f&#34;Groups/{quote(group_id)}&#34;,
-                body_params=group.to_dict()
-                if isinstance(group, Group)
-                else _to_dict_without_not_given(group),
+                body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
             )
         )
 
@@ -385,8 +357,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 
                 if self.logger.level &lt;= logging.DEBUG:
                     headers_for_logging = {
-                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
-                        for k, v in headers.items()
+                        k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v for k, v in headers.items()
                     }
                     self.logger.debug(
                         f&#34;Sending a request - url: {url}, params: {body_params}, headers: {headers_for_logging}&#34;
@@ -399,14 +370,10 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
                                 headers=res.headers,
-                                data=response_body.encode(&#34;utf-8&#34;)
-                                if response_body is not None
-                                else None,
+                                data=response_body.encode(&#34;utf-8&#34;) if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
-                            self.logger.debug(
-                                f&#34;No response data returned from the following API call: {url}.&#34;
-                            )
+                            self.logger.debug(f&#34;No response data returned from the following API call: {url}.&#34;)
 
                         if res.status == 429:
                             for handler in self.retry_handlers:
@@ -448,8 +415,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
                         ):
                             if self.logger.level &lt;= logging.DEBUG:
                                 self.logger.info(
-                                    f&#34;A retry handler found: {type(handler).__name__} &#34;
-                                    f&#34;for {http_verb} {url} - {e}&#34;
+                                    f&#34;A retry handler found: {type(handler).__name__} &#34; f&#34;for {http_verb} {url} - {e}&#34;
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
@@ -568,16 +534,12 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def create_group(
-    self, group: Union[Dict[str, Any], Group]
-) -&gt; GroupCreateResponse:
+<pre><code class="python">async def create_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupCreateResponse:
     return GroupCreateResponse(
         await self.api_call(
             http_verb=&#34;POST&#34;,
             path=&#34;Groups&#34;,
-            body_params=group.to_dict()
-            if isinstance(group, Group)
-            else _to_dict_without_not_given(group),
+            body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
         )
     )</code></pre>
 </details>
@@ -591,16 +553,12 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def create_user(
-    self, user: Union[Dict[str, Any], User]
-) -&gt; UserCreateResponse:
+<pre><code class="python">async def create_user(self, user: Union[Dict[str, Any], User]) -&gt; UserCreateResponse:
     return UserCreateResponse(
         await self.api_call(
             http_verb=&#34;POST&#34;,
             path=&#34;Users&#34;,
-            body_params=user.to_dict()
-            if isinstance(user, User)
-            else _to_dict_without_not_given(user),
+            body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
         )
     )</code></pre>
 </details>
@@ -650,9 +608,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def patch_group(
-    self, id: str, partial_group: Union[Dict[str, Any], Group]
-) -&gt; GroupPatchResponse:
+<pre><code class="python">async def patch_group(self, id: str, partial_group: Union[Dict[str, Any], Group]) -&gt; GroupPatchResponse:
     return GroupPatchResponse(
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
@@ -673,9 +629,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def patch_user(
-    self, id: str, partial_user: Union[Dict[str, Any], User]
-) -&gt; UserPatchResponse:
+<pre><code class="python">async def patch_user(self, id: str, partial_user: Union[Dict[str, Any], User]) -&gt; UserPatchResponse:
     return UserPatchResponse(
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
@@ -697,9 +651,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def read_group(self, id: str) -&gt; ReadGroupResponse:
-    return ReadGroupResponse(
-        await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;)
-    )</code></pre>
+    return ReadGroupResponse(await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;))</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.scim.async_client.AsyncSCIMClient.read_user"><code class="name flex">
@@ -712,9 +664,7 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">async def read_user(self, id: str) -&gt; ReadUserResponse:
-    return ReadUserResponse(
-        await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;)
-    )</code></pre>
+    return ReadUserResponse(await self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;))</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.scim.async_client.AsyncSCIMClient.search_groups"><code class="name flex">
@@ -786,17 +736,13 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def update_group(
-    self, group: Union[Dict[str, Any], Group]
-) -&gt; GroupUpdateResponse:
+<pre><code class="python">async def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
     group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
     return GroupUpdateResponse(
         await self.api_call(
             http_verb=&#34;PUT&#34;,
             path=f&#34;Groups/{quote(group_id)}&#34;,
-            body_params=group.to_dict()
-            if isinstance(group, Group)
-            else _to_dict_without_not_given(group),
+            body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
         )
     )</code></pre>
 </details>
@@ -810,17 +756,13 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">async def update_user(
-    self, user: Union[Dict[str, Any], User]
-) -&gt; UserUpdateResponse:
+<pre><code class="python">async def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
     user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
     return UserUpdateResponse(
         await self.api_call(
             http_verb=&#34;PUT&#34;,
             path=f&#34;Users/{quote(user_id)}&#34;,
-            body_params=user.to_dict()
-            if isinstance(user, User)
-            else _to_dict_without_not_given(user),
+            body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
         )
     )</code></pre>
 </details>

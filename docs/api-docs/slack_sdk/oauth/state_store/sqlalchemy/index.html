@@ -90,9 +90,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         try:
             with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(
-                    and_(c.state == state, c.expire_at &gt; datetime.utcnow())
-                )
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
                 result = conn.execute(query)
                 for row in result:
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -176,9 +174,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         try:
             with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(
-                    and_(c.state == state, c.expire_at &gt; datetime.utcnow())
-                )
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
                 result = conn.execute(query)
                 for row in result:
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -273,9 +269,7 @@ def logger(self) -&gt; Logger:
     try:
         with self.engine.begin() as conn:
             c = self.oauth_states.c
-            query = self.oauth_states.select().where(
-                and_(c.state == state, c.expire_at &gt; datetime.utcnow())
-            )
+            query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
             result = conn.execute(query)
             for row in result:
                 self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)

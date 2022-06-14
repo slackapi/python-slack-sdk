@@ -192,9 +192,7 @@ __all__ = [
         self.ping_interval = ping_interval
         self.receive_buffer_size = receive_buffer_size
         if self.receive_buffer_size &lt; 16:
-            raise SlackClientConfigurationError(
-                &#34;Too small receive_buffer_size detected.&#34;
-            )
+            raise SlackClientConfigurationError(&#34;Too small receive_buffer_size detected.&#34;)
 
         self.wss_uri = None
         self.message_queue = Queue()
@@ -203,14 +201,10 @@ __all__ = [
 
         self.current_session = None
         self.current_session_state = ConnectionState()
-        self.current_session_runner = IntervalRunner(
-            self._run_current_session, 0.1
-        ).start()
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.1).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(
-            self._monitor_current_session, self.ping_interval
-        )
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.closed = False
         self.connect_operation_lock = Lock()
@@ -274,9 +268,7 @@ __all__ = [
             self.current_app_monitor_started = True
             self.current_app_monitor.start()
 
-        self.logger.info(
-            f&#34;A new session has been established (session id: {self.session_id()})&#34;
-        )
+        self.logger.info(f&#34;A new session has been established (session id: {self.session_id()})&#34;)
 
     def disconnect(self) -&gt; None:
         if self.current_session is not None:
@@ -284,9 +276,7 @@ __all__ = [
 
     def send_message(self, message: str) -&gt; None:
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;
-            )
+            self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
         try:
             self.current_session.send(message)
         except SlackClientNotConnectedError as e:
@@ -328,8 +318,7 @@ __all__ = [
 
     def _on_error(self, error: Exception):
         error_message = (
-            f&#34;on_error invoked (session id: {self.session_id()}, &#34;
-            f&#34;error: {type(error).__name__}, message: {error})&#34;
+            f&#34;on_error invoked (session id: {self.session_id()}, &#34; f&#34;error: {type(error).__name__}, message: {error})&#34;
         )
         if self.trace_enabled:
             self.logger.exception(error_message)
@@ -343,10 +332,7 @@ __all__ = [
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;on_close invoked (session id: {self.session_id()})&#34;)
         if self.auto_reconnect_enabled:
-            self.logger.info(
-                &#34;Received CLOSE event. Reconnecting... &#34;
-                f&#34;(session id: {self.session_id()})&#34;
-            )
+            self.logger.info(&#34;Received CLOSE event. Reconnecting... &#34; f&#34;(session id: {self.session_id()})&#34;)
             self.connect_to_new_endpoint()
         for listener in self.on_close_listeners:
             listener(code, reason)
@@ -355,21 +341,12 @@ __all__ = [
         if self.current_session is not None and self.current_session.is_active():
             session_id = self.session_id()
             try:
-                self.logger.info(
-                    &#34;Starting to receive messages from a new connection&#34;
-                    f&#34; (session id: {session_id})&#34;
-                )
+                self.logger.info(&#34;Starting to receive messages from a new connection&#34; f&#34; (session id: {session_id})&#34;)
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info(
-                    &#34;Stopped receiving messages from a connection&#34;
-                    f&#34; (session id: {session_id})&#34;
-                )
+                self.logger.info(&#34;Stopped receiving messages from a connection&#34; f&#34; (session id: {session_id})&#34;)
             except Exception as e:
-                error_message = (
-                    &#34;Failed to start or stop the current session&#34;
-                    f&#34; (session id: {session_id}, error: {e})&#34;
-                )
+                error_message = &#34;Failed to start or stop the current session&#34; f&#34; (session id: {session_id}, error: {e})&#34;
                 if self.trace_enabled:
                     self.logger.exception(error_message)
                 else:
@@ -380,12 +357,9 @@ __all__ = [
             try:
                 self.current_session.check_state()
 
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or not self.current_session.is_active()
-                ):
+                if self.auto_reconnect_enabled and (self.current_session is None or not self.current_session.is_active()):
                     self.logger.info(
-                        &#34;The session seems to be already closed. Reconnecting... &#34;
-                        f&#34;(session id: {self.session_id()})&#34;
+                        &#34;The session seems to be already closed. Reconnecting... &#34; f&#34;(session id: {self.session_id()})&#34;
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:
@@ -557,9 +531,7 @@ __all__ = [
         self.current_app_monitor_started = True
         self.current_app_monitor.start()
 
-    self.logger.info(
-        f&#34;A new session has been established (session id: {self.session_id()})&#34;
-    )</code></pre>
+    self.logger.info(f&#34;A new session has been established (session id: {self.session_id()})&#34;)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.SocketModeClient.disconnect"><code class="name flex">
@@ -600,9 +572,7 @@ __all__ = [
 </summary>
 <pre><code class="python">def send_message(self, message: str) -&gt; None:
     if self.logger.level &lt;= logging.DEBUG:
-        self.logger.debug(
-            f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;
-        )
+        self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
     try:
         self.current_session.send(message)
     except SlackClientNotConnectedError as e:

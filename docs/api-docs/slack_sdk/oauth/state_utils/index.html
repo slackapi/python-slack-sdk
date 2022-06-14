@@ -46,33 +46,17 @@ class OAuthStateUtils:
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-        return (
-            f&#34;{self.cookie_name}={state}; &#34;
-            &#34;Secure; &#34;
-            &#34;HttpOnly; &#34;
-            &#34;Path=/; &#34;
-            f&#34;Max-Age={self.expiration_seconds}&#34;
-        )
+        return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;
 
     def build_set_cookie_for_deletion(self) -&gt; str:
-        return (
-            f&#34;{self.cookie_name}=deleted; &#34;
-            &#34;Secure; &#34;
-            &#34;HttpOnly; &#34;
-            &#34;Path=/; &#34;
-            &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
-        )
+        return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
 
     def is_valid_browser(
         self,
         state: Optional[str],
         request_headers: Dict[str, Union[str, Sequence[str]]],
     ) -&gt; bool:
-        if (
-            state is None
-            or request_headers is None
-            or request_headers.get(&#34;cookie&#34;, None) is None
-        ):
+        if state is None or request_headers is None or request_headers.get(&#34;cookie&#34;, None) is None:
             return False
         cookies = request_headers[&#34;cookie&#34;]
         if isinstance(cookies, str):
@@ -121,33 +105,17 @@ class OAuthStateUtils:
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-        return (
-            f&#34;{self.cookie_name}={state}; &#34;
-            &#34;Secure; &#34;
-            &#34;HttpOnly; &#34;
-            &#34;Path=/; &#34;
-            f&#34;Max-Age={self.expiration_seconds}&#34;
-        )
+        return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;
 
     def build_set_cookie_for_deletion(self) -&gt; str:
-        return (
-            f&#34;{self.cookie_name}=deleted; &#34;
-            &#34;Secure; &#34;
-            &#34;HttpOnly; &#34;
-            &#34;Path=/; &#34;
-            &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
-        )
+        return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
 
     def is_valid_browser(
         self,
         state: Optional[str],
         request_headers: Dict[str, Union[str, Sequence[str]]],
     ) -&gt; bool:
-        if (
-            state is None
-            or request_headers is None
-            or request_headers.get(&#34;cookie&#34;, None) is None
-        ):
+        if state is None or request_headers is None or request_headers.get(&#34;cookie&#34;, None) is None:
             return False
         cookies = request_headers[&#34;cookie&#34;]
         if isinstance(cookies, str):
@@ -190,13 +158,7 @@ class OAuthStateUtils:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_deletion(self) -&gt; str:
-    return (
-        f&#34;{self.cookie_name}=deleted; &#34;
-        &#34;Secure; &#34;
-        &#34;HttpOnly; &#34;
-        &#34;Path=/; &#34;
-        &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
-    )</code></pre>
+    return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.oauth.state_utils.OAuthStateUtils.build_set_cookie_for_new_state"><code class="name flex">
@@ -209,13 +171,7 @@ class OAuthStateUtils:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-    return (
-        f&#34;{self.cookie_name}={state}; &#34;
-        &#34;Secure; &#34;
-        &#34;HttpOnly; &#34;
-        &#34;Path=/; &#34;
-        f&#34;Max-Age={self.expiration_seconds}&#34;
-    )</code></pre>
+    return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.oauth.state_utils.OAuthStateUtils.is_valid_browser"><code class="name flex">
@@ -232,11 +188,7 @@ class OAuthStateUtils:
     state: Optional[str],
     request_headers: Dict[str, Union[str, Sequence[str]]],
 ) -&gt; bool:
-    if (
-        state is None
-        or request_headers is None
-        or request_headers.get(&#34;cookie&#34;, None) is None
-    ):
+    if state is None or request_headers is None or request_headers.get(&#34;cookie&#34;, None) is None:
         return False
     cookies = request_headers[&#34;cookie&#34;]
     if isinstance(cookies, str):

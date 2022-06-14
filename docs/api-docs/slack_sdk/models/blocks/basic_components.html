@@ -81,9 +81,7 @@ class TextObject(JsonObject):
         elif isinstance(text, TextObject):
             return text
         else:
-            cls.logger.warning(
-                f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;
-            )
+            cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
             return None
 
     def __init__(
@@ -282,20 +280,14 @@ class Option(JsonObject):
 
     @JsonValidator(f&#34;text attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
-        return (
-            self._text is None
-            or self._text.text is None
-            or len(self._text.text) &lt;= self.label_max_length
-        )
+        return self._text is None or self._text.text is None or len(self._text.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
     def _validate_value_length(self) -&gt; bool:
         return len(self.value) &lt;= self.value_max_length
 
     @classmethod
-    def parse_all(
-        cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
-    ) -&gt; Optional[List[&#34;Option&#34;]]:
+    def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
         if options is None:
             return None
         option_objects: List[Option] = []
@@ -309,9 +301,7 @@ class Option(JsonObject):
                 cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
         return option_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         &#34;&#34;&#34;
         Different parent classes must call this with a valid value from OptionTypes -
         either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -381,9 +371,7 @@ class OptionGroup(JsonObject):
             options: A list of no more than 100 Option objects.
         &#34;&#34;&#34;  # noqa prevent flake8 blowing up on the long URL
         # default_type=PlainTextObject.type is for backward-compatibility
-        self._label: Optional[TextObject] = TextObject.parse(
-            label, default_type=PlainTextObject.type
-        )
+        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)
         self.label: Optional[str] = self._label.text if self._label else None
         self.options = Option.parse_all(options)  # compatible with version 2.5
         show_unknown_key_warning(self, others)
@@ -410,14 +398,10 @@ class OptionGroup(JsonObject):
             elif isinstance(o, OptionGroup):
                 option_group_objects.append(o)
             else:
-                cls.logger.warning(
-                    f&#34;Unknown option group object detected and skipped ({o})&#34;
-                )
+                cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
         return option_group_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
@@ -496,9 +480,7 @@ class ConfirmObject(JsonObject):
 
     @JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
     def confirm_length(self) -&gt; bool:
-        return (
-            self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
-        )
+        return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
 
     @JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
     def deny_length(self) -&gt; bool:
@@ -508,19 +490,13 @@ class ConfirmObject(JsonObject):
     def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == &#34;action&#34;:  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can&#39;t find documentation
             # on actual limits here
             json = {
-                &#34;ok_text&#34;: self._confirm.text
-                if self._confirm and self._confirm.text != &#34;Yes&#34;
-                else &#34;Okay&#34;,
-                &#34;dismiss_text&#34;: self._deny.text
-                if self._deny and self._deny.text != &#34;No&#34;
-                else &#34;Cancel&#34;,
+                &#34;ok_text&#34;: self._confirm.text if self._confirm and self._confirm.text != &#34;Yes&#34; else &#34;Okay&#34;,
+                &#34;dismiss_text&#34;: self._deny.text if self._deny and self._deny.text != &#34;No&#34; else &#34;Cancel&#34;,
             }
             if self._title:
                 json[&#34;title&#34;] = self._title.text
@@ -659,9 +635,7 @@ offering a confirm and deny button.
 
     @JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
     def confirm_length(self) -&gt; bool:
-        return (
-            self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
-        )
+        return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
 
     @JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
     def deny_length(self) -&gt; bool:
@@ -671,19 +645,13 @@ offering a confirm and deny button.
     def _validate_confirm_style(self) -&gt; bool:
         return self._style is None or self._style in [&#34;primary&#34;, &#34;danger&#34;]
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         if option_type == &#34;action&#34;:  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can&#39;t find documentation
             # on actual limits here
             json = {
-                &#34;ok_text&#34;: self._confirm.text
-                if self._confirm and self._confirm.text != &#34;Yes&#34;
-                else &#34;Okay&#34;,
-                &#34;dismiss_text&#34;: self._deny.text
-                if self._deny and self._deny.text != &#34;No&#34;
-                else &#34;Cancel&#34;,
+                &#34;ok_text&#34;: self._confirm.text if self._confirm and self._confirm.text != &#34;Yes&#34; else &#34;Okay&#34;,
+                &#34;dismiss_text&#34;: self._deny.text if self._deny and self._deny.text != &#34;No&#34; else &#34;Cancel&#34;,
             }
             if self._title:
                 json[&#34;title&#34;] = self._title.text
@@ -768,9 +736,7 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
 def confirm_length(self) -&gt; bool:
-    return (
-        self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length
-    )</code></pre>
+    return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.deny_length"><code class="name flex">
@@ -1233,20 +1199,14 @@ dialogs.</dd>
 
     @JsonValidator(f&#34;text attribute cannot exceed {label_max_length} characters&#34;)
     def _validate_text_length(self) -&gt; bool:
-        return (
-            self._text is None
-            or self._text.text is None
-            or len(self._text.text) &lt;= self.label_max_length
-        )
+        return self._text is None or self._text.text is None or len(self._text.text) &lt;= self.label_max_length
 
     @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
     def _validate_value_length(self) -&gt; bool:
         return len(self.value) &lt;= self.value_max_length
 
     @classmethod
-    def parse_all(
-        cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
-    ) -&gt; Optional[List[&#34;Option&#34;]]:
+    def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
         if options is None:
             return None
         option_objects: List[Option] = []
@@ -1260,9 +1220,7 @@ dialogs.</dd>
                 cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
         return option_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         &#34;&#34;&#34;
         Different parent classes must call this with a valid value from OptionTypes -
         either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -1342,9 +1300,7 @@ def from_single_value(value_and_label: str):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(
-    cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]
-) -&gt; Optional[List[&#34;Option&#34;]]:
+def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
     if options is None:
         return None
     option_objects: List[Option] = []
@@ -1373,9 +1329,7 @@ correct shape.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def to_dict(
-    self, option_type: str = &#34;block&#34;
-) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+<pre><code class="python">def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
     &#34;&#34;&#34;
     Different parent classes must call this with a valid value from OptionTypes -
     either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
@@ -1478,9 +1432,7 @@ UI) and a list of Option objects.</p>
             options: A list of no more than 100 Option objects.
         &#34;&#34;&#34;  # noqa prevent flake8 blowing up on the long URL
         # default_type=PlainTextObject.type is for backward-compatibility
-        self._label: Optional[TextObject] = TextObject.parse(
-            label, default_type=PlainTextObject.type
-        )
+        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)
         self.label: Optional[str] = self._label.text if self._label else None
         self.options = Option.parse_all(options)  # compatible with version 2.5
         show_unknown_key_warning(self, others)
@@ -1507,14 +1459,10 @@ UI) and a list of Option objects.</p>
             elif isinstance(o, OptionGroup):
                 option_group_objects.append(o)
             else:
-                cls.logger.warning(
-                    f&#34;Unknown option group object detected and skipped ({o})&#34;
-                )
+                cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
         return option_group_objects
 
-    def to_dict(
-        self, option_type: str = &#34;block&#34;
-    ) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]
         if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
@@ -1579,9 +1527,7 @@ def parse_all(
         elif isinstance(o, OptionGroup):
             option_group_objects.append(o)
         else:
-            cls.logger.warning(
-                f&#34;Unknown option group object detected and skipped ({o})&#34;
-            )
+            cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
     return option_group_objects</code></pre>
 </details>
 </dd>
@@ -1775,9 +1721,7 @@ def attributes(self) -&gt; Set[str]:
         elif isinstance(text, TextObject):
             return text
         else:
-            cls.logger.warning(
-                f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;
-            )
+            cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
             return None
 
     def __init__(
@@ -1847,9 +1791,7 @@ def parse(
     elif isinstance(text, TextObject):
         return text
     else:
-        cls.logger.warning(
-            f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;
-        )
+        cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
         return None</code></pre>
 </details>
 </dd>

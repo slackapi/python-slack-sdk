@@ -84,9 +84,7 @@ class SignatureVerifier:
             return False
         return hmac.compare_digest(calculated_signature, signature)
 
-    def generate_signature(
-        self, *, timestamp: str, body: Union[str, bytes]
-    ) -&gt; Optional[str]:
+    def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -&gt; Optional[str]:
         &#34;&#34;&#34;Generates a signature&#34;&#34;&#34;
         if timestamp is None:
             return None
@@ -200,9 +198,7 @@ whether requests from us are authentic.
             return False
         return hmac.compare_digest(calculated_signature, signature)
 
-    def generate_signature(
-        self, *, timestamp: str, body: Union[str, bytes]
-    ) -&gt; Optional[str]:
+    def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -&gt; Optional[str]:
         &#34;&#34;&#34;Generates a signature&#34;&#34;&#34;
         if timestamp is None:
             return None
@@ -228,9 +224,7 @@ whether requests from us are authentic.
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate_signature(
-    self, *, timestamp: str, body: Union[str, bytes]
-) -&gt; Optional[str]:
+<pre><code class="python">def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -&gt; Optional[str]:
     &#34;&#34;&#34;Generates a signature&#34;&#34;&#34;
     if timestamp is None:
         return None

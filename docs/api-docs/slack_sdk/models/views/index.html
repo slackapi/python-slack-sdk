@@ -129,9 +129,7 @@ class View(JsonObject):
 
     @JsonValidator(&#34;home view cannot have submit and close&#34;)
     def _validate_home_tab_structure(self):
-        return self.type != &#34;home&#34; or (
-            self.type == &#34;home&#34; and self.close is None and self.submit is None
-        )
+        return self.type != &#34;home&#34; or (self.type == &#34;home&#34; and self.close is None and self.submit is None)
 
     @JsonValidator(f&#34;close cannot exceed {close_max_length} characters&#34;)
     def _validate_close_length(self):
@@ -139,25 +137,15 @@ class View(JsonObject):
 
     @JsonValidator(f&#34;submit cannot exceed {submit_max_length} characters&#34;)
     def _validate_submit_length(self):
-        return self.submit is None or len(self.submit.text) &lt;= int(
-            self.submit_max_length
-        )
+        return self.submit is None or len(self.submit.text) &lt;= int(self.submit_max_length)
 
-    @JsonValidator(
-        f&#34;private_metadata cannot exceed {private_metadata_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;private_metadata cannot exceed {private_metadata_max_length} characters&#34;)
     def _validate_private_metadata_max_length(self):
-        return (
-            self.private_metadata is None
-            or len(self.private_metadata) &lt;= self.private_metadata_max_length
-        )
+        return self.private_metadata is None or len(self.private_metadata) &lt;= self.private_metadata_max_length
 
     @JsonValidator(f&#34;callback_id cannot exceed {callback_id_max_length} characters&#34;)
     def _validate_callback_id_max_length(self):
-        return (
-            self.callback_id is None
-            or len(self.callback_id) &lt;= self.callback_id_max_length
-        )
+        return self.callback_id is None or len(self.callback_id) &lt;= self.callback_id_max_length
 
     def __str__(self):
         return str(self.get_non_null_attributes())
@@ -174,9 +162,7 @@ class ViewState(JsonObject):
     def _show_warning_about_unknown(cls, value):
         c = value.__class__
         name = &#34;.&#34;.join([c.__module__, c.__name__])
-        cls.logger.warning(
-            f&#34;Unknown type for view.state.values detected ({name}) and ViewState skipped to add it&#34;
-        )
+        cls.logger.warning(f&#34;Unknown type for view.state.values detected ({name}) and ViewState skipped to add it&#34;)
 
     def __init__(
         self,
@@ -190,9 +176,7 @@ class ViewState(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
-                        actions
-                    )
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)
@@ -391,9 +375,7 @@ class ViewStateValue(JsonObject):
 
     @JsonValidator(&#34;home view cannot have submit and close&#34;)
     def _validate_home_tab_structure(self):
-        return self.type != &#34;home&#34; or (
-            self.type == &#34;home&#34; and self.close is None and self.submit is None
-        )
+        return self.type != &#34;home&#34; or (self.type == &#34;home&#34; and self.close is None and self.submit is None)
 
     @JsonValidator(f&#34;close cannot exceed {close_max_length} characters&#34;)
     def _validate_close_length(self):
@@ -401,25 +383,15 @@ class ViewStateValue(JsonObject):
 
     @JsonValidator(f&#34;submit cannot exceed {submit_max_length} characters&#34;)
     def _validate_submit_length(self):
-        return self.submit is None or len(self.submit.text) &lt;= int(
-            self.submit_max_length
-        )
+        return self.submit is None or len(self.submit.text) &lt;= int(self.submit_max_length)
 
-    @JsonValidator(
-        f&#34;private_metadata cannot exceed {private_metadata_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;private_metadata cannot exceed {private_metadata_max_length} characters&#34;)
     def _validate_private_metadata_max_length(self):
-        return (
-            self.private_metadata is None
-            or len(self.private_metadata) &lt;= self.private_metadata_max_length
-        )
+        return self.private_metadata is None or len(self.private_metadata) &lt;= self.private_metadata_max_length
 
     @JsonValidator(f&#34;callback_id cannot exceed {callback_id_max_length} characters&#34;)
     def _validate_callback_id_max_length(self):
-        return (
-            self.callback_id is None
-            or len(self.callback_id) &lt;= self.callback_id_max_length
-        )
+        return self.callback_id is None or len(self.callback_id) &lt;= self.callback_id_max_length
 
     def __str__(self):
         return str(self.get_non_null_attributes())
@@ -493,9 +465,7 @@ class ViewStateValue(JsonObject):
     def _show_warning_about_unknown(cls, value):
         c = value.__class__
         name = &#34;.&#34;.join([c.__module__, c.__name__])
-        cls.logger.warning(
-            f&#34;Unknown type for view.state.values detected ({name}) and ViewState skipped to add it&#34;
-        )
+        cls.logger.warning(f&#34;Unknown type for view.state.values detected ({name}) and ViewState skipped to add it&#34;)
 
     def __init__(
         self,
@@ -509,9 +479,7 @@ class ViewStateValue(JsonObject):
                 if actions is None:  # skipcq: PYL-R1724
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(
-                        actions
-                    )
+                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)

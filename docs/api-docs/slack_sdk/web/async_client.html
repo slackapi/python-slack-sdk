@@ -81,11 +81,6 @@ class AsyncWebClient(AsyncBaseClient):
             is not specified, if any of the following environment variables are
             present, they will be loaded into this parameter: `HTTPS_PROXY`,
             `https_proxy`, `HTTP_PROXY` or `http_proxy`.
-        session (ClientSession): [`aiohttp.ClientSession`][2] to attach to all outgoing requests.
-        trust_env_in_session (bool): Boolean setting whether aiohttp outgoing requests
-            are allowed to read environment variables. Commonly used in conjunction
-            with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
-            `http_proxy` environment variables.
         headers (dict): Additional request headers to attach to all requests.
 
     Methods:
@@ -124,7 +119,6 @@ class AsyncWebClient(AsyncBaseClient):
         removed at anytime.
 
     [1]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext
-    [2]: https://docs.aiohttp.org/en/stable/client_reference.html#client-session
     &#34;&#34;&#34;
 
     async def admin_analytics_getFile(
@@ -165,9 +159,7 @@ class AsyncWebClient(AsyncBaseClient):
         elif request_id:
             kwargs.update({&#34;request_id&#34;: request_id})
         else:
-            raise e.SlackRequestError(
-                &#34;The app_id or request_id argument must be specified.&#34;
-            )
+            raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
         kwargs.update(
             {
@@ -197,9 +189,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_clearResolution(
         self,
@@ -219,9 +209,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_apps_requests_cancel(
         self,
@@ -241,9 +229,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_apps_requests_list(
         self,
@@ -263,9 +249,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_restrict(
         self,
@@ -287,9 +271,7 @@ class AsyncWebClient(AsyncBaseClient):
         elif request_id:
             kwargs.update({&#34;request_id&#34;: request_id})
         else:
-            raise e.SlackRequestError(
-                &#34;The app_id or request_id argument must be specified.&#34;
-            )
+            raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
         kwargs.update(
             {
@@ -319,9 +301,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_uninstall(
         self,
@@ -343,9 +323,7 @@ class AsyncWebClient(AsyncBaseClient):
                 kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
             else:
                 kwargs.update({&#34;team_ids&#34;: team_ids})
-        return await self.api_call(
-            &#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_getEntities(
         self,
@@ -366,9 +344,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;entity_type&#34;: entity_type})
         if limit is not None:
             kwargs.update({&#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_assignEntities(
         self,
@@ -387,9 +363,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;entity_ids&#34;: entity_ids})
         kwargs.update({&#34;policy_name&#34;: policy_name})
         kwargs.update({&#34;entity_type&#34;: entity_type})
-        return await self.api_call(
-            &#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_removeEntities(
         self,
@@ -408,9 +382,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;entity_ids&#34;: entity_ids})
         kwargs.update({&#34;policy_name&#34;: policy_name})
         kwargs.update({&#34;entity_type&#34;: entity_type})
-        return await self.api_call(
-            &#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_create(
         self,
@@ -425,20 +397,14 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
         else:
             kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-        return await self.api_call(
-            &#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_delete(
         self,
@@ -450,9 +416,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.barriers.delete
         &#34;&#34;&#34;
         kwargs.update({&#34;barrier_id&#34;: barrier_id})
-        return await self.api_call(
-            &#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_update(
         self,
@@ -466,24 +430,16 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Update an existing Information Barrier
         https://api.slack.com/methods/admin.barriers.update
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id}
-        )
+        kwargs.update({&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
         else:
             kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-        return await self.api_call(
-            &#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_list(
         self,
@@ -500,9 +456,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;limit&#34;: limit,
             }
         )
-        return await self.api_call(
-            &#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_conversations_create(
         self,
@@ -642,9 +596,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.conversations.convertToPrivate
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.convertToPrivate&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)
 
     async def admin_conversations_setConversationPrefs(
         self,
@@ -661,9 +613,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;prefs&#34;: json.dumps(prefs)})
         else:
             kwargs.update({&#34;prefs&#34;: prefs})
-        return await self.api_call(
-            &#34;admin.conversations.setConversationPrefs&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.setConversationPrefs&#34;, params=kwargs)
 
     async def admin_conversations_getConversationPrefs(
         self,
@@ -675,9 +625,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.conversations.getConversationPrefs
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.getConversationPrefs&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.getConversationPrefs&#34;, params=kwargs)
 
     async def admin_conversations_disconnectShared(
         self,
@@ -694,9 +642,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;leaving_team_ids&#34;: &#34;,&#34;.join(leaving_team_ids)})
         else:
             kwargs.update({&#34;leaving_team_ids&#34;: leaving_team_ids})
-        return await self.api_call(
-            &#34;admin.conversations.disconnectShared&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.disconnectShared&#34;, params=kwargs)
 
     async def admin_conversations_ekm_listOriginalConnectedChannelInfo(
         self,
@@ -726,9 +672,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
         else:
             kwargs.update({&#34;team_ids&#34;: team_ids})
-        return await self.api_call(
-            &#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs)
 
     async def admin_conversations_restrictAccess_addGroup(
         self,
@@ -855,9 +799,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.conversations.getCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.getCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)
 
     async def admin_conversations_removeCustomRetention(
         self,
@@ -869,9 +811,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.conversations.removeCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.removeCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)
 
     async def admin_conversations_setCustomRetention(
         self,
@@ -884,9 +824,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.conversations.setCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
-        return await self.api_call(
-            &#34;admin.conversations.setCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
 
     async def admin_emoji_add(
         self,
@@ -912,9 +850,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.emoji.addAlias
         &#34;&#34;&#34;
         kwargs.update({&#34;alias_for&#34;: alias_for, &#34;name&#34;: name})
-        return await self.api_call(
-            &#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_emoji_list(
         self,
@@ -1047,9 +983,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
         else:
             kwargs.update({&#34;channel_ids&#34;: channel_ids})
-        return await self.api_call(
-            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_users_session_getSettings(
         self,
@@ -1124,9 +1058,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;date_sessions_started&#34;: date_sessions_started,
             }
         )
-        return await self.api_call(
-            &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.users.unsupportedVersions.export&#34;, params=kwargs)
 
     async def admin_inviteRequests_approve(
         self,
@@ -1219,9 +1151,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_create(
         self,
@@ -1270,9 +1200,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.teams.owners.list
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_settings_info(
         self,
@@ -1310,9 +1238,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.teams.settings.setDiscoverability
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;discoverability&#34;: discoverability})
-        return await self.api_call(
-            &#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs)
 
     async def admin_teams_settings_setIcon(
         self,
@@ -1325,9 +1251,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/admin.teams.settings.setIcon
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;image_url&#34;: image_url})
-        return await self.api_call(
-            &#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_settings_setName(
         self,
@@ -1466,9 +1390,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;email&#34;: email,
                 &#34;custom_message&#34;: custom_message,
                 &#34;email_password_policy_enabled&#34;: email_password_policy_enabled,
-                &#34;guest_expiration_ts&#34;: str(guest_expiration_ts)
-                if guest_expiration_ts is not None
-                else None,
+                &#34;guest_expiration_ts&#34;: str(guest_expiration_ts) if guest_expiration_ts is not None else None,
                 &#34;is_restricted&#34;: is_restricted,
                 &#34;is_ultra_restricted&#34;: is_ultra_restricted,
                 &#34;real_name&#34;: real_name,
@@ -1538,9 +1460,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Set an expiration for a guest user.
         https://api.slack.com/methods/admin.users.setExpiration
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id}
-        )
+        kwargs.update({&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id})
         return await self.api_call(&#34;admin.users.setExpiration&#34;, params=kwargs)
 
     async def admin_users_setOwner(
@@ -1592,9 +1512,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/apps.connections.open
         &#34;&#34;&#34;
         kwargs.update({&#34;token&#34;: app_token})
-        return await self.api_call(
-            &#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def apps_event_authorizations_list(
         self,
@@ -1608,9 +1526,7 @@ class AsyncWebClient(AsyncBaseClient):
         Each authorization represents an app installation that the event is visible to.
         https://api.slack.com/methods/apps.event.authorizations.list
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit}
-        )
+        kwargs.update({&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
         return await self.api_call(&#34;apps.event.authorizations.list&#34;, params=kwargs)
 
     async def apps_uninstall(
@@ -1820,9 +1736,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;id&#34;: id})
         _update_call_participants(kwargs, users)
-        return await self.api_call(
-            &#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def calls_participants_remove(
         self,
@@ -1836,9 +1750,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;id&#34;: id})
         _update_call_participants(kwargs, users)
-        return await self.api_call(
-            &#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def calls_update(
         self,
@@ -2349,9 +2261,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/conversations.acceptSharedInvite
         &#34;&#34;&#34;
         if channel_id is None and invite_id is None:
-            raise e.SlackRequestError(
-                &#34;Either channel_id or invite_id must be provided.&#34;
-            )
+            raise e.SlackRequestError(&#34;Either channel_id or invite_id must be provided.&#34;)
         kwargs.update(
             {
                 &#34;channel_name&#34;: channel_name,
@@ -2362,9 +2272,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def conversations_approveSharedInvite(
         self,
@@ -2377,9 +2285,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/conversations.approveSharedInvite
         &#34;&#34;&#34;
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-        return await self.api_call(
-            &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def conversations_archive(
         self,
@@ -2430,9 +2336,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/conversations.declineSharedInvite
         &#34;&#34;&#34;
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-        return await self.api_call(
-            &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_history(
         self,
@@ -2460,9 +2364,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;oldest&#34;: oldest,
             }
         )
-        return await self.api_call(
-            &#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_info(
         self,
@@ -2523,9 +2425,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
         else:
             kwargs.update({&#34;user_ids&#34;: user_ids})
-        return await self.api_call(
-            &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_join(
         self,
@@ -2631,9 +2531,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/conversations.members
         &#34;&#34;&#34;
         kwargs.update({&#34;channel&#34;: channel, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_open(
         self,
@@ -2694,9 +2592,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;oldest&#34;: oldest,
             }
         )
-        return await self.api_call(
-            &#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_setPurpose(
         self,
@@ -3029,9 +2925,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/files.remote.remove
         &#34;&#34;&#34;
         kwargs.update({&#34;external_id&#34;: external_id, &#34;file&#34;: file})
-        return await self.api_call(
-            &#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def files_remote_share(
         self,
@@ -3096,9 +2990,7 @@ class AsyncWebClient(AsyncBaseClient):
         if file is None and content is None:
             raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
         if file is not None and content is not None:
-            raise e.SlackRequestError(
-                &#34;You cannot specify both the file and the content argument.&#34;
-            )
+            raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
 
         if isinstance(channels, (list, Tuple)):
             kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
@@ -3118,9 +3010,7 @@ class AsyncWebClient(AsyncBaseClient):
                 # use the local filename if filename is missing
                 if kwargs.get(&#34;filename&#34;) is None:
                     kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-            return await self.api_call(
-                &#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs
-            )
+            return await self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
         else:
             kwargs[&#34;content&#34;] = content
             return await self.api_call(&#34;files.upload&#34;, data=kwargs)
@@ -3532,9 +3422,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Exchanges a legacy access token for a new expiring access token and refresh token
         https://api.slack.com/methods/oauth.v2.exchange
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
-        )
+        kwargs.update({&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token})
         return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)
 
     async def openid_connect_token(
@@ -3786,9 +3674,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Starts a Real Time Messaging session.
         https://api.slack.com/methods/rtm.connect
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub}
-        )
+        kwargs.update({&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub})
         return await self.api_call(&#34;rtm.connect&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def rtm_start(
@@ -4056,9 +3942,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;user&#34;: user,
             }
         )
-        return await self.api_call(
-            &#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def team_profile_get(
         self,
@@ -4121,9 +4005,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Disable an existing User Group
         https://api.slack.com/methods/usergroups.disable
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-        )
+        kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
         return await self.api_call(&#34;usergroups.disable&#34;, params=kwargs)
 
     async def usergroups_enable(
@@ -4137,9 +4019,7 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Enable a User Group
         https://api.slack.com/methods/usergroups.enable
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-        )
+        kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
         return await self.api_call(&#34;usergroups.enable&#34;, params=kwargs)
 
     async def usergroups_list(
@@ -4213,9 +4093,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def usergroups_users_update(
         self,
@@ -4269,9 +4147,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({&#34;types&#34;: &#34;,&#34;.join(types)})
         else:
             kwargs.update({&#34;types&#34;: types})
-        return await self.api_call(
-            &#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def users_deletePhoto(
         self,
@@ -4348,9 +4224,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/users.lookupByEmail
         &#34;&#34;&#34;
         kwargs.update({&#34;email&#34;: email})
-        return await self.api_call(
-            &#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def users_setPhoto(
         self,
@@ -4365,9 +4239,7 @@ class AsyncWebClient(AsyncBaseClient):
         https://api.slack.com/methods/users.setPhoto
         &#34;&#34;&#34;
         kwargs.update({&#34;crop_w&#34;: crop_w, &#34;crop_x&#34;: crop_x, &#34;crop_y&#34;: crop_y})
-        return await self.api_call(
-            &#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs
-        )
+        return await self.api_call(&#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs)
 
     async def users_setPresence(
         self,
@@ -4613,13 +4485,6 @@ which to route all requests to the Slack API. Even if this parameter
 is not specified, if any of the following environment variables are
 present, they will be loaded into this parameter: <code>HTTPS_PROXY</code>,
 <code>https_proxy</code>, <code>HTTP_PROXY</code> or <code>http_proxy</code>.</dd>
-<dt><strong><code>session</code></strong> :&ensp;<code>ClientSession</code></dt>
-<dd><a href="https://docs.aiohttp.org/en/stable/client_reference.html#client-session"><code>aiohttp.ClientSession</code></a> to attach to all outgoing requests.</dd>
-<dt><strong><code>trust_env_in_session</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Boolean setting whether aiohttp outgoing requests
-are allowed to read environment variables. Commonly used in conjunction
-with proxy support via the <code>HTTPS_PROXY</code>, <code>https_proxy</code>, <code>HTTP_PROXY</code> and
-<code>http_proxy</code> environment variables.</dd>
 <dt><strong><code>headers</code></strong> :&ensp;<code>dict</code></dt>
 <dd>Additional request headers to attach to all requests.</dd>
 </dl>
@@ -4681,11 +4546,6 @@ removed at anytime.</p></div>
             is not specified, if any of the following environment variables are
             present, they will be loaded into this parameter: `HTTPS_PROXY`,
             `https_proxy`, `HTTP_PROXY` or `http_proxy`.
-        session (ClientSession): [`aiohttp.ClientSession`][2] to attach to all outgoing requests.
-        trust_env_in_session (bool): Boolean setting whether aiohttp outgoing requests
-            are allowed to read environment variables. Commonly used in conjunction
-            with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
-            `http_proxy` environment variables.
         headers (dict): Additional request headers to attach to all requests.
 
     Methods:
@@ -4724,7 +4584,6 @@ removed at anytime.</p></div>
         removed at anytime.
 
     [1]: https://docs.python.org/3/library/ssl.html#ssl.SSLContext
-    [2]: https://docs.aiohttp.org/en/stable/client_reference.html#client-session
     &#34;&#34;&#34;
 
     async def admin_analytics_getFile(
@@ -4765,9 +4624,7 @@ removed at anytime.</p></div>
         elif request_id:
             kwargs.update({&#34;request_id&#34;: request_id})
         else:
-            raise e.SlackRequestError(
-                &#34;The app_id or request_id argument must be specified.&#34;
-            )
+            raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
         kwargs.update(
             {
@@ -4797,9 +4654,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_clearResolution(
         self,
@@ -4819,9 +4674,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_apps_requests_cancel(
         self,
@@ -4841,9 +4694,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_apps_requests_list(
         self,
@@ -4863,9 +4714,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_restrict(
         self,
@@ -4887,9 +4736,7 @@ removed at anytime.</p></div>
         elif request_id:
             kwargs.update({&#34;request_id&#34;: request_id})
         else:
-            raise e.SlackRequestError(
-                &#34;The app_id or request_id argument must be specified.&#34;
-            )
+            raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
         kwargs.update(
             {
@@ -4919,9 +4766,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_apps_uninstall(
         self,
@@ -4943,9 +4788,7 @@ removed at anytime.</p></div>
                 kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
             else:
                 kwargs.update({&#34;team_ids&#34;: team_ids})
-        return await self.api_call(
-            &#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_getEntities(
         self,
@@ -4966,9 +4809,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;entity_type&#34;: entity_type})
         if limit is not None:
             kwargs.update({&#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_assignEntities(
         self,
@@ -4987,9 +4828,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;entity_ids&#34;: entity_ids})
         kwargs.update({&#34;policy_name&#34;: policy_name})
         kwargs.update({&#34;entity_type&#34;: entity_type})
-        return await self.api_call(
-            &#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_auth_policy_removeEntities(
         self,
@@ -5008,9 +4847,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;entity_ids&#34;: entity_ids})
         kwargs.update({&#34;policy_name&#34;: policy_name})
         kwargs.update({&#34;entity_type&#34;: entity_type})
-        return await self.api_call(
-            &#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_create(
         self,
@@ -5025,20 +4862,14 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
         else:
             kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-        return await self.api_call(
-            &#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_delete(
         self,
@@ -5050,9 +4881,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.barriers.delete
         &#34;&#34;&#34;
         kwargs.update({&#34;barrier_id&#34;: barrier_id})
-        return await self.api_call(
-            &#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_update(
         self,
@@ -5066,24 +4895,16 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Update an existing Information Barrier
         https://api.slack.com/methods/admin.barriers.update
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id}
-        )
+        kwargs.update({&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
         else:
-            kwargs.update(
-                {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-            )
+            kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
         if isinstance(restricted_subjects, (list, Tuple)):
             kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
         else:
             kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-        return await self.api_call(
-            &#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def admin_barriers_list(
         self,
@@ -5100,9 +4921,7 @@ removed at anytime.</p></div>
                 &#34;limit&#34;: limit,
             }
         )
-        return await self.api_call(
-            &#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_conversations_create(
         self,
@@ -5242,9 +5061,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.conversations.convertToPrivate
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.convertToPrivate&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)
 
     async def admin_conversations_setConversationPrefs(
         self,
@@ -5261,9 +5078,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;prefs&#34;: json.dumps(prefs)})
         else:
             kwargs.update({&#34;prefs&#34;: prefs})
-        return await self.api_call(
-            &#34;admin.conversations.setConversationPrefs&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.setConversationPrefs&#34;, params=kwargs)
 
     async def admin_conversations_getConversationPrefs(
         self,
@@ -5275,9 +5090,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.conversations.getConversationPrefs
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.getConversationPrefs&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.getConversationPrefs&#34;, params=kwargs)
 
     async def admin_conversations_disconnectShared(
         self,
@@ -5294,9 +5107,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;leaving_team_ids&#34;: &#34;,&#34;.join(leaving_team_ids)})
         else:
             kwargs.update({&#34;leaving_team_ids&#34;: leaving_team_ids})
-        return await self.api_call(
-            &#34;admin.conversations.disconnectShared&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.disconnectShared&#34;, params=kwargs)
 
     async def admin_conversations_ekm_listOriginalConnectedChannelInfo(
         self,
@@ -5326,9 +5137,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
         else:
             kwargs.update({&#34;team_ids&#34;: team_ids})
-        return await self.api_call(
-            &#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs)
 
     async def admin_conversations_restrictAccess_addGroup(
         self,
@@ -5455,9 +5264,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.conversations.getCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.getCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)
 
     async def admin_conversations_removeCustomRetention(
         self,
@@ -5469,9 +5276,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.conversations.removeCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id})
-        return await self.api_call(
-            &#34;admin.conversations.removeCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)
 
     async def admin_conversations_setCustomRetention(
         self,
@@ -5484,9 +5289,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.conversations.setCustomRetention
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
-        return await self.api_call(
-            &#34;admin.conversations.setCustomRetention&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
 
     async def admin_emoji_add(
         self,
@@ -5512,9 +5315,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.emoji.addAlias
         &#34;&#34;&#34;
         kwargs.update({&#34;alias_for&#34;: alias_for, &#34;name&#34;: name})
-        return await self.api_call(
-            &#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_emoji_list(
         self,
@@ -5647,9 +5448,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
         else:
             kwargs.update({&#34;channel_ids&#34;: channel_ids})
-        return await self.api_call(
-            &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_users_session_getSettings(
         self,
@@ -5724,9 +5523,7 @@ removed at anytime.</p></div>
                 &#34;date_sessions_started&#34;: date_sessions_started,
             }
         )
-        return await self.api_call(
-            &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.users.unsupportedVersions.export&#34;, params=kwargs)
 
     async def admin_inviteRequests_approve(
         self,
@@ -5819,9 +5616,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_create(
         self,
@@ -5870,9 +5665,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.teams.owners.list
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_settings_info(
         self,
@@ -5910,9 +5703,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.teams.settings.setDiscoverability
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;discoverability&#34;: discoverability})
-        return await self.api_call(
-            &#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs)
 
     async def admin_teams_settings_setIcon(
         self,
@@ -5925,9 +5716,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/admin.teams.settings.setIcon
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;image_url&#34;: image_url})
-        return await self.api_call(
-            &#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def admin_teams_settings_setName(
         self,
@@ -6066,9 +5855,7 @@ removed at anytime.</p></div>
                 &#34;email&#34;: email,
                 &#34;custom_message&#34;: custom_message,
                 &#34;email_password_policy_enabled&#34;: email_password_policy_enabled,
-                &#34;guest_expiration_ts&#34;: str(guest_expiration_ts)
-                if guest_expiration_ts is not None
-                else None,
+                &#34;guest_expiration_ts&#34;: str(guest_expiration_ts) if guest_expiration_ts is not None else None,
                 &#34;is_restricted&#34;: is_restricted,
                 &#34;is_ultra_restricted&#34;: is_ultra_restricted,
                 &#34;real_name&#34;: real_name,
@@ -6138,9 +5925,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Set an expiration for a guest user.
         https://api.slack.com/methods/admin.users.setExpiration
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id}
-        )
+        kwargs.update({&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id})
         return await self.api_call(&#34;admin.users.setExpiration&#34;, params=kwargs)
 
     async def admin_users_setOwner(
@@ -6192,9 +5977,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/apps.connections.open
         &#34;&#34;&#34;
         kwargs.update({&#34;token&#34;: app_token})
-        return await self.api_call(
-            &#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def apps_event_authorizations_list(
         self,
@@ -6208,9 +5991,7 @@ removed at anytime.</p></div>
         Each authorization represents an app installation that the event is visible to.
         https://api.slack.com/methods/apps.event.authorizations.list
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit}
-        )
+        kwargs.update({&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
         return await self.api_call(&#34;apps.event.authorizations.list&#34;, params=kwargs)
 
     async def apps_uninstall(
@@ -6420,9 +6201,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;id&#34;: id})
         _update_call_participants(kwargs, users)
-        return await self.api_call(
-            &#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def calls_participants_remove(
         self,
@@ -6436,9 +6215,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;id&#34;: id})
         _update_call_participants(kwargs, users)
-        return await self.api_call(
-            &#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def calls_update(
         self,
@@ -6949,9 +6726,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/conversations.acceptSharedInvite
         &#34;&#34;&#34;
         if channel_id is None and invite_id is None:
-            raise e.SlackRequestError(
-                &#34;Either channel_id or invite_id must be provided.&#34;
-            )
+            raise e.SlackRequestError(&#34;Either channel_id or invite_id must be provided.&#34;)
         kwargs.update(
             {
                 &#34;channel_name&#34;: channel_name,
@@ -6962,9 +6737,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def conversations_approveSharedInvite(
         self,
@@ -6977,9 +6750,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/conversations.approveSharedInvite
         &#34;&#34;&#34;
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-        return await self.api_call(
-            &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def conversations_archive(
         self,
@@ -7030,9 +6801,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/conversations.declineSharedInvite
         &#34;&#34;&#34;
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-        return await self.api_call(
-            &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_history(
         self,
@@ -7060,9 +6829,7 @@ removed at anytime.</p></div>
                 &#34;oldest&#34;: oldest,
             }
         )
-        return await self.api_call(
-            &#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_info(
         self,
@@ -7123,9 +6890,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
         else:
             kwargs.update({&#34;user_ids&#34;: user_ids})
-        return await self.api_call(
-            &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_join(
         self,
@@ -7231,9 +6996,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/conversations.members
         &#34;&#34;&#34;
         kwargs.update({&#34;channel&#34;: channel, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-        return await self.api_call(
-            &#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_open(
         self,
@@ -7294,9 +7057,7 @@ removed at anytime.</p></div>
                 &#34;oldest&#34;: oldest,
             }
         )
-        return await self.api_call(
-            &#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def conversations_setPurpose(
         self,
@@ -7629,9 +7390,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/files.remote.remove
         &#34;&#34;&#34;
         kwargs.update({&#34;external_id&#34;: external_id, &#34;file&#34;: file})
-        return await self.api_call(
-            &#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
     async def files_remote_share(
         self,
@@ -7696,9 +7455,7 @@ removed at anytime.</p></div>
         if file is None and content is None:
             raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
         if file is not None and content is not None:
-            raise e.SlackRequestError(
-                &#34;You cannot specify both the file and the content argument.&#34;
-            )
+            raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
 
         if isinstance(channels, (list, Tuple)):
             kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
@@ -7718,9 +7475,7 @@ removed at anytime.</p></div>
                 # use the local filename if filename is missing
                 if kwargs.get(&#34;filename&#34;) is None:
                     kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-            return await self.api_call(
-                &#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs
-            )
+            return await self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
         else:
             kwargs[&#34;content&#34;] = content
             return await self.api_call(&#34;files.upload&#34;, data=kwargs)
@@ -8132,9 +7887,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Exchanges a legacy access token for a new expiring access token and refresh token
         https://api.slack.com/methods/oauth.v2.exchange
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
-        )
+        kwargs.update({&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token})
         return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)
 
     async def openid_connect_token(
@@ -8386,9 +8139,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Starts a Real Time Messaging session.
         https://api.slack.com/methods/rtm.connect
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub}
-        )
+        kwargs.update({&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub})
         return await self.api_call(&#34;rtm.connect&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def rtm_start(
@@ -8656,9 +8407,7 @@ removed at anytime.</p></div>
                 &#34;user&#34;: user,
             }
         )
-        return await self.api_call(
-            &#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def team_profile_get(
         self,
@@ -8721,9 +8470,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Disable an existing User Group
         https://api.slack.com/methods/usergroups.disable
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-        )
+        kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
         return await self.api_call(&#34;usergroups.disable&#34;, params=kwargs)
 
     async def usergroups_enable(
@@ -8737,9 +8484,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Enable a User Group
         https://api.slack.com/methods/usergroups.enable
         &#34;&#34;&#34;
-        kwargs.update(
-            {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-        )
+        kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
         return await self.api_call(&#34;usergroups.enable&#34;, params=kwargs)
 
     async def usergroups_list(
@@ -8813,9 +8558,7 @@ removed at anytime.</p></div>
                 &#34;team_id&#34;: team_id,
             }
         )
-        return await self.api_call(
-            &#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def usergroups_users_update(
         self,
@@ -8869,9 +8612,7 @@ removed at anytime.</p></div>
             kwargs.update({&#34;types&#34;: &#34;,&#34;.join(types)})
         else:
             kwargs.update({&#34;types&#34;: types})
-        return await self.api_call(
-            &#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def users_deletePhoto(
         self,
@@ -8948,9 +8689,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/users.lookupByEmail
         &#34;&#34;&#34;
         kwargs.update({&#34;email&#34;: email})
-        return await self.api_call(
-            &#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs
-        )
+        return await self.api_call(&#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     async def users_setPhoto(
         self,
@@ -8965,9 +8704,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/users.setPhoto
         &#34;&#34;&#34;
         kwargs.update({&#34;crop_w&#34;: crop_w, &#34;crop_x&#34;: crop_x, &#34;crop_y&#34;: crop_y})
-        return await self.api_call(
-            &#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs
-        )
+        return await self.api_call(&#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs)
 
     async def users_setPresence(
         self,
@@ -9240,9 +8977,7 @@ or by the admin.apps.requests.list method.
     elif request_id:
         kwargs.update({&#34;request_id&#34;: request_id})
     else:
-        raise e.SlackRequestError(
-            &#34;The app_id or request_id argument must be specified.&#34;
-        )
+        raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
     kwargs.update(
         {
@@ -9283,9 +9018,7 @@ or by the admin.apps.requests.list method.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.approved.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_clearResolution"><code class="name flex">
@@ -9316,9 +9049,7 @@ or by the admin.apps.requests.list method.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel"><code class="name flex">
@@ -9349,9 +9080,7 @@ or by the admin.apps.requests.list method.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.requests.cancel&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_list"><code class="name flex">
@@ -9382,9 +9111,7 @@ or by the admin.apps.requests.list method.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.requests.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_restrict"><code class="name flex">
@@ -9420,9 +9147,7 @@ via the app_requested event, or by the admin.apps.requests.list method.
     elif request_id:
         kwargs.update({&#34;request_id&#34;: request_id})
     else:
-        raise e.SlackRequestError(
-            &#34;The app_id or request_id argument must be specified.&#34;
-        )
+        raise e.SlackRequestError(&#34;The app_id or request_id argument must be specified.&#34;)
 
     kwargs.update(
         {
@@ -9463,9 +9188,7 @@ via the app_requested event, or by the admin.apps.requests.list method.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.restricted.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_uninstall"><code class="name flex">
@@ -9499,9 +9222,7 @@ With an org-level token, enterprise_id or team_ids is required.
             kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
         else:
             kwargs.update({&#34;team_ids&#34;: team_ids})
-    return await self.api_call(
-        &#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_auth_policy_assignEntities"><code class="name flex">
@@ -9531,9 +9252,7 @@ With an org-level token, enterprise_id or team_ids is required.
         kwargs.update({&#34;entity_ids&#34;: entity_ids})
     kwargs.update({&#34;policy_name&#34;: policy_name})
     kwargs.update({&#34;entity_type&#34;: entity_type})
-    return await self.api_call(
-        &#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.auth.policy.assignEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_auth_policy_getEntities"><code class="name flex">
@@ -9565,9 +9284,7 @@ With an org-level token, enterprise_id or team_ids is required.
         kwargs.update({&#34;entity_type&#34;: entity_type})
     if limit is not None:
         kwargs.update({&#34;limit&#34;: limit})
-    return await self.api_call(
-        &#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.auth.policy.getEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_auth_policy_removeEntities"><code class="name flex">
@@ -9597,9 +9314,7 @@ With an org-level token, enterprise_id or team_ids is required.
         kwargs.update({&#34;entity_ids&#34;: entity_ids})
     kwargs.update({&#34;policy_name&#34;: policy_name})
     kwargs.update({&#34;entity_type&#34;: entity_type})
-    return await self.api_call(
-        &#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_barriers_create"><code class="name flex">
@@ -9625,20 +9340,14 @@ With an org-level token, enterprise_id or team_ids is required.
     &#34;&#34;&#34;
     kwargs.update({&#34;primary_usergroup_id&#34;: primary_usergroup_id})
     if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-        kwargs.update(
-            {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-        )
+        kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
     else:
-        kwargs.update(
-            {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-        )
+        kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
     if isinstance(restricted_subjects, (list, Tuple)):
         kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
     else:
         kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-    return await self.api_call(
-        &#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.barriers.create&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_barriers_delete"><code class="name flex">
@@ -9661,9 +9370,7 @@ With an org-level token, enterprise_id or team_ids is required.
     https://api.slack.com/methods/admin.barriers.delete
     &#34;&#34;&#34;
     kwargs.update({&#34;barrier_id&#34;: barrier_id})
-    return await self.api_call(
-        &#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.barriers.delete&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_barriers_list"><code class="name flex">
@@ -9691,9 +9398,7 @@ With an org-level token, enterprise_id or team_ids is required.
             &#34;limit&#34;: limit,
         }
     )
-    return await self.api_call(
-        &#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.barriers.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_barriers_update"><code class="name flex">
@@ -9718,24 +9423,16 @@ With an org-level token, enterprise_id or team_ids is required.
     &#34;&#34;&#34;Update an existing Information Barrier
     https://api.slack.com/methods/admin.barriers.update
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id}
-    )
+    kwargs.update({&#34;barrier_id&#34;: barrier_id, &#34;primary_usergroup_id&#34;: primary_usergroup_id})
     if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
-        kwargs.update(
-            {&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)}
-        )
+        kwargs.update({&#34;barriered_from_usergroup_ids&#34;: &#34;,&#34;.join(barriered_from_usergroup_ids)})
     else:
-        kwargs.update(
-            {&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids}
-        )
+        kwargs.update({&#34;barriered_from_usergroup_ids&#34;: barriered_from_usergroup_ids})
     if isinstance(restricted_subjects, (list, Tuple)):
         kwargs.update({&#34;restricted_subjects&#34;: &#34;,&#34;.join(restricted_subjects)})
     else:
         kwargs.update({&#34;restricted_subjects&#34;: restricted_subjects})
-    return await self.api_call(
-        &#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.barriers.update&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_archive"><code class="name flex">
@@ -9781,9 +9478,7 @@ With an org-level token, enterprise_id or team_ids is required.
     https://api.slack.com/methods/admin.conversations.convertToPrivate
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id})
-    return await self.api_call(
-        &#34;admin.conversations.convertToPrivate&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_create"><code class="name flex">
@@ -9869,9 +9564,7 @@ With an org-level token, enterprise_id or team_ids is required.
         kwargs.update({&#34;leaving_team_ids&#34;: &#34;,&#34;.join(leaving_team_ids)})
     else:
         kwargs.update({&#34;leaving_team_ids&#34;: leaving_team_ids})
-    return await self.api_call(
-        &#34;admin.conversations.disconnectShared&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.disconnectShared&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo"><code class="name flex">
@@ -9914,9 +9607,7 @@ the corresponding original channel IDs for key revocation with EKM.
         kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
     else:
         kwargs.update({&#34;team_ids&#34;: team_ids})
-    return await self.api_call(
-        &#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.ekm.listOriginalConnectedChannelInfo&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_getConversationPrefs"><code class="name flex">
@@ -9939,9 +9630,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.conversations.getConversationPrefs
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id})
-    return await self.api_call(
-        &#34;admin.conversations.getConversationPrefs&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.getConversationPrefs&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_getCustomRetention"><code class="name flex">
@@ -9964,9 +9653,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.conversations.getCustomRetention
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id})
-    return await self.api_call(
-        &#34;admin.conversations.getCustomRetention&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.getCustomRetention&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_getTeams"><code class="name flex">
@@ -10049,9 +9736,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.conversations.removeCustomRetention
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id})
-    return await self.api_call(
-        &#34;admin.conversations.removeCustomRetention&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.removeCustomRetention&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_rename"><code class="name flex">
@@ -10254,9 +9939,7 @@ the corresponding original channel IDs for key revocation with EKM.
         kwargs.update({&#34;prefs&#34;: json.dumps(prefs)})
     else:
         kwargs.update({&#34;prefs&#34;: prefs})
-    return await self.api_call(
-        &#34;admin.conversations.setConversationPrefs&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.setConversationPrefs&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_setCustomRetention"><code class="name flex">
@@ -10280,9 +9963,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.conversations.setCustomRetention
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
-    return await self.api_call(
-        &#34;admin.conversations.setCustomRetention&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_conversations_setTeams"><code class="name flex">
@@ -10389,9 +10070,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.emoji.addAlias
     &#34;&#34;&#34;
     kwargs.update({&#34;alias_for&#34;: alias_for, &#34;name&#34;: name})
-    return await self.api_call(
-        &#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.emoji.addAlias&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_emoji_list"><code class="name flex">
@@ -10620,9 +10299,7 @@ the corresponding original channel IDs for key revocation with EKM.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.teams.admins.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_teams_create"><code class="name flex">
@@ -10704,9 +10381,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.teams.owners.list
     &#34;&#34;&#34;
     kwargs.update({&#34;team_id&#34;: team_id, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-    return await self.api_call(
-        &#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.teams.owners.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_teams_settings_info"><code class="name flex">
@@ -10757,9 +10432,7 @@ the corresponding original channel IDs for key revocation with EKM.
         kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
     else:
         kwargs.update({&#34;channel_ids&#34;: channel_ids})
-    return await self.api_call(
-        &#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.teams.settings.setDefaultChannels&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_teams_settings_setDescription"><code class="name flex">
@@ -10807,9 +10480,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.teams.settings.setDiscoverability
     &#34;&#34;&#34;
     kwargs.update({&#34;team_id&#34;: team_id, &#34;discoverability&#34;: discoverability})
-    return await self.api_call(
-        &#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.teams.settings.setDiscoverability&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_teams_settings_setIcon"><code class="name flex">
@@ -10833,9 +10504,7 @@ the corresponding original channel IDs for key revocation with EKM.
     https://api.slack.com/methods/admin.teams.settings.setIcon
     &#34;&#34;&#34;
     kwargs.update({&#34;team_id&#34;: team_id, &#34;image_url&#34;: image_url})
-    return await self.api_call(
-        &#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.teams.settings.setIcon&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_teams_settings_setName"><code class="name flex">
@@ -11051,9 +10720,7 @@ the corresponding original channel IDs for key revocation with EKM.
             &#34;email&#34;: email,
             &#34;custom_message&#34;: custom_message,
             &#34;email_password_policy_enabled&#34;: email_password_policy_enabled,
-            &#34;guest_expiration_ts&#34;: str(guest_expiration_ts)
-            if guest_expiration_ts is not None
-            else None,
+            &#34;guest_expiration_ts&#34;: str(guest_expiration_ts) if guest_expiration_ts is not None else None,
             &#34;is_restricted&#34;: is_restricted,
             &#34;is_ultra_restricted&#34;: is_ultra_restricted,
             &#34;real_name&#34;: real_name,
@@ -11381,9 +11048,7 @@ and what happens when the client closes—for one or more users.
     &#34;&#34;&#34;Set an expiration for a guest user.
     https://api.slack.com/methods/admin.users.setExpiration
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id}
-    )
+    kwargs.update({&#34;expiration_ts&#34;: expiration_ts, &#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id})
     return await self.api_call(&#34;admin.users.setExpiration&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -11463,9 +11128,7 @@ presented as a zipped CSV file.
             &#34;date_sessions_started&#34;: date_sessions_started,
         }
     )
-    return await self.api_call(
-        &#34;admin.users.unsupportedVersions.export&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;admin.users.unsupportedVersions.export&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.api_test"><code class="name flex">
@@ -11513,9 +11176,7 @@ in order to receive events and interactive payloads
     https://api.slack.com/methods/apps.connections.open
     &#34;&#34;&#34;
     kwargs.update({&#34;token&#34;: app_token})
-    return await self.api_call(
-        &#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;apps.connections.open&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.apps_event_authorizations_list"><code class="name flex">
@@ -11541,9 +11202,7 @@ Each authorization represents an app installation that the event is visible to.
     Each authorization represents an app installation that the event is visible to.
     https://api.slack.com/methods/apps.event.authorizations.list
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit}
-    )
+    kwargs.update({&#34;event_context&#34;: event_context, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
     return await self.api_call(&#34;apps.event.authorizations.list&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -11896,9 +11555,7 @@ Each authorization represents an app installation that the event is visible to.
     &#34;&#34;&#34;
     kwargs.update({&#34;id&#34;: id})
     _update_call_participants(kwargs, users)
-    return await self.api_call(
-        &#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;calls.participants.add&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.calls_participants_remove"><code class="name flex">
@@ -11923,9 +11580,7 @@ Each authorization represents an app installation that the event is visible to.
     &#34;&#34;&#34;
     kwargs.update({&#34;id&#34;: id})
     _update_call_participants(kwargs, users)
-    return await self.api_call(
-        &#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;calls.participants.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.calls_update"><code class="name flex">
@@ -12710,9 +12365,7 @@ Each authorization represents an app installation that the event is visible to.
     https://api.slack.com/methods/conversations.acceptSharedInvite
     &#34;&#34;&#34;
     if channel_id is None and invite_id is None:
-        raise e.SlackRequestError(
-            &#34;Either channel_id or invite_id must be provided.&#34;
-        )
+        raise e.SlackRequestError(&#34;Either channel_id or invite_id must be provided.&#34;)
     kwargs.update(
         {
             &#34;channel_name&#34;: channel_name,
@@ -12723,9 +12376,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.acceptSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_approveSharedInvite"><code class="name flex">
@@ -12749,9 +12400,7 @@ Each authorization represents an app installation that the event is visible to.
     https://api.slack.com/methods/conversations.approveSharedInvite
     &#34;&#34;&#34;
     kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-    return await self.api_call(
-        &#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.approveSharedInvite&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_archive"><code class="name flex">
@@ -12846,9 +12495,7 @@ Each authorization represents an app installation that the event is visible to.
     https://api.slack.com/methods/conversations.declineSharedInvite
     &#34;&#34;&#34;
     kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
-    return await self.api_call(
-        &#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_history"><code class="name flex">
@@ -12887,9 +12534,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;oldest&#34;: oldest,
         }
     )
-    return await self.api_call(
-        &#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.history&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_info"><code class="name flex">
@@ -12983,9 +12628,7 @@ Each authorization represents an app installation that the event is visible to.
         kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
     else:
         kwargs.update({&#34;user_ids&#34;: user_ids})
-    return await self.api_call(
-        &#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.inviteShared&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_join"><code class="name flex">
@@ -13169,9 +12812,7 @@ or received but have not yet been approved by all parties.
     https://api.slack.com/methods/conversations.members
     &#34;&#34;&#34;
     kwargs.update({&#34;channel&#34;: channel, &#34;cursor&#34;: cursor, &#34;limit&#34;: limit})
-    return await self.api_call(
-        &#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.members&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_open"><code class="name flex">
@@ -13265,9 +12906,7 @@ or received but have not yet been approved by all parties.
             &#34;oldest&#34;: oldest,
         }
     )
-    return await self.api_call(
-        &#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.conversations_setPurpose"><code class="name flex">
@@ -13758,9 +13397,7 @@ or received but have not yet been approved by all parties.
     https://api.slack.com/methods/files.remote.remove
     &#34;&#34;&#34;
     kwargs.update({&#34;external_id&#34;: external_id, &#34;file&#34;: file})
-    return await self.api_call(
-        &#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;files.remote.remove&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_remote_share"><code class="name flex">
@@ -13920,9 +13557,7 @@ or received but have not yet been approved by all parties.
     if file is None and content is None:
         raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
     if file is not None and content is not None:
-        raise e.SlackRequestError(
-            &#34;You cannot specify both the file and the content argument.&#34;
-        )
+        raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
 
     if isinstance(channels, (list, Tuple)):
         kwargs.update({&#34;channels&#34;: &#34;,&#34;.join(channels)})
@@ -13942,9 +13577,7 @@ or received but have not yet been approved by all parties.
             # use the local filename if filename is missing
             if kwargs.get(&#34;filename&#34;) is None:
                 kwargs[&#34;filename&#34;] = file.split(os.path.sep)[-1]
-        return await self.api_call(
-            &#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs
-        )
+        return await self.api_call(&#34;files.upload&#34;, files={&#34;file&#34;: file}, data=kwargs)
     else:
         kwargs[&#34;content&#34;] = content
         return await self.api_call(&#34;files.upload&#34;, data=kwargs)</code></pre>
@@ -14659,9 +14292,7 @@ multiparty direct message.</p></div>
     &#34;&#34;&#34;Exchanges a legacy access token for a new expiring access token and refresh token
     https://api.slack.com/methods/oauth.v2.exchange
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token}
-    )
+    kwargs.update({&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret, &#34;token&#34;: token})
     return await self.api_call(&#34;oauth.v2.exchange&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -15078,9 +14709,7 @@ multiparty direct message.</p></div>
     &#34;&#34;&#34;Starts a Real Time Messaging session.
     https://api.slack.com/methods/rtm.connect
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub}
-    )
+    kwargs.update({&#34;batch_presence_aware&#34;: batch_presence_aware, &#34;presence_sub&#34;: presence_sub})
     return await self.api_call(&#34;rtm.connect&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -15480,9 +15109,7 @@ multiparty direct message.</p></div>
             &#34;user&#34;: user,
         }
     )
-    return await self.api_call(
-        &#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;team.integrationLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.team_preferences_list"><code class="name flex">
@@ -15589,9 +15216,7 @@ multiparty direct message.</p></div>
     &#34;&#34;&#34;Disable an existing User Group
     https://api.slack.com/methods/usergroups.disable
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-    )
+    kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
     return await self.api_call(&#34;usergroups.disable&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -15616,9 +15241,7 @@ multiparty direct message.</p></div>
     &#34;&#34;&#34;Enable a User Group
     https://api.slack.com/methods/usergroups.enable
     &#34;&#34;&#34;
-    kwargs.update(
-        {&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id}
-    )
+    kwargs.update({&#34;usergroup&#34;: usergroup, &#34;include_count&#34;: include_count, &#34;team_id&#34;: team_id})
     return await self.api_call(&#34;usergroups.enable&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -15725,9 +15348,7 @@ multiparty direct message.</p></div>
             &#34;team_id&#34;: team_id,
         }
     )
-    return await self.api_call(
-        &#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;usergroups.users.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.usergroups_users_update"><code class="name flex">
@@ -15803,9 +15424,7 @@ multiparty direct message.</p></div>
         kwargs.update({&#34;types&#34;: &#34;,&#34;.join(types)})
     else:
         kwargs.update({&#34;types&#34;: types})
-    return await self.api_call(
-        &#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;users.conversations&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.users_deletePhoto"><code class="name flex">
@@ -15948,9 +15567,7 @@ multiparty direct message.</p></div>
     https://api.slack.com/methods/users.lookupByEmail
     &#34;&#34;&#34;
     kwargs.update({&#34;email&#34;: email})
-    return await self.api_call(
-        &#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;users.lookupByEmail&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.users_profile_get"><code class="name flex">
@@ -16035,9 +15652,7 @@ multiparty direct message.</p></div>
     https://api.slack.com/methods/users.setPhoto
     &#34;&#34;&#34;
     kwargs.update({&#34;crop_w&#34;: crop_w, &#34;crop_x&#34;: crop_x, &#34;crop_y&#34;: crop_y})
-    return await self.api_call(
-        &#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs
-    )</code></pre>
+    return await self.api_call(&#34;users.setPhoto&#34;, files={&#34;image&#34;: image}, data=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.users_setPresence"><code class="name flex">

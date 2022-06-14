@@ -40,13 +40,7 @@ from slack_sdk.web.internal_utils import get_user_agent
 
 def _build_query(params: Optional[Dict[str, Any]]) -&gt; str:
     if params is not None and len(params) &gt; 0:
-        return &#34;&amp;&#34;.join(
-            {
-                f&#34;{quote(str(k))}={quote(str(v))}&#34;
-                for k, v in params.items()
-                if v is not None
-            }
-        )
+        return &#34;&amp;&#34;.join({f&#34;{quote(str(k))}={quote(str(v))}&#34; for k, v in params.items() if v is not None})
     return &#34;&#34;
 
 
@@ -68,15 +62,11 @@ def _to_dict_without_not_given(obj: Any) -&gt; dict:
         if value is NotGiven:
             continue
         if isinstance(value, list):
-            dict_value[dict_key] = [
-                elem.to_dict() if hasattr(elem, &#34;to_dict&#34;) else elem for elem in value
-            ]
+            dict_value[dict_key] = [elem.to_dict() if hasattr(elem, &#34;to_dict&#34;) else elem for elem in value]
         elif isinstance(value, dict):
             dict_value[dict_key] = _to_dict_without_not_given(value)
         else:
-            dict_value[dict_key] = (
-                value.to_dict() if hasattr(value, &#34;to_dict&#34;) else value
-            )
+            dict_value[dict_key] = value.to_dict() if hasattr(value, &#34;to_dict&#34;) else value
     return dict_value
 
 
@@ -133,9 +123,7 @@ def _convert_dict_keys(
         new_key = convert(original_key)
         if isinstance(original_value, dict):
             result_dict[new_key] = {}
-            new_value = _convert_dict_keys(
-                original_value, result_dict[new_key], convert
-            )
+            new_value = _convert_dict_keys(original_value, result_dict[new_key], convert)
             result_dict[new_key] = new_value
         elif isinstance(original_value, list):
             result_dict[new_key] = []

@@ -111,12 +111,8 @@ class SocketModeClient(BaseSocketModeClient):
         http_proxy_auth: Optional[Tuple[str, str]] = None,
         proxy_type: Optional[str] = None,
         on_open_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
-        on_message_listeners: Optional[
-            List[Callable[[WebSocketApp, str], None]]
-        ] = None,
-        on_error_listeners: Optional[
-            List[Callable[[WebSocketApp, Exception], None]]
-        ] = None,
+        on_message_listeners: Optional[List[Callable[[WebSocketApp, str], None]]] = None,
+        on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
         &#34;&#34;&#34;
@@ -149,14 +145,10 @@ class SocketModeClient(BaseSocketModeClient):
         self.socket_mode_request_listeners = []
 
         self.current_session = None
-        self.current_session_runner = IntervalRunner(
-            self._run_current_session, 0.5
-        ).start()
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(
-            self._monitor_current_session, self.ping_interval
-        )
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.closed = False
         self.connect_operation_lock = Lock()
@@ -195,9 +187,7 @@ class SocketModeClient(BaseSocketModeClient):
                 listener(ws, message)
 
         def on_error(ws: WebSocketApp, error: Exception):
-            self.logger.error(
-                f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;
-            )
+            self.logger.error(f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;)
             for listener in self.on_error_listeners:
                 listener(ws, error)
 
@@ -207,9 +197,7 @@ class SocketModeClient(BaseSocketModeClient):
             close_msg: Optional[str] = None,
         ):
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;
-                )
+                self.logger.debug(f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;)
             if self.auto_reconnect_enabled:
                 self.logger.info(&#34;Received CLOSE event. Reconnecting...&#34;)
                 self.connect_to_new_endpoint()
@@ -289,19 +277,13 @@ class SocketModeClient(BaseSocketModeClient):
                 )
                 self.logger.info(&#34;Stopped receiving messages from a connection&#34;)
             except Exception as e:
-                self.logger.exception(
-                    f&#34;Failed to start or stop the current session: {e}&#34;
-                )
+                self.logger.exception(f&#34;Failed to start or stop the current session: {e}&#34;)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
             try:
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or self.current_session.sock is None
-                ):
-                    self.logger.info(
-                        &#34;The session seems to be already closed. Reconnecting...&#34;
-                    )
+                if self.auto_reconnect_enabled and (self.current_session is None or self.current_session.sock is None):
+                    self.logger.info(&#34;The session seems to be already closed. Reconnecting...&#34;)
                     self.connect_to_new_endpoint()
             except Exception as e:
                 self.logger.error(
@@ -411,12 +393,8 @@ class SocketModeClient(BaseSocketModeClient):
         http_proxy_auth: Optional[Tuple[str, str]] = None,
         proxy_type: Optional[str] = None,
         on_open_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
-        on_message_listeners: Optional[
-            List[Callable[[WebSocketApp, str], None]]
-        ] = None,
-        on_error_listeners: Optional[
-            List[Callable[[WebSocketApp, Exception], None]]
-        ] = None,
+        on_message_listeners: Optional[List[Callable[[WebSocketApp, str], None]]] = None,
+        on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
         &#34;&#34;&#34;
@@ -449,14 +427,10 @@ class SocketModeClient(BaseSocketModeClient):
         self.socket_mode_request_listeners = []
 
         self.current_session = None
-        self.current_session_runner = IntervalRunner(
-            self._run_current_session, 0.5
-        ).start()
+        self.current_session_runner = IntervalRunner(self._run_current_session, 0.5).start()
 
         self.current_app_monitor_started = False
-        self.current_app_monitor = IntervalRunner(
-            self._monitor_current_session, self.ping_interval
-        )
+        self.current_app_monitor = IntervalRunner(self._monitor_current_session, self.ping_interval)
 
         self.closed = False
         self.connect_operation_lock = Lock()
@@ -495,9 +469,7 @@ class SocketModeClient(BaseSocketModeClient):
                 listener(ws, message)
 
         def on_error(ws: WebSocketApp, error: Exception):
-            self.logger.error(
-                f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;
-            )
+            self.logger.error(f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;)
             for listener in self.on_error_listeners:
                 listener(ws, error)
 
@@ -507,9 +479,7 @@ class SocketModeClient(BaseSocketModeClient):
             close_msg: Optional[str] = None,
         ):
             if self.logger.level &lt;= logging.DEBUG:
-                self.logger.debug(
-                    f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;
-                )
+                self.logger.debug(f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;)
             if self.auto_reconnect_enabled:
                 self.logger.info(&#34;Received CLOSE event. Reconnecting...&#34;)
                 self.connect_to_new_endpoint()
@@ -589,19 +559,13 @@ class SocketModeClient(BaseSocketModeClient):
                 )
                 self.logger.info(&#34;Stopped receiving messages from a connection&#34;)
             except Exception as e:
-                self.logger.exception(
-                    f&#34;Failed to start or stop the current session: {e}&#34;
-                )
+                self.logger.exception(f&#34;Failed to start or stop the current session: {e}&#34;)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
             try:
-                if self.auto_reconnect_enabled and (
-                    self.current_session is None or self.current_session.sock is None
-                ):
-                    self.logger.info(
-                        &#34;The session seems to be already closed. Reconnecting...&#34;
-                    )
+                if self.auto_reconnect_enabled and (self.current_session is None or self.current_session.sock is None):
+                    self.logger.info(&#34;The session seems to be already closed. Reconnecting...&#34;)
                     self.connect_to_new_endpoint()
             except Exception as e:
                 self.logger.error(
@@ -740,9 +704,7 @@ class SocketModeClient(BaseSocketModeClient):
             listener(ws, message)
 
     def on_error(ws: WebSocketApp, error: Exception):
-        self.logger.error(
-            f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;
-        )
+        self.logger.error(f&#34;on_error invoked (error: {type(error).__name__}, message: {error})&#34;)
         for listener in self.on_error_listeners:
             listener(ws, error)
 
@@ -752,9 +714,7 @@ class SocketModeClient(BaseSocketModeClient):
         close_msg: Optional[str] = None,
     ):
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(
-                f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;
-            )
+            self.logger.debug(f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;)
         if self.auto_reconnect_enabled:
             self.logger.info(&#34;Received CLOSE event. Reconnecting...&#34;)
             self.connect_to_new_endpoint()

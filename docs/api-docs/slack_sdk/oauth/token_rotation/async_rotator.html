@@ -124,9 +124,7 @@ class AsyncTokenRotator:
             refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
-            refreshed_bot.bot_token_expires_at = int(time()) + int(
-                refresh_response.get(&#34;expires_in&#34;)
-            )
+            refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
             return refreshed_bot
 
         except SlackApiError as e:
@@ -164,12 +162,8 @@ class AsyncTokenRotator:
 
             refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
-            refreshed_installation.user_refresh_token = refresh_response.get(
-                &#34;refresh_token&#34;
-            )
-            refreshed_installation.user_token_expires_at = int(time()) + int(
-                refresh_response.get(&#34;expires_in&#34;)
-            )
+            refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
+            refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
             return refreshed_installation  # type: ignore
 
         except SlackApiError as e:
@@ -285,9 +279,7 @@ class AsyncTokenRotator:
             refreshed_bot = Bot(**bot.to_dict())  # type: ignore
             refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
-            refreshed_bot.bot_token_expires_at = int(time()) + int(
-                refresh_response.get(&#34;expires_in&#34;)
-            )
+            refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
             return refreshed_bot
 
         except SlackApiError as e:
@@ -325,12 +317,8 @@ class AsyncTokenRotator:
 
             refreshed_installation = Installation(**installation.to_dict())  # type: ignore
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
-            refreshed_installation.user_refresh_token = refresh_response.get(
-                &#34;refresh_token&#34;
-            )
-            refreshed_installation.user_token_expires_at = int(time()) + int(
-                refresh_response.get(&#34;expires_in&#34;)
-            )
+            refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
+            refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
             return refreshed_installation  # type: ignore
 
         except SlackApiError as e:
@@ -406,9 +394,7 @@ class AsyncTokenRotator:
         refreshed_bot = Bot(**bot.to_dict())  # type: ignore
         refreshed_bot.bot_token = refresh_response.get(&#34;access_token&#34;)
         refreshed_bot.bot_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
-        refreshed_bot.bot_token_expires_at = int(time()) + int(
-            refresh_response.get(&#34;expires_in&#34;)
-        )
+        refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
         return refreshed_bot
 
     except SlackApiError as e:
@@ -523,12 +509,8 @@ class AsyncTokenRotator:
 
         refreshed_installation = Installation(**installation.to_dict())  # type: ignore
         refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
-        refreshed_installation.user_refresh_token = refresh_response.get(
-            &#34;refresh_token&#34;
-        )
-        refreshed_installation.user_token_expires_at = int(time()) + int(
-            refresh_response.get(&#34;expires_in&#34;)
-        )
+        refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
+        refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
         return refreshed_installation  # type: ignore
 
     except SlackApiError as e:

@@ -59,9 +59,7 @@ class SocketModeRequest:
             self.payload = {&#34;text&#34;: payload}
         else:
             unexpected_payload_type = type(payload)  # type: ignore
-            raise ValueError(
-                f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;
-            )
+            raise ValueError(f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;)
 
         self.accepts_response_payload = accepts_response_payload or False
         self.retry_attempt = retry_attempt
@@ -74,8 +72,7 @@ class SocketModeRequest:
                 type=message.get(&#34;type&#34;),
                 envelope_id=message.get(&#34;envelope_id&#34;),
                 payload=message.get(&#34;payload&#34;),
-                accepts_response_payload=message.get(&#34;accepts_response_payload&#34;)
-                or False,
+                accepts_response_payload=message.get(&#34;accepts_response_payload&#34;) or False,
                 retry_attempt=message.get(&#34;retry_attempt&#34;),
                 retry_reason=message.get(&#34;retry_reason&#34;),
             )
@@ -135,9 +132,7 @@ class SocketModeRequest:
             self.payload = {&#34;text&#34;: payload}
         else:
             unexpected_payload_type = type(payload)  # type: ignore
-            raise ValueError(
-                f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;
-            )
+            raise ValueError(f&#34;Unsupported payload data type ({unexpected_payload_type})&#34;)
 
         self.accepts_response_payload = accepts_response_payload or False
         self.retry_attempt = retry_attempt
@@ -150,8 +145,7 @@ class SocketModeRequest:
                 type=message.get(&#34;type&#34;),
                 envelope_id=message.get(&#34;envelope_id&#34;),
                 payload=message.get(&#34;payload&#34;),
-                accepts_response_payload=message.get(&#34;accepts_response_payload&#34;)
-                or False,
+                accepts_response_payload=message.get(&#34;accepts_response_payload&#34;) or False,
                 retry_attempt=message.get(&#34;retry_attempt&#34;),
                 retry_reason=message.get(&#34;retry_reason&#34;),
             )
@@ -208,8 +202,7 @@ def from_dict(cls, message: dict) -&gt; Optional[&#34;SocketModeRequest&#34;]:
             type=message.get(&#34;type&#34;),
             envelope_id=message.get(&#34;envelope_id&#34;),
             payload=message.get(&#34;payload&#34;),
-            accepts_response_payload=message.get(&#34;accepts_response_payload&#34;)
-            or False,
+            accepts_response_payload=message.get(&#34;accepts_response_payload&#34;) or False,
             retry_attempt=message.get(&#34;retry_attempt&#34;),
             retry_reason=message.get(&#34;retry_reason&#34;),
         )

@@ -42,9 +42,7 @@ from slack_sdk.models.blocks import Block
 from slack_sdk.models.metadata import Metadata
 
 
-def convert_bool_to_0_or_1(
-    params: Optional[Dict[str, Any]]
-) -&gt; Optional[Dict[str, Any]]:
+def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
     &#34;&#34;&#34;Converts all bool values in dict to &#34;0&#34; or &#34;1&#34;.
 
     Slack APIs safely accept &#34;0&#34;/&#34;1&#34; as boolean values.
@@ -233,9 +231,7 @@ def _parse_web_class_objects(kwargs) -&gt; None:
         kwargs.update({&#34;metadata&#34;: to_dict(metadata)})
 
 
-def _update_call_participants(
-    kwargs, users: Union[str, Sequence[Dict[str, str]]]
-) -&gt; None:
+def _update_call_participants(kwargs, users: Union[str, Sequence[Dict[str, str]]]) -&gt; None:
     if users is None:
         return
 
@@ -269,9 +265,7 @@ def _to_0_or_1_if_bool(v: Any) -&gt; Union[Any, str]:
     return v
 
 
-def _warn_if_text_or_attachment_fallback_is_missing(
-    endpoint: str, kwargs: Dict[str, Any]
-) -&gt; None:
+def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[str, Any]) -&gt; None:
     text = kwargs.get(&#34;text&#34;)
     if text and len(text.strip()) &gt; 0:
         # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
@@ -301,11 +295,7 @@ def _warn_if_text_or_attachment_fallback_is_missing(
         attachments is not None
         and isinstance(attachments, list)
         and not all(
-            [
-                isinstance(attachment, dict)
-                and len(attachment.get(&#34;fallback&#34;, &#34;&#34;).strip()) &gt; 0
-                for attachment in attachments
-            ]
+            [isinstance(attachment, dict) and len(attachment.get(&#34;fallback&#34;, &#34;&#34;).strip()) &gt; 0 for attachment in attachments]
         )
     ):
         # https://api.slack.com/reference/messaging/attachments
@@ -321,9 +311,7 @@ def _warn_if_text_or_attachment_fallback_is_missing(
 
 
 def _build_unexpected_body_error_message(body: str) -&gt; str:
-    body_for_logging = &#34;&#34;.join(
-        [line.strip() for line in body.replace(&#34;\r&#34;, &#34;\n&#34;).split(&#34;\n&#34;)]
-    )
+    body_for_logging = &#34;&#34;.join([line.strip() for line in body.replace(&#34;\r&#34;, &#34;\n&#34;).split(&#34;\n&#34;)])
     if len(body_for_logging) &gt; 100:
         body_for_logging = body_for_logging[:100] + &#34;...&#34;
     message = f&#34;Received a response in a non-JSON format: {body_for_logging}&#34;
@@ -367,9 +355,7 @@ This method converts only the bool values in top-level of a given dict.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def convert_bool_to_0_or_1(
-    params: Optional[Dict[str, Any]]
-) -&gt; Optional[Dict[str, Any]]:
+<pre><code class="python">def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
     &#34;&#34;&#34;Converts all bool values in dict to &#34;0&#34; or &#34;1&#34;.
 
     Slack APIs safely accept &#34;0&#34;/&#34;1&#34; as boolean values.

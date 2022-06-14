@@ -98,14 +98,9 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
     def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
-    @JsonValidator(
-        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
     def placeholder_length(self) -&gt; bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) &lt; self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
     def hint_length(self) -&gt; bool:
@@ -203,14 +198,9 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
-    @JsonValidator(
-        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
     def placeholder_length(self) -&gt; bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) &lt; self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length
 
     @EnumValidator(&#34;data_source&#34;, DataSourceTypes)
     def data_source_valid(self) -&gt; bool:
@@ -865,10 +855,7 @@ class DialogBuilder(JsonObject):
 
     @JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
     def submit_label_length(self) -&gt; bool:
-        return (
-            self._submit_label is None
-            or len(self._submit_label) &lt;= self.submit_label_max_length
-        )
+        return self._submit_label is None or len(self._submit_label) &lt;= self.submit_label_max_length
 
     @JsonValidator(&#34;submit_label can only be one word&#34;)
     def submit_label_valid(self) -&gt; bool:
@@ -1019,14 +1006,9 @@ __all__ = [
     def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
-    @JsonValidator(
-        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
     def placeholder_length(self) -&gt; bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) &lt; self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length
 
     @EnumValidator(&#34;data_source&#34;, DataSourceTypes)
     def data_source_valid(self) -&gt; bool:
@@ -1147,14 +1129,9 @@ def name_length(self) -&gt; bool:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@JsonValidator(
-    f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-)
+<pre><code class="python">@JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
 def placeholder_length(self) -&gt; bool:
-    return (
-        self.placeholder is None
-        or len(self.placeholder) &lt; self.placeholder_max_length
-    )</code></pre>
+    return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length</code></pre>
 </details>
 </dd>
 </dl>
@@ -1588,10 +1565,7 @@ dialog to Slack</p></div>
 
     @JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
     def submit_label_length(self) -&gt; bool:
-        return (
-            self._submit_label is None
-            or len(self._submit_label) &lt;= self.submit_label_max_length
-        )
+        return self._submit_label is None or len(self._submit_label) &lt;= self.submit_label_max_length
 
     @JsonValidator(&#34;submit_label can only be one word&#34;)
     def submit_label_valid(self) -&gt; bool:
@@ -2095,10 +2069,7 @@ spaces)</dd>
 </summary>
 <pre><code class="python">@JsonValidator(f&#34;submit_label cannot exceed {submit_label_max_length} characters&#34;)
 def submit_label_length(self) -&gt; bool:
-    return (
-        self._submit_label is None
-        or len(self._submit_label) &lt;= self.submit_label_max_length
-    )</code></pre>
+    return self._submit_label is None or len(self._submit_label) &lt;= self.submit_label_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogBuilder.submit_label_valid"><code class="name flex">
@@ -3029,14 +3000,9 @@ max_length you have set or the default, 3000.</p>
     def label_length(self) -&gt; bool:
         return len(self.label) &lt; self.label_max_length
 
-    @JsonValidator(
-        f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-    )
+    @JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
     def placeholder_length(self) -&gt; bool:
-        return (
-            self.placeholder is None
-            or len(self.placeholder) &lt; self.placeholder_max_length
-        )
+        return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length
 
     @JsonValidator(f&#34;hint attribute cannot exceed {hint_max_length} characters&#34;)
     def hint_length(self) -&gt; bool:
@@ -3251,14 +3217,9 @@ def name_length(self) -&gt; bool:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@JsonValidator(
-    f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;
-)
+<pre><code class="python">@JsonValidator(f&#34;placeholder attribute cannot exceed {placeholder_max_length} characters&#34;)
 def placeholder_length(self) -&gt; bool:
-    return (
-        self.placeholder is None
-        or len(self.placeholder) &lt; self.placeholder_max_length
-    )</code></pre>
+    return self.placeholder is None or len(self.placeholder) &lt; self.placeholder_max_length</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.dialogs.DialogTextComponent.subtype_valid"><code class="name flex">

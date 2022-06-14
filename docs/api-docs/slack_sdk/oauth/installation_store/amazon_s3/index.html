@@ -233,11 +233,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             t_id = none
         workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
         try:
-            key = (
-                f&#34;{workspace_path}/installer-{user_id}-latest&#34;
-                if user_id
-                else f&#34;{workspace_path}/installer-latest&#34;
-            )
+            key = f&#34;{workspace_path}/installer-{user_id}-latest&#34; if user_id else f&#34;{workspace_path}/installer-latest&#34;
             fetch_response = self.s3_client.get_object(
                 Bucket=self.bucket_name,
                 Key=key,
@@ -245,23 +241,41 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f&#34;S3 get_object response: {fetch_response}&#34;)
             body = fetch_response[&#34;Body&#34;].read().decode(&#34;utf-8&#34;)
             data = json.loads(body)
-            return Installation(**data)
+            installation = Installation(**data)
+
+            if installation is not None and user_id is not None:
+                # Retrieve the latest bot token, just in case
+                # See also: https://github.com/slackapi/bolt-python/issues/664
+                latest_bot_installation = self.find_installation(
+                    enterprise_id=enterprise_id,
+                    team_id=team_id,
+                    is_enterprise_install=is_enterprise_install,
+                )
+                if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                    # NOTE: this logic is based on the assumption that every single installation has bot scopes
+                    # If you need to installation patterns without bot scopes in the same S3 bucket,
+                    # please fork this code and implement your own logic.
+                    installation.bot_id = latest_bot_installation.bot_id
+                    installation.bot_user_id = latest_bot_installation.bot_user_id
+                    installation.bot_token = latest_bot_installation.bot_token
+                    installation.bot_scopes = latest_bot_installation.bot_scopes
+                    installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                    installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+            return installation
+
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
             self.logger.warning(message)
             return None
 
-    async def async_delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         return self.delete_bot(
             enterprise_id=enterprise_id,
             team_id=team_id,
         )
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         none = &#34;none&#34;
         e_id = enterprise_id or none
         t_id = team_id or none
@@ -344,11 +358,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             Prefix=f&#34;{workspace_path}/installer-&#34;,
             MaxKeys=10,  # the small number would be enough for this purpose
         )
-        keys = [
-            c.get(&#34;Key&#34;)
-            for c in objects.get(&#34;Contents&#34;, [])
-            if c.get(&#34;Key&#34;) not in deleted_keys
-        ]
+        keys = [c.get(&#34;Key&#34;) for c in objects.get(&#34;Contents&#34;, []) if c.get(&#34;Key&#34;) not in deleted_keys]
         # If only installer-latest remains, we should delete the one as well
         if len(keys) == 1 and keys[0].endswith(&#34;installer-latest&#34;):
             content = objects.get(&#34;Contents&#34;, [])[0]
@@ -590,11 +600,7 @@ the following methods should be implemented.</p>
             t_id = none
         workspace_path = f&#34;{self.client_id}/{e_id}-{t_id}&#34;
         try:
-            key = (
-                f&#34;{workspace_path}/installer-{user_id}-latest&#34;
-                if user_id
-                else f&#34;{workspace_path}/installer-latest&#34;
-            )
+            key = f&#34;{workspace_path}/installer-{user_id}-latest&#34; if user_id else f&#34;{workspace_path}/installer-latest&#34;
             fetch_response = self.s3_client.get_object(
                 Bucket=self.bucket_name,
                 Key=key,
@@ -602,23 +608,41 @@ the following methods should be implemented.</p>
             self.logger.debug(f&#34;S3 get_object response: {fetch_response}&#34;)
             body = fetch_response[&#34;Body&#34;].read().decode(&#34;utf-8&#34;)
             data = json.loads(body)
-            return Installation(**data)
+            installation = Installation(**data)
+
+            if installation is not None and user_id is not None:
+                # Retrieve the latest bot token, just in case
+                # See also: https://github.com/slackapi/bolt-python/issues/664
+                latest_bot_installation = self.find_installation(
+                    enterprise_id=enterprise_id,
+                    team_id=team_id,
+                    is_enterprise_install=is_enterprise_install,
+                )
+                if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                    # NOTE: this logic is based on the assumption that every single installation has bot scopes
+                    # If you need to installation patterns without bot scopes in the same S3 bucket,
+                    # please fork this code and implement your own logic.
+                    installation.bot_id = latest_bot_installation.bot_id
+                    installation.bot_user_id = latest_bot_installation.bot_user_id
+                    installation.bot_token = latest_bot_installation.bot_token
+                    installation.bot_scopes = latest_bot_installation.bot_scopes
+                    installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                    installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+            return installation
+
         except Exception as e:  # skipcq: PYL-W0703
             message = f&#34;Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
             self.logger.warning(message)
             return None
 
-    async def async_delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         return self.delete_bot(
             enterprise_id=enterprise_id,
             team_id=team_id,
         )
 
-    def delete_bot(
-        self, *, enterprise_id: Optional[str], team_id: Optional[str]
-    ) -&gt; None:
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         none = &#34;none&#34;
         e_id = enterprise_id or none
         t_id = team_id or none
@@ -701,11 +725,7 @@ the following methods should be implemented.</p>
             Prefix=f&#34;{workspace_path}/installer-&#34;,
             MaxKeys=10,  # the small number would be enough for this purpose
         )
-        keys = [
-            c.get(&#34;Key&#34;)
-            for c in objects.get(&#34;Contents&#34;, [])
-            if c.get(&#34;Key&#34;) not in deleted_keys
-        ]
+        keys = [c.get(&#34;Key&#34;) for c in objects.get(&#34;Contents&#34;, []) if c.get(&#34;Key&#34;) not in deleted_keys]
         # If only installer-latest remains, we should delete the one as well
         if len(keys) == 1 and keys[0].endswith(&#34;installer-latest&#34;):
             content = objects.get(&#34;Contents&#34;, [])[0]

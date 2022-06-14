@@ -61,9 +61,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute(&#34;select count(1) from oauth_states;&#34;)
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f&#34;{row_num} oauth states are stored in {self.database}&#34;
-                )
+                self.logger.debug(f&#34;{row_num} oauth states are stored in {self.database}&#34;)
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -100,12 +98,8 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 state,
                 time.time() + self.expiration_seconds,
             ]
-            conn.execute(
-                &#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters
-            )
-            self.logger.debug(
-                f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;
-            )
+            conn.execute(&#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters)
+            self.logger.debug(f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;)
             conn.commit()
         return state
 
@@ -117,9 +111,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                     [state, time.time()],
                 )
                 row = cur.fetchone()
-                self.logger.debug(
-                    f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     id = row[0]  # skipcq: PYL-W0622
                     conn.execute(&#34;delete from oauth_states where id = ?;&#34;, [id])
@@ -175,9 +167,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             with sqlite3.connect(database=self.database) as conn:
                 cur = conn.execute(&#34;select count(1) from oauth_states;&#34;)
                 row_num = cur.fetchone()[0]
-                self.logger.debug(
-                    f&#34;{row_num} oauth states are stored in {self.database}&#34;
-                )
+                self.logger.debug(f&#34;{row_num} oauth states are stored in {self.database}&#34;)
         except Exception:  # skipcq: PYL-W0703
             self.create_tables()
         self.init_called = True
@@ -214,12 +204,8 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 state,
                 time.time() + self.expiration_seconds,
             ]
-            conn.execute(
-                &#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters
-            )
-            self.logger.debug(
-                f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;
-            )
+            conn.execute(&#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters)
+            self.logger.debug(f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;)
             conn.commit()
         return state
 
@@ -231,9 +217,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                     [state, time.time()],
                 )
                 row = cur.fetchone()
-                self.logger.debug(
-                    f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;
-                )
+                self.logger.debug(f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;)
                 if row and len(row) &gt; 0:
                     id = row[0]  # skipcq: PYL-W0622
                     conn.execute(&#34;delete from oauth_states where id = ?;&#34;, [id])
@@ -327,9 +311,7 @@ def logger(self) -&gt; Logger:
                 [state, time.time()],
             )
             row = cur.fetchone()
-            self.logger.debug(
-                f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;
-            )
+            self.logger.debug(f&#34;consume&#39;s query result: {row} (database: {self.database})&#34;)
             if row and len(row) &gt; 0:
                 id = row[0]  # skipcq: PYL-W0622
                 conn.execute(&#34;delete from oauth_states where id = ?;&#34;, [id])
@@ -380,9 +362,7 @@ def logger(self) -&gt; Logger:
         with sqlite3.connect(database=self.database) as conn:
             cur = conn.execute(&#34;select count(1) from oauth_states;&#34;)
             row_num = cur.fetchone()[0]
-            self.logger.debug(
-                f&#34;{row_num} oauth states are stored in {self.database}&#34;
-            )
+            self.logger.debug(f&#34;{row_num} oauth states are stored in {self.database}&#34;)
     except Exception:  # skipcq: PYL-W0703
         self.create_tables()
     self.init_called = True</code></pre>
@@ -404,12 +384,8 @@ def logger(self) -&gt; Logger:
             state,
             time.time() + self.expiration_seconds,
         ]
-        conn.execute(
-            &#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters
-        )
-        self.logger.debug(
-            f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;
-        )
+        conn.execute(&#34;insert into oauth_states (state, expire_at) values (?, ?);&#34;, parameters)
+        self.logger.debug(f&#34;issue&#39;s insertion result: {parameters} (database: {self.database})&#34;)
         conn.commit()
     return state</code></pre>
 </details>

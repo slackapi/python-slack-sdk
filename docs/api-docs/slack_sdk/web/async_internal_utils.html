@@ -119,14 +119,10 @@ async def _request_with_session(
                 def convert_params(values: dict) -&gt; dict:
                     if not values or not isinstance(values, dict):
                         return {}
-                    return {
-                        k: (&#34;(bytes)&#34; if isinstance(v, bytes) else v)
-                        for k, v in values.items()
-                    }
+                    return {k: (&#34;(bytes)&#34; if isinstance(v, bytes) else v) for k, v in values.items()}
 
                 headers = {
-                    k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v
-                    for k, v in req_args.get(&#34;headers&#34;, {}).items()
+                    k: &#34;(redacted)&#34; if k.lower() == &#34;authorization&#34; else v for k, v in req_args.get(&#34;headers&#34;, {}).items()
                 }
                 logger.debug(
                     f&#34;Sending a request - url: {http_verb} {api_url}, &#34;
@@ -158,9 +154,7 @@ async def _request_with_session(
                                 body=data,
                             )
                         except aiohttp.ContentTypeError:
-                            logger.debug(
-                                f&#34;No response data returned from the following API call: {api_url}.&#34;
-                            )
+                            logger.debug(f&#34;No response data returned from the following API call: {api_url}.&#34;)
                         except json.decoder.JSONDecodeError:
                             try:
                                 body: str = await res.text()
@@ -219,8 +213,7 @@ async def _request_with_session(
                     ):
                         if logger.level &lt;= logging.DEBUG:
                             logger.info(
-                                f&#34;A retry handler found: {type(handler).__name__} &#34;
-                                f&#34;for {http_verb} {api_url} - {e}&#34;
+                                f&#34;A retry handler found: {type(handler).__name__} &#34; f&#34;for {http_verb} {api_url} - {e}&#34;
                             )
                         await handler.prepare_for_next_attempt_async(
                             state=retry_state,
