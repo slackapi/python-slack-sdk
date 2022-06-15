@@ -4,6 +4,7 @@
 import asyncio
 import logging
 import os
+import sys
 
 from slack_sdk.rtm import RTMClient
 
