@@ -22,6 +22,8 @@ from tests.slack_sdk.socket_mode.mock_web_api_server import (
     cleanup_mock_web_api_server,
 )
 
+import sys
+
 
 class TestInteractionsBuiltin(unittest.TestCase):
     logger = logging.getLogger(__name__)
@@ -46,6 +48,16 @@ class TestInteractionsBuiltin(unittest.TestCase):
     def test_interactions(self):
         if is_ci_unstable_test_skip_enabled():
             return
+
+        default_recursion_limit = sys.getrecursionlimit()  # will restore later
+        # This built-in WebSocket client internally has recursive method calls of _fetch_messages method.
+        # In this test, the method calls can result in the following error when giving a quite small buffer size.
+        # RecursionError: maximum recursion depth exceeded while calling a Python object
+        # (the default recursion depth in Python is 1500)
+        # Since the default buffer size is set to 1024, and it's enough to prevent the same situation happening,
+        # we believe that the same situation never happens in the production usage.
+        sys.setrecursionlimit(4000)
+
         t = Thread(target=start_socket_mode_server(self, 3011))
         t.daemon = True
         t.start()
@@ -112,6 +124,8 @@ class TestInteractionsBuiltin(unittest.TestCase):
                 self.logger.info(f"Passed with buffer size: {buffer_size}")
 
         finally:
+            # Restore the default value
+            sys.setrecursionlimit(default_recursion_limit)
             client.close()
             self.server.stop()
             self.server.close()
