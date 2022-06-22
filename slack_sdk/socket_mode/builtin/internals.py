@@ -278,7 +278,7 @@ def _fetch_messages(
         elif current_data_length == 127:
             if len(remaining_bytes) < 10:
                 remaining_bytes += receive(1024)
-            current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:10]))[0]
+            current_data_length = struct.unpack("!Q", bytes(remaining_bytes[2:10]))[0]
             idx_after_length_part = 10
 
         current_header = FrameHeader(
