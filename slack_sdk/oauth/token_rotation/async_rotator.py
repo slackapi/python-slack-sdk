@@ -107,7 +107,7 @@ class AsyncTokenRotator:
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -> Optional[Bot]:  # type: ignore
+    ) -> Optional[Installation]:
         """Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -136,7 +136,7 @@ class AsyncTokenRotator:
             refreshed_installation.user_token = refresh_response.get("access_token")
             refreshed_installation.user_refresh_token = refresh_response.get("refresh_token")
             refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))
-            return refreshed_installation  # type: ignore
+            return refreshed_installation
 
         except SlackApiError as e:
             raise SlackTokenRotationError(e)
