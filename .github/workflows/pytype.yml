@@ -24,7 +24,7 @@ jobs:
         pip install -e ".[testing]"
         pip install -e ".[optional]"
         # As pytype can change its behavior in newer versions, we manually upgrade it
-        pip install "pytype==2022.6.6"
+        pip install "pytype==2022.6.30"
     - name: Run pytype
       run: |
         pytype slack_sdk/
