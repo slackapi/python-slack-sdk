@@ -20,6 +20,7 @@ from slack_sdk.models.blocks import (
     PlainTextObject,
     MarkdownTextObject,
     HeaderBlock,
+    VideoBlock,
     Option,
 )
 from . import STRING_3001_CHARS
@@ -694,3 +695,79 @@ class HeaderBlockTests(unittest.TestCase):
         }
         with self.assertRaises(SlackObjectFormationError):
             HeaderBlock(**input).validate_json()
+
+
+# ----------------------------------------------
+# Video
+# ----------------------------------------------
+
+
+class VideoBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "video",
+            "title": {"type": "plain_text", "text": "How to use Slack.", "emoji": True},
+            "title_url": "https://www.youtube.com/watch?v=RRxQQxiM7AA",
+            "description": {
+                "type": "plain_text",
+                "text": "Slack is a new way to communicate with your team. "
+                "It's faster, better organized and more secure than email.",
+                "emoji": True,
+            },
+            "video_url": "https://www.youtube.com/embed/RRxQQxiM7AA?feature=oembed&autoplay=1",
+            "alt_text": "How to use Slack?",
+            "thumbnail_url": "https://i.ytimg.com/vi/RRxQQxiM7AA/hqdefault.jpg",
+            "author_name": "Arcado Buendia",
+            "provider_name": "YouTube",
+            "provider_icon_url": "https://a.slack-edge.com/80588/img/unfurl_icons/youtube.png",
+        }
+        self.assertDictEqual(input, VideoBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_required(self):
+        input = {
+            "type": "video",
+            "title": {"type": "plain_text", "text": "How to use Slack.", "emoji": True},
+            "video_url": "https://www.youtube.com/embed/RRxQQxiM7AA?feature=oembed&autoplay=1",
+            "alt_text": "How to use Slack?",
+            "thumbnail_url": "https://i.ytimg.com/vi/RRxQQxiM7AA/hqdefault.jpg",
+        }
+        VideoBlock(**input).validate_json()
+
+    def test_required_error(self):
+        # title is missing
+        input = {
+            "type": "video",
+            "video_url": "https://www.youtube.com/embed/RRxQQxiM7AA?feature=oembed&autoplay=1",
+            "alt_text": "How to use Slack?",
+            "thumbnail_url": "https://i.ytimg.com/vi/RRxQQxiM7AA/hqdefault.jpg",
+        }
+        with self.assertRaises(SlackObjectFormationError):
+            VideoBlock(**input).validate_json()
+
+    def test_title_length_199(self):
+        input = {
+            "type": "video",
+            "title": {
+                "type": "plain_text",
+                "text": "1234567890" * 19 + "123456789",
+            },
+            "video_url": "https://www.youtube.com/embed/RRxQQxiM7AA?feature=oembed&autoplay=1",
+            "alt_text": "How to use Slack?",
+            "thumbnail_url": "https://i.ytimg.com/vi/RRxQQxiM7AA/hqdefault.jpg",
+        }
+        VideoBlock(**input).validate_json()
+
+    def test_title_length_200(self):
+        input = {
+            "type": "video",
+            "title": {
+                "type": "plain_text",
+                "text": "1234567890" * 20,
+            },
+            "video_url": "https://www.youtube.com/embed/RRxQQxiM7AA?feature=oembed&autoplay=1",
+            "alt_text": "How to use Slack?",
+            "thumbnail_url": "https://i.ytimg.com/vi/RRxQQxiM7AA/hqdefault.jpg",
+        }
+        with self.assertRaises(SlackObjectFormationError):
+            VideoBlock(**input).validate_json()

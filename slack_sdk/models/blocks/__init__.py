@@ -48,6 +48,7 @@ from .blocks import HeaderBlock
 from .blocks import ImageBlock
 from .blocks import InputBlock
 from .blocks import SectionBlock
+from .blocks import VideoBlock
 
 __all__ = [
     "ButtonStyles",
@@ -92,4 +93,5 @@ __all__ = [
     "ImageBlock",
     "InputBlock",
     "SectionBlock",
+    "VideoBlock",
 ]

@@ -86,6 +86,8 @@ class Block(JsonObject):
                     return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
+                elif type == VideoBlock.type:
+                    return VideoBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -492,3 +494,100 @@ class HeaderBlock(Block):
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_alt_text_length(self):
         return self.text is None or len(self.text.text) <= self.text_max_length
+
+
+class VideoBlock(Block):
+    type = "video"
+    title_max_length = 200
+    author_name_max_length = 50
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {
+                "alt_text",
+                "video_url",
+                "thumbnail_url",
+                "title",
+                "title_url",
+                "description",
+                "provider_icon_url",
+                "provider_name",
+                "author_name",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        alt_text: Optional[str] = None,
+        video_url: Optional[str] = None,
+        thumbnail_url: Optional[str] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
+        title_url: Optional[str] = None,
+        description: Optional[Union[str, dict, PlainTextObject]] = None,
+        provider_icon_url: Optional[str] = None,
+        provider_name: Optional[str] = None,
+        author_name: Optional[str] = None,
+        **others: dict,
+    ):
+        """A video block is designed to embed videos in all app surfaces
+        (e.g. link unfurls, messages, modals, App Home) —
+        anywhere you can put blocks! To use the video block within your app,
+        you must have the links.embed:write scope.
+        https://api.slack.com/reference/block-kit/blocks#video
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            alt_text (required): A tooltip for the video. Required for accessibility
+            video_url (required): The URL to be embedded. Must match any existing unfurl domains within the app
+                and point to a HTTPS URL.
+            thumbnail_url (required): The thumbnail image URL
+            title (required): Video title in plain text format. Must be less than 200 characters.
+            title_url: Hyperlink for the title text. Must correspond to the non-embeddable URL for the video.
+                Must go to an HTTPS URL.
+            description: Description for video in plain text format.
+            provider_icon_url: Icon for the video provider - ex. Youtube icon
+            provider_name: The originating application or domain of the video ex. Youtube
+            author_name: Author name to be displayed. Must be less than 50 characters.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.alt_text = alt_text
+        self.video_url = video_url
+        self.thumbnail_url = thumbnail_url
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self.title_url = title_url
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)
+        self.provider_icon_url = provider_icon_url
+        self.provider_name = provider_name
+        self.author_name = author_name
+
+    @JsonValidator("alt_text attribute must be specified")
+    def _validate_alt_text(self):
+        return self.alt_text is not None
+
+    @JsonValidator("video_url attribute must be specified")
+    def _validate_video_url(self):
+        return self.video_url is not None
+
+    @JsonValidator("thumbnail_url attribute must be specified")
+    def _validate_thumbnail_url(self):
+        return self.thumbnail_url is not None
+
+    @JsonValidator("title attribute must be specified")
+    def _validate_title(self):
+        return self.title is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or len(self.title.text) < self.title_max_length
+
+    @JsonValidator(f"author_name attribute cannot exceed {author_name_max_length} characters")
+    def _validate_author_name_length(self):
+        return self.author_name is None or len(self.author_name) < self.author_name_max_length
