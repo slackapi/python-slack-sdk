@@ -2123,8 +2123,10 @@ class LegacyWebClient(LegacyBaseClient):
     def chat_unfurl(
         self,
         *,
-        channel: str,
-        ts: str,
+        channel: Optional[str] = None,
+        ts: Optional[str] = None,
+        source: Optional[str] = None,
+        unfurl_id: Optional[str] = None,
         unfurls: Dict[str, Dict],
         user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         user_auth_message: Optional[str] = None,
@@ -2139,6 +2141,8 @@ class LegacyWebClient(LegacyBaseClient):
             {
                 "channel": channel,
                 "ts": ts,
+                "source": channel,
+                "unfurl_id": ts,
                 "unfurls": unfurls,
                 "user_auth_blocks": user_auth_blocks,
                 "user_auth_message": user_auth_message,
