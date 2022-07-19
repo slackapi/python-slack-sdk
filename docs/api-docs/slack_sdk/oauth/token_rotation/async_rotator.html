@@ -135,7 +135,7 @@ class AsyncTokenRotator:
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Bot]:  # type: ignore
+    ) -&gt; Optional[Installation]:
         &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -164,7 +164,7 @@ class AsyncTokenRotator:
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
             refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
-            return refreshed_installation  # type: ignore
+            return refreshed_installation
 
         except SlackApiError as e:
             raise SlackTokenRotationError(e)</code></pre>
@@ -290,7 +290,7 @@ class AsyncTokenRotator:
         *,
         installation: Installation,
         minutes_before_expiration: int = 120,  # 2 hours by default
-    ) -&gt; Optional[Bot]:  # type: ignore
+    ) -&gt; Optional[Installation]:
         &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
         Args:
@@ -319,7 +319,7 @@ class AsyncTokenRotator:
             refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
             refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
             refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
-            return refreshed_installation  # type: ignore
+            return refreshed_installation
 
         except SlackApiError as e:
             raise SlackTokenRotationError(e)</code></pre>
@@ -460,7 +460,7 @@ class AsyncTokenRotator:
 </details>
 </dd>
 <dt id="slack_sdk.oauth.token_rotation.async_rotator.AsyncTokenRotator.perform_user_token_rotation"><code class="name flex">
-<span>async def <span class="ident">perform_user_token_rotation</span></span>(<span>self, *, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>, minutes_before_expiration: int = 120) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../installation_store/models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>]</span>
+<span>async def <span class="ident">perform_user_token_rotation</span></span>(<span>self, *, installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>, minutes_before_expiration: int = 120) ‑> Optional[<a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs user token rotation if the underlying user token is expired / expiring.</p>
@@ -482,7 +482,7 @@ class AsyncTokenRotator:
     *,
     installation: Installation,
     minutes_before_expiration: int = 120,  # 2 hours by default
-) -&gt; Optional[Bot]:  # type: ignore
+) -&gt; Optional[Installation]:
     &#34;&#34;&#34;Performs user token rotation if the underlying user token is expired / expiring.
 
     Args:
@@ -511,7 +511,7 @@ class AsyncTokenRotator:
         refreshed_installation.user_token = refresh_response.get(&#34;access_token&#34;)
         refreshed_installation.user_refresh_token = refresh_response.get(&#34;refresh_token&#34;)
         refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get(&#34;expires_in&#34;))
-        return refreshed_installation  # type: ignore
+        return refreshed_installation
 
     except SlackApiError as e:
         raise SlackTokenRotationError(e)</code></pre>

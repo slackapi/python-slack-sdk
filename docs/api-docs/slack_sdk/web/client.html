@@ -2141,8 +2141,10 @@ class WebClient(BaseClient):
     def chat_unfurl(
         self,
         *,
-        channel: str,
-        ts: str,
+        channel: Optional[str] = None,
+        ts: Optional[str] = None,
+        source: Optional[str] = None,
+        unfurl_id: Optional[str] = None,
         unfurls: Dict[str, Dict],
         user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         user_auth_message: Optional[str] = None,
@@ -2157,6 +2159,8 @@ class WebClient(BaseClient):
             {
                 &#34;channel&#34;: channel,
                 &#34;ts&#34;: ts,
+                &#34;source&#34;: source,
+                &#34;unfurl_id&#34;: unfurl_id,
                 &#34;unfurls&#34;: unfurls,
                 &#34;user_auth_blocks&#34;: user_auth_blocks,
                 &#34;user_auth_message&#34;: user_auth_message,
@@ -6606,8 +6610,10 @@ removed at anytime.</p></div>
     def chat_unfurl(
         self,
         *,
-        channel: str,
-        ts: str,
+        channel: Optional[str] = None,
+        ts: Optional[str] = None,
+        source: Optional[str] = None,
+        unfurl_id: Optional[str] = None,
         unfurls: Dict[str, Dict],
         user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
         user_auth_message: Optional[str] = None,
@@ -6622,6 +6628,8 @@ removed at anytime.</p></div>
             {
                 &#34;channel&#34;: channel,
                 &#34;ts&#34;: ts,
+                &#34;source&#34;: source,
+                &#34;unfurl_id&#34;: unfurl_id,
                 &#34;unfurls&#34;: unfurls,
                 &#34;user_auth_blocks&#34;: user_auth_blocks,
                 &#34;user_auth_message&#34;: user_auth_message,
@@ -12237,7 +12245,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.chat_unfurl"><code class="name flex">
-<span>def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: str, ts: str, unfurls: Dict[str, Dict], user_auth_blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: Optional[str] = None, ts: Optional[str] = None, source: Optional[str] = None, unfurl_id: Optional[str] = None, unfurls: Dict[str, Dict], user_auth_blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Provide custom unfurl behavior for user-posted URLs.
@@ -12249,8 +12257,10 @@ Each authorization represents an app installation that the event is visible to.
 <pre><code class="python">def chat_unfurl(
     self,
     *,
-    channel: str,
-    ts: str,
+    channel: Optional[str] = None,
+    ts: Optional[str] = None,
+    source: Optional[str] = None,
+    unfurl_id: Optional[str] = None,
     unfurls: Dict[str, Dict],
     user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
     user_auth_message: Optional[str] = None,
@@ -12265,6 +12275,8 @@ Each authorization represents an app installation that the event is visible to.
         {
             &#34;channel&#34;: channel,
             &#34;ts&#34;: ts,
+            &#34;source&#34;: source,
+            &#34;unfurl_id&#34;: unfurl_id,
             &#34;unfurls&#34;: unfurls,
             &#34;user_auth_blocks&#34;: user_auth_blocks,
             &#34;user_auth_message&#34;: user_auth_message,

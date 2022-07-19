@@ -145,7 +145,9 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
             return None
 
     @classmethod
-    def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
+    def parse_all(
+        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
+    ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
         return [cls.parse(e) for e in block_elements or []]
 
 
@@ -1621,7 +1623,9 @@ class OverflowMenuElement(InteractiveElement):
             return None
 
     @classmethod
-    def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
+    def parse_all(
+        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
+    ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
         return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1714,7 +1718,7 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.BlockElement.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>')]]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>'), <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]) ‑> List[Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1723,7 +1727,9 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
+def parse_all(
+    cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
+) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
     return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 </dd>

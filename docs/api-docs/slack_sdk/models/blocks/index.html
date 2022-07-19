@@ -83,6 +83,7 @@ from .blocks import HeaderBlock
 from .blocks import ImageBlock
 from .blocks import InputBlock
 from .blocks import SectionBlock
+from .blocks import VideoBlock
 
 __all__ = [
     &#34;ButtonStyles&#34;,
@@ -127,6 +128,7 @@ __all__ = [
     &#34;ImageBlock&#34;,
     &#34;InputBlock&#34;,
     &#34;SectionBlock&#34;,
+    &#34;VideoBlock&#34;,
 ]</code></pre>
 </details>
 </section>
@@ -339,6 +341,8 @@ to create visually rich and compellingly interactive messages.
                     return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
+                elif type == VideoBlock.type:
+                    return VideoBlock(**block)
                 else:
                     cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                     return None
@@ -366,6 +370,7 @@ to create visually rich and compellingly interactive messages.
 <li><a title="slack_sdk.models.blocks.blocks.ImageBlock" href="blocks.html#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.InputBlock" href="blocks.html#slack_sdk.models.blocks.blocks.InputBlock">InputBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.SectionBlock" href="blocks.html#slack_sdk.models.blocks.blocks.SectionBlock">SectionBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.VideoBlock" href="blocks.html#slack_sdk.models.blocks.blocks.VideoBlock">VideoBlock</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -416,6 +421,8 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
                 return CallBlock(**block)
             elif type == HeaderBlock.type:
                 return HeaderBlock(**block)
+            elif type == VideoBlock.type:
+                return VideoBlock(**block)
             else:
                 cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                 return None
@@ -568,7 +575,9 @@ def subtype(self) -&gt; Optional[str]:
             return None
 
     @classmethod
-    def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
+    def parse_all(
+        cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
+    ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
         return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -661,7 +670,7 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>')]]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>'), <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]) ‑> List[Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -670,7 +679,9 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@classmethod
-def parse_all(cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;]]) -&gt; List[&#34;BlockElement&#34;]:
+def parse_all(
+    cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
+) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
     return [cls.parse(e) for e in block_elements or []]</code></pre>
 </details>
 </dd>
@@ -5691,6 +5702,208 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.VideoBlock"><code class="flex name class">
+<span>class <span class="ident">VideoBlock</span></span>
+<span>(</span><span>*, block_id: Optional[str] = None, alt_text: Optional[str] = None, video_url: Optional[str] = None, thumbnail_url: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, title_url: Optional[str] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, provider_icon_url: Optional[str] = None, provider_name: Optional[str] = None, author_name: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A video block is designed to embed videos in all app surfaces
+(e.g. link unfurls, messages, modals, App Home) —
+anywhere you can put blocks! To use the video block within your app,
+you must have the links.embed:write scope.
+<a href="https://api.slack.com/reference/block-kit/blocks#video">https://api.slack.com/reference/block-kit/blocks#video</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
+<dd>A tooltip for the video. Required for accessibility</dd>
+<dt><strong><code>video_url</code></strong> :&ensp;<code>required</code></dt>
+<dd>The URL to be embedded. Must match any existing unfurl domains within the app
+and point to a HTTPS URL.</dd>
+<dt><strong><code>thumbnail_url</code></strong> :&ensp;<code>required</code></dt>
+<dd>The thumbnail image URL</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>required</code></dt>
+<dd>Video title in plain text format. Must be less than 200 characters.</dd>
+<dt><strong><code>title_url</code></strong></dt>
+<dd>Hyperlink for the title text. Must correspond to the non-embeddable URL for the video.
+Must go to an HTTPS URL.</dd>
+<dt><strong><code>description</code></strong></dt>
+<dd>Description for video in plain text format.</dd>
+<dt><strong><code>provider_icon_url</code></strong></dt>
+<dd>Icon for the video provider - ex. Youtube icon</dd>
+<dt><strong><code>provider_name</code></strong></dt>
+<dd>The originating application or domain of the video ex. Youtube</dd>
+<dt><strong><code>author_name</code></strong></dt>
+<dd>Author name to be displayed. Must be less than 50 characters.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VideoBlock(Block):
+    type = &#34;video&#34;
+    title_max_length = 200
+    author_name_max_length = 50
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;alt_text&#34;,
+                &#34;video_url&#34;,
+                &#34;thumbnail_url&#34;,
+                &#34;title&#34;,
+                &#34;title_url&#34;,
+                &#34;description&#34;,
+                &#34;provider_icon_url&#34;,
+                &#34;provider_name&#34;,
+                &#34;author_name&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        alt_text: Optional[str] = None,
+        video_url: Optional[str] = None,
+        thumbnail_url: Optional[str] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
+        title_url: Optional[str] = None,
+        description: Optional[Union[str, dict, PlainTextObject]] = None,
+        provider_icon_url: Optional[str] = None,
+        provider_name: Optional[str] = None,
+        author_name: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A video block is designed to embed videos in all app surfaces
+        (e.g. link unfurls, messages, modals, App Home) —
+        anywhere you can put blocks! To use the video block within your app,
+        you must have the links.embed:write scope.
+        https://api.slack.com/reference/block-kit/blocks#video
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            alt_text (required): A tooltip for the video. Required for accessibility
+            video_url (required): The URL to be embedded. Must match any existing unfurl domains within the app
+                and point to a HTTPS URL.
+            thumbnail_url (required): The thumbnail image URL
+            title (required): Video title in plain text format. Must be less than 200 characters.
+            title_url: Hyperlink for the title text. Must correspond to the non-embeddable URL for the video.
+                Must go to an HTTPS URL.
+            description: Description for video in plain text format.
+            provider_icon_url: Icon for the video provider - ex. Youtube icon
+            provider_name: The originating application or domain of the video ex. Youtube
+            author_name: Author name to be displayed. Must be less than 50 characters.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.alt_text = alt_text
+        self.video_url = video_url
+        self.thumbnail_url = thumbnail_url
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self.title_url = title_url
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)
+        self.provider_icon_url = provider_icon_url
+        self.provider_name = provider_name
+        self.author_name = author_name
+
+    @JsonValidator(&#34;alt_text attribute must be specified&#34;)
+    def _validate_alt_text(self):
+        return self.alt_text is not None
+
+    @JsonValidator(&#34;video_url attribute must be specified&#34;)
+    def _validate_video_url(self):
+        return self.video_url is not None
+
+    @JsonValidator(&#34;thumbnail_url attribute must be specified&#34;)
+    def _validate_thumbnail_url(self):
+        return self.thumbnail_url is not None
+
+    @JsonValidator(&#34;title attribute must be specified&#34;)
+    def _validate_title(self):
+        return self.title is not None
+
+    @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+    def _validate_title_length(self):
+        return self.title is None or len(self.title.text) &lt; self.title_max_length
+
+    @JsonValidator(f&#34;author_name attribute cannot exceed {author_name_max_length} characters&#34;)
+    def _validate_author_name_length(self):
+        return self.author_name is None or len(self.author_name) &lt; self.author_name_max_length</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.VideoBlock.author_name_max_length"><code class="name">var <span class="ident">author_name_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.VideoBlock.title_max_length"><code class="name">var <span class="ident">title_max_length</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.VideoBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.VideoBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;alt_text&#34;,
+            &#34;video_url&#34;,
+            &#34;thumbnail_url&#34;,
+            &#34;title&#34;,
+            &#34;title_url&#34;,
+            &#34;description&#34;,
+            &#34;provider_icon_url&#34;,
+            &#34;provider_name&#34;,
+            &#34;author_name&#34;,
+        }
+    )</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -6017,6 +6230,15 @@ Only one element can be set to true. Defaults to false.</dd>
 <h4><code><a title="slack_sdk.models.blocks.UserSelectElement" href="#slack_sdk.models.blocks.UserSelectElement">UserSelectElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.UserSelectElement.type" href="#slack_sdk.models.blocks.UserSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.VideoBlock" href="#slack_sdk.models.blocks.VideoBlock">VideoBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.VideoBlock.attributes" href="#slack_sdk.models.blocks.VideoBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.VideoBlock.author_name_max_length" href="#slack_sdk.models.blocks.VideoBlock.author_name_max_length">author_name_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.VideoBlock.title_max_length" href="#slack_sdk.models.blocks.VideoBlock.title_max_length">title_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.VideoBlock.type" href="#slack_sdk.models.blocks.VideoBlock.type">type</a></code></li>
 </ul>
 </li>
 </ul>
