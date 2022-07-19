@@ -2139,8 +2139,8 @@ class AsyncWebClient(AsyncBaseClient):
             {
                 "channel": channel,
                 "ts": ts,
-                "source": channel,
-                "unfurl_id": ts,
+                "source": source,
+                "unfurl_id": unfurl_id,
                 "unfurls": unfurls,
                 "user_auth_blocks": user_auth_blocks,
                 "user_auth_message": user_auth_message,
