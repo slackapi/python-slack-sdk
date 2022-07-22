@@ -160,18 +160,18 @@ To use the asyncio-based ones such as aiohttp, your app needs to be compatible w
     from slack_sdk.web.async_client import AsyncWebClient
     from slack_sdk.socket_mode.aiohttp import SocketModeClient
 
-    # Initialize SocketModeClient with an app-level token + AsyncWebClient
-    client = SocketModeClient(
-        # This app-level token will be used only for establishing a connection
-        app_token=os.environ.get("SLACK_APP_TOKEN"),  # xapp-A111-222-xyz
-        # You will be using this AsyncWebClient for performing Web API calls in listeners
-        web_client=AsyncWebClient(token=os.environ.get("SLACK_BOT_TOKEN"))  # xoxb-111-222-xyz
-    )
-
     # Use async method
     async def main():
         from slack_sdk.socket_mode.response import SocketModeResponse
         from slack_sdk.socket_mode.request import SocketModeRequest
+
+        # Initialize SocketModeClient with an app-level token + AsyncWebClient
+        client = SocketModeClient(
+            # This app-level token will be used only for establishing a connection
+            app_token=os.environ.get("SLACK_APP_TOKEN"),  # xapp-A111-222-xyz
+            # You will be using this AsyncWebClient for performing Web API calls in listeners
+            web_client=AsyncWebClient(token=os.environ.get("SLACK_BOT_TOKEN"))  # xoxb-111-222-xyz
+        )
 
         # Use async method
         async def process(client: SocketModeClient, req: SocketModeRequest):
