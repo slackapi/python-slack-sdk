@@ -28,6 +28,7 @@ body {
 }
 
 div.document {
+    display: flex;
     background-color: #1c4e63;
 }
 
@@ -204,6 +205,8 @@ div.seealso {
     background-color: #ffc;
     border: 1px solid #ff6;
 }
+nav.contents,
+aside.topic,
 
 div.topic {
     background-color: #eee;
