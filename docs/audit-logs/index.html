@@ -5,7 +5,7 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+        <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
         <title>Audit Logs API Client &mdash; Python Slack SDK</title>
 
@@ -212,13 +212,13 @@
                     <!-- <div class="section-title">Audit Logs API Client</div> -->
                     <div class="card">
   <section id="audit-logs-api-client">
-<h1>Audit Logs API Client<a class="headerlink" href="#audit-logs-api-client" title="Permalink to this headline">¶</a></h1>
+<h1>Audit Logs API Client<a class="headerlink" href="#audit-logs-api-client" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="https://api.slack.com/admins/audit-logs">Audit Logs API</a> is a set of APIs for monitoring what’s happening in your <a class="reference external" href="https://api.slack.com/enterprise/grid">Enterprise Grid</a> organization.</p>
 <p>The Audit Logs API can be used by security information and event management (SIEM) tools to provide an analysis of how your Slack organization is being accessed. You can also use this API to write your own applications to see how members of your organization are using Slack.</p>
 <p>Follow the instructions in <a class="reference external" href="https://api.slack.com/admins/audit-logs">the API document</a> to get a valid token for using Audit Logs API. The Slack app using the Audit Logs API needs to be installed in the Enterprise Grid Organization, not an individual workspace within the organization.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
 <section id="auditlogsclient">
-<h2>AuditLogsClient<a class="headerlink" href="#auditlogsclient" title="Permalink to this headline">¶</a></h2>
+<h2>AuditLogsClient<a class="headerlink" href="#auditlogsclient" title="Permalink to this heading">¶</a></h2>
 <p>An OAuth token with <a class="reference external" href="https://api.slack.com/scopes/admin">the admin scope</a> is required to access this API.</p>
 <p>You will likely use the <code class="docutils literal notranslate"><span class="pre">/logs</span></code> endpoint as it’s the essential part of this API.</p>
 <p>To learn about the available parameters for this endpoint, check out <a class="reference external" href="https://api.slack.com/admins/audit-logs#how_to_call_the_audit_logs_api">this guide</a>. You can also learn more about the data structure of <code class="docutils literal notranslate"><span class="pre">api_response.typed_body</span></code> from <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py">the class source code</a>.</p>
@@ -238,7 +238,7 @@
 </div>
 </section>
 <section id="asyncauditlogsclient">
-<h2>AsyncAuditLogsClient<a class="headerlink" href="#asyncauditlogsclient" title="Permalink to this headline">¶</a></h2>
+<h2>AsyncAuditLogsClient<a class="headerlink" href="#asyncauditlogsclient" title="Permalink to this heading">¶</a></h2>
 <p>If you are keen to use asyncio for SCIM API calls, we offer AsyncSCIMClient for it. This client relies on aiohttp library.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">slack_sdk.audit_logs.async_client</span> <span class="kn">import</span> <span class="n">AsyncAuditLogsClient</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">AsyncAuditLogsClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_ORG_ADMIN_USER_TOKEN&quot;</span><span class="p">])</span>
@@ -250,7 +250,7 @@
 </section>
 <hr class="docutils" />
 <section id="retryhandler">
-<h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this headline">¶</a></h2>
+<h2>RetryHandler<a class="headerlink" href="#retryhandler" title="Permalink to this heading">¶</a></h2>
 <p>With the default settings, only <code class="docutils literal notranslate"><span class="pre">ConnectionErrorRetryHandler</span></code> with its default configuration (=only one retry in the manner of <a class="reference external" href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">exponential backoff and jitter</a>) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., Connection reset by peer).</p>
 <p>To use other retry handlers, you can pass a list of <code class="docutils literal notranslate"><span class="pre">RetryHandler</span></code> to the client constructor. For instance, you can add the built-in <code class="docutils literal notranslate"><span class="pre">RateLimitErrorRetryHandler</span></code> this way:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
