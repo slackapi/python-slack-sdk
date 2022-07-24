@@ -25,7 +25,7 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
         while True:
             c = sock.recv(1)
             if not c:
-                raise Exception('socket is dead')
+                raise Exception('server closed connection')
             line.append(c)
             if c == b"\n":
                 break
@@ -118,7 +118,7 @@ def _read_http_response_line(sock: ssl.SSLSocket) -> str:
     while True:
         b: bytes = sock.recv(1)
         if not b:
-            raise Exception('socket is dead')
+            raise Exception('server closed connection')
         c: str = b.decode("utf-8")
         if c == "\r":
             break
@@ -206,7 +206,7 @@ def _receive_messages(
         with sock_receive_lock:
             received_bytes = sock.recv(size)
             if not received_bytes:
-                raise Exception('socket is dead')
+                raise Exception('server closed connection')
             if all_message_trace_enabled:
                 logger.debug(f"Received bytes: {received_bytes}")
             return received_bytes
