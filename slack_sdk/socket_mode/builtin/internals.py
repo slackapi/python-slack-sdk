@@ -24,6 +24,8 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
         line = []
         while True:
             c = sock.recv(1)
+            if not c:
+                raise Exception('socket is dead')
             line.append(c)
             if c == b"\n":
                 break
@@ -114,7 +116,10 @@ def _establish_new_socket_connection(
 def _read_http_response_line(sock: ssl.SSLSocket) -> str:
     cs = []
     while True:
-        c: str = sock.recv(1).decode("utf-8")
+        b: bytes = sock.recv(1)
+        if not b:
+            raise Exception('socket is dead')
+        c: str = b.decode("utf-8")
         if c == "\r":
             break
         if c != "\n":
