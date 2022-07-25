@@ -1,4 +1,3 @@
-import errno
 import hashlib
 import itertools
 import os
@@ -24,6 +23,8 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
         line = []
         while True:
             c = sock.recv(1)
+            if not c:
+                raise ConnectionError("Connection is closed")
             line.append(c)
             if c == b"\n":
                 break
@@ -114,7 +115,10 @@ def _establish_new_socket_connection(
 def _read_http_response_line(sock: ssl.SSLSocket) -> str:
     cs = []
     while True:
-        c: str = sock.recv(1).decode("utf-8")
+        b: bytes = sock.recv(1)
+        if not b:
+            raise ConnectionError("Connection is closed")
+        c: str = b.decode("utf-8")
         if c == "\r":
             break
         if c != "\n":
@@ -199,19 +203,12 @@ def _receive_messages(
     def receive(specific_buffer_size: Optional[int] = None):
         size = specific_buffer_size if specific_buffer_size is not None else receive_buffer_size
         with sock_receive_lock:
-            try:
-                received_bytes = sock.recv(size)
-                if all_message_trace_enabled:
-                    if len(received_bytes) > 0:
-                        logger.debug(f"Received bytes: {received_bytes}")
-                return received_bytes
-            except OSError as e:
-                # For Linux/macOS, errno.EBADF is the expected error for bad connections.
-                # The errno.ENOTSOCK can be sent when running on Windows OS.
-                if e.errno in (errno.EBADF, errno.ENOTSOCK):
-                    logger.debug("The connection seems to be already closed.")
-                    return bytes()
-                raise e
+            received_bytes = sock.recv(size)
+            if not received_bytes:
+                raise ConnectionError("Connection is closed")
+            if all_message_trace_enabled:
+                logger.debug(f"Received bytes: {received_bytes}")
+            return received_bytes
 
     return _fetch_messages(
         messages=[],
