@@ -26,8 +26,8 @@ validate_dependencies = [
     "Jinja2==3.0.3",  # https://github.com/pallets/flask/issues/4494
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
-    "flake8>=4,<5",
-    "black==22.3.0",
+    "flake8>=5,<6",
+    "black==22.6.0",
     "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
     "psutil>=5,<6",
     "databases>=0.5",
@@ -37,7 +37,7 @@ validate_dependencies = [
     "moto>=3,<4",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==22.3.0",
+    "black==22.6.0",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
@@ -122,12 +122,8 @@ class CodegenCommand(BaseCommand):
             async_source = header + source
             async_source = re.sub("    def ", "    async def ", async_source)
             async_source = re.sub("from asyncio import Future\n", "", async_source)
-            async_source = re.sub(
-                "return self.api_call\(", "return await self.api_call(", async_source
-            )
-            async_source = re.sub(
-                "-> SlackResponse", "-> AsyncSlackResponse", async_source
-            )
+            async_source = re.sub("return self.api_call\(", "return await self.api_call(", async_source)
+            async_source = re.sub("-> SlackResponse", "-> AsyncSlackResponse", async_source)
             async_source = re.sub(
                 "from .base_client import BaseClient, SlackResponse",
                 "from .async_base_client import AsyncBaseClient, AsyncSlackResponse",
@@ -149,9 +145,7 @@ class CodegenCommand(BaseCommand):
                 output.write(async_source)
 
             legacy_source = header + "from asyncio import Future\n" + source
-            legacy_source = re.sub(
-                "-> SlackResponse", "-> Union[Future, SlackResponse]", legacy_source
-            )
+            legacy_source = re.sub("-> SlackResponse", "-> Union[Future, SlackResponse]", legacy_source)
             legacy_source = re.sub(
                 "from .base_client import BaseClient, SlackResponse",
                 "from .legacy_base_client import LegacyBaseClient, SlackResponse",
@@ -193,15 +187,9 @@ class ValidateCommand(BaseCommand):
             [sys.executable, "-m", "pip", "install"] + validate_dependencies,
         )
         self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack"])
-        self._run(
-            "Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"]
-        )
-        self._run(
-            "Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"]
-        )
-        self._run(
-            "Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"]
-        )
+        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+        self._run("Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"])
+        self._run("Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"])
 
         target = self.test_target.replace("tests/", "", 1)
         self._run(
@@ -230,7 +218,12 @@ class UnitTestsCommand(BaseCommand):
         target = self.test_target.replace("tests/", "", 1)
         self._run(
             "Running unit tests ...",
-            [sys.executable, "-m", "pytest", f"tests/{target}",],
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                f"tests/{target}",
+            ],
         )
 
 
@@ -251,7 +244,13 @@ class IntegrationTestsCommand(BaseCommand):
         target = self.test_target.replace("integration_tests/", "", 1)
         path = f"integration_tests/{target}"
         self._run(
-            "Running integration tests ...", [sys.executable, "-m", "pytest", path,],
+            "Running integration tests ...",
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                path,
+            ],
         )
 
 
