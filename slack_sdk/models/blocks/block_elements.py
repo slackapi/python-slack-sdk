@@ -461,7 +461,7 @@ class TimePickerElement(InputInteractiveElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"initial_time"})
+        return super().attributes.union({"initial_time", "timezone"})
 
     def __init__(
         self,
@@ -471,6 +471,7 @@ class TimePickerElement(InputInteractiveElement):
         initial_time: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         focus_on_load: Optional[bool] = None,
+        timezone: Optional[str] = None,
         **others: dict,
     ):
         """
@@ -494,6 +495,7 @@ class TimePickerElement(InputInteractiveElement):
                 that appears after a time is selected.
             focus_on_load: Indicates whether the element will be set to auto focus within the view object.
                 Only one element can be set to true. Defaults to false.
+            timezone: The timezone to consider for this input value.
         """
         super().__init__(
             type=self.type,
@@ -505,6 +507,7 @@ class TimePickerElement(InputInteractiveElement):
         show_unknown_key_warning(self, others)
 
         self.initial_time = initial_time
+        self.timezone = timezone
 
     @JsonValidator("initial_time attribute must be in format 'HH:mm'")
     def _validate_initial_time_valid(self) -> bool:
