@@ -158,7 +158,7 @@ __all__ = [
 <dl>
 <dt id="slack_sdk.models.blocks.ActionsBlock"><code class="flex name class">
 <span>class <span class="ident">ActionsBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>]], block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -239,7 +239,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ActionsBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ActionsBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -267,7 +267,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.Block"><code class="flex name class">
 <span>class <span class="ident">Block</span></span>
-<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, block_id: Optional[str] = None)</span>
+<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, block_id: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -386,7 +386,7 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')]) ‑> Optional[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse</span></span>(<span>block: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')]) ‑> Optional[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -432,7 +432,7 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')]]]) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')]]]) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -448,7 +448,7 @@ def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&g
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.Block.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.Block.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -475,7 +475,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement"><code class="flex name class">
 <span>class <span class="ident">BlockElement</span></span>
-<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -600,7 +600,7 @@ def subtype(self) -&gt; Optional[str]:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.BlockElement.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block_element: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>')]) ‑> Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)]</span>
+<span>def <span class="ident">parse</span></span>(<span>block_element: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>')]) ‑> Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -670,7 +670,7 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>'), <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]) ‑> List[Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>'), <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]) ‑> List[Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -688,7 +688,7 @@ def parse_all(
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.BlockElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.BlockElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -715,7 +715,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ButtonElement"><code class="flex name class">
 <span>class <span class="ident">ButtonElement</span></span>
-<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, url: Optional[str] = None, value: Optional[str] = None, style: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, accessibility_label: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, url: Optional[str] = None, value: Optional[str] = None, style: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, accessibility_label: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -886,7 +886,7 @@ Maximum length for this field is 75 characters.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.CallBlock"><code class="flex name class">
 <span>class <span class="ident">CallBlock</span></span>
-<span>(</span><span>*, call_id: str, api_decoration_available: Optional[bool] = None, call: Optional[Dict[str, Dict[str, Any]]] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, call_id: str, api_decoration_available: Optional[bool] = None, call: Optional[Dict[str, Dict[str, Any]]] = None, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -939,7 +939,7 @@ to create visually rich and compellingly interactive messages.
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.CallBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.CallBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -967,7 +967,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ChannelMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ChannelMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channels: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channels: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1086,7 +1086,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.ChannelSelectElement"><code class="flex name class">
 <span>class <span class="ident">ChannelSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channel: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_channel: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1207,7 +1207,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.CheckboxesElement"><code class="flex name class">
 <span>class <span class="ident">CheckboxesElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1314,7 +1314,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject"><code class="flex name class">
 <span>class <span class="ident">ConfirmObject</span></span>
-<span>(</span><span>*, title: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: Optional[str] = None)</span>
+<span>(</span><span>*, title: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], confirm: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'Yes', deny: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>] = 'No', style: Optional[str] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -1450,7 +1450,7 @@ offering a confirm and deny button.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConfirmObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>confirm: Union[ForwardRef('<a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a>'), Dict[str, Any]])</span>
+<span>def <span class="ident">parse</span></span>(<span>confirm: Union[ForwardRef('<a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a>'), Dict[str, Any]])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1475,7 +1475,7 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConfirmObject.confirm_length"><code class="name flex">
-<span>def <span class="ident">confirm_length</span></span>(<span>self) ‑> bool</span>
+<span>def <span class="ident">confirm_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1489,7 +1489,7 @@ def confirm_length(self) -&gt; bool:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.deny_length"><code class="name flex">
-<span>def <span class="ident">deny_length</span></span>(<span>self) ‑> bool</span>
+<span>def <span class="ident">deny_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1503,7 +1503,7 @@ def deny_length(self) -&gt; bool:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.text_length"><code class="name flex">
-<span>def <span class="ident">text_length</span></span>(<span>self) ‑> bool</span>
+<span>def <span class="ident">text_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1517,7 +1517,7 @@ def text_length(self) -&gt; bool:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.title_length"><code class="name flex">
-<span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
+<span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1545,7 +1545,7 @@ def title_length(self) -&gt; bool:
 </dd>
 <dt id="slack_sdk.models.blocks.ContextBlock"><code class="flex name class">
 <span>class <span class="ident">ContextBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1620,7 +1620,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ContextBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ContextBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -1648,7 +1648,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ConversationFilter"><code class="flex name class">
 <span>class <span class="ident">ConversationFilter</span></span>
-<span>(</span><span>*, include: Optional[Sequence[str]] = None, exclude_bot_users: Optional[bool] = None, exclude_external_shared_channels: Optional[bool] = None)</span>
+<span>(</span><span>*, include: Optional[Sequence[str]] = None, exclude_bot_users: Optional[bool] = None, exclude_external_shared_channels: Optional[bool] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -1728,7 +1728,7 @@ from conversation lists. Defaults to false.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConversationFilter.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>filter: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>')])</span>
+<span>def <span class="ident">parse</span></span>(<span>filter: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>')])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1765,7 +1765,7 @@ def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PY
 </dd>
 <dt id="slack_sdk.models.blocks.ConversationMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ConversationMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversations: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, default_to_current_conversation: Optional[bool] = None, filter: Union[dict, <a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversations: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, default_to_current_conversation: Optional[bool] = None, filter: Union[dict, <a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -1905,7 +1905,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.ConversationSelectElement"><code class="flex name class">
 <span>class <span class="ident">ConversationSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversation: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, default_to_current_conversation: Optional[bool] = None, filter: Optional[<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_conversation: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, response_url_enabled: Optional[bool] = None, default_to_current_conversation: Optional[bool] = None, filter: Optional[<a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a>] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2047,7 +2047,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.DatePickerElement"><code class="flex name class">
 <span>class <span class="ident">DatePickerElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_date: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_date: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2166,7 +2166,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.DividerBlock"><code class="flex name class">
 <span>class <span class="ident">DividerBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -2240,7 +2240,7 @@ If a message is updated, use a new block_id.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.ExternalDataMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">ExternalDataMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, min_query_length: Optional[int] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, min_query_length: Optional[int] = None, initial_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2372,7 +2372,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.ExternalDataSelectElement"><code class="flex name class">
 <span>class <span class="ident">ExternalDataSelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_option: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None), <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] = None, min_query_length: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_option: Union[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None), <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] = None, min_query_length: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2499,7 +2499,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.FileBlock"><code class="flex name class">
 <span>class <span class="ident">FileBlock</span></span>
-<span>(</span><span>*, external_id: str, source: str = 'remote', block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, external_id: str, source: str = 'remote', block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -2570,7 +2570,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.FileBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.FileBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -2598,7 +2598,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.HeaderBlock"><code class="flex name class">
 <span>class <span class="ident">HeaderBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -2679,7 +2679,7 @@ Maximum length for the text in this field is 150 characters.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.HeaderBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.HeaderBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -2707,7 +2707,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ImageBlock"><code class="flex name class">
 <span>class <span class="ident">ImageBlock</span></span>
-<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -2817,7 +2817,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ImageBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ImageBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -2845,7 +2845,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ImageElement"><code class="flex name class">
 <span>class <span class="ident">ImageElement</span></span>
-<span>(</span><span>*, image_url: Optional[str] = None, alt_text: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, image_url: Optional[str] = None, alt_text: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -2927,7 +2927,7 @@ you're looking for the image block.
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ImageElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ImageElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -2955,7 +2955,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.InputBlock"><code class="flex name class">
 <span>class <span class="ident">InputBlock</span></span>
-<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -3082,7 +3082,7 @@ Defaults to false.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InputBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InputBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3110,7 +3110,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.InputInteractiveElement"><code class="flex name class">
 <span>class <span class="ident">InputInteractiveElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, type: Optional[str] = None, subtype: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, type: Optional[str] = None, subtype: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3200,7 +3200,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InputInteractiveElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InputInteractiveElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -3227,7 +3227,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.InteractiveElement"><code class="flex name class">
 <span>class <span class="ident">InteractiveElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3292,7 +3292,7 @@ def subtype(self) -&gt; Optional[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InteractiveElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InteractiveElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3320,7 +3320,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.LinkButtonElement"><code class="flex name class">
 <span>class <span class="ident">LinkButtonElement</span></span>
-<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], url: str, action_id: Optional[str] = None, style: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], url: str, action_id: Optional[str] = None, style: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3423,7 +3423,7 @@ If you don't include this field, the default button style will be used.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject"><code class="flex name class">
 <span>class <span class="ident">MarkdownTextObject</span></span>
-<span>(</span><span>*, text: str, verbatim: Optional[bool] = None)</span>
+<span>(</span><span>*, text: str, verbatim: Optional[bool] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>mrkdwn typed text object</p>
@@ -3514,7 +3514,7 @@ although you can still include manual parsing strings. This field is only usable
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.direct_from_link"><code class="name flex">
-<span>def <span class="ident">direct_from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> Dict[str, Any]</span>
+<span>def <span class="ident">direct_from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transform a Link object directly into the required object shape
@@ -3533,7 +3533,7 @@ def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.direct_from_string"><code class="name flex">
-<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
+<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
@@ -3548,7 +3548,7 @@ def direct_from_string(text: str) -&gt; Dict[str, Any]:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.from_link"><code class="name flex">
-<span>def <span class="ident">from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
+<span>def <span class="ident">from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transform a Link object directly into the required object shape
@@ -3569,7 +3569,7 @@ def from_link(link: Link, title: str = &#34;&#34;) -&gt; &#34;MarkdownTextObject
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.from_str"><code class="name flex">
-<span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
+<span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
@@ -3586,7 +3586,7 @@ def from_str(text: str) -&gt; &#34;MarkdownTextObject&#34;:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.MarkdownTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.MarkdownTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3614,7 +3614,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.Option"><code class="flex name class">
 <span>class <span class="ident">Option</span></span>
-<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, description: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, url: Optional[str] = None, **others: Dict[str, Any])</span>
+<span>(</span><span>*, value: str, label: Optional[str] = None, text: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, description: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, url: Optional[str] = None, **others: Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments),
@@ -3816,7 +3816,7 @@ dialogs.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.Option.from_single_value"><code class="name flex">
-<span>def <span class="ident">from_single_value</span></span>(<span>value_and_label: str)</span>
+<span>def <span class="ident">from_single_value</span></span>(<span>value_and_label: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
@@ -3831,7 +3831,7 @@ def from_single_value(value_and_label: str):
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.Option.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>options: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>options: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3859,7 +3859,7 @@ def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.Option.to_dict"><code class="name flex">
-<span>def <span class="ident">to_dict</span></span>(<span>self, option_type: str = 'block') ‑> Dict[str, Any]</span>
+<span>def <span class="ident">to_dict</span></span>(<span>self, option_type: str = 'block') ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Different parent classes must call this with a valid value from OptionTypes -
@@ -3912,7 +3912,7 @@ correct shape.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.OptionGroup"><code class="flex name class">
 <span>class <span class="ident">OptionGroup</span></span>
-<span>(</span><span>*, label: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, options: Sequence[Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]], **others: Dict[str, Any])</span>
+<span>(</span><span>*, label: Union[str, Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, options: Sequence[Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]], **others: Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>JSON must be retrieved with an explicit option_type - the Slack API has
@@ -4045,7 +4045,7 @@ UI) and a list of Option objects.</p>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.OptionGroup.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4086,7 +4086,7 @@ def parse_all(
 </dd>
 <dt id="slack_sdk.models.blocks.OverflowMenuElement"><code class="flex name class">
 <span>class <span class="ident">OverflowMenuElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, options: Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>], confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4204,7 +4204,7 @@ after a menu item is selected.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.PlainTextInputElement"><code class="flex name class">
 <span>class <span class="ident">PlainTextInputElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[str] = None, multiline: Optional[bool] = None, min_length: Optional[int] = None, max_length: Optional[int] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[str] = None, multiline: Optional[bool] = None, min_length: Optional[int] = None, max_length: Optional[int] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4347,7 +4347,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.PlainTextObject"><code class="flex name class">
 <span>class <span class="ident">PlainTextObject</span></span>
-<span>(</span><span>*, text: str, emoji: Optional[bool] = None)</span>
+<span>(</span><span>*, text: str, emoji: Optional[bool] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>plain_text typed text object</p>
@@ -4415,7 +4415,7 @@ This field is only usable when type is plain_text.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.PlainTextObject.direct_from_string"><code class="name flex">
-<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
+<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a PlainTextObject</p></div>
@@ -4430,7 +4430,7 @@ def direct_from_string(text: str) -&gt; Dict[str, Any]:
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.PlainTextObject.from_str"><code class="name flex">
-<span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a></span>
+<span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4446,7 +4446,7 @@ def from_str(text: str) -&gt; &#34;PlainTextObject&#34;:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.PlainTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.PlainTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -4474,7 +4474,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.RadioButtonsElement"><code class="flex name class">
 <span>class <span class="ident">RadioButtonsElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4581,7 +4581,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.SectionBlock"><code class="flex name class">
 <span>class <span class="ident">SectionBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, fields: Optional[Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, fields: Optional[Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -4708,7 +4708,7 @@ Maximum number of items is 10. Maximum length for the text in each item is 2000 
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.SectionBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.SectionBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -4736,7 +4736,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.SelectElement"><code class="flex name class">
 <span>class <span class="ident">SelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_option: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_option: Optional[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4889,7 +4889,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.StaticMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">StaticMultiSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, option_groups: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]] = None, initial_options: Optional[Sequence[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5050,7 +5050,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.StaticSelectElement"><code class="flex name class">
 <span>class <span class="ident">StaticSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, option_groups: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None, option_groups: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>]]] = None, initial_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5203,7 +5203,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.TextObject"><code class="flex name class">
 <span>class <span class="ident">TextObject</span></span>
-<span>(</span><span>text: str, type: Optional[str] = None, subtype: Optional[str] = None, emoji: Optional[bool] = None, **kwargs)</span>
+<span>(</span><span>text: str, type: Optional[str] = None, subtype: Optional[str] = None, emoji: Optional[bool] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The interface for text objects (types: plain_text, mrkdwn)</p>
@@ -5290,7 +5290,7 @@ Only one element can be set to true. Defaults to false.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.TextObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>text: Union[str, Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>')], default_type: str = 'mrkdwn') ‑> Optional[<a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
+<span>def <span class="ident">parse</span></span>(<span>text: Union[str, Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>')], default_type: str = 'mrkdwn') ‑> Optional[<a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -5328,7 +5328,7 @@ def parse(
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.TextObject.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.TextObject.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -5355,7 +5355,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.TimePickerElement"><code class="flex name class">
 <span>class <span class="ident">TimePickerElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5477,7 +5477,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.UserMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">UserMultiSelectElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5594,7 +5594,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.UserSelectElement"><code class="flex name class">
 <span>class <span class="ident">UserSelectElement</span></span>
-<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_user: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, action_id: Optional[str] = None, initial_user: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5704,7 +5704,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.VideoBlock"><code class="flex name class">
 <span>class <span class="ident">VideoBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, alt_text: Optional[str] = None, video_url: Optional[str] = None, thumbnail_url: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, title_url: Optional[str] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, provider_icon_url: Optional[str] = None, provider_name: Optional[str] = None, author_name: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: Optional[str] = None, alt_text: Optional[str] = None, video_url: Optional[str] = None, thumbnail_url: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, title_url: Optional[str] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, provider_icon_url: Optional[str] = None, provider_name: Optional[str] = None, author_name: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -5866,7 +5866,7 @@ Must go to an HTTPS URL.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.VideoBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.VideoBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
