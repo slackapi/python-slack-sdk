@@ -382,6 +382,19 @@ class TimePickerElementTests(unittest.TestCase):
         }
         self.assertDictEqual(input, TimePickerElement(**input).to_dict())
 
+    def test_timezone(self):
+        input = {
+            "type": "timepicker",
+            "action_id": "timepicker123",
+            "initial_time": "11:40",
+            "placeholder": {
+                "type": "plain_text",
+                "text": "Select a time",
+            },
+            "timezone": "America/Los_Angeles",
+        }
+        self.assertDictEqual(input, TimePickerElement(**input).to_dict())
+
 
 # -------------------------------------------------
 # Image
