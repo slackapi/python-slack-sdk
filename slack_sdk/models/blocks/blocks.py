@@ -257,7 +257,7 @@ class ImageBlock(Block):
 
 class ActionsBlock(Block):
     type = "actions"
-    elements_max_length = 5
+    elements_max_length = 25
 
     @property
     def attributes(self) -> Set[str]:
@@ -275,7 +275,7 @@ class ActionsBlock(Block):
 
         Args:
             elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
-                or date pickers. There is a maximum of 5 elements in each action block.
+                or date pickers. There is a maximum of 25 elements in each action block.
             block_id: A string acting as a unique identifier for a block.
                 If not specified, a block_id will be generated.
                 You can use this block_id when you receive an interaction payload to identify the source of the action.
