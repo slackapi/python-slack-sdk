@@ -257,7 +257,7 @@ class ImageBlock(Block):
 
 class ActionsBlock(Block):
     type = "actions"
-    elements_max_length = 5
+    elements_max_length = 25
 
     @property
     def attributes(self) -> Set[str]:
