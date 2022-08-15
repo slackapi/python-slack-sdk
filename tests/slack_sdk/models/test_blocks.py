@@ -397,7 +397,7 @@ class ActionsBlockTests(unittest.TestCase):
             ActionsBlock(elements=self.elements).to_dict(),
         )
         with self.assertRaises(SlackObjectFormationError):
-            ActionsBlock(elements=self.elements * 3).to_dict()
+            ActionsBlock(elements=self.elements * 13).to_dict()
 
     def test_element_parsing(self):
         elements = [
