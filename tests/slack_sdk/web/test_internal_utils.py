@@ -1,5 +1,14 @@
 import unittest
-from slack_sdk.web.internal_utils import _build_unexpected_body_error_message
+from typing import Dict, Sequence, Union
+
+import pytest
+
+from slack_sdk.models.attachments import Attachment
+from slack_sdk.models.blocks import Block
+from slack_sdk.web.internal_utils import (
+    _build_unexpected_body_error_message,
+    _parse_web_class_objects
+)
 
 
 class TestInternalUtils(unittest.TestCase):
@@ -16,3 +25,33 @@ class TestInternalUtils(unittest.TestCase):
         assert message.startswith(
             """Received a response in a non-JSON format: <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">"""
         )
+
+
+@pytest.mark.parametrize("initial_blocks", [
+    [Block(block_id="42"), Block(block_id="24")],  # list
+    (Block(block_id="42"), Block(block_id="24"),),  # tuple
+])
+def test_can_parse_sequence_of_blocks(initial_blocks: Sequence[Union[Dict, Block]]):
+    kwargs = {"blocks": initial_blocks}
+
+    _parse_web_class_objects(kwargs)
+
+    assert kwargs["blocks"]
+
+    for block in kwargs["blocks"]:
+        assert isinstance(block, Dict)
+
+
+@pytest.mark.parametrize("initial_attachments", [
+    [Attachment(text="foo"), Attachment(text="bar")],  # list
+    (Attachment(text="foo"), Attachment(text="bar"),),  # tuple
+])
+def test_can_parse_sequence_of_attachments(initial_attachments: Sequence[Union[Dict, Attachment]]):
+    kwargs = {"attachments": initial_attachments}
+
+    _parse_web_class_objects(kwargs)
+
+    assert kwargs["attachments"]
+
+    for attachment in kwargs["attachments"]:
+        assert isinstance(attachment, Dict)

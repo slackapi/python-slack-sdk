@@ -4,7 +4,7 @@ import platform
 import sys
 import warnings
 from ssl import SSLContext
-from typing import Dict, Union, Optional, Any, Sequence
+from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
 
 from slack_sdk import version
@@ -189,12 +189,12 @@ def _parse_web_class_objects(kwargs) -> None:
         return obj
 
     blocks = kwargs.get("blocks", None)
-    if blocks is not None and isinstance(blocks, list):
+    if blocks is not None and isinstance(blocks, Sequence):
         dict_blocks = [to_dict(b) for b in blocks]
         kwargs.update({"blocks": dict_blocks})
 
     attachments = kwargs.get("attachments", None)
-    if attachments is not None and isinstance(attachments, list):
+    if attachments is not None and isinstance(attachments, Sequence):
         dict_attachments = [to_dict(a) for a in attachments]
         kwargs.update({"attachments": dict_attachments})
 
