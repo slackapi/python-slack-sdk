@@ -3,9 +3,7 @@
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-if ! [[ -x "$(command -v sphinx-build)" ]]; then
-  pip install sphinx
-fi
+pip install -U sphinx docutils
 
 sphinx-build -E -c ./docs-src/_themes/slack/ -b html docs-src docs \
   && touch ./docs/.nojekyll \

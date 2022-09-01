@@ -170,7 +170,7 @@ to create visually rich and compellingly interactive messages.
 <dl>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of interactive element objects - buttons, select menus, overflow menus,
-or date pickers. There is a maximum of 5 elements in each action block.</dd>
+or date pickers. There is a maximum of 25 elements in each action block.</dd>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block.
 If not specified, a block_id will be generated.
@@ -185,7 +185,7 @@ If a message is updated, use a new block_id.</dd>
 </summary>
 <pre><code class="python">class ActionsBlock(Block):
     type = &#34;actions&#34;
-    elements_max_length = 5
+    elements_max_length = 25
 
     @property
     def attributes(self) -&gt; Set[str]:
@@ -203,7 +203,7 @@ If a message is updated, use a new block_id.</dd>
 
         Args:
             elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
-                or date pickers. There is a maximum of 5 elements in each action block.
+                or date pickers. There is a maximum of 25 elements in each action block.
             block_id: A string acting as a unique identifier for a block.
                 If not specified, a block_id will be generated.
                 You can use this block_id when you receive an interaction payload to identify the source of the action.
@@ -5355,7 +5355,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.TimePickerElement"><code class="flex name class">
 <span>class <span class="ident">TimePickerElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_time: Optional[str] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, timezone: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -5385,6 +5385,8 @@ that appears after a time is selected.</dd>
 <dt><strong><code>focus_on_load</code></strong></dt>
 <dd>Indicates whether the element will be set to auto focus within the view object.
 Only one element can be set to true. Defaults to false.</dd>
+<dt><strong><code>timezone</code></strong></dt>
+<dd>The timezone to consider for this input value.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -5395,7 +5397,7 @@ Only one element can be set to true. Defaults to false.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;initial_time&#34;})
+        return super().attributes.union({&#34;initial_time&#34;, &#34;timezone&#34;})
 
     def __init__(
         self,
@@ -5405,6 +5407,7 @@ Only one element can be set to true. Defaults to false.</dd>
         initial_time: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         focus_on_load: Optional[bool] = None,
+        timezone: Optional[str] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;
@@ -5428,6 +5431,7 @@ Only one element can be set to true. Defaults to false.</dd>
                 that appears after a time is selected.
             focus_on_load: Indicates whether the element will be set to auto focus within the view object.
                 Only one element can be set to true. Defaults to false.
+            timezone: The timezone to consider for this input value.
         &#34;&#34;&#34;
         super().__init__(
             type=self.type,
@@ -5439,6 +5443,7 @@ Only one element can be set to true. Defaults to false.</dd>
         show_unknown_key_warning(self, others)
 
         self.initial_time = initial_time
+        self.timezone = timezone
 
     @JsonValidator(&#34;initial_time attribute must be in format &#39;HH:mm&#39;&#34;)
     def _validate_initial_time_valid(self) -&gt; bool:
