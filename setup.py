@@ -27,7 +27,7 @@ validate_dependencies = [
     "pytest-cov>=2,<3",
     "codecov>=2,<3",
     "flake8>=5,<6",
-    "black==22.6.0",
+    "black==22.8.0",
     "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
     "psutil>=5,<6",
     "databases>=0.5",
@@ -37,7 +37,7 @@ validate_dependencies = [
     "moto>=3,<4",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==22.6.0",
+    "black==22.8.0",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
