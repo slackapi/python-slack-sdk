@@ -2014,8 +2014,8 @@ class AsyncWebClient(AsyncBaseClient):
         user: str,
         text: Optional[str] = None,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         icon_emoji: Optional[str] = None,
         icon_url: Optional[str] = None,
@@ -2055,8 +2055,8 @@ class AsyncWebClient(AsyncBaseClient):
         channel: str,
         text: Optional[str] = None,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         reply_broadcast: Optional[bool] = None,
         unfurl_links: Optional[bool] = None,
@@ -2110,8 +2110,8 @@ class AsyncWebClient(AsyncBaseClient):
         post_at: Union[str, int],
         text: str,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         parse: Optional[str] = None,
         reply_broadcast: Optional[bool] = None,
@@ -2155,7 +2155,7 @@ class AsyncWebClient(AsyncBaseClient):
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Dict[str, Dict],
-        user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
         user_auth_url: Optional[str] = None,
@@ -2187,8 +2187,8 @@ class AsyncWebClient(AsyncBaseClient):
         channel: str,
         ts: str,
         text: Optional[str] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         as_user: Optional[bool] = None,
         file_ids: Optional[Union[str, Sequence[str]]] = None,
         link_names: Optional[bool] = None,
@@ -6483,8 +6483,8 @@ removed at anytime.</p></div>
         user: str,
         text: Optional[str] = None,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         icon_emoji: Optional[str] = None,
         icon_url: Optional[str] = None,
@@ -6524,8 +6524,8 @@ removed at anytime.</p></div>
         channel: str,
         text: Optional[str] = None,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         reply_broadcast: Optional[bool] = None,
         unfurl_links: Optional[bool] = None,
@@ -6579,8 +6579,8 @@ removed at anytime.</p></div>
         post_at: Union[str, int],
         text: str,
         as_user: Optional[bool] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         thread_ts: Optional[str] = None,
         parse: Optional[str] = None,
         reply_broadcast: Optional[bool] = None,
@@ -6624,7 +6624,7 @@ removed at anytime.</p></div>
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Dict[str, Dict],
-        user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
         user_auth_url: Optional[str] = None,
@@ -6656,8 +6656,8 @@ removed at anytime.</p></div>
         channel: str,
         ts: str,
         text: Optional[str] = None,
-        attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         as_user: Optional[bool] = None,
         file_ids: Optional[Union[str, Sequence[str]]] = None,
         link_names: Optional[bool] = None,
@@ -12044,7 +12044,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postEphemeral"><code class="name flex">
-<span>async def <span class="ident">chat_postEphemeral</span></span>(<span>self, *, channel: str, user: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postEphemeral</span></span>(<span>self, *, channel: str, user: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, thread_ts: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sends an ephemeral message to a user in a channel.
@@ -12060,8 +12060,8 @@ Each authorization represents an app installation that the event is visible to.
     user: str,
     text: Optional[str] = None,
     as_user: Optional[bool] = None,
-    attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-    blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     thread_ts: Optional[str] = None,
     icon_emoji: Optional[str] = None,
     icon_url: Optional[str] = None,
@@ -12097,7 +12097,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postMessage"><code class="name flex">
-<span>async def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, file_annotation: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, file_annotation: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sends a message to a channel.
@@ -12112,8 +12112,8 @@ Each authorization represents an app installation that the event is visible to.
     channel: str,
     text: Optional[str] = None,
     as_user: Optional[bool] = None,
-    attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-    blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     thread_ts: Optional[str] = None,
     reply_broadcast: Optional[bool] = None,
     unfurl_links: Optional[bool] = None,
@@ -12162,7 +12162,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_scheduleMessage"><code class="name flex">
-<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self, *, channel: str, post_at: Union[str, int], text: str, as_user: Optional[bool] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, thread_ts: Optional[str] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, link_names: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self, *, channel: str, post_at: Union[str, int], text: str, as_user: Optional[bool] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, thread_ts: Optional[str] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, link_names: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Schedules a message.
@@ -12178,8 +12178,8 @@ Each authorization represents an app installation that the event is visible to.
     post_at: Union[str, int],
     text: str,
     as_user: Optional[bool] = None,
-    attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-    blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     thread_ts: Optional[str] = None,
     parse: Optional[str] = None,
     reply_broadcast: Optional[bool] = None,
@@ -12254,7 +12254,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl"><code class="name flex">
-<span>async def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: Optional[str] = None, ts: Optional[str] = None, source: Optional[str] = None, unfurl_id: Optional[str] = None, unfurls: Dict[str, Dict], user_auth_blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: Optional[str] = None, ts: Optional[str] = None, source: Optional[str] = None, unfurl_id: Optional[str] = None, unfurls: Dict[str, Dict], user_auth_blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Provide custom unfurl behavior for user-posted URLs.
@@ -12271,7 +12271,7 @@ Each authorization represents an app installation that the event is visible to.
     source: Optional[str] = None,
     unfurl_id: Optional[str] = None,
     unfurls: Dict[str, Dict],
-    user_auth_blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     user_auth_message: Optional[str] = None,
     user_auth_required: Optional[bool] = None,
     user_auth_url: Optional[str] = None,
@@ -12299,7 +12299,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_update"><code class="name flex">
-<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]]] = None, blocks: Optional[Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]]] = None, as_user: Optional[bool] = None, file_ids: Union[str, Sequence[str], ForwardRef(None)] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_update</span></span>(<span>self, *, channel: str, ts: str, text: Optional[str] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, as_user: Optional[bool] = None, file_ids: Union[str, Sequence[str], ForwardRef(None)] = None, link_names: Optional[bool] = None, parse: Optional[str] = None, reply_broadcast: Optional[bool] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Updates a message in a channel.
@@ -12314,8 +12314,8 @@ Each authorization represents an app installation that the event is visible to.
     channel: str,
     ts: str,
     text: Optional[str] = None,
-    attachments: Optional[Sequence[Union[Dict, Attachment]]] = None,
-    blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     as_user: Optional[bool] = None,
     file_ids: Optional[Union[str, Sequence[str]]] = None,
     link_names: Optional[bool] = None,
