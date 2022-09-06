@@ -189,12 +189,12 @@ def _parse_web_class_objects(kwargs) -> None:
         return obj
 
     blocks = kwargs.get("blocks", None)
-    if blocks is not None and isinstance(blocks, Sequence):
+    if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
         dict_blocks = [to_dict(b) for b in blocks]
         kwargs.update({"blocks": dict_blocks})
 
     attachments = kwargs.get("attachments", None)
-    if attachments is not None and isinstance(attachments, Sequence):
+    if attachments is not None and isinstance(attachments, Sequence) and (not isinstance(attachments, str)):
         dict_attachments = [to_dict(a) for a in attachments]
         kwargs.update({"attachments": dict_attachments})
 
