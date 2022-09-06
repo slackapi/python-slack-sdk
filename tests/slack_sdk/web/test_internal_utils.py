@@ -1,3 +1,4 @@
+import json
 import unittest
 from typing import Dict, Sequence, Union
 
@@ -23,44 +24,41 @@ class TestInternalUtils(unittest.TestCase):
             """Received a response in a non-JSON format: <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">"""
         )
 
+    def test_can_parse_sequence_of_blocks(self):
+        for blocks in [
+            [Block(block_id="42"), Block(block_id="24")],  # list
+            (Block(block_id="42"), Block(block_id="24")),  # tuple
+        ]:
+            kwargs = {"blocks": blocks}
+            _parse_web_class_objects(kwargs)
+            assert kwargs["blocks"]
+            for block in kwargs["blocks"]:
+                assert isinstance(block, Dict)
 
-@pytest.mark.parametrize(
-    "initial_blocks",
-    [
-        [Block(block_id="42"), Block(block_id="24")],  # list
-        (
-            Block(block_id="42"),
-            Block(block_id="24"),
-        ),  # tuple
-    ],
-)
-def test_can_parse_sequence_of_blocks(initial_blocks: Sequence[Union[Dict, Block]]):
-    kwargs = {"blocks": initial_blocks}
+    def test_can_parse_sequence_of_attachments(self):
+        for attachments in [
+            [Attachment(text="foo"), Attachment(text="bar")],  # list
+            (
+                Attachment(text="foo"),
+                Attachment(text="bar"),
+            ),  # tuple
+        ]:
+            kwargs = {"attachments": attachments}
+            _parse_web_class_objects(kwargs)
+            assert kwargs["attachments"]
+            for attachment in kwargs["attachments"]:
+                assert isinstance(attachment, Dict)
 
-    _parse_web_class_objects(kwargs)
+    def test_can_parse_str_blocks(self):
+        input = json.dumps([Block(block_id="42").to_dict(), Block(block_id="24").to_dict()])
+        kwargs = {"blocks": input}
+        _parse_web_class_objects(kwargs)
+        assert isinstance(kwargs["blocks"], str)
+        assert input == kwargs["blocks"]
 
-    assert kwargs["blocks"]
-
-    for block in kwargs["blocks"]:
-        assert isinstance(block, Dict)
-
-
-@pytest.mark.parametrize(
-    "initial_attachments",
-    [
-        [Attachment(text="foo"), Attachment(text="bar")],  # list
-        (
-            Attachment(text="foo"),
-            Attachment(text="bar"),
-        ),  # tuple
-    ],
-)
-def test_can_parse_sequence_of_attachments(initial_attachments: Sequence[Union[Dict, Attachment]]):
-    kwargs = {"attachments": initial_attachments}
-
-    _parse_web_class_objects(kwargs)
-
-    assert kwargs["attachments"]
-
-    for attachment in kwargs["attachments"]:
-        assert isinstance(attachment, Dict)
+    def test_can_parse_str_attachments(self):
+        input = json.dumps([Attachment(text="foo").to_dict(), Attachment(text="bar").to_dict()])
+        kwargs = {"attachments": input}
+        _parse_web_class_objects(kwargs)
+        assert isinstance(kwargs["attachments"], str)
+        assert input == kwargs["attachments"]
