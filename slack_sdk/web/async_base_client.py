@@ -20,7 +20,7 @@ from .internal_utils import (
 from ..proxy_env_variable_loader import load_http_proxy_from_env
 
 from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
-from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 
 
 class AsyncBaseClient:
@@ -41,7 +41,7 @@ class AsyncBaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: Optional[List[RetryHandler]] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
         """A string specifying an `xoxp-*` or `xoxb-*` token."""
