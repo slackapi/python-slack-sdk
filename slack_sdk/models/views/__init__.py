@@ -185,6 +185,7 @@ class ViewStateValue(JsonObject):
         "type",
         "value",
         "selected_date",
+        "selected_time",
         "selected_conversation",
         "selected_channel",
         "selected_user",
@@ -201,6 +202,7 @@ class ViewStateValue(JsonObject):
         type: Optional[str] = None,  # skipcq: PYL-W0622
         value: Optional[str] = None,
         selected_date: Optional[str] = None,
+        selected_time: Optional[str] = None,
         selected_conversation: Optional[str] = None,
         selected_channel: Optional[str] = None,
         selected_user: Optional[str] = None,
@@ -213,6 +215,7 @@ class ViewStateValue(JsonObject):
         self.type = type
         self.value = value
         self.selected_date = selected_date
+        self.selected_time = selected_time
         self.selected_conversation = selected_conversation
         self.selected_channel = selected_channel
         self.selected_user = selected_user
