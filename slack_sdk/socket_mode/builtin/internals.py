@@ -204,8 +204,6 @@ def _receive_messages(
         size = specific_buffer_size if specific_buffer_size is not None else receive_buffer_size
         with sock_receive_lock:
             received_bytes = sock.recv(size)
-            if not received_bytes:
-                raise ConnectionError("Connection is closed")
             if all_message_trace_enabled:
                 logger.debug(f"Received bytes: {received_bytes}")
             return received_bytes
