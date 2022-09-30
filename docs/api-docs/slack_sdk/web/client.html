@@ -2568,6 +2568,7 @@ class WebClient(BaseClient):
         ts: str,
         cursor: Optional[str] = None,
         inclusive: Optional[bool] = None,
+        include_all_metadata: Optional[bool] = None,
         latest: Optional[str] = None,
         limit: Optional[int] = None,
         oldest: Optional[str] = None,
@@ -2582,6 +2583,7 @@ class WebClient(BaseClient):
                 &#34;ts&#34;: ts,
                 &#34;cursor&#34;: cursor,
                 &#34;inclusive&#34;: inclusive,
+                &#34;include_all_metadata&#34;: include_all_metadata,
                 &#34;limit&#34;: limit,
                 &#34;latest&#34;: latest,
                 &#34;oldest&#34;: oldest,
@@ -7037,6 +7039,7 @@ removed at anytime.</p></div>
         ts: str,
         cursor: Optional[str] = None,
         inclusive: Optional[bool] = None,
+        include_all_metadata: Optional[bool] = None,
         latest: Optional[str] = None,
         limit: Optional[int] = None,
         oldest: Optional[str] = None,
@@ -7051,6 +7054,7 @@ removed at anytime.</p></div>
                 &#34;ts&#34;: ts,
                 &#34;cursor&#34;: cursor,
                 &#34;inclusive&#34;: inclusive,
+                &#34;include_all_metadata&#34;: include_all_metadata,
                 &#34;limit&#34;: limit,
                 &#34;latest&#34;: latest,
                 &#34;oldest&#34;: oldest,
@@ -12874,7 +12878,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.conversations_replies"><code class="name flex">
-<span>def <span class="ident">conversations_replies</span></span>(<span>self, *, channel: str, ts: str, cursor: Optional[str] = None, inclusive: Optional[bool] = None, latest: Optional[str] = None, limit: Optional[int] = None, oldest: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">conversations_replies</span></span>(<span>self, *, channel: str, ts: str, cursor: Optional[str] = None, inclusive: Optional[bool] = None, include_all_metadata: Optional[bool] = None, latest: Optional[str] = None, limit: Optional[int] = None, oldest: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Retrieve a thread of messages posted to a conversation
@@ -12890,6 +12894,7 @@ or received but have not yet been approved by all parties.
     ts: str,
     cursor: Optional[str] = None,
     inclusive: Optional[bool] = None,
+    include_all_metadata: Optional[bool] = None,
     latest: Optional[str] = None,
     limit: Optional[int] = None,
     oldest: Optional[str] = None,
@@ -12904,6 +12909,7 @@ or received but have not yet been approved by all parties.
             &#34;ts&#34;: ts,
             &#34;cursor&#34;: cursor,
             &#34;inclusive&#34;: inclusive,
+            &#34;include_all_metadata&#34;: include_all_metadata,
             &#34;limit&#34;: limit,
             &#34;latest&#34;: latest,
             &#34;oldest&#34;: oldest,

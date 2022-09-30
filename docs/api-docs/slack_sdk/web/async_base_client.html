@@ -48,7 +48,7 @@ from .internal_utils import (
 from ..proxy_env_variable_loader import load_http_proxy_from_env
 
 from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
-from slack_sdk.http_retry.handler import RetryHandler
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 
 
 class AsyncBaseClient:
@@ -69,7 +69,7 @@ class AsyncBaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: Optional[List[RetryHandler]] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
@@ -255,7 +255,7 @@ class AsyncBaseClient:
 <dl>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient"><code class="flex name class">
 <span>class <span class="ident">AsyncBaseClient</span></span>
-<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
+<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[slack_sdk.http_retry.async_handler.AsyncRetryHandler]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -281,7 +281,7 @@ class AsyncBaseClient:
         # for Org-Wide App installation
         team_id: Optional[str] = None,
         logger: Optional[logging.Logger] = None,
-        retry_handlers: Optional[List[RetryHandler]] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         self.token = None if token is None else token.strip()
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
