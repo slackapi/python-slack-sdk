@@ -1,3 +1,4 @@
+import errno
 import hashlib
 import itertools
 import os
@@ -203,10 +204,21 @@ def _receive_messages(
     def receive(specific_buffer_size: Optional[int] = None):
         size = specific_buffer_size if specific_buffer_size is not None else receive_buffer_size
         with sock_receive_lock:
-            received_bytes = sock.recv(size)
-            if all_message_trace_enabled:
-                logger.debug(f"Received bytes: {received_bytes}")
-            return received_bytes
+            try:
+                received_bytes = sock.recv(size)
+                if all_message_trace_enabled:
+                    if len(received_bytes) > 0:
+                        logger.debug(f"Received bytes: {received_bytes}")
+                return received_bytes
+            except OSError as e:
+                # For Linux/macOS, errno.EBADF is the expected error for bad connections.
+                # The errno.ENOTSOCK can be sent when running on Windows OS.
+                if e.errno in (errno.EBADF, errno.ENOTSOCK):
+                    # Note that bad connections can be detected by monitoring threads
+                    # the Socket Mode client automatically reconnects to a new endpoint later.
+                    logger.debug("The connection seems to be already closed.")
+                    return bytes()
+                raise e
 
     return _fetch_messages(
         messages=[],
