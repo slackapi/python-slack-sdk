@@ -7,7 +7,7 @@ import urllib
 import warnings
 from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Any, Dict, Optional, Sequence, Union, List
+from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
 from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
 
@@ -305,7 +305,7 @@ def _remove_none_values(d: dict) -> dict:
     return {k: v for k, v in d.items() if v is not None}
 
 
-def _to_v2_upload_file_item(upload_file: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _to_v2_upload_file_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[Any]]:
     file = upload_file.get("file")
     content = upload_file.get("content")
     data: Optional[bytes] = None
