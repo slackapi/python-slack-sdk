@@ -364,7 +364,7 @@ def _upload_file_via_v2_url(
     resp: Optional[HTTPResponse] = None
     req: Request = Request(method="POST", url=url, data=data, headers={})
     if opener:
-        resp = opener.open(req, timeout)
+        resp = opener.open(req, timeout=timeout)
     else:
         resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
 
