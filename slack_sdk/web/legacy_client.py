@@ -3062,8 +3062,8 @@ class LegacyWebClient(LegacyBaseClient):
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")
-            f["upload_url"] = url_response.get("upload_url")
+            f["file_id"] = url_response.get("file_id")  # type: ignore
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
