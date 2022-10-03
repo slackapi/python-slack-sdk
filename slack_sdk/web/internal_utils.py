@@ -5,6 +5,7 @@ import platform
 import sys
 import urllib
 import warnings
+from asyncio import Future
 from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
@@ -378,3 +379,48 @@ def _upload_file_via_v2_url(
         logger.debug(message)
 
     return {"status": resp.status, "headers": resp.headers, "body": body}
+
+
+def _validate_for_legacy_client(
+    response: Union["SlackResponse", Future],  # noqa: F821
+) -> None:
+    # Only LegacyWebClient can return this union type
+    if isinstance(response, Future):
+        message = (
+            "Sorry! This SDK does not support run_async=True option for this API calls. "
+            "Please migrate to AsyncWebClient, which is a new and stable way to go."
+        )
+        raise SlackRequestError(message)
+
+
+def _attach_full_file_metadata(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: Union["SlackResponse", Future],  # noqa: F821
+) -> None:
+    _validate_for_legacy_client(completion)
+    # fetch all the file metadata for backward-compatibility
+    for f in completion.get("files"):
+        full_info = client.files_info(
+            file=f.get("id"),
+            token=token_as_arg,
+        )
+        f.update(full_info["file"])
+    if len(completion.get("files")) == 1:
+        completion.data["file"] = completion.get("files")[0]
+
+
+async def _attach_full_file_metadata_async(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: "SlackResponse",  # noqa: F821
+) -> None:
+    # fetch all the file metadata for backward-compatibility
+    for f in completion.get("files"):
+        full_info = await client.files_info(
+            file=f.get("id"),
+            token=token_as_arg,
+        )
+        f.update(full_info["file"])
+    if len(completion.get("files")) == 1:
+        completion.data["file"] = completion.get("files")[0]

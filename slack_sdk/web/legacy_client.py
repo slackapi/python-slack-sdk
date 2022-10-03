@@ -26,6 +26,8 @@ from .internal_utils import (
     _remove_none_values,
     _to_v2_upload_file_item,
     _upload_file_via_v2_url,
+    _attach_full_file_metadata,
+    _validate_for_legacy_client,
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -3059,6 +3061,7 @@ class LegacyWebClient(LegacyBaseClient):
                 snippet_type=f.get("snippet_type"),
                 token=kwargs.get("token"),
             )
+            _validate_for_legacy_client(url_response)
             f["file_id"] = url_response.get("file_id")
             f["upload_url"] = url_response.get("upload_url")
 
@@ -3095,15 +3098,11 @@ class LegacyWebClient(LegacyBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        # fetch all the file metadata for backward-compatibility
-        for f in completion.get("files"):
-            full_info = self.files_info(
-                file=f.get("id"),
-                token=kwargs.get("token"),
-            )
-            f.update(full_info["file"])
-        if len(completion.get("files")) == 1:
-            completion.data["file"] = completion.get("files")[0]
+        _attach_full_file_metadata(
+            client=self,
+            token_as_arg=kwargs.get("token"),
+            completion=completion,
+        )
         return completion
 
     def files_getUploadURLExternal(
