@@ -383,7 +383,7 @@ def _upload_file_via_v2_url(
 
 def _validate_for_legacy_client(
     response: Union["SlackResponse", Future],  # noqa: F821
-) -> None:
+) -> None:  # type: ignore
     # Only LegacyWebClient can return this union type
     if isinstance(response, Future):
         message = (
@@ -399,15 +399,16 @@ def _attach_full_file_metadata(
     completion: Union["SlackResponse", Future],  # noqa: F821
 ) -> None:
     _validate_for_legacy_client(completion)
+    _completion: Any = completion  # just for satisfying pytype
     # fetch all the file metadata for backward-compatibility
-    for f in completion.get("files"):
+    for f in _completion.get("files"):
         full_info = client.files_info(
             file=f.get("id"),
             token=token_as_arg,
         )
         f.update(full_info["file"])
-    if len(completion.get("files")) == 1:
-        completion.data["file"] = completion.get("files")[0]
+    if len(_completion.get("files")) == 1:
+        _completion.data["file"] = _completion.get("files")[0]
 
 
 async def _attach_full_file_metadata_async(
