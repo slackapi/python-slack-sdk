@@ -416,9 +416,9 @@ Uploading files
 
 .. code-block:: python
 
-  response = client.files_upload(
-    channels="C3UKJTQAC",
-    file="files.pdf",
+  response = client.files_upload_v2(
+    channel="C3UKJTQAC",
+    file="./files.pdf",
     title="Test upload"
   )
 

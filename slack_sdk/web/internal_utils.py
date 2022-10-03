@@ -1,11 +1,15 @@
 import json
+import logging
 import os
 import platform
 import sys
+import urllib
 import warnings
+from http.client import HTTPResponse
 from ssl import SSLContext
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, Optional, Sequence, Union, List
 from urllib.parse import urljoin
+from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
 
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
@@ -299,3 +303,78 @@ def _remove_none_values(d: dict) -> dict:
     # '{"a": null, "b": 123}'
     #
     return {k: v for k, v in d.items() if v is not None}
+
+
+def _to_v2_upload_file_item(upload_file: Dict[str, Any]) -> List[Dict[str, Any]]:
+    file = upload_file.get("file")
+    content = upload_file.get("content")
+    data: Optional[bytes] = None
+    if file is not None:
+        if isinstance(file, str):  # filepath
+            with open(file.encode("utf-8", "ignore"), "rb") as readable:
+                data = readable.read()
+        else:
+            data = file
+    elif content is not None:
+        if isinstance(content, str):  # filepath
+            data = content.encode("utf-8")
+        elif isinstance(content, bytes):
+            data = content
+        else:
+            raise SlackRequestError("The given content must be either filepath as str or data as bytes")
+
+    filename = upload_file.get("filename")
+    if upload_file.get("filename") is None and isinstance(file, str):
+        # use the local filename if filename is missing
+        if upload_file.get("filename") is None:
+            filename = file.split(os.path.sep)[-1]
+        else:
+            filename = "Uploaded file"
+
+    title = upload_file.get("title", "Uploaded file")
+    if data is None:
+        raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
+
+    return {
+        "data": data,
+        "length": len(data),
+        "title": title,
+        "filename": filename,
+    }
+
+
+def _upload_file_via_v2_url(
+    url: str,
+    data: bytes,
+    timeout: int,
+    logger: logging.Logger,
+    proxy: Optional[str] = None,
+    ssl: Optional[SSLContext] = None,
+) -> Dict[str, Any]:
+    opener: Optional[OpenerDirector] = None
+    if proxy is not None:
+        if isinstance(proxy, str):
+            opener = urllib.request.build_opener(
+                ProxyHandler({"http": proxy, "https": proxy}),
+                HTTPSHandler(context=ssl),
+            )
+        else:
+            raise SlackRequestError(f"Invalid proxy detected: {proxy} must be a str value")
+
+    resp: Optional[HTTPResponse] = None
+    req: Request = Request(method="POST", url=url, data=data, headers={})
+    if opener:
+        resp = opener.open(req, timeout)
+    else:
+        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+
+    charset = resp.headers.get_content_charset() or "utf-8"
+    body: str = resp.read().decode(charset)  # read the response body here
+    if logger.level <= logging.DEBUG:
+        message = (
+            "Received the following response - ",
+            f"status: {resp.status}, " f"headers: {dict(resp.headers)}, " f"body: {body}",
+        )
+        logger.debug(message)
+
+    return {"status": resp.status, "headers": resp.headers, "body": body}
