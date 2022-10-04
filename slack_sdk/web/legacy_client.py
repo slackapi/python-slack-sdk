@@ -24,7 +24,7 @@ from .internal_utils import (
     _update_call_participants,
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
-    _to_v2_upload_file_item,
+    _to_v2_file_upload_item,
     _upload_file_via_v2_url,
     _attach_full_file_metadata,
     _validate_for_legacy_client,
@@ -3048,9 +3048,9 @@ class LegacyWebClient(LegacyBaseClient):
         files: List[Dict[str, Any]] = []
         if file_uploads is not None:
             for f in file_uploads:
-                files.append(_to_v2_upload_file_item(f))
+                files.append(_to_v2_file_upload_item(f))
         else:
-            f = _to_v2_upload_file_item(
+            f = _to_v2_file_upload_item(
                 {
                     "filename": filename,
                     "file": file,

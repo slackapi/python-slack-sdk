@@ -306,7 +306,7 @@ def _remove_none_values(d: dict) -> dict:
     return {k: v for k, v in d.items() if v is not None}
 
 
-def _to_v2_upload_file_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[Any]]:
+def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[Any]]:
     file = upload_file.get("file")
     content = upload_file.get("content")
     data: Optional[bytes] = None
