@@ -2998,11 +2998,9 @@ class WebClient(BaseClient):
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
         snippet_type: Optional[str] = None,
-        filetype: Optional[str] = None,  # no longer supported
         # To upload multiple files at a time
         upload_files: Optional[List[Dict[str, Any]]] = None,
         channel: Optional[str] = None,
-        channels: Optional[Union[str, Sequence[str]]] = None,  # having n channels is no longer supported
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
         **kwargs,
@@ -3016,13 +3014,24 @@ class WebClient(BaseClient):
             raise e.SlackRequestError("Any of file, content, and upload_files must be specified.")
         if file is not None and content is not None:
             raise e.SlackRequestError("You cannot specify both the file and the content argument.")
-        if channels is not None and (
-            (isinstance(channels, (list, Tuple)) and len(channels) > 1)
-            or (isinstance(channels, str) and len(channels.split(",")) > 1)
-        ):
-            raise e.SlackRequestError("Sharing files with multiple channels is no longer supported")
+
+        # deprecated arguments:
+        channels, filetype = kwargs.get("channels"), kwargs.get("filetype")
+
+        if channels is not None:
+            warnings.warn(
+                "Although the channels parameter is still supported for smooth migration from legacy files.upload, "
+                "we recommend using the new channel parameter with a single str value instead for more clarity."
+            )
+            if (isinstance(channels, (list, Tuple)) and len(channels) > 1) or (
+                isinstance(channels, str) and len(channels.split(",")) > 1
+            ):
+                raise e.SlackRequestError(
+                    "Sharing files with multiple channels is no longer supported in v2. "
+                    "Share files in each channel separately instead."
+                )
         if filetype is not None:
-            warnings.warn("filetype is no longer supported. Please remove it from the arguments.")
+            warnings.warn("The filetype parameter is no longer supported. Please remove it from the arguments.")
 
         # step1: files.getUploadURLExternal per file
         files: List[Dict[str, Any]] = []
@@ -3051,8 +3060,8 @@ class WebClient(BaseClient):
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")
-            f["upload_url"] = url_response.get("upload_url")
+            f["file_id"] = url_response.get("file_id")  # type: ignore
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
