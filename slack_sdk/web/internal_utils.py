@@ -337,10 +337,12 @@ def _to_v2_upload_file_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
 
     return {
+        "filename": filename,
         "data": data,
         "length": len(data),
         "title": title,
-        "filename": filename,
+        "alt_txt": upload_file.get("alt_txt"),
+        "snippet_type": upload_file.get("snippet_type"),
     }
 
 
