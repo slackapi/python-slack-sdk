@@ -58,7 +58,7 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
         client = self.sync_client
         file = __file__
         upload = client.files_upload_v2(
-            upload_files=[
+            file_uploads=[
                 {
                     "file": file,
                     "title": "Test code",

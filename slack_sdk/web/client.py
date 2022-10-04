@@ -2999,7 +2999,7 @@ class WebClient(BaseClient):
         alt_txt: Optional[str] = None,
         snippet_type: Optional[str] = None,
         # To upload multiple files at a time
-        upload_files: Optional[List[Dict[str, Any]]] = None,
+        file_uploads: Optional[List[Dict[str, Any]]] = None,
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
@@ -3010,8 +3010,8 @@ class WebClient(BaseClient):
         * step2: "https://files.slack.com/upload/v1/..." URLs returned from files.getUploadURLExternal API
         * step3: https://api.slack.com/methods/files.completeUploadExternal
         """
-        if file is None and content is None and upload_files is None:
-            raise e.SlackRequestError("Any of file, content, and upload_files must be specified.")
+        if file is None and content is None and file_uploads is None:
+            raise e.SlackRequestError("Any of file, content, and file_uploads must be specified.")
         if file is not None and content is not None:
             raise e.SlackRequestError("You cannot specify both the file and the content argument.")
 
@@ -3035,8 +3035,8 @@ class WebClient(BaseClient):
 
         # step1: files.getUploadURLExternal per file
         files: List[Dict[str, Any]] = []
-        if upload_files is not None:
-            for f in upload_files:
+        if file_uploads is not None:
+            for f in file_uploads:
                 files.append(_to_v2_upload_file_item(f))
         else:
             f = _to_v2_upload_file_item(
