@@ -427,3 +427,12 @@ async def _attach_full_file_metadata_async(
         f.update(full_info["file"])
     if len(completion.get("files")) == 1:
         completion.data["file"] = completion.get("files")[0]
+
+
+def _print_files_upload_v2_suggestion():
+    message = (
+        "client.files_upload() may cause some issues like timeouts for relatively large files. "
+        "Our latest recommendation is to use client.files_upload_v2(), "
+        "which is mostly compatible and much stabler, instead."
+    )
+    warnings.warn(message)

@@ -8,7 +8,6 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 from asyncio import Future
-
 """A Python module for interacting with Slack's Web API."""
 import json
 import os
@@ -28,6 +27,7 @@ from .internal_utils import (
     _upload_file_via_v2_url,
     _attach_full_file_metadata,
     _validate_for_legacy_client,
+    _print_files_upload_v2_suggestion,
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2971,6 +2971,8 @@ class LegacyWebClient(LegacyBaseClient):
         """Uploads or creates a file.
         https://api.slack.com/methods/files.upload
         """
+        _print_files_upload_v2_suggestion()
+
         if file is None and content is None:
             raise e.SlackRequestError("The file or content argument must be specified.")
         if file is not None and content is not None:
