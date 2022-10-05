@@ -141,6 +141,31 @@ class CodegenCommand(BaseCommand):
                 async_source,
             )
             async_source = re.sub("= WebClient\(", "= AsyncWebClient(", async_source)
+            async_source = re.sub(
+                " self.files_getUploadURLExternal\(",
+                " await self.files_getUploadURLExternal(",
+                async_source,
+            )
+            async_source = re.sub(
+                " self.files_completeUploadExternal\(",
+                " await self.files_completeUploadExternal(",
+                async_source,
+            )
+            async_source = re.sub(
+                " self.files_info\(",
+                " await self.files_info(",
+                async_source,
+            )
+            async_source = re.sub(
+                "_attach_full_file_metadata",
+                "_attach_full_file_metadata_async",
+                async_source,
+            )
+            async_source = re.sub(
+                " _attach_full_file_metadata_async\(",
+                " await _attach_full_file_metadata_async(",
+                async_source,
+            )
             with open(f"{here}/slack_sdk/web/async_client.py", "w") as output:
                 output.write(async_source)
 

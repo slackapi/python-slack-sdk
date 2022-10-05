@@ -1,6 +1,7 @@
 """A Python module for interacting with Slack's Web API."""
 import json
 import os
+import warnings
 from io import IOBase
 from typing import Union, Sequence, Optional, Dict, Tuple, Any, List
 
@@ -12,6 +13,11 @@ from .internal_utils import (
     _update_call_participants,
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
+    _to_v2_file_upload_item,
+    _upload_file_via_v2_url,
+    _attach_full_file_metadata,
+    _validate_for_legacy_client,
+    _print_files_upload_v2_suggestion,
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2943,7 +2949,7 @@ class WebClient(BaseClient):
         self,
         *,
         file: Optional[Union[str, bytes, IOBase]] = None,
-        content: Optional[str] = None,
+        content: Optional[Union[str, bytes]] = None,
         filename: Optional[str] = None,
         filetype: Optional[str] = None,
         initial_comment: Optional[str] = None,
@@ -2955,6 +2961,8 @@ class WebClient(BaseClient):
         """Uploads or creates a file.
         https://api.slack.com/methods/files.upload
         """
+        _print_files_upload_v2_suggestion()
+
         if file is None and content is None:
             raise e.SlackRequestError("The file or content argument must be specified.")
         if file is not None and content is not None:
@@ -2982,6 +2990,166 @@ class WebClient(BaseClient):
         else:
             kwargs["content"] = content
             return self.api_call("files.upload", data=kwargs)
+
+    def files_upload_v2(
+        self,
+        *,
+        # for sending a single file
+        filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: Optional[Union[str, bytes]] = None,
+        title: Optional[str] = None,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        # To upload multiple files at a time
+        file_uploads: Optional[List[Dict[str, Any]]] = None,
+        channel: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """This wrapper method provides an easy way to upload files using the following endpoints:
+        * step1: https://api.slack.com/methods/files.getUploadURLExternal
+        * step2: "https://files.slack.com/upload/v1/..." URLs returned from files.getUploadURLExternal API
+        * step3: https://api.slack.com/methods/files.completeUploadExternal
+        """
+        if file is None and content is None and file_uploads is None:
+            raise e.SlackRequestError("Any of file, content, and file_uploads must be specified.")
+        if file is not None and content is not None:
+            raise e.SlackRequestError("You cannot specify both the file and the content argument.")
+
+        # deprecated arguments:
+        channels, filetype = kwargs.get("channels"), kwargs.get("filetype")
+
+        if channels is not None:
+            warnings.warn(
+                "Although the channels parameter is still supported for smooth migration from legacy files.upload, "
+                "we recommend using the new channel parameter with a single str value instead for more clarity."
+            )
+            if (isinstance(channels, (list, Tuple)) and len(channels) > 1) or (
+                isinstance(channels, str) and len(channels.split(",")) > 1
+            ):
+                raise e.SlackRequestError(
+                    "Sharing files with multiple channels is no longer supported in v2. "
+                    "Share files in each channel separately instead."
+                )
+        if filetype is not None:
+            warnings.warn("The filetype parameter is no longer supported. Please remove it from the arguments.")
+
+        # step1: files.getUploadURLExternal per file
+        files: List[Dict[str, Any]] = []
+        if file_uploads is not None:
+            for f in file_uploads:
+                files.append(_to_v2_file_upload_item(f))
+        else:
+            f = _to_v2_file_upload_item(
+                {
+                    "filename": filename,
+                    "file": file,
+                    "content": content,
+                    "title": title,
+                    "alt_txt": alt_txt,
+                    "snippet_type": snippet_type,
+                }
+            )
+            files.append(f)
+
+        for f in files:
+            url_response = self.files_getUploadURLExternal(
+                filename=f.get("filename"),
+                length=f.get("length"),
+                alt_txt=f.get("alt_txt"),
+                snippet_type=f.get("snippet_type"),
+                token=kwargs.get("token"),
+            )
+            _validate_for_legacy_client(url_response)
+            f["file_id"] = url_response.get("file_id")  # type: ignore
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore
+
+        # step2: "https://files.slack.com/upload/v1/..." per file
+        for f in files:
+            upload_result = _upload_file_via_v2_url(
+                url=f["upload_url"],
+                data=f["data"],
+                logger=self._logger,
+                timeout=self.timeout,
+                proxy=self.proxy,
+                ssl=self.ssl,
+            )
+            if upload_result.get("status") != 200:
+                status = upload_result.get("status")
+                body = upload_result.get("body")
+                message = (
+                    "Failed to upload a file "
+                    f"(status: {status}, body: {body}, filename: {f.get('filename')}, title: {f.get('title')})"
+                )
+                raise e.SlackRequestError(message)
+
+        # step3: files.completeUploadExternal with all the sets of (file_id + title)
+        channel_to_share = channel
+        if channels is not None:
+            if isinstance(channels, str):
+                channel_to_share = channels.split(",")[0]
+            else:
+                channel_to_share = channels[0]
+        completion = self.files_completeUploadExternal(
+            files=[{"id": f["file_id"], "title": f["title"]} for f in files],
+            channel=channel_to_share,
+            initial_comment=initial_comment,
+            thread_ts=thread_ts,
+            **kwargs,
+        )
+        _attach_full_file_metadata(
+            client=self,
+            token_as_arg=kwargs.get("token"),
+            completion=completion,
+        )
+        return completion
+
+    def files_getUploadURLExternal(
+        self,
+        *,
+        filename: str,
+        length: int,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Gets a URL for an edge external upload.
+        https://api.slack.com/methods/files.getUploadURLExternal
+        """
+        kwargs.update(
+            {
+                "filename": filename,
+                "length": length,
+                "alt_txt": alt_txt,
+                "snippet_type": snippet_type,
+            }
+        )
+        return self.api_call("files.getUploadURLExternal", params=kwargs)
+
+    def files_completeUploadExternal(
+        self,
+        *,
+        files: List[Dict[str, str]],
+        channel_id: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Finishes an upload started with files.getUploadURLExternal.
+        https://api.slack.com/methods/files.completeUploadExternal
+        """
+        _files = [{k: v for k, v in f.items() if v is not None} for f in files]
+        kwargs.update(
+            {
+                "files": json.dumps(_files),
+                "channel_id": channel_id,
+                "initial_comment": initial_comment,
+                "thread_ts": thread_ts,
+            }
+        )
+        return self.api_call("files.completeUploadExternal", params=kwargs)
 
     # --------------------------
     # Deprecated: groups.*

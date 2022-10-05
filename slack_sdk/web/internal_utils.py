@@ -1,11 +1,16 @@
 import json
+import logging
 import os
 import platform
 import sys
+import urllib
 import warnings
+from asyncio import Future
+from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
+from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
 
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
@@ -299,3 +304,135 @@ def _remove_none_values(d: dict) -> dict:
     # '{"a": null, "b": 123}'
     #
     return {k: v for k, v in d.items() if v is not None}
+
+
+def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[Any]]:
+    file = upload_file.get("file")
+    content = upload_file.get("content")
+    data: Optional[bytes] = None
+    if file is not None:
+        if isinstance(file, str):  # filepath
+            with open(file.encode("utf-8", "ignore"), "rb") as readable:
+                data = readable.read()
+        else:
+            data = file
+    elif content is not None:
+        if isinstance(content, str):  # filepath
+            data = content.encode("utf-8")
+        elif isinstance(content, bytes):
+            data = content
+        else:
+            raise SlackRequestError("The given content must be either filepath as str or data as bytes")
+
+    filename = upload_file.get("filename")
+    if upload_file.get("filename") is None and isinstance(file, str):
+        # use the local filename if filename is missing
+        if upload_file.get("filename") is None:
+            filename = file.split(os.path.sep)[-1]
+        else:
+            filename = "Uploaded file"
+
+    title = upload_file.get("title", "Uploaded file")
+    if data is None:
+        raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
+
+    return {
+        "filename": filename,
+        "data": data,
+        "length": len(data),
+        "title": title,
+        "alt_txt": upload_file.get("alt_txt"),
+        "snippet_type": upload_file.get("snippet_type"),
+    }
+
+
+def _upload_file_via_v2_url(
+    url: str,
+    data: bytes,
+    timeout: int,
+    logger: logging.Logger,
+    proxy: Optional[str] = None,
+    ssl: Optional[SSLContext] = None,
+) -> Dict[str, Any]:
+    opener: Optional[OpenerDirector] = None
+    if proxy is not None:
+        if isinstance(proxy, str):
+            opener = urllib.request.build_opener(
+                ProxyHandler({"http": proxy, "https": proxy}),
+                HTTPSHandler(context=ssl),
+            )
+        else:
+            raise SlackRequestError(f"Invalid proxy detected: {proxy} must be a str value")
+
+    resp: Optional[HTTPResponse] = None
+    req: Request = Request(method="POST", url=url, data=data, headers={})
+    if opener:
+        resp = opener.open(req, timeout=timeout)
+    else:
+        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+
+    charset = resp.headers.get_content_charset() or "utf-8"
+    body: str = resp.read().decode(charset)  # read the response body here
+    if logger.level <= logging.DEBUG:
+        message = (
+            "Received the following response - ",
+            f"status: {resp.status}, " f"headers: {dict(resp.headers)}, " f"body: {body}",
+        )
+        logger.debug(message)
+
+    return {"status": resp.status, "headers": resp.headers, "body": body}
+
+
+def _validate_for_legacy_client(
+    response: Union["SlackResponse", Future],  # noqa: F821
+) -> None:  # type: ignore
+    # Only LegacyWebClient can return this union type
+    if isinstance(response, Future):
+        message = (
+            "Sorry! This SDK does not support run_async=True option for this API calls. "
+            "Please migrate to AsyncWebClient, which is a new and stable way to go."
+        )
+        raise SlackRequestError(message)
+
+
+def _attach_full_file_metadata(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: Union["SlackResponse", Future],  # noqa: F821
+) -> None:
+    _validate_for_legacy_client(completion)
+    _completion: Any = completion  # just for satisfying pytype
+    # fetch all the file metadata for backward-compatibility
+    for f in _completion.get("files"):
+        full_info = client.files_info(
+            file=f.get("id"),
+            token=token_as_arg,
+        )
+        f.update(full_info["file"])
+    if len(_completion.get("files")) == 1:
+        _completion.data["file"] = _completion.get("files")[0]
+
+
+async def _attach_full_file_metadata_async(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: "SlackResponse",  # noqa: F821
+) -> None:
+    # fetch all the file metadata for backward-compatibility
+    for f in completion.get("files"):
+        full_info = await client.files_info(
+            file=f.get("id"),
+            token=token_as_arg,
+        )
+        f.update(full_info["file"])
+    if len(completion.get("files")) == 1:
+        completion.data["file"] = completion.get("files")[0]
+
+
+def _print_files_upload_v2_suggestion():
+    message = (
+        "client.files_upload() may cause some issues like timeouts for relatively large files. "
+        "Our latest recommendation is to use client.files_upload_v2(), "
+        "which is mostly compatible and much stabler, instead."
+    )
+    warnings.warn(message)

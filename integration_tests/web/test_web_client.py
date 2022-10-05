@@ -242,7 +242,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(file=upload["file"]["id"])
+        deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
 
     def test_uploading_file_with_token_param(self):
@@ -278,7 +278,7 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(upload)
 
-        deletion = client.files_delete(
+        deletion = await client.files_delete(
             token=self.bot_token,
             file=upload["file"]["id"],
         )
