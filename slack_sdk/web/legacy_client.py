@@ -8,6 +8,7 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 from asyncio import Future
+
 """A Python module for interacting with Slack's Web API."""
 import json
 import os
