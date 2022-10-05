@@ -39,6 +39,7 @@
 &#34;&#34;&#34;A Python module for interacting with Slack&#39;s Web API.&#34;&#34;&#34;
 import json
 import os
+import warnings
 from io import IOBase
 from typing import Union, Sequence, Optional, Dict, Tuple, Any, List
 
@@ -50,6 +51,11 @@ from .internal_utils import (
     _update_call_participants,
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
+    _to_v2_file_upload_item,
+    _upload_file_via_v2_url,
+    _attach_full_file_metadata_async,
+    _validate_for_legacy_client,
+    _print_files_upload_v2_suggestion,
 )
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2981,7 +2987,7 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         file: Optional[Union[str, bytes, IOBase]] = None,
-        content: Optional[str] = None,
+        content: Optional[Union[str, bytes]] = None,
         filename: Optional[str] = None,
         filetype: Optional[str] = None,
         initial_comment: Optional[str] = None,
@@ -2993,6 +2999,8 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;Uploads or creates a file.
         https://api.slack.com/methods/files.upload
         &#34;&#34;&#34;
+        _print_files_upload_v2_suggestion()
+
         if file is None and content is None:
             raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
         if file is not None and content is not None:
@@ -3020,6 +3028,171 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             kwargs[&#34;content&#34;] = content
             return await self.api_call(&#34;files.upload&#34;, data=kwargs)
+
+    async def files_upload_v2(
+        self,
+        *,
+        # for sending a single file
+        filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: Optional[Union[str, bytes]] = None,
+        title: Optional[str] = None,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        # To upload multiple files at a time
+        file_uploads: Optional[List[Dict[str, Any]]] = None,
+        channel: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
+
+        - step1: https://api.slack.com/methods/files.getUploadURLExternal
+
+        - step2: &#34;https://files.slack.com/upload/v1/...&#34; URLs returned from files.getUploadURLExternal API
+
+        - step3: https://api.slack.com/methods/files.completeUploadExternal
+            and https://api.slack.com/methods/files.info
+
+        &#34;&#34;&#34;
+        if file is None and content is None and file_uploads is None:
+            raise e.SlackRequestError(&#34;Any of file, content, and file_uploads must be specified.&#34;)
+        if file is not None and content is not None:
+            raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
+
+        # deprecated arguments:
+        channels, filetype = kwargs.get(&#34;channels&#34;), kwargs.get(&#34;filetype&#34;)
+
+        if channels is not None:
+            warnings.warn(
+                &#34;Although the channels parameter is still supported for smooth migration from legacy files.upload, &#34;
+                &#34;we recommend using the new channel parameter with a single str value instead for more clarity.&#34;
+            )
+            if (isinstance(channels, (list, Tuple)) and len(channels) &gt; 1) or (
+                isinstance(channels, str) and len(channels.split(&#34;,&#34;)) &gt; 1
+            ):
+                raise e.SlackRequestError(
+                    &#34;Sharing files with multiple channels is no longer supported in v2. &#34;
+                    &#34;Share files in each channel separately instead.&#34;
+                )
+        if filetype is not None:
+            warnings.warn(&#34;The filetype parameter is no longer supported. Please remove it from the arguments.&#34;)
+
+        # step1: files.getUploadURLExternal per file
+        files: List[Dict[str, Any]] = []
+        if file_uploads is not None:
+            for f in file_uploads:
+                files.append(_to_v2_file_upload_item(f))
+        else:
+            f = _to_v2_file_upload_item(
+                {
+                    &#34;filename&#34;: filename,
+                    &#34;file&#34;: file,
+                    &#34;content&#34;: content,
+                    &#34;title&#34;: title,
+                    &#34;alt_txt&#34;: alt_txt,
+                    &#34;snippet_type&#34;: snippet_type,
+                }
+            )
+            files.append(f)
+
+        for f in files:
+            url_response = await self.files_getUploadURLExternal(
+                filename=f.get(&#34;filename&#34;),
+                length=f.get(&#34;length&#34;),
+                alt_txt=f.get(&#34;alt_txt&#34;),
+                snippet_type=f.get(&#34;snippet_type&#34;),
+                token=kwargs.get(&#34;token&#34;),
+            )
+            _validate_for_legacy_client(url_response)
+            f[&#34;file_id&#34;] = url_response.get(&#34;file_id&#34;)  # type: ignore
+            f[&#34;upload_url&#34;] = url_response.get(&#34;upload_url&#34;)  # type: ignore
+
+        # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
+        for f in files:
+            upload_result = _upload_file_via_v2_url(
+                url=f[&#34;upload_url&#34;],
+                data=f[&#34;data&#34;],
+                logger=self._logger,
+                timeout=self.timeout,
+                proxy=self.proxy,
+                ssl=self.ssl,
+            )
+            if upload_result.get(&#34;status&#34;) != 200:
+                status = upload_result.get(&#34;status&#34;)
+                body = upload_result.get(&#34;body&#34;)
+                message = (
+                    &#34;Failed to upload a file &#34;
+                    f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
+                )
+                raise e.SlackRequestError(message)
+
+        # step3: files.completeUploadExternal with all the sets of (file_id + title)
+        channel_to_share = channel
+        if channels is not None:
+            if isinstance(channels, str):
+                channel_to_share = channels.split(&#34;,&#34;)[0]
+            else:
+                channel_to_share = channels[0]
+        completion = await self.files_completeUploadExternal(
+            files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
+            channel=channel_to_share,
+            initial_comment=initial_comment,
+            thread_ts=thread_ts,
+            **kwargs,
+        )
+        await _attach_full_file_metadata_async(
+            client=self,
+            token_as_arg=kwargs.get(&#34;token&#34;),
+            completion=completion,
+        )
+        return completion
+
+    async def files_getUploadURLExternal(
+        self,
+        *,
+        filename: str,
+        length: int,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Gets a URL for an edge external upload.
+        https://api.slack.com/methods/files.getUploadURLExternal
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;filename&#34;: filename,
+                &#34;length&#34;: length,
+                &#34;alt_txt&#34;: alt_txt,
+                &#34;snippet_type&#34;: snippet_type,
+            }
+        )
+        return await self.api_call(&#34;files.getUploadURLExternal&#34;, params=kwargs)
+
+    async def files_completeUploadExternal(
+        self,
+        *,
+        files: List[Dict[str, str]],
+        channel_id: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Finishes an upload started with files.getUploadURLExternal.
+        https://api.slack.com/methods/files.completeUploadExternal
+        &#34;&#34;&#34;
+        _files = [{k: v for k, v in f.items() if v is not None} for f in files]
+        kwargs.update(
+            {
+                &#34;files&#34;: json.dumps(_files),
+                &#34;channel_id&#34;: channel_id,
+                &#34;initial_comment&#34;: initial_comment,
+                &#34;thread_ts&#34;: thread_ts,
+            }
+        )
+        return await self.api_call(&#34;files.completeUploadExternal&#34;, params=kwargs)
 
     # --------------------------
     # Deprecated: groups.*
@@ -7452,7 +7625,7 @@ removed at anytime.</p></div>
         self,
         *,
         file: Optional[Union[str, bytes, IOBase]] = None,
-        content: Optional[str] = None,
+        content: Optional[Union[str, bytes]] = None,
         filename: Optional[str] = None,
         filetype: Optional[str] = None,
         initial_comment: Optional[str] = None,
@@ -7464,6 +7637,8 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Uploads or creates a file.
         https://api.slack.com/methods/files.upload
         &#34;&#34;&#34;
+        _print_files_upload_v2_suggestion()
+
         if file is None and content is None:
             raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
         if file is not None and content is not None:
@@ -7491,6 +7666,171 @@ removed at anytime.</p></div>
         else:
             kwargs[&#34;content&#34;] = content
             return await self.api_call(&#34;files.upload&#34;, data=kwargs)
+
+    async def files_upload_v2(
+        self,
+        *,
+        # for sending a single file
+        filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        content: Optional[Union[str, bytes]] = None,
+        title: Optional[str] = None,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        # To upload multiple files at a time
+        file_uploads: Optional[List[Dict[str, Any]]] = None,
+        channel: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
+
+        - step1: https://api.slack.com/methods/files.getUploadURLExternal
+
+        - step2: &#34;https://files.slack.com/upload/v1/...&#34; URLs returned from files.getUploadURLExternal API
+
+        - step3: https://api.slack.com/methods/files.completeUploadExternal
+            and https://api.slack.com/methods/files.info
+
+        &#34;&#34;&#34;
+        if file is None and content is None and file_uploads is None:
+            raise e.SlackRequestError(&#34;Any of file, content, and file_uploads must be specified.&#34;)
+        if file is not None and content is not None:
+            raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
+
+        # deprecated arguments:
+        channels, filetype = kwargs.get(&#34;channels&#34;), kwargs.get(&#34;filetype&#34;)
+
+        if channels is not None:
+            warnings.warn(
+                &#34;Although the channels parameter is still supported for smooth migration from legacy files.upload, &#34;
+                &#34;we recommend using the new channel parameter with a single str value instead for more clarity.&#34;
+            )
+            if (isinstance(channels, (list, Tuple)) and len(channels) &gt; 1) or (
+                isinstance(channels, str) and len(channels.split(&#34;,&#34;)) &gt; 1
+            ):
+                raise e.SlackRequestError(
+                    &#34;Sharing files with multiple channels is no longer supported in v2. &#34;
+                    &#34;Share files in each channel separately instead.&#34;
+                )
+        if filetype is not None:
+            warnings.warn(&#34;The filetype parameter is no longer supported. Please remove it from the arguments.&#34;)
+
+        # step1: files.getUploadURLExternal per file
+        files: List[Dict[str, Any]] = []
+        if file_uploads is not None:
+            for f in file_uploads:
+                files.append(_to_v2_file_upload_item(f))
+        else:
+            f = _to_v2_file_upload_item(
+                {
+                    &#34;filename&#34;: filename,
+                    &#34;file&#34;: file,
+                    &#34;content&#34;: content,
+                    &#34;title&#34;: title,
+                    &#34;alt_txt&#34;: alt_txt,
+                    &#34;snippet_type&#34;: snippet_type,
+                }
+            )
+            files.append(f)
+
+        for f in files:
+            url_response = await self.files_getUploadURLExternal(
+                filename=f.get(&#34;filename&#34;),
+                length=f.get(&#34;length&#34;),
+                alt_txt=f.get(&#34;alt_txt&#34;),
+                snippet_type=f.get(&#34;snippet_type&#34;),
+                token=kwargs.get(&#34;token&#34;),
+            )
+            _validate_for_legacy_client(url_response)
+            f[&#34;file_id&#34;] = url_response.get(&#34;file_id&#34;)  # type: ignore
+            f[&#34;upload_url&#34;] = url_response.get(&#34;upload_url&#34;)  # type: ignore
+
+        # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
+        for f in files:
+            upload_result = _upload_file_via_v2_url(
+                url=f[&#34;upload_url&#34;],
+                data=f[&#34;data&#34;],
+                logger=self._logger,
+                timeout=self.timeout,
+                proxy=self.proxy,
+                ssl=self.ssl,
+            )
+            if upload_result.get(&#34;status&#34;) != 200:
+                status = upload_result.get(&#34;status&#34;)
+                body = upload_result.get(&#34;body&#34;)
+                message = (
+                    &#34;Failed to upload a file &#34;
+                    f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
+                )
+                raise e.SlackRequestError(message)
+
+        # step3: files.completeUploadExternal with all the sets of (file_id + title)
+        channel_to_share = channel
+        if channels is not None:
+            if isinstance(channels, str):
+                channel_to_share = channels.split(&#34;,&#34;)[0]
+            else:
+                channel_to_share = channels[0]
+        completion = await self.files_completeUploadExternal(
+            files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
+            channel=channel_to_share,
+            initial_comment=initial_comment,
+            thread_ts=thread_ts,
+            **kwargs,
+        )
+        await _attach_full_file_metadata_async(
+            client=self,
+            token_as_arg=kwargs.get(&#34;token&#34;),
+            completion=completion,
+        )
+        return completion
+
+    async def files_getUploadURLExternal(
+        self,
+        *,
+        filename: str,
+        length: int,
+        alt_txt: Optional[str] = None,
+        snippet_type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Gets a URL for an edge external upload.
+        https://api.slack.com/methods/files.getUploadURLExternal
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;filename&#34;: filename,
+                &#34;length&#34;: length,
+                &#34;alt_txt&#34;: alt_txt,
+                &#34;snippet_type&#34;: snippet_type,
+            }
+        )
+        return await self.api_call(&#34;files.getUploadURLExternal&#34;, params=kwargs)
+
+    async def files_completeUploadExternal(
+        self,
+        *,
+        files: List[Dict[str, str]],
+        channel_id: Optional[str] = None,
+        initial_comment: Optional[str] = None,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Finishes an upload started with files.getUploadURLExternal.
+        https://api.slack.com/methods/files.completeUploadExternal
+        &#34;&#34;&#34;
+        _files = [{k: v for k, v in f.items() if v is not None} for f in files]
+        kwargs.update(
+            {
+                &#34;files&#34;: json.dumps(_files),
+                &#34;channel_id&#34;: channel_id,
+                &#34;initial_comment&#34;: initial_comment,
+                &#34;thread_ts&#34;: thread_ts,
+            }
+        )
+        return await self.api_call(&#34;files.completeUploadExternal&#34;, params=kwargs)
 
     # --------------------------
     # Deprecated: groups.*
@@ -13182,6 +13522,40 @@ or received but have not yet been approved by all parties.
     return await self.api_call(&#34;files.comments.delete&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.files_completeUploadExternal"><code class="name flex">
+<span>async def <span class="ident">files_completeUploadExternal</span></span>(<span>self, *, files: List[Dict[str, str]], channel_id: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Finishes an upload started with files.getUploadURLExternal.
+<a href="https://api.slack.com/methods/files.completeUploadExternal">https://api.slack.com/methods/files.completeUploadExternal</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def files_completeUploadExternal(
+    self,
+    *,
+    files: List[Dict[str, str]],
+    channel_id: Optional[str] = None,
+    initial_comment: Optional[str] = None,
+    thread_ts: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Finishes an upload started with files.getUploadURLExternal.
+    https://api.slack.com/methods/files.completeUploadExternal
+    &#34;&#34;&#34;
+    _files = [{k: v for k, v in f.items() if v is not None} for f in files]
+    kwargs.update(
+        {
+            &#34;files&#34;: json.dumps(_files),
+            &#34;channel_id&#34;: channel_id,
+            &#34;initial_comment&#34;: initial_comment,
+            &#34;thread_ts&#34;: thread_ts,
+        }
+    )
+    return await self.api_call(&#34;files.completeUploadExternal&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_delete"><code class="name flex">
 <span>async def <span class="ident">files_delete</span></span>(<span>self, *, file: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -13203,6 +13577,39 @@ or received but have not yet been approved by all parties.
     &#34;&#34;&#34;
     kwargs.update({&#34;file&#34;: file})
     return await self.api_call(&#34;files.delete&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.files_getUploadURLExternal"><code class="name flex">
+<span>async def <span class="ident">files_getUploadURLExternal</span></span>(<span>self, *, filename: str, length: int, alt_txt: Optional[str] = None, snippet_type: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets a URL for an edge external upload.
+<a href="https://api.slack.com/methods/files.getUploadURLExternal">https://api.slack.com/methods/files.getUploadURLExternal</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def files_getUploadURLExternal(
+    self,
+    *,
+    filename: str,
+    length: int,
+    alt_txt: Optional[str] = None,
+    snippet_type: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Gets a URL for an edge external upload.
+    https://api.slack.com/methods/files.getUploadURLExternal
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;filename&#34;: filename,
+            &#34;length&#34;: length,
+            &#34;alt_txt&#34;: alt_txt,
+            &#34;snippet_type&#34;: snippet_type,
+        }
+    )
+    return await self.api_call(&#34;files.getUploadURLExternal&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_info"><code class="name flex">
@@ -13547,7 +13954,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_upload"><code class="name flex">
-<span>async def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Optional[str] = None, filename: Optional[str] = None, filetype: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, title: Optional[str] = None, channels: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">files_upload</span></span>(<span>self, *, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Union[str, bytes, ForwardRef(None)] = None, filename: Optional[str] = None, filetype: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, title: Optional[str] = None, channels: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Uploads or creates a file.
@@ -13560,7 +13967,7 @@ or received but have not yet been approved by all parties.
     self,
     *,
     file: Optional[Union[str, bytes, IOBase]] = None,
-    content: Optional[str] = None,
+    content: Optional[Union[str, bytes]] = None,
     filename: Optional[str] = None,
     filetype: Optional[str] = None,
     initial_comment: Optional[str] = None,
@@ -13572,6 +13979,8 @@ or received but have not yet been approved by all parties.
     &#34;&#34;&#34;Uploads or creates a file.
     https://api.slack.com/methods/files.upload
     &#34;&#34;&#34;
+    _print_files_upload_v2_suggestion()
+
     if file is None and content is None:
         raise e.SlackRequestError(&#34;The file or content argument must be specified.&#34;)
     if file is not None and content is not None:
@@ -13599,6 +14008,148 @@ or received but have not yet been approved by all parties.
     else:
         kwargs[&#34;content&#34;] = content
         return await self.api_call(&#34;files.upload&#34;, data=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.files_upload_v2"><code class="name flex">
+<span>async def <span class="ident">files_upload_v2</span></span>(<span>self, *, filename: Optional[str] = None, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Union[str, bytes, ForwardRef(None)] = None, title: Optional[str] = None, alt_txt: Optional[str] = None, snippet_type: Optional[str] = None, file_uploads: Optional[List[Dict[str, Any]]] = None, channel: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>This wrapper method provides an easy way to upload files using the following endpoints:</p>
+<ul>
+<li>
+<p>step1: <a href="https://api.slack.com/methods/files.getUploadURLExternal">https://api.slack.com/methods/files.getUploadURLExternal</a></p>
+</li>
+<li>
+<p>step2: "https://files.slack.com/upload/v1/&hellip;" URLs returned from files.getUploadURLExternal API</p>
+</li>
+<li>
+<p>step3: <a href="https://api.slack.com/methods/files.completeUploadExternal">https://api.slack.com/methods/files.completeUploadExternal</a>
+and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/methods/files.info</a></p>
+</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def files_upload_v2(
+    self,
+    *,
+    # for sending a single file
+    filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
+    file: Optional[Union[str, bytes, IOBase]] = None,
+    content: Optional[Union[str, bytes]] = None,
+    title: Optional[str] = None,
+    alt_txt: Optional[str] = None,
+    snippet_type: Optional[str] = None,
+    # To upload multiple files at a time
+    file_uploads: Optional[List[Dict[str, Any]]] = None,
+    channel: Optional[str] = None,
+    initial_comment: Optional[str] = None,
+    thread_ts: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
+
+    - step1: https://api.slack.com/methods/files.getUploadURLExternal
+
+    - step2: &#34;https://files.slack.com/upload/v1/...&#34; URLs returned from files.getUploadURLExternal API
+
+    - step3: https://api.slack.com/methods/files.completeUploadExternal
+        and https://api.slack.com/methods/files.info
+
+    &#34;&#34;&#34;
+    if file is None and content is None and file_uploads is None:
+        raise e.SlackRequestError(&#34;Any of file, content, and file_uploads must be specified.&#34;)
+    if file is not None and content is not None:
+        raise e.SlackRequestError(&#34;You cannot specify both the file and the content argument.&#34;)
+
+    # deprecated arguments:
+    channels, filetype = kwargs.get(&#34;channels&#34;), kwargs.get(&#34;filetype&#34;)
+
+    if channels is not None:
+        warnings.warn(
+            &#34;Although the channels parameter is still supported for smooth migration from legacy files.upload, &#34;
+            &#34;we recommend using the new channel parameter with a single str value instead for more clarity.&#34;
+        )
+        if (isinstance(channels, (list, Tuple)) and len(channels) &gt; 1) or (
+            isinstance(channels, str) and len(channels.split(&#34;,&#34;)) &gt; 1
+        ):
+            raise e.SlackRequestError(
+                &#34;Sharing files with multiple channels is no longer supported in v2. &#34;
+                &#34;Share files in each channel separately instead.&#34;
+            )
+    if filetype is not None:
+        warnings.warn(&#34;The filetype parameter is no longer supported. Please remove it from the arguments.&#34;)
+
+    # step1: files.getUploadURLExternal per file
+    files: List[Dict[str, Any]] = []
+    if file_uploads is not None:
+        for f in file_uploads:
+            files.append(_to_v2_file_upload_item(f))
+    else:
+        f = _to_v2_file_upload_item(
+            {
+                &#34;filename&#34;: filename,
+                &#34;file&#34;: file,
+                &#34;content&#34;: content,
+                &#34;title&#34;: title,
+                &#34;alt_txt&#34;: alt_txt,
+                &#34;snippet_type&#34;: snippet_type,
+            }
+        )
+        files.append(f)
+
+    for f in files:
+        url_response = await self.files_getUploadURLExternal(
+            filename=f.get(&#34;filename&#34;),
+            length=f.get(&#34;length&#34;),
+            alt_txt=f.get(&#34;alt_txt&#34;),
+            snippet_type=f.get(&#34;snippet_type&#34;),
+            token=kwargs.get(&#34;token&#34;),
+        )
+        _validate_for_legacy_client(url_response)
+        f[&#34;file_id&#34;] = url_response.get(&#34;file_id&#34;)  # type: ignore
+        f[&#34;upload_url&#34;] = url_response.get(&#34;upload_url&#34;)  # type: ignore
+
+    # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
+    for f in files:
+        upload_result = _upload_file_via_v2_url(
+            url=f[&#34;upload_url&#34;],
+            data=f[&#34;data&#34;],
+            logger=self._logger,
+            timeout=self.timeout,
+            proxy=self.proxy,
+            ssl=self.ssl,
+        )
+        if upload_result.get(&#34;status&#34;) != 200:
+            status = upload_result.get(&#34;status&#34;)
+            body = upload_result.get(&#34;body&#34;)
+            message = (
+                &#34;Failed to upload a file &#34;
+                f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
+            )
+            raise e.SlackRequestError(message)
+
+    # step3: files.completeUploadExternal with all the sets of (file_id + title)
+    channel_to_share = channel
+    if channels is not None:
+        if isinstance(channels, str):
+            channel_to_share = channels.split(&#34;,&#34;)[0]
+        else:
+            channel_to_share = channels[0]
+    completion = await self.files_completeUploadExternal(
+        files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
+        channel=channel_to_share,
+        initial_comment=initial_comment,
+        thread_ts=thread_ts,
+        **kwargs,
+    )
+    await _attach_full_file_metadata_async(
+        client=self,
+        token_as_arg=kwargs.get(&#34;token&#34;),
+        completion=completion,
+    )
+    return completion</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.groups_archive"><code class="name flex">
@@ -16126,7 +16677,9 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.dnd_teamInfo" href="#slack_sdk.web.async_client.AsyncWebClient.dnd_teamInfo">dnd_teamInfo</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.emoji_list" href="#slack_sdk.web.async_client.AsyncWebClient.emoji_list">emoji_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_comments_delete" href="#slack_sdk.web.async_client.AsyncWebClient.files_comments_delete">files_comments_delete</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_completeUploadExternal" href="#slack_sdk.web.async_client.AsyncWebClient.files_completeUploadExternal">files_completeUploadExternal</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_delete" href="#slack_sdk.web.async_client.AsyncWebClient.files_delete">files_delete</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_getUploadURLExternal" href="#slack_sdk.web.async_client.AsyncWebClient.files_getUploadURLExternal">files_getUploadURLExternal</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_info" href="#slack_sdk.web.async_client.AsyncWebClient.files_info">files_info</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_list" href="#slack_sdk.web.async_client.AsyncWebClient.files_list">files_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_remote_add" href="#slack_sdk.web.async_client.AsyncWebClient.files_remote_add">files_remote_add</a></code></li>
@@ -16138,6 +16691,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_revokePublicURL" href="#slack_sdk.web.async_client.AsyncWebClient.files_revokePublicURL">files_revokePublicURL</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_sharedPublicURL" href="#slack_sdk.web.async_client.AsyncWebClient.files_sharedPublicURL">files_sharedPublicURL</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_upload" href="#slack_sdk.web.async_client.AsyncWebClient.files_upload">files_upload</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_upload_v2" href="#slack_sdk.web.async_client.AsyncWebClient.files_upload_v2">files_upload_v2</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.groups_archive" href="#slack_sdk.web.async_client.AsyncWebClient.groups_archive">groups_archive</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.groups_create" href="#slack_sdk.web.async_client.AsyncWebClient.groups_create">groups_create</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.groups_createChild" href="#slack_sdk.web.async_client.AsyncWebClient.groups_createChild">groups_createChild</a></code></li>

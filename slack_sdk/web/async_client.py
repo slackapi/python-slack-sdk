@@ -3018,9 +3018,14 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """This wrapper method provides an easy way to upload files using the following endpoints:
-        * step1: https://api.slack.com/methods/files.getUploadURLExternal
-        * step2: "https://files.slack.com/upload/v1/..." URLs returned from files.getUploadURLExternal API
-        * step3: https://api.slack.com/methods/files.completeUploadExternal
+
+        - step1: https://api.slack.com/methods/files.getUploadURLExternal
+
+        - step2: "https://files.slack.com/upload/v1/..." URLs returned from files.getUploadURLExternal API
+
+        - step3: https://api.slack.com/methods/files.completeUploadExternal
+            and https://api.slack.com/methods/files.info
+
         """
         if file is None and content is None and file_uploads is None:
             raise e.SlackRequestError("Any of file, content, and file_uploads must be specified.")

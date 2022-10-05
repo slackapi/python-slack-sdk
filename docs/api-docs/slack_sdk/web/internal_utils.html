@@ -27,13 +27,18 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import json
+import logging
 import os
 import platform
 import sys
+import urllib
 import warnings
+from asyncio import Future
+from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
+from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
 
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
@@ -326,7 +331,139 @@ def _remove_none_values(d: dict) -&gt; dict:
     # &gt;&gt;&gt; json.dumps(d)
     # &#39;{&#34;a&#34;: null, &#34;b&#34;: 123}&#39;
     #
-    return {k: v for k, v in d.items() if v is not None}</code></pre>
+    return {k: v for k, v in d.items() if v is not None}
+
+
+def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -&gt; Dict[str, Optional[Any]]:
+    file = upload_file.get(&#34;file&#34;)
+    content = upload_file.get(&#34;content&#34;)
+    data: Optional[bytes] = None
+    if file is not None:
+        if isinstance(file, str):  # filepath
+            with open(file.encode(&#34;utf-8&#34;, &#34;ignore&#34;), &#34;rb&#34;) as readable:
+                data = readable.read()
+        else:
+            data = file
+    elif content is not None:
+        if isinstance(content, str):  # filepath
+            data = content.encode(&#34;utf-8&#34;)
+        elif isinstance(content, bytes):
+            data = content
+        else:
+            raise SlackRequestError(&#34;The given content must be either filepath as str or data as bytes&#34;)
+
+    filename = upload_file.get(&#34;filename&#34;)
+    if upload_file.get(&#34;filename&#34;) is None and isinstance(file, str):
+        # use the local filename if filename is missing
+        if upload_file.get(&#34;filename&#34;) is None:
+            filename = file.split(os.path.sep)[-1]
+        else:
+            filename = &#34;Uploaded file&#34;
+
+    title = upload_file.get(&#34;title&#34;, &#34;Uploaded file&#34;)
+    if data is None:
+        raise SlackRequestError(f&#34;File content not found for filename: {filename}, title: {title}&#34;)
+
+    return {
+        &#34;filename&#34;: filename,
+        &#34;data&#34;: data,
+        &#34;length&#34;: len(data),
+        &#34;title&#34;: title,
+        &#34;alt_txt&#34;: upload_file.get(&#34;alt_txt&#34;),
+        &#34;snippet_type&#34;: upload_file.get(&#34;snippet_type&#34;),
+    }
+
+
+def _upload_file_via_v2_url(
+    url: str,
+    data: bytes,
+    timeout: int,
+    logger: logging.Logger,
+    proxy: Optional[str] = None,
+    ssl: Optional[SSLContext] = None,
+) -&gt; Dict[str, Any]:
+    opener: Optional[OpenerDirector] = None
+    if proxy is not None:
+        if isinstance(proxy, str):
+            opener = urllib.request.build_opener(
+                ProxyHandler({&#34;http&#34;: proxy, &#34;https&#34;: proxy}),
+                HTTPSHandler(context=ssl),
+            )
+        else:
+            raise SlackRequestError(f&#34;Invalid proxy detected: {proxy} must be a str value&#34;)
+
+    resp: Optional[HTTPResponse] = None
+    req: Request = Request(method=&#34;POST&#34;, url=url, data=data, headers={})
+    if opener:
+        resp = opener.open(req, timeout=timeout)
+    else:
+        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+
+    charset = resp.headers.get_content_charset() or &#34;utf-8&#34;
+    body: str = resp.read().decode(charset)  # read the response body here
+    if logger.level &lt;= logging.DEBUG:
+        message = (
+            &#34;Received the following response - &#34;,
+            f&#34;status: {resp.status}, &#34; f&#34;headers: {dict(resp.headers)}, &#34; f&#34;body: {body}&#34;,
+        )
+        logger.debug(message)
+
+    return {&#34;status&#34;: resp.status, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
+
+
+def _validate_for_legacy_client(
+    response: Union[&#34;SlackResponse&#34;, Future],  # noqa: F821
+) -&gt; None:  # type: ignore
+    # Only LegacyWebClient can return this union type
+    if isinstance(response, Future):
+        message = (
+            &#34;Sorry! This SDK does not support run_async=True option for this API calls. &#34;
+            &#34;Please migrate to AsyncWebClient, which is a new and stable way to go.&#34;
+        )
+        raise SlackRequestError(message)
+
+
+def _attach_full_file_metadata(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: Union[&#34;SlackResponse&#34;, Future],  # noqa: F821
+) -&gt; None:
+    _validate_for_legacy_client(completion)
+    _completion: Any = completion  # just for satisfying pytype
+    # fetch all the file metadata for backward-compatibility
+    for f in _completion.get(&#34;files&#34;):
+        full_info = client.files_info(
+            file=f.get(&#34;id&#34;),
+            token=token_as_arg,
+        )
+        f.update(full_info[&#34;file&#34;])
+    if len(_completion.get(&#34;files&#34;)) == 1:
+        _completion.data[&#34;file&#34;] = _completion.get(&#34;files&#34;)[0]
+
+
+async def _attach_full_file_metadata_async(
+    client,  # type: ignore
+    token_as_arg: Optional[str],
+    completion: &#34;SlackResponse&#34;,  # noqa: F821
+) -&gt; None:
+    # fetch all the file metadata for backward-compatibility
+    for f in completion.get(&#34;files&#34;):
+        full_info = await client.files_info(
+            file=f.get(&#34;id&#34;),
+            token=token_as_arg,
+        )
+        f.update(full_info[&#34;file&#34;])
+    if len(completion.get(&#34;files&#34;)) == 1:
+        completion.data[&#34;file&#34;] = completion.get(&#34;files&#34;)[0]
+
+
+def _print_files_upload_v2_suggestion():
+    message = (
+        &#34;client.files_upload() may cause some issues like timeouts for relatively large files. &#34;
+        &#34;Our latest recommendation is to use client.files_upload_v2(), &#34;
+        &#34;which is mostly compatible and much stabler, instead.&#34;
+    )
+    warnings.warn(message)</code></pre>
 </details>
 </section>
 <section>
