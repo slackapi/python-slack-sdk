@@ -364,6 +364,9 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -&gt; Dict[str, Optiona
     if data is None:
         raise SlackRequestError(f&#34;File content not found for filename: {filename}, title: {title}&#34;)
 
+    if title is None:
+        title = filename  # to be consistent with files.upload API
+
     return {
         &#34;filename&#34;: filename,
         &#34;data&#34;: data,
