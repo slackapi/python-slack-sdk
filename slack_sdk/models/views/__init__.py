@@ -206,7 +206,7 @@ class ViewStateValue(JsonObject):
         selected_conversation: Optional[str] = None,
         selected_channel: Optional[str] = None,
         selected_user: Optional[str] = None,
-        selected_option: Optional[str] = None,
+        selected_option: Optional[Union[dict, Option]] = None,
         selected_conversations: Optional[Sequence[str]] = None,
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
