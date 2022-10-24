@@ -317,12 +317,12 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
         else:
             data = file
     elif content is not None:
-        if isinstance(content, str):  # filepath
+        if isinstance(content, str):
             data = content.encode("utf-8")
         elif isinstance(content, bytes):
             data = content
         else:
-            raise SlackRequestError("The given content must be either filepath as str or data as bytes")
+            raise SlackRequestError("content for file upload must be 'str' (UTF-8 encoded) or 'bytes' (for data)")
 
     filename = upload_file.get("filename")
     if upload_file.get("filename") is None and isinstance(file, str):
