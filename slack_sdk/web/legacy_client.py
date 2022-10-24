@@ -3017,6 +3017,7 @@ class LegacyWebClient(LegacyBaseClient):
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
+        full_file_info_required: bool = True,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """This wrapper method provides an easy way to upload files using the following endpoints:
@@ -3115,11 +3116,12 @@ class LegacyWebClient(LegacyBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        _attach_full_file_metadata(
-            client=self,
-            token_as_arg=kwargs.get("token"),
-            completion=completion,
-        )
+        if full_file_info_required is True:
+            _attach_full_file_metadata(
+                client=self,
+                token_as_arg=kwargs.get("token"),
+                completion=completion,
+            )
         return completion
 
     def files_getUploadURLExternal(
