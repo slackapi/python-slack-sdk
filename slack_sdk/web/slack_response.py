@@ -1,10 +1,12 @@
 """A Python module for interacting and consuming responses from Slack."""
 
 import logging
-from typing import Union
+from typing import Any, Optional, TypeVar, Union, overload
 
 import slack_sdk.errors as e
 from .internal_utils import _next_cursor_is_present
+
+T = TypeVar("T")
 
 
 class SlackResponse:
@@ -155,6 +157,14 @@ class SlackResponse:
             return self.validate()
         else:
             raise StopIteration
+
+    @overload
+    def get(self, key: str, default: None = None) -> Optional[Any]:
+        ...
+
+    @overload
+    def get(self, key: str, default: T) -> T:
+        ...
 
     def get(self, key, default=None):
         """Retrieves any key from the response data.
