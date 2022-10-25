@@ -3006,7 +3006,7 @@ class WebClient(BaseClient):
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
-        full_file_info_required: bool = True,
+        request_file_info: bool = True,
         **kwargs,
     ) -> SlackResponse:
         """This wrapper method provides an easy way to upload files using the following endpoints:
@@ -3105,7 +3105,7 @@ class WebClient(BaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if full_file_info_required is True:
+        if request_file_info is True:
             _attach_full_file_metadata(
                 client=self,
                 token_as_arg=kwargs.get("token"),
