@@ -3015,6 +3015,7 @@ class AsyncWebClient(AsyncBaseClient):
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
+        request_file_info: bool = True,
         **kwargs,
     ) -> AsyncSlackResponse:
         """This wrapper method provides an easy way to upload files using the following endpoints:
@@ -3113,11 +3114,12 @@ class AsyncWebClient(AsyncBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        await _attach_full_file_metadata_async(
-            client=self,
-            token_as_arg=kwargs.get("token"),
-            completion=completion,
-        )
+        if request_file_info is True:
+            await _attach_full_file_metadata_async(
+                client=self,
+                token_as_arg=kwargs.get("token"),
+                completion=completion,
+            )
         return completion
 
     async def files_getUploadURLExternal(
