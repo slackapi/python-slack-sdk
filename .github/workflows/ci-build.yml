@@ -12,10 +12,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        # TODO: 3.10 in GH Actions is not yet stable enough for us
-        # You may often encounter "Error: Process completed with exit code 250."
-        # python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
-        python-version: ['3.6', '3.7', '3.8', '3.9']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
     env:
       PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       #CI_UNSTABLE_TESTS_SKIP_ENABLED: '1'
