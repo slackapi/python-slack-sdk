@@ -56,7 +56,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
         # (the default recursion depth in Python is 1500)
         # Since the default buffer size is set to 1024, and it's enough to prevent the same situation happening,
         # we believe that the same situation never happens in the production usage.
-        sys.setrecursionlimit(4000)
+        sys.setrecursionlimit(10000)
 
         t = Thread(target=start_socket_mode_server(self, 3011))
         t.daemon = True
