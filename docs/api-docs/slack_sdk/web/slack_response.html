@@ -30,10 +30,12 @@
 <pre><code class="python">&#34;&#34;&#34;A Python module for interacting and consuming responses from Slack.&#34;&#34;&#34;
 
 import logging
-from typing import Union
+from typing import Any, Optional, TypeVar, Union, overload
 
 import slack_sdk.errors as e
 from .internal_utils import _next_cursor_is_present
+
+T = TypeVar(&#34;T&#34;)
 
 
 class SlackResponse:
@@ -184,6 +186,14 @@ class SlackResponse:
             return self.validate()
         else:
             raise StopIteration
+
+    @overload
+    def get(self, key: str, default: None = None) -&gt; Optional[Any]:
+        ...
+
+    @overload
+    def get(self, key: str, default: T) -&gt; T:
+        ...
 
     def get(self, key, default=None):
         &#34;&#34;&#34;Retrieves any key from the response data.
@@ -422,6 +432,14 @@ removed at anytime.</p></div>
             return self.validate()
         else:
             raise StopIteration
+
+    @overload
+    def get(self, key: str, default: None = None) -&gt; Optional[Any]:
+        ...
+
+    @overload
+    def get(self, key: str, default: T) -&gt; T:
+        ...
 
     def get(self, key, default=None):
         &#34;&#34;&#34;Retrieves any key from the response data.

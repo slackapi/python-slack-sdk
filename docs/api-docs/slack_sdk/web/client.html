@@ -3035,6 +3035,7 @@ class WebClient(BaseClient):
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
+        request_file_info: bool = True,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
@@ -3133,11 +3134,12 @@ class WebClient(BaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        _attach_full_file_metadata(
-            client=self,
-            token_as_arg=kwargs.get(&#34;token&#34;),
-            completion=completion,
-        )
+        if request_file_info is True:
+            _attach_full_file_metadata(
+                client=self,
+                token_as_arg=kwargs.get(&#34;token&#34;),
+                completion=completion,
+            )
         return completion
 
     def files_getUploadURLExternal(
@@ -7673,6 +7675,7 @@ removed at anytime.</p></div>
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
+        request_file_info: bool = True,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
@@ -7771,11 +7774,12 @@ removed at anytime.</p></div>
             thread_ts=thread_ts,
             **kwargs,
         )
-        _attach_full_file_metadata(
-            client=self,
-            token_as_arg=kwargs.get(&#34;token&#34;),
-            completion=completion,
-        )
+        if request_file_info is True:
+            _attach_full_file_metadata(
+                client=self,
+                token_as_arg=kwargs.get(&#34;token&#34;),
+                completion=completion,
+            )
         return completion
 
     def files_getUploadURLExternal(
@@ -14002,7 +14006,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.files_upload_v2"><code class="name flex">
-<span>def <span class="ident">files_upload_v2</span></span>(<span>self, *, filename: Optional[str] = None, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Union[str, bytes, ForwardRef(None)] = None, title: Optional[str] = None, alt_txt: Optional[str] = None, snippet_type: Optional[str] = None, file_uploads: Optional[List[Dict[str, Any]]] = None, channel: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">files_upload_v2</span></span>(<span>self, *, filename: Optional[str] = None, file: Union[str, bytes, io.IOBase, ForwardRef(None)] = None, content: Union[str, bytes, ForwardRef(None)] = None, title: Optional[str] = None, alt_txt: Optional[str] = None, snippet_type: Optional[str] = None, file_uploads: Optional[List[Dict[str, Any]]] = None, channel: Optional[str] = None, initial_comment: Optional[str] = None, thread_ts: Optional[str] = None, request_file_info: bool = True, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>This wrapper method provides an easy way to upload files using the following endpoints:</p>
@@ -14037,6 +14041,7 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
     channel: Optional[str] = None,
     initial_comment: Optional[str] = None,
     thread_ts: Optional[str] = None,
+    request_file_info: bool = True,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;This wrapper method provides an easy way to upload files using the following endpoints:
@@ -14135,11 +14140,12 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
         thread_ts=thread_ts,
         **kwargs,
     )
-    _attach_full_file_metadata(
-        client=self,
-        token_as_arg=kwargs.get(&#34;token&#34;),
-        completion=completion,
-    )
+    if request_file_info is True:
+        _attach_full_file_metadata(
+            client=self,
+            token_as_arg=kwargs.get(&#34;token&#34;),
+            completion=completion,
+        )
     return completion</code></pre>
 </details>
 </dd>

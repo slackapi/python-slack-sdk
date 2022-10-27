@@ -234,7 +234,7 @@ class ViewStateValue(JsonObject):
         selected_conversation: Optional[str] = None,
         selected_channel: Optional[str] = None,
         selected_user: Optional[str] = None,
-        selected_option: Optional[str] = None,
+        selected_option: Optional[Union[dict, Option]] = None,
         selected_conversations: Optional[Sequence[str]] = None,
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
@@ -539,7 +539,7 @@ class ViewStateValue(JsonObject):
 </dd>
 <dt id="slack_sdk.models.views.ViewStateValue"><code class="flex name class">
 <span>class <span class="ident">ViewStateValue</span></span>
-<span>(</span><span>*, type: Optional[str] = None, value: Optional[str] = None, selected_date: Optional[str] = None, selected_time: Optional[str] = None, selected_conversation: Optional[str] = None, selected_channel: Optional[str] = None, selected_user: Optional[str] = None, selected_option: Optional[str] = None, selected_conversations: Optional[Sequence[str]] = None, selected_channels: Optional[Sequence[str]] = None, selected_users: Optional[Sequence[str]] = None, selected_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None)</span>
+<span>(</span><span>*, type: Optional[str] = None, value: Optional[str] = None, selected_date: Optional[str] = None, selected_time: Optional[str] = None, selected_conversation: Optional[str] = None, selected_channel: Optional[str] = None, selected_user: Optional[str] = None, selected_option: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>, ForwardRef(None)] = None, selected_conversations: Optional[Sequence[str]] = None, selected_channels: Optional[Sequence[str]] = None, selected_users: Optional[Sequence[str]] = None, selected_options: Optional[Sequence[Union[dict, <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p></div>
@@ -573,7 +573,7 @@ class ViewStateValue(JsonObject):
         selected_conversation: Optional[str] = None,
         selected_channel: Optional[str] = None,
         selected_user: Optional[str] = None,
-        selected_option: Optional[str] = None,
+        selected_option: Optional[Union[dict, Option]] = None,
         selected_conversations: Optional[Sequence[str]] = None,
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
