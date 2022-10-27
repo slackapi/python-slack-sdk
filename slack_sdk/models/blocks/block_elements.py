@@ -3,7 +3,7 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import List, Optional, Set, Union, Sequence
+from typing import Iterator, List, Optional, Set, Type, Union, Sequence
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -64,63 +64,30 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
             if "type" in block_element:
                 d = copy.copy(block_element)
                 t = d.pop("type")
+                for subclass in cls._get_sub_block_elements():
+                    if t == subclass.type:
+                        return subclass(**d)
                 if t == PlainTextObject.type:  # skipcq: PYL-R1705
                     return PlainTextObject(**d)
                 elif t == MarkdownTextObject.type:
                     return MarkdownTextObject(**d)
-                elif t == ImageElement.type:
-                    return ImageElement(**d)
-                elif t == ButtonElement.type:
-                    return ButtonElement(**d)
-                elif t == StaticSelectElement.type:
-                    return StaticSelectElement(**d)
-                elif t == StaticMultiSelectElement.type:
-                    return StaticMultiSelectElement(**d)
-                elif t == ExternalDataSelectElement.type:
-                    return ExternalDataSelectElement(**d)
-                elif t == ExternalDataMultiSelectElement.type:
-                    return ExternalDataMultiSelectElement(**d)
-                elif t == UserSelectElement.type:
-                    return UserSelectElement(**d)
-                elif t == UserMultiSelectElement.type:
-                    return UserMultiSelectElement(**d)
-                elif t == ConversationSelectElement.type:
-                    return ConversationSelectElement(**d)
-                elif t == ConversationMultiSelectElement.type:
-                    return ConversationMultiSelectElement(**d)
-                elif t == ChannelSelectElement.type:
-                    return ChannelSelectElement(**d)
-                elif t == ChannelMultiSelectElement.type:
-                    return ChannelMultiSelectElement(**d)
-                elif t == PlainTextInputElement.type:
-                    return PlainTextInputElement(**d)
-                elif t == RadioButtonsElement.type:
-                    return RadioButtonsElement(**d)
-                elif t == CheckboxesElement.type:
-                    return CheckboxesElement(**d)
-                elif t == OverflowMenuElement.type:
-                    return OverflowMenuElement(**d)
-                elif t == DatePickerElement.type:
-                    return DatePickerElement(**d)
-                elif t == TimePickerElement.type:
-                    return TimePickerElement(**d)
-                else:
-                    cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
-                    return None
-            else:
-                cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
-                return None
         elif isinstance(block_element, (TextObject, BlockElement)):
             return block_element
-        else:
-            cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
-            return None
+        cls.logger.warning(f"Unknown element detected and skipped ({block_element})")
+        return None
 
     @classmethod
     def parse_all(
         cls, block_elements: Sequence[Union[dict, "BlockElement", TextObject]]
     ) -> List[Union["BlockElement", TextObject]]:
         return [cls.parse(e) for e in block_elements or []]
+
+    @classmethod
+    def _get_sub_block_elements(cls: Type["BlockElement"]) -> Iterator[Type["BlockElement"]]:
+        for subclass in cls.__subclasses__():
+            if hasattr(subclass, "type"):
+                yield subclass
+            yield from subclass._get_sub_block_elements()
 
 
 # -------------------------------------------------
@@ -512,6 +479,63 @@ class TimePickerElement(InputInteractiveElement):
     @JsonValidator("initial_time attribute must be in format 'HH:mm'")
     def _validate_initial_time_valid(self) -> bool:
         return self.initial_time is None or re.match(r"([0-1][0-9]|2[0-3]):([0-5][0-9])", self.initial_time) is not None
+
+
+# -------------------------------------------------
+# DateTimePicker
+# -------------------------------------------------
+
+
+class DateTimePickerElement(InputInteractiveElement):
+    type = "datetimepicker"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"initial_date_time"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_date_time: Optional[int] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
+        **others: dict,
+    ):
+        """
+        An element that allows the selection of a time of day formatted as a UNIX timestamp.
+        On desktop clients, this time picker will take the form of a dropdown list and the
+        date picker will take the form of a dropdown calendar. Both options will have free-text
+        entry for precise choices. On mobile clients, the time picker and date
+        picker will use native UIs.
+        https://api.slack.com/reference/block-kit/block-elements#datetimepicker
+
+        Args:
+            action_id (required): An identifier for the action triggered when a time is selected. You can use this
+                when you receive an interaction payload to identify the source of the action. Should be unique among
+                all other action_ids in the containing block. Maximum length for this field is 255 characters.
+            initial_date_time: The initial date and time that is selected when the element is loaded, represented as
+                a UNUIX timestamp in seconds. This should be in the format of 10 digits, for example 1628633820
+                represents the date and time August 10th, 2021 at 03:17pm PST.
+                and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a time is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+        """
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_date_time = initial_date_time
+
+    @JsonValidator("initial_date_time attribute must be between 0 and 99999999 seconds")
+    def _validate_initial_date_time_valid(self) -> bool:
+        return self.initial_date_time is None or (0 <= self.initial_date_time <= 9999999999)
 
 
 # -------------------------------------------------
@@ -1308,7 +1332,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
-# Input Elements
+# Plain Text Input Element
 # -------------------------------------------------
 
 
@@ -1378,6 +1402,185 @@ class PlainTextInputElement(InputInteractiveElement):
         self.multiline = multiline
         self.min_length = min_length
         self.max_length = max_length
+        self.dispatch_action_config = dispatch_action_config
+
+
+# -------------------------------------------------
+# Email Input Element
+# -------------------------------------------------
+
+
+class EmailInputElement(InputInteractiveElement):
+    type = "email_text_input"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {
+                "initial_value",
+                "dispatch_action_config",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_value: Optional[str] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        """
+        https://api.slack.com/reference/block-kit/block-elements#email
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_value: The initial value in the email input when it is loaded.
+            dispatch_action_config:  dispatch configuration object that determines when during
+                text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown in the
+                email input. Maximum length for the text in this field is 150 characters.
+        """
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config
+
+
+# -------------------------------------------------
+# Url Input Element
+# -------------------------------------------------
+
+
+class UrlInputElement(InputInteractiveElement):
+    type = "url_text_input"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {
+                "initial_value",
+                "dispatch_action_config",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_value: Optional[str] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        """
+        A URL input element, similar to the Plain-text input element,
+        creates a single line field where a user can enter URL-encoded data.
+        https://api.slack.com/reference/block-kit/block-elements#url
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_value: The initial value in the URL input when it is loaded.
+            dispatch_action_config: A dispatch configuration object that determines when during text input
+                the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown in the URL input.
+                Maximum length for the text in this field is 150 characters.
+        """
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config
+
+
+# -------------------------------------------------
+# Number Input Element
+# -------------------------------------------------
+
+
+class NumberInputElement(InputInteractiveElement):
+    type = "number_input"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {
+                "initial_value",
+                "is_decimal_allowed",
+                "min_value",
+                "max_value",
+                "dispatch_action_config",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        is_decimal_allowed: Optional[bool] = None,
+        initial_value: Optional[str] = None,
+        min_value: Optional[str] = None,
+        max_value: Optional[str] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        """
+        https://api.slack.com/reference/block-kit/block-elements#number
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            is_decimal_allowed: Decimal numbers are allowed if is_decimal_allowed= true, set the value to false otherwise.
+            initial_value: The initial value in the number input when it is loaded.
+            min_value: The minimum value, cannot be greater than max_value.
+            max_value: The maximum value, cannot be less than min_value.
+            dispatch_action_config: A dispatch configuration object that determines when
+                during text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown
+                in the plain-text input. Maximum length for the text in this field is 150 characters.
+        """
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.is_decimal_allowed = is_decimal_allowed
+        self.min_value = min_value
+        self.max_value = max_value
         self.dispatch_action_config = dispatch_action_config
 
 

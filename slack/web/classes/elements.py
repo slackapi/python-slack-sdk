@@ -7,6 +7,7 @@ from slack_sdk.models.blocks import ConversationFilter  # noqa
 from slack_sdk.models.blocks import ConversationMultiSelectElement  # noqa
 from slack_sdk.models.blocks import ConversationSelectElement  # noqa
 from slack_sdk.models.blocks import DatePickerElement  # noqa
+from slack_sdk.models.blocks import DateTimePickerElement  # noqa
 from slack_sdk.models.blocks import ExternalDataMultiSelectElement  # noqa
 from slack_sdk.models.blocks import ExternalDataSelectElement  # noqa
 from slack_sdk.models.blocks import ImageElement  # noqa
@@ -15,6 +16,9 @@ from slack_sdk.models.blocks import InteractiveElement  # noqa
 from slack_sdk.models.blocks import LinkButtonElement  # noqa
 from slack_sdk.models.blocks import OverflowMenuElement  # noqa
 from slack_sdk.models.blocks import PlainTextInputElement  # noqa
+from slack_sdk.models.blocks import EmailInputElement  # noqa
+from slack_sdk.models.blocks import UrlInputElement  # noqa
+from slack_sdk.models.blocks import NumberInputElement  # noqa
 from slack_sdk.models.blocks import RadioButtonsElement  # noqa
 from slack_sdk.models.blocks import SelectElement  # noqa
 from slack_sdk.models.blocks import StaticMultiSelectElement  # noqa

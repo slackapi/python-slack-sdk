@@ -24,6 +24,7 @@ from .block_elements import ConversationMultiSelectElement
 from .block_elements import ConversationSelectElement
 from .block_elements import DatePickerElement
 from .block_elements import TimePickerElement
+from .block_elements import DateTimePickerElement
 from .block_elements import ExternalDataMultiSelectElement
 from .block_elements import ExternalDataSelectElement
 from .block_elements import ImageElement
@@ -32,6 +33,9 @@ from .block_elements import InteractiveElement
 from .block_elements import LinkButtonElement
 from .block_elements import OverflowMenuElement
 from .block_elements import PlainTextInputElement
+from .block_elements import EmailInputElement
+from .block_elements import UrlInputElement
+from .block_elements import NumberInputElement
 from .block_elements import RadioButtonsElement
 from .block_elements import SelectElement
 from .block_elements import StaticMultiSelectElement
@@ -69,6 +73,7 @@ __all__ = [
     "ConversationSelectElement",
     "DatePickerElement",
     "TimePickerElement",
+    "DateTimePickerElement",
     "ExternalDataMultiSelectElement",
     "ExternalDataSelectElement",
     "ImageElement",
@@ -77,6 +82,9 @@ __all__ = [
     "LinkButtonElement",
     "OverflowMenuElement",
     "PlainTextInputElement",
+    "EmailInputElement",
+    "UrlInputElement",
+    "NumberInputElement",
     "RadioButtonsElement",
     "SelectElement",
     "StaticMultiSelectElement",
