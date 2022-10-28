@@ -515,7 +515,7 @@ class DateTimePickerElement(InputInteractiveElement):
                 when you receive an interaction payload to identify the source of the action. Should be unique among
                 all other action_ids in the containing block. Maximum length for this field is 255 characters.
             initial_date_time: The initial date and time that is selected when the element is loaded, represented as
-                a UNUIX timestamp in seconds. This should be in the format of 10 digits, for example 1628633820
+                a UNIX timestamp in seconds. This should be in the format of 10 digits, for example 1628633820
                 represents the date and time August 10th, 2021 at 03:17pm PST.
                 and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
             confirm: A confirm object that defines an optional confirmation dialog
@@ -1558,7 +1558,8 @@ class NumberInputElement(InputInteractiveElement):
                 You can use this when you receive a view_submission payload to identify the value of the input element.
                 Should be unique among all other action_ids in the containing block.
                 Maximum length for this field is 255 characters.
-            is_decimal_allowed: Decimal numbers are allowed if is_decimal_allowed= true, set the value to false otherwise.
+            is_decimal_allowed (required): Decimal numbers are allowed if is_decimal_allowed= true, set the value to
+                false otherwise.
             initial_value: The initial value in the number input when it is loaded.
             min_value: The minimum value, cannot be greater than max_value.
             max_value: The maximum value, cannot be less than min_value.
@@ -1577,10 +1578,10 @@ class NumberInputElement(InputInteractiveElement):
         )
         show_unknown_key_warning(self, others)
 
-        self.initial_value = initial_value
+        self.initial_value = str(initial_value) if initial_value else None
         self.is_decimal_allowed = is_decimal_allowed
-        self.min_value = min_value
-        self.max_value = max_value
+        self.min_value = str(min_value) if min_value else None
+        self.max_value = str(max_value) if max_value else None
         self.dispatch_action_config = dispatch_action_config
 
 

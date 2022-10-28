@@ -66,11 +66,7 @@ class BlockElementTests(unittest.TestCase):
 
 class InteractiveElementTests(unittest.TestCase):
     def test_with_interactive_element(self):
-        input = {
-            "type": "plain_text_input",
-            "action_id": "plain_input",
-            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
-        }
+        input = {"type": "plain_text_input", "action_id": "plain_input"}
         # Any properties should not be lost
         self.assertDictEqual(input, InteractiveElement(**input).to_dict())
 
@@ -83,12 +79,6 @@ class InteractiveElementTests(unittest.TestCase):
         }
         # Any properties should not be lost
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
-
-
-class InteractiveElementTests(unittest.TestCase):
-    def test_action_id(self):
-        with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(text="click me!", action_id=STRING_301_CHARS, value="clickable button").to_dict()
 
 
 class ButtonElementTests(unittest.TestCase):
@@ -185,6 +175,10 @@ class ButtonElementTests(unittest.TestCase):
                 value="click_me",
                 accessibility_label=("1234567890" * 8),
             ).to_dict()
+
+    def test_action_id(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ButtonElement(text="click me!", action_id=STRING_301_CHARS, value="clickable button").to_dict()
 
 
 class LinkButtonElementTests(unittest.TestCase):
