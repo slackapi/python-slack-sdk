@@ -8,6 +8,9 @@ RTM Client
 Real Time Messaging (RTM)
 ---------------------------------------
 
+.. parsed-literal ::
+   **rtm.start method has been deprecated for apps created after Nov 30th, 2021.** See details `here <https://api.slack.com/changelog/2021-10-rtm-start-to-stop>`_
+
 The `Real Time Messaging (RTM) API`_ is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
 
 If you prefer events to be pushed to your app, we recommend using the HTTP-based `Events API <https://api.slack.com/events-api>`_ along with `Socket Mode <https://api.slack.com/socket-mode>`_ instead. The Events API contains some events that aren't supported in the RTM API (like `app_home_opened event <https://api.slack.com/events/app_home_opened>`_), and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the `Python Slack Events Adaptor <https://github.com/slackapi/python-slack-events-api>`_.
@@ -50,7 +53,7 @@ Note that the import here is not ``from slack_sdk.rtm import RTMClient`` but ``f
                 thread_ts=thread_ts
             )
 
-    rtm.start()
+    rtm.connect()
 
 
 **Connecting to the RTM API (v1 client)**
@@ -80,40 +83,14 @@ Below is a code snippet that uses the legacy version of ``RTMClient``. For new a
 
     slack_token = os.environ["SLACK_BOT_TOKEN"]
     rtm_client = RTMClient(token=slack_token)
-    rtm_client.start()
+    rtm_client.connect()
 
 **rtm.start vs rtm.connect (v1 client)**
 
+.. parsed-literal ::
+   **rtm.start method has been deprecated for apps created after Nov 30th, 2021.** See details `here <https://api.slack.com/changelog/2021-10-rtm-start-to-stop>`_
+
 By default, the RTM client uses ``rtm.connect`` to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.
-
-If you'd rather use ``rtm.start`` to establish the connection, which provides more information about the conversations and users on the team, you can set the ``connect_method`` option to ``rtm.start`` when instantiating the RTM Client. Note that on larger teams, use of ``rtm.start`` can be slow and unreliable.
-
-.. code-block:: python
-
-    import os
-    from slack_sdk.rtm import RTMClient
-
-    @RTMClient.run_on(event="message")
-    def say_hello(**payload):
-        data = payload['data']
-        web_client = payload['web_client']
-        if 'text' in data and 'Hello' in data['text']:
-            channel_id = data['channel']
-            thread_ts = data['ts']
-            user = data['user'] # This is not username but user ID (the format is either U*** or W***)
-
-            web_client.chat_postMessage(
-                channel=channel_id,
-                text=f"Hi <@{user}>!",
-                thread_ts=thread_ts
-            )
-
-    slack_token = os.environ["SLACK_BOT_TOKEN"]
-    rtm_client = RTMClient(
-        token=slack_token,
-        connect_method='rtm.start'
-    )
-    rtm_client.start()
 
 Read the `rtm.connect docs <https://api.slack.com/methods/rtm.connect>`_ and the `rtm.start docs <https://api.slack.com/methods/rtm.start>`_ for more details. Also, note that ``slack.rtm_v2.RTMClient`` does not support ``rtm.start``.
 
