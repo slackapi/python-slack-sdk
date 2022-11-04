@@ -28,6 +28,12 @@ from slack_sdk.models.blocks import (
     InteractiveElement,
     PlainTextObject,
 )
+from slack_sdk.models.blocks.block_elements import (
+    DateTimePickerElement,
+    EmailInputElement,
+    NumberInputElement,
+    UrlInputElement,
+)
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
 
@@ -60,11 +66,7 @@ class BlockElementTests(unittest.TestCase):
 
 class InteractiveElementTests(unittest.TestCase):
     def test_with_interactive_element(self):
-        input = {
-            "type": "plain_text_input",
-            "action_id": "plain_input",
-            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
-        }
+        input = {"type": "plain_text_input", "action_id": "plain_input"}
         # Any properties should not be lost
         self.assertDictEqual(input, InteractiveElement(**input).to_dict())
 
@@ -77,12 +79,6 @@ class InteractiveElementTests(unittest.TestCase):
         }
         # Any properties should not be lost
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
-
-
-class InteractiveElementTests(unittest.TestCase):
-    def test_action_id(self):
-        with self.assertRaises(SlackObjectFormationError):
-            ButtonElement(text="click me!", action_id=STRING_301_CHARS, value="clickable button").to_dict()
 
 
 class ButtonElementTests(unittest.TestCase):
@@ -179,6 +175,10 @@ class ButtonElementTests(unittest.TestCase):
                 value="click_me",
                 accessibility_label=("1234567890" * 8),
             ).to_dict()
+
+    def test_action_id(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ButtonElement(text="click me!", action_id=STRING_301_CHARS, value="clickable button").to_dict()
 
 
 class LinkButtonElementTests(unittest.TestCase):
@@ -394,6 +394,46 @@ class TimePickerElementTests(unittest.TestCase):
             "timezone": "America/Los_Angeles",
         }
         self.assertDictEqual(input, TimePickerElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# DateTimePicker
+# -------------------------------------------------
+
+
+class DateTimePickerElementTests(unittest.TestCase):
+    def test_document(self):
+        input = {"type": "datetimepicker", "action_id": "datetimepicker123", "initial_date_time": 1628633820}
+        self.assertDictEqual(input, DateTimePickerElement(**input).to_dict())
+
+    def test_json(self):
+        for initial_date_time in [0, 9999999999]:
+            self.assertDictEqual(
+                {
+                    "action_id": "datetimepicker123",
+                    "initial_date_time": initial_date_time,
+                    "type": "datetimepicker",
+                },
+                DateTimePickerElement(
+                    action_id="datetimepicker123",
+                    initial_date_time=initial_date_time,
+                ).to_dict(),
+            )
+
+        with self.assertRaises(SlackObjectFormationError):
+            DateTimePickerElement(
+                action_id="datetimepicker123",
+                initial_date_time=10000000000,
+            ).to_dict()
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "datetimepicker",
+            "action_id": "datetimepicker123",
+            "initial_date_time": 1628633820,
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, DateTimePickerElement(**input).to_dict())
 
 
 # -------------------------------------------------
@@ -1009,6 +1049,132 @@ class PlainTextInputElementTests(unittest.TestCase):
             "focus_on_load": True,
         }
         self.assertDictEqual(input, PlainTextInputElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# Email Input Element
+# -------------------------------------------------
+
+
+class EmailInputElementTests(unittest.TestCase):
+    def test_element(self):
+        input = {
+            "type": "email_text_input",
+            "action_id": "email_text_input-action",
+            "placeholder": {"type": "plain_text", "text": "Enter some email"},
+        }
+        self.assertDictEqual(input, EmailInputElement(**input).to_dict())
+
+    def test_initial_value(self):
+        input = {
+            "type": "email_text_input",
+            "action_id": "email_text_input-action",
+            "initial_value": "bill@slack.com",
+            "placeholder": {"type": "plain_text", "text": "Enter some email"},
+        }
+        self.assertDictEqual(input, EmailInputElement(**input).to_dict())
+
+    def test_no_action_id(self):
+        input = {
+            "type": "email_text_input",
+            "dispatch_action_config": {"trigger_actions_on": ["on_character_entered"]},
+        }
+        self.assertDictEqual(input, EmailInputElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "email_text_input",
+            "action_id": "email_text_input-action",
+            "placeholder": {"type": "plain_text", "text": "Enter some email"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, EmailInputElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# Url Input Element
+# -------------------------------------------------
+
+
+class UrlInputElementTests(unittest.TestCase):
+    def test_element(self):
+        input = {
+            "type": "url_text_input",
+            "action_id": "url_text_input-action",
+            "placeholder": {"type": "plain_text", "text": "Enter some url"},
+        }
+        self.assertDictEqual(input, UrlInputElement(**input).to_dict())
+
+    def test_initial_value(self):
+        input = {
+            "type": "url_text_input",
+            "action_id": "url_text_input-action",
+            "initial_value": "https://bill.test.com",
+            "placeholder": {"type": "plain_text", "text": "Enter some url"},
+        }
+        self.assertDictEqual(input, UrlInputElement(**input).to_dict())
+
+    def test_no_action_id(self):
+        input = {
+            "type": "url_text_input",
+            "dispatch_action_config": {"trigger_actions_on": ["on_character_entered"]},
+        }
+        self.assertDictEqual(input, UrlInputElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "url_text_input",
+            "action_id": "url_text_input-action",
+            "placeholder": {"type": "plain_text", "text": "Enter some url"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, UrlInputElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# Number Input Element
+# -------------------------------------------------
+
+
+class NumberInputElementTests(unittest.TestCase):
+    def test_element(self):
+        input = {
+            "type": "number_input",
+            "action_id": "number_input-action",
+            "is_decimal_allowed": False,
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+        }
+        self.assertDictEqual(input, NumberInputElement(**input).to_dict())
+
+    def test_element_full(self):
+        input = {
+            "type": "number_input",
+            "action_id": "number_input-action",
+            "is_decimal_allowed": False,
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+            "initial_value": "7",
+            "min_value": "1",
+            "max_value": "10",
+        }
+        self.assertDictEqual(input, NumberInputElement(**input).to_dict())
+
+    def test_dispatch_action_config(self):
+        input = {
+            "type": "number_input",
+            "is_decimal_allowed": True,
+            "dispatch_action_config": {"trigger_actions_on": ["on_character_entered"]},
+        }
+        self.assertDictEqual(input, NumberInputElement(**input).to_dict())
+
+    def test_focus_on_load(self):
+        input = {
+            "type": "number_input",
+            "action_id": "number_input-action",
+            "is_decimal_allowed": False,
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+            "focus_on_load": True,
+        }
+        self.assertDictEqual(input, NumberInputElement(**input).to_dict())
 
 
 # -------------------------------------------------
