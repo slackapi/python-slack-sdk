@@ -1541,10 +1541,10 @@ class NumberInputElement(InputInteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        is_decimal_allowed: Optional[bool] = None,
-        initial_value: Optional[str] = None,
-        min_value: Optional[str] = None,
-        max_value: Optional[str] = None,
+        is_decimal_allowed: Optional[bool] = False,
+        initial_value: Optional[Union[int, float, str]] = None,
+        min_value: Optional[Union[int, float, str]] = None,
+        max_value: Optional[Union[int, float, str]] = None,
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
@@ -1578,10 +1578,10 @@ class NumberInputElement(InputInteractiveElement):
         )
         show_unknown_key_warning(self, others)
 
-        self.initial_value = str(initial_value) if initial_value else None
+        self.initial_value = str(initial_value) if initial_value is not None else None
         self.is_decimal_allowed = is_decimal_allowed
-        self.min_value = str(min_value) if min_value else None
-        self.max_value = str(max_value) if max_value else None
+        self.min_value = str(min_value) if min_value is not None else None
+        self.max_value = str(max_value) if max_value is not None else None
         self.dispatch_action_config = dispatch_action_config
 
 
