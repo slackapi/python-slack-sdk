@@ -1,6 +1,7 @@
 import logging
 import os
 import unittest
+from io import BytesIO
 
 import pytest
 
@@ -44,12 +45,12 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
         )
         self.assertIsNotNone(upload)
 
-    def test_uploading_text_files_legacy(self):
-        client = self.legacy_client
-        file = __file__
+    def test_uploading_bytes_io(self):
+        client = self.sync_client
         upload = client.files_upload_v2(
             channels=self.channel_id,
-            file=file,
+            file=BytesIO(bytearray("This is a test!", "utf-8")),
+            filename="test.txt",
             title="Test code",
         )
         self.assertIsNotNone(upload)
