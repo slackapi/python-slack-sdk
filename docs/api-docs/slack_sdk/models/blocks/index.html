@@ -59,6 +59,7 @@ from .block_elements import ConversationMultiSelectElement
 from .block_elements import ConversationSelectElement
 from .block_elements import DatePickerElement
 from .block_elements import TimePickerElement
+from .block_elements import DateTimePickerElement
 from .block_elements import ExternalDataMultiSelectElement
 from .block_elements import ExternalDataSelectElement
 from .block_elements import ImageElement
@@ -67,6 +68,9 @@ from .block_elements import InteractiveElement
 from .block_elements import LinkButtonElement
 from .block_elements import OverflowMenuElement
 from .block_elements import PlainTextInputElement
+from .block_elements import EmailInputElement
+from .block_elements import UrlInputElement
+from .block_elements import NumberInputElement
 from .block_elements import RadioButtonsElement
 from .block_elements import SelectElement
 from .block_elements import StaticMultiSelectElement
@@ -104,6 +108,7 @@ __all__ = [
     &#34;ConversationSelectElement&#34;,
     &#34;DatePickerElement&#34;,
     &#34;TimePickerElement&#34;,
+    &#34;DateTimePickerElement&#34;,
     &#34;ExternalDataMultiSelectElement&#34;,
     &#34;ExternalDataSelectElement&#34;,
     &#34;ImageElement&#34;,
@@ -112,6 +117,9 @@ __all__ = [
     &#34;LinkButtonElement&#34;,
     &#34;OverflowMenuElement&#34;,
     &#34;PlainTextInputElement&#34;,
+    &#34;EmailInputElement&#34;,
+    &#34;UrlInputElement&#34;,
+    &#34;NumberInputElement&#34;,
     &#34;RadioButtonsElement&#34;,
     &#34;SelectElement&#34;,
     &#34;StaticMultiSelectElement&#34;,
@@ -522,63 +530,30 @@ def subtype(self) -&gt; Optional[str]:
             if &#34;type&#34; in block_element:
                 d = copy.copy(block_element)
                 t = d.pop(&#34;type&#34;)
+                for subclass in cls._get_sub_block_elements():
+                    if t == subclass.type:  # type: ignore
+                        return subclass(**d)
                 if t == PlainTextObject.type:  # skipcq: PYL-R1705
                     return PlainTextObject(**d)
                 elif t == MarkdownTextObject.type:
                     return MarkdownTextObject(**d)
-                elif t == ImageElement.type:
-                    return ImageElement(**d)
-                elif t == ButtonElement.type:
-                    return ButtonElement(**d)
-                elif t == StaticSelectElement.type:
-                    return StaticSelectElement(**d)
-                elif t == StaticMultiSelectElement.type:
-                    return StaticMultiSelectElement(**d)
-                elif t == ExternalDataSelectElement.type:
-                    return ExternalDataSelectElement(**d)
-                elif t == ExternalDataMultiSelectElement.type:
-                    return ExternalDataMultiSelectElement(**d)
-                elif t == UserSelectElement.type:
-                    return UserSelectElement(**d)
-                elif t == UserMultiSelectElement.type:
-                    return UserMultiSelectElement(**d)
-                elif t == ConversationSelectElement.type:
-                    return ConversationSelectElement(**d)
-                elif t == ConversationMultiSelectElement.type:
-                    return ConversationMultiSelectElement(**d)
-                elif t == ChannelSelectElement.type:
-                    return ChannelSelectElement(**d)
-                elif t == ChannelMultiSelectElement.type:
-                    return ChannelMultiSelectElement(**d)
-                elif t == PlainTextInputElement.type:
-                    return PlainTextInputElement(**d)
-                elif t == RadioButtonsElement.type:
-                    return RadioButtonsElement(**d)
-                elif t == CheckboxesElement.type:
-                    return CheckboxesElement(**d)
-                elif t == OverflowMenuElement.type:
-                    return OverflowMenuElement(**d)
-                elif t == DatePickerElement.type:
-                    return DatePickerElement(**d)
-                elif t == TimePickerElement.type:
-                    return TimePickerElement(**d)
-                else:
-                    cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-                    return None
-            else:
-                cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-                return None
         elif isinstance(block_element, (TextObject, BlockElement)):
             return block_element
-        else:
-            cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-            return None
+        cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
+        return None
 
     @classmethod
     def parse_all(
         cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
     ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]</code></pre>
+        return [cls.parse(e) for e in block_elements or []]
+
+    @classmethod
+    def _get_sub_block_elements(cls: Type[&#34;BlockElement&#34;]) -&gt; Iterator[Type[&#34;BlockElement&#34;]]:
+        for subclass in cls.__subclasses__():
+            if hasattr(subclass, &#34;type&#34;):
+                yield subclass
+            yield from subclass._get_sub_block_elements()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -616,57 +591,17 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
         if &#34;type&#34; in block_element:
             d = copy.copy(block_element)
             t = d.pop(&#34;type&#34;)
+            for subclass in cls._get_sub_block_elements():
+                if t == subclass.type:  # type: ignore
+                    return subclass(**d)
             if t == PlainTextObject.type:  # skipcq: PYL-R1705
                 return PlainTextObject(**d)
             elif t == MarkdownTextObject.type:
                 return MarkdownTextObject(**d)
-            elif t == ImageElement.type:
-                return ImageElement(**d)
-            elif t == ButtonElement.type:
-                return ButtonElement(**d)
-            elif t == StaticSelectElement.type:
-                return StaticSelectElement(**d)
-            elif t == StaticMultiSelectElement.type:
-                return StaticMultiSelectElement(**d)
-            elif t == ExternalDataSelectElement.type:
-                return ExternalDataSelectElement(**d)
-            elif t == ExternalDataMultiSelectElement.type:
-                return ExternalDataMultiSelectElement(**d)
-            elif t == UserSelectElement.type:
-                return UserSelectElement(**d)
-            elif t == UserMultiSelectElement.type:
-                return UserMultiSelectElement(**d)
-            elif t == ConversationSelectElement.type:
-                return ConversationSelectElement(**d)
-            elif t == ConversationMultiSelectElement.type:
-                return ConversationMultiSelectElement(**d)
-            elif t == ChannelSelectElement.type:
-                return ChannelSelectElement(**d)
-            elif t == ChannelMultiSelectElement.type:
-                return ChannelMultiSelectElement(**d)
-            elif t == PlainTextInputElement.type:
-                return PlainTextInputElement(**d)
-            elif t == RadioButtonsElement.type:
-                return RadioButtonsElement(**d)
-            elif t == CheckboxesElement.type:
-                return CheckboxesElement(**d)
-            elif t == OverflowMenuElement.type:
-                return OverflowMenuElement(**d)
-            elif t == DatePickerElement.type:
-                return DatePickerElement(**d)
-            elif t == TimePickerElement.type:
-                return TimePickerElement(**d)
-            else:
-                cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-                return None
-        else:
-            cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-            return None
     elif isinstance(block_element, (TextObject, BlockElement)):
         return block_element
-    else:
-        cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-        return None</code></pre>
+    cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
+    return None</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
@@ -2164,6 +2099,123 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.DateTimePickerElement"><code class="flex name class">
+<span>class <span class="ident">DateTimePickerElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, initial_date_time: Optional[int] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>An element that allows the selection of a time of day formatted as a UNIX timestamp.
+On desktop clients, this time picker will take the form of a dropdown list and the
+date picker will take the form of a dropdown calendar. Both options will have free-text
+entry for precise choices. On mobile clients, the time picker and date
+picker will use native UIs.
+<a href="https://api.slack.com/reference/block-kit/block-elements#datetimepicker">https://api.slack.com/reference/block-kit/block-elements#datetimepicker</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for the action triggered when a time is selected. You can use this
+when you receive an interaction payload to identify the source of the action. Should be unique among
+all other action_ids in the containing block. Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>initial_date_time</code></strong></dt>
+<dd>The initial date and time that is selected when the element is loaded, represented as
+a UNIX timestamp in seconds. This should be in the format of 10 digits, for example 1628633820
+represents the date and time August 10th, 2021 at 03:17pm PST.
+and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.</dd>
+<dt><strong><code>confirm</code></strong></dt>
+<dd>A confirm object that defines an optional confirmation dialog
+that appears after a time is selected.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DateTimePickerElement(InputInteractiveElement):
+    type = &#34;datetimepicker&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;initial_date_time&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_date_time: Optional[int] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        focus_on_load: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        An element that allows the selection of a time of day formatted as a UNIX timestamp.
+        On desktop clients, this time picker will take the form of a dropdown list and the
+        date picker will take the form of a dropdown calendar. Both options will have free-text
+        entry for precise choices. On mobile clients, the time picker and date
+        picker will use native UIs.
+        https://api.slack.com/reference/block-kit/block-elements#datetimepicker
+
+        Args:
+            action_id (required): An identifier for the action triggered when a time is selected. You can use this
+                when you receive an interaction payload to identify the source of the action. Should be unique among
+                all other action_ids in the containing block. Maximum length for this field is 255 characters.
+            initial_date_time: The initial date and time that is selected when the element is loaded, represented as
+                a UNIX timestamp in seconds. This should be in the format of 10 digits, for example 1628633820
+                represents the date and time August 10th, 2021 at 03:17pm PST.
+                and mm is minutes with leading zeros (00 to 59), for example 22:25 for 10:25pm.
+            confirm: A confirm object that defines an optional confirmation dialog
+                that appears after a time is selected.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            confirm=ConfirmObject.parse(confirm),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_date_time = initial_date_time
+
+    @JsonValidator(&#34;initial_date_time attribute must be between 0 and 99999999 seconds&#34;)
+    def _validate_initial_date_time_valid(self) -&gt; bool:
+        return self.initial_date_time is None or (0 &lt;= self.initial_date_time &lt;= 9999999999)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.DateTimePickerElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.DividerBlock"><code class="flex name class">
 <span>class <span class="ident">DividerBlock</span></span>
 <span>(</span><span>*, block_id: Optional[str] = None, **others: dict)</span>
@@ -2234,6 +2286,117 @@ If a message is updated, use a new block_id.</dd>
 <li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.EmailInputElement"><code class="flex name class">
+<span>class <span class="ident">EmailInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, initial_value: Optional[str] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p><a href="https://api.slack.com/reference/block-kit/block-elements#email">https://api.slack.com/reference/block-kit/block-elements#email</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for the input value when the parent modal is submitted.
+You can use this when you receive a view_submission payload to identify the value of the input element.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>initial_value</code></strong></dt>
+<dd>The initial value in the email input when it is loaded.</dd>
+<dt><strong><code>dispatch_action_config</code></strong></dt>
+<dd>dispatch configuration object that determines when during
+text input the element returns a block_actions payload.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A plain_text only text object that defines the placeholder text shown in the
+email input. Maximum length for the text in this field is 150 characters.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EmailInputElement(InputInteractiveElement):
+    type = &#34;email_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_value: Optional[str] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        https://api.slack.com/reference/block-kit/block-elements#email
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_value: The initial value in the email input when it is loaded.
+            dispatch_action_config:  dispatch configuration object that determines when during
+                text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown in the
+                email input. Maximum length for the text in this field is 150 characters.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.EmailInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3180,14 +3343,18 @@ def attributes(self) -&gt; Set[str]:
 <li><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement">ConversationMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ConversationSelectElement">ConversationSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.DatePickerElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.DatePickerElement">DatePickerElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.DateTimePickerElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.DateTimePickerElement">DateTimePickerElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.EmailInputElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.EmailInputElement">EmailInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement">ExternalDataMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.NumberInputElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.NumberInputElement">NumberInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.SelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.SelectElement">SelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement">StaticMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.StaticSelectElement">StaticSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.TimePickerElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.TimePickerElement">TimePickerElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.UrlInputElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.UrlInputElement">UrlInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.UserMultiSelectElement">UserMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.UserSelectElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.UserSelectElement">UserSelectElement</a></li>
 </ul>
@@ -3608,6 +3775,137 @@ def attributes(self) -&gt; Set[str]:
 <li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.NumberInputElement"><code class="flex name class">
+<span>class <span class="ident">NumberInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, is_decimal_allowed: Optional[bool] = False, initial_value: Union[int, float, str, ForwardRef(None)] = None, min_value: Union[int, float, str, ForwardRef(None)] = None, max_value: Union[int, float, str, ForwardRef(None)] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p><a href="https://api.slack.com/reference/block-kit/block-elements#number">https://api.slack.com/reference/block-kit/block-elements#number</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for the input value when the parent modal is submitted.
+You can use this when you receive a view_submission payload to identify the value of the input element.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>is_decimal_allowed</code></strong> :&ensp;<code>required</code></dt>
+<dd>Decimal numbers are allowed if is_decimal_allowed= true, set the value to
+false otherwise.</dd>
+<dt><strong><code>initial_value</code></strong></dt>
+<dd>The initial value in the number input when it is loaded.</dd>
+<dt><strong><code>min_value</code></strong></dt>
+<dd>The minimum value, cannot be greater than max_value.</dd>
+<dt><strong><code>max_value</code></strong></dt>
+<dd>The maximum value, cannot be less than min_value.</dd>
+<dt><strong><code>dispatch_action_config</code></strong></dt>
+<dd>A dispatch configuration object that determines when
+during text input the element returns a block_actions payload.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A plain_text only text object that defines the placeholder text shown
+in the plain-text input. Maximum length for the text in this field is 150 characters.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class NumberInputElement(InputInteractiveElement):
+    type = &#34;number_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;is_decimal_allowed&#34;,
+                &#34;min_value&#34;,
+                &#34;max_value&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        is_decimal_allowed: Optional[bool] = False,
+        initial_value: Optional[Union[int, float, str]] = None,
+        min_value: Optional[Union[int, float, str]] = None,
+        max_value: Optional[Union[int, float, str]] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        https://api.slack.com/reference/block-kit/block-elements#number
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            is_decimal_allowed (required): Decimal numbers are allowed if is_decimal_allowed= true, set the value to
+                false otherwise.
+            initial_value: The initial value in the number input when it is loaded.
+            min_value: The minimum value, cannot be greater than max_value.
+            max_value: The maximum value, cannot be less than min_value.
+            dispatch_action_config: A dispatch configuration object that determines when
+                during text input the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown
+                in the plain-text input. Maximum length for the text in this field is 150 characters.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = str(initial_value) if initial_value is not None else None
+        self.is_decimal_allowed = is_decimal_allowed
+        self.min_value = str(min_value) if min_value is not None else None
+        self.max_value = str(max_value) if max_value is not None else None
+        self.dispatch_action_config = dispatch_action_config</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.NumberInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5480,6 +5778,121 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.UrlInputElement"><code class="flex name class">
+<span>class <span class="ident">UrlInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, initial_value: Optional[str] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>A URL input element, similar to the Plain-text input element,
+creates a single line field where a user can enter URL-encoded data.
+<a href="https://api.slack.com/reference/block-kit/block-elements#url">https://api.slack.com/reference/block-kit/block-elements#url</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for the input value when the parent modal is submitted.
+You can use this when you receive a view_submission payload to identify the value of the input element.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>initial_value</code></strong></dt>
+<dd>The initial value in the URL input when it is loaded.</dd>
+<dt><strong><code>dispatch_action_config</code></strong></dt>
+<dd>A dispatch configuration object that determines when during text input
+the element returns a block_actions payload.</dd>
+<dt><strong><code>focus_on_load</code></strong></dt>
+<dd>Indicates whether the element will be set to auto focus within the view object.
+Only one element can be set to true. Defaults to false.</dd>
+<dt><strong><code>placeholder</code></strong></dt>
+<dd>A plain_text only text object that defines the placeholder text shown in the URL input.
+Maximum length for the text in this field is 150 characters.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UrlInputElement(InputInteractiveElement):
+    type = &#34;url_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        initial_value: Optional[str] = None,
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        A URL input element, similar to the Plain-text input element,
+        creates a single line field where a user can enter URL-encoded data.
+        https://api.slack.com/reference/block-kit/block-elements#url
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            initial_value: The initial value in the URL input when it is loaded.
+            dispatch_action_config: A dispatch configuration object that determines when during text input
+                the element returns a block_actions payload.
+            focus_on_load: Indicates whether the element will be set to auto focus within the view object.
+                Only one element can be set to true. Defaults to false.
+            placeholder: A plain_text only text object that defines the placeholder text shown in the URL input.
+                Maximum length for the text in this field is 150 characters.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.UrlInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.UserMultiSelectElement"><code class="flex name class">
 <span>class <span class="ident">UserMultiSelectElement</span></span>
 <span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_users: Optional[Sequence[str]] = None, confirm: Union[dict, <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>, ForwardRef(None)] = None, max_selected_items: Optional[int] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
@@ -6041,9 +6454,21 @@ def attributes(self) -&gt; Set[str]:
 </ul>
 </li>
 <li>
+<h4><code><a title="slack_sdk.models.blocks.DateTimePickerElement" href="#slack_sdk.models.blocks.DateTimePickerElement">DateTimePickerElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.DateTimePickerElement.type" href="#slack_sdk.models.blocks.DateTimePickerElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.models.blocks.DividerBlock" href="#slack_sdk.models.blocks.DividerBlock">DividerBlock</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.DividerBlock.type" href="#slack_sdk.models.blocks.DividerBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.EmailInputElement" href="#slack_sdk.models.blocks.EmailInputElement">EmailInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.EmailInputElement.type" href="#slack_sdk.models.blocks.EmailInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
@@ -6127,6 +6552,12 @@ def attributes(self) -&gt; Set[str]:
 <li><code><a title="slack_sdk.models.blocks.MarkdownTextObject.from_link" href="#slack_sdk.models.blocks.MarkdownTextObject.from_link">from_link</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.MarkdownTextObject.from_str" href="#slack_sdk.models.blocks.MarkdownTextObject.from_str">from_str</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.MarkdownTextObject.type" href="#slack_sdk.models.blocks.MarkdownTextObject.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.NumberInputElement" href="#slack_sdk.models.blocks.NumberInputElement">NumberInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.NumberInputElement.type" href="#slack_sdk.models.blocks.NumberInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
@@ -6223,6 +6654,12 @@ def attributes(self) -&gt; Set[str]:
 <h4><code><a title="slack_sdk.models.blocks.TimePickerElement" href="#slack_sdk.models.blocks.TimePickerElement">TimePickerElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.TimePickerElement.type" href="#slack_sdk.models.blocks.TimePickerElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.UrlInputElement" href="#slack_sdk.models.blocks.UrlInputElement">UrlInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.UrlInputElement.type" href="#slack_sdk.models.blocks.UrlInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>

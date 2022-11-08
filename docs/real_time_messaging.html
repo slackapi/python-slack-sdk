@@ -215,7 +215,7 @@
 <span id="real-time-messaging"></span><h1>RTM Client<a class="headerlink" href="#rtm-client" title="Permalink to this heading">¶</a></h1>
 <section id="real-time-messaging-rtm">
 <h2>Real Time Messaging (RTM)<a class="headerlink" href="#real-time-messaging-rtm" title="Permalink to this heading">¶</a></h2>
-<pre class="literal-block"><strong>rtm.start method deprecation after Nov 30th, 2021.</strong> see details <a class="reference external" href="https://api.slack.com/changelog/2021-10-rtm-start-to-stop">here</a></pre>
+<pre class="literal-block"><strong>rtm.start method has been deprecated for apps created after Nov 30th, 2021.</strong> See details <a class="reference external" href="https://api.slack.com/changelog/2021-10-rtm-start-to-stop">here</a></pre>
 <p>The <a class="reference external" href="https://api.slack.com/rtm">Real Time Messaging (RTM) API</a> is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.</p>
 <p>If you prefer events to be pushed to your app, we recommend using the HTTP-based <a class="reference external" href="https://api.slack.com/events-api">Events API</a> along with <a class="reference external" href="https://api.slack.com/socket-mode">Socket Mode</a> instead. The Events API contains some events that aren’t supported in the RTM API (like <a class="reference external" href="https://api.slack.com/events/app_home_opened">app_home_opened event</a>), and it supports most of the event types in the RTM API. If you’d like to use the Events API, you can use the <a class="reference external" href="https://github.com/slackapi/python-slack-events-api">Python Slack Events Adaptor</a>.</p>
 <p>The RTMClient allows apps to communicate with the Slack Platform’s RTM API.</p>
@@ -275,7 +275,7 @@
 </pre></div>
 </div>
 <p><strong>rtm.start vs rtm.connect (v1 client)</strong></p>
-<pre class="literal-block"><strong>rtm.start method deprecation after Nov 30th, 2021.</strong> see details <a class="reference external" href="https://api.slack.com/changelog/2021-10-rtm-start-to-stop">here</a></pre>
+<pre class="literal-block"><strong>rtm.start method has been deprecated for apps created after Nov 30th, 2021.</strong> See details <a class="reference external" href="https://api.slack.com/changelog/2021-10-rtm-start-to-stop">here</a></pre>
 <p>By default, the RTM client uses <code class="docutils literal notranslate"><span class="pre">rtm.connect</span></code> to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.</p>
 <p>Read the <a class="reference external" href="https://api.slack.com/methods/rtm.connect">rtm.connect docs</a> and the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> for more details. Also, note that <code class="docutils literal notranslate"><span class="pre">slack.rtm_v2.RTMClient</span></code> does not support <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code>.</p>
 <p><strong>RTM Events</strong></p>

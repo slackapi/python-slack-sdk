@@ -35,6 +35,7 @@ import urllib
 import warnings
 from asyncio import Future
 from http.client import HTTPResponse
+from io import IOBase
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
@@ -342,8 +343,14 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -&gt; Dict[str, Optiona
         if isinstance(file, str):  # filepath
             with open(file.encode(&#34;utf-8&#34;, &#34;ignore&#34;), &#34;rb&#34;) as readable:
                 data = readable.read()
-        else:
+        elif isinstance(file, bytes):
             data = file
+        elif isinstance(file, IOBase):
+            data = file.read()
+            if isinstance(data, str):
+                data = data.encode()
+        else:
+            raise SlackRequestError(&#34;file parameter must be any of filepath, bytes, and io.IOBase&#34;)
     elif content is not None:
         if isinstance(content, str):
             data = content.encode(&#34;utf-8&#34;)
