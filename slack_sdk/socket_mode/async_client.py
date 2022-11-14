@@ -24,6 +24,7 @@ class AsyncBaseSocketModeClient:
     auto_reconnect_enabled: bool
     trace_enabled: bool
     closed: bool
+    auto_acknowledge_messages: bool
     connect_operation_lock: Lock
 
     message_queue: Queue
@@ -99,10 +100,19 @@ class AsyncBaseSocketModeClient:
 
     async def enqueue_message(self, message: str):
         await self.message_queue.put(message)
+        if self.auto_acknowledge_messages:
+            await self.auto_acknowledge_message(raw_message=message)
         if self.logger.level <= logging.DEBUG:
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
             self.logger.debug(f"A new message enqueued (current queue size: {queue_size}, session: {session_id})")
+
+    async def auto_acknowledge_message(self, raw_message: str):
+        if raw_message.startswith("{"):
+            message = json.loads(raw_message)
+            if message.envelope_id:
+                response = SocketModeResponse(envelope_id=message.envelope_id)
+                await self.send_socket_mode_response(response)
 
     async def process_messages(self):
         session_id = await self.session_id()

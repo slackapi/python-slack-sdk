@@ -143,6 +143,8 @@ class SocketModeClient(BaseSocketModeClient):
         self.on_error_listeners = on_error_listeners or []
         self.on_close_listeners = on_close_listeners or []
 
+        self.auto_acknowledge_messages = False
+
     def session_id(self) -> Optional[str]:
         if self.current_session is not None:
             return self.current_session.session_id

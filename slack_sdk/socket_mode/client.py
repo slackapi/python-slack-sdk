@@ -42,6 +42,7 @@ class BaseSocketModeClient:
 
     closed: bool
     connect_operation_lock: Lock
+    auto_acknowledge_messages: bool
 
     def issue_new_wss_url(self) -> str:
         try:
@@ -95,8 +96,17 @@ class BaseSocketModeClient:
 
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
+        if self.auto_acknowledge_messages:
+            await self.auto_acknowledge_message(raw_message=message)
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
+
+    async def auto_acknowledge_message(self, raw_message: str):
+        if raw_message.startswith("{"):
+            message = json.loads(raw_message)
+            if message.envelope_id:
+                response = SocketModeResponse(envelope_id=message.envelope_id)
+                self.send_socket_mode_response(response)
 
     def process_message(self):
         try:
