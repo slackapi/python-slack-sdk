@@ -97,11 +97,11 @@ class BaseSocketModeClient:
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
         if self.auto_acknowledge_messages:
-            await self.auto_acknowledge_message(raw_message=message)
+            self.auto_acknowledge_message(raw_message=message)
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
 
-    async def auto_acknowledge_message(self, raw_message: str):
+    def auto_acknowledge_message(self, raw_message: str):
         if raw_message.startswith("{"):
             message = json.loads(raw_message)
             if message.envelope_id:

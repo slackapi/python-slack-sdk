@@ -60,6 +60,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     default_auto_reconnect_enabled: bool
     closed: bool
     connect_operation_lock: Lock
+    auto_acknowledge_messages: bool
 
     def __init__(
         self,
@@ -69,6 +70,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 10,
         trace_enabled: bool = False,
+        auto_acknowledge_messages: bool = False,
     ):
         """Socket Mode client
 
@@ -79,6 +81,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             auto_reconnect_enabled: True if automatic reconnection is enabled (default: True)
             ping_interval: interval for ping-pong with Slack servers (seconds)
             trace_enabled: True if more verbose logs to see what's happening under the hood
+            auto_acknowledge_messages: True if messages should automatically be acknowledged
         """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
@@ -95,6 +98,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.socket_mode_request_listeners = []
         self.current_session = None
         self.current_session_monitor = None
+        self.auto_acknowledge_messages = auto_acknowledge_messages
 
         self.message_receiver = None
         self.message_processor = asyncio.ensure_future(self.process_messages())

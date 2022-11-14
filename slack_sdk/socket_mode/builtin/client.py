@@ -60,6 +60,8 @@ class SocketModeClient(BaseSocketModeClient):
 
     connect_operation_lock: Lock
 
+    auto_acknowledge_messages: bool
+
     on_message_listeners: List[Callable[[str], None]]
     on_error_listeners: List[Callable[[Exception], None]]
     on_close_listeners: List[Callable[[int, Optional[str]], None]]
@@ -81,6 +83,7 @@ class SocketModeClient(BaseSocketModeClient):
         on_message_listeners: Optional[List[Callable[[str], None]]] = None,
         on_error_listeners: Optional[List[Callable[[Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None,
+        auto_acknowledge_messages: bool = False,
     ):
         """Socket Mode client
 
@@ -100,6 +103,7 @@ class SocketModeClient(BaseSocketModeClient):
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
             on_close_listeners: listener functions for on_close
+            auto_acknowledge_messages: True if messages should be acknowledged before they are queued (default: False)
         """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)
@@ -143,7 +147,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.on_error_listeners = on_error_listeners or []
         self.on_close_listeners = on_close_listeners or []
 
-        self.auto_acknowledge_messages = False
+        self.auto_acknowledge_messages = auto_acknowledge_messages
 
     def session_id(self) -> Optional[str]:
         if self.current_session is not None:

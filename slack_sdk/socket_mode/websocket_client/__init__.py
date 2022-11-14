@@ -58,6 +58,8 @@ class SocketModeClient(BaseSocketModeClient):
     close: bool
     connect_operation_lock: Lock
 
+    auto_acknowledge_messages: bool
+
     on_open_listeners: List[Callable[[WebSocketApp], None]]
     on_message_listeners: List[Callable[[WebSocketApp, str], None]]
     on_error_listeners: List[Callable[[WebSocketApp, Exception], None]]
@@ -76,6 +78,7 @@ class SocketModeClient(BaseSocketModeClient):
         http_proxy_port: Optional[int] = None,
         http_proxy_auth: Optional[Tuple[str, str]] = None,
         proxy_type: Optional[str] = None,
+        auto_acknowledge_messages: bool = False,
         on_open_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
         on_message_listeners: Optional[List[Callable[[WebSocketApp, str], None]]] = None,
         on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
@@ -94,6 +97,7 @@ class SocketModeClient(BaseSocketModeClient):
             http_proxy_port: the HTTP proxy port
             http_proxy_auth: the HTTP proxy username & password
             proxy_type: the HTTP proxy type
+            auto_acknowledge_messages: True if messages should automatically be acknowledged
             on_open_listeners: listener functions for on_open
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
@@ -129,6 +133,8 @@ class SocketModeClient(BaseSocketModeClient):
         self.http_proxy_port = http_proxy_port
         self.http_proxy_auth = http_proxy_auth
         self.proxy_type = proxy_type
+
+        self.auto_acknowledge_messages = auto_acknowledge_messages
 
         self.on_open_listeners = on_open_listeners or []
         self.on_message_listeners = on_message_listeners or []

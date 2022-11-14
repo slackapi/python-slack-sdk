@@ -67,6 +67,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     on_error_listeners: List[Callable[[WSMessage], Awaitable[None]]]
     on_close_listeners: List[Callable[[WSMessage], Awaitable[None]]]
 
+    auto_acknowledge_messages: bool
+
     def __init__(
         self,
         app_token: str,
@@ -76,6 +78,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         auto_reconnect_enabled: bool = True,
         ping_interval: float = 5,
         trace_enabled: bool = False,
+        auto_acknowledge_messages: bool = False,
         on_message_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         on_error_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         on_close_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
@@ -90,6 +93,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             ping_interval: interval for ping-pong with Slack servers (seconds)
             trace_enabled: True if more verbose logs to see what's happening under the hood
             proxy: the HTTP proxy URL
+            auto_acknowledge_messages: True if messages should automatically be acknowledged
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
             on_close_listeners: listener functions for on_close
@@ -111,6 +115,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.ping_interval = ping_interval
         self.trace_enabled = trace_enabled
         self.last_ping_pong_time = None
+        self.auto_acknowledge_messages = auto_acknowledge_messages
 
         self.wss_uri = None
         self.message_queue = Queue()
