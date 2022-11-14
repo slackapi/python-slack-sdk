@@ -154,6 +154,8 @@ class SocketModeClient(BaseSocketModeClient):
         def on_message(ws: WebSocketApp, message: str):
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(f"on_message invoked: (message: {message})")
+            if self.auto_acknowledge_messages:
+                self.auto_acknowledge_message(raw_message=message)
             self.enqueue_message(message)
             for listener in self.on_message_listeners:
                 listener(ws, message)

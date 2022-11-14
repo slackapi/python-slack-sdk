@@ -96,8 +96,6 @@ class BaseSocketModeClient:
 
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
-        if self.auto_acknowledge_messages:
-            self.auto_acknowledge_message(raw_message=message)
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
 

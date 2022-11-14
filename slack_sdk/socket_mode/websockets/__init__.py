@@ -154,6 +154,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             message = message.decode("utf-8")
                         if self.logger.level <= logging.DEBUG:
                             self.logger.debug(f"Received message: {message}, session: {session_id}")
+                        if self.auto_acknowledge_messages:
+                            await self.auto_acknowledge_message(raw_message=message)
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:

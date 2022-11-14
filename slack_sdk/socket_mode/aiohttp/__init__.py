@@ -268,6 +268,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
                         if message.type == WSMsgType.TEXT:
                             message_data = message.data
+                            if self.auto_acknowledge_messages:
+                                await self.auto_acknowledge_message(raw_message=message)
                             await self.enqueue_message(message_data)
                             for listener in self.on_message_listeners:
                                 await listener(message)

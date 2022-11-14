@@ -100,8 +100,6 @@ class AsyncBaseSocketModeClient:
 
     async def enqueue_message(self, message: str):
         await self.message_queue.put(message)
-        if self.auto_acknowledge_messages:
-            await self.auto_acknowledge_message(raw_message=message)
         if self.logger.level <= logging.DEBUG:
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
