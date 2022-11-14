@@ -5,7 +5,7 @@
       http-equiv="Content-Type"
       content="text/html; charset=utf-8"
     />
-    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Basic Usage &mdash; slackclient (Legacy Python Slack SDK)</title>
 
@@ -245,12 +245,12 @@
           <!-- <div class="section-title">Basic Usage</div> -->
           <div class="card">
   <section id="basic-usage">
-<span id="web-api-examples"></span><h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<span id="web-api-examples"></span><h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">¶</a></h1>
 <p>The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations we provide out of the box.</p>
 <p>Access Slack’s API methods requires an OAuth token – see the <a class="reference external" href="auth">Tokens &amp; Authentication</a> section for more on how Slack uses OAuth tokens as well as best practices.</p>
 <p><a class="reference external" href="https://api.slack.com/methods">Each of these API methods</a> is fully documented on our developer site at api.slack.com</p>
 <section id="sending-a-message">
-<h2>Sending a message<a class="headerlink" href="#sending-a-message" title="Permalink to this headline">¶</a></h2>
+<h2>Sending a message<a class="headerlink" href="#sending-a-message" title="Permalink to this heading">¶</a></h2>
 <p>One of the primary uses of Slack is posting messages to a channel using the channel ID or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the <code class="docutils literal notranslate"><span class="pre">channel</span></code> parameter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -291,7 +291,7 @@ as sending a regular message, but with an additional <code class="docutils liter
 </section>
 <hr class="docutils" />
 <section id="formatting-with-block-kit">
-<h2>Formatting with Block Kit<a class="headerlink" href="#formatting-with-block-kit" title="Permalink to this headline">¶</a></h2>
+<h2>Formatting with Block Kit<a class="headerlink" href="#formatting-with-block-kit" title="Permalink to this heading">¶</a></h2>
 <p>Messages posted from apps can contain more than just text, though. They can include full user interfaces composed of <a class="reference external" href="https://api.slack.com/block-kit">blocks</a>.</p>
 <p>The chat.postMessage method takes an optional blocks argument that allows you to customize the layout of a message. Blocks specified in a single object literal, so just add additional keys for any optional argument.</p>
 <p>To send a message to a channel, use the channel’s ID. For IMs, use the user’s ID.</p>
@@ -335,7 +335,7 @@ as sending a regular message, but with an additional <code class="docutils liter
 </section>
 <hr class="docutils" />
 <section id="threading-messages">
-<h2>Threading Messages<a class="headerlink" href="#threading-messages" title="Permalink to this headline">¶</a></h2>
+<h2>Threading Messages<a class="headerlink" href="#threading-messages" title="Permalink to this heading">¶</a></h2>
 <p>Threaded messages are a way of grouping messages together to provide greater context. You can reply to a thread or start a new threaded conversation by simply passing the original message’s <code class="docutils literal notranslate"><span class="pre">ts</span></code> ID in the <code class="docutils literal notranslate"><span class="pre">thread_ts</span></code> attribute when posting a message. If you’re replying to a threaded message, you’ll pass the <cite>thread_ts</cite> ID of the message you’re replying to.</p>
 <p>A channel or DM conversation is a nearly linear timeline of messages exchanged between people, bots, and apps. When one of these messages is replied to, it becomes the parent of a thread. By default, threaded replies do not appear directly in the channel, instead relegated to a kind of forked timeline descending from the parent message.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_postMessage</span><span class="p">(</span>
@@ -363,7 +363,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="updating-a-message">
-<h2>Updating a message<a class="headerlink" href="#updating-a-message" title="Permalink to this headline">¶</a></h2>
+<h2>Updating a message<a class="headerlink" href="#updating-a-message" title="Permalink to this heading">¶</a></h2>
 <p>Let’s say you have a bot which posts the status of a request. When that request changes, you’ll want to update the message to reflect it’s state.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_update</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
@@ -376,7 +376,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="deleting-a-message">
-<h2>Deleting a message<a class="headerlink" href="#deleting-a-message" title="Permalink to this headline">¶</a></h2>
+<h2>Deleting a message<a class="headerlink" href="#deleting-a-message" title="Permalink to this heading">¶</a></h2>
 <p>Sometimes you need to delete things.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_delete</span><span class="p">(</span>
   <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXX&quot;</span><span class="p">,</span>
@@ -388,7 +388,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="opening-a-modal">
-<h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this headline">¶</a></h2>
+<h2>Opening a modal<a class="headerlink" href="#opening-a-modal" title="Permalink to this heading">¶</a></h2>
 <p>Modals allow you to collect data from users and display dynamic information in a focused surface.</p>
 <p>Modals use the same blocks that compose messages with the addition of an <cite>input</cite> block.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This module is available since v2.6</span>
@@ -474,7 +474,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="updating-and-pushing-modals">
-<h2>Updating and pushing modals<a class="headerlink" href="#updating-and-pushing-modals" title="Permalink to this headline">¶</a></h2>
+<h2>Updating and pushing modals<a class="headerlink" href="#updating-and-pushing-modals" title="Permalink to this heading">¶</a></h2>
 <p>You can dynamically update a view inside of a modal by calling <cite>views.update</cite> and passing the view ID returned in the previous <cite>views.open</cite> call.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">private_metadata</span> <span class="o">=</span> <span class="s2">&quot;any str data you want to store&quot;</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">views_update</span><span class="p">(</span>
@@ -519,7 +519,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="emoji-reactions">
-<h2>Emoji reactions<a class="headerlink" href="#emoji-reactions" title="Permalink to this headline">¶</a></h2>
+<h2>Emoji reactions<a class="headerlink" href="#emoji-reactions" title="Permalink to this heading">¶</a></h2>
 <p>You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement -— or just for fun.</p>
 <p>This method adds a reaction (emoji) to an item (<code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">comment</span></code>, <code class="docutils literal notranslate"><span class="pre">channel</span> <span class="pre">message</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span> <span class="pre">message</span></code>, or <code class="docutils literal notranslate"><span class="pre">direct</span> <span class="pre">message</span></code>). One of file, file_comment, or the combination of channel and timestamp must be specified.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">reactions_add</span><span class="p">(</span>
@@ -541,7 +541,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="listing-public-channels">
-<h2>Listing public channels<a class="headerlink" href="#listing-public-channels" title="Permalink to this headline">¶</a></h2>
+<h2>Listing public channels<a class="headerlink" href="#listing-public-channels" title="Permalink to this heading">¶</a></h2>
 <p>At some point, you’ll want to find out what channels are available to your app. This is how you get that list.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_list</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="s2">&quot;public_channel&quot;</span><span class="p">)</span>
 </pre></div>
@@ -554,7 +554,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="getting-a-channel-s-info">
-<h2>Getting a channel’s info<a class="headerlink" href="#getting-a-channel-s-info" title="Permalink to this headline">¶</a></h2>
+<h2>Getting a channel’s info<a class="headerlink" href="#getting-a-channel-s-info" title="Permalink to this heading">¶</a></h2>
 <p>Once you have the ID for a specific channel, you can fetch information about that channel.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_info</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">)</span>
 </pre></div>
@@ -563,7 +563,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="joining-a-channel">
-<h2>Joining a channel<a class="headerlink" href="#joining-a-channel" title="Permalink to this headline">¶</a></h2>
+<h2>Joining a channel<a class="headerlink" href="#joining-a-channel" title="Permalink to this heading">¶</a></h2>
 <p>Channels are the social hub of most Slack teams. Here’s how you hop into one:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_join</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXY&quot;</span><span class="p">)</span>
 </pre></div>
@@ -574,7 +574,7 @@ article for more information.</p>
 </section>
 <hr class="docutils" />
 <section id="leaving-a-channel">
-<h2>Leaving a channel<a class="headerlink" href="#leaving-a-channel" title="Permalink to this headline">¶</a></h2>
+<h2>Leaving a channel<a class="headerlink" href="#leaving-a-channel" title="Permalink to this heading">¶</a></h2>
 <p>Maybe you’ve finished up all the business you had in a channel, or maybe you
 joined one by accident. This is how you leave a channel.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">conversations_leave</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C0XXXXXXX&quot;</span><span class="p">)</span>
@@ -584,7 +584,7 @@ joined one by accident. This is how you leave a channel.</p>
 </section>
 <hr class="docutils" />
 <section id="listing-team-members">
-<h2>Listing team members<a class="headerlink" href="#listing-team-members" title="Permalink to this headline">¶</a></h2>
+<h2>Listing team members<a class="headerlink" href="#listing-team-members" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">users_list</span><span class="p">()</span>
 <span class="n">users</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;members&quot;</span><span class="p">]</span>
 <span class="n">user_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">u</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">users</span><span class="p">))</span>
@@ -594,10 +594,10 @@ joined one by accident. This is how you leave a channel.</p>
 </section>
 <hr class="docutils" />
 <section id="uploading-files">
-<h2>Uploading files<a class="headerlink" href="#uploading-files" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
-  <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
-  <span class="n">file</span><span class="o">=</span><span class="s2">&quot;files.pdf&quot;</span><span class="p">,</span>
+<h2>Uploading files<a class="headerlink" href="#uploading-files" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload_v2</span><span class="p">(</span>
+  <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
+  <span class="n">file</span><span class="o">=</span><span class="s2">&quot;./files.pdf&quot;</span><span class="p">,</span>
   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
 <span class="p">)</span>
 </pre></div>
@@ -606,7 +606,7 @@ joined one by accident. This is how you leave a channel.</p>
 </section>
 <hr class="docutils" />
 <section id="calling-any-api-methods">
-<h2>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this headline">¶</a></h2>
+<h2>Calling any API methods<a class="headerlink" href="#calling-any-api-methods" title="Permalink to this heading">¶</a></h2>
 <p>This library covers all the public endpoints as the methods in <code class="docutils literal notranslate"><span class="pre">WebClient</span></code>. That said, you may see a bit delay of the library release. When you’re in a hurry, you can directly use <code class="docutils literal notranslate"><span class="pre">api_call</span></code> method as below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">slack</span> <span class="kn">import</span> <span class="n">WebClient</span>
@@ -622,7 +622,7 @@ joined one by accident. This is how you leave a channel.</p>
 </section>
 <hr class="docutils" />
 <section id="web-api-rate-limits">
-<h2>Web API Rate Limits<a class="headerlink" href="#web-api-rate-limits" title="Permalink to this headline">¶</a></h2>
+<h2>Web API Rate Limits<a class="headerlink" href="#web-api-rate-limits" title="Permalink to this heading">¶</a></h2>
 <p>When posting messages to a channel, Slack allows applications to send no more than one message per channel per second. We allow bursts over that limit for short periods. However, if your app continues to exceed the limit over a longer period of time it will be rate limited. Different API methods have other rate limits – be sure to <a class="reference external" href="https://api.slack.com/docs/rate-limits">check the limits</a> and test that your application has a graceful fallback if it should hit those limits.</p>
 <p>If you go over these limits, Slack will start returning a HTTP 429 Too Many Requests error, a JSON object containing the number of calls you have been making, and a Retry-After header containing the number of seconds until you can retry.</p>
 <p>Here’s a very basic example of how one might deal with rate limited requests.</p>

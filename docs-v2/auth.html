@@ -5,7 +5,7 @@
       http-equiv="Content-Type"
       content="text/html; charset=utf-8"
     />
-    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Tokens &amp; Installation &mdash; slackclient (Legacy Python Slack SDK)</title>
 
@@ -245,9 +245,9 @@
           <!-- <div class="section-title">Tokens &amp; Installation</div> -->
           <div class="card">
   <section id="tokens-installation">
-<h1>Tokens &amp; Installation<a class="headerlink" href="#tokens-installation" title="Permalink to this headline">¶</a></h1>
+<h1>Tokens &amp; Installation<a class="headerlink" href="#tokens-installation" title="Permalink to this heading">¶</a></h1>
 <section id="keeping-tokens-safe">
-<span id="handling-tokens"></span><h2>Keeping tokens safe<a class="headerlink" href="#keeping-tokens-safe" title="Permalink to this headline">¶</a></h2>
+<span id="handling-tokens"></span><h2>Keeping tokens safe<a class="headerlink" href="#keeping-tokens-safe" title="Permalink to this heading">¶</a></h2>
 <p>The OAuth token you use to call the Slack API has access to the data on the workspace where it is installed. Depending on the scopes granted to the token, it potentially has the ability to read and write data. Treat these tokens just as you would a password – don’t publish them, don’t check them into source code, don’t share them with others.</p>
 <p>🚫Avoid this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">token</span> <span class="o">=</span> <span class="s1">&#39;xoxb-111-222-xxxxx&#39;</span>
@@ -265,7 +265,7 @@
 <p>For additional information, please see our <a class="reference external" href="https://api.slack.com/authentication/best-practices">Safely Storing Credentials</a> page.</p>
 </section>
 <section id="single-workspace-install">
-<h2>Single Workspace Install<a class="headerlink" href="#single-workspace-install" title="Permalink to this headline">¶</a></h2>
+<h2>Single Workspace Install<a class="headerlink" href="#single-workspace-install" title="Permalink to this heading">¶</a></h2>
 <p>If you’re building an application for a single Slack workspace, there’s no need to build out the entire OAuth flow.</p>
 <p>Once you’ve setup your features, click on the <strong>Install App to Team</strong> button found on the <strong>Install App</strong> page.
 If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to
@@ -273,7 +273,7 @@ your workspace for changes to take effect.</p>
 <p>For additional information, see the <a class="reference external" href="https://api.slack.com/start/overview#installing_distributing">Installing Apps</a> of our <a class="reference external" href="https://api.slack.com/start">Building Slack apps</a> page.</p>
 </section>
 <section id="multiple-workspace-install">
-<h2>Multiple Workspace Install<a class="headerlink" href="#multiple-workspace-install" title="Permalink to this headline">¶</a></h2>
+<h2>Multiple Workspace Install<a class="headerlink" href="#multiple-workspace-install" title="Permalink to this heading">¶</a></h2>
 <p>If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. You can read more about <a class="reference external" href="https://api.slack.com/authentication/oauth-v2">how Slack handles Oauth</a>.</p>
 <p>(The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we’ll use <a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>.)</p>
 <p>To configure your app for OAuth, you’ll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from your <a class="reference external" href="https://api.slack.com/apps">app’s configuration page</a>. The scopes are determined by the functionality of the app – every method you wish to access has a corresponding scope and your app will need to request that scope in order to be able to access the method. Review Slack’s <a class="reference external" href="https://api.slack.com/scopes">full list of OAuth scopes</a>.</p>
