@@ -5,6 +5,7 @@ import time
 
 import slack_sdk.errors as err
 from slack_sdk import WebClient
+from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.metadata import Metadata
 from tests.slack_sdk.web.mock_web_api_server import (
     setup_mock_web_api_server,
@@ -218,3 +219,13 @@ class TestWebClient(unittest.TestCase):
             ),
         )
         self.assertIsNone(scheduled.get("error"))
+
+    def test_user_auth_blocks(self):
+        client = self.client
+        new_message = client.chat_unfurl(
+            channel="C12345",
+            ts="1111.2222",
+            unfurls={},
+            user_auth_blocks=[DividerBlock(), DividerBlock()],
+        )
+        self.assertIsNone(new_message.get("error"))

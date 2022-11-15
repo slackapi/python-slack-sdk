@@ -1,9 +1,8 @@
 import re
 import unittest
 
-import aiohttp
-
 import slack_sdk.errors as err
+from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.web.mock_web_api_server import (
@@ -153,3 +152,15 @@ class TestAsyncWebClient(unittest.TestCase):
         client = AsyncWebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
         resp = await client.users_list(token="xoxb-users_list_pagination")
         self.assertIsNone(resp["error"])
+
+    @async_test
+    async def test_user_auth_blocks(self):
+        self.client.token = "xoxb-api_test"
+        client = self.client
+        new_message = await client.chat_unfurl(
+            channel="C12345",
+            ts="1111.2222",
+            unfurls={},
+            user_auth_blocks=[DividerBlock(), DividerBlock()],
+        )
+        self.assertIsNone(new_message.get("error"))
