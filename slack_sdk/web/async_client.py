@@ -2131,7 +2131,7 @@ class AsyncWebClient(AsyncBaseClient):
         ts: Optional[str] = None,
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
-        unfurls: Dict[str, Dict],
+        unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -2154,6 +2154,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "user_auth_url": user_auth_url,
             }
         )
+        _parse_web_class_objects(kwargs)  # for user_auth_blocks
         kwargs = _remove_none_values(kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return await self.api_call("chat.unfurl", json=kwargs)

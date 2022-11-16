@@ -5,7 +5,7 @@ from typing import Dict, Sequence, Union
 import pytest
 
 from slack_sdk.models.attachments import Attachment
-from slack_sdk.models.blocks import Block
+from slack_sdk.models.blocks import Block, DividerBlock
 from slack_sdk.web.internal_utils import _build_unexpected_body_error_message, _parse_web_class_objects
 
 
@@ -62,3 +62,13 @@ class TestInternalUtils(unittest.TestCase):
         _parse_web_class_objects(kwargs)
         assert isinstance(kwargs["attachments"], str)
         assert input == kwargs["attachments"]
+
+    def test_can_parse_user_auth_blocks(self):
+        kwargs = {
+            "channel": "C12345",
+            "ts": "1111.2222",
+            "unfurls": {},
+            "user_auth_blocks": [DividerBlock(), DividerBlock()],
+        }
+        _parse_web_class_objects(kwargs)
+        assert isinstance(kwargs["user_auth_blocks"][0], dict)

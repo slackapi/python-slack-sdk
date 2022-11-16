@@ -194,10 +194,11 @@ def _parse_web_class_objects(kwargs) -> None:
             return obj.to_dict()
         return obj
 
-    blocks = kwargs.get("blocks", None)
-    if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
-        dict_blocks = [to_dict(b) for b in blocks]
-        kwargs.update({"blocks": dict_blocks})
+    for blocks_name in ["blocks", "user_auth_blocks"]:
+        blocks = kwargs.get(blocks_name, None)
+        if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
+            dict_blocks = [to_dict(b) for b in blocks]
+            kwargs.update({blocks_name: dict_blocks})
 
     attachments = kwargs.get("attachments", None)
     if attachments is not None and isinstance(attachments, Sequence) and (not isinstance(attachments, str)):
