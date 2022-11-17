@@ -2160,7 +2160,7 @@ class AsyncWebClient(AsyncBaseClient):
         ts: Optional[str] = None,
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
-        unfurls: Dict[str, Dict],
+        unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -2183,6 +2183,7 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;user_auth_url&#34;: user_auth_url,
             }
         )
+        _parse_web_class_objects(kwargs)  # for user_auth_blocks
         kwargs = _remove_none_values(kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return await self.api_call(&#34;chat.unfurl&#34;, json=kwargs)
@@ -6800,7 +6801,7 @@ removed at anytime.</p></div>
         ts: Optional[str] = None,
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
-        unfurls: Dict[str, Dict],
+        unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -6823,6 +6824,7 @@ removed at anytime.</p></div>
                 &#34;user_auth_url&#34;: user_auth_url,
             }
         )
+        _parse_web_class_objects(kwargs)  # for user_auth_blocks
         kwargs = _remove_none_values(kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return await self.api_call(&#34;chat.unfurl&#34;, json=kwargs)
@@ -12602,7 +12604,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl"><code class="name flex">
-<span>async def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: Optional[str] = None, ts: Optional[str] = None, source: Optional[str] = None, unfurl_id: Optional[str] = None, unfurls: Dict[str, Dict], user_auth_blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_unfurl</span></span>(<span>self, *, channel: Optional[str] = None, ts: Optional[str] = None, source: Optional[str] = None, unfurl_id: Optional[str] = None, unfurls: Optional[Dict[str, Dict]] = None, user_auth_blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, user_auth_message: Optional[str] = None, user_auth_required: Optional[bool] = None, user_auth_url: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Provide custom unfurl behavior for user-posted URLs.
@@ -12618,7 +12620,7 @@ Each authorization represents an app installation that the event is visible to.
     ts: Optional[str] = None,
     source: Optional[str] = None,
     unfurl_id: Optional[str] = None,
-    unfurls: Dict[str, Dict],
+    unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
     user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     user_auth_message: Optional[str] = None,
     user_auth_required: Optional[bool] = None,
@@ -12641,6 +12643,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;user_auth_url&#34;: user_auth_url,
         }
     )
+    _parse_web_class_objects(kwargs)  # for user_auth_blocks
     kwargs = _remove_none_values(kwargs)
     # NOTE: intentionally using json over params for API methods using blocks/attachments
     return await self.api_call(&#34;chat.unfurl&#34;, json=kwargs)</code></pre>

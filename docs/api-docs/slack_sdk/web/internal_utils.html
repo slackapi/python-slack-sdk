@@ -222,10 +222,11 @@ def _parse_web_class_objects(kwargs) -&gt; None:
             return obj.to_dict()
         return obj
 
-    blocks = kwargs.get(&#34;blocks&#34;, None)
-    if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
-        dict_blocks = [to_dict(b) for b in blocks]
-        kwargs.update({&#34;blocks&#34;: dict_blocks})
+    for blocks_name in [&#34;blocks&#34;, &#34;user_auth_blocks&#34;]:
+        blocks = kwargs.get(blocks_name, None)
+        if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
+            dict_blocks = [to_dict(b) for b in blocks]
+            kwargs.update({blocks_name: dict_blocks})
 
     attachments = kwargs.get(&#34;attachments&#34;, None)
     if attachments is not None and isinstance(attachments, Sequence) and (not isinstance(attachments, str)):
