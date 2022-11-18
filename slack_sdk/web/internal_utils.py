@@ -269,9 +269,9 @@ def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[
     # Not all attachments have a fallback property; warn about this too!
     missing_fallback_message = (
         f"Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call"
-        f" - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a"
-        f" message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered"
-        f" a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details)."
+        " - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a"
+        " message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered"
+        " a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details)."
     )
 
     # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
