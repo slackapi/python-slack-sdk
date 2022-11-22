@@ -163,6 +163,19 @@ class FeatureEnablement:
         self.unknown_fields = kwargs
 
 
+class SharedWith:
+    channel_id: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        channel_id: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.channel_id = channel_id
+        self.unknown_fields = kwargs
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -234,6 +247,11 @@ class Details:
     enable_at_here: Optional[FeatureEnablement]
     enable_at_channel: Optional[FeatureEnablement]
     can_huddle: Optional[FeatureEnablement]
+    url_private: Optional[str]
+    shared_with: Optional[SharedWith]
+    initiated_by: Optional[str]
+    source_team: Optional[str]
+    destination_team: Optional[str]
 
     def __init__(
         self,
@@ -307,6 +325,11 @@ class Details:
         enable_at_here: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
         enable_at_channel: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
         can_huddle: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        url_private: Optional[str] = None,
+        shared_with: Optional[Union[Dict[str, Any], SharedWith]] = None,
+        initiated_by: Optional[str] = None,
+        source_team: Optional[str] = None,
+        destination_team: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -405,6 +428,13 @@ class Details:
             if can_huddle is None or isinstance(can_huddle, FeatureEnablement)
             else FeatureEnablement(**can_huddle)
         )
+        self.url_private = url_private
+        self.shared_with = (
+            shared_with if shared_with is None or isinstance(shared_with, SharedWith) else SharedWith(**shared_with)
+        )
+        self.initiated_by = initiated_by
+        self.source_team = source_team
+        self.destination_team = destination_team
 
 
 class Channel:
