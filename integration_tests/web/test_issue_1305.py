@@ -1,15 +1,9 @@
 import asyncio
-import logging
 import os
 import time
 import unittest
 
-from integration_tests.env_variable_names import (
-    SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN,
-    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID,
-    SLACK_SDK_TEST_GRID_TEAM_ID,
-    SLACK_SDK_TEST_GRID_USER_ID,
-)
+from integration_tests.env_variable_names import SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN
 from integration_tests.helpers import async_test
 from slack_sdk.web import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
