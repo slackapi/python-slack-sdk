@@ -353,6 +353,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             autoping=False,
             heartbeat=self.ping_interval,
             proxy=self.proxy,
+            ssl=self.web_client.ssl,
         )
         session_id: str = await self.session_id()
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
