@@ -794,6 +794,48 @@ class WebClient(BaseClient):
         kwargs.update({"channel_id": channel_id, "duration_days": duration_days})
         return self.api_call("admin.conversations.setCustomRetention", params=kwargs)
 
+    def admin_conversations_bulkArchive(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -> SlackResponse:
+        """Archive public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkArchive
+        """
+        kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call("admin.conversations.bulkArchive", params=kwargs)
+
+    def admin_conversations_bulkDelete(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -> SlackResponse:
+        """Delete public or private channels in bulk.
+        https://slack.com/api/admin.conversations.bulkDelete
+        """
+        kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call("admin.conversations.bulkDelete", params=kwargs)
+
+    def admin_conversations_bulkMove(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        target_team_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Move public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkMove
+        """
+        kwargs.update(
+            {
+                "target_team_id": target_team_id,
+                "channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids,
+            }
+        )
+        return self.api_call("admin.conversations.bulkMove", params=kwargs)
+
     def admin_emoji_add(
         self,
         *,

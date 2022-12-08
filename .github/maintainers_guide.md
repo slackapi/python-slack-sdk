@@ -54,6 +54,7 @@ work for this project again in the future, `cd` into this project directory and
 run `source env_3.9.6/bin/activate` again.
 
 The last step is to install this project's dependencies and run all unit tests; to do so, you can run
+
 ```bash
 $ ./scripts/run_validation.sh 
 ```
@@ -61,6 +62,7 @@ $ ./scripts/run_validation.sh
 Also check out [how
 we configure GitHub Actions to install dependencies for this project for use in
 our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/v3.17.0/.github/workflows/ci-build.yml#L28-L32).
+
 ## Tasks
 
 ### Testing (Unit Tests)
@@ -68,16 +70,19 @@ our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/v3
 When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests and formatting/linter with the below scripts.
 
 Run all the unit tests, code formatter, and code analyzer:
+
 ```bash
 $ ./scripts/run_validation.sh 
 ```
 
 Run all the unit tests (no formatter nor code analyzer):
+
 ```bash
 $ ./scripts/run_unit_tests.sh
 ```
 
 Run a specific unit test:
+
 ```bash
 $ ./scripts/run_unit_tests.sh tests/web/test_web_client.py
 ```
@@ -89,11 +94,13 @@ You can rely on GitHub Actions builds for running the tests on a variety of Pyth
 This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
 Run all integration tests:
+
 ```bash
 $ ./scripts/run_integration_tests.sh
 ```
 
 Run a specific integration test:
+
 ```bash
 $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 ```
@@ -104,12 +111,14 @@ The documentation is generated from the source and templates in the `docs-src` d
 gets committed to the repo in `docs` and also published to a GitHub Pages website.
 
 You can generate and preview the **SDK document pages** by running
+
 ```bash
 $ ./scripts/docs.sh
 $ open docs/index.html
 ```
 
 Similarly you can generate and preview the **API documents for `slack_sdk` package modules** by running
+
 ```bash
 $ ./scripts/generate_api_docs.sh
 ```
@@ -118,46 +127,46 @@ $ ./scripts/generate_api_docs.sh
 
 1. Create the commit for the release:
 
-- Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
-- Build the docs with `./scripts/docs.sh` and then `./scripts/generate_api_docs.sh`.
-- Create a branch for the release with `git checkout -b v2.5.0`
-- Make a commit that includes the new version number: `git commit -m 'version 2.5.0'`.
-- Open a PR and merge after receiving at least one approval from other maintainers.
-- Create a git tag for the release. For example `git tag v2.5.0`.
-- Push the tag up to github with `git push origin --tags`
+   - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
+   - Build the docs with `./scripts/docs.sh` and then `./scripts/generate_api_docs.sh`.
+   - Create a branch for the release with `git checkout -b v2.5.0`
+   - Make a commit that includes the new version number: `git commit -m 'version 2.5.0'`.
+   - Open a PR and merge after receiving at least one approval from other maintainers.
+   - Create a git tag for the release. For example `git tag v2.5.0`.
+   - Push the tag up to github with `git push origin --tags`
 
 2. Distribute the release
 
-- Use the latest stable Python runtime
-  - `python -m venv env`
-  - `python setup.py upload`
-- Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
+   - Use the latest stable Python runtime
+     - `python -m venv env`
+     - `python setup.py upload`
+   - Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
-```markdown
-Refer to [v{version} milestone](https://github.com/slackapi/python-slack-sdk/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
+   ```markdown
+   Refer to [v{version} milestone](https://github.com/slackapi/python-slack-sdk/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
 
-**Updates**
+   **Updates**
 
-1. [WebClient] #111 Make an awesome change - Thanks @SlackHQ
-1. [RTMClient] #222 Make an awesome change - Thanks @SlackAPI
+   1. [WebClient] #111 Make an awesome change - Thanks @SlackHQ
+   2. [RTMClient] #222 Make an awesome change - Thanks @SlackAPI
 
-**All Changes**
+   **All Changes**
 
-https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
-```
+   https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
+   ```
 
 3. (Slack Internal) Communicate the release internally
 
-- Include a link to the GitHub release
+   - Include a link to the GitHub release
 
 4. Make announcements
 
-- #slack-api in dev4slack.slack.com
-- #lang-python in community.slack.com
+   - #slack-api in dev4slack.slack.com
+   - #lang-python in community.slack.com
 
 5. (Slack Internal) Tweet by @SlackAPI
 
-- Not necessary for patch updates, might be needed for minor updates, definitely needed for major updates. Include a link to the GitHub release
+   - Not necessary for patch updates, might be needed for minor updates, definitely needed for major updates. Include a link to the GitHub release
 
 ## Workflow
 
