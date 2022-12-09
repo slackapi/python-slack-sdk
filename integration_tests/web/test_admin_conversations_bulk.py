@@ -12,7 +12,8 @@ from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_GRID_USER_ID,
 )
 from integration_tests.helpers import async_test
-from slack_sdk.web import WebClient
+from slack_sdk.web import WebClient, SlackResponse
+from slack_sdk.errors import SlackApiError
 from slack_sdk.web.async_client import AsyncWebClient
 
 
@@ -38,6 +39,25 @@ class TestWebClient(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_sync_move(self):
+        client = self.sync_client
+
+        conv_creation = client.admin_conversations_create(
+            is_private=False,
+            name=self.channel_name,
+            team_id=self.team_id,
+        )
+        self.assertIsNotNone(conv_creation)
+        created_channel_id = conv_creation.data["channel_id"]
+
+        self.assertIsNotNone(
+            _get_bulk_response(
+                client.admin_conversations_bulkMove,
+                channel_ids=[created_channel_id],
+                target_team_id=self.team_id_2,
+            )
+        )
+
     def test_sync(self):
         client = self.sync_client
 
@@ -50,27 +70,21 @@ class TestWebClient(unittest.TestCase):
         created_channel_id = conv_creation.data["channel_id"]
 
         self.assertIsNotNone(
-            client.admin_conversations_bulkMove(
-                channel_ids=[created_channel_id],
-                target_team_id=self.team_id_2,
-            )
-        )
-
-        self.assertIsNotNone(
-            client.admin_conversations_bulkArchive(
+            _get_bulk_response(
+                client.admin_conversations_bulkArchive,
                 channel_ids=[created_channel_id],
             )
         )
 
         self.assertIsNotNone(
-            client.admin_conversations_bulkDelete(
+            _get_bulk_response(
+                client.admin_conversations_bulkDelete,
                 channel_ids=[created_channel_id],
             )
         )
 
     @async_test
-    async def test_async(self):
-        # await asyncio.sleep(seconds) are included to avoid rate limiting errors
+    async def test_async_move(self):
 
         client = self.async_client
 
@@ -83,20 +97,62 @@ class TestWebClient(unittest.TestCase):
         created_channel_id = conv_creation.data["channel_id"]
 
         self.assertIsNotNone(
-            await client.admin_conversations_bulkMove(
+            await _get_async_bulk_response(
+                client.admin_conversations_bulkMove,
                 channel_ids=[created_channel_id],
                 target_team_id=self.team_id_2,
             )
         )
 
+    @async_test
+    async def test_async(self):
+
+        client = self.async_client
+
+        conv_creation = await client.admin_conversations_create(
+            is_private=False,
+            name=self.channel_name,
+            team_id=self.team_id,
+        )
+        self.assertIsNotNone(conv_creation)
+        created_channel_id = conv_creation.data["channel_id"]
+
         self.assertIsNotNone(
-            await client.admin_conversations_bulkArchive(
+            await _get_async_bulk_response(
+                client.admin_conversations_bulkArchive,
                 channel_ids=[created_channel_id],
             )
         )
 
         self.assertIsNotNone(
-            await client.admin_conversations_bulkDelete(
+            await _get_async_bulk_response(
+                client.admin_conversations_bulkDelete,
                 channel_ids=[created_channel_id],
             )
         )
+
+
+async def _get_async_bulk_response(method, **kwargs) -> SlackResponse:
+    while True:
+        try:
+            return await method(**kwargs)
+        except SlackApiError as e:
+            if not _action_in_progress(e.response):
+                raise e
+            await asyncio.sleep(3)
+
+
+def _get_bulk_response(method, **kwargs) -> SlackResponse:
+    while True:
+        try:
+            return method(**kwargs)
+        except SlackApiError as e:
+            if not _action_in_progress(e.response):
+                raise e
+            time.sleep(3)
+
+
+def _action_in_progress(response: SlackResponse) -> bool:
+    if response.data.get("error", "") == "action_already_in_progress":
+        return True
+    return False
