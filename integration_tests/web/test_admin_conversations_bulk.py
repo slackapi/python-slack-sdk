@@ -6,10 +6,8 @@ import unittest
 
 from integration_tests.env_variable_names import (
     SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN,
-    SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID,
     SLACK_SDK_TEST_GRID_TEAM_ID_2,
     SLACK_SDK_TEST_GRID_TEAM_ID,
-    SLACK_SDK_TEST_GRID_USER_ID,
 )
 from integration_tests.helpers import async_test
 from slack_sdk.web import WebClient, SlackResponse
@@ -20,9 +18,6 @@ from slack_sdk.web.async_client import AsyncWebClient
 class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API"""
 
-    # TODO: admin_conversations_disconnectShared - not_allowed_token_type
-    # TODO: admin_conversations_ekm_listOriginalConnectedChannelInfo - enable the feature
-
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.org_admin_token = os.environ[SLACK_SDK_TEST_GRID_ORG_ADMIN_USER_TOKEN]
@@ -31,10 +26,7 @@ class TestWebClient(unittest.TestCase):
 
         self.team_id = os.environ[SLACK_SDK_TEST_GRID_TEAM_ID]
         self.team_id_2 = os.environ[SLACK_SDK_TEST_GRID_TEAM_ID_2]
-        self.idp_group_id = os.environ[SLACK_SDK_TEST_GRID_IDP_USERGROUP_ID]
-        self.user_id = os.environ[SLACK_SDK_TEST_GRID_USER_ID]
         self.channel_name = f"test-channel-{int(round(time.time() * 1000))}"
-        self.channel_rename = f"test-channel-renamed-{int(round(time.time() * 1000))}"
 
     def tearDown(self):
         pass
