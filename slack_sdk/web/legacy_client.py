@@ -2736,11 +2736,13 @@ class LegacyWebClient(LegacyBaseClient):
 
     def emoji_list(
         self,
+        include_categories: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists custom emoji for a team.
         https://api.slack.com/methods/emoji.list
         """
+        kwargs.update({"include_categories": include_categories})
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     def files_comments_delete(

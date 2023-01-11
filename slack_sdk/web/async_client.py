@@ -2734,11 +2734,13 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def emoji_list(
         self,
+        include_categories: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists custom emoji for a team.
         https://api.slack.com/methods/emoji.list
         """
+        kwargs.update({"include_categories": include_categories})
         return await self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
     async def files_comments_delete(
