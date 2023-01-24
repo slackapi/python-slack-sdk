@@ -1,3 +1,4 @@
+import json
 from typing import Optional, List, Union, Any, Dict
 
 
@@ -252,6 +253,21 @@ class Details:
     initiated_by: Optional[str]
     source_team: Optional[str]
     destination_team: Optional[str]
+    succeeded_users: Optional[List[str]]
+    failed_users: Optional[List[str]]
+    enterprise: Optional[str]
+    subteam: Optional[str]
+    action: Optional[str]
+    idp_group_member_count: Optional[int]
+    workspace_member_count: Optional[int]
+    added_user_count: Optional[int]
+    added_user_error_count: Optional[int]
+    reactivated_user_count: Optional[int]
+    removed_user_count: Optional[int]
+    removed_user_error_count: Optional[int]
+    total_removal_count: Optional[int]
+    is_flagged: Optional[str]
+    target_user: Optional[str]
 
     def __init__(
         self,
@@ -330,6 +346,21 @@ class Details:
         initiated_by: Optional[str] = None,
         source_team: Optional[str] = None,
         destination_team: Optional[str] = None,
+        succeeded_users: Optional[Union[List[str], str]] = None,
+        failed_users: Optional[Union[List[str], str]] = None,
+        enterprise: Optional[str] = None,
+        subteam: Optional[str] = None,
+        action: Optional[str] = None,
+        idp_group_member_count: Optional[int] = None,
+        workspace_member_count: Optional[int] = None,
+        added_user_count: Optional[int] = None,
+        added_user_error_count: Optional[int] = None,
+        reactivated_user_count: Optional[int] = None,
+        removed_user_count: Optional[int] = None,
+        removed_user_error_count: Optional[int] = None,
+        total_removal_count: Optional[int] = None,
+        is_flagged: Optional[str] = None,
+        target_user: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -435,6 +466,25 @@ class Details:
         self.initiated_by = initiated_by
         self.source_team = source_team
         self.destination_team = destination_team
+        self.succeeded_users = (
+            succeeded_users if succeeded_users is None or isinstance(succeeded_users, list) else json.loads(succeeded_users)
+        )
+        self.failed_users = (
+            failed_users if failed_users is None or isinstance(failed_users, list) else json.loads(failed_users)
+        )
+        self.enterprise = enterprise
+        self.subteam = subteam
+        self.action = action
+        self.idp_group_member_count = idp_group_member_count
+        self.workspace_member_count = workspace_member_count
+        self.added_user_count = added_user_count
+        self.added_user_error_count = added_user_error_count
+        self.reactivated_user_count = reactivated_user_count
+        self.removed_user_count = removed_user_count
+        self.removed_user_error_count = removed_user_error_count
+        self.total_removal_count = total_removal_count
+        self.is_flagged = is_flagged
+        self.target_user = target_user
 
 
 class Channel:
@@ -509,6 +559,49 @@ class Usergroup:
         self.unknown_fields = kwargs
 
 
+class Huddle:
+    id: Optional[str]
+    date_start: Optional[int]
+    date_end: Optional[int]
+    participants: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        date_start: Optional[int] = None,
+        date_end: Optional[int] = None,
+        participants: Optional[List[str]] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.date_start = date_start
+        self.date_end = date_end
+        self.participants = participants
+        self.unknown_fields = kwargs
+
+
+class Role:
+    id: Optional[str]
+    name: Optional[str]
+    type: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.type = type
+        self.unknown_fields = kwargs
+
+
 class Workflow:
     id: Optional[str]
     name: Optional[str]
@@ -560,6 +653,8 @@ class Entity:
     channel: Optional[Channel]
     file: Optional[File]
     app: Optional[App]
+    huddle: Optional[Huddle]
+    role: Optional[Role]
     usergroup: Optional[Usergroup]
     workflow: Optional[Workflow]
     barrier: Optional[InformationBarrier]
@@ -575,6 +670,8 @@ class Entity:
         channel: Optional[Union[Channel, Dict[str, Any]]] = None,
         file: Optional[Union[File, Dict[str, Any]]] = None,
         app: Optional[Union[App, Dict[str, Any]]] = None,
+        huddle: Optional[Union[Huddle, Dict[str, Any]]] = None,
+        role: Optional[Union[Role, Dict[str, Any]]] = None,
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
         workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
@@ -587,6 +684,8 @@ class Entity:
         self.channel = Channel(**channel) if isinstance(channel, dict) else channel
         self.file = File(**file) if isinstance(file, dict) else file
         self.app = App(**app) if isinstance(app, dict) else app
+        self.huddle = Huddle(**huddle) if isinstance(huddle, dict) else huddle
+        self.role = Role(**role) if isinstance(role, dict) else role
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
         self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier

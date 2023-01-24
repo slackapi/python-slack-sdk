@@ -138,6 +138,10 @@ class TestAuditLogsClient(unittest.TestCase):
         self.assertEqual(entry.details.can_thread.type, ["admin", "org_admin"])
         self.assertEqual(entry.details.can_thread.user, ["W222"])
         self.assertEqual(entry.details.is_external_limited, True)
+        # Due to historical reasons, succeeded_users/failed_users can be
+        # either an array or a single string with encoded JSON data
+        self.assertEqual(entry.details.succeeded_users, ["W111", "W222"])
+        self.assertEqual(entry.details.failed_users, ["W333", "W444"])
         self.assertEqual(entry.details.exporting_team_id, 1134128598372)
 
 
@@ -361,6 +365,8 @@ logs_response_data = """{
           ]
         },
         "is_external_limited": true,
+        "succeeded_users": "[\\\"W111\\\", \\\"W222\\\"]",
+        "failed_users": "[\\\"W333\\\", \\\"W444\\\"]",
         "exporting_team_id": 1134128598372
       }
     }
