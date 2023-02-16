@@ -324,8 +324,7 @@ class Attachment(JsonObject):
                 table-like way. For best results, include no more than 2-3 field
                 objects.
             color: Changes the color of the border on the left side of this attachment
-                from the default gray. Can either be one of "good" (green), "warning"
-                (yellow), "danger" (red), or any hex color code (eg. #439FE0)
+                from the default gray. Can be any hex color code (eg. #439FE0)
             markdown_in: An array of field names that should be formatted by
                 markdown syntax - allowed values: "pretext", "text", "fields"
             title: Large title text near the top of the attachment.

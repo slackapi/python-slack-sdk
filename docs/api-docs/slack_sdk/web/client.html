@@ -823,6 +823,48 @@ class WebClient(BaseClient):
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
         return self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
 
+    def admin_conversations_bulkArchive(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Archive public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkArchive
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call(&#34;admin.conversations.bulkArchive&#34;, params=kwargs)
+
+    def admin_conversations_bulkDelete(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Delete public or private channels in bulk.
+        https://slack.com/api/admin.conversations.bulkDelete
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call(&#34;admin.conversations.bulkDelete&#34;, params=kwargs)
+
+    def admin_conversations_bulkMove(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        target_team_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Move public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkMove
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;target_team_id&#34;: target_team_id,
+                &#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids,
+            }
+        )
+        return self.api_call(&#34;admin.conversations.bulkMove&#34;, params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
@@ -2712,11 +2754,13 @@ class WebClient(BaseClient):
 
     def emoji_list(
         self,
+        include_categories: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Lists custom emoji for a team.
         https://api.slack.com/methods/emoji.list
         &#34;&#34;&#34;
+        kwargs.update({&#34;include_categories&#34;: include_categories})
         return self.api_call(&#34;emoji.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     def files_comments_delete(
@@ -5464,6 +5508,48 @@ removed at anytime.</p></div>
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;duration_days&#34;: duration_days})
         return self.api_call(&#34;admin.conversations.setCustomRetention&#34;, params=kwargs)
 
+    def admin_conversations_bulkArchive(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Archive public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkArchive
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call(&#34;admin.conversations.bulkArchive&#34;, params=kwargs)
+
+    def admin_conversations_bulkDelete(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Delete public or private channels in bulk.
+        https://slack.com/api/admin.conversations.bulkDelete
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        return self.api_call(&#34;admin.conversations.bulkDelete&#34;, params=kwargs)
+
+    def admin_conversations_bulkMove(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        target_team_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Move public or private channels in bulk.
+        https://api.slack.com/methods/admin.conversations.bulkMove
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;target_team_id&#34;: target_team_id,
+                &#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids,
+            }
+        )
+        return self.api_call(&#34;admin.conversations.bulkMove&#34;, params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
@@ -7353,11 +7439,13 @@ removed at anytime.</p></div>
 
     def emoji_list(
         self,
+        include_categories: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Lists custom emoji for a team.
         https://api.slack.com/methods/emoji.list
         &#34;&#34;&#34;
+        kwargs.update({&#34;include_categories&#34;: include_categories})
         return self.api_call(&#34;emoji.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     def files_comments_delete(
@@ -9805,6 +9893,81 @@ With an org-level token, enterprise_id or team_ids is required.
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id})
     return self.api_call(&#34;admin.conversations.archive&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.admin_conversations_bulkArchive"><code class="name flex">
+<span>def <span class="ident">admin_conversations_bulkArchive</span></span>(<span>self, *, channel_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Archive public or private channels in bulk.
+<a href="https://api.slack.com/methods/admin.conversations.bulkArchive">https://api.slack.com/methods/admin.conversations.bulkArchive</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_bulkArchive(
+    self,
+    *,
+    channel_ids: Union[Sequence[str], str],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Archive public or private channels in bulk.
+    https://api.slack.com/methods/admin.conversations.bulkArchive
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+    return self.api_call(&#34;admin.conversations.bulkArchive&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.admin_conversations_bulkDelete"><code class="name flex">
+<span>def <span class="ident">admin_conversations_bulkDelete</span></span>(<span>self, *, channel_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Delete public or private channels in bulk.
+<a href="https://slack.com/api/admin.conversations.bulkDelete">https://slack.com/api/admin.conversations.bulkDelete</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_bulkDelete(
+    self,
+    *,
+    channel_ids: Union[Sequence[str], str],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Delete public or private channels in bulk.
+    https://slack.com/api/admin.conversations.bulkDelete
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+    return self.api_call(&#34;admin.conversations.bulkDelete&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.admin_conversations_bulkMove"><code class="name flex">
+<span>def <span class="ident">admin_conversations_bulkMove</span></span>(<span>self, *, channel_ids: Union[str, Sequence[str]], target_team_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Move public or private channels in bulk.
+<a href="https://api.slack.com/methods/admin.conversations.bulkMove">https://api.slack.com/methods/admin.conversations.bulkMove</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_bulkMove(
+    self,
+    *,
+    channel_ids: Union[Sequence[str], str],
+    target_team_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Move public or private channels in bulk.
+    https://api.slack.com/methods/admin.conversations.bulkMove
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;target_team_id&#34;: target_team_id,
+            &#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids,
+        }
+    )
+    return self.api_call(&#34;admin.conversations.bulkMove&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.admin_conversations_convertToPrivate"><code class="name flex">
@@ -13477,7 +13640,7 @@ or received but have not yet been approved by all parties.
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.emoji_list"><code class="name flex">
-<span>def <span class="ident">emoji_list</span></span>(<span>self, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">emoji_list</span></span>(<span>self, include_categories: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Lists custom emoji for a team.
@@ -13488,11 +13651,13 @@ or received but have not yet been approved by all parties.
 </summary>
 <pre><code class="python">def emoji_list(
     self,
+    include_categories: Optional[bool] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Lists custom emoji for a team.
     https://api.slack.com/methods/emoji.list
     &#34;&#34;&#34;
+    kwargs.update({&#34;include_categories&#34;: include_categories})
     return self.api_call(&#34;emoji.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
@@ -16543,6 +16708,9 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.admin_barriers_list" href="#slack_sdk.web.client.WebClient.admin_barriers_list">admin_barriers_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_barriers_update" href="#slack_sdk.web.client.WebClient.admin_barriers_update">admin_barriers_update</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_archive" href="#slack_sdk.web.client.WebClient.admin_conversations_archive">admin_conversations_archive</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_bulkArchive" href="#slack_sdk.web.client.WebClient.admin_conversations_bulkArchive">admin_conversations_bulkArchive</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_bulkDelete" href="#slack_sdk.web.client.WebClient.admin_conversations_bulkDelete">admin_conversations_bulkDelete</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_bulkMove" href="#slack_sdk.web.client.WebClient.admin_conversations_bulkMove">admin_conversations_bulkMove</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_convertToPrivate" href="#slack_sdk.web.client.WebClient.admin_conversations_convertToPrivate">admin_conversations_convertToPrivate</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_create" href="#slack_sdk.web.client.WebClient.admin_conversations_create">admin_conversations_create</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_conversations_delete" href="#slack_sdk.web.client.WebClient.admin_conversations_delete">admin_conversations_delete</a></code></li>
