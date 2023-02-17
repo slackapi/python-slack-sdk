@@ -140,7 +140,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
             i_column = self.installations.c
             installations_rows = conn.execute(
-                sqlalchemy.select([i_column.id])
+                sqlalchemy.select(i_column.id)
                 .where(
                     and_(
                         i_column.client_id == self.client_id,
@@ -152,7 +152,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 .limit(1)
             )
             installations_row_id: Optional[str] = None
-            for row in installations_rows:
+            for row in installations_rows.mappings():
                 installations_row_id = row["id"]
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
@@ -171,7 +171,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
             b_column = self.bots.c
             bots_rows = conn.execute(
-                sqlalchemy.select([b_column.id])
+                sqlalchemy.select(b_column.id)
                 .where(
                     and_(
                         b_column.client_id == self.client_id,
@@ -183,7 +183,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 .limit(1)
             )
             bots_row_id: Optional[str] = None
-            for row in bots_rows:
+            for row in bots_rows.mappings():
                 bots_row_id = row["id"]
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
@@ -217,7 +217,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 return Bot(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -261,7 +261,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 installation = Installation(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -302,7 +302,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
             with self.engine.connect() as conn:
                 result: object = conn.execute(query)
-                for row in result:  # type: ignore
+                for row in result.mappings():  # type: ignore
                     installation.bot_token = row["bot_token"]
                     installation.bot_id = row["bot_id"]
                     installation.bot_user_id = row["bot_user_id"]
