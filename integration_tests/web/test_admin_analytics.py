@@ -28,7 +28,7 @@ class TestWebClient(unittest.TestCase):
     def test_sync(self):
         client = self.sync_client
 
-        response = client.admin_analytics_getFile(date="2020-10-20", type="member")
+        response = client.admin_analytics_getFile(date="2022-10-20", type="member")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -44,7 +44,7 @@ class TestWebClient(unittest.TestCase):
     def test_sync_public_channel(self):
         client = self.sync_client
 
-        response = client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
+        response = client.admin_analytics_getFile(date="2022-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -59,7 +59,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async(self):
         client = self.async_client
 
-        response = await client.admin_analytics_getFile(date="2020-10-20", type="member")
+        response = await client.admin_analytics_getFile(date="2022-10-20", type="member")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -77,7 +77,7 @@ class TestWebClient(unittest.TestCase):
     async def test_async_public_channel(self):
         client = self.async_client
 
-        response = await client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
+        response = await client.admin_analytics_getFile(date="2022-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
@@ -95,14 +95,14 @@ class TestWebClient(unittest.TestCase):
     def test_legacy(self):
         client = self.legacy_client
 
-        response = client.admin_analytics_getFile(date="2020-10-20", type="member")
+        response = client.admin_analytics_getFile(date="2022-10-20", type="member")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 
     def test_legacy_public_channel(self):
         client = self.legacy_client
 
-        response = client.admin_analytics_getFile(date="2020-10-20", type="public_channel")
+        response = client.admin_analytics_getFile(date="2022-10-20", type="public_channel")
         self.assertTrue(isinstance(response.data, bytes))
         self.assertIsNotNone(response.data)
 

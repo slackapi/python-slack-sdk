@@ -64,7 +64,7 @@ class TestAsyncWebClient(unittest.TestCase):
 
     @async_test
     async def test_slack_api_rate_limiting_exception_returns_retry_after(self):
-        self.client.token = "xoxb-rate_limited"
+        self.client.token = "xoxb-ratelimited"
         try:
             await self.client.api_test()
         except err.SlackApiError as slack_api_error:

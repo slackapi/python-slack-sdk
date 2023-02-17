@@ -41,11 +41,11 @@ class MockHandler(SimpleHTTPRequestHandler):
                 self.set_common_headers()
                 self.wfile.write("""{"ok":false}""".encode("utf-8"))
                 return
-            if pattern == "rate_limited":
+            if pattern == "ratelimited":
                 self.send_response(429)
                 self.send_header("retry-after", 1)
                 self.set_common_headers()
-                self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
+                self.wfile.write("""{"ok":false,"error":"ratelimited"}""".encode("utf-8"))
                 self.wfile.close()
                 return
 

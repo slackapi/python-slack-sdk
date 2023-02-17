@@ -31,7 +31,7 @@ class TestAuditLogsClient_HttpRetries(unittest.TestCase):
 
         self.assertEqual(2, retry_handler.call_count)
 
-    def test_rate_limited(self):
+    def test_ratelimited(self):
         client = AuditLogsClient(
             token="xoxp-ratelimited",
             base_url="http://localhost:8888/",

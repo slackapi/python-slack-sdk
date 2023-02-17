@@ -34,7 +34,7 @@ class TestAsyncAuditLogsClient_HttpRetries(unittest.TestCase):
         self.assertEqual(2, retry_handler.call_count)
 
     @async_test
-    async def test_rate_limited(self):
+    async def test_ratelimited(self):
         client = AsyncAuditLogsClient(
             token="xoxp-ratelimited",
             base_url="http://localhost:8888/",
