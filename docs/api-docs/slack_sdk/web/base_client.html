@@ -425,7 +425,29 @@ class BaseClient:
             try:
                 resp = self._perform_urllib_http_request_internal(url, req)
                 # The resp is a 200 OK response
-                return resp
+                if len(self.retry_handlers) &gt; 0:
+                    retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                    body_string = resp[&#34;body&#34;] if isinstance(resp[&#34;body&#34;], str) else None
+                    body_bytes = body_string.encode(&#34;utf-8&#34;) if body_string is not None else resp[&#34;body&#34;]
+                    body = json.loads(body_string) if body_string is not None and body_string.startswith(&#34;{&#34;) else {}
+                    retry_response = RetryHttpResponse(
+                        status_code=resp[&#34;status&#34;],
+                        headers=resp[&#34;headers&#34;],
+                        body=body,
+                        data=body_bytes,
+                    )
+                    for handler in self.retry_handlers:
+                        if handler.can_retry(state=retry_state, request=retry_request, response=retry_response):
+                            if self._logger.level &lt;= logging.DEBUG:
+                                self._logger.info(
+                                    f&#34;A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}&#34;
+                                )
+                            handler.prepare_for_next_attempt(
+                                state=retry_state, request=retry_request, response=retry_response
+                            )
+                            break
+                if retry_state.next_attempt_requested is False:
+                    return resp
 
             except HTTPError as e:
                 # As adding new values to HTTPError#headers can be ignored, building a new dict object here
@@ -986,7 +1008,29 @@ class BaseClient:
             try:
                 resp = self._perform_urllib_http_request_internal(url, req)
                 # The resp is a 200 OK response
-                return resp
+                if len(self.retry_handlers) &gt; 0:
+                    retry_request = RetryHttpRequest.from_urllib_http_request(req)
+                    body_string = resp[&#34;body&#34;] if isinstance(resp[&#34;body&#34;], str) else None
+                    body_bytes = body_string.encode(&#34;utf-8&#34;) if body_string is not None else resp[&#34;body&#34;]
+                    body = json.loads(body_string) if body_string is not None and body_string.startswith(&#34;{&#34;) else {}
+                    retry_response = RetryHttpResponse(
+                        status_code=resp[&#34;status&#34;],
+                        headers=resp[&#34;headers&#34;],
+                        body=body,
+                        data=body_bytes,
+                    )
+                    for handler in self.retry_handlers:
+                        if handler.can_retry(state=retry_state, request=retry_request, response=retry_response):
+                            if self._logger.level &lt;= logging.DEBUG:
+                                self._logger.info(
+                                    f&#34;A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}&#34;
+                                )
+                            handler.prepare_for_next_attempt(
+                                state=retry_state, request=retry_request, response=retry_response
+                            )
+                            break
+                if retry_state.next_attempt_requested is False:
+                    return resp
 
             except HTTPError as e:
                 # As adding new values to HTTPError#headers can be ignored, building a new dict object here

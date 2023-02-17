@@ -92,7 +92,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
                 c = self.oauth_states.c
                 query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
                 result = conn.execute(query)
-                for row in result:
+                for row in result.mappings():
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
                     conn.execute(self.oauth_states.delete().where(c.id == row[&#34;id&#34;]))
                     return True
@@ -176,7 +176,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
                 c = self.oauth_states.c
                 query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
                 result = conn.execute(query)
-                for row in result:
+                for row in result.mappings():
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
                     conn.execute(self.oauth_states.delete().where(c.id == row[&#34;id&#34;]))
                     return True
@@ -271,7 +271,7 @@ def logger(self) -&gt; Logger:
             c = self.oauth_states.c
             query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
             result = conn.execute(query)
-            for row in result:
+            for row in result.mappings():
                 self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
                 conn.execute(self.oauth_states.delete().where(c.id == row[&#34;id&#34;]))
                 return True

@@ -2521,7 +2521,6 @@ removed at anytime.</p></div>
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         container_id: Optional[str] = None,
-        file_annotation: Optional[str] = None,
         icon_emoji: Optional[str] = None,
         icon_url: Optional[str] = None,
         mrkdwn: Optional[bool] = None,
@@ -2546,7 +2545,6 @@ removed at anytime.</p></div>
                 &#34;unfurl_links&#34;: unfurl_links,
                 &#34;unfurl_media&#34;: unfurl_media,
                 &#34;container_id&#34;: container_id,
-                &#34;file_annotation&#34;: file_annotation,
                 &#34;icon_emoji&#34;: icon_emoji,
                 &#34;icon_url&#34;: icon_url,
                 &#34;mrkdwn&#34;: mrkdwn,
@@ -8336,7 +8334,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.WebClient.chat_postMessage"><code class="name flex">
-<span>def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, file_annotation: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">chat_postMessage</span></span>(<span>self, *, channel: str, text: Optional[str] = None, as_user: Optional[bool] = None, attachments: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>]], ForwardRef(None)] = None, blocks: Union[str, Sequence[Union[Dict, <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]], ForwardRef(None)] = None, thread_ts: Optional[str] = None, reply_broadcast: Optional[bool] = None, unfurl_links: Optional[bool] = None, unfurl_media: Optional[bool] = None, container_id: Optional[str] = None, icon_emoji: Optional[str] = None, icon_url: Optional[str] = None, mrkdwn: Optional[bool] = None, link_names: Optional[bool] = None, username: Optional[str] = None, parse: Optional[str] = None, metadata: Union[Dict, <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a>, ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Sends a message to a channel.
@@ -8358,7 +8356,6 @@ Each authorization represents an app installation that the event is visible to.
     unfurl_links: Optional[bool] = None,
     unfurl_media: Optional[bool] = None,
     container_id: Optional[str] = None,
-    file_annotation: Optional[str] = None,
     icon_emoji: Optional[str] = None,
     icon_url: Optional[str] = None,
     mrkdwn: Optional[bool] = None,
@@ -8383,7 +8380,6 @@ Each authorization represents an app installation that the event is visible to.
             &#34;unfurl_links&#34;: unfurl_links,
             &#34;unfurl_media&#34;: unfurl_media,
             &#34;container_id&#34;: container_id,
-            &#34;file_annotation&#34;: file_annotation,
             &#34;icon_emoji&#34;: icon_emoji,
             &#34;icon_url&#34;: icon_url,
             &#34;mrkdwn&#34;: mrkdwn,

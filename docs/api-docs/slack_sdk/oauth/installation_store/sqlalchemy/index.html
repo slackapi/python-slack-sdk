@@ -168,7 +168,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
             i_column = self.installations.c
             installations_rows = conn.execute(
-                sqlalchemy.select([i_column.id])
+                sqlalchemy.select(i_column.id)
                 .where(
                     and_(
                         i_column.client_id == self.client_id,
@@ -180,7 +180,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 .limit(1)
             )
             installations_row_id: Optional[str] = None
-            for row in installations_rows:
+            for row in installations_rows.mappings():
                 installations_row_id = row[&#34;id&#34;]
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
@@ -199,7 +199,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
             b_column = self.bots.c
             bots_rows = conn.execute(
-                sqlalchemy.select([b_column.id])
+                sqlalchemy.select(b_column.id)
                 .where(
                     and_(
                         b_column.client_id == self.client_id,
@@ -211,7 +211,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 .limit(1)
             )
             bots_row_id: Optional[str] = None
-            for row in bots_rows:
+            for row in bots_rows.mappings():
                 bots_row_id = row[&#34;id&#34;]
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
@@ -245,7 +245,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 return Bot(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
@@ -289,7 +289,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 installation = Installation(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
@@ -330,7 +330,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
             query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
             with self.engine.connect() as conn:
                 result: object = conn.execute(query)
-                for row in result:  # type: ignore
+                for row in result.mappings():  # type: ignore
                     installation.bot_token = row[&#34;bot_token&#34;]
                     installation.bot_id = row[&#34;bot_id&#34;]
                     installation.bot_user_id = row[&#34;bot_user_id&#34;]
@@ -539,7 +539,7 @@ the following methods should be implemented.</p>
 
             i_column = self.installations.c
             installations_rows = conn.execute(
-                sqlalchemy.select([i_column.id])
+                sqlalchemy.select(i_column.id)
                 .where(
                     and_(
                         i_column.client_id == self.client_id,
@@ -551,7 +551,7 @@ the following methods should be implemented.</p>
                 .limit(1)
             )
             installations_row_id: Optional[str] = None
-            for row in installations_rows:
+            for row in installations_rows.mappings():
                 installations_row_id = row[&#34;id&#34;]
             if installations_row_id is None:
                 conn.execute(self.installations.insert(), i)
@@ -570,7 +570,7 @@ the following methods should be implemented.</p>
 
             b_column = self.bots.c
             bots_rows = conn.execute(
-                sqlalchemy.select([b_column.id])
+                sqlalchemy.select(b_column.id)
                 .where(
                     and_(
                         b_column.client_id == self.client_id,
@@ -582,7 +582,7 @@ the following methods should be implemented.</p>
                 .limit(1)
             )
             bots_row_id: Optional[str] = None
-            for row in bots_rows:
+            for row in bots_rows.mappings():
                 bots_row_id = row[&#34;id&#34;]
             if bots_row_id is None:
                 conn.execute(self.bots.insert(), b)
@@ -616,7 +616,7 @@ the following methods should be implemented.</p>
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 return Bot(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
@@ -660,7 +660,7 @@ the following methods should be implemented.</p>
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result:  # type: ignore
+            for row in result.mappings():  # type: ignore
                 installation = Installation(
                     app_id=row[&#34;app_id&#34;],
                     enterprise_id=row[&#34;enterprise_id&#34;],
@@ -701,7 +701,7 @@ the following methods should be implemented.</p>
             query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
             with self.engine.connect() as conn:
                 result: object = conn.execute(query)
-                for row in result:  # type: ignore
+                for row in result.mappings():  # type: ignore
                     installation.bot_token = row[&#34;bot_token&#34;]
                     installation.bot_id = row[&#34;bot_id&#34;]
                     installation.bot_user_id = row[&#34;bot_user_id&#34;]
