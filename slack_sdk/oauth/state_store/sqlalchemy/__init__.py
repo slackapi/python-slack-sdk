@@ -64,7 +64,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
                 c = self.oauth_states.c
                 query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.utcnow()))
                 result = conn.execute(query)
-                for row in result:
+                for row in result.mappings():
                     self.logger.debug(f"consume's query result: {row}")
                     conn.execute(self.oauth_states.delete().where(c.id == row["id"]))
                     return True
