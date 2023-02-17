@@ -28,7 +28,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     error_html_response_body = '<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="utf-8">\n\t<title>Server Error | Slack</title>\n\t<meta name="author" content="Slack">\n\t<style></style>\n</head>\n<body>\n\t<nav class="top persistent">\n\t\t<a href="https://status.slack.com/" class="logo" data-qa="logo"></a>\n\t</nav>\n\t<div id="page">\n\t\t<div id="page_contents">\n\t\t\t<h1>\n\t\t\t\t<svg width="30px" height="27px" viewBox="0 0 60 54" class="warning_icon"><path d="" fill="#D94827"/></svg>\n\t\t\t\tServer Error\n\t\t\t</h1>\n\t\t\t<div class="card">\n\t\t\t\t<p>It seems like there’s a problem connecting to our servers, and we’re investigating the issue.</p>\n\t\t\t\t<p>Please <a href="https://status.slack.com/">check our Status page for updates</a>.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<script type="text/javascript">\n\t\tif (window.desktop) {\n\t\t\tdocument.documentElement.className = \'desktop\';\n\t\t}\n\n\t\tvar FIVE_MINS = 5 * 60 * 1000;\n\t\tvar TEN_MINS = 10 * 60 * 1000;\n\n\t\tfunction randomBetween(min, max) {\n\t\t\treturn Math.floor(Math.random() * (max - (min + 1))) + min;\n\t\t}\n\n\t\twindow.setTimeout(function () {\n\t\t\twindow.location.reload(true);\n\t\t}, randomBetween(FIVE_MINS, TEN_MINS));\n\t</script>\n</body>\n</html>'
 
-    state = {"rate_limited_count": 0}
+    state = {"ratelimited_count": 0, "fatal_error_count": 0}
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
@@ -98,17 +98,37 @@ class MockHandler(SimpleHTTPRequestHandler):
                     return
 
             header = self.headers["Authorization"]
-            if header is not None and "xoxp-" in header:
-                pattern = str(header).split("xoxp-", 1)[1]
+            if header is not None and ("xoxb-" in header or "xoxp-" in header):
+                pattern = ""
+                xoxb = str(header).split("xoxb-", 1)
+                if len(xoxb) > 1:
+                    pattern = xoxb[1]
+                else:
+                    xoxp = str(header).split("xoxp-", 1)
+                    pattern = xoxp[1]
+
                 if "remote_disconnected" in pattern:
                     # http.client.RemoteDisconnected
                     self.finish()
                     return
-                if "ratelimited" in pattern:
+
+                if pattern == "ratelimited" or (pattern == "ratelimited_only_once" and self.state["ratelimited_count"] == 0):
+                    self.state["ratelimited_count"] += 1
                     self.send_response(429)
                     self.send_header("retry-after", 1)
+                    self.send_header("content-type", "application/json;charset=utf-8")
+                    self.send_header("connection", "close")
+                    self.end_headers()
+                    self.wfile.write("""{"ok":false,"error":"ratelimited"}""".encode("utf-8"))
+                    self.wfile.close()
+                    return
+
+                if pattern == "fatal_error" or (pattern == "fatal_error_only_once" and self.state["fatal_error_count"] == 0):
+                    self.state["fatal_error_count"] += 1
+                    self.send_response(200)
                     self.set_common_headers()
-                    self.wfile.write("""{"ok": false, "error": "ratelimited"}""".encode("utf-8"))
+                    self.wfile.write("""{"ok":false,"error":"fatal_error"}""".encode("utf-8"))
+                    self.wfile.close()
                     return
 
             if self.is_valid_token() and self.is_valid_user_agent():
@@ -139,22 +159,10 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.wfile.write("""{"ok":false}""".encode("utf-8"))
                     return
 
-                if pattern == "rate_limited" or (
-                    pattern == "rate_limited_only_once" and self.state["rate_limited_count"] == 0
-                ):
-                    self.state["rate_limited_count"] += 1
-                    self.send_response(429)
-                    self.send_header("retry-after", 1)
-                    self.send_header("content-type", "application/json;charset=utf-8")
-                    self.send_header("connection", "close")
-                    self.end_headers()
-                    self.wfile.write("""{"ok":false,"error":"rate_limited"}""".encode("utf-8"))
-                    self.wfile.close()
-                    return
-
                 if pattern == "timeout":
-                    time.sleep(2)
+                    time.sleep(3)
                     self.send_response(200)
+                    self.set_common_headers()
                     self.wfile.write("""{"ok":true}""".encode("utf-8"))
                     self.wfile.close()
                     return
@@ -248,7 +256,7 @@ class MockServerProcessTarget:
 
     def run(self):
         self.handler.received_requests = {}
-        self.handler.state = {"rate_limited_count": 0}
+        self.handler.state = {"ratelimited_count": 0}
         self.server = HTTPServer(("localhost", 8888), self.handler)
         try:
             self.server.serve_forever(0.05)
@@ -257,7 +265,7 @@ class MockServerProcessTarget:
 
     def stop(self):
         self.handler.received_requests = {}
-        self.handler.state = {"rate_limited_count": 0}
+        self.handler.state = {"ratelimited_count": 0}
         self.server.shutdown()
         self.join()
 

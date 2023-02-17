@@ -147,24 +147,20 @@ async def _request_with_session(
                             f"body: {body}"
                         )
 
-                    if res.status == 429:
-                        for handler in retry_handlers:
-                            if await handler.can_retry_async(
+                    for handler in retry_handlers:
+                        if await handler.can_retry_async(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                        ):
+                            if logger.level <= logging.DEBUG:
+                                logger.info(f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {api_url}")
+                            await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
-                            ):
-                                if logger.level <= logging.DEBUG:
-                                    logger.info(
-                                        f"A retry handler found: {type(handler).__name__} "
-                                        f"for {http_verb} {api_url} - rate_limited"
-                                    )
-                                await handler.prepare_for_next_attempt_async(
-                                    state=retry_state,
-                                    request=retry_request,
-                                    response=retry_response,
-                                )
-                                break
+                            )
+                            break
 
                     if retry_state.next_attempt_requested is False:
                         response = {

@@ -64,7 +64,7 @@ class TestAsyncWebClient(unittest.TestCase):
 
     @async_test
     async def test_slack_api_rate_limiting_exception_returns_retry_after(self):
-        self.client.token = "xoxb-rate_limited"
+        self.client.token = "xoxb-ratelimited"
         try:
             await self.client.api_test()
         except err.SlackApiError as slack_api_error:
@@ -121,8 +121,13 @@ class TestAsyncWebClient(unittest.TestCase):
 
     @async_test
     async def test_timeout_issue_712_async(self):
+        client = AsyncWebClient(
+            token="xoxp-1234",
+            base_url="http://localhost:8888",
+            timeout=1,
+        )
         with self.assertRaises(Exception):
-            await self.client.users_list(token="xoxb-timeout")
+            await client.users_list(token="xoxb-timeout")
 
     @async_test
     async def test_html_response_body_issue_718_async(self):
