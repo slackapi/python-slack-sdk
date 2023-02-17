@@ -40,7 +40,7 @@ class TestWebClient(unittest.TestCase):
             external_id=external_id,
             external_url=external_url,
             title="Good Old Slack Logo",
-            indexable_file_contents="Good Old Slack Logo",
+            indexable_file_contents="Good Old Slack Logo".encode("utf-8"),
             preview_image=image,
         )
         self.assertIsNotNone(creation)
@@ -76,7 +76,7 @@ class TestWebClient(unittest.TestCase):
             external_id=external_id,
             external_url=external_url,
             title="Slack (Wikipedia)",
-            indexable_file_contents="Slack is a proprietary business communication platform developed by Slack Technologies.",
+            indexable_file_contents="Slack is a proprietary business communication platform developed by Slack Technologies.".encode("utf-8"),
         )
         self.assertIsNotNone(creation)
 
