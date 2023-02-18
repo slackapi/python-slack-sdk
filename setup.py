@@ -337,7 +337,9 @@ setup(
             # used only under slack_sdk/*_store
             "boto3<=2",
             # InstallationStore/OAuthStateStore
-            "SQLAlchemy>=1,<3",
+            # Since v3.20, we no longer support SQLAlchemy 1.3 or older.
+            # If you need to use a legacy version, please add our v3.19.5 code to your project.
+            "SQLAlchemy>=1.4,<3",
             # Socket Mode
             # websockets 9 is not compatible with Python 3.10
             "websockets>=10,<11" if sys.version_info.minor > 6 else "websockets>=9.1,<10",
