@@ -1,5 +1,5 @@
 ---
-name: Enhancement / Feature Request
+name: SDK Enhancement / Feature Request
 about: Submit an enhancement/feature request
 title: (Set a clear title describing your idea)
 labels: "untriaged"

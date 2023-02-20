@@ -1,5 +1,5 @@
 ---
-name: Document
+name: SDK Document
 about: Submit an issue on documents
 title: (Set a clear title describing your idea)
 labels: "untriaged"

@@ -1,0 +1,7 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Slack Platform Customer Support
+    url: https://my.slack.com/help/requests/new
+    about: |
+      This issue tracker is a place to track bugs, feature requests, and questions on this SDK side.
+      If you have a general question on how to use the Slack platform, please get in touch with our customer support agents first via either /feedback in your Slack workspace or the help page link here.

@@ -1,5 +1,5 @@
 ---
-name: Question
+name: SDK Question
 about: Submit a question about this SDK
 title: (Set a clear title describing your question)
 labels: "untriaged"
