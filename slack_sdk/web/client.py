@@ -3143,9 +3143,10 @@ class WebClient(BaseClient):
                 channel_to_share = channels[0]
         completion = self.files_completeUploadExternal(
             files=[{"id": f["file_id"], "title": f["title"]} for f in files],
-            channel=channel_to_share,
+            channel_id=channel_to_share,
             initial_comment=initial_comment,
             thread_ts=thread_ts,
+            token=kwargs.get("token"),
             **kwargs,
         )
         if request_file_info is True:

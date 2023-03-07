@@ -14,3 +14,4 @@ client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 channels = ",".join(["#random"])
 filepath = "./tmp.txt"
 response = client.files_upload(channels=channels, file=filepath)
+response = client.files_upload_v2(channel=response.get("file").get("channels")[0], file=filepath)
