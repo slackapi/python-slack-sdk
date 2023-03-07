@@ -3172,9 +3172,10 @@ class WebClient(BaseClient):
                 channel_to_share = channels[0]
         completion = self.files_completeUploadExternal(
             files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
-            channel=channel_to_share,
+            channel_id=channel_to_share,
             initial_comment=initial_comment,
             thread_ts=thread_ts,
+            token=kwargs.get(&#34;token&#34;),
             **kwargs,
         )
         if request_file_info is True:
@@ -7855,9 +7856,10 @@ removed at anytime.</p></div>
                 channel_to_share = channels[0]
         completion = self.files_completeUploadExternal(
             files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
-            channel=channel_to_share,
+            channel_id=channel_to_share,
             initial_comment=initial_comment,
             thread_ts=thread_ts,
+            token=kwargs.get(&#34;token&#34;),
             **kwargs,
         )
         if request_file_info is True:
@@ -14297,9 +14299,10 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
             channel_to_share = channels[0]
     completion = self.files_completeUploadExternal(
         files=[{&#34;id&#34;: f[&#34;file_id&#34;], &#34;title&#34;: f[&#34;title&#34;]} for f in files],
-        channel=channel_to_share,
+        channel_id=channel_to_share,
         initial_comment=initial_comment,
         thread_ts=thread_ts,
+        token=kwargs.get(&#34;token&#34;),
         **kwargs,
     )
     if request_file_info is True:
