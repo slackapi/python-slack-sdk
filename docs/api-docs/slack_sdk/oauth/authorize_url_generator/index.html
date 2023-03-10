@@ -45,7 +45,7 @@ class AuthorizeUrlGenerator:
         self.user_scopes = user_scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str) -&gt; str:
+    def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
         url = (
@@ -57,6 +57,8 @@ class AuthorizeUrlGenerator:
         )
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         return url
 
 
@@ -76,7 +78,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
         self.scopes = scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str, nonce: Optional[str] = None) -&gt; str:
+    def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         url = (
             f&#34;{self.authorization_url}?&#34;
@@ -86,6 +88,8 @@ class OpenIDConnectAuthorizeUrlGenerator:
             f&#34;scope={scopes}&amp;&#34;
             f&#34;redirect_uri={self.redirect_uri}&#34;
         )
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         if nonce is not None:
             url += f&#34;&amp;nonce={nonce}&#34;
         return url</code></pre>
@@ -126,7 +130,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
         self.user_scopes = user_scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str) -&gt; str:
+    def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
         url = (
@@ -138,12 +142,14 @@ class OpenIDConnectAuthorizeUrlGenerator:
         )
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         return url</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.authorize_url_generator.AuthorizeUrlGenerator.generate"><code class="name flex">
-<span>def <span class="ident">generate</span></span>(<span>self, state: str) ‑> str</span>
+<span>def <span class="ident">generate</span></span>(<span>self, state: str, team: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -151,7 +157,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate(self, state: str) -&gt; str:
+<pre><code class="python">def generate(self, state: str, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
     url = (
@@ -163,6 +169,8 @@ class OpenIDConnectAuthorizeUrlGenerator:
     )
     if self.redirect_uri is not None:
         url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
+    if team is not None:
+        url += f&#34;&amp;team={team}&#34;
     return url</code></pre>
 </details>
 </dd>
@@ -194,7 +202,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
         self.scopes = scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str, nonce: Optional[str] = None) -&gt; str:
+    def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         url = (
             f&#34;{self.authorization_url}?&#34;
@@ -204,6 +212,8 @@ class OpenIDConnectAuthorizeUrlGenerator:
             f&#34;scope={scopes}&amp;&#34;
             f&#34;redirect_uri={self.redirect_uri}&#34;
         )
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         if nonce is not None:
             url += f&#34;&amp;nonce={nonce}&#34;
         return url</code></pre>
@@ -211,7 +221,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.authorize_url_generator.OpenIDConnectAuthorizeUrlGenerator.generate"><code class="name flex">
-<span>def <span class="ident">generate</span></span>(<span>self, state: str, nonce: Optional[str] = None) ‑> str</span>
+<span>def <span class="ident">generate</span></span>(<span>self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -219,7 +229,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate(self, state: str, nonce: Optional[str] = None) -&gt; str:
+<pre><code class="python">def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     url = (
         f&#34;{self.authorization_url}?&#34;
@@ -229,6 +239,8 @@ class OpenIDConnectAuthorizeUrlGenerator:
         f&#34;scope={scopes}&amp;&#34;
         f&#34;redirect_uri={self.redirect_uri}&#34;
     )
+    if team is not None:
+        url += f&#34;&amp;team={team}&#34;
     if nonce is not None:
         url += f&#34;&amp;nonce={nonce}&#34;
     return url</code></pre>

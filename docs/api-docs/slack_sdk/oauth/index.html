@@ -111,7 +111,7 @@ __all__ = [
         self.user_scopes = user_scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str) -&gt; str:
+    def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
         url = (
@@ -123,12 +123,14 @@ __all__ = [
         )
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         return url</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.AuthorizeUrlGenerator.generate"><code class="name flex">
-<span>def <span class="ident">generate</span></span>(<span>self, state: str) ‑> str</span>
+<span>def <span class="ident">generate</span></span>(<span>self, state: str, team: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -136,7 +138,7 @@ __all__ = [
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate(self, state: str) -&gt; str:
+<pre><code class="python">def generate(self, state: str, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
     url = (
@@ -148,6 +150,8 @@ __all__ = [
     )
     if self.redirect_uri is not None:
         url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
+    if team is not None:
+        url += f&#34;&amp;team={team}&#34;
     return url</code></pre>
 </details>
 </dd>
@@ -647,7 +651,7 @@ def logger(self) -&gt; Logger:
         self.scopes = scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str, nonce: Optional[str] = None) -&gt; str:
+    def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         url = (
             f&#34;{self.authorization_url}?&#34;
@@ -657,6 +661,8 @@ def logger(self) -&gt; Logger:
             f&#34;scope={scopes}&amp;&#34;
             f&#34;redirect_uri={self.redirect_uri}&#34;
         )
+        if team is not None:
+            url += f&#34;&amp;team={team}&#34;
         if nonce is not None:
             url += f&#34;&amp;nonce={nonce}&#34;
         return url</code></pre>
@@ -664,7 +670,7 @@ def logger(self) -&gt; Logger:
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.OpenIDConnectAuthorizeUrlGenerator.generate"><code class="name flex">
-<span>def <span class="ident">generate</span></span>(<span>self, state: str, nonce: Optional[str] = None) ‑> str</span>
+<span>def <span class="ident">generate</span></span>(<span>self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -672,7 +678,7 @@ def logger(self) -&gt; Logger:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate(self, state: str, nonce: Optional[str] = None) -&gt; str:
+<pre><code class="python">def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     url = (
         f&#34;{self.authorization_url}?&#34;
@@ -682,6 +688,8 @@ def logger(self) -&gt; Logger:
         f&#34;scope={scopes}&amp;&#34;
         f&#34;redirect_uri={self.redirect_uri}&#34;
     )
+    if team is not None:
+        url += f&#34;&amp;team={team}&#34;
     if nonce is not None:
         url += f&#34;&amp;nonce={nonce}&#34;
     return url</code></pre>
