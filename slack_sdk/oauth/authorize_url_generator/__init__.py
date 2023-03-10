@@ -17,7 +17,7 @@ class AuthorizeUrlGenerator:
         self.user_scopes = user_scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str) -> str:
+    def generate(self, state: str, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
         url = (
@@ -29,6 +29,8 @@ class AuthorizeUrlGenerator:
         )
         if self.redirect_uri is not None:
             url += f"&redirect_uri={self.redirect_uri}"
+        if team is not None:
+            url += f"&team={team}"
         return url
 
 
@@ -48,7 +50,7 @@ class OpenIDConnectAuthorizeUrlGenerator:
         self.scopes = scopes
         self.authorization_url = authorization_url
 
-    def generate(self, state: str, nonce: Optional[str] = None) -> str:
+    def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         url = (
             f"{self.authorization_url}?"
@@ -58,6 +60,8 @@ class OpenIDConnectAuthorizeUrlGenerator:
             f"scope={scopes}&"
             f"redirect_uri={self.redirect_uri}"
         )
+        if team is not None:
+            url += f"&team={team}"
         if nonce is not None:
             url += f"&nonce={nonce}"
         return url
