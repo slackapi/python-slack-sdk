@@ -279,12 +279,12 @@
 <p>By default, the RTM client uses <code class="docutils literal notranslate"><span class="pre">rtm.connect</span></code> to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket url.</p>
 <p>Read the <a class="reference external" href="https://api.slack.com/methods/rtm.connect">rtm.connect docs</a> and the <a class="reference external" href="https://api.slack.com/methods/rtm.start">rtm.start docs</a> for more details. Also, note that <code class="docutils literal notranslate"><span class="pre">slack.rtm_v2.RTMClient</span></code> does not support <code class="docutils literal notranslate"><span class="pre">rtm.start</span></code>.</p>
 <p><strong>RTM Events</strong></p>
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;message&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s1">&#39;ts&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s1">&#39;user&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Hello&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;ts&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;1358878749.000002&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;user&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;U023BECGF&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="s1">&#39;text&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Hello&#39;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://api.slack.com/rtm#events">RTM Events</a> for a complete list of events.</p>

@@ -367,14 +367,15 @@ deletion of threaded replies works the same as regular messages.</p>
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">¶</a></h2>
 <p><strong>Uploading files</strong></p>
 <p>You can upload files onto Slack and share the file with people in channels. Note that your app’s bot user needs to be in the channel (otherwise, you will get either <code class="docutils literal notranslate"><span class="pre">not_in_channel</span></code> or <code class="docutils literal notranslate"><span class="pre">channel_not_found</span></code> error code).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload</span><span class="p">(</span>
-    <span class="n">channels</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_upload_v2</span><span class="p">(</span>
+    <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;C3UKJTQAC&quot;</span><span class="p">,</span>
     <span class="n">file</span><span class="o">=</span><span class="s2">&quot;files.pdf&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test upload&quot;</span><span class="p">,</span>
+    <span class="n">initial_comment</span><span class="o">=</span><span class="s2">&quot;Here is the latest version of the file!&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://api.slack.com/methods/files.upload">files.upload</a> for more info.</p>
+<p>See <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0">files_upload_v2 method release notes</a> for more info.</p>
 <p><strong>Adding a remote file</strong></p>
 <p>You can add a file information that is stored in an external storage, not in Slack.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_remote_add</span><span class="p">(</span>

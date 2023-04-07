@@ -605,6 +605,18 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({&#34;channel_id&#34;: channel_id})
         return self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)
 
+    def admin_conversations_convertToPublic(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Convert a privte channel to a public channel.
+        https://api.slack.com/methods/admin.conversations.convertToPublic
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.convertToPublic&#34;, params=kwargs)
+
     def admin_conversations_setConversationPrefs(
         self,
         *,
@@ -650,6 +662,33 @@ class LegacyWebClient(LegacyBaseClient):
         else:
             kwargs.update({&#34;leaving_team_ids&#34;: leaving_team_ids})
         return self.api_call(&#34;admin.conversations.disconnectShared&#34;, params=kwargs)
+
+    def admin_conversations_lookup(
+        self,
+        *,
+        last_message_activity_before: int,
+        team_ids: Union[str, Sequence[str]],
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        max_member_count: Optional[int] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Returns channels on the given team using the filters.
+        https://api.slack.com/methods/admin.conversations.lookup
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;last_message_activity_before&#34;: last_message_activity_before,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;max_member_count&#34;: max_member_count,
+            }
+        )
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+        else:
+            kwargs.update({&#34;team_ids&#34;: team_ids})
+        return self.api_call(&#34;admin.conversations.lookup&#34;, params=kwargs)
 
     def admin_conversations_ekm_listOriginalConnectedChannelInfo(
         self,
@@ -938,6 +977,75 @@ class LegacyWebClient(LegacyBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name, &#34;new_name&#34;: new_name})
         return self.api_call(&#34;admin.emoji.rename&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    def admin_roles_addAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Adds members to the specified role with the specified scopes
+        https://api.slack.com/methods/admin.roles.addAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;role_id&#34;: role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.roles.addAssignments&#34;, params=kwargs)
+
+    def admin_roles_listAssignments(
+        self,
+        *,
+        role_ids: Optional[Union[str, Sequence[str]]] = None,
+        entity_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[Union[str, int]] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Lists assignments for all roles across entities.
+            Options to scope results by any combination of roles or entities
+        https://api.slack.com/methods/admin.roles.listAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;sort_dir&#34;: sort_dir})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(role_ids, (list, Tuple)):
+            kwargs.update({&#34;role_ids&#34;: &#34;,&#34;.join(role_ids)})
+        else:
+            kwargs.update({&#34;role_ids&#34;: role_ids})
+        return self.api_call(&#34;admin.roles.listAssignments&#34;, params=kwargs)
+
+    def admin_roles_removeAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Removes a set of users from a role for the given scopes and entities
+        https://api.slack.com/methods/admin.roles.removeAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;role_id&#34;: role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.roles.removeAssignments&#34;, params=kwargs)
 
     def admin_users_session_reset(
         self,
@@ -5289,6 +5397,18 @@ removed at anytime.</p></div>
         kwargs.update({&#34;channel_id&#34;: channel_id})
         return self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)
 
+    def admin_conversations_convertToPublic(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Convert a privte channel to a public channel.
+        https://api.slack.com/methods/admin.conversations.convertToPublic
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        return self.api_call(&#34;admin.conversations.convertToPublic&#34;, params=kwargs)
+
     def admin_conversations_setConversationPrefs(
         self,
         *,
@@ -5334,6 +5454,33 @@ removed at anytime.</p></div>
         else:
             kwargs.update({&#34;leaving_team_ids&#34;: leaving_team_ids})
         return self.api_call(&#34;admin.conversations.disconnectShared&#34;, params=kwargs)
+
+    def admin_conversations_lookup(
+        self,
+        *,
+        last_message_activity_before: int,
+        team_ids: Union[str, Sequence[str]],
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        max_member_count: Optional[int] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Returns channels on the given team using the filters.
+        https://api.slack.com/methods/admin.conversations.lookup
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;last_message_activity_before&#34;: last_message_activity_before,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;max_member_count&#34;: max_member_count,
+            }
+        )
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+        else:
+            kwargs.update({&#34;team_ids&#34;: team_ids})
+        return self.api_call(&#34;admin.conversations.lookup&#34;, params=kwargs)
 
     def admin_conversations_ekm_listOriginalConnectedChannelInfo(
         self,
@@ -5622,6 +5769,75 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name, &#34;new_name&#34;: new_name})
         return self.api_call(&#34;admin.emoji.rename&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    def admin_roles_addAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Adds members to the specified role with the specified scopes
+        https://api.slack.com/methods/admin.roles.addAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;role_id&#34;: role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.roles.addAssignments&#34;, params=kwargs)
+
+    def admin_roles_listAssignments(
+        self,
+        *,
+        role_ids: Optional[Union[str, Sequence[str]]] = None,
+        entity_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[Union[str, int]] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Lists assignments for all roles across entities.
+            Options to scope results by any combination of roles or entities
+        https://api.slack.com/methods/admin.roles.listAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;sort_dir&#34;: sort_dir})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(role_ids, (list, Tuple)):
+            kwargs.update({&#34;role_ids&#34;: &#34;,&#34;.join(role_ids)})
+        else:
+            kwargs.update({&#34;role_ids&#34;: role_ids})
+        return self.api_call(&#34;admin.roles.listAssignments&#34;, params=kwargs)
+
+    def admin_roles_removeAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Removes a set of users from a role for the given scopes and entities
+        https://api.slack.com/methods/admin.roles.removeAssignments
+        &#34;&#34;&#34;
+        kwargs.update({&#34;role_id&#34;: role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+        else:
+            kwargs.update({&#34;entity_ids&#34;: entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        return self.api_call(&#34;admin.roles.removeAssignments&#34;, params=kwargs)
 
     def admin_users_session_reset(
         self,
@@ -10001,6 +10217,29 @@ With an org-level token, enterprise_id or team_ids is required.
     return self.api_call(&#34;admin.conversations.convertToPrivate&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPublic"><code class="name flex">
+<span>def <span class="ident">admin_conversations_convertToPublic</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert a privte channel to a public channel.
+<a href="https://api.slack.com/methods/admin.conversations.convertToPublic">https://api.slack.com/methods/admin.conversations.convertToPublic</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_convertToPublic(
+    self,
+    *,
+    channel_id: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Convert a privte channel to a public channel.
+    https://api.slack.com/methods/admin.conversations.convertToPublic
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    return self.api_call(&#34;admin.conversations.convertToPublic&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_create"><code class="name flex">
 <span>def <span class="ident">admin_conversations_create</span></span>(<span>self, *, is_private: bool, name: str, description: Optional[str] = None, org_wide: Optional[bool] = None, team_id: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
@@ -10234,6 +10473,44 @@ the corresponding original channel IDs for key revocation with EKM.
         kwargs.update({&#34;user_ids&#34;: user_ids})
     # NOTE: the endpoint is unable to handle Content-Type: application/json as of Sep 3, 2020.
     return self.api_call(&#34;admin.conversations.invite&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup"><code class="name flex">
+<span>def <span class="ident">admin_conversations_lookup</span></span>(<span>self, *, last_message_activity_before: int, team_ids: Union[str, Sequence[str]], cursor: Optional[str] = None, limit: Optional[int] = None, max_member_count: Optional[int] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns channels on the given team using the filters.
+<a href="https://api.slack.com/methods/admin.conversations.lookup">https://api.slack.com/methods/admin.conversations.lookup</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_lookup(
+    self,
+    *,
+    last_message_activity_before: int,
+    team_ids: Union[str, Sequence[str]],
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    max_member_count: Optional[int] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Returns channels on the given team using the filters.
+    https://api.slack.com/methods/admin.conversations.lookup
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;last_message_activity_before&#34;: last_message_activity_before,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+            &#34;max_member_count&#34;: max_member_count,
+        }
+    )
+    if isinstance(team_ids, (list, Tuple)):
+        kwargs.update({&#34;team_ids&#34;: &#34;,&#34;.join(team_ids)})
+    else:
+        kwargs.update({&#34;team_ids&#34;: team_ids})
+    return self.api_call(&#34;admin.conversations.lookup&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention"><code class="name flex">
@@ -10789,6 +11066,109 @@ the corresponding original channel IDs for key revocation with EKM.
 ) -&gt; Union[Future, SlackResponse]:
     &#34;&#34;&#34;List all pending workspace invite requests.&#34;&#34;&#34;
     return self.api_call(&#34;admin.inviteRequests.list&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_addAssignments"><code class="name flex">
+<span>def <span class="ident">admin_roles_addAssignments</span></span>(<span>self, *, role_id: str, entity_ids: Union[str, Sequence[str]], user_ids: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds members to the specified role with the specified scopes
+<a href="https://api.slack.com/methods/admin.roles.addAssignments">https://api.slack.com/methods/admin.roles.addAssignments</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_roles_addAssignments(
+    self,
+    *,
+    role_id: str,
+    entity_ids: Union[str, Sequence[str]],
+    user_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Adds members to the specified role with the specified scopes
+    https://api.slack.com/methods/admin.roles.addAssignments
+    &#34;&#34;&#34;
+    kwargs.update({&#34;role_id&#34;: role_id})
+    if isinstance(entity_ids, (list, Tuple)):
+        kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+    else:
+        kwargs.update({&#34;entity_ids&#34;: entity_ids})
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return self.api_call(&#34;admin.roles.addAssignments&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_listAssignments"><code class="name flex">
+<span>def <span class="ident">admin_roles_listAssignments</span></span>(<span>self, *, role_ids: Union[str, Sequence[str], ForwardRef(None)] = None, entity_ids: Union[str, Sequence[str], ForwardRef(None)] = None, cursor: Optional[str] = None, limit: Union[str, int, ForwardRef(None)] = None, sort_dir: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lists assignments for all roles across entities.
+Options to scope results by any combination of roles or entities
+<a href="https://api.slack.com/methods/admin.roles.listAssignments">https://api.slack.com/methods/admin.roles.listAssignments</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_roles_listAssignments(
+    self,
+    *,
+    role_ids: Optional[Union[str, Sequence[str]]] = None,
+    entity_ids: Optional[Union[str, Sequence[str]]] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[Union[str, int]] = None,
+    sort_dir: Optional[str] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Lists assignments for all roles across entities.
+        Options to scope results by any combination of roles or entities
+    https://api.slack.com/methods/admin.roles.listAssignments
+    &#34;&#34;&#34;
+    kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;sort_dir&#34;: sort_dir})
+    if isinstance(entity_ids, (list, Tuple)):
+        kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+    else:
+        kwargs.update({&#34;entity_ids&#34;: entity_ids})
+    if isinstance(role_ids, (list, Tuple)):
+        kwargs.update({&#34;role_ids&#34;: &#34;,&#34;.join(role_ids)})
+    else:
+        kwargs.update({&#34;role_ids&#34;: role_ids})
+    return self.api_call(&#34;admin.roles.listAssignments&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_removeAssignments"><code class="name flex">
+<span>def <span class="ident">admin_roles_removeAssignments</span></span>(<span>self, *, role_id: str, entity_ids: Union[str, Sequence[str]], user_ids: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Removes a set of users from a role for the given scopes and entities
+<a href="https://api.slack.com/methods/admin.roles.removeAssignments">https://api.slack.com/methods/admin.roles.removeAssignments</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_roles_removeAssignments(
+    self,
+    *,
+    role_id: str,
+    entity_ids: Union[str, Sequence[str]],
+    user_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Removes a set of users from a role for the given scopes and entities
+    https://api.slack.com/methods/admin.roles.removeAssignments
+    &#34;&#34;&#34;
+    kwargs.update({&#34;role_id&#34;: role_id})
+    if isinstance(entity_ids, (list, Tuple)):
+        kwargs.update({&#34;entity_ids&#34;: &#34;,&#34;.join(entity_ids)})
+    else:
+        kwargs.update({&#34;entity_ids&#34;: entity_ids})
+    if isinstance(user_ids, (list, Tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    return self.api_call(&#34;admin.roles.removeAssignments&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_admins_list"><code class="name flex">
@@ -16719,6 +17099,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_bulkDelete" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_bulkDelete">admin_conversations_bulkDelete</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_bulkMove" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_bulkMove">admin_conversations_bulkMove</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPrivate" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPrivate">admin_conversations_convertToPrivate</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPublic" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPublic">admin_conversations_convertToPublic</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_create" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_create">admin_conversations_create</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_delete" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_delete">admin_conversations_delete</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared">admin_conversations_disconnectShared</a></code></li>
@@ -16727,6 +17108,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention">admin_conversations_getCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams">admin_conversations_getTeams</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite">admin_conversations_invite</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup">admin_conversations_lookup</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention">admin_conversations_removeCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename">admin_conversations_rename</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_addGroup" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_restrictAccess_addGroup">admin_conversations_restrictAccess_addGroup</a></code></li>
@@ -16747,6 +17129,9 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_denied_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_denied_list">admin_inviteRequests_denied_list</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_deny" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_deny">admin_inviteRequests_deny</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_inviteRequests_list">admin_inviteRequests_list</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_addAssignments" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_addAssignments">admin_roles_addAssignments</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_listAssignments" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_listAssignments">admin_roles_listAssignments</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_removeAssignments" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_roles_removeAssignments">admin_roles_removeAssignments</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_admins_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_admins_list">admin_teams_admins_list</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_create" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_create">admin_teams_create</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_teams_list">admin_teams_list</a></code></li>

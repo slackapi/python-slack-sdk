@@ -204,13 +204,14 @@ You can upload files onto Slack and share the file with people in channels. Note
 
 .. code-block:: python
 
-    response = client.files_upload(
-        channels="C3UKJTQAC",
+    response = client.files_upload_v2(
+        channel="C3UKJTQAC",
         file="files.pdf",
-        title="Test upload"
+        title="Test upload",
+        initial_comment="Here is the latest version of the file!",
     )
 
-See `files.upload <https://api.slack.com/methods/files.upload>`_ for more info.
+See `files_upload_v2 method release notes <https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0>`_ for more info.
 
 **Adding a remote file**
 
