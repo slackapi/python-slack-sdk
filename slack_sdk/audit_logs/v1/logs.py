@@ -551,9 +551,7 @@ class Details:
             if previous_profile is None or isinstance(previous_profile, Profile)
             else Profile(**previous_profile)
         )
-        self.new_profile = (
-            previous_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
-        )
+        self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
 
 
 class Channel:
