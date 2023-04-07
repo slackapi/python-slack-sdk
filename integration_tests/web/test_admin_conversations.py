@@ -47,6 +47,8 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(conv_creation)
         created_channel_id = conv_creation.data["channel_id"]
 
+        self.assertIsNotNone(client.admin_conversations_lookup(last_message_activity_before=100, team_ids=[self.team_id]))
+
         self.assertIsNotNone(
             client.admin_conversations_invite(
                 channel_id=created_channel_id,
@@ -109,6 +111,12 @@ class TestWebClient(unittest.TestCase):
         )
         time.sleep(2)  # To avoid internal_error
         self.assertIsNotNone(
+            client.admin_conversations_convertToPublic(
+                channel_id=created_channel_id,
+            )
+        )
+        time.sleep(2)  # To avoid internal_error
+        self.assertIsNotNone(
             client.admin_conversations_archive(
                 channel_id=created_channel_id,
             )
@@ -133,6 +141,10 @@ class TestWebClient(unittest.TestCase):
         )
         self.assertIsNotNone(conv_creation)
         created_channel_id = conv_creation.data["channel_id"]
+
+        self.assertIsNotNone(
+            await client.admin_conversations_lookup(last_message_activity_before=100, team_ids=[self.team_id])
+        )
 
         self.assertIsNotNone(
             await client.admin_conversations_invite(
@@ -185,6 +197,12 @@ class TestWebClient(unittest.TestCase):
         await asyncio.sleep(2)  # To avoid channel_not_found
         self.assertIsNotNone(
             await client.admin_conversations_convertToPrivate(
+                channel_id=created_channel_id,
+            )
+        )
+        await asyncio.sleep(2)  # To avoid internal_error
+        self.assertIsNotNone(
+            await client.admin_conversations_convertToPublic(
                 channel_id=created_channel_id,
             )
         )

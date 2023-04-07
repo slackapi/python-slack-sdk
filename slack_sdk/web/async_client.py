@@ -575,6 +575,18 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.convertToPrivate", params=kwargs)
 
+    async def admin_conversations_convertToPublic(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Convert a privte channel to a public channel.
+        https://api.slack.com/methods/admin.conversations.convertToPublic
+        """
+        kwargs.update({"channel_id": channel_id})
+        return await self.api_call("admin.conversations.convertToPublic", params=kwargs)
+
     async def admin_conversations_setConversationPrefs(
         self,
         *,
@@ -620,6 +632,33 @@ class AsyncWebClient(AsyncBaseClient):
         else:
             kwargs.update({"leaving_team_ids": leaving_team_ids})
         return await self.api_call("admin.conversations.disconnectShared", params=kwargs)
+
+    async def admin_conversations_lookup(
+        self,
+        *,
+        last_message_activity_before: int,
+        team_ids: Union[str, Sequence[str]],
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        max_member_count: Optional[int] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Returns channels on the given team using the filters.
+        https://api.slack.com/methods/admin.conversations.lookup
+        """
+        kwargs.update(
+            {
+                "last_message_activity_before": last_message_activity_before,
+                "cursor": cursor,
+                "limit": limit,
+                "max_member_count": max_member_count,
+            }
+        )
+        if isinstance(team_ids, (list, Tuple)):
+            kwargs.update({"team_ids": ",".join(team_ids)})
+        else:
+            kwargs.update({"team_ids": team_ids})
+        return await self.api_call("admin.conversations.lookup", params=kwargs)
 
     async def admin_conversations_ekm_listOriginalConnectedChannelInfo(
         self,
@@ -908,6 +947,75 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"name": name, "new_name": new_name})
         return await self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
+
+    async def admin_roles_addAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Adds members to the specified role with the specified scopes
+        https://api.slack.com/methods/admin.roles.addAssignments
+        """
+        kwargs.update({"role_id": role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({"entity_ids": ",".join(entity_ids)})
+        else:
+            kwargs.update({"entity_ids": entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return await self.api_call("admin.roles.addAssignments", params=kwargs)
+
+    async def admin_roles_listAssignments(
+        self,
+        *,
+        role_ids: Optional[Union[str, Sequence[str]]] = None,
+        entity_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[Union[str, int]] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Lists assignments for all roles across entities.
+            Options to scope results by any combination of roles or entities
+        https://api.slack.com/methods/admin.roles.listAssignments
+        """
+        kwargs.update({"cursor": cursor, "limit": limit, "sort_dir": sort_dir})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({"entity_ids": ",".join(entity_ids)})
+        else:
+            kwargs.update({"entity_ids": entity_ids})
+        if isinstance(role_ids, (list, Tuple)):
+            kwargs.update({"role_ids": ",".join(role_ids)})
+        else:
+            kwargs.update({"role_ids": role_ids})
+        return await self.api_call("admin.roles.listAssignments", params=kwargs)
+
+    async def admin_roles_removeAssignments(
+        self,
+        *,
+        role_id: str,
+        entity_ids: Union[str, Sequence[str]],
+        user_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Removes a set of users from a role for the given scopes and entities
+        https://api.slack.com/methods/admin.roles.removeAssignments
+        """
+        kwargs.update({"role_id": role_id})
+        if isinstance(entity_ids, (list, Tuple)):
+            kwargs.update({"entity_ids": ",".join(entity_ids)})
+        else:
+            kwargs.update({"entity_ids": entity_ids})
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return await self.api_call("admin.roles.removeAssignments", params=kwargs)
 
     async def admin_users_session_reset(
         self,
