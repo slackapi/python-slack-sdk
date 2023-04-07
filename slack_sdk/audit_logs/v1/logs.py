@@ -177,6 +177,51 @@ class SharedWith:
         self.unknown_fields = kwargs
 
 
+class Profile:
+    real_name: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    display_name: Optional[str]
+    image_original: Optional[str]
+    image_24: Optional[str]
+    image_32: Optional[str]
+    image_48: Optional[str]
+    image_72: Optional[str]
+    image_192: Optional[str]
+    image_512: Optional[str]
+    image_1024: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        real_name: Optional[str] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        display_name: Optional[str] = None,
+        image_original: Optional[str] = None,
+        image_24: Optional[str] = None,
+        image_32: Optional[str] = None,
+        image_48: Optional[str] = None,
+        image_72: Optional[str] = None,
+        image_192: Optional[str] = None,
+        image_512: Optional[str] = None,
+        image_1024: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.real_name = real_name
+        self.first_name = first_name
+        self.last_name = last_name
+        self.display_name = display_name
+        self.image_original = image_original
+        self.image_24 = image_24
+        self.image_32 = image_32
+        self.image_48 = image_48
+        self.image_72 = image_72
+        self.image_192 = image_192
+        self.image_512 = image_512
+        self.image_1024 = image_1024
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -268,6 +313,12 @@ class Details:
     total_removal_count: Optional[int]
     is_flagged: Optional[str]
     target_user: Optional[str]
+    idp_config_id: Optional[str]
+    config_type: Optional[str]
+    idp_entity_id_hash: Optional[str]
+    label: Optional[str]
+    previous_profile: Optional[Profile]
+    new_profile: Optional[Profile]
 
     def __init__(
         self,
@@ -361,6 +412,12 @@ class Details:
         total_removal_count: Optional[int] = None,
         is_flagged: Optional[str] = None,
         target_user: Optional[str] = None,
+        idp_config_id: Optional[str] = None,
+        config_type: Optional[str] = None,
+        idp_entity_id_hash: Optional[str] = None,
+        label: Optional[str] = None,
+        previous_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        new_profile: Optional[Union[Dict[str, Any], Profile]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -485,6 +542,18 @@ class Details:
         self.total_removal_count = total_removal_count
         self.is_flagged = is_flagged
         self.target_user = target_user
+        self.idp_config_id = idp_config_id
+        self.config_type = config_type
+        self.idp_entity_id_hash = idp_entity_id_hash
+        self.label = label
+        self.previous_profile = (
+            previous_profile
+            if previous_profile is None or isinstance(previous_profile, Profile)
+            else Profile(**previous_profile)
+        )
+        self.new_profile = (
+            previous_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
+        )
 
 
 class Channel:
