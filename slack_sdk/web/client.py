@@ -634,7 +634,7 @@ class WebClient(BaseClient):
         max_member_count: Optional[int] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Convert a private channel to a public channel.
+        """Returns channels on the given team using the filters.
         https://api.slack.com/methods/admin.conversations.lookup
         """
         kwargs.update(

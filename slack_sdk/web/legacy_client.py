@@ -645,7 +645,7 @@ class LegacyWebClient(LegacyBaseClient):
         max_member_count: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Convert a private channel to a public channel.
+        """Returns channels on the given team using the filters.
         https://api.slack.com/methods/admin.conversations.lookup
         """
         kwargs.update(
