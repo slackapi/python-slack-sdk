@@ -41,5 +41,8 @@ jobs:
       run: |
         python_version=`python -V`
         if [ ${python_version:7:3} == "3.9" ]; then
-          codecov -e ${python_version:7}
+          # python setup.py validate generates the coverage file
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t ${CODECOV_TOKEN}
         fi
