@@ -1,7 +1,7 @@
 # ---------------------
 # Sanic App for Slack OAuth flow
 # ---------------------
-
+import html
 import logging
 import os
 from slack_sdk.web.async_client import AsyncWebClient
@@ -44,7 +44,7 @@ async def oauth_start(req: Request):
     url = authorization_url_generator.generate(state)
     return HTTPResponse(
         status=200,
-        body=f'<a href="{url}">'
+        body=f'<a href="{html.escape(url)}">'
         f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>',
     )
 
@@ -61,6 +61,7 @@ async def oauth_callback(req: Request):
             logger.info(f"oauth.v2.access response: {oauth_response}")
 
             installed_enterprise = oauth_response.get("enterprise") or {}
+            is_enterprise_install = oauth_response.get("is_enterprise_install")
             installed_team = oauth_response.get("team") or {}
             installer = oauth_response.get("authed_user") or {}
             incoming_webhook = oauth_response.get("incoming_webhook") or {}
@@ -85,6 +86,8 @@ async def oauth_callback(req: Request):
                 incoming_webhook_url=incoming_webhook.get("url"),
                 incoming_webhook_channel_id=incoming_webhook.get("channel_id"),
                 incoming_webhook_configuration_url=incoming_webhook.get("configuration_url"),
+                is_enterprise_install=is_enterprise_install,
+                token_type=oauth_response.get("token_type"),
             )
             installation_store.save(installation)
             html = redirect_page_renderer.render_success_page(
@@ -111,7 +114,11 @@ async def oauth_callback(req: Request):
             )
 
     error = req.args.get("error") if "error" in req.args else ""
-    return HTTPResponse(status=400, body=f"Something is wrong with the installation (error: {error})")
+    return HTTPResponse(
+        status=400,
+        headers={"Content-Type": "text/html; charset=utf-8"},
+        body=redirect_page_renderer.render_failure_page(error),
+    )
 
 
 # ---------------------

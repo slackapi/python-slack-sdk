@@ -24,7 +24,7 @@ class TestInit(unittest.TestCase):
             redirect_uri_path="/slack/oauth_redirect",
         )
         page = renderer.render_success_page(app_id="A111", team_id="T111")
-        self.assertTrue("slack://app?team=T111&id=A111" in page)
+        self.assertTrue("slack://app?team=T111&amp;id=A111" in page)
 
         page = renderer.render_success_page(app_id="A111", team_id=None)
         self.assertTrue("slack://open" in page)
