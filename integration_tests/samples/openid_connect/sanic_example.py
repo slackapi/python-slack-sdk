@@ -98,20 +98,27 @@ async def oauth_callback(req: Request):
 
             except Exception:
                 logger.exception("Failed to perform openid.connect.token API call")
-                return redirect_page_renderer.render_failure_page("Failed to perform openid.connect.token API call")
+                html = redirect_page_renderer.render_failure_page("Failed to perform openid.connect.token API call")
+                return HTTPResponse(
+                    status=400,
+                    headers={"Content-Type": "text/html; charset=utf-8"},
+                    body=html,
+                )
 
         else:
             html = redirect_page_renderer.render_failure_page("The state value is already expired")
             return HTTPResponse(
                 status=400,
-                headers={
-                    "Content-Type": "text/html; charset=utf-8",
-                },
+                headers={"Content-Type": "text/html; charset=utf-8"},
                 body=html,
             )
 
     error = req.args.get("error") if "error" in req.args else ""
-    return HTTPResponse(status=400, body=f"Something is wrong with the installation (error: {error})")
+    return HTTPResponse(
+        status=400,
+        headers={"Content-Type": "text/html; charset=utf-8"},
+        body=redirect_page_renderer.render_failure_page(error),
+    )
 
 
 if __name__ == "__main__":

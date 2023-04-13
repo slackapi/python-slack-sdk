@@ -91,7 +91,7 @@ def oauth_callback():
             return redirect_page_renderer.render_failure_page("The state value is already expired")
 
     error = request.args["error"] if "error" in request.args else ""
-    return make_response(f"Something is wrong with the installation (error: {error})", 400)
+    return redirect_page_renderer.render_failure_page(error)
 
 
 if __name__ == "__main__":

@@ -34,6 +34,7 @@ The code snippet below demonstrates how to build it using `Flask <https://flask.
 .. code-block:: python
 
     import os
+    import html
     from slack_sdk.oauth import AuthorizeUrlGenerator
     from slack_sdk.oauth.installation_store import FileInstallationStore, Installation
     from slack_sdk.oauth.state_store import FileOAuthStateStore
@@ -59,7 +60,7 @@ The code snippet below demonstrates how to build it using `Flask <https://flask.
         state = state_store.issue()
         # https://slack.com/oauth/v2/authorize?state=(generated value)&client_id={client_id}&scope=app_mentions:read,chat:write&user_scope=search:read
         url = authorize_url_generator.generate(state)
-        return f'<a href="{url}">' \
+        return f'<a href="{html.escape(url)}">' \
                f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
 
 When accessing ``https://(your domain)/slack/install``, you will see "Add to Slack" button in the webpage. You can start the app's installation flow by clicking the button.
@@ -90,13 +91,11 @@ The redirection gives you a ``code`` parameter. You can exchange the value for a
                     redirect_uri=redirect_uri,
                     code=request.args["code"]
                 )
-
-                installed_enterprise = oauth_response.get("enterprise", {})
+                installed_enterprise = oauth_response.get("enterprise") or {}
                 is_enterprise_install = oauth_response.get("is_enterprise_install")
-                installed_team = oauth_response.get("team", {})
-                installer = oauth_response.get("authed_user", {})
-                incoming_webhook = oauth_response.get("incoming_webhook", {})
-
+                installed_team = oauth_response.get("team") or {}
+                installer = oauth_response.get("authed_user") or {}
+                incoming_webhook = oauth_response.get("incoming_webhook") or {}
                 bot_token = oauth_response.get("access_token")
                 # NOTE: oauth.v2.access doesn't include bot_id in response
                 bot_id = None
@@ -137,7 +136,7 @@ The redirection gives you a ``code`` parameter. You can exchange the value for a
                 return make_response(f"Try the installation again (the state value is already expired)", 400)
 
         error = request.args["error"] if "error" in request.args else ""
-        return make_response(f"Something is wrong with the installation (error: {error})", 400)
+        return make_response(f"Something is wrong with the installation (error: {html.escape(error)})", 400)
 
 Token Lookup
 *************************************************

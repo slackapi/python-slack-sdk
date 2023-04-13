@@ -251,7 +251,11 @@ async def oauth_callback(req: Request):
             )
 
     error = req.args.get("error") if "error" in req.args else ""
-    return HTTPResponse(status=400, body=f"Something is wrong with the installation (error: {error})")
+    return HTTPResponse(
+        status=400,
+        headers={"Content-Type": "text/html; charset=utf-8"},
+        body=redirect_page_renderer.render_failure_page(error),
+    )
 
 
 if __name__ == "__main__":

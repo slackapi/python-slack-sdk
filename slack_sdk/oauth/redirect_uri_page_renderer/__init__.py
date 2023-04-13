@@ -1,3 +1,4 @@
+import html
 from typing import Optional
 
 
@@ -35,7 +36,7 @@ class RedirectUriPageRenderer:
         return f"""
 <html>
 <head>
-<meta http-equiv="refresh" content="0; URL={url}">
+<meta http-equiv="refresh" content="0; URL={html.escape(url)}">
 <style>
 body {{
   padding: 10px 15px;
@@ -46,7 +47,7 @@ body {{
 </head>
 <body>
 <h2>Thank you!</h2>
-<p>Redirecting to the Slack App... click <a href="{url}">here</a>. If you use the browser version of Slack, click <a href="{browser_url}" target="_blank">this link</a> instead.</p>
+<p>Redirecting to the Slack App... click <a href="{html.escape(url)}">here</a>. If you use the browser version of Slack, click <a href="{html.escape(browser_url)}" target="_blank">this link</a> instead.</p>
 </body>
 </html>
 """  # noqa: E501
@@ -65,7 +66,7 @@ body {{
 </head>
 <body>
 <h2>Oops, Something Went Wrong!</h2>
-<p>Please try again from <a href="{self.install_path}">here</a> or contact the app owner (reason: {reason})</p>
+<p>Please try again from <a href="{html.escape(self.install_path)}">here</a> or contact the app owner (reason: {html.escape(reason)})</p>
 </body>
 </html>
-"""
+"""  # noqa: E501
