@@ -39,7 +39,9 @@ jobs:
         python setup.py unit_tests --test-target tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
     - name: Run codecov (only 3.9)
       run: |
-        python_version=`python -V`
         if [ ${python_version:7:3} == "3.9" ]; then
-          codecov -e ${python_version:7}
+          pytest --cov .
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t ${CODECOV_TOKEN}
         fi
