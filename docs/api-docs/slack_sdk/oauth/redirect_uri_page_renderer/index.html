@@ -26,7 +26,8 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import Optional
+<pre><code class="python">import html
+from typing import Optional
 
 
 class RedirectUriPageRenderer:
@@ -63,7 +64,7 @@ class RedirectUriPageRenderer:
         return f&#34;&#34;&#34;
 &lt;html&gt;
 &lt;head&gt;
-&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={url}&#34;&gt;
+&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={html.escape(url)}&#34;&gt;
 &lt;style&gt;
 body {{
   padding: 10px 15px;
@@ -74,7 +75,7 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Thank you!&lt;/h2&gt;
-&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{url}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{browser_url}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
+&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{html.escape(url)}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{html.escape(browser_url)}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &#34;&#34;&#34;  # noqa: E501
@@ -93,10 +94,10 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Oops, Something Went Wrong!&lt;/h2&gt;
-&lt;p&gt;Please try again from &lt;a href=&#34;{self.install_path}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {reason})&lt;/p&gt;
+&lt;p&gt;Please try again from &lt;a href=&#34;{html.escape(self.install_path)}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {html.escape(reason)})&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-&#34;&#34;&#34;</code></pre>
+&#34;&#34;&#34;  # noqa: E501</code></pre>
 </details>
 </section>
 <section>
@@ -152,7 +153,7 @@ body {{
         return f&#34;&#34;&#34;
 &lt;html&gt;
 &lt;head&gt;
-&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={url}&#34;&gt;
+&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={html.escape(url)}&#34;&gt;
 &lt;style&gt;
 body {{
   padding: 10px 15px;
@@ -163,7 +164,7 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Thank you!&lt;/h2&gt;
-&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{url}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{browser_url}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
+&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{html.escape(url)}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{html.escape(browser_url)}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &#34;&#34;&#34;  # noqa: E501
@@ -182,10 +183,10 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Oops, Something Went Wrong!&lt;/h2&gt;
-&lt;p&gt;Please try again from &lt;a href=&#34;{self.install_path}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {reason})&lt;/p&gt;
+&lt;p&gt;Please try again from &lt;a href=&#34;{html.escape(self.install_path)}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {html.escape(reason)})&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-&#34;&#34;&#34;</code></pre>
+&#34;&#34;&#34;  # noqa: E501</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -212,10 +213,10 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Oops, Something Went Wrong!&lt;/h2&gt;
-&lt;p&gt;Please try again from &lt;a href=&#34;{self.install_path}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {reason})&lt;/p&gt;
+&lt;p&gt;Please try again from &lt;a href=&#34;{html.escape(self.install_path)}&#34;&gt;here&lt;/a&gt; or contact the app owner (reason: {html.escape(reason)})&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-&#34;&#34;&#34;</code></pre>
+&#34;&#34;&#34;  # noqa: E501</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.oauth.redirect_uri_page_renderer.RedirectUriPageRenderer.render_success_page"><code class="name flex">
@@ -247,7 +248,7 @@ body {{
         return f&#34;&#34;&#34;
 &lt;html&gt;
 &lt;head&gt;
-&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={url}&#34;&gt;
+&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0; URL={html.escape(url)}&#34;&gt;
 &lt;style&gt;
 body {{
   padding: 10px 15px;
@@ -258,7 +259,7 @@ body {{
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h2&gt;Thank you!&lt;/h2&gt;
-&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{url}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{browser_url}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
+&lt;p&gt;Redirecting to the Slack App... click &lt;a href=&#34;{html.escape(url)}&#34;&gt;here&lt;/a&gt;. If you use the browser version of Slack, click &lt;a href=&#34;{html.escape(browser_url)}&#34; target=&#34;_blank&#34;&gt;this link&lt;/a&gt; instead.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &#34;&#34;&#34;  # noqa: E501</code></pre>
