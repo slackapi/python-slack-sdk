@@ -247,7 +247,11 @@ class SQLAlchemyInstallationStore(InstallationStore):
             team_id = None
 
         c = self.installations.c
-        where_clause = and_(c.enterprise_id == enterprise_id, c.team_id == team_id)
+        where_clause = and_(
+            c.client_id == self.client_id,
+            c.enterprise_id == enterprise_id,
+            c.team_id == team_id,
+        )
         if user_id is not None:
             where_clause = and_(
                 c.client_id == self.client_id,
