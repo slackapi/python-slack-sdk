@@ -1,12 +1,17 @@
 import json
 import unittest
+from io import BytesIO
 from typing import Dict, Sequence, Union
 
 import pytest
 
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block, DividerBlock
-from slack_sdk.web.internal_utils import _build_unexpected_body_error_message, _parse_web_class_objects
+from slack_sdk.web.internal_utils import (
+    _build_unexpected_body_error_message,
+    _parse_web_class_objects,
+    _to_v2_file_upload_item,
+)
 
 
 class TestInternalUtils(unittest.TestCase):
@@ -72,3 +77,24 @@ class TestInternalUtils(unittest.TestCase):
         }
         _parse_web_class_objects(kwargs)
         assert isinstance(kwargs["user_auth_blocks"][0], dict)
+
+    def test_files_upload_v2_issue_1356(self):
+        content_item = _to_v2_file_upload_item({"content": "test"})
+        assert content_item.get("filename") == "Uploaded file"
+
+        filepath_item = _to_v2_file_upload_item({"file": "tests/slack_sdk/web/test_internal_utils.py"})
+        assert filepath_item.get("filename") == "test_internal_utils.py"
+        filepath_item = _to_v2_file_upload_item({"file": "tests/slack_sdk/web/test_internal_utils.py", "filename": "foo.py"})
+        assert filepath_item.get("filename") == "foo.py"
+
+        file_bytes = "This is a test!".encode("utf-8")
+        file_bytes_item = _to_v2_file_upload_item({"file": file_bytes})
+        assert file_bytes_item.get("filename") == "Uploaded file"
+        file_bytes_item = _to_v2_file_upload_item({"file": file_bytes, "filename": "foo.txt"})
+        assert file_bytes_item.get("filename") == "foo.txt"
+
+        file_io = BytesIO(file_bytes)
+        file_io_item = _to_v2_file_upload_item({"file": file_io})
+        assert file_io_item.get("filename") == "Uploaded file"
+        file_io_item = _to_v2_file_upload_item({"file": file_io, "filename": "foo.txt"})
+        assert file_io_item.get("filename") == "foo.txt"
