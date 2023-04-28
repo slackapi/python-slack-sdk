@@ -244,6 +244,7 @@
 </table>
 <p>The code snippet below demonstrates how to build it using <a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">html</span>
 <span class="kn">from</span> <span class="nn">slack_sdk.oauth</span> <span class="kn">import</span> <span class="n">AuthorizeUrlGenerator</span>
 <span class="kn">from</span> <span class="nn">slack_sdk.oauth.installation_store</span> <span class="kn">import</span> <span class="n">FileInstallationStore</span><span class="p">,</span> <span class="n">Installation</span>
 <span class="kn">from</span> <span class="nn">slack_sdk.oauth.state_store</span> <span class="kn">import</span> <span class="n">FileOAuthStateStore</span>
@@ -269,7 +270,7 @@
     <span class="n">state</span> <span class="o">=</span> <span class="n">state_store</span><span class="o">.</span><span class="n">issue</span><span class="p">()</span>
     <span class="c1"># https://slack.com/oauth/v2/authorize?state=(generated value)&amp;client_id={client_id}&amp;scope=app_mentions:read,chat:write&amp;user_scope=search:read</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">authorize_url_generator</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span> \
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{</span><span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span> \
            <span class="sa">f</span><span class="s1">&#39;&lt;img alt=&quot;&quot;Add to Slack&quot;&quot; height=&quot;40&quot; width=&quot;139&quot; src=&quot;https://platform.slack-edge.com/img/add_to_slack.png&quot; srcset=&quot;https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x&quot; /&gt;&lt;/a&gt;&#39;</span>
 </pre></div>
 </div>
@@ -295,13 +296,11 @@
                 <span class="n">redirect_uri</span><span class="o">=</span><span class="n">redirect_uri</span><span class="p">,</span>
                 <span class="n">code</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span>
             <span class="p">)</span>
-
-            <span class="n">installed_enterprise</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enterprise&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">installed_enterprise</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enterprise&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
             <span class="n">is_enterprise_install</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_enterprise_install&quot;</span><span class="p">)</span>
-            <span class="n">installed_team</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;team&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">installer</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;authed_user&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">incoming_webhook</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;incoming_webhook&quot;</span><span class="p">,</span> <span class="p">{})</span>
-
+            <span class="n">installed_team</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;team&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">installer</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;authed_user&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">incoming_webhook</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;incoming_webhook&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
             <span class="n">bot_token</span> <span class="o">=</span> <span class="n">oauth_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_token&quot;</span><span class="p">)</span>
             <span class="c1"># NOTE: oauth.v2.access doesn&#39;t include bot_id in response</span>
             <span class="n">bot_id</span> <span class="o">=</span> <span class="kc">None</span>
@@ -342,7 +341,7 @@
             <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Try the installation again (the state value is already expired)&quot;</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 
     <span class="n">error</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Something is wrong with the installation (error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">make_response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Something is wrong with the installation (error: </span><span class="si">{</span><span class="n">html</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
