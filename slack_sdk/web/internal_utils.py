@@ -334,9 +334,9 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
             raise SlackRequestError("content for file upload must be 'str' (UTF-8 encoded) or 'bytes' (for data)")
 
     filename = upload_file.get("filename")
-    if upload_file.get("filename") is None and isinstance(file, str):
+    if filename is None:
         # use the local filename if filename is missing
-        if upload_file.get("filename") is None:
+        if isinstance(file, str):
             filename = file.split(os.path.sep)[-1]
         else:
             filename = "Uploaded file"
