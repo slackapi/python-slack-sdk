@@ -276,3 +276,17 @@ class TestAsyncWebhook(unittest.TestCase):
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("ok", response.body)
+
+    @async_test
+    async def test_metadata(self):
+        url = os.environ[SLACK_SDK_TEST_INCOMING_WEBHOOK_URL]
+        webhook = AsyncWebhookClient(url)
+        response = await webhook.send(
+            text="Hello with metadata",
+            metadata={
+                "event_type": "foo",
+                "event_payload": {"foo": "bar"},
+            },
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ok", response.body)
