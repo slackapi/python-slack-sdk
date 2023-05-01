@@ -96,6 +96,7 @@ class AsyncWebhookClient:
         delete_original: Optional[bool] = None,
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
+        metadata: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> WebhookResponse:
         """Performs a Slack API request and returns the result.
@@ -109,6 +110,7 @@ class AsyncWebhookClient:
             delete_original: True if you use this option for response_url requests
             unfurl_links: Option to indicate whether text url should unfurl
             unfurl_media: Option to indicate whether media url should unfurl
+            metadata: Metadata attached to the message
             headers: Request headers to append only for this request
 
         Returns:
@@ -126,6 +128,7 @@ class AsyncWebhookClient:
                 "delete_original": delete_original,
                 "unfurl_links": unfurl_links,
                 "unfurl_media": unfurl_media,
+                "metadata": metadata,
             },
             headers=headers,
         )
