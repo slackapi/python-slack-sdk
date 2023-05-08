@@ -42,6 +42,9 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         self.metadata = MetaData()
         self.oauth_states = self.build_oauth_states_table(self.metadata, table_name)
 
+    def create_tables(self):
+        self.metadata.create_all(self.engine)
+
     @property
     def logger(self) -> Logger:
         if self._logger is None:
