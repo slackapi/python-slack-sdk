@@ -266,6 +266,7 @@ class Attachment(JsonObject):
         "author_icon",
         "author_link",
         "author_name",
+        "author_subname",
         "color",
         "fallback",
         "fields",
@@ -298,6 +299,7 @@ class Attachment(JsonObject):
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -333,6 +335,7 @@ class Attachment(JsonObject):
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author's name.
+            author_subname: Small text used to display the author's sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -371,6 +374,7 @@ class Attachment(JsonObject):
         self.title_link = title_link
         self.color = color
         self.author_name = author_name
+        self.author_subname = author_subname
         self.author_link = author_link
         self.author_icon = author_icon
         self.image_url = image_url
@@ -484,6 +488,7 @@ class InteractiveAttachment(Attachment):
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -525,6 +530,7 @@ class InteractiveAttachment(Attachment):
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author's name.
+            author_subname: Small text used to display the author's sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -565,6 +571,7 @@ class InteractiveAttachment(Attachment):
             title_link=title_link,
             color=color,
             author_name=author_name,
+            author_subname=author_subname,
             author_link=author_link,
             author_icon=author_icon,
             image_url=image_url,
