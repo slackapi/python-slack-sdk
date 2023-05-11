@@ -86,5 +86,27 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         state.increment_current_attempt()
 
 
+class AsyncServerErrorRetryHandler(AsyncRetryHandler):
+    """RetryHandler that does retries for server errors."""
+
+    def __init__(
+        self,
+        max_retry_count: int = 1,
+        interval_calculator: RetryIntervalCalculator = default_interval_calculator,
+    ):
+        super().__init__(max_retry_count, interval_calculator)
+
+    async def _can_retry_async(
+        self,
+        *,
+        state: RetryState,
+        request: HttpRequest,
+        response: Optional[HttpResponse],
+        error: Optional[Exception],
+    ) -> bool:
+        # foo
+        return response is not None and response.status_code in [500, 503]
+
+
 def async_default_handlers() -> List[AsyncRetryHandler]:
     return [AsyncConnectionErrorRetryHandler()]
