@@ -107,5 +107,4 @@ class ServerErrorRetryHandler(RetryHandler):
         response: Optional[HttpResponse],
         error: Optional[Exception],
     ) -> bool:
-        # foo
         return response is not None and response.status_code in [500, 503]
