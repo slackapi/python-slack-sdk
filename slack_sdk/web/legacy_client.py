@@ -4172,6 +4172,8 @@ class LegacyWebClient(LegacyBaseClient):
         count: Optional[Union[int, str]] = None,
         page: Optional[Union[int, str]] = None,
         team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets the access logs for the current team.
@@ -4183,6 +4185,8 @@ class LegacyWebClient(LegacyBaseClient):
                 "count": count,
                 "page": page,
                 "team_id": team_id,
+                "cursor": cursor,
+                "limit": limit,
             }
         )
         return self.api_call("team.accessLogs", http_verb="GET", params=kwargs)
