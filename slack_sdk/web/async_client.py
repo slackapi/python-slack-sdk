@@ -4170,6 +4170,8 @@ class AsyncWebClient(AsyncBaseClient):
         count: Optional[Union[int, str]] = None,
         page: Optional[Union[int, str]] = None,
         team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets the access logs for the current team.
@@ -4181,6 +4183,8 @@ class AsyncWebClient(AsyncBaseClient):
                 "count": count,
                 "page": page,
                 "team_id": team_id,
+                "cursor": cursor,
+                "limit": limit,
             }
         )
         return await self.api_call("team.accessLogs", http_verb="GET", params=kwargs)
