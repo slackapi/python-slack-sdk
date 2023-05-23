@@ -99,12 +99,12 @@ class ServerErrorRetryHandler(RetryHandler):
     ):
         super().__init__(max_retry_count, interval_calculator)
 
-    def _can_retry_async(
+    def _can_retry(
         self,
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> bool:
         return response is not None and response.status_code in [500, 503]
