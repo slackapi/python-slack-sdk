@@ -87,3 +87,24 @@ class RateLimitErrorRetryHandler(RetryHandler):
             duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
         time.sleep(duration)
         state.increment_current_attempt()
+
+
+class ServerErrorRetryHandler(RetryHandler):
+    """RetryHandler that does retries for server errors."""
+
+    def __init__(
+        self,
+        max_retry_count: int = 1,
+        interval_calculator: RetryIntervalCalculator = default_interval_calculator,
+    ):
+        super().__init__(max_retry_count, interval_calculator)
+
+    def _can_retry(
+        self,
+        *,
+        state: RetryState,
+        request: HttpRequest,
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
+    ) -> bool:
+        return response is not None and response.status_code in [500, 503]
