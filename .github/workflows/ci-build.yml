@@ -18,7 +18,7 @@ jobs:
       PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
