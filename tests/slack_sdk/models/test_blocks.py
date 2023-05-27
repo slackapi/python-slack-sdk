@@ -251,6 +251,60 @@ class ImageBlockTests(unittest.TestCase):
         }
         self.assertDictEqual(input, ImageBlock(**input).to_dict())
 
+    def test_issue_1369_title_type(self):
+        self.assertEqual(
+            "plain_text",
+            ImageBlock(
+                image_url="https://example.com/",
+                alt_text="example",
+                title="example",
+            ).title.type,
+        )
+
+        self.assertEqual(
+            "plain_text",
+            ImageBlock(
+                image_url="https://example.com/",
+                alt_text="example",
+                title={
+                    "type": "plain_text",
+                    "text": "Please enjoy this photo of a kitten",
+                },
+            ).title.type,
+        )
+
+        self.assertEqual(
+            "plain_text",
+            ImageBlock(
+                image_url="https://example.com/",
+                alt_text="example",
+                title=PlainTextObject(text="example"),
+            ).title.type,
+        )
+
+        with self.assertRaises(SlackObjectFormationError):
+            self.assertEqual(
+                "plain_text",
+                ImageBlock(
+                    image_url="https://example.com/",
+                    alt_text="example",
+                    title={
+                        "type": "mrkdwn",
+                        "text": "Please enjoy this photo of a kitten",
+                    },
+                ).title.type,
+            )
+
+            with self.assertRaises(SlackObjectFormationError):
+                self.assertEqual(
+                    "plain_text",
+                    ImageBlock(
+                        image_url="https://example.com/",
+                        alt_text="example",
+                        title=MarkdownTextObject(text="example"),
+                    ).title.type,
+                )
+
     def test_json(self):
         self.assertDictEqual(
             {

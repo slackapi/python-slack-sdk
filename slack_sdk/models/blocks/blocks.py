@@ -15,6 +15,7 @@ from .block_elements import BlockElement
 from .block_elements import ImageElement
 from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
+from ...errors import SlackObjectFormationError
 
 
 # -------------------------------------------------
@@ -216,7 +217,7 @@ class ImageBlock(Block):
         *,
         image_url: str,
         alt_text: str,
-        title: Optional[Union[str, dict, TextObject]] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -240,7 +241,19 @@ class ImageBlock(Block):
 
         self.image_url = image_url
         self.alt_text = alt_text
-        self.title = TextObject.parse(title)
+        parsed_title = None
+        if title is not None:
+            if isinstance(title, str):
+                parsed_title = PlainTextObject(text=title)
+            elif isinstance(title, dict):
+                if title.get("type") != PlainTextObject.type:
+                    raise SlackObjectFormationError(f"Unsupported type for title in an image block: {title.get('type')}")
+                parsed_title = PlainTextObject(text=title.get("text"), emoji=title.get("emoji"))
+            elif isinstance(title, PlainTextObject):
+                parsed_title = title
+            else:
+                raise SlackObjectFormationError(f"Unsupported type for title in an image block: {type(title)}")
+        self.title = parsed_title
 
     @JsonValidator(f"image_url attribute cannot exceed {image_url_max_length} characters")
     def _validate_image_url_length(self):
