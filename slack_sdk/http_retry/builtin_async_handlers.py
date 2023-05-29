@@ -54,8 +54,8 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> bool:
         return response is not None and response.status_code == 429
 
@@ -101,8 +101,8 @@ class AsyncServerErrorRetryHandler(AsyncRetryHandler):
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -> bool:
         return response is not None and response.status_code in [500, 503]
 
