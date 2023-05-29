@@ -28,7 +28,7 @@ class MockHandler(SimpleHTTPRequestHandler):
 
     error_html_response_body = '<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="utf-8">\n\t<title>Server Error | Slack</title>\n\t<meta name="author" content="Slack">\n\t<style></style>\n</head>\n<body>\n\t<nav class="top persistent">\n\t\t<a href="https://status.slack.com/" class="logo" data-qa="logo"></a>\n\t</nav>\n\t<div id="page">\n\t\t<div id="page_contents">\n\t\t\t<h1>\n\t\t\t\t<svg width="30px" height="27px" viewBox="0 0 60 54" class="warning_icon"><path d="" fill="#D94827"/></svg>\n\t\t\t\tServer Error\n\t\t\t</h1>\n\t\t\t<div class="card">\n\t\t\t\t<p>It seems like there’s a problem connecting to our servers, and we’re investigating the issue.</p>\n\t\t\t\t<p>Please <a href="https://status.slack.com/">check our Status page for updates</a>.</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<script type="text/javascript">\n\t\tif (window.desktop) {\n\t\t\tdocument.documentElement.className = \'desktop\';\n\t\t}\n\n\t\tvar FIVE_MINS = 5 * 60 * 1000;\n\t\tvar TEN_MINS = 10 * 60 * 1000;\n\n\t\tfunction randomBetween(min, max) {\n\t\t\treturn Math.floor(Math.random() * (max - (min + 1))) + min;\n\t\t}\n\n\t\twindow.setTimeout(function () {\n\t\t\twindow.location.reload(true);\n\t\t}, randomBetween(FIVE_MINS, TEN_MINS));\n\t</script>\n</body>\n</html>'
 
-    state = {"ratelimited_count": 0, "fatal_error_count": 0}
+    state = {"ratelimited_count": 0, "fatal_error_count": 0, "server_error_count": 0}
 
     def is_valid_user_agent(self):
         user_agent = self.headers["User-Agent"]
@@ -184,6 +184,23 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.wfile.write(self.error_html_response_body.encode("utf-8"))
                     self.wfile.close()
                     return
+                if pattern == "server_error_only_once":
+                    if self.state["server_error_count"] == 0:
+                        self.state["server_error_count"] += 1
+                        self.send_response(500)
+                        # no charset here is intentional for testing
+                        self.send_header("content-type", "text/html")
+                        self.send_header("connection", "close")
+                        self.end_headers()
+                        self.wfile.write(self.error_html_response_body.encode("utf-8"))
+                        self.wfile.close()
+                        return
+                    else:
+                        self.send_response(200)
+                        self.set_common_headers()
+                        self.wfile.write("""{"ok":true}""".encode("utf-8"))
+                        self.wfile.close()
+                        return
 
                 if pattern.startswith("user-agent"):
                     elements = pattern.split(" ")

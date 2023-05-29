@@ -333,6 +333,10 @@ class AsyncSCIMClient:
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f"No response data returned from the following API call: {url}.")
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                            )
 
                         if res.status == 429:
                             for handler in self.retry_handlers:

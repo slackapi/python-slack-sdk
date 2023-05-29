@@ -1,7 +1,7 @@
 import unittest
 
 import slack_sdk.errors as err
-from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler
+from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler, AsyncServerErrorRetryHandler
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.web.mock_web_api_server import (
@@ -18,10 +18,6 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
-
-    @async_test
-    async def test_api_calls_return_a_future(self):
-        pass
 
     @async_test
     async def test_remote_disconnected(self):
@@ -88,3 +84,30 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
         client.retry_handlers.append(FatalErrorRetryHandler())
         # The auto-retry should work here
         await client.auth_test()
+
+    @async_test
+    async def test_retries(self):
+        retry_handler = MyRetryHandler(max_retry_count=2)
+        client = AsyncWebClient(
+            token="xoxp-remote_disconnected",
+            base_url="http://localhost:8888",
+            retry_handlers=[retry_handler],
+        )
+        try:
+            await client.auth_test()
+            self.fail("An exception is expected")
+        except Exception as _:
+            pass
+
+        self.assertEqual(2, retry_handler.call_count)
+
+    @async_test
+    async def test_server_error(self):
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-server_error_only_once",
+            team_id="T111",
+        )
+        client.retry_handlers.append(AsyncServerErrorRetryHandler())
+        # The auto-retry should work here
+        await client.chat_postMessage(channel="C123", text="Hi there!")

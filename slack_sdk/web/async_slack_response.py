@@ -199,5 +199,5 @@ class AsyncSlackResponse:
         """
         if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get("ok", False)):
             return self
-        msg = f"The request to the Slack API failed. (url: {self.api_url})"
+        msg = f"The request to the Slack API failed. (url: {self.api_url}, status: {self.status_code})"
         raise e.SlackApiError(message=msg, response=self)

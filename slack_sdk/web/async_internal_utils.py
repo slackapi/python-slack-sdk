@@ -127,6 +127,10 @@ async def _request_with_session(
                             )
                         except aiohttp.ContentTypeError:
                             logger.debug(f"No response data returned from the following API call: {api_url}.")
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                            )
                         except json.decoder.JSONDecodeError:
                             try:
                                 body: str = await res.text()
