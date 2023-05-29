@@ -288,6 +288,10 @@ class AsyncAuditLogsClient:
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f"No response data returned from the following API call: {url}.")
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                            )
                         except json.decoder.JSONDecodeError as e:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
