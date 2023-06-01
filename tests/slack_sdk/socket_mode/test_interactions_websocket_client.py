@@ -70,8 +70,8 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             time.sleep(1)  # wait for the server
             client.wss_uri = "ws://0.0.0.0:3012/link"
             client.connect()
-            self.assertTrue(client.is_connected())
             time.sleep(1)  # wait for the message receiver
+            self.assertTrue(client.is_connected())
 
             for _ in range(10):
                 client.send_message("foo")
