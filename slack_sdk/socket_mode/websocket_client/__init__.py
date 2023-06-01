@@ -136,7 +136,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.on_close_listeners = on_close_listeners or []
 
     def is_connected(self) -> bool:
-        return self.current_session is not None
+        return self.current_session is not None and self.current_session.sock is not None
 
     def connect(self) -> None:
         def on_open(ws: WebSocketApp):
