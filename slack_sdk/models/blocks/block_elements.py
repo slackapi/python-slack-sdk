@@ -80,7 +80,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def parse_all(
         cls, block_elements: Sequence[Union[dict, "BlockElement", TextObject]]
     ) -> List[Union["BlockElement", TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]
+        return [cls.parse(e) for e in block_elements or []]  # type: ignore
 
     @classmethod
     def _get_sub_block_elements(cls: Type["BlockElement"]) -> Iterator[Type["BlockElement"]]:
