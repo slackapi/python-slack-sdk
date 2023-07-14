@@ -25,4 +25,5 @@ class TestWebClient(unittest.TestCase):
             client = WebClient(base_url="http://localhost:8888")
             client.stars_list(token="xoxb-api_test")
         finally:
-            os.environ.update({"SLACKCLIENT_SKIP_DEPRECATION": env_value})
+            if env_value is not None:
+                os.environ.update({"SLACKCLIENT_SKIP_DEPRECATION": env_value})
