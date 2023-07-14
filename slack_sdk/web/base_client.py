@@ -21,7 +21,7 @@ from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPS
 
 import slack_sdk.errors as err
 from slack_sdk.errors import SlackRequestError
-from .deprecation import show_2020_01_deprecation
+from .deprecation import show_deprecation_warning_if_any
 from .internal_utils import (
     convert_bool_to_0_or_1,
     get_user_agent,
@@ -152,7 +152,7 @@ class BaseClient:
             proxy=self.proxy,
         )
 
-        show_2020_01_deprecation(api_method)
+        show_deprecation_warning_if_any(api_method)
         return self._sync_send(api_url=api_url, req_args=req_args)
 
     # =================================================================

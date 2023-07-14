@@ -25,7 +25,7 @@ from aiohttp import FormData, BasicAuth
 import slack_sdk.errors as err
 from slack_sdk.errors import SlackRequestError
 from .async_internal_utils import _files_to_data, _get_event_loop, _request_with_session
-from .deprecation import show_2020_01_deprecation
+from .deprecation import show_deprecation_warning_if_any
 from .internal_utils import (
     convert_bool_to_0_or_1,
     get_user_agent,
@@ -161,7 +161,7 @@ class LegacyBaseClient:
             proxy=self.proxy,
         )
 
-        show_2020_01_deprecation(api_method)
+        show_deprecation_warning_if_any(api_method)
 
         if self.run_async or self.use_sync_aiohttp:
             if self._event_loop is None:

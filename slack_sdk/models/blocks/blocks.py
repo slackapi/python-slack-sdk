@@ -100,6 +100,7 @@ class Block(JsonObject):
     def parse_all(cls, blocks: Optional[Sequence[Union[dict, "Block"]]]) -> List["Block"]:
         return [cls.parse(b) for b in blocks or []]  # type: ignore
 
+
 # -------------------------------------------------
 # Block Classes
 # -------------------------------------------------

@@ -10,7 +10,7 @@ from .async_internal_utils import (
     _request_with_session,
 )  # type: ignore
 from .async_slack_response import AsyncSlackResponse
-from .deprecation import show_2020_01_deprecation
+from .deprecation import show_deprecation_warning_if_any
 from .internal_utils import (
     convert_bool_to_0_or_1,
     _build_req_args,
@@ -156,7 +156,7 @@ class AsyncBaseClient:
             proxy=self.proxy,
         )
 
-        show_2020_01_deprecation(api_method)
+        show_deprecation_warning_if_any(api_method)
 
         return await self._send(
             http_verb=http_verb,
