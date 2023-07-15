@@ -29,7 +29,6 @@ validate_dependencies = [
     "black==22.8.0",
     "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
     "psutil>=5,<6",
-    "databases>=0.5",
     # used only under slack_sdk/*_store
     "boto3<=2",
     # TODO: Upgrade to v2
