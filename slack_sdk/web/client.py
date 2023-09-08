@@ -293,6 +293,82 @@ class WebClient(BaseClient):
                 kwargs.update({"team_ids": team_ids})
         return self.api_call("admin.apps.uninstall", http_verb="POST", params=kwargs)
 
+    def admin_apps_activities_list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        component_id: Optional[str] = None,
+        component_type: Optional[str] = None,
+        log_event_type: Optional[str] = None,
+        max_date_created: Optional[int] = None,
+        min_date_created: Optional[int] = None,
+        min_log_level: Optional[str] = None,
+        sort_direction: Optional[str] = None,
+        source: Optional[str] = None,
+        team_id: Optional[str] = None,
+        trace_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Get logs for a specified team/org
+        https://api.slack.com/methods/admin.apps.activities.list
+        """
+        kwargs.update(
+            {
+                "app_id": app_id,
+                "component_id": component_id,
+                "component_type": component_type,
+                "log_event_type": log_event_type,
+                "max_date_created": max_date_created,
+                "min_date_created": min_date_created,
+                "min_log_level": min_log_level,
+                "sort_direction": sort_direction,
+                "source": source,
+                "team_id": team_id,
+                "trace_id": trace_id,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return self.api_call("admin.apps.activities.list", params=kwargs)
+
+    def admin_apps_config_lookup(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Look up the app config for connectors by their IDs
+        https://api.slack.com/methods/admin.apps.config.lookup
+        """
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({"app_ids": ",".join(app_ids)})
+        else:
+            kwargs.update({"app_ids": app_ids})
+        return self.api_call("admin.apps.config.lookup", params=kwargs)
+
+    def admin_apps_config_set(
+        self,
+        *,
+        app_id: str,
+        domain_restrictions: Optional[dict] = None,
+        workflow_auth_strategy: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set the app config for a connector
+        https://api.slack.com/methods/admin.apps.config.set
+        """
+        kwargs.update(
+            {
+                "app_id": app_id,
+                "workflow_auth_strategy": workflow_auth_strategy,
+            }
+        )
+        if domain_restrictions is not None:
+            kwargs.update({"domain_restrictions", json.dumps(domain_restrictions)})
+        return self.api_call("admin.apps.config.set", params=kwargs)
+
     def admin_auth_policy_getEntities(
         self,
         *,
@@ -938,6 +1014,72 @@ class WebClient(BaseClient):
         """
         kwargs.update({"name": name, "new_name": new_name})
         return self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
+
+    def admin_functions_list(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Look up functions by a set of apps
+        https://api.slack.com/methods/admin.functions.list
+        """
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({"app_ids": ",".join(app_ids)})
+        else:
+            kwargs.update({"app_ids": app_ids})
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return self.api_call("admin.functions.list", params=kwargs)
+
+    def admin_functions_permissions_lookup(
+        self,
+        *,
+        function_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Lookup the visibility of multiple Slack functions
+        and include the users if it is limited to particular named entities.
+        https://api.slack.com/methods/admin.functions.permissions.lookup
+        """
+        if isinstance(function_ids, (list, Tuple)):
+            kwargs.update({"function_ids": ",".join(function_ids)})
+        else:
+            kwargs.update({"function_ids": function_ids})
+        return self.api_call("admin.functions.permissions.lookup", params=kwargs)
+
+    def admin_functions_permissions_set(
+        self,
+        *,
+        function_id: str,
+        visibility: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set the visibility of a Slack function
+        and define the users or workspaces if it is set to named_entities
+        https://api.slack.com/methods/admin.functions.permissions.set
+        """
+        kwargs.update(
+            {
+                "function_id": function_id,
+                "visibility": visibility,
+            }
+        )
+        if user_ids is not None:
+            if isinstance(user_ids, (list, Tuple)):
+                kwargs.update({"user_ids": ",".join(user_ids)})
+            else:
+                kwargs.update({"user_ids": user_ids})
+        return self.api_call("admin.functions.permissions.set", params=kwargs)
 
     def admin_roles_addAssignments(
         self,
@@ -1606,6 +1748,120 @@ class WebClient(BaseClient):
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return self.api_call("admin.users.setRegular", params=kwargs)
+
+    def admin_workflows_search(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        collaborator_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        no_collaborators: Optional[bool] = None,
+        num_trigger_ids: Optional[int] = None,
+        query: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        source: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Search workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.search
+        """
+        if collaborator_ids is not None:
+            if isinstance(collaborator_ids, (list, Tuple)):
+                kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
+            else:
+                kwargs.update({"collaborator_ids": collaborator_ids})
+        kwargs.update(
+            {
+                "app_id": app_id,
+                "cursor": cursor,
+                "limit": limit,
+                "no_collaborators": no_collaborators,
+                "num_trigger_ids": num_trigger_ids,
+                "query": query,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "source": source,
+            }
+        )
+        return self.api_call("admin.workflows.search", params=kwargs)
+
+    def admin_workflows_permissions_lookup(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        max_workflow_triggers: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Look up the permissions for a set of workflows
+        https://api.slack.com/methods/admin.workflows.permissions.lookup
+        """
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({"workflow_ids": ",".join(workflow_ids)})
+        else:
+            kwargs.update({"workflow_ids": workflow_ids})
+        kwargs.update(
+            {
+                "max_workflow_triggers": max_workflow_triggers,
+            }
+        )
+        return self.api_call("admin.workflows.permissions.lookup", params=kwargs)
+
+    def admin_workflows_collaborators_add(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Add collaborators to workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.add
+        """
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
+        else:
+            kwargs.update({"collaborator_ids": collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({"workflow_ids": ",".join(workflow_ids)})
+        else:
+            kwargs.update({"workflow_ids": workflow_ids})
+        return self.api_call("admin.workflows.collaborators.add", params=kwargs)
+
+    def admin_workflows_collaborators_remove(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Remove collaborators from workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.remove
+        """
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
+        else:
+            kwargs.update({"collaborator_ids": collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({"workflow_ids": ",".join(workflow_ids)})
+        else:
+            kwargs.update({"workflow_ids": workflow_ids})
+        return self.api_call("admin.workflows.collaborators.remove", params=kwargs)
+
+    def admin_workflows_unpublish(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Unpublish workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.unpublish
+        """
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({"workflow_ids": ",".join(workflow_ids)})
+        else:
+            kwargs.update({"workflow_ids": workflow_ids})
+        return self.api_call("admin.workflows.unpublish", params=kwargs)
 
     def api_test(
         self,
