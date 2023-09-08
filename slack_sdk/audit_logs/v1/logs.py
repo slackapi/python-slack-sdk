@@ -222,6 +222,33 @@ class Profile:
         self.image_1024 = image_1024
 
 
+class SpaceFileId:
+    payload: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        payload: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.payload = payload
+
+
+class Attribute:
+    name: Optional[str]
+    type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.name = name
+        self.type = type
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -319,6 +346,13 @@ class Details:
     label: Optional[str]
     previous_profile: Optional[Profile]
     new_profile: Optional[Profile]
+    target_user_id: Optional[str]
+    space_file_id: Optional[SpaceFileId]
+    target_entity: Optional[str]
+    target_entity_id: Optional[str]
+    changed_permissions: Optional[List[str]]
+    datastore_name: Optional[str]
+    attributes: Optional[List[Attribute]]
 
     def __init__(
         self,
@@ -418,6 +452,13 @@ class Details:
         label: Optional[str] = None,
         previous_profile: Optional[Union[Dict[str, Any], Profile]] = None,
         new_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        target_user_id: Optional[str] = None,
+        space_file_id: Optional[Union[Dict[str, Any], SpaceFileId]] = None,
+        target_entity: Optional[str] = None,
+        target_entity_id: Optional[str] = None,
+        changed_permissions: Optional[List[str]] = None,
+        datastore_name: Optional[str] = None,
+        attributes: Optional[List[Union[Dict[str, str], Attribute]]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -552,6 +593,24 @@ class Details:
             else Profile(**previous_profile)
         )
         self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
+        self.target_user_id = target_user_id
+        self.space_file_id = (
+            space_file_id
+            if space_file_id is None or isinstance(space_file_id, SpaceFileId)
+            else SpaceFileId(**space_file_id)
+        )
+        self.target_entity = target_entity
+        self.target_entity_id = target_entity_id
+        self.changed_permissions = changed_permissions
+        self.datastore_name = datastore_name
+        self.attributes = None
+        if attributes is not None:
+            self.attributes = []
+            for a in attributes:
+                if isinstance(a, dict):
+                    self.attributes.append(Attribute(**a))
+                else:
+                    self.attributes.append(a)
 
 
 class Channel:
@@ -712,6 +771,23 @@ class InformationBarrier:
         self.unknown_fields = kwargs
 
 
+class AccountTypeRole:
+    id: Optional[str]
+    name: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.name = name
+        self.unknown_fields = kwargs
+
+
 class Entity:
     type: Optional[str]
     user: Optional[User]
@@ -725,6 +801,7 @@ class Entity:
     usergroup: Optional[Usergroup]
     workflow: Optional[Workflow]
     barrier: Optional[InformationBarrier]
+    account_type_role: Optional[AccountTypeRole]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -742,6 +819,7 @@ class Entity:
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
         workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
+        account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.type = type
@@ -756,6 +834,9 @@ class Entity:
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
         self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
+        self.account_type_role = (
+            AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
+        )
         self.unknown_fields = kwargs
 
 
