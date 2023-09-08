@@ -11,6 +11,7 @@ from slack_sdk.models.blocks import (
     OptionGroup,
     PlainTextObject,
 )
+from slack_sdk.models.blocks.basic_components import Workflow, WorkflowTrigger
 from slack_sdk.models.messages import (
     ChannelLink,
     DateLink,
@@ -566,3 +567,28 @@ class OptionGroupTests(unittest.TestCase):
                     "style": "something-wrong",
                 }
             ).validate_json()
+
+
+class WorkflowTests(unittest.TestCase):
+    def test_creation(self):
+        workflow = Workflow(
+            trigger=WorkflowTrigger(
+                url="https://slack.com/shortcuts/Ft0123ABC456/xyz...zyx",
+                customizable_input_parameters=[
+                    {"name": "input_parameter_a", "value": "Value for input param A"},
+                    {"name": "input_parameter_b", "value": "Value for input param B"},
+                ],
+            )
+        )
+        self.assertDictEqual(
+            workflow.to_dict(),
+            {
+                "trigger": {
+                    "url": "https://slack.com/shortcuts/Ft0123ABC456/xyz...zyx",
+                    "customizable_input_parameters": [
+                        {"name": "input_parameter_a", "value": "Value for input param A"},
+                        {"name": "input_parameter_b", "value": "Value for input param B"},
+                    ],
+                }
+            },
+        )
