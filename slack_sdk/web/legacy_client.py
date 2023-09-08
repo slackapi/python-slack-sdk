@@ -363,7 +363,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         app_id: str,
-        domain_restrictions: Optional[dict] = None,
+        domain_restrictions: Optional[Dict[str, Any]] = None,
         workflow_auth_strategy: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
