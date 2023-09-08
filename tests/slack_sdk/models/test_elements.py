@@ -33,6 +33,7 @@ from slack_sdk.models.blocks.block_elements import (
     EmailInputElement,
     NumberInputElement,
     UrlInputElement,
+    WorkflowButtonElement,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -1213,3 +1214,26 @@ class RadioButtonsElementTest(unittest.TestCase):
             "focus_on_load": True,
         }
         self.assertDictEqual(input, RadioButtonsElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# Workflow Button
+# -------------------------------------------------
+
+
+class WorkflowButtonElementTests(unittest.TestCase):
+    def test_load(self):
+        input = {
+            "type": "workflow_button",
+            "text": {"type": "plain_text", "text": "Run Workflow"},
+            "workflow": {
+                "trigger": {
+                    "url": "https://slack.com/shortcuts/Ft0123ABC456/xyz...zyx",
+                    "customizable_input_parameters": [
+                        {"name": "input_parameter_a", "value": "Value for input param A"},
+                        {"name": "input_parameter_b", "value": "Value for input param B"},
+                    ],
+                }
+            },
+        }
+        self.assertDictEqual(input, WorkflowButtonElement(**input).to_dict())

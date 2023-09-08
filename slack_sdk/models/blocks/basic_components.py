@@ -524,3 +524,38 @@ class DispatchActionConfig(JsonObject):
         if self._trigger_actions_on:
             json["trigger_actions_on"] = self._trigger_actions_on
         return json
+
+
+class WorkflowTrigger(JsonObject):
+    attributes = {"trigger"}
+
+    def __init__(self, *, url: str, customizable_input_parameters: Optional[List[Dict[str, str]]] = None):
+        self._url = url
+        self._customizable_input_parameters = customizable_input_parameters
+
+    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {"url": self._url}
+        if self._customizable_input_parameters is not None:
+            json.update({"customizable_input_parameters": self._customizable_input_parameters})
+        return json
+
+
+class Workflow(JsonObject):
+    attributes = {"trigger"}
+
+    def __init__(
+        self,
+        *,
+        trigger: Union[WorkflowTrigger, dict],
+    ):
+        self._trigger = trigger
+
+    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if isinstance(self._trigger, WorkflowTrigger):
+            json["trigger"] = self._trigger.to_dict()
+        else:
+            json["trigger"] = self._trigger
+        return json

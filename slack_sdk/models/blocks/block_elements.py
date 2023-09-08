@@ -11,7 +11,7 @@ from slack_sdk.models.basic_objects import (
     JsonValidator,
     EnumValidator,
 )
-from .basic_components import ButtonStyles
+from .basic_components import ButtonStyles, Workflow
 from .basic_components import ConfirmObject
 from .basic_components import DispatchActionConfig
 from .basic_components import MarkdownTextObject
@@ -1689,3 +1689,60 @@ class OverflowMenuElement(InteractiveElement):
     @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
     def _validate_options_length(self) -> bool:
         return self.options_min_length <= len(self.options) <= self.options_max_length
+
+
+# -------------------------------------------------
+# Workflow Button
+# -------------------------------------------------
+
+
+class WorkflowButtonElement(InteractiveElement):
+    type = "workflow_button"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"text", "workflow", "style", "accessibility_label"})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        action_id: Optional[str] = None,
+        workflow: Optional[Union[dict, Workflow]] = None,
+        style: Optional[str] = None,  # primary, danger
+        accessibility_label: Optional[str] = None,
+        **others: dict,
+    ):
+        """Allows users to run a link trigger with customizable inputs
+        Interactive component - but interactions with workflow button elements will not send block_actions events,
+        since these are used to start new workflow runs.
+        https://api.slack.com/reference/block-kit/block-elements#workflow_button
+
+        Args:
+            text (required): A text object that defines the button's text.
+                Can only be of type: plain_text. text may truncate with ~30 characters.
+                Maximum length for the text in this field is 75 characters.
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            workflow: A workflow object that contains details about the workflow
+                that will run when the button is clicked.
+            style: Decorates buttons with alternative visual color schemes. Use this option with restraint.
+                "primary" gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+                "primary" should only be used for one button within a set.
+                "danger" gives buttons a red outline and text, and should be used when the action is destructive.
+                Use "danger" even more sparingly than "primary".
+                If you don't include this field, the default button style will be used.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+        """
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        # NOTE: default_type=PlainTextObject.type here is only for backward-compatibility with version 2.5.0
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.workflow = workflow
+        self.style = style
+        self.accessibility_label = accessibility_label
