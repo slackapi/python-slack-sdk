@@ -377,7 +377,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if domain_restrictions is not None:
-            kwargs.update({"domain_restrictions", json.dumps(domain_restrictions)})
+            kwargs.update({"domain_restrictions": json.dumps(domain_restrictions)})
         return self.api_call("admin.apps.config.set", params=kwargs)
 
     def admin_auth_policy_getEntities(

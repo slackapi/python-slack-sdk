@@ -375,7 +375,7 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         if domain_restrictions is not None:
-            kwargs.update({"domain_restrictions", json.dumps(domain_restrictions)})
+            kwargs.update({"domain_restrictions": json.dumps(domain_restrictions)})
         return await self.api_call("admin.apps.config.set", params=kwargs)
 
     async def admin_auth_policy_getEntities(
