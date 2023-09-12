@@ -24,7 +24,8 @@ jobs:
         pip install -e ".[testing]"
         pip install -e ".[optional]"
         # As pytype can change its behavior in newer versions, we manually upgrade it
-        pip install "pytype==2023.9.11"
+        # 2023.9.11 fails due to errors that only happen on GH Actions
+        pip install "pytype==2023.5.24"
     - name: Run pytype
       run: |
         pytype slack_sdk/
