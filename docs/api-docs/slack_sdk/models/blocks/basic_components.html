@@ -551,6 +551,41 @@ class DispatchActionConfig(JsonObject):
         json = {}
         if self._trigger_actions_on:
             json[&#34;trigger_actions_on&#34;] = self._trigger_actions_on
+        return json
+
+
+class WorkflowTrigger(JsonObject):
+    attributes = {&#34;trigger&#34;}
+
+    def __init__(self, *, url: str, customizable_input_parameters: Optional[List[Dict[str, str]]] = None):
+        self._url = url
+        self._customizable_input_parameters = customizable_input_parameters
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {&#34;url&#34;: self._url}
+        if self._customizable_input_parameters is not None:
+            json.update({&#34;customizable_input_parameters&#34;: self._customizable_input_parameters})
+        return json
+
+
+class Workflow(JsonObject):
+    attributes = {&#34;trigger&#34;}
+
+    def __init__(
+        self,
+        *,
+        trigger: Union[WorkflowTrigger, dict],
+    ):
+        self._trigger = trigger
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if isinstance(self._trigger, WorkflowTrigger):
+            json[&#34;trigger&#34;] = self._trigger.to_dict()
+        else:
+            json[&#34;trigger&#34;] = self._trigger
         return json</code></pre>
 </details>
 </section>
@@ -1823,6 +1858,93 @@ def subtype(self) -&gt; Optional[str]:
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.basic_components.Workflow"><code class="flex name class">
+<span>class <span class="ident">Workflow</span></span>
+<span>(</span><span>*, trigger: Union[<a title="slack_sdk.models.blocks.basic_components.WorkflowTrigger" href="#slack_sdk.models.blocks.basic_components.WorkflowTrigger">WorkflowTrigger</a>, dict])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Workflow(JsonObject):
+    attributes = {&#34;trigger&#34;}
+
+    def __init__(
+        self,
+        *,
+        trigger: Union[WorkflowTrigger, dict],
+    ):
+        self._trigger = trigger
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if isinstance(self._trigger, WorkflowTrigger):
+            json[&#34;trigger&#34;] = self._trigger.to_dict()
+        else:
+            json[&#34;trigger&#34;] = self._trigger
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.WorkflowTrigger"><code class="flex name class">
+<span>class <span class="ident">WorkflowTrigger</span></span>
+<span>(</span><span>*, url: str, customizable_input_parameters: Optional[List[Dict[str, str]]] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WorkflowTrigger(JsonObject):
+    attributes = {&#34;trigger&#34;}
+
+    def __init__(self, *, url: str, customizable_input_parameters: Optional[List[Dict[str, str]]] = None):
+        self._url = url
+        self._customizable_input_parameters = customizable_input_parameters
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {&#34;url&#34;: self._url}
+        if self._customizable_input_parameters is not None:
+            json.update({&#34;customizable_input_parameters&#34;: self._customizable_input_parameters})
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -1906,6 +2028,12 @@ def subtype(self) -&gt; Optional[str]:
 <li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.parse" href="#slack_sdk.models.blocks.basic_components.TextObject.parse">parse</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.subtype" href="#slack_sdk.models.blocks.basic_components.TextObject.subtype">subtype</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.Workflow" href="#slack_sdk.models.blocks.basic_components.Workflow">Workflow</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.WorkflowTrigger" href="#slack_sdk.models.blocks.basic_components.WorkflowTrigger">WorkflowTrigger</a></code></h4>
 </li>
 </ul>
 </li>

@@ -38,8 +38,10 @@ deprecated_method_prefixes_2020_01 = [
     &#34;admin.conversations.whitelist.&#34;,
 ]
 
+deprecated_method_prefixes_2023_07 = [&#34;stars.&#34;]
 
-def show_2020_01_deprecation(method_name: str):
+
+def show_deprecation_warning_if_any(method_name: str):
     &#34;&#34;&#34;Prints a warning if the given method is deprecated&#34;&#34;&#34;
 
     skip_deprecation = os.environ.get(&#34;SLACKCLIENT_SKIP_DEPRECATION&#34;)  # for unit tests etc.
@@ -48,12 +50,22 @@ def show_2020_01_deprecation(method_name: str):
     if not method_name:
         return
 
+    # 2020/01 conversations API deprecation
     matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2020_01 if method_name.startswith(prefix)]
     if len(matched_prefixes) &gt; 0:
         message = (
             f&#34;{method_name} is deprecated. Please use the Conversations API instead. &#34;
             &#34;For more info, go to &#34;
             &#34;https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api&#34;
+        )
+        warnings.warn(message)
+
+    # 2023/07 stars API deprecation
+    matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2023_07 if method_name.startswith(prefix)]
+    if len(matched_prefixes) &gt; 0:
+        message = (
+            f&#34;{method_name} is deprecated. For more info, go to &#34;
+            &#34;https://api.slack.com/changelog/2023-07-its-later-already-for-stars-and-reminders&#34;
         )
         warnings.warn(message)</code></pre>
 </details>
@@ -65,8 +77,8 @@ def show_2020_01_deprecation(method_name: str):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="slack_sdk.web.deprecation.show_2020_01_deprecation"><code class="name flex">
-<span>def <span class="ident">show_2020_01_deprecation</span></span>(<span>method_name: str)</span>
+<dt id="slack_sdk.web.deprecation.show_deprecation_warning_if_any"><code class="name flex">
+<span>def <span class="ident">show_deprecation_warning_if_any</span></span>(<span>method_name: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints a warning if the given method is deprecated</p></div>
@@ -74,7 +86,7 @@ def show_2020_01_deprecation(method_name: str):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def show_2020_01_deprecation(method_name: str):
+<pre><code class="python">def show_deprecation_warning_if_any(method_name: str):
     &#34;&#34;&#34;Prints a warning if the given method is deprecated&#34;&#34;&#34;
 
     skip_deprecation = os.environ.get(&#34;SLACKCLIENT_SKIP_DEPRECATION&#34;)  # for unit tests etc.
@@ -83,12 +95,22 @@ def show_2020_01_deprecation(method_name: str):
     if not method_name:
         return
 
+    # 2020/01 conversations API deprecation
     matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2020_01 if method_name.startswith(prefix)]
     if len(matched_prefixes) &gt; 0:
         message = (
             f&#34;{method_name} is deprecated. Please use the Conversations API instead. &#34;
             &#34;For more info, go to &#34;
             &#34;https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api&#34;
+        )
+        warnings.warn(message)
+
+    # 2023/07 stars API deprecation
+    matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2023_07 if method_name.startswith(prefix)]
+    if len(matched_prefixes) &gt; 0:
+        message = (
+            f&#34;{method_name} is deprecated. For more info, go to &#34;
+            &#34;https://api.slack.com/changelog/2023-07-its-later-already-for-stars-and-reminders&#34;
         )
         warnings.warn(message)</code></pre>
 </details>
@@ -111,7 +133,7 @@ def show_2020_01_deprecation(method_name: str):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="slack_sdk.web.deprecation.show_2020_01_deprecation" href="#slack_sdk.web.deprecation.show_2020_01_deprecation">show_2020_01_deprecation</a></code></li>
+<li><code><a title="slack_sdk.web.deprecation.show_deprecation_warning_if_any" href="#slack_sdk.web.deprecation.show_deprecation_warning_if_any">show_deprecation_warning_if_any</a></code></li>
 </ul>
 </li>
 </ul>

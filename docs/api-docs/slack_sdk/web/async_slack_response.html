@@ -228,7 +228,7 @@ class AsyncSlackResponse:
         &#34;&#34;&#34;
         if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False)):
             return self
-        msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
+        msg = f&#34;The request to the Slack API failed. (url: {self.api_url}, status: {self.status_code})&#34;
         raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 </section>
@@ -478,7 +478,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False)):
             return self
-        msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
+        msg = f&#34;The request to the Slack API failed. (url: {self.api_url}, status: {self.status_code})&#34;
         raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 <h3>Methods</h3>
@@ -545,7 +545,7 @@ This method returns it's own object. e.g. 'self'</p>
     &#34;&#34;&#34;
     if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False)):
         return self
-    msg = f&#34;The request to the Slack API failed. (url: {self.api_url})&#34;
+    msg = f&#34;The request to the Slack API failed. (url: {self.api_url}, status: {self.status_code})&#34;
     raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 </dd>

@@ -344,6 +344,10 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f&#34;No response data returned from the following API call: {url}.&#34;)
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                            )
                         except json.decoder.JSONDecodeError as e:
                             message = f&#34;Failed to parse the response body: {str(e)}&#34;
                             raise SlackApiError(message, res)

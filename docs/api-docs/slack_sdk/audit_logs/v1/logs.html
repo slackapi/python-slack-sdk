@@ -250,6 +250,33 @@ class Profile:
         self.image_1024 = image_1024
 
 
+class SpaceFileId:
+    payload: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        payload: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.payload = payload
+
+
+class Attribute:
+    name: Optional[str]
+    type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.type = type
+
+
 class Details:
     name: Optional[str]
     new_value: Optional[Union[str, List[str], Dict[str, Any]]]
@@ -347,6 +374,13 @@ class Details:
     label: Optional[str]
     previous_profile: Optional[Profile]
     new_profile: Optional[Profile]
+    target_user_id: Optional[str]
+    space_file_id: Optional[SpaceFileId]
+    target_entity: Optional[str]
+    target_entity_id: Optional[str]
+    changed_permissions: Optional[List[str]]
+    datastore_name: Optional[str]
+    attributes: Optional[List[Attribute]]
 
     def __init__(
         self,
@@ -446,6 +480,13 @@ class Details:
         label: Optional[str] = None,
         previous_profile: Optional[Union[Dict[str, Any], Profile]] = None,
         new_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        target_user_id: Optional[str] = None,
+        space_file_id: Optional[Union[Dict[str, Any], SpaceFileId]] = None,
+        target_entity: Optional[str] = None,
+        target_entity_id: Optional[str] = None,
+        changed_permissions: Optional[List[str]] = None,
+        datastore_name: Optional[str] = None,
+        attributes: Optional[List[Union[Dict[str, str], Attribute]]] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -580,6 +621,24 @@ class Details:
             else Profile(**previous_profile)
         )
         self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
+        self.target_user_id = target_user_id
+        self.space_file_id = (
+            space_file_id
+            if space_file_id is None or isinstance(space_file_id, SpaceFileId)
+            else SpaceFileId(**space_file_id)
+        )
+        self.target_entity = target_entity
+        self.target_entity_id = target_entity_id
+        self.changed_permissions = changed_permissions
+        self.datastore_name = datastore_name
+        self.attributes = None
+        if attributes is not None:
+            self.attributes = []
+            for a in attributes:
+                if isinstance(a, dict):
+                    self.attributes.append(Attribute(**a))
+                else:
+                    self.attributes.append(a)
 
 
 class Channel:
@@ -740,6 +799,23 @@ class InformationBarrier:
         self.unknown_fields = kwargs
 
 
+class AccountTypeRole:
+    id: Optional[str]
+    name: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.unknown_fields = kwargs
+
+
 class Entity:
     type: Optional[str]
     user: Optional[User]
@@ -753,6 +829,7 @@ class Entity:
     usergroup: Optional[Usergroup]
     workflow: Optional[Workflow]
     barrier: Optional[InformationBarrier]
+    account_type_role: Optional[AccountTypeRole]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -770,6 +847,7 @@ class Entity:
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
         workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
+        account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -784,6 +862,9 @@ class Entity:
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
         self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
+        self.account_type_role = (
+            AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
+        )
         self.unknown_fields = kwargs
 
 
@@ -873,6 +954,48 @@ class LogsResponse:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole"><code class="flex name class">
+<span>class <span class="ident">AccountTypeRole</span></span>
+<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccountTypeRole:
+    id: Optional[str]
+    name: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Actor"><code class="flex name class">
 <span>class <span class="ident">Actor</span></span>
 <span>(</span><span>type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
@@ -979,6 +1102,42 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.App.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute"><code class="flex name class">
+<span>class <span class="ident">Attribute</span></span>
+<span>(</span><span>*, name: Optional[str] = None, type: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Attribute:
+    name: Optional[str]
+    type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.type = type</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1163,7 +1322,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
 <span>class <span class="ident">Details</span></span>
-<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, kicker: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, enable_at_channel: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, can_huddle: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, url_private: Optional[str] = None, shared_with: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a>, ForwardRef(None)] = None, initiated_by: Optional[str] = None, source_team: Optional[str] = None, destination_team: Optional[str] = None, succeeded_users: Union[List[str], str, ForwardRef(None)] = None, failed_users: Union[List[str], str, ForwardRef(None)] = None, enterprise: Optional[str] = None, subteam: Optional[str] = None, action: Optional[str] = None, idp_group_member_count: Optional[int] = None, workspace_member_count: Optional[int] = None, added_user_count: Optional[int] = None, added_user_error_count: Optional[int] = None, reactivated_user_count: Optional[int] = None, removed_user_count: Optional[int] = None, removed_user_error_count: Optional[int] = None, total_removal_count: Optional[int] = None, is_flagged: Optional[str] = None, target_user: Optional[str] = None, idp_config_id: Optional[str] = None, config_type: Optional[str] = None, idp_entity_id_hash: Optional[str] = None, label: Optional[str] = None, previous_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, new_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, kicker: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, enable_at_channel: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, can_huddle: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, url_private: Optional[str] = None, shared_with: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a>, ForwardRef(None)] = None, initiated_by: Optional[str] = None, source_team: Optional[str] = None, destination_team: Optional[str] = None, succeeded_users: Union[List[str], str, ForwardRef(None)] = None, failed_users: Union[List[str], str, ForwardRef(None)] = None, enterprise: Optional[str] = None, subteam: Optional[str] = None, action: Optional[str] = None, idp_group_member_count: Optional[int] = None, workspace_member_count: Optional[int] = None, added_user_count: Optional[int] = None, added_user_error_count: Optional[int] = None, reactivated_user_count: Optional[int] = None, removed_user_count: Optional[int] = None, removed_user_error_count: Optional[int] = None, total_removal_count: Optional[int] = None, is_flagged: Optional[str] = None, target_user: Optional[str] = None, idp_config_id: Optional[str] = None, config_type: Optional[str] = None, idp_entity_id_hash: Optional[str] = None, label: Optional[str] = None, previous_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, new_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, target_user_id: Optional[str] = None, space_file_id: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a>, ForwardRef(None)] = None, target_entity: Optional[str] = None, target_entity_id: Optional[str] = None, changed_permissions: Optional[List[str]] = None, datastore_name: Optional[str] = None, attributes: Optional[List[Union[Dict[str, str], <a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>]]] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1268,6 +1427,13 @@ class LogsResponse:
     label: Optional[str]
     previous_profile: Optional[Profile]
     new_profile: Optional[Profile]
+    target_user_id: Optional[str]
+    space_file_id: Optional[SpaceFileId]
+    target_entity: Optional[str]
+    target_entity_id: Optional[str]
+    changed_permissions: Optional[List[str]]
+    datastore_name: Optional[str]
+    attributes: Optional[List[Attribute]]
 
     def __init__(
         self,
@@ -1367,6 +1533,13 @@ class LogsResponse:
         label: Optional[str] = None,
         previous_profile: Optional[Union[Dict[str, Any], Profile]] = None,
         new_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        target_user_id: Optional[str] = None,
+        space_file_id: Optional[Union[Dict[str, Any], SpaceFileId]] = None,
+        target_entity: Optional[str] = None,
+        target_entity_id: Optional[str] = None,
+        changed_permissions: Optional[List[str]] = None,
+        datastore_name: Optional[str] = None,
+        attributes: Optional[List[Union[Dict[str, str], Attribute]]] = None,
         **kwargs,
     ) -&gt; None:
         self.name = name
@@ -1500,7 +1673,25 @@ class LogsResponse:
             if previous_profile is None or isinstance(previous_profile, Profile)
             else Profile(**previous_profile)
         )
-        self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)</code></pre>
+        self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
+        self.target_user_id = target_user_id
+        self.space_file_id = (
+            space_file_id
+            if space_file_id is None or isinstance(space_file_id, SpaceFileId)
+            else SpaceFileId(**space_file_id)
+        )
+        self.target_entity = target_entity
+        self.target_entity_id = target_entity_id
+        self.changed_permissions = changed_permissions
+        self.datastore_name = datastore_name
+        self.attributes = None
+        if attributes is not None:
+            self.attributes = []
+            for a in attributes:
+                if isinstance(a, dict):
+                    self.attributes.append(Attribute(**a))
+                else:
+                    self.attributes.append(a)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -1548,6 +1739,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.attributes"><code class="name">var <span class="ident">attributes</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.barrier_id"><code class="name">var <span class="ident">barrier_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1572,6 +1767,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.changed_permissions"><code class="name">var <span class="ident">changed_permissions</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.channel_id"><code class="name">var <span class="ident">channel_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1589,6 +1788,10 @@ class LogsResponse:
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.creator"><code class="name">var <span class="ident">creator</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.datastore_name"><code class="name">var <span class="ident">datastore_name</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1836,6 +2039,10 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.space_file_id"><code class="name">var <span class="ident">space_file_id</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.subteam"><code class="name">var <span class="ident">subteam</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1844,11 +2051,23 @@ class LogsResponse:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity"><code class="name">var <span class="ident">target_entity</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity_id"><code class="name">var <span class="ident">target_entity_id</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.target_user"><code class="name">var <span class="ident">target_user</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user_id"><code class="name">var <span class="ident">target_user_id</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1892,7 +2111,7 @@ class LogsResponse:
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entity"><code class="flex name class">
 <span>class <span class="ident">Entity</span></span>
-<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, Dict[str, Any], ForwardRef(None)] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, Dict[str, Any], ForwardRef(None)] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, huddle: Union[<a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a>, Dict[str, Any], ForwardRef(None)] = None, role: Union[<a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a>, Dict[str, Any], ForwardRef(None)] = None, usergroup: Union[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>, Dict[str, Any], ForwardRef(None)] = None, workflow: Union[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>, Dict[str, Any], ForwardRef(None)] = None, barrier: Union[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, Dict[str, Any], ForwardRef(None)] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, Dict[str, Any], ForwardRef(None)] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, huddle: Union[<a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a>, Dict[str, Any], ForwardRef(None)] = None, role: Union[<a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a>, Dict[str, Any], ForwardRef(None)] = None, usergroup: Union[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>, Dict[str, Any], ForwardRef(None)] = None, workflow: Union[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>, Dict[str, Any], ForwardRef(None)] = None, barrier: Union[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>, Dict[str, Any], ForwardRef(None)] = None, account_type_role: Union[<a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1913,6 +2132,7 @@ class LogsResponse:
     usergroup: Optional[Usergroup]
     workflow: Optional[Workflow]
     barrier: Optional[InformationBarrier]
+    account_type_role: Optional[AccountTypeRole]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -1930,6 +2150,7 @@ class LogsResponse:
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
         workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
+        account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
         **kwargs,
     ) -&gt; None:
         self.type = type
@@ -1944,10 +2165,17 @@ class LogsResponse:
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
         self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
+        self.account_type_role = (
+            AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
+        )
         self.unknown_fields = kwargs</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.account_type_role"><code class="name">var <span class="ident">account_type_role</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entity.app"><code class="name">var <span class="ident">app</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -2662,6 +2890,35 @@ class LogsResponse:
 </dd>
 </dl>
 </dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId"><code class="flex name class">
+<span>class <span class="ident">SpaceFileId</span></span>
+<span>(</span><span>*, payload: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SpaceFileId:
+    payload: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        payload: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.payload = payload</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload"><code class="name">var <span class="ident">payload</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="slack_sdk.audit_logs.v1.logs.User"><code class="flex name class">
 <span>class <span class="ident">User</span></span>
 <span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, email: Optional[str] = None, team: Optional[str] = None, **kwargs)</span>
@@ -2826,6 +3083,14 @@ class LogsResponse:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.type" href="#slack_sdk.audit_logs.v1.logs.Actor.type">type</a></code></li>
@@ -2843,6 +3108,13 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.App.name" href="#slack_sdk.audit_logs.v1.logs.App.name">name</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.App.scopes" href="#slack_sdk.audit_logs.v1.logs.App.scopes">scopes</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.App.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.App.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Attribute.name" href="#slack_sdk.audit_logs.v1.logs.Attribute.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Attribute.type" href="#slack_sdk.audit_logs.v1.logs.Attribute.type">type</a></code></li>
 </ul>
 </li>
 <li>
@@ -2890,17 +3162,20 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved">app_previously_resolved</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.approval_type" href="#slack_sdk.audit_logs.v1.logs.Details.approval_type">approval_type</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.approver_id" href="#slack_sdk.audit_logs.v1.logs.Details.approver_id">approver_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.attributes" href="#slack_sdk.audit_logs.v1.logs.Details.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.barrier_id" href="#slack_sdk.audit_logs.v1.logs.Details.barrier_id">barrier_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids" href="#slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids">barriered_from_usergroup_ids</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_id" href="#slack_sdk.audit_logs.v1.logs.Details.bot_id">bot_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.bot_scopes">bot_scopes</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_huddle" href="#slack_sdk.audit_logs.v1.logs.Details.can_huddle">can_huddle</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_thread" href="#slack_sdk.audit_logs.v1.logs.Details.can_thread">can_thread</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.changed_permissions" href="#slack_sdk.audit_logs.v1.logs.Details.changed_permissions">changed_permissions</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channel_id" href="#slack_sdk.audit_logs.v1.logs.Details.channel_id">channel_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channels" href="#slack_sdk.audit_logs.v1.logs.Details.channels">channels</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution" href="#slack_sdk.audit_logs.v1.logs.Details.cleared_resolution">cleared_resolution</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.config_type" href="#slack_sdk.audit_logs.v1.logs.Details.config_type">config_type</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.creator" href="#slack_sdk.audit_logs.v1.logs.Details.creator">creator</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.datastore_name" href="#slack_sdk.audit_logs.v1.logs.Details.datastore_name">datastore_name</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end" href="#slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end">deprecation_search_end</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit" href="#slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit">desktop_app_browser_quit</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.destination_team" href="#slack_sdk.audit_logs.v1.logs.Details.destination_team">destination_team</a></code></li>
@@ -2962,10 +3237,14 @@ class LogsResponse:
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_to" href="#slack_sdk.audit_logs.v1.logs.Details.shared_to">shared_to</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_with" href="#slack_sdk.audit_logs.v1.logs.Details.shared_with">shared_with</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.source_team" href="#slack_sdk.audit_logs.v1.logs.Details.source_team">source_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.space_file_id" href="#slack_sdk.audit_logs.v1.logs.Details.space_file_id">space_file_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.subteam" href="#slack_sdk.audit_logs.v1.logs.Details.subteam">subteam</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.succeeded_users" href="#slack_sdk.audit_logs.v1.logs.Details.succeeded_users">succeeded_users</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_entity" href="#slack_sdk.audit_logs.v1.logs.Details.target_entity">target_entity</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_entity_id" href="#slack_sdk.audit_logs.v1.logs.Details.target_entity_id">target_entity_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_team" href="#slack_sdk.audit_logs.v1.logs.Details.target_team">target_team</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_user" href="#slack_sdk.audit_logs.v1.logs.Details.target_user">target_user</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_user_id" href="#slack_sdk.audit_logs.v1.logs.Details.target_user_id">target_user_id</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.team" href="#slack_sdk.audit_logs.v1.logs.Details.team">team</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.total_removal_count" href="#slack_sdk.audit_logs.v1.logs.Details.total_removal_count">total_removal_count</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Details.trigger" href="#slack_sdk.audit_logs.v1.logs.Details.trigger">trigger</a></code></li>
@@ -2980,6 +3259,7 @@ class LogsResponse:
 <li>
 <h4><code><a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a></code></h4>
 <ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.account_type_role" href="#slack_sdk.audit_logs.v1.logs.Entity.account_type_role">account_type_role</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.app" href="#slack_sdk.audit_logs.v1.logs.Entity.app">app</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.barrier" href="#slack_sdk.audit_logs.v1.logs.Entity.barrier">barrier</a></code></li>
 <li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.channel" href="#slack_sdk.audit_logs.v1.logs.Entity.channel">channel</a></code></li>
@@ -3110,6 +3390,12 @@ class LogsResponse:
 <h4><code><a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.audit_logs.v1.logs.SharedWith.channel_id" href="#slack_sdk.audit_logs.v1.logs.SharedWith.channel_id">channel_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId.payload">payload</a></code></li>
 </ul>
 </li>
 <li>

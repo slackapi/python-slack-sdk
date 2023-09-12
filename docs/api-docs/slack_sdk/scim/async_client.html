@@ -374,6 +374,10 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f&#34;No response data returned from the following API call: {url}.&#34;)
+                            retry_response = RetryHttpResponse(
+                                status_code=res.status,
+                                headers=res.headers,
+                            )
 
                         if res.status == 429:
                             for handler in self.retry_handlers:

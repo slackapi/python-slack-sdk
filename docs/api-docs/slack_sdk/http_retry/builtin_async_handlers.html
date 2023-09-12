@@ -82,8 +82,8 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -&gt; bool:
         return response is not None and response.status_code == 429
 
@@ -112,6 +112,27 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
             duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
         await asyncio.sleep(duration)
         state.increment_current_attempt()
+
+
+class AsyncServerErrorRetryHandler(AsyncRetryHandler):
+    &#34;&#34;&#34;RetryHandler that does retries for server errors.&#34;&#34;&#34;
+
+    def __init__(
+        self,
+        max_retry_count: int = 1,
+        interval_calculator: RetryIntervalCalculator = default_interval_calculator,
+    ):
+        super().__init__(max_retry_count, interval_calculator)
+
+    async def _can_retry_async(
+        self,
+        *,
+        state: RetryState,
+        request: HttpRequest,
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
+    ) -&gt; bool:
+        return response is not None and response.status_code in [500, 503]
 
 
 def async_default_handlers() -&gt; List[AsyncRetryHandler]:
@@ -236,8 +257,8 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
         *,
         state: RetryState,
         request: HttpRequest,
-        response: Optional[HttpResponse],
-        error: Optional[Exception],
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
     ) -&gt; bool:
         return response is not None and response.status_code == 429
 
@@ -322,6 +343,60 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
 </dd>
 </dl>
 </dd>
+<dt id="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler"><code class="flex name class">
+<span>class <span class="ident">AsyncServerErrorRetryHandler</span></span>
+<span>(</span><span>max_retry_count: int = 1, interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>RetryHandler that does retries for server errors.</p>
+<p>RetryHandler interface.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_retry_count</code></strong></dt>
+<dd>The maximum times to do retries</dd>
+<dt><strong><code>interval_calculator</code></strong></dt>
+<dd>Pass an interval calculator for customizing the logic</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AsyncServerErrorRetryHandler(AsyncRetryHandler):
+    &#34;&#34;&#34;RetryHandler that does retries for server errors.&#34;&#34;&#34;
+
+    def __init__(
+        self,
+        max_retry_count: int = 1,
+        interval_calculator: RetryIntervalCalculator = default_interval_calculator,
+    ):
+        super().__init__(max_retry_count, interval_calculator)
+
+    async def _can_retry_async(
+        self,
+        *,
+        state: RetryState,
+        request: HttpRequest,
+        response: Optional[HttpResponse] = None,
+        error: Optional[Exception] = None,
+    ) -&gt; bool:
+        return response is not None and response.status_code in [500, 503]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>slack_sdk.http_retry.async_handler.AsyncRetryHandler</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.interval_calculator"><code class="name">var <span class="ident">interval_calculator</span> : <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.max_retry_count"><code class="name">var <span class="ident">max_retry_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -356,6 +431,13 @@ def async_default_handlers() -&gt; List[AsyncRetryHandler]:
 <li><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.interval_calculator" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.interval_calculator">interval_calculator</a></code></li>
 <li><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.max_retry_count" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.max_retry_count">max_retry_count</a></code></li>
 <li><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.prepare_for_next_attempt_async" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncRateLimitErrorRetryHandler.prepare_for_next_attempt_async">prepare_for_next_attempt_async</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler">AsyncServerErrorRetryHandler</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.interval_calculator" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.interval_calculator">interval_calculator</a></code></li>
+<li><code><a title="slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.max_retry_count" href="#slack_sdk.http_retry.builtin_async_handlers.AsyncServerErrorRetryHandler.max_retry_count">max_retry_count</a></code></li>
 </ul>
 </li>
 </ul>

@@ -5,7 +5,7 @@
             http-equiv="Content-Type"
             content="text/html; charset=utf-8"
         />
-        <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>Socket Mode Client &mdash; Python Slack SDK</title>
 
@@ -212,11 +212,11 @@
                     <!-- <div class="section-title">Socket Mode Client</div> -->
                     <div class="card">
   <section id="socket-mode-client">
-<h1>Socket Mode Client<a class="headerlink" href="#socket-mode-client" title="Permalink to this heading">¶</a></h1>
+<h1>Socket Mode Client<a class="headerlink" href="#socket-mode-client" title="Link to this heading">¶</a></h1>
 <p>Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP. You can use  <code class="docutils literal notranslate"><span class="pre">slack_sdk.socket_mode.SocketModeClient</span></code> for managing <a class="reference external" href="https://api.slack.com/apis/connections/socket">Socket Mode</a> connections and performing interactions with Slack.</p>
 <p>The Python document for this module is available at <a class="reference external" href="https://slack.dev/python-slack-sdk/api-docs/slack_sdk/">https://slack.dev/python-slack-sdk/api-docs/slack_sdk/</a></p>
 <section id="socketmodeclient">
-<h2>SocketModeClient<a class="headerlink" href="#socketmodeclient" title="Permalink to this heading">¶</a></h2>
+<h2>SocketModeClient<a class="headerlink" href="#socketmodeclient" title="Link to this heading">¶</a></h2>
 <p>First off, let’s start with enabling Socket Mode. Visit <a class="reference external" href="http://api.slack.com/apps">the Slack App configuration page</a>, choose the app you’re working on, and go to <strong>Settings</strong> on the left pane. There are a few things to do on the page.</p>
 <ul>
 <li><p>Go to <strong>Settings</strong> &gt; <strong>Basic Information</strong>, then add a new <strong>App-Level Token</strong> with the <cite>connections:write</cite> scope</p></li>
@@ -335,7 +335,7 @@
 </section>
 <hr class="docutils" />
 <section id="supported-libraries">
-<h2>Supported Libraries<a class="headerlink" href="#supported-libraries" title="Permalink to this heading">¶</a></h2>
+<h2>Supported Libraries<a class="headerlink" href="#supported-libraries" title="Link to this heading">¶</a></h2>
 <p>This SDK offers its own simple WebSocket client covering only required features for Socket Mode. In addition to that, <code class="docutils literal notranslate"><span class="pre">SocketModeClient</span></code> is implemented with a few 3rd party open-source libraries. If you prefer any of the following, you can use it over the built-in one.</p>
 <table class="docutils align-default">
 <thead>
@@ -372,7 +372,7 @@
 </section>
 <hr class="docutils" />
 <section id="asyncio-based-libraries">
-<h2>Asyncio Based Libraries<a class="headerlink" href="#asyncio-based-libraries" title="Permalink to this heading">¶</a></h2>
+<h2>Asyncio Based Libraries<a class="headerlink" href="#asyncio-based-libraries" title="Link to this heading">¶</a></h2>
 <p>To use the asyncio-based ones such as aiohttp, your app needs to be compatible with asyncio’s async/await programming model. The <cite>SocketModeClient</cite> only works with <cite>AsyncWebClient</cite> and async listeners.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">os</span>

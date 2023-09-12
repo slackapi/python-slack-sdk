@@ -331,6 +331,82 @@ class AsyncWebClient(AsyncBaseClient):
                 kwargs.update({&#34;team_ids&#34;: team_ids})
         return await self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
+    async def admin_apps_activities_list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        component_id: Optional[str] = None,
+        component_type: Optional[str] = None,
+        log_event_type: Optional[str] = None,
+        max_date_created: Optional[int] = None,
+        min_date_created: Optional[int] = None,
+        min_log_level: Optional[str] = None,
+        sort_direction: Optional[str] = None,
+        source: Optional[str] = None,
+        team_id: Optional[str] = None,
+        trace_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get logs for a specified team/org
+        https://api.slack.com/methods/admin.apps.activities.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;component_id&#34;: component_id,
+                &#34;component_type&#34;: component_type,
+                &#34;log_event_type&#34;: log_event_type,
+                &#34;max_date_created&#34;: max_date_created,
+                &#34;min_date_created&#34;: min_date_created,
+                &#34;min_log_level&#34;: min_log_level,
+                &#34;sort_direction&#34;: sort_direction,
+                &#34;source&#34;: source,
+                &#34;team_id&#34;: team_id,
+                &#34;trace_id&#34;: trace_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        return await self.api_call(&#34;admin.apps.activities.list&#34;, params=kwargs)
+
+    async def admin_apps_config_lookup(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up the app config for connectors by their IDs
+        https://api.slack.com/methods/admin.apps.config.lookup
+        &#34;&#34;&#34;
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+        else:
+            kwargs.update({&#34;app_ids&#34;: app_ids})
+        return await self.api_call(&#34;admin.apps.config.lookup&#34;, params=kwargs)
+
+    async def admin_apps_config_set(
+        self,
+        *,
+        app_id: str,
+        domain_restrictions: Optional[Dict[str, Any]] = None,
+        workflow_auth_strategy: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set the app config for a connector
+        https://api.slack.com/methods/admin.apps.config.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;workflow_auth_strategy&#34;: workflow_auth_strategy,
+            }
+        )
+        if domain_restrictions is not None:
+            kwargs.update({&#34;domain_restrictions&#34;: json.dumps(domain_restrictions)})
+        return await self.api_call(&#34;admin.apps.config.set&#34;, params=kwargs)
+
     async def admin_auth_policy_getEntities(
         self,
         *,
@@ -976,6 +1052,72 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name, &#34;new_name&#34;: new_name})
         return await self.api_call(&#34;admin.emoji.rename&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def admin_functions_list(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up functions by a set of apps
+        https://api.slack.com/methods/admin.functions.list
+        &#34;&#34;&#34;
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+        else:
+            kwargs.update({&#34;app_ids&#34;: app_ids})
+        kwargs.update(
+            {
+                &#34;team_id&#34;: team_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        return await self.api_call(&#34;admin.functions.list&#34;, params=kwargs)
+
+    async def admin_functions_permissions_lookup(
+        self,
+        *,
+        function_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Lookup the visibility of multiple Slack functions
+        and include the users if it is limited to particular named entities.
+        https://api.slack.com/methods/admin.functions.permissions.lookup
+        &#34;&#34;&#34;
+        if isinstance(function_ids, (list, Tuple)):
+            kwargs.update({&#34;function_ids&#34;: &#34;,&#34;.join(function_ids)})
+        else:
+            kwargs.update({&#34;function_ids&#34;: function_ids})
+        return await self.api_call(&#34;admin.functions.permissions.lookup&#34;, params=kwargs)
+
+    async def admin_functions_permissions_set(
+        self,
+        *,
+        function_id: str,
+        visibility: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set the visibility of a Slack function
+        and define the users or workspaces if it is set to named_entities
+        https://api.slack.com/methods/admin.functions.permissions.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;function_id&#34;: function_id,
+                &#34;visibility&#34;: visibility,
+            }
+        )
+        if user_ids is not None:
+            if isinstance(user_ids, (list, Tuple)):
+                kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+            else:
+                kwargs.update({&#34;user_ids&#34;: user_ids})
+        return await self.api_call(&#34;admin.functions.permissions.set&#34;, params=kwargs)
 
     async def admin_roles_addAssignments(
         self,
@@ -1644,6 +1786,120 @@ class AsyncWebClient(AsyncBaseClient):
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id})
         return await self.api_call(&#34;admin.users.setRegular&#34;, params=kwargs)
+
+    async def admin_workflows_search(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        collaborator_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        no_collaborators: Optional[bool] = None,
+        num_trigger_ids: Optional[int] = None,
+        query: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        source: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Search workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.search
+        &#34;&#34;&#34;
+        if collaborator_ids is not None:
+            if isinstance(collaborator_ids, (list, Tuple)):
+                kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+            else:
+                kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;no_collaborators&#34;: no_collaborators,
+                &#34;num_trigger_ids&#34;: num_trigger_ids,
+                &#34;query&#34;: query,
+                &#34;sort&#34;: sort,
+                &#34;sort_dir&#34;: sort_dir,
+                &#34;source&#34;: source,
+            }
+        )
+        return await self.api_call(&#34;admin.workflows.search&#34;, params=kwargs)
+
+    async def admin_workflows_permissions_lookup(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        max_workflow_triggers: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up the permissions for a set of workflows
+        https://api.slack.com/methods/admin.workflows.permissions.lookup
+        &#34;&#34;&#34;
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        kwargs.update(
+            {
+                &#34;max_workflow_triggers&#34;: max_workflow_triggers,
+            }
+        )
+        return await self.api_call(&#34;admin.workflows.permissions.lookup&#34;, params=kwargs)
+
+    async def admin_workflows_collaborators_add(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add collaborators to workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.add
+        &#34;&#34;&#34;
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+        else:
+            kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.collaborators.add&#34;, params=kwargs)
+
+    async def admin_workflows_collaborators_remove(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Remove collaborators from workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.remove
+        &#34;&#34;&#34;
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+        else:
+            kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.collaborators.remove&#34;, params=kwargs)
+
+    async def admin_workflows_unpublish(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Unpublish workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.unpublish
+        &#34;&#34;&#34;
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.unpublish&#34;, params=kwargs)
 
     async def api_test(
         self,
@@ -4199,6 +4455,8 @@ class AsyncWebClient(AsyncBaseClient):
         count: Optional[Union[int, str]] = None,
         page: Optional[Union[int, str]] = None,
         team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets the access logs for the current team.
@@ -4210,6 +4468,8 @@ class AsyncWebClient(AsyncBaseClient):
                 &#34;count&#34;: count,
                 &#34;page&#34;: page,
                 &#34;team_id&#34;: team_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
             }
         )
         return await self.api_call(&#34;team.accessLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)
@@ -5123,6 +5383,82 @@ removed at anytime.</p></div>
                 kwargs.update({&#34;team_ids&#34;: team_ids})
         return await self.api_call(&#34;admin.apps.uninstall&#34;, http_verb=&#34;POST&#34;, params=kwargs)
 
+    async def admin_apps_activities_list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        component_id: Optional[str] = None,
+        component_type: Optional[str] = None,
+        log_event_type: Optional[str] = None,
+        max_date_created: Optional[int] = None,
+        min_date_created: Optional[int] = None,
+        min_log_level: Optional[str] = None,
+        sort_direction: Optional[str] = None,
+        source: Optional[str] = None,
+        team_id: Optional[str] = None,
+        trace_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get logs for a specified team/org
+        https://api.slack.com/methods/admin.apps.activities.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;component_id&#34;: component_id,
+                &#34;component_type&#34;: component_type,
+                &#34;log_event_type&#34;: log_event_type,
+                &#34;max_date_created&#34;: max_date_created,
+                &#34;min_date_created&#34;: min_date_created,
+                &#34;min_log_level&#34;: min_log_level,
+                &#34;sort_direction&#34;: sort_direction,
+                &#34;source&#34;: source,
+                &#34;team_id&#34;: team_id,
+                &#34;trace_id&#34;: trace_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        return await self.api_call(&#34;admin.apps.activities.list&#34;, params=kwargs)
+
+    async def admin_apps_config_lookup(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up the app config for connectors by their IDs
+        https://api.slack.com/methods/admin.apps.config.lookup
+        &#34;&#34;&#34;
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+        else:
+            kwargs.update({&#34;app_ids&#34;: app_ids})
+        return await self.api_call(&#34;admin.apps.config.lookup&#34;, params=kwargs)
+
+    async def admin_apps_config_set(
+        self,
+        *,
+        app_id: str,
+        domain_restrictions: Optional[Dict[str, Any]] = None,
+        workflow_auth_strategy: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set the app config for a connector
+        https://api.slack.com/methods/admin.apps.config.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;workflow_auth_strategy&#34;: workflow_auth_strategy,
+            }
+        )
+        if domain_restrictions is not None:
+            kwargs.update({&#34;domain_restrictions&#34;: json.dumps(domain_restrictions)})
+        return await self.api_call(&#34;admin.apps.config.set&#34;, params=kwargs)
+
     async def admin_auth_policy_getEntities(
         self,
         *,
@@ -5768,6 +6104,72 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;name&#34;: name, &#34;new_name&#34;: new_name})
         return await self.api_call(&#34;admin.emoji.rename&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def admin_functions_list(
+        self,
+        *,
+        app_ids: Union[str, Sequence[str]],
+        team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up functions by a set of apps
+        https://api.slack.com/methods/admin.functions.list
+        &#34;&#34;&#34;
+        if isinstance(app_ids, (list, Tuple)):
+            kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+        else:
+            kwargs.update({&#34;app_ids&#34;: app_ids})
+        kwargs.update(
+            {
+                &#34;team_id&#34;: team_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        return await self.api_call(&#34;admin.functions.list&#34;, params=kwargs)
+
+    async def admin_functions_permissions_lookup(
+        self,
+        *,
+        function_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Lookup the visibility of multiple Slack functions
+        and include the users if it is limited to particular named entities.
+        https://api.slack.com/methods/admin.functions.permissions.lookup
+        &#34;&#34;&#34;
+        if isinstance(function_ids, (list, Tuple)):
+            kwargs.update({&#34;function_ids&#34;: &#34;,&#34;.join(function_ids)})
+        else:
+            kwargs.update({&#34;function_ids&#34;: function_ids})
+        return await self.api_call(&#34;admin.functions.permissions.lookup&#34;, params=kwargs)
+
+    async def admin_functions_permissions_set(
+        self,
+        *,
+        function_id: str,
+        visibility: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set the visibility of a Slack function
+        and define the users or workspaces if it is set to named_entities
+        https://api.slack.com/methods/admin.functions.permissions.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;function_id&#34;: function_id,
+                &#34;visibility&#34;: visibility,
+            }
+        )
+        if user_ids is not None:
+            if isinstance(user_ids, (list, Tuple)):
+                kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+            else:
+                kwargs.update({&#34;user_ids&#34;: user_ids})
+        return await self.api_call(&#34;admin.functions.permissions.set&#34;, params=kwargs)
 
     async def admin_roles_addAssignments(
         self,
@@ -6436,6 +6838,120 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;
         kwargs.update({&#34;team_id&#34;: team_id, &#34;user_id&#34;: user_id})
         return await self.api_call(&#34;admin.users.setRegular&#34;, params=kwargs)
+
+    async def admin_workflows_search(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        collaborator_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        no_collaborators: Optional[bool] = None,
+        num_trigger_ids: Optional[int] = None,
+        query: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        source: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Search workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.search
+        &#34;&#34;&#34;
+        if collaborator_ids is not None:
+            if isinstance(collaborator_ids, (list, Tuple)):
+                kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+            else:
+                kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        kwargs.update(
+            {
+                &#34;app_id&#34;: app_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;no_collaborators&#34;: no_collaborators,
+                &#34;num_trigger_ids&#34;: num_trigger_ids,
+                &#34;query&#34;: query,
+                &#34;sort&#34;: sort,
+                &#34;sort_dir&#34;: sort_dir,
+                &#34;source&#34;: source,
+            }
+        )
+        return await self.api_call(&#34;admin.workflows.search&#34;, params=kwargs)
+
+    async def admin_workflows_permissions_lookup(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        max_workflow_triggers: Optional[int] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Look up the permissions for a set of workflows
+        https://api.slack.com/methods/admin.workflows.permissions.lookup
+        &#34;&#34;&#34;
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        kwargs.update(
+            {
+                &#34;max_workflow_triggers&#34;: max_workflow_triggers,
+            }
+        )
+        return await self.api_call(&#34;admin.workflows.permissions.lookup&#34;, params=kwargs)
+
+    async def admin_workflows_collaborators_add(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add collaborators to workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.add
+        &#34;&#34;&#34;
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+        else:
+            kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.collaborators.add&#34;, params=kwargs)
+
+    async def admin_workflows_collaborators_remove(
+        self,
+        *,
+        collaborator_ids: Union[str, Sequence[str]],
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Remove collaborators from workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.collaborators.remove
+        &#34;&#34;&#34;
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+        else:
+            kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.collaborators.remove&#34;, params=kwargs)
+
+    async def admin_workflows_unpublish(
+        self,
+        *,
+        workflow_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Unpublish workflows within the team or enterprise
+        https://api.slack.com/methods/admin.workflows.unpublish
+        &#34;&#34;&#34;
+        if isinstance(workflow_ids, (list, Tuple)):
+            kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+        else:
+            kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+        return await self.api_call(&#34;admin.workflows.unpublish&#34;, params=kwargs)
 
     async def api_test(
         self,
@@ -8991,6 +9507,8 @@ removed at anytime.</p></div>
         count: Optional[Union[int, str]] = None,
         page: Optional[Union[int, str]] = None,
         team_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Gets the access logs for the current team.
@@ -9002,6 +9520,8 @@ removed at anytime.</p></div>
                 &#34;count&#34;: count,
                 &#34;page&#34;: page,
                 &#34;team_id&#34;: team_id,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
             }
         )
         return await self.api_call(&#34;team.accessLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)
@@ -9604,6 +10124,57 @@ removed at anytime.</p></div>
     return await self.api_call(&#34;admin.analytics.getFile&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_activities_list"><code class="name flex">
+<span>async def <span class="ident">admin_apps_activities_list</span></span>(<span>self, *, app_id: Optional[str] = None, component_id: Optional[str] = None, component_type: Optional[str] = None, log_event_type: Optional[str] = None, max_date_created: Optional[int] = None, min_date_created: Optional[int] = None, min_log_level: Optional[str] = None, sort_direction: Optional[str] = None, source: Optional[str] = None, team_id: Optional[str] = None, trace_id: Optional[str] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get logs for a specified team/org
+<a href="https://api.slack.com/methods/admin.apps.activities.list">https://api.slack.com/methods/admin.apps.activities.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_apps_activities_list(
+    self,
+    *,
+    app_id: Optional[str] = None,
+    component_id: Optional[str] = None,
+    component_type: Optional[str] = None,
+    log_event_type: Optional[str] = None,
+    max_date_created: Optional[int] = None,
+    min_date_created: Optional[int] = None,
+    min_log_level: Optional[str] = None,
+    sort_direction: Optional[str] = None,
+    source: Optional[str] = None,
+    team_id: Optional[str] = None,
+    trace_id: Optional[str] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Get logs for a specified team/org
+    https://api.slack.com/methods/admin.apps.activities.list
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;app_id&#34;: app_id,
+            &#34;component_id&#34;: component_id,
+            &#34;component_type&#34;: component_type,
+            &#34;log_event_type&#34;: log_event_type,
+            &#34;max_date_created&#34;: max_date_created,
+            &#34;min_date_created&#34;: min_date_created,
+            &#34;min_log_level&#34;: min_log_level,
+            &#34;sort_direction&#34;: sort_direction,
+            &#34;source&#34;: source,
+            &#34;team_id&#34;: team_id,
+            &#34;trace_id&#34;: trace_id,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+        }
+    )
+    return await self.api_call(&#34;admin.apps.activities.list&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve"><code class="name flex">
 <span>async def <span class="ident">admin_apps_approve</span></span>(<span>self, *, app_id: Optional[str] = None, request_id: Optional[str] = None, enterprise_id: Optional[str] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -9710,6 +10281,64 @@ or by the admin.apps.requests.list method.
         }
     )
     return await self.api_call(&#34;admin.apps.clearResolution&#34;, http_verb=&#34;POST&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_lookup"><code class="name flex">
+<span>async def <span class="ident">admin_apps_config_lookup</span></span>(<span>self, *, app_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Look up the app config for connectors by their IDs
+<a href="https://api.slack.com/methods/admin.apps.config.lookup">https://api.slack.com/methods/admin.apps.config.lookup</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_apps_config_lookup(
+    self,
+    *,
+    app_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Look up the app config for connectors by their IDs
+    https://api.slack.com/methods/admin.apps.config.lookup
+    &#34;&#34;&#34;
+    if isinstance(app_ids, (list, Tuple)):
+        kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+    else:
+        kwargs.update({&#34;app_ids&#34;: app_ids})
+    return await self.api_call(&#34;admin.apps.config.lookup&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_set"><code class="name flex">
+<span>async def <span class="ident">admin_apps_config_set</span></span>(<span>self, *, app_id: str, domain_restrictions: Optional[Dict[str, Any]] = None, workflow_auth_strategy: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the app config for a connector
+<a href="https://api.slack.com/methods/admin.apps.config.set">https://api.slack.com/methods/admin.apps.config.set</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_apps_config_set(
+    self,
+    *,
+    app_id: str,
+    domain_restrictions: Optional[Dict[str, Any]] = None,
+    workflow_auth_strategy: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Set the app config for a connector
+    https://api.slack.com/methods/admin.apps.config.set
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;app_id&#34;: app_id,
+            &#34;workflow_auth_strategy&#34;: workflow_auth_strategy,
+        }
+    )
+    if domain_restrictions is not None:
+        kwargs.update({&#34;domain_restrictions&#34;: json.dumps(domain_restrictions)})
+    return await self.api_call(&#34;admin.apps.config.set&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel"><code class="name flex">
@@ -10940,6 +11569,107 @@ the corresponding original channel IDs for key revocation with EKM.
     return await self.api_call(&#34;admin.emoji.rename&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_functions_list"><code class="name flex">
+<span>async def <span class="ident">admin_functions_list</span></span>(<span>self, *, app_ids: Union[str, Sequence[str]], team_id: Optional[str] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Look up functions by a set of apps
+<a href="https://api.slack.com/methods/admin.functions.list">https://api.slack.com/methods/admin.functions.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_functions_list(
+    self,
+    *,
+    app_ids: Union[str, Sequence[str]],
+    team_id: Optional[str] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Look up functions by a set of apps
+    https://api.slack.com/methods/admin.functions.list
+    &#34;&#34;&#34;
+    if isinstance(app_ids, (list, Tuple)):
+        kwargs.update({&#34;app_ids&#34;: &#34;,&#34;.join(app_ids)})
+    else:
+        kwargs.update({&#34;app_ids&#34;: app_ids})
+    kwargs.update(
+        {
+            &#34;team_id&#34;: team_id,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+        }
+    )
+    return await self.api_call(&#34;admin.functions.list&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_lookup"><code class="name flex">
+<span>async def <span class="ident">admin_functions_permissions_lookup</span></span>(<span>self, *, function_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lookup the visibility of multiple Slack functions
+and include the users if it is limited to particular named entities.
+<a href="https://api.slack.com/methods/admin.functions.permissions.lookup">https://api.slack.com/methods/admin.functions.permissions.lookup</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_functions_permissions_lookup(
+    self,
+    *,
+    function_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Lookup the visibility of multiple Slack functions
+    and include the users if it is limited to particular named entities.
+    https://api.slack.com/methods/admin.functions.permissions.lookup
+    &#34;&#34;&#34;
+    if isinstance(function_ids, (list, Tuple)):
+        kwargs.update({&#34;function_ids&#34;: &#34;,&#34;.join(function_ids)})
+    else:
+        kwargs.update({&#34;function_ids&#34;: function_ids})
+    return await self.api_call(&#34;admin.functions.permissions.lookup&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_set"><code class="name flex">
+<span>async def <span class="ident">admin_functions_permissions_set</span></span>(<span>self, *, function_id: str, visibility: str, user_ids: Union[str, Sequence[str], ForwardRef(None)] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the visibility of a Slack function
+and define the users or workspaces if it is set to named_entities
+<a href="https://api.slack.com/methods/admin.functions.permissions.set">https://api.slack.com/methods/admin.functions.permissions.set</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_functions_permissions_set(
+    self,
+    *,
+    function_id: str,
+    visibility: str,
+    user_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Set the visibility of a Slack function
+    and define the users or workspaces if it is set to named_entities
+    https://api.slack.com/methods/admin.functions.permissions.set
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;function_id&#34;: function_id,
+            &#34;visibility&#34;: visibility,
+        }
+    )
+    if user_ids is not None:
+        if isinstance(user_ids, (list, Tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+    return await self.api_call(&#34;admin.functions.permissions.set&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_approve"><code class="name flex">
 <span>async def <span class="ident">admin_inviteRequests_approve</span></span>(<span>self, *, invite_request_id: str, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -12028,6 +12758,175 @@ presented as a zipped CSV file.
         }
     )
     return await self.api_call(&#34;admin.users.unsupportedVersions.export&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_add"><code class="name flex">
+<span>async def <span class="ident">admin_workflows_collaborators_add</span></span>(<span>self, *, collaborator_ids: Union[str, Sequence[str]], workflow_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add collaborators to workflows within the team or enterprise
+<a href="https://api.slack.com/methods/admin.workflows.collaborators.add">https://api.slack.com/methods/admin.workflows.collaborators.add</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_workflows_collaborators_add(
+    self,
+    *,
+    collaborator_ids: Union[str, Sequence[str]],
+    workflow_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Add collaborators to workflows within the team or enterprise
+    https://api.slack.com/methods/admin.workflows.collaborators.add
+    &#34;&#34;&#34;
+    if isinstance(collaborator_ids, (list, Tuple)):
+        kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+    else:
+        kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+    if isinstance(workflow_ids, (list, Tuple)):
+        kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+    else:
+        kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+    return await self.api_call(&#34;admin.workflows.collaborators.add&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_remove"><code class="name flex">
+<span>async def <span class="ident">admin_workflows_collaborators_remove</span></span>(<span>self, *, collaborator_ids: Union[str, Sequence[str]], workflow_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove collaborators from workflows within the team or enterprise
+<a href="https://api.slack.com/methods/admin.workflows.collaborators.remove">https://api.slack.com/methods/admin.workflows.collaborators.remove</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_workflows_collaborators_remove(
+    self,
+    *,
+    collaborator_ids: Union[str, Sequence[str]],
+    workflow_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Remove collaborators from workflows within the team or enterprise
+    https://api.slack.com/methods/admin.workflows.collaborators.remove
+    &#34;&#34;&#34;
+    if isinstance(collaborator_ids, (list, Tuple)):
+        kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+    else:
+        kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+    if isinstance(workflow_ids, (list, Tuple)):
+        kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+    else:
+        kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+    return await self.api_call(&#34;admin.workflows.collaborators.remove&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_permissions_lookup"><code class="name flex">
+<span>async def <span class="ident">admin_workflows_permissions_lookup</span></span>(<span>self, *, workflow_ids: Union[str, Sequence[str]], max_workflow_triggers: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Look up the permissions for a set of workflows
+<a href="https://api.slack.com/methods/admin.workflows.permissions.lookup">https://api.slack.com/methods/admin.workflows.permissions.lookup</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_workflows_permissions_lookup(
+    self,
+    *,
+    workflow_ids: Union[str, Sequence[str]],
+    max_workflow_triggers: Optional[int] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Look up the permissions for a set of workflows
+    https://api.slack.com/methods/admin.workflows.permissions.lookup
+    &#34;&#34;&#34;
+    if isinstance(workflow_ids, (list, Tuple)):
+        kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+    else:
+        kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+    kwargs.update(
+        {
+            &#34;max_workflow_triggers&#34;: max_workflow_triggers,
+        }
+    )
+    return await self.api_call(&#34;admin.workflows.permissions.lookup&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_search"><code class="name flex">
+<span>async def <span class="ident">admin_workflows_search</span></span>(<span>self, *, app_id: Optional[str] = None, collaborator_ids: Union[str, Sequence[str], ForwardRef(None)] = None, cursor: Optional[str] = None, limit: Optional[int] = None, no_collaborators: Optional[bool] = None, num_trigger_ids: Optional[int] = None, query: Optional[str] = None, sort: Optional[str] = None, sort_dir: Optional[str] = None, source: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Search workflows within the team or enterprise
+<a href="https://api.slack.com/methods/admin.workflows.search">https://api.slack.com/methods/admin.workflows.search</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_workflows_search(
+    self,
+    *,
+    app_id: Optional[str] = None,
+    collaborator_ids: Optional[Union[str, Sequence[str]]] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    no_collaborators: Optional[bool] = None,
+    num_trigger_ids: Optional[int] = None,
+    query: Optional[str] = None,
+    sort: Optional[str] = None,
+    sort_dir: Optional[str] = None,
+    source: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Search workflows within the team or enterprise
+    https://api.slack.com/methods/admin.workflows.search
+    &#34;&#34;&#34;
+    if collaborator_ids is not None:
+        if isinstance(collaborator_ids, (list, Tuple)):
+            kwargs.update({&#34;collaborator_ids&#34;: &#34;,&#34;.join(collaborator_ids)})
+        else:
+            kwargs.update({&#34;collaborator_ids&#34;: collaborator_ids})
+    kwargs.update(
+        {
+            &#34;app_id&#34;: app_id,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+            &#34;no_collaborators&#34;: no_collaborators,
+            &#34;num_trigger_ids&#34;: num_trigger_ids,
+            &#34;query&#34;: query,
+            &#34;sort&#34;: sort,
+            &#34;sort_dir&#34;: sort_dir,
+            &#34;source&#34;: source,
+        }
+    )
+    return await self.api_call(&#34;admin.workflows.search&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_unpublish"><code class="name flex">
+<span>async def <span class="ident">admin_workflows_unpublish</span></span>(<span>self, *, workflow_ids: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unpublish workflows within the team or enterprise
+<a href="https://api.slack.com/methods/admin.workflows.unpublish">https://api.slack.com/methods/admin.workflows.unpublish</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def admin_workflows_unpublish(
+    self,
+    *,
+    workflow_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Unpublish workflows within the team or enterprise
+    https://api.slack.com/methods/admin.workflows.unpublish
+    &#34;&#34;&#34;
+    if isinstance(workflow_ids, (list, Tuple)):
+        kwargs.update({&#34;workflow_ids&#34;: &#34;,&#34;.join(workflow_ids)})
+    else:
+        kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
+    return await self.api_call(&#34;admin.workflows.unpublish&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.api_test"><code class="name flex">
@@ -16093,7 +16992,7 @@ multiparty direct message.</p></div>
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.team_accessLogs"><code class="name flex">
-<span>async def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[str, int, ForwardRef(None)] = None, count: Union[str, int, ForwardRef(None)] = None, page: Union[str, int, ForwardRef(None)] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">team_accessLogs</span></span>(<span>self, *, before: Union[str, int, ForwardRef(None)] = None, count: Union[str, int, ForwardRef(None)] = None, page: Union[str, int, ForwardRef(None)] = None, team_id: Optional[str] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets the access logs for the current team.
@@ -16109,6 +17008,8 @@ multiparty direct message.</p></div>
     count: Optional[Union[int, str]] = None,
     page: Optional[Union[int, str]] = None,
     team_id: Optional[str] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Gets the access logs for the current team.
@@ -16120,6 +17021,8 @@ multiparty direct message.</p></div>
             &#34;count&#34;: count,
             &#34;page&#34;: page,
             &#34;team_id&#34;: team_id,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
         }
     )
     return await self.api_call(&#34;team.accessLogs&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
@@ -17079,9 +17982,12 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <h4><code><a title="slack_sdk.web.async_client.AsyncWebClient" href="#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_analytics_getFile" href="#slack_sdk.web.async_client.AsyncWebClient.admin_analytics_getFile">admin_analytics_getFile</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_activities_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_activities_list">admin_apps_activities_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_approve">admin_apps_approve</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_approved_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_approved_list">admin_apps_approved_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_clearResolution" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_clearResolution">admin_apps_clearResolution</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_lookup" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_lookup">admin_apps_config_lookup</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_set" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_config_set">admin_apps_config_set</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_cancel">admin_apps_requests_cancel</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_requests_list">admin_apps_requests_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_apps_restrict" href="#slack_sdk.web.async_client.AsyncWebClient.admin_apps_restrict">admin_apps_restrict</a></code></li>
@@ -17124,6 +18030,9 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_emoji_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_emoji_list">admin_emoji_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_emoji_remove" href="#slack_sdk.web.async_client.AsyncWebClient.admin_emoji_remove">admin_emoji_remove</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_emoji_rename" href="#slack_sdk.web.async_client.AsyncWebClient.admin_emoji_rename">admin_emoji_rename</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_functions_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_functions_list">admin_functions_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_lookup" href="#slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_lookup">admin_functions_permissions_lookup</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_set" href="#slack_sdk.web.async_client.AsyncWebClient.admin_functions_permissions_set">admin_functions_permissions_set</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_approve" href="#slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_approve">admin_inviteRequests_approve</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_approved_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_approved_list">admin_inviteRequests_approved_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_denied_list" href="#slack_sdk.web.async_client.AsyncWebClient.admin_inviteRequests_denied_list">admin_inviteRequests_denied_list</a></code></li>
@@ -17162,6 +18071,11 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_setOwner" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_setOwner">admin_users_setOwner</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_setRegular" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_setRegular">admin_users_setRegular</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_users_unsupportedVersions_export" href="#slack_sdk.web.async_client.AsyncWebClient.admin_users_unsupportedVersions_export">admin_users_unsupportedVersions_export</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_add" href="#slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_add">admin_workflows_collaborators_add</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_remove" href="#slack_sdk.web.async_client.AsyncWebClient.admin_workflows_collaborators_remove">admin_workflows_collaborators_remove</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_permissions_lookup" href="#slack_sdk.web.async_client.AsyncWebClient.admin_workflows_permissions_lookup">admin_workflows_permissions_lookup</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_search" href="#slack_sdk.web.async_client.AsyncWebClient.admin_workflows_search">admin_workflows_search</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.admin_workflows_unpublish" href="#slack_sdk.web.async_client.AsyncWebClient.admin_workflows_unpublish">admin_workflows_unpublish</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.api_test" href="#slack_sdk.web.async_client.AsyncWebClient.api_test">api_test</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.apps_connections_open" href="#slack_sdk.web.async_client.AsyncWebClient.apps_connections_open">apps_connections_open</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.apps_event_authorizations_list" href="#slack_sdk.web.async_client.AsyncWebClient.apps_event_authorizations_list">apps_event_authorizations_list</a></code></li>

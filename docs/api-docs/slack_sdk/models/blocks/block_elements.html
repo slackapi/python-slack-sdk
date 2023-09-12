@@ -39,7 +39,7 @@ from slack_sdk.models.basic_objects import (
     JsonValidator,
     EnumValidator,
 )
-from .basic_components import ButtonStyles
+from .basic_components import ButtonStyles, Workflow
 from .basic_components import ConfirmObject
 from .basic_components import DispatchActionConfig
 from .basic_components import MarkdownTextObject
@@ -108,7 +108,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def parse_all(
         cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
     ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]
+        return [cls.parse(e) for e in block_elements or []]  # type: ignore
 
     @classmethod
     def _get_sub_block_elements(cls: Type[&#34;BlockElement&#34;]) -&gt; Iterator[Type[&#34;BlockElement&#34;]]:
@@ -1716,7 +1716,64 @@ class OverflowMenuElement(InteractiveElement):
 
     @JsonValidator(f&#34;options attribute must have between {options_min_length} &#34; f&#34;and {options_max_length} items&#34;)
     def _validate_options_length(self) -&gt; bool:
-        return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length</code></pre>
+        return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length
+
+
+# -------------------------------------------------
+# Workflow Button
+# -------------------------------------------------
+
+
+class WorkflowButtonElement(InteractiveElement):
+    type = &#34;workflow_button&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;workflow&#34;, &#34;style&#34;, &#34;accessibility_label&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        action_id: Optional[str] = None,
+        workflow: Optional[Union[dict, Workflow]] = None,
+        style: Optional[str] = None,  # primary, danger
+        accessibility_label: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Allows users to run a link trigger with customizable inputs
+        Interactive component - but interactions with workflow button elements will not send block_actions events,
+        since these are used to start new workflow runs.
+        https://api.slack.com/reference/block-kit/block-elements#workflow_button
+
+        Args:
+            text (required): A text object that defines the button&#39;s text.
+                Can only be of type: plain_text. text may truncate with ~30 characters.
+                Maximum length for the text in this field is 75 characters.
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            workflow: A workflow object that contains details about the workflow
+                that will run when the button is clicked.
+            style: Decorates buttons with alternative visual color schemes. Use this option with restraint.
+                &#34;primary&#34; gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+                &#34;primary&#34; should only be used for one button within a set.
+                &#34;danger&#34; gives buttons a red outline and text, and should be used when the action is destructive.
+                Use &#34;danger&#34; even more sparingly than &#34;primary&#34;.
+                If you don&#39;t include this field, the default button style will be used.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        # NOTE: default_type=PlainTextObject.type here is only for backward-compatibility with version 2.5.0
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.workflow = workflow
+        self.style = style
+        self.accessibility_label = accessibility_label</code></pre>
 </details>
 </section>
 <section>
@@ -1793,7 +1850,7 @@ class OverflowMenuElement(InteractiveElement):
     def parse_all(
         cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
     ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]
+        return [cls.parse(e) for e in block_elements or []]  # type: ignore
 
     @classmethod
     def _get_sub_block_elements(cls: Type[&#34;BlockElement&#34;]) -&gt; Iterator[Type[&#34;BlockElement&#34;]]:
@@ -1864,7 +1921,7 @@ def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optiona
 def parse_all(
     cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
 ) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
-    return [cls.parse(e) for e in block_elements or []]</code></pre>
+    return [cls.parse(e) for e in block_elements or []]  # type: ignore</code></pre>
 </details>
 </dd>
 </dl>
@@ -3706,6 +3763,7 @@ def subtype(self) -&gt; Optional[str]:
 <li><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement">OverflowMenuElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.WorkflowButtonElement" href="#slack_sdk.models.blocks.block_elements.WorkflowButtonElement">WorkflowButtonElement</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -5280,6 +5338,124 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.block_elements.WorkflowButtonElement"><code class="flex name class">
+<span>class <span class="ident">WorkflowButtonElement</span></span>
+<span>(</span><span>*, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>], action_id: Optional[str] = None, workflow: Union[dict, <a title="slack_sdk.models.blocks.basic_components.Workflow" href="basic_components.html#slack_sdk.models.blocks.basic_components.Workflow">Workflow</a>, ForwardRef(None)] = None, style: Optional[str] = None, accessibility_label: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>Allows users to run a link trigger with customizable inputs
+Interactive component - but interactions with workflow button elements will not send block_actions events,
+since these are used to start new workflow runs.
+<a href="https://api.slack.com/reference/block-kit/block-elements#workflow_button">https://api.slack.com/reference/block-kit/block-elements#workflow_button</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>A text object that defines the button's text.
+Can only be of type: plain_text. text may truncate with ~30 characters.
+Maximum length for the text in this field is 75 characters.</dd>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for this action.
+You can use this when you receive an interaction payload to identify the source of the action.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>workflow</code></strong></dt>
+<dd>A workflow object that contains details about the workflow
+that will run when the button is clicked.</dd>
+<dt><strong><code>style</code></strong></dt>
+<dd>Decorates buttons with alternative visual color schemes. Use this option with restraint.
+"primary" gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+"primary" should only be used for one button within a set.
+"danger" gives buttons a red outline and text, and should be used when the action is destructive.
+Use "danger" even more sparingly than "primary".
+If you don't include this field, the default button style will be used.</dd>
+<dt><strong><code>accessibility_label</code></strong></dt>
+<dd>A label for longer descriptive text about a button element.
+This label will be read out by screen readers instead of the button text object.
+Maximum length for this field is 75 characters.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WorkflowButtonElement(InteractiveElement):
+    type = &#34;workflow_button&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;text&#34;, &#34;workflow&#34;, &#34;style&#34;, &#34;accessibility_label&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        action_id: Optional[str] = None,
+        workflow: Optional[Union[dict, Workflow]] = None,
+        style: Optional[str] = None,  # primary, danger
+        accessibility_label: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Allows users to run a link trigger with customizable inputs
+        Interactive component - but interactions with workflow button elements will not send block_actions events,
+        since these are used to start new workflow runs.
+        https://api.slack.com/reference/block-kit/block-elements#workflow_button
+
+        Args:
+            text (required): A text object that defines the button&#39;s text.
+                Can only be of type: plain_text. text may truncate with ~30 characters.
+                Maximum length for the text in this field is 75 characters.
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            workflow: A workflow object that contains details about the workflow
+                that will run when the button is clicked.
+            style: Decorates buttons with alternative visual color schemes. Use this option with restraint.
+                &#34;primary&#34; gives buttons a green outline and text, ideal for affirmation or confirmation actions.
+                &#34;primary&#34; should only be used for one button within a set.
+                &#34;danger&#34; gives buttons a red outline and text, and should be used when the action is destructive.
+                Use &#34;danger&#34; even more sparingly than &#34;primary&#34;.
+                If you don&#39;t include this field, the default button style will be used.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        # NOTE: default_type=PlainTextObject.type here is only for backward-compatibility with version 2.5.0
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.workflow = workflow
+        self.style = style
+        self.accessibility_label = accessibility_label</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.WorkflowButtonElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -5479,6 +5655,12 @@ Only one element can be set to true. Defaults to false.</dd>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement" href="#slack_sdk.models.blocks.block_elements.UserSelectElement">UserSelectElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement.type" href="#slack_sdk.models.blocks.block_elements.UserSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.WorkflowButtonElement" href="#slack_sdk.models.blocks.block_elements.WorkflowButtonElement">WorkflowButtonElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.WorkflowButtonElement.type" href="#slack_sdk.models.blocks.block_elements.WorkflowButtonElement.type">type</a></code></li>
 </ul>
 </li>
 </ul>

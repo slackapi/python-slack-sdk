@@ -294,6 +294,7 @@ class Attachment(JsonObject):
         &#34;author_icon&#34;,
         &#34;author_link&#34;,
         &#34;author_name&#34;,
+        &#34;author_subname&#34;,
         &#34;color&#34;,
         &#34;fallback&#34;,
         &#34;fields&#34;,
@@ -326,6 +327,7 @@ class Attachment(JsonObject):
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -361,6 +363,7 @@ class Attachment(JsonObject):
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author&#39;s name.
+            author_subname: Small text used to display the author&#39;s sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -399,6 +402,7 @@ class Attachment(JsonObject):
         self.title_link = title_link
         self.color = color
         self.author_name = author_name
+        self.author_subname = author_subname
         self.author_link = author_link
         self.author_icon = author_icon
         self.image_url = image_url
@@ -512,6 +516,7 @@ class InteractiveAttachment(Attachment):
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -553,6 +558,7 @@ class InteractiveAttachment(Attachment):
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author&#39;s name.
+            author_subname: Small text used to display the author&#39;s sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -593,6 +599,7 @@ class InteractiveAttachment(Attachment):
             title_link=title_link,
             color=color,
             author_name=author_name,
+            author_subname=author_subname,
             author_link=author_link,
             author_icon=author_icon,
             image_url=image_url,
@@ -1374,7 +1381,7 @@ value.</dd>
 </dd>
 <dt id="slack_sdk.models.attachments.Attachment"><code class="flex name class">
 <span>class <span class="ident">Attachment</span></span>
-<span>(</span><span>*, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
+<span>(</span><span>*, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_subname: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -1412,6 +1419,8 @@ be formatted as plain text, or with markdown by including it in the
 markdown_in parameter.</dd>
 <dt><strong><code>author_name</code></strong></dt>
 <dd>Small text used to display the author's name.</dd>
+<dt><strong><code>author_subname</code></strong></dt>
+<dd>Small text used to display the author's sub name.</dd>
 <dt><strong><code>author_link</code></strong></dt>
 <dd>A valid URL that will hyperlink the author_name text.
 Will only work if author_name is present.</dd>
@@ -1459,6 +1468,7 @@ desktop may also transform its rendered appearance.</dd>
         &#34;author_icon&#34;,
         &#34;author_link&#34;,
         &#34;author_name&#34;,
+        &#34;author_subname&#34;,
         &#34;color&#34;,
         &#34;fallback&#34;,
         &#34;fields&#34;,
@@ -1491,6 +1501,7 @@ desktop may also transform its rendered appearance.</dd>
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -1526,6 +1537,7 @@ desktop may also transform its rendered appearance.</dd>
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author&#39;s name.
+            author_subname: Small text used to display the author&#39;s sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -1564,6 +1576,7 @@ desktop may also transform its rendered appearance.</dd>
         self.title_link = title_link
         self.color = color
         self.author_name = author_name
+        self.author_subname = author_subname
         self.author_link = author_link
         self.author_icon = author_icon
         self.image_url = image_url
@@ -1921,7 +1934,7 @@ def fields_attribute_absent(self) -&gt; bool:
 </dd>
 <dt id="slack_sdk.models.attachments.InteractiveAttachment"><code class="flex name class">
 <span>class <span class="ident">InteractiveAttachment</span></span>
-<span>(</span><span>*, actions: Sequence[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>], callback_id: str, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
+<span>(</span><span>*, actions: Sequence[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>], callback_id: str, text: str, fallback: Optional[str] = None, fields: Optional[Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]] = None, color: Optional[str] = None, markdown_in: Optional[Sequence[str]] = None, title: Optional[str] = None, title_link: Optional[str] = None, pretext: Optional[str] = None, author_name: Optional[str] = None, author_subname: Optional[str] = None, author_link: Optional[str] = None, author_icon: Optional[str] = None, image_url: Optional[str] = None, thumb_url: Optional[str] = None, footer: Optional[str] = None, footer_icon: Optional[str] = None, ts: Optional[int] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
@@ -1967,6 +1980,8 @@ be formatted as plain text, or with markdown by including it in the
 markdown_in parameter.</dd>
 <dt><strong><code>author_name</code></strong></dt>
 <dd>Small text used to display the author's name.</dd>
+<dt><strong><code>author_subname</code></strong></dt>
+<dd>Small text used to display the author's sub name.</dd>
 <dt><strong><code>author_link</code></strong></dt>
 <dd>A valid URL that will hyperlink the author_name text.
 Will only work if author_name is present.</dd>
@@ -2030,6 +2045,7 @@ desktop may also transform its rendered appearance.</dd>
         title_link: Optional[str] = None,
         pretext: Optional[str] = None,
         author_name: Optional[str] = None,
+        author_subname: Optional[str] = None,
         author_link: Optional[str] = None,
         author_icon: Optional[str] = None,
         image_url: Optional[str] = None,
@@ -2071,6 +2087,7 @@ desktop may also transform its rendered appearance.</dd>
                 be formatted as plain text, or with markdown by including it in the
                 markdown_in parameter.
             author_name: Small text used to display the author&#39;s name.
+            author_subname: Small text used to display the author&#39;s sub name.
             author_link: A valid URL that will hyperlink the author_name text.
                 Will only work if author_name is present.
             author_icon: A valid URL that displays a small 16px by 16px image to
@@ -2111,6 +2128,7 @@ desktop may also transform its rendered appearance.</dd>
             title_link=title_link,
             color=color,
             author_name=author_name,
+            author_subname=author_subname,
             author_link=author_link,
             author_icon=author_icon,
             image_url=image_url,

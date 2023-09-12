@@ -70,6 +70,9 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         self.metadata = MetaData()
         self.oauth_states = self.build_oauth_states_table(self.metadata, table_name)
 
+    def create_tables(self):
+        self.metadata.create_all(self.engine)
+
     @property
     def logger(self) -&gt; Logger:
         if self._logger is None:
@@ -153,6 +156,9 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         self.engine = engine
         self.metadata = MetaData()
         self.oauth_states = self.build_oauth_states_table(self.metadata, table_name)
+
+    def create_tables(self):
+        self.metadata.create_all(self.engine)
 
     @property
     def logger(self) -&gt; Logger:
@@ -282,6 +288,19 @@ def logger(self) -&gt; Logger:
         return False</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.create_tables"><code class="name flex">
+<span>def <span class="ident">create_tables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_tables(self):
+    self.metadata.create_all(self.engine)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.issue"><code class="name flex">
 <span>def <span class="ident">issue</span></span>(<span>self, *args, **kwargs) ‑> str</span>
 </code></dt>
@@ -325,6 +344,7 @@ def logger(self) -&gt; Logger:
 <ul class="">
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.build_oauth_states_table" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.build_oauth_states_table">build_oauth_states_table</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.consume" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.consume">consume</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.create_tables" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.create_tables">create_tables</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.default_table_name" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.default_table_name">default_table_name</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.engine" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.engine">engine</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.expiration_seconds" href="#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore.expiration_seconds">expiration_seconds</a></code></li>

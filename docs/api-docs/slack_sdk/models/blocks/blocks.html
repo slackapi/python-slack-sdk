@@ -43,6 +43,7 @@ from .block_elements import BlockElement
 from .block_elements import ImageElement
 from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
+from ...errors import SlackObjectFormationError
 
 
 # -------------------------------------------------
@@ -125,7 +126,7 @@ class Block(JsonObject):
 
     @classmethod
     def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
-        return [cls.parse(b) for b in blocks or []]
+        return [cls.parse(b) for b in blocks or []]  # type: ignore
 
 
 # -------------------------------------------------
@@ -244,7 +245,7 @@ class ImageBlock(Block):
         *,
         image_url: str,
         alt_text: str,
-        title: Optional[Union[str, dict, TextObject]] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -268,7 +269,19 @@ class ImageBlock(Block):
 
         self.image_url = image_url
         self.alt_text = alt_text
-        self.title = TextObject.parse(title)
+        parsed_title = None
+        if title is not None:
+            if isinstance(title, str):
+                parsed_title = PlainTextObject(text=title)
+            elif isinstance(title, dict):
+                if title.get(&#34;type&#34;) != PlainTextObject.type:
+                    raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {title.get(&#39;type&#39;)}&#34;)
+                parsed_title = PlainTextObject(text=title.get(&#34;text&#34;), emoji=title.get(&#34;emoji&#34;))
+            elif isinstance(title, PlainTextObject):
+                parsed_title = title
+            else:
+                raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {type(title)}&#34;)
+        self.title = parsed_title
 
     @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):
@@ -826,7 +839,7 @@ to create visually rich and compellingly interactive messages.
 
     @classmethod
     def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
-        return [cls.parse(b) for b in blocks or []]</code></pre>
+        return [cls.parse(b) for b in blocks or []]  # type: ignore</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -916,7 +929,7 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
 </summary>
 <pre><code class="python">@classmethod
 def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
-    return [cls.parse(b) for b in blocks or []]</code></pre>
+    return [cls.parse(b) for b in blocks or []]  # type: ignore</code></pre>
 </details>
 </dd>
 </dl>
@@ -1415,7 +1428,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.ImageBlock"><code class="flex name class">
 <span>class <span class="ident">ImageBlock</span></span>
-<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1460,7 +1473,7 @@ If a message is updated, use a new block_id.</dd>
         *,
         image_url: str,
         alt_text: str,
-        title: Optional[Union[str, dict, TextObject]] = None,
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -1484,7 +1497,19 @@ If a message is updated, use a new block_id.</dd>
 
         self.image_url = image_url
         self.alt_text = alt_text
-        self.title = TextObject.parse(title)
+        parsed_title = None
+        if title is not None:
+            if isinstance(title, str):
+                parsed_title = PlainTextObject(text=title)
+            elif isinstance(title, dict):
+                if title.get(&#34;type&#34;) != PlainTextObject.type:
+                    raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {title.get(&#39;type&#39;)}&#34;)
+                parsed_title = PlainTextObject(text=title.get(&#34;text&#34;), emoji=title.get(&#34;emoji&#34;))
+            elif isinstance(title, PlainTextObject):
+                parsed_title = title
+            else:
+                raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {type(title)}&#34;)
+        self.title = parsed_title
 
     @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):

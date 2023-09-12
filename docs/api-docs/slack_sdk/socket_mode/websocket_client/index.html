@@ -170,7 +170,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.on_close_listeners = on_close_listeners or []
 
     def is_connected(self) -&gt; bool:
-        return self.current_session is not None
+        return self.current_session is not None and self.current_session.sock is not None
 
     def connect(self) -&gt; None:
         def on_open(ws: WebSocketApp):
@@ -452,7 +452,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.on_close_listeners = on_close_listeners or []
 
     def is_connected(self) -&gt; bool:
-        return self.current_session is not None
+        return self.current_session is not None and self.current_session.sock is not None
 
     def connect(self) -&gt; None:
         def on_open(ws: WebSocketApp):
@@ -769,7 +769,7 @@ class SocketModeClient(BaseSocketModeClient):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def is_connected(self) -&gt; bool:
-    return self.current_session is not None</code></pre>
+    return self.current_session is not None and self.current_session.sock is not None</code></pre>
 </details>
 </dd>
 <dt id="slack_sdk.socket_mode.websocket_client.SocketModeClient.send_message"><code class="name flex">
