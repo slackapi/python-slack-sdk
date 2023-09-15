@@ -113,7 +113,7 @@ Here we also ensure that the response back from Slack is a successful one and th
 
 #### Uploading files to Slack
 
-We've changed the process for uploading files to Slack to be much easier and straight forward. You can now just include a path to the file directly in the API call and upload it that way. You can find the details on this api call [here][files.upload]
+We've changed the process for uploading files to Slack to be much easier and straight forward. You can now just include a path to the file directly in the API call and upload it that way.
 
 ```python
 import os
@@ -124,7 +124,7 @@ client = WebClient(token=os.environ['SLACK_BOT_TOKEN'])
 
 try:
     filepath="./tmp.txt"
-    response = client.files_upload(channels='#random', file=filepath)
+    response = client.files_upload_v2(channel='C0123456789', file=filepath)
     assert response["file"]  # the uploaded file
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
@@ -132,6 +132,8 @@ except SlackApiError as e:
     assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
     print(f"Got an error: {e.response['error']}")
 ```
+
+More details on the `files_upload_v2` method can be found [here][files_upload_v2].
 
 ### Async usage
 
@@ -292,6 +294,6 @@ helpful and collaborative way.
 [pypi]: https://pypi.org/
 [gh-issues]: https://github.com/slackapi/python-slack-sdk/issues
 [slack-community]: https://slackcommunity.com/
-[files.upload]: https://api.slack.com/methods/files.upload
+[files_upload_v2]: https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0
 [aiohttp]: https://aiohttp.readthedocs.io/
 [urllib]: https://docs.python.org/3/library/urllib.request.html
