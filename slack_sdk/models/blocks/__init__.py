@@ -32,6 +32,7 @@ from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
 from .block_elements import LinkButtonElement
 from .block_elements import OverflowMenuElement
+from .block_elements import RichTextInputElement
 from .block_elements import PlainTextInputElement
 from .block_elements import EmailInputElement
 from .block_elements import UrlInputElement
@@ -81,6 +82,7 @@ __all__ = [
     "InteractiveElement",
     "LinkButtonElement",
     "OverflowMenuElement",
+    "RichTextInputElement",
     "PlainTextInputElement",
     "EmailInputElement",
     "UrlInputElement",

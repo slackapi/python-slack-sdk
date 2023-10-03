@@ -3,7 +3,7 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import Iterator, List, Optional, Set, Type, Union, Sequence
+from typing import Iterator, List, Optional, Set, Type, Union, Sequence, Dict, Any
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -1329,6 +1329,45 @@ class ChannelMultiSelectElement(InputInteractiveElement):
 
         self.initial_channels = initial_channels
         self.max_selected_items = max_selected_items
+
+
+# -------------------------------------------------
+# Rich Text Input Element
+# -------------------------------------------------
+
+
+class RichTextInputElement(InputInteractiveElement):
+    type = "rich_text_input"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union(
+            {
+                "initial_value",
+                "dispatch_action_config",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_value: Optional[Dict[str, Any]] = None,  # TODO: Add rich_text block class and its element classes
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        **others: dict,
+    ):
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config
 
 
 # -------------------------------------------------

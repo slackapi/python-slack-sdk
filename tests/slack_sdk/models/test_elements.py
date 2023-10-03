@@ -34,6 +34,7 @@ from slack_sdk.models.blocks.block_elements import (
     NumberInputElement,
     UrlInputElement,
     WorkflowButtonElement,
+    RichTextInputElement,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -1011,6 +1012,26 @@ class OverflowMenuElementTests(unittest.TestCase):
 # -------------------------------------------------
 # Input
 # -------------------------------------------------
+
+
+class RichTextInputElementTests(unittest.TestCase):
+    def test_simple(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "placeholder": {"type": "plain_text", "text": "Enter some plain text"},
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_document(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_text_input-action",
+            "dispatch_action_config": {"trigger_actions_on": ["on_character_entered"]},
+            "focus_on_load": True,
+            "placeholder": {"type": "plain_text", "text": "Enter text"},
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
 
 
 class PlainTextInputElementTests(unittest.TestCase):
