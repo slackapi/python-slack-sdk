@@ -44,6 +44,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             title="Test code",
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
     def test_uploading_bytes_io(self):
         client = self.sync_client
@@ -54,6 +56,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             title="Test code",
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
     def test_uploading_multiple_files(self):
         client = self.sync_client
@@ -74,6 +78,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             initial_comment="Here are files :wave:",
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
     @async_test
     async def test_uploading_text_files_async(self):
@@ -86,6 +92,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             file=file,
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
         deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
@@ -116,6 +124,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             file=file,
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
         deletion = client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
@@ -133,6 +143,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
                 content=content,
             )
             self.assertIsNotNone(upload)
+            self.assertIsNotNone(upload.get("files")[0].get("id"))
+            self.assertIsNotNone(upload.get("files")[0].get("title"))
 
             deletion = client.files_delete(file=upload["file"]["id"])
             self.assertIsNotNone(deletion)
@@ -149,6 +161,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             file=file,
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
         deletion = await client.files_delete(file=upload["file"]["id"])
         self.assertIsNotNone(deletion)
@@ -165,6 +179,8 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             file=file,
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
         deletion = client.files_delete(
             token=self.bot_token,
@@ -185,56 +201,11 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             file=file,
         )
         self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
 
         deletion = await client.files_delete(
             token=self.bot_token,
             file=upload["file"]["id"],
         )
         self.assertIsNotNone(deletion)
-
-    def test_request_file_info_false(self):
-        client = self.sync_client
-        upload = client.files_upload_v2(
-            channels=self.channel_id,
-            title="Foo",
-            filename="foo.txt",
-            content="foo",
-        )
-        self.assertIsNotNone(upload)
-        self.assertIsNotNone(upload.get("files")[0].get("id"))
-        self.assertIsNotNone(upload.get("files")[0].get("name"))
-
-        upload = client.files_upload_v2(
-            channels=self.channel_id,
-            title="Foo",
-            filename="foo.txt",
-            content="foo",
-            request_file_info=False,
-        )
-        self.assertIsNotNone(upload)
-        self.assertIsNotNone(upload.get("files")[0].get("id"))
-        self.assertIsNone(upload.get("files")[0].get("name"))
-
-    @async_test
-    async def test_request_file_info_false_async(self):
-        client = self.async_client
-        upload = await client.files_upload_v2(
-            channels=self.channel_id,
-            title="Foo",
-            filename="foo.txt",
-            content="foo",
-        )
-        self.assertIsNotNone(upload)
-        self.assertIsNotNone(upload.get("files")[0].get("id"))
-        self.assertIsNotNone(upload.get("files")[0].get("name"))
-
-        upload = await client.files_upload_v2(
-            channels=self.channel_id,
-            title="Foo",
-            filename="foo.txt",
-            content="foo",
-            request_file_info=False,
-        )
-        self.assertIsNotNone(upload)
-        self.assertIsNotNone(upload.get("files")[0].get("id"))
-        self.assertIsNone(upload.get("files")[0].get("name"))

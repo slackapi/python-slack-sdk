@@ -24,7 +24,6 @@ from .internal_utils import (
     _remove_none_values,
     _to_v2_file_upload_item,
     _upload_file_via_v2_url,
-    _attach_full_file_metadata_async,
     _validate_for_legacy_client,
     _print_files_upload_v2_suggestion,
 )
@@ -3422,7 +3421,7 @@ class AsyncWebClient(AsyncBaseClient):
         channel: Optional[str] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
-        request_file_info: bool = True,
+        request_file_info: bool = True,  # since v3.23, this flag is no longer necessary
         **kwargs,
     ) -> AsyncSlackResponse:
         """This wrapper method provides an easy way to upload files using the following endpoints:
@@ -3519,15 +3518,10 @@ class AsyncWebClient(AsyncBaseClient):
             channel_id=channel_to_share,
             initial_comment=initial_comment,
             thread_ts=thread_ts,
-            token=kwargs.get("token"),
             **kwargs,
         )
-        if request_file_info is True:
-            await _attach_full_file_metadata_async(
-                client=self,
-                token_as_arg=kwargs.get("token"),
-                completion=completion,
-            )
+        if len(completion.get("files")) == 1:  # type: ignore
+            completion.data["file"] = completion.get("files")[0]  # type: ignore
         return completion
 
     async def files_getUploadURLExternal(
