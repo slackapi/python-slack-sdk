@@ -435,40 +435,6 @@ def _validate_for_legacy_client(
         raise SlackRequestError(message)
 
 
-def _attach_full_file_metadata(
-    client,  # type: ignore
-    token_as_arg: Optional[str],
-    completion: Union[&#34;SlackResponse&#34;, Future],  # noqa: F821
-) -&gt; None:
-    _validate_for_legacy_client(completion)
-    _completion: Any = completion  # just for satisfying pytype
-    # fetch all the file metadata for backward-compatibility
-    for f in _completion.get(&#34;files&#34;):
-        full_info = client.files_info(
-            file=f.get(&#34;id&#34;),
-            token=token_as_arg,
-        )
-        f.update(full_info[&#34;file&#34;])
-    if len(_completion.get(&#34;files&#34;)) == 1:
-        _completion.data[&#34;file&#34;] = _completion.get(&#34;files&#34;)[0]
-
-
-async def _attach_full_file_metadata_async(
-    client,  # type: ignore
-    token_as_arg: Optional[str],
-    completion: &#34;SlackResponse&#34;,  # noqa: F821
-) -&gt; None:
-    # fetch all the file metadata for backward-compatibility
-    for f in completion.get(&#34;files&#34;):
-        full_info = await client.files_info(
-            file=f.get(&#34;id&#34;),
-            token=token_as_arg,
-        )
-        f.update(full_info[&#34;file&#34;])
-    if len(completion.get(&#34;files&#34;)) == 1:
-        completion.data[&#34;file&#34;] = completion.get(&#34;files&#34;)[0]
-
-
 def _print_files_upload_v2_suggestion():
     message = (
         &#34;client.files_upload() may cause some issues like timeouts for relatively large files. &#34;

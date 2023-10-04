@@ -31,7 +31,7 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import Iterator, List, Optional, Set, Type, Union, Sequence
+from typing import Iterator, List, Optional, Set, Type, Union, Sequence, Dict, Any
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -1357,6 +1357,45 @@ class ChannelMultiSelectElement(InputInteractiveElement):
 
         self.initial_channels = initial_channels
         self.max_selected_items = max_selected_items
+
+
+# -------------------------------------------------
+# Rich Text Input Element
+# -------------------------------------------------
+
+
+class RichTextInputElement(InputInteractiveElement):
+    type = &#34;rich_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_value: Optional[Dict[str, Any]] = None,  # TODO: Add rich_text block class and its element classes
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        **others: dict,
+    ):
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config
 
 
 # -------------------------------------------------
@@ -3664,6 +3703,7 @@ def attributes(self) -&gt; Set[str]:
 <li><a title="slack_sdk.models.blocks.block_elements.NumberInputElement" href="#slack_sdk.models.blocks.block_elements.NumberInputElement">NumberInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement">RichTextInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.SelectElement" href="#slack_sdk.models.blocks.block_elements.SelectElement">SelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement">StaticMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement">StaticSelectElement</a></li>
@@ -4382,6 +4422,83 @@ Only one element can be set to true. Defaults to false.</dd>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextInputElement"><code class="flex name class">
+<span>class <span class="ident">RichTextInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[Dict[str, Any]] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p>InteractiveElement that is usable in input blocks</p>
+<p>We generally recommend using the concrete subclasses for better supports of available properties.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextInputElement(InputInteractiveElement):
+    type = &#34;rich_text_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;initial_value&#34;,
+                &#34;dispatch_action_config&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        placeholder: Optional[Union[str, dict, TextObject]] = None,
+        initial_value: Optional[Dict[str, Any]] = None,  # TODO: Add rich_text block class and its element classes
+        dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
+        focus_on_load: Optional[bool] = None,
+        **others: dict,
+    ):
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            focus_on_load=focus_on_load,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.initial_value = initial_value
+        self.dispatch_action_config = dispatch_action_config</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -5607,6 +5724,12 @@ Maximum length for this field is 75 characters.</dd>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement">RichTextInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
