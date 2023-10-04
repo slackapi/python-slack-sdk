@@ -304,6 +304,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     keywords="slack slack-api web-api slack-rtm websocket chat chatbot chatops",
     packages=find_packages(
