@@ -3522,8 +3522,8 @@ class LegacyWebClient(LegacyBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if len(completion.get("files")) == 1:
-            completion.data["file"] = completion.get("files")[0]
+        if len(completion.get("files")) == 1:  # type: ignore
+            completion.data["file"] = completion.get("files")[0]  # type: ignore
         return completion
 
     def files_getUploadURLExternal(
