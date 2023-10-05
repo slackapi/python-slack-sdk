@@ -11,6 +11,7 @@ from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
     _parse_web_class_objects,
     _to_v2_file_upload_item,
+    _next_cursor_is_present,
 )
 
 
@@ -98,3 +99,12 @@ class TestInternalUtils(unittest.TestCase):
         assert file_io_item.get("filename") == "Uploaded file"
         file_io_item = _to_v2_file_upload_item({"file": file_io, "filename": "foo.txt"})
         assert file_io_item.get("filename") == "foo.txt"
+
+    def test_next_cursor_is_present(self):
+        assert _next_cursor_is_present({"next_cursor": "next-page"}) is True
+        assert _next_cursor_is_present({"next_cursor": ""}) is False
+        assert _next_cursor_is_present({"next_cursor": None}) is False
+        assert _next_cursor_is_present({"response_metadata": {"next_cursor": "next-page"}}) is True
+        assert _next_cursor_is_present({"response_metadata": {"next_cursor": ""}}) is False
+        assert _next_cursor_is_present({"response_metadata": {"next_cursor": None}}) is False
+        assert _next_cursor_is_present({"something_else": {"next_cursor": "next-page"}}) is False

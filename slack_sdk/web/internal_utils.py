@@ -230,9 +230,10 @@ def _next_cursor_is_present(data) -> bool:
         A boolean value.
     """
     # Only admin.conversations.search returns next_cursor at the top level
-    present = ("next_cursor" in data and data["next_cursor"] != "") or (
+    present = ("next_cursor" in data and data["next_cursor"] is not None and data["next_cursor"] != "") or (
         "response_metadata" in data
         and "next_cursor" in data["response_metadata"]
+        and data["response_metadata"]["next_cursor"] is not None
         and data["response_metadata"]["next_cursor"] != ""
     )
     return present
