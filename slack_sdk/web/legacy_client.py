@@ -1677,6 +1677,8 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         team_id: str,
+        include_deactivated_user_workspaces: Optional[bool] = None,
+        is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
@@ -1687,6 +1689,8 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update(
             {
                 "team_id": team_id,
+                "include_deactivated_user_workspaces": include_deactivated_user_workspaces,
+                "is_active": is_active,
                 "cursor": cursor,
                 "limit": limit,
             }
