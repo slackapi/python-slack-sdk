@@ -19,7 +19,6 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen, OpenerDirector, ProxyHandler, HTTPSHandler
 
-import slack_sdk.errors as err
 from slack_sdk.errors import SlackRequestError
 from .deprecation import show_deprecation_warning_if_any
 from .internal_utils import (
