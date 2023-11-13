@@ -299,7 +299,8 @@ class BaseClient:
                     response_body_data = json.loads(response["body"])
                 except json.decoder.JSONDecodeError:
                     message = _build_unexpected_body_error_message(response.get("body", ""))
-                    raise err.SlackApiError(message, response)
+                    self._logger.error(f"Failed to decode Slack API response: {message}")
+                    response_body_data = {"ok": False, "error": message}
 
             all_params: Dict[str, Any] = copy.copy(body_params) if body_params is not None else {}
             if query_params:
