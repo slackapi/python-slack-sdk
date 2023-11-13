@@ -150,7 +150,7 @@ class TestWebClient(unittest.TestCase):
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
             self.assertTrue(
-                str(e).startswith("Received a response in a non-JSON format: <!DOCTYPE HTML PUBLIC"),
+                str(e).startswith("The request to the Slack API failed. (url: http://"),
                 e,
             )
 

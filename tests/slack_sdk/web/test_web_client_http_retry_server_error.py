@@ -51,7 +51,16 @@ class TestWebClient_HttpRetry_ServerError(unittest.TestCase):
             client.users_list(token="xoxb-error_html_response")
             self.fail("SlackApiError expected here")
         except err.SlackApiError as e:
-            self.assertTrue(str(e).startswith("Received a response in a non-JSON format: "), e)
+            self.assertTrue(
+                str(e).startswith("The request to the Slack API failed. (url: http://"),
+                e,
+            )
+            self.assertIsInstance(e.response.status_code, int)
+            self.assertFalse(e.response["ok"])
+            self.assertTrue(
+                e.response["error"].startswith("Received a response in a non-JSON format: <!DOCTYPE "),
+                e.response["error"],
+            )
 
         self.assertEqual(2, retry_handlers[0].call_count)
 

@@ -107,6 +107,9 @@ except SlackApiError as e:
     assert e.response["ok"] is False
     assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
     print(f"Got an error: {e.response['error']}")
+    # Also receive a corresponding status_code
+    assert isinstance(e.response.status_code, int)
+    print(f"Received a response status_code: {e.response.status_code}")
 ```
 
 Here we also ensure that the response back from Slack is a successful one and that the message is the one we sent by using the `assert` statement.
