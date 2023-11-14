@@ -1704,6 +1704,8 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         team_id: str,
+        include_deactivated_user_workspaces: Optional[bool] = None,
+        is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
@@ -1714,6 +1716,8 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update(
             {
                 &#34;team_id&#34;: team_id,
+                &#34;include_deactivated_user_workspaces&#34;: include_deactivated_user_workspaces,
+                &#34;is_active&#34;: is_active,
                 &#34;cursor&#34;: cursor,
                 &#34;limit&#34;: limit,
             }
@@ -6751,6 +6755,8 @@ removed at anytime.</p></div>
         self,
         *,
         team_id: str,
+        include_deactivated_user_workspaces: Optional[bool] = None,
+        is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
@@ -6761,6 +6767,8 @@ removed at anytime.</p></div>
         kwargs.update(
             {
                 &#34;team_id&#34;: team_id,
+                &#34;include_deactivated_user_workspaces&#34;: include_deactivated_user_workspaces,
+                &#34;is_active&#34;: is_active,
                 &#34;cursor&#34;: cursor,
                 &#34;limit&#34;: limit,
             }
@@ -12353,7 +12361,7 @@ Options to scope results by any combination of roles or entities
 </details>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_users_list"><code class="name flex">
-<span>async def <span class="ident">admin_users_list</span></span>(<span>self, *, team_id: str, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">admin_users_list</span></span>(<span>self, *, team_id: str, include_deactivated_user_workspaces: Optional[bool] = None, is_active: Optional[bool] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>List users on a workspace
@@ -12366,6 +12374,8 @@ Options to scope results by any combination of roles or entities
     self,
     *,
     team_id: str,
+    include_deactivated_user_workspaces: Optional[bool] = None,
+    is_active: Optional[bool] = None,
     cursor: Optional[str] = None,
     limit: Optional[int] = None,
     **kwargs,
@@ -12376,6 +12386,8 @@ Options to scope results by any combination of roles or entities
     kwargs.update(
         {
             &#34;team_id&#34;: team_id,
+            &#34;include_deactivated_user_workspaces&#34;: include_deactivated_user_workspaces,
+            &#34;is_active&#34;: is_active,
             &#34;cursor&#34;: cursor,
             &#34;limit&#34;: limit,
         }
