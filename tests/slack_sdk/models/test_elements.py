@@ -35,6 +35,7 @@ from slack_sdk.models.blocks.block_elements import (
     UrlInputElement,
     WorkflowButtonElement,
     RichTextInputElement,
+    FileInputElement,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -1197,6 +1198,22 @@ class NumberInputElementTests(unittest.TestCase):
             "focus_on_load": True,
         }
         self.assertDictEqual(input, NumberInputElement(**input).to_dict())
+
+
+# -------------------------------------------------
+# File Input Element
+# -------------------------------------------------
+
+
+class FileInputElementTests(unittest.TestCase):
+    def test_element(self):
+        input = {
+            "type": "file_input",
+            "action_id": "file_input-action",
+            "filetypes": ["pdf", "txt"],
+            "max_files": 3,
+        }
+        self.assertDictEqual(input, FileInputElement(**input).to_dict())
 
 
 # -------------------------------------------------
