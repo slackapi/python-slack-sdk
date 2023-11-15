@@ -1645,7 +1645,7 @@ class FileInputElement(InputInteractiveElement):
         self,
         *,
         action_id: Optional[str] = None,
-        filetypes: Optional[List[str]] = False,
+        filetypes: Optional[List[str]] = None,
         max_files: Optional[int] = None,
         **others: dict,
     ):
