@@ -1653,6 +1653,55 @@ class NumberInputElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
+# File Input Element
+# -------------------------------------------------
+
+
+class FileInputElement(InputInteractiveElement):
+    type = &#34;file_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;filetypes&#34;,
+                &#34;max_files&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        filetypes: Optional[List[str]] = None,
+        max_files: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        https://api.slack.com/reference/block-kit/block-elements#file_input
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block. Maximum length is 255 characters.
+            filetypes: An array of valid file extensions that will be accepted for this element.
+                All file extensions will be accepted if filetypes is not specified.
+                This validation is provided for convenience only,
+                and you should perform your own file type validation based on what you expect to receive.
+            max_files: Maximum number of files that can be uploaded for this file_input element.
+                Minimum of 1, maximum of 10. Defaults to 10 if not specified.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.filetypes = filetypes
+        self.max_files = max_files
+
+
+# -------------------------------------------------
 # Radio Buttons Select
 # -------------------------------------------------
 
@@ -3514,6 +3563,107 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.block_elements.FileInputElement"><code class="flex name class">
+<span>class <span class="ident">FileInputElement</span></span>
+<span>(</span><span>*, action_id: Optional[str] = None, filetypes: Optional[List[str]] = None, max_files: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p>
+<p><a href="https://api.slack.com/reference/block-kit/block-elements#file_input">https://api.slack.com/reference/block-kit/block-elements#file_input</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for the input value when the parent modal is submitted.
+You can use this when you receive a view_submission payload to identify the value of the input element.
+Should be unique among all other action_ids in the containing block. Maximum length is 255 characters.</dd>
+<dt><strong><code>filetypes</code></strong></dt>
+<dd>An array of valid file extensions that will be accepted for this element.
+All file extensions will be accepted if filetypes is not specified.
+This validation is provided for convenience only,
+and you should perform your own file type validation based on what you expect to receive.</dd>
+<dt><strong><code>max_files</code></strong></dt>
+<dd>Maximum number of files that can be uploaded for this file_input element.
+Minimum of 1, maximum of 10. Defaults to 10 if not specified.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileInputElement(InputInteractiveElement):
+    type = &#34;file_input&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union(
+            {
+                &#34;filetypes&#34;,
+                &#34;max_files&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        filetypes: Optional[List[str]] = None,
+        max_files: Optional[int] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;
+        https://api.slack.com/reference/block-kit/block-elements#file_input
+
+        Args:
+            action_id (required): An identifier for the input value when the parent modal is submitted.
+                You can use this when you receive a view_submission payload to identify the value of the input element.
+                Should be unique among all other action_ids in the containing block. Maximum length is 255 characters.
+            filetypes: An array of valid file extensions that will be accepted for this element.
+                All file extensions will be accepted if filetypes is not specified.
+                This validation is provided for convenience only,
+                and you should perform your own file type validation based on what you expect to receive.
+            max_files: Maximum number of files that can be uploaded for this file_input element.
+                Minimum of 1, maximum of 10. Defaults to 10 if not specified.
+        &#34;&#34;&#34;
+        super().__init__(
+            type=self.type,
+            action_id=action_id,
+        )
+        show_unknown_key_warning(self, others)
+
+        self.filetypes = filetypes
+        self.max_files = max_files</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.FileInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.ImageElement"><code class="flex name class">
 <span>class <span class="ident">ImageElement</span></span>
 <span>(</span><span>*, image_url: Optional[str] = None, alt_text: Optional[str] = None, **others: dict)</span>
@@ -3700,6 +3850,7 @@ def attributes(self) -&gt; Set[str]:
 <li><a title="slack_sdk.models.blocks.block_elements.EmailInputElement" href="#slack_sdk.models.blocks.block_elements.EmailInputElement">EmailInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement">ExternalDataMultiSelectElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.FileInputElement" href="#slack_sdk.models.blocks.block_elements.FileInputElement">FileInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.NumberInputElement" href="#slack_sdk.models.blocks.block_elements.NumberInputElement">NumberInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></li>
@@ -5672,6 +5823,12 @@ Maximum length for this field is 75 characters.</dd>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement" href="#slack_sdk.models.blocks.block_elements.FileInputElement">FileInputElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement.type" href="#slack_sdk.models.blocks.block_elements.FileInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
