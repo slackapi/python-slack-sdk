@@ -640,6 +640,12 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "files_completeUploadExternal":
                 self.api_methods_to_call.remove(method(files=[{"id": "F111"}])["method"])
                 await async_method(files=[{"id": "F111"}])
+            elif method_name == "functions_completeSuccess":
+                self.api_methods_to_call.remove(method(function_execution_id="Fn111", outputs={"num": 123}))
+                await async_method(function_execution_id="Fn111", outputs={"num": 123})
+            elif method_name == "functions_completeError":
+                self.api_methods_to_call.remove(method(function_execution_id="Fn111", error="something wrong"))
+                await async_method(function_execution_id="Fn111", error="something wrong")
             elif method_name == "migration_exchange":
                 self.api_methods_to_call.remove(method(users="U123,U234")["method"])
                 method(users="U123,U234")

@@ -3658,6 +3658,32 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("files.completeUploadExternal", params=kwargs)
 
+    async def functions_completeSuccess(
+        self,
+        *,
+        function_execution_id: str,
+        outputs: Dict[str, Any],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Signal the successful completion of a function
+        https://api.slack.com/methods/functions.completeSuccess
+        """
+        kwargs.update({"function_execution_id": function_execution_id, "outputs": outputs})
+        return await self.api_call("functions.completeSuccess", params=kwargs)
+
+    async def functions_completeError(
+        self,
+        *,
+        function_execution_id: str,
+        error: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Signal the failure to execute a function
+        https://api.slack.com/methods/functions.completeError
+        """
+        kwargs.update({"function_execution_id": function_execution_id, "error": error})
+        return await self.api_call("functions.completeError", params=kwargs)
+
     # --------------------------
     # Deprecated: groups.*
     # You can use conversations.* APIs instead.

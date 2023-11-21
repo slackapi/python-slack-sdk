@@ -3660,6 +3660,32 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("files.completeUploadExternal", params=kwargs)
 
+    def functions_completeSuccess(
+        self,
+        *,
+        function_execution_id: str,
+        outputs: Dict[str, Any],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Signal the successful completion of a function
+        https://api.slack.com/methods/functions.completeSuccess
+        """
+        kwargs.update({"function_execution_id": function_execution_id, "outputs": outputs})
+        return self.api_call("functions.completeSuccess", params=kwargs)
+
+    def functions_completeError(
+        self,
+        *,
+        function_execution_id: str,
+        error: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Signal the failure to execute a function
+        https://api.slack.com/methods/functions.completeError
+        """
+        kwargs.update({"function_execution_id": function_execution_id, "error": error})
+        return self.api_call("functions.completeError", params=kwargs)
+
     # --------------------------
     # Deprecated: groups.*
     # You can use conversations.* APIs instead.
