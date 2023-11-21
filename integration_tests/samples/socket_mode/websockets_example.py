@@ -11,7 +11,6 @@ from slack_sdk.socket_mode.websockets import SocketModeClient
 
 
 async def main():
-
     client = SocketModeClient(
         app_token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN"),
         web_client=AsyncWebClient(token=os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_BOT_TOKEN")),

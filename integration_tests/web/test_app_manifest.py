@@ -14,7 +14,7 @@ class TestWebClient(unittest.TestCase):
         pass
 
     def test_operations(self):
-        token = os.environ["SLACK_SDK_TEST_TOOLING_TOKEN"] # xoxe.xoxp-...
+        token = os.environ["SLACK_SDK_TEST_TOOLING_TOKEN"]  # xoxe.xoxp-...
         client = WebClient(token)
         client.apps_manifest_validate(manifest=STR_MANIFEST)
         client.apps_manifest_validate(manifest=DICT_MANIFEST)
@@ -115,32 +115,13 @@ STR_MANIFEST = """{
 """
 
 DICT_MANIFEST = {
-    "display_information": {
-        "name": "manifest-sandbox"
-    },
+    "display_information": {"name": "manifest-sandbox"},
     "features": {
-        "app_home": {
-            "home_tab_enabled": True,
-            "messages_tab_enabled": False,
-            "messages_tab_read_only_enabled": False
-        },
-        "bot_user": {
-            "display_name": "manifest-sandbox",
-            "always_online": True
-        },
+        "app_home": {"home_tab_enabled": True, "messages_tab_enabled": False, "messages_tab_read_only_enabled": False},
+        "bot_user": {"display_name": "manifest-sandbox", "always_online": True},
         "shortcuts": [
-            {
-                "name": "message one",
-                "type": "message",
-                "callback_id": "m",
-                "description": "message"
-            },
-            {
-                "name": "global one",
-                "type": "global",
-                "callback_id": "g",
-                "description": "global"
-            }
+            {"name": "message one", "type": "message", "callback_id": "m", "description": "message"},
+            {"name": "global one", "type": "global", "callback_id": "g", "description": "global"},
         ],
         "slash_commands": [
             {
@@ -148,53 +129,32 @@ DICT_MANIFEST = {
                 "url": "https://www.example.com/",
                 "description": "What's up?",
                 "usage_hint": "What's up?",
-                "should_escape": True
+                "should_escape": True,
             }
         ],
-        "unfurl_domains": [
-            "example.com"
-        ]
+        "unfurl_domains": ["example.com"],
     },
     "oauth_config": {
-        "redirect_urls": [
-            "https://www.example.com/foo"
-        ],
+        "redirect_urls": ["https://www.example.com/foo"],
         "scopes": {
-            "user": [
-                "search:read",
-                "channels:read",
-                "groups:read",
-                "mpim:read"
-            ],
-            "bot": [
-                "commands",
-                "incoming-webhook",
-                "app_mentions:read",
-                "links:read"
-            ]
-        }
+            "user": ["search:read", "channels:read", "groups:read", "mpim:read"],
+            "bot": ["commands", "incoming-webhook", "app_mentions:read", "links:read"],
+        },
     },
     "settings": {
-        "allowed_ip_address_ranges": [
-            "123.123.123.123/32"
-        ],
+        "allowed_ip_address_ranges": ["123.123.123.123/32"],
         "event_subscriptions": {
             "request_url": "https://www.example.com/slack/events",
-            "user_events": [
-                "member_joined_channel"
-            ],
-            "bot_events": [
-                "app_mention",
-                "link_shared"
-            ]
+            "user_events": ["member_joined_channel"],
+            "bot_events": ["app_mention", "link_shared"],
         },
         "interactivity": {
             "is_enabled": True,
             "request_url": "https://www.example.com/",
-            "message_menu_options_url": "https://www.example.com/"
+            "message_menu_options_url": "https://www.example.com/",
         },
         "org_deploy_enabled": True,
         "socket_mode_enabled": False,
-        "token_rotation_enabled": True
-    }
+        "token_rotation_enabled": True,
+    },
 }

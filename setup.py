@@ -26,16 +26,15 @@ validate_dependencies = [
     "Jinja2==3.0.3",  # https://github.com/pallets/flask/issues/4494
     "pytest-cov>=2,<3",
     "flake8>=5,<6",
-    "black==22.8.0",
+    "black==23.11.0",
     "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
     "psutil>=5,<6",
     # used only under slack_sdk/*_store
     "boto3<=2",
-    # TODO: Upgrade to v2
     "moto>=3,<4",  # For AWS tests
 ]
 codegen_dependencies = [
-    "black==22.10.0",
+    "black==23.11.0",
 ]
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)

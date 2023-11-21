@@ -39,7 +39,6 @@ async def hello_command(ack, body):
 
 
 if __name__ == "__main__":
-
     import asyncio
     from asyncio import Future
 

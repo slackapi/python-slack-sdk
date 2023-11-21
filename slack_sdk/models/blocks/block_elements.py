@@ -94,6 +94,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 # Interactive Block Elements
 # -------------------------------------------------
 
+
 # This is a base class
 class InteractiveElement(BlockElement):
     action_id_max_length = 255

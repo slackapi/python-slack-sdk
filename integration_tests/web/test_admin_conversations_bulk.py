@@ -77,7 +77,6 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_async_move(self):
-
         client = self.async_client
 
         conv_creation = await client.admin_conversations_create(
@@ -98,7 +97,6 @@ class TestWebClient(unittest.TestCase):
 
     @async_test
     async def test_async(self):
-
         client = self.async_client
 
         conv_creation = await client.admin_conversations_create(

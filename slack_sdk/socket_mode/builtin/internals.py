@@ -55,7 +55,6 @@ def _establish_new_socket_connection(
     trace_enabled: bool,
     ssl_context: Optional[ssl.SSLContext] = None,
 ) -> Union[ssl.SSLSocket, Socket]:
-
     ssl_context = _use_or_create_ssl_context(ssl_context)
 
     if proxy is not None:
@@ -240,7 +239,6 @@ def _fetch_messages(
     current_header: Optional[FrameHeader] = None,
     current_data: Optional[bytes] = None,
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
-
     if remaining_bytes is None:
         # Fetch more to complete the current message
         remaining_bytes = receive()  # type: ignore

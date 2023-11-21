@@ -32,7 +32,6 @@ def hello_command(ack, body):
 
 
 if __name__ == "__main__":
-
     from bolt_adapter.websocket_client import SocketModeHandler
 
     app_token = os.environ.get("SLACK_SDK_TEST_SOCKET_MODE_APP_TOKEN")
