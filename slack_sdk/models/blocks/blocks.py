@@ -11,7 +11,7 @@ from slack_sdk.models.basic_objects import (
 from .basic_components import MarkdownTextObject
 from .basic_components import PlainTextObject
 from .basic_components import TextObject
-from .block_elements import BlockElement
+from .block_elements import BlockElement, RichTextElement
 from .block_elements import ImageElement
 from .block_elements import InputInteractiveElement
 from .block_elements import InteractiveElement
@@ -604,3 +604,34 @@ class VideoBlock(Block):
     @JsonValidator(f"author_name attribute cannot exceed {author_name_max_length} characters")
     def _validate_author_name_length(self):
         return self.author_name is None or len(self.author_name) < self.author_name_max_length
+
+
+class RichTextBlock(Block):
+    type = "rich_text"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A block that is used to hold interactive elements.
+        https://api.slack.com/reference/block-kit/blocks#rich_text
+
+        Args:
+            elements (required): An array of rich text objects -
+                rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted
+            block_id: A unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message or view and each iteration of a message or view.
+                If a message or view is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
