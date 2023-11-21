@@ -122,6 +122,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 # Interactive Block Elements
 # -------------------------------------------------
 
+
 # This is a base class
 class InteractiveElement(BlockElement):
     action_id_max_length = 255
@@ -1861,7 +1862,313 @@ class WorkflowButtonElement(InteractiveElement):
         self.text = TextObject.parse(text, default_type=PlainTextObject.type)
         self.workflow = workflow
         self.style = style
-        self.accessibility_label = accessibility_label</code></pre>
+        self.accessibility_label = accessibility_label
+
+
+# -------------------------------------------------
+# Rich text elements
+# -------------------------------------------------
+
+
+class RichTextElement(BlockElement):
+    pass
+
+
+class RichTextListElement(RichTextElement):
+    type = &#34;rich_text_list&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;, &#34;style&#34;, &#34;indent&#34;, &#34;offset&#34;, &#34;border&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        style: Optional[str] = None,  # bullet, ordered
+        indent: Optional[int] = None,
+        offset: Optional[int] = None,
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.style = style
+        self.indent = indent
+        self.offset = offset
+        self.border = border
+
+
+class RichTextPreformattedElement(RichTextElement):
+    type = &#34;rich_text_preformatted&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;, &#34;border&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.border = border
+
+
+class RichTextQuoteElement(RichTextElement):
+    type = &#34;rich_text_quote&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+
+
+class RichTextSectionElement(RichTextElement):
+    type = &#34;rich_text_section&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+
+
+class RichTextElementParts:
+    class TextStyle:
+        def __init__(
+            self,
+            *,
+            bold: Optional[bool] = None,
+            italic: Optional[bool] = None,
+            strike: Optional[bool] = None,
+            code: Optional[bool] = None,
+        ):
+            self.bold = bold
+            self.italic = italic
+            self.strike = strike
+            self.code = code
+
+        def to_dict(self, *args) -&gt; dict:
+            result = {
+                &#34;bold&#34;: self.bold,
+                &#34;italic&#34;: self.italic,
+                &#34;strike&#34;: self.strike,
+                &#34;code&#34;: self.code,
+            }
+            return {k: v for k, v in result.items() if v is not None}
+
+    class Text(RichTextElement):
+        type = &#34;text&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;text&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            text: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.text = text
+            self.style = style
+
+    class Channel(RichTextElement):
+        type = &#34;channel&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;channel_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            channel_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.channel_id = channel_id
+            self.style = style
+
+    class User(RichTextElement):
+        type = &#34;user&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;user_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            user_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.user_id = user_id
+            self.style = style
+
+    class Emoji(RichTextElement):
+        type = &#34;emoji&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;name&#34;, &#34;skin_tone&#34;, &#34;unicode&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            name: str,
+            skin_tone: Optional[int] = None,
+            unicode: Optional[str] = None,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.name = name
+            self.skin_tone = skin_tone
+            self.unicode = unicode
+            self.style = style
+
+    class Link(RichTextElement):
+        type = &#34;link&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;url&#34;, &#34;text&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            url: str,
+            text: Optional[str] = None,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.url = url
+            self.text = text
+            self.style = style
+
+    class Team(RichTextElement):
+        type = &#34;team&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;team_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            team_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.team_id = team_id
+            self.style = style
+
+    class UserGroup(RichTextElement):
+        type = &#34;usergroup&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;usergroup_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            usergroup_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.usergroup_id = usergroup_id
+            self.style = style
+
+    class Date(RichTextElement):
+        type = &#34;date&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;timestamp&#34;})
+
+        def __init__(
+            self,
+            *,
+            timestamp: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.timestamp = timestamp
+
+    class Broadcast(RichTextElement):
+        type = &#34;broadcast&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;range&#34;})
+
+        def __init__(
+            self,
+            *,
+            range: str,  # channel, here, ..
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.range = range
+
+    class Color(RichTextElement):
+        type = &#34;color&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;value&#34;})
+
+        def __init__(
+            self,
+            *,
+            value: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.value = value</code></pre>
 </details>
 </section>
 <section>
@@ -1956,6 +2263,7 @@ class WorkflowButtonElement(InteractiveElement):
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.block_elements.ImageElement" href="#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -4593,6 +4901,340 @@ Only one element can be set to true. Defaults to false.</dd>
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElement"><code class="flex name class">
+<span>class <span class="ident">RichTextElement</span></span>
+<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextElement(BlockElement):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Broadcast" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Broadcast">RichTextElementParts.Broadcast</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Channel" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Channel">RichTextElementParts.Channel</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Color" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Color">RichTextElementParts.Color</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Date" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Date">RichTextElementParts.Date</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Emoji" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Emoji">RichTextElementParts.Emoji</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Link" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Link">RichTextElementParts.Link</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Team" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Team">RichTextElementParts.Team</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Text" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Text">RichTextElementParts.Text</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.User" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.User">RichTextElementParts.User</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.UserGroup" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.UserGroup">RichTextElementParts.UserGroup</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextListElement" href="#slack_sdk.models.blocks.block_elements.RichTextListElement">RichTextListElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement" href="#slack_sdk.models.blocks.block_elements.RichTextPreformattedElement">RichTextPreformattedElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextQuoteElement" href="#slack_sdk.models.blocks.block_elements.RichTextQuoteElement">RichTextQuoteElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextSectionElement" href="#slack_sdk.models.blocks.block_elements.RichTextSectionElement">RichTextSectionElement</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts"><code class="flex name class">
+<span>class <span class="ident">RichTextElementParts</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextElementParts:
+    class TextStyle:
+        def __init__(
+            self,
+            *,
+            bold: Optional[bool] = None,
+            italic: Optional[bool] = None,
+            strike: Optional[bool] = None,
+            code: Optional[bool] = None,
+        ):
+            self.bold = bold
+            self.italic = italic
+            self.strike = strike
+            self.code = code
+
+        def to_dict(self, *args) -&gt; dict:
+            result = {
+                &#34;bold&#34;: self.bold,
+                &#34;italic&#34;: self.italic,
+                &#34;strike&#34;: self.strike,
+                &#34;code&#34;: self.code,
+            }
+            return {k: v for k, v in result.items() if v is not None}
+
+    class Text(RichTextElement):
+        type = &#34;text&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;text&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            text: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.text = text
+            self.style = style
+
+    class Channel(RichTextElement):
+        type = &#34;channel&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;channel_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            channel_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.channel_id = channel_id
+            self.style = style
+
+    class User(RichTextElement):
+        type = &#34;user&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;user_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            user_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.user_id = user_id
+            self.style = style
+
+    class Emoji(RichTextElement):
+        type = &#34;emoji&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;name&#34;, &#34;skin_tone&#34;, &#34;unicode&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            name: str,
+            skin_tone: Optional[int] = None,
+            unicode: Optional[str] = None,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.name = name
+            self.skin_tone = skin_tone
+            self.unicode = unicode
+            self.style = style
+
+    class Link(RichTextElement):
+        type = &#34;link&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;url&#34;, &#34;text&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            url: str,
+            text: Optional[str] = None,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.url = url
+            self.text = text
+            self.style = style
+
+    class Team(RichTextElement):
+        type = &#34;team&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;team_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            team_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.team_id = team_id
+            self.style = style
+
+    class UserGroup(RichTextElement):
+        type = &#34;usergroup&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;usergroup_id&#34;, &#34;style&#34;})
+
+        def __init__(
+            self,
+            *,
+            usergroup_id: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.usergroup_id = usergroup_id
+            self.style = style
+
+    class Date(RichTextElement):
+        type = &#34;date&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;timestamp&#34;})
+
+        def __init__(
+            self,
+            *,
+            timestamp: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.timestamp = timestamp
+
+    class Broadcast(RichTextElement):
+        type = &#34;broadcast&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;range&#34;})
+
+        def __init__(
+            self,
+            *,
+            range: str,  # channel, here, ..
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.range = range
+
+    class Color(RichTextElement):
+        type = &#34;color&#34;
+
+        @property
+        def attributes(self) -&gt; Set[str]:
+            return super().attributes.union({&#34;value&#34;})
+
+        def __init__(
+            self,
+            *,
+            value: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.value = value</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Broadcast"><code class="name">var <span class="ident">Broadcast</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Channel"><code class="name">var <span class="ident">Channel</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Color"><code class="name">var <span class="ident">Color</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Date"><code class="name">var <span class="ident">Date</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Emoji"><code class="name">var <span class="ident">Emoji</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Link"><code class="name">var <span class="ident">Link</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Team"><code class="name">var <span class="ident">Team</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.Text"><code class="name">var <span class="ident">Text</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.TextStyle"><code class="name">var <span class="ident">TextStyle</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.User"><code class="name">var <span class="ident">User</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.UserGroup"><code class="name">var <span class="ident">UserGroup</span></code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+</dd>
+</dl>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextInputElement"><code class="flex name class">
 <span>class <span class="ident">RichTextInputElement</span></span>
 <span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[Dict[str, Any]] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
@@ -4666,6 +5308,296 @@ Only one element can be set to true. Defaults to false.</dd>
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextListElement"><code class="flex name class">
+<span>class <span class="ident">RichTextListElement</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>]], style: Optional[str] = None, indent: Optional[int] = None, offset: Optional[int] = None, border: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextListElement(RichTextElement):
+    type = &#34;rich_text_list&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;, &#34;style&#34;, &#34;indent&#34;, &#34;offset&#34;, &#34;border&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        style: Optional[str] = None,  # bullet, ordered
+        indent: Optional[int] = None,
+        offset: Optional[int] = None,
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.style = style
+        self.indent = indent
+        self.offset = offset
+        self.border = border</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextListElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextListElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;, &#34;style&#34;, &#34;indent&#34;, &#34;offset&#34;, &#34;border&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement"><code class="flex name class">
+<span>class <span class="ident">RichTextPreformattedElement</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>]], border: Optional[int] = None, **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextPreformattedElement(RichTextElement):
+    type = &#34;rich_text_preformatted&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;, &#34;border&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.border = border</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;, &#34;border&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextQuoteElement"><code class="flex name class">
+<span>class <span class="ident">RichTextQuoteElement</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>]], **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextQuoteElement(RichTextElement):
+    type = &#34;rich_text_quote&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextSectionElement"><code class="flex name class">
+<span>class <span class="ident">RichTextSectionElement</span></span>
+<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>]], **others: dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://api.slack.com/reference/block-kit/block-elements">https://api.slack.com/reference/block-kit/block-elements</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RichTextSectionElement(RichTextElement):
+    type = &#34;rich_text_section&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextSectionElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextSectionElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
 </li>
 </ul>
@@ -5884,9 +6816,56 @@ Maximum length for this field is 75 characters.</dd>
 </ul>
 </li>
 <li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts">RichTextElementParts</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Broadcast" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Broadcast">Broadcast</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Channel" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Channel">Channel</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Color" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Color">Color</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Date" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Date">Date</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Emoji" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Emoji">Emoji</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Link" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Link">Link</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Team" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Team">Team</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.Text" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.Text">Text</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.TextStyle" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.TextStyle">TextStyle</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.User" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.User">User</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElementParts.UserGroup" href="#slack_sdk.models.blocks.block_elements.RichTextElementParts.UserGroup">UserGroup</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement">RichTextInputElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextListElement" href="#slack_sdk.models.blocks.block_elements.RichTextListElement">RichTextListElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextListElement.attributes" href="#slack_sdk.models.blocks.block_elements.RichTextListElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextListElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextListElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement" href="#slack_sdk.models.blocks.block_elements.RichTextPreformattedElement">RichTextPreformattedElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.attributes" href="#slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextQuoteElement" href="#slack_sdk.models.blocks.block_elements.RichTextQuoteElement">RichTextQuoteElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.attributes" href="#slack_sdk.models.blocks.block_elements.RichTextQuoteElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextQuoteElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextSectionElement" href="#slack_sdk.models.blocks.block_elements.RichTextSectionElement">RichTextSectionElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextSectionElement.attributes" href="#slack_sdk.models.blocks.block_elements.RichTextSectionElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextSectionElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextSectionElement.type">type</a></code></li>
 </ul>
 </li>
 <li>

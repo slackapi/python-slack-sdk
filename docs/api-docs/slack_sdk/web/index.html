@@ -2369,6 +2369,91 @@ removed at anytime.</p></div>
         kwargs.update({&#34;client_id&#34;: client_id, &#34;client_secret&#34;: client_secret})
         return self.api_call(&#34;apps.uninstall&#34;, params=kwargs)
 
+    def apps_manifest_create(
+        self,
+        *,
+        manifest: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Create an app from an app manifest
+        https://api.slack.com/methods/apps.manifest.create
+        &#34;&#34;&#34;
+        if isinstance(manifest, str):
+            kwargs.update({&#34;manifest&#34;: manifest})
+        else:
+            kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+        return self.api_call(&#34;apps.manifest.create&#34;, params=kwargs)
+
+    def apps_manifest_delete(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Permanently deletes an app created through app manifests
+        https://api.slack.com/methods/apps.manifest.delete
+        &#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id})
+        return self.api_call(&#34;apps.manifest.delete&#34;, params=kwargs)
+
+    def apps_manifest_export(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Export an app manifest from an existing app
+        https://api.slack.com/methods/apps.manifest.export
+        &#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id})
+        return self.api_call(&#34;apps.manifest.export&#34;, params=kwargs)
+
+    def apps_manifest_update(
+        self,
+        *,
+        app_id: str,
+        manifest: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Update an app from an app manifest
+        https://api.slack.com/methods/apps.manifest.update
+        &#34;&#34;&#34;
+        if isinstance(manifest, str):
+            kwargs.update({&#34;manifest&#34;: manifest})
+        else:
+            kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+        kwargs.update({&#34;app_id&#34;: app_id})
+        return self.api_call(&#34;apps.manifest.update&#34;, params=kwargs)
+
+    def apps_manifest_validate(
+        self,
+        *,
+        manifest: Union[str, Dict[str, Any]],
+        app_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Validate an app manifest
+        https://api.slack.com/methods/apps.manifest.validate
+        &#34;&#34;&#34;
+        if isinstance(manifest, str):
+            kwargs.update({&#34;manifest&#34;: manifest})
+        else:
+            kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+        kwargs.update({&#34;app_id&#34;: app_id})
+        return self.api_call(&#34;apps.manifest.validate&#34;, params=kwargs)
+
+    def tooling_tokens_rotate(
+        self,
+        *,
+        refresh_token: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Exchanges a refresh token for a new app configuration token
+        https://api.slack.com/methods/tooling.tokens.rotate
+        &#34;&#34;&#34;
+        kwargs.update({&#34;refresh_token&#34;: refresh_token})
+        return self.api_call(&#34;tooling.tokens.rotate&#34;, params=kwargs)
+
     def auth_revoke(
         self,
         *,
@@ -8366,6 +8451,134 @@ Each authorization represents an app installation that the event is visible to.
     return self.api_call(&#34;apps.event.authorizations.list&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.WebClient.apps_manifest_create"><code class="name flex">
+<span>def <span class="ident">apps_manifest_create</span></span>(<span>self, *, manifest: Union[str, Dict[str, Any]], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create an app from an app manifest
+<a href="https://api.slack.com/methods/apps.manifest.create">https://api.slack.com/methods/apps.manifest.create</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_manifest_create(
+    self,
+    *,
+    manifest: Union[str, Dict[str, Any]],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Create an app from an app manifest
+    https://api.slack.com/methods/apps.manifest.create
+    &#34;&#34;&#34;
+    if isinstance(manifest, str):
+        kwargs.update({&#34;manifest&#34;: manifest})
+    else:
+        kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+    return self.api_call(&#34;apps.manifest.create&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.WebClient.apps_manifest_delete"><code class="name flex">
+<span>def <span class="ident">apps_manifest_delete</span></span>(<span>self, *, app_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Permanently deletes an app created through app manifests
+<a href="https://api.slack.com/methods/apps.manifest.delete">https://api.slack.com/methods/apps.manifest.delete</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_manifest_delete(
+    self,
+    *,
+    app_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Permanently deletes an app created through app manifests
+    https://api.slack.com/methods/apps.manifest.delete
+    &#34;&#34;&#34;
+    kwargs.update({&#34;app_id&#34;: app_id})
+    return self.api_call(&#34;apps.manifest.delete&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.WebClient.apps_manifest_export"><code class="name flex">
+<span>def <span class="ident">apps_manifest_export</span></span>(<span>self, *, app_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Export an app manifest from an existing app
+<a href="https://api.slack.com/methods/apps.manifest.export">https://api.slack.com/methods/apps.manifest.export</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_manifest_export(
+    self,
+    *,
+    app_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Export an app manifest from an existing app
+    https://api.slack.com/methods/apps.manifest.export
+    &#34;&#34;&#34;
+    kwargs.update({&#34;app_id&#34;: app_id})
+    return self.api_call(&#34;apps.manifest.export&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.WebClient.apps_manifest_update"><code class="name flex">
+<span>def <span class="ident">apps_manifest_update</span></span>(<span>self, *, app_id: str, manifest: Union[str, Dict[str, Any]], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Update an app from an app manifest
+<a href="https://api.slack.com/methods/apps.manifest.update">https://api.slack.com/methods/apps.manifest.update</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_manifest_update(
+    self,
+    *,
+    app_id: str,
+    manifest: Union[str, Dict[str, Any]],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Update an app from an app manifest
+    https://api.slack.com/methods/apps.manifest.update
+    &#34;&#34;&#34;
+    if isinstance(manifest, str):
+        kwargs.update({&#34;manifest&#34;: manifest})
+    else:
+        kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+    kwargs.update({&#34;app_id&#34;: app_id})
+    return self.api_call(&#34;apps.manifest.update&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.web.WebClient.apps_manifest_validate"><code class="name flex">
+<span>def <span class="ident">apps_manifest_validate</span></span>(<span>self, *, manifest: Union[str, Dict[str, Any]], app_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate an app manifest
+<a href="https://api.slack.com/methods/apps.manifest.validate">https://api.slack.com/methods/apps.manifest.validate</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_manifest_validate(
+    self,
+    *,
+    manifest: Union[str, Dict[str, Any]],
+    app_id: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Validate an app manifest
+    https://api.slack.com/methods/apps.manifest.validate
+    &#34;&#34;&#34;
+    if isinstance(manifest, str):
+        kwargs.update({&#34;manifest&#34;: manifest})
+    else:
+        kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
+    kwargs.update({&#34;app_id&#34;: app_id})
+    return self.api_call(&#34;apps.manifest.validate&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.WebClient.apps_uninstall"><code class="name flex">
 <span>def <span class="ident">apps_uninstall</span></span>(<span>self, *, client_id: str, client_secret: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -12535,6 +12748,29 @@ multiparty direct message.</p></div>
     return self.api_call(&#34;team.profile.get&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.WebClient.tooling_tokens_rotate"><code class="name flex">
+<span>def <span class="ident">tooling_tokens_rotate</span></span>(<span>self, *, refresh_token: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exchanges a refresh token for a new app configuration token
+<a href="https://api.slack.com/methods/tooling.tokens.rotate">https://api.slack.com/methods/tooling.tokens.rotate</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tooling_tokens_rotate(
+    self,
+    *,
+    refresh_token: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Exchanges a refresh token for a new app configuration token
+    https://api.slack.com/methods/tooling.tokens.rotate
+    &#34;&#34;&#34;
+    kwargs.update({&#34;refresh_token&#34;: refresh_token})
+    return self.api_call(&#34;tooling.tokens.rotate&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.WebClient.usergroups_create"><code class="name flex">
 <span>def <span class="ident">usergroups_create</span></span>(<span>self, *, name: str, channels: Union[str, Sequence[str], ForwardRef(None)] = None, description: Optional[str] = None, handle: Optional[str] = None, include_count: Optional[bool] = None, team_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -13458,6 +13694,11 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.WebClient.api_test" href="#slack_sdk.web.WebClient.api_test">api_test</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.apps_connections_open" href="#slack_sdk.web.WebClient.apps_connections_open">apps_connections_open</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.apps_event_authorizations_list" href="#slack_sdk.web.WebClient.apps_event_authorizations_list">apps_event_authorizations_list</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_manifest_create" href="#slack_sdk.web.WebClient.apps_manifest_create">apps_manifest_create</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_manifest_delete" href="#slack_sdk.web.WebClient.apps_manifest_delete">apps_manifest_delete</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_manifest_export" href="#slack_sdk.web.WebClient.apps_manifest_export">apps_manifest_export</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_manifest_update" href="#slack_sdk.web.WebClient.apps_manifest_update">apps_manifest_update</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_manifest_validate" href="#slack_sdk.web.WebClient.apps_manifest_validate">apps_manifest_validate</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.apps_uninstall" href="#slack_sdk.web.WebClient.apps_uninstall">apps_uninstall</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.auth_revoke" href="#slack_sdk.web.WebClient.auth_revoke">auth_revoke</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.auth_teams_list" href="#slack_sdk.web.WebClient.auth_teams_list">auth_teams_list</a></code></li>
@@ -13605,6 +13846,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.WebClient.team_integrationLogs" href="#slack_sdk.web.WebClient.team_integrationLogs">team_integrationLogs</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.team_preferences_list" href="#slack_sdk.web.WebClient.team_preferences_list">team_preferences_list</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.team_profile_get" href="#slack_sdk.web.WebClient.team_profile_get">team_profile_get</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.tooling_tokens_rotate" href="#slack_sdk.web.WebClient.tooling_tokens_rotate">tooling_tokens_rotate</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.usergroups_create" href="#slack_sdk.web.WebClient.usergroups_create">usergroups_create</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.usergroups_disable" href="#slack_sdk.web.WebClient.usergroups_disable">usergroups_disable</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.usergroups_enable" href="#slack_sdk.web.WebClient.usergroups_enable">usergroups_enable</a></code></li>
