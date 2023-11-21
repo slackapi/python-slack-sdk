@@ -1834,3 +1834,309 @@ class WorkflowButtonElement(InteractiveElement):
         self.workflow = workflow
         self.style = style
         self.accessibility_label = accessibility_label
+
+
+# -------------------------------------------------
+# Rich text elements
+# -------------------------------------------------
+
+
+class RichTextElement(BlockElement):
+    pass
+
+
+class RichTextListElement(RichTextElement):
+    type = "rich_text_list"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"elements", "style", "indent", "offset", "border"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        style: Optional[str] = None,  # bullet, ordered
+        indent: Optional[int] = None,
+        offset: Optional[int] = None,
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.style = style
+        self.indent = indent
+        self.offset = offset
+        self.border = border
+
+
+class RichTextPreformattedElement(RichTextElement):
+    type = "rich_text_preformatted"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"elements", "border"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        border: Optional[int] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+        self.border = border
+
+
+class RichTextQuoteElement(RichTextElement):
+    type = "rich_text_quote"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+
+
+class RichTextSectionElement(RichTextElement):
+    type = "rich_text_section"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, RichTextElement]],
+        **others: dict,
+    ):
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.elements = elements
+
+
+class RichTextElementParts:
+    class TextStyle:
+        def __init__(
+            self,
+            *,
+            bold: Optional[bool] = None,
+            italic: Optional[bool] = None,
+            strike: Optional[bool] = None,
+            code: Optional[bool] = None,
+        ):
+            self.bold = bold
+            self.italic = italic
+            self.strike = strike
+            self.code = code
+
+        def to_dict(self, *args) -> dict:
+            result = {
+                "bold": self.bold,
+                "italic": self.italic,
+                "strike": self.strike,
+                "code": self.code,
+            }
+            return {k: v for k, v in result.items() if v is not None}
+
+    class Text(RichTextElement):
+        type = "text"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"text", "style"})
+
+        def __init__(
+            self,
+            *,
+            text: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.text = text
+            self.style = style
+
+    class Channel(RichTextElement):
+        type = "channel"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"channel_id", "style"})
+
+        def __init__(
+            self,
+            *,
+            channel_id: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.channel_id = channel_id
+            self.style = style
+
+    class User(RichTextElement):
+        type = "user"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"user_id", "style"})
+
+        def __init__(
+            self,
+            *,
+            user_id: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.user_id = user_id
+            self.style = style
+
+    class Emoji(RichTextElement):
+        type = "emoji"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"name", "skin_tone", "unicode", "style"})
+
+        def __init__(
+            self,
+            *,
+            name: str,
+            skin_tone: Optional[int] = None,
+            unicode: Optional[str] = None,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.name = name
+            self.skin_tone = skin_tone
+            self.unicode = unicode
+            self.style = style
+
+    class Link(RichTextElement):
+        type = "link"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"url", "text", "style"})
+
+        def __init__(
+            self,
+            *,
+            url: str,
+            text: Optional[str] = None,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.url = url
+            self.text = text
+            self.style = style
+
+    class Team(RichTextElement):
+        type = "team"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"team_id", "style"})
+
+        def __init__(
+            self,
+            *,
+            team_id: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.team_id = team_id
+            self.style = style
+
+    class UserGroup(RichTextElement):
+        type = "usergroup"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"usergroup_id", "style"})
+
+        def __init__(
+            self,
+            *,
+            usergroup_id: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.usergroup_id = usergroup_id
+            self.style = style
+
+    class Date(RichTextElement):
+        type = "date"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"timestamp"})
+
+        def __init__(
+            self,
+            *,
+            timestamp: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.timestamp = timestamp
+
+    class Broadcast(RichTextElement):
+        type = "broadcast"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"range"})
+
+        def __init__(
+            self,
+            *,
+            range: str,  # channel, here, ..
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.range = range
+
+    class Color(RichTextElement):
+        type = "color"
+
+        @property
+        def attributes(self) -> Set[str]:
+            return super().attributes.union({"value"})
+
+        def __init__(
+            self,
+            *,
+            value: str,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.value = value

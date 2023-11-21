@@ -43,6 +43,12 @@ from .block_elements import StaticMultiSelectElement
 from .block_elements import StaticSelectElement
 from .block_elements import UserMultiSelectElement
 from .block_elements import UserSelectElement
+from .block_elements import RichTextElement
+from .block_elements import RichTextElementParts
+from .block_elements import RichTextListElement
+from .block_elements import RichTextPreformattedElement
+from .block_elements import RichTextQuoteElement
+from .block_elements import RichTextSectionElement
 from .blocks import ActionsBlock
 from .blocks import Block
 from .blocks import CallBlock
@@ -54,6 +60,7 @@ from .blocks import ImageBlock
 from .blocks import InputBlock
 from .blocks import SectionBlock
 from .blocks import VideoBlock
+from .blocks import RichTextBlock
 
 __all__ = [
     "ButtonStyles",
@@ -93,6 +100,12 @@ __all__ = [
     "StaticSelectElement",
     "UserMultiSelectElement",
     "UserSelectElement",
+    "RichTextElement",
+    "RichTextElementParts",
+    "RichTextListElement",
+    "RichTextPreformattedElement",
+    "RichTextQuoteElement",
+    "RichTextSectionElement",
     "ActionsBlock",
     "Block",
     "CallBlock",
@@ -104,4 +117,5 @@ __all__ = [
     "InputBlock",
     "SectionBlock",
     "VideoBlock",
+    "RichTextBlock",
 ]

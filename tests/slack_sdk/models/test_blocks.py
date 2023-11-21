@@ -22,6 +22,12 @@ from slack_sdk.models.blocks import (
     HeaderBlock,
     VideoBlock,
     Option,
+    RichTextBlock,
+    RichTextSectionElement,
+    RichTextListElement,
+    RichTextQuoteElement,
+    RichTextPreformattedElement,
+    RichTextElementParts,
 )
 from . import STRING_3001_CHARS
 
@@ -825,3 +831,219 @@ class VideoBlockTests(unittest.TestCase):
         }
         with self.assertRaises(SlackObjectFormationError):
             VideoBlock(**input).validate_json()
+
+
+# ----------------------------------------------
+# RichTextBlock
+# ----------------------------------------------
+
+
+class RichTextBlockTests(unittest.TestCase):
+    def test_document(self):
+        inputs = [
+            {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [{"type": "text", "text": "Hello there, I am a basic rich text block!"}],
+                    }
+                ],
+            },
+            {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {"type": "text", "text": "Hello there, "},
+                            {"type": "text", "text": "I am a bold rich text block!", "style": {"bold": True}},
+                        ],
+                    }
+                ],
+            },
+            {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {"type": "text", "text": "Hello there, "},
+                            {"type": "text", "text": "I am an italic rich text block!", "style": {"italic": True}},
+                        ],
+                    }
+                ],
+            },
+            {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {"type": "text", "text": "Hello there, "},
+                            {"type": "text", "text": "I am a strikethrough rich text block!", "style": {"strike": True}},
+                        ],
+                    }
+                ],
+            },
+        ]
+        for input in inputs:
+            self.assertDictEqual(input, RichTextBlock(**input).to_dict())
+
+    def test_complex(self):
+        self.maxDiff = None
+        dict_block = {
+            "type": "rich_text",
+            "block_id": "3Uk3Q",
+            "elements": [
+                {
+                    "type": "rich_text_section",
+                    "elements": [
+                        {"type": "text", "text": "Hey!", "style": {"bold": True}},
+                        {"type": "text", "text": " this is "},
+                        {"type": "text", "text": "very", "style": {"strike": True}},
+                        {"type": "text", "text": " rich text "},
+                        {"type": "text", "text": "block", "style": {"code": True}},
+                        {"type": "text", "text": " "},
+                        {"type": "text", "text": "test", "style": {"italic": True}},
+                        {"type": "link", "url": "https://slack.com", "text": "Slack website!"},
+                    ],
+                },
+                {
+                    "type": "rich_text_list",
+                    "elements": [
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "a"}]},
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "b"}]},
+                    ],
+                    "style": "ordered",
+                    "indent": 0,
+                    "border": 0,
+                },
+                {
+                    "type": "rich_text_list",
+                    "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "bb"}]}],
+                    "style": "ordered",
+                    "indent": 1,
+                    "border": 0,
+                },
+                {
+                    "type": "rich_text_list",
+                    "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "BBB"}]}],
+                    "style": "ordered",
+                    "indent": 2,
+                    "border": 0,
+                },
+                {
+                    "type": "rich_text_list",
+                    "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "c"}]}],
+                    "style": "ordered",
+                    "indent": 0,
+                    "offset": 2,
+                    "border": 0,
+                },
+                {"type": "rich_text_section", "elements": [{"type": "text", "text": "\n"}]},
+                {
+                    "type": "rich_text_list",
+                    "elements": [
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "todo"}]},
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "todo"}]},
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "todo"}]},
+                    ],
+                    "style": "bullet",
+                    "indent": 0,
+                    "border": 0,
+                },
+                {"type": "rich_text_section", "elements": [{"type": "text", "text": "\n"}]},
+                {"type": "rich_text_quote", "elements": [{"type": "text", "text": "this is very important"}]},
+                {
+                    "type": "rich_text_preformatted",
+                    "elements": [{"type": "text", "text": 'print("Hello world")'}],
+                    "border": 0,
+                },
+                {
+                    "type": "rich_text_section",
+                    "elements": [
+                        {"type": "user", "user_id": "WJC6QG0MS"},
+                        {"type": "text", "text": " "},
+                        {"type": "usergroup", "usergroup_id": "S01BL602YLU"},
+                        {"type": "text", "text": " "},
+                        {"type": "channel", "channel_id": "C02GD0YEHDJ"},
+                    ],
+                },
+            ],
+        }
+        self.assertDictEqual(dict_block, RichTextBlock(**dict_block).to_dict())
+
+        _ = RichTextElementParts
+        class_block = RichTextBlock(
+            block_id="3Uk3Q",
+            elements=[
+                RichTextSectionElement(
+                    elements=[
+                        _.Text(text="Hey!", style=_.TextStyle(bold=True)),
+                        _.Text(text=" this is "),
+                        _.Text(text="very", style=_.TextStyle(strike=True)),
+                        _.Text(text=" rich text "),
+                        _.Text(text="block", style=_.TextStyle(code=True)),
+                        _.Text(text=" "),
+                        _.Text(text="test", style=_.TextStyle(italic=True)),
+                        _.Link(text="Slack website!", url="https://slack.com"),
+                    ]
+                ),
+                RichTextListElement(
+                    elements=[
+                        RichTextSectionElement(elements=[_.Text(text="a")]),
+                        RichTextSectionElement(elements=[_.Text(text="b")]),
+                    ],
+                    style="ordered",
+                    indent=0,
+                    border=0,
+                ),
+                RichTextListElement(
+                    elements=[RichTextSectionElement(elements=[_.Text(text="bb")])],
+                    style="ordered",
+                    indent=1,
+                    border=0,
+                ),
+                RichTextListElement(
+                    elements=[RichTextSectionElement(elements=[_.Text(text="BBB")])],
+                    style="ordered",
+                    indent=2,
+                    border=0,
+                ),
+                RichTextListElement(
+                    elements=[RichTextSectionElement(elements=[_.Text(text="c")])],
+                    style="ordered",
+                    indent=0,
+                    offset=2,
+                    border=0,
+                ),
+                RichTextSectionElement(elements=[_.Text(text="\n")]),
+                RichTextListElement(
+                    elements=[
+                        RichTextSectionElement(elements=[_.Text(text="todo")]),
+                        RichTextSectionElement(elements=[_.Text(text="todo")]),
+                        RichTextSectionElement(elements=[_.Text(text="todo")]),
+                    ],
+                    style="bullet",
+                    indent=0,
+                    border=0,
+                ),
+                RichTextSectionElement(elements=[_.Text(text="\n")]),
+                RichTextQuoteElement(elements=[_.Text(text="this is very important")]),
+                RichTextPreformattedElement(
+                    elements=[_.Text(text='print("Hello world")')],
+                    border=0,
+                ),
+                RichTextSectionElement(
+                    elements=[
+                        _.User(user_id="WJC6QG0MS"),
+                        _.Text(text=" "),
+                        _.UserGroup(usergroup_id="S01BL602YLU"),
+                        _.Text(text=" "),
+                        _.Channel(channel_id="C02GD0YEHDJ"),
+                    ]
+                ),
+            ],
+        )
+        self.assertDictEqual(dict_block, class_block.to_dict())
