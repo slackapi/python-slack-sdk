@@ -1919,6 +1919,91 @@ class WebClient(BaseClient):
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
         return self.api_call("apps.uninstall", params=kwargs)
 
+    def apps_manifest_create(
+        self,
+        *,
+        manifest: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Create an app from an app manifest
+        https://api.slack.com/methods/apps.manifest.create
+        """
+        if isinstance(manifest, str):
+            kwargs.update({"manifest": manifest})
+        else:
+            kwargs.update({"manifest": json.dumps(manifest)})
+        return self.api_call("apps.manifest.create", params=kwargs)
+
+    def apps_manifest_delete(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Permanently deletes an app created through app manifests
+        https://api.slack.com/methods/apps.manifest.delete
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.delete", params=kwargs)
+
+    def apps_manifest_export(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Export an app manifest from an existing app
+        https://api.slack.com/methods/apps.manifest.export
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.export", params=kwargs)
+
+    def apps_manifest_update(
+        self,
+        *,
+        app_id: str,
+        manifest: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Update an app from an app manifest
+        https://api.slack.com/methods/apps.manifest.update
+        """
+        if isinstance(manifest, str):
+            kwargs.update({"manifest": manifest})
+        else:
+            kwargs.update({"manifest": json.dumps(manifest)})
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.update", params=kwargs)
+
+    def apps_manifest_validate(
+        self,
+        *,
+        manifest: Union[str, Dict[str, Any]],
+        app_id: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Validate an app manifest
+        https://api.slack.com/methods/apps.manifest.validate
+        """
+        if isinstance(manifest, str):
+            kwargs.update({"manifest": manifest})
+        else:
+            kwargs.update({"manifest": json.dumps(manifest)})
+        kwargs.update({"app_id": app_id})
+        return self.api_call("apps.manifest.validate", params=kwargs)
+
+    def tooling_tokens_rotate(
+        self,
+        *,
+        refresh_token: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Exchanges a refresh token for a new app configuration token
+        https://api.slack.com/methods/tooling.tokens.rotate
+        """
+        kwargs.update({"refresh_token": refresh_token})
+        return self.api_call("tooling.tokens.rotate", params=kwargs)
+
     def auth_revoke(
         self,
         *,

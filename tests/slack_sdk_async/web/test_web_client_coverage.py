@@ -41,13 +41,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 "openid.connect.token",
                 "openid.connect.userInfo",
                 "users.setActive",
-                # TODO: will merge https://github.com/slackapi/python-slack-sdk/pull/1123 once the APIs are GAed
-                "apps.manifest.create",
-                "apps.manifest.delete",
-                "apps.manifest.export",
-                "apps.manifest.update",
-                "apps.manifest.validate",
-                "tooling.tokens.rotate",
                 # automation platform token required ones
                 "apps.activities.list",
                 "apps.auth.external.delete",
@@ -86,6 +79,21 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])["method"]
                 )
                 await async_method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])
+            elif method_name == "apps_manifest_create":
+                self.api_methods_to_call.remove(method(manifest="{}")["method"])
+                await async_method(manifest="{}")
+            elif method_name == "apps_manifest_delete":
+                self.api_methods_to_call.remove(method(app_id="AID123")["method"])
+                await async_method(app_id="AID123")
+            elif method_name == "apps_manifest_export":
+                self.api_methods_to_call.remove(method(app_id="AID123")["method"])
+                await async_method(app_id="AID123")
+            elif method_name == "apps_manifest_update":
+                self.api_methods_to_call.remove(method(app_id="AID123", manifest="{}")["method"])
+                await async_method(app_id="AID123", manifest="{}")
+            elif method_name == "apps_manifest_validate":
+                self.api_methods_to_call.remove(method(manifest="{}")["method"])
+                await async_method(manifest="{}")
             elif method_name == "admin_apps_requests_cancel":
                 self.api_methods_to_call.remove(method(request_id="XXX", enterprise_id="E111", team_id="T123")["method"])
                 await async_method(request_id="XXX", enterprise_id="E111", team_id="T123")
@@ -676,6 +684,9 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "search_messages":
                 self.api_methods_to_call.remove(method(query="Slack")["method"])
                 await async_method(query="Slack")
+            elif method_name == "tooling_tokens_rotate":
+                self.api_methods_to_call.remove(method(refresh_token="xoxe-refresh")["method"])
+                await async_method(refresh_token="xoxe-refresh")
             elif method_name == "usergroups_create":
                 self.api_methods_to_call.remove(method(name="Engineering Team")["method"])
                 await async_method(name="Engineering Team")
