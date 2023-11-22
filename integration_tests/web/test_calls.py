@@ -24,12 +24,7 @@ class TestWebClient(unittest.TestCase):
 
     def test_sync(self):
         client = self.sync_client
-        user_id = list(
-            filter(
-                lambda u: not u["deleted"] and "bot_id" not in u,
-                client.users_list(limit=50)["members"],
-            )
-        )[
+        user_id = list(filter(lambda u: not u["deleted"] and "bot_id" not in u, client.users_list(limit=50)["members"],))[
             0
         ]["id"]
 

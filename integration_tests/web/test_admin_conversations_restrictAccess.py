@@ -40,10 +40,7 @@ class TestWebClient(unittest.TestCase):
             if self.channel_id is None:
                 millis = int(round(time.time() * 1000))
                 channel_name = f"private-test-channel-{millis}"
-                self.channel_id = client.conversations_create(
-                    name=channel_name,
-                    is_private=True,
-                )[
+                self.channel_id = client.conversations_create(name=channel_name, is_private=True,)[
                     "channel"
                 ]["id"]
 
