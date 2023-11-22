@@ -3659,7 +3659,7 @@ class WebClient(BaseClient):
         """Signal the successful completion of a function
         https://api.slack.com/methods/functions.completeSuccess
         """
-        kwargs.update({"function_execution_id": function_execution_id, "outputs": outputs})
+        kwargs.update({"function_execution_id": function_execution_id, "outputs": json.dumps(outputs)})
         return self.api_call("functions.completeSuccess", params=kwargs)
 
     def functions_completeError(

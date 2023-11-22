@@ -3668,7 +3668,7 @@ class AsyncWebClient(AsyncBaseClient):
         """Signal the successful completion of a function
         https://api.slack.com/methods/functions.completeSuccess
         """
-        kwargs.update({"function_execution_id": function_execution_id, "outputs": outputs})
+        kwargs.update({"function_execution_id": function_execution_id, "outputs": json.dumps(outputs)})
         return await self.api_call("functions.completeSuccess", params=kwargs)
 
     async def functions_completeError(
