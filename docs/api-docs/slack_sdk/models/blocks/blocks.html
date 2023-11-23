@@ -117,6 +117,8 @@ class Block(JsonObject):
                     return HeaderBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
+                elif type == RichTextBlock.type:
+                    return RichTextBlock(**block)
                 else:
                     cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                     return None
@@ -861,6 +863,8 @@ to create visually rich and compellingly interactive messages.
                     return HeaderBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
+                elif type == RichTextBlock.type:
+                    return RichTextBlock(**block)
                 else:
                     cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                     return None
@@ -942,6 +946,8 @@ def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#3
                 return HeaderBlock(**block)
             elif type == VideoBlock.type:
                 return VideoBlock(**block)
+            elif type == RichTextBlock.type:
+                return RichTextBlock(**block)
             else:
                 cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                 return None

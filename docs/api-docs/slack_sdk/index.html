@@ -3888,6 +3888,32 @@ removed at anytime.</p></div>
         )
         return self.api_call(&#34;files.completeUploadExternal&#34;, params=kwargs)
 
+    def functions_completeSuccess(
+        self,
+        *,
+        function_execution_id: str,
+        outputs: Dict[str, Any],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Signal the successful completion of a function
+        https://api.slack.com/methods/functions.completeSuccess
+        &#34;&#34;&#34;
+        kwargs.update({&#34;function_execution_id&#34;: function_execution_id, &#34;outputs&#34;: json.dumps(outputs)})
+        return self.api_call(&#34;functions.completeSuccess&#34;, params=kwargs)
+
+    def functions_completeError(
+        self,
+        *,
+        function_execution_id: str,
+        error: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Signal the failure to execute a function
+        https://api.slack.com/methods/functions.completeError
+        &#34;&#34;&#34;
+        kwargs.update({&#34;function_execution_id&#34;: function_execution_id, &#34;error&#34;: error})
+        return self.api_call(&#34;functions.completeError&#34;, params=kwargs)
+
     # --------------------------
     # Deprecated: groups.*
     # You can use conversations.* APIs instead.
@@ -10961,6 +10987,54 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
     return completion</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.WebClient.functions_completeError"><code class="name flex">
+<span>def <span class="ident">functions_completeError</span></span>(<span>self, *, function_execution_id: str, error: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Signal the failure to execute a function
+<a href="https://api.slack.com/methods/functions.completeError">https://api.slack.com/methods/functions.completeError</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def functions_completeError(
+    self,
+    *,
+    function_execution_id: str,
+    error: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Signal the failure to execute a function
+    https://api.slack.com/methods/functions.completeError
+    &#34;&#34;&#34;
+    kwargs.update({&#34;function_execution_id&#34;: function_execution_id, &#34;error&#34;: error})
+    return self.api_call(&#34;functions.completeError&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
+<dt id="slack_sdk.WebClient.functions_completeSuccess"><code class="name flex">
+<span>def <span class="ident">functions_completeSuccess</span></span>(<span>self, *, function_execution_id: str, outputs: Dict[str, Any], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Signal the successful completion of a function
+<a href="https://api.slack.com/methods/functions.completeSuccess">https://api.slack.com/methods/functions.completeSuccess</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def functions_completeSuccess(
+    self,
+    *,
+    function_execution_id: str,
+    outputs: Dict[str, Any],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Signal the successful completion of a function
+    https://api.slack.com/methods/functions.completeSuccess
+    &#34;&#34;&#34;
+    kwargs.update({&#34;function_execution_id&#34;: function_execution_id, &#34;outputs&#34;: json.dumps(outputs)})
+    return self.api_call(&#34;functions.completeSuccess&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.WebClient.groups_archive"><code class="name flex">
 <span>def <span class="ident">groups_archive</span></span>(<span>self, *, channel: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -14013,6 +14087,8 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.WebClient.files_sharedPublicURL" href="#slack_sdk.WebClient.files_sharedPublicURL">files_sharedPublicURL</a></code></li>
 <li><code><a title="slack_sdk.WebClient.files_upload" href="#slack_sdk.WebClient.files_upload">files_upload</a></code></li>
 <li><code><a title="slack_sdk.WebClient.files_upload_v2" href="#slack_sdk.WebClient.files_upload_v2">files_upload_v2</a></code></li>
+<li><code><a title="slack_sdk.WebClient.functions_completeError" href="#slack_sdk.WebClient.functions_completeError">functions_completeError</a></code></li>
+<li><code><a title="slack_sdk.WebClient.functions_completeSuccess" href="#slack_sdk.WebClient.functions_completeSuccess">functions_completeSuccess</a></code></li>
 <li><code><a title="slack_sdk.WebClient.groups_archive" href="#slack_sdk.WebClient.groups_archive">groups_archive</a></code></li>
 <li><code><a title="slack_sdk.WebClient.groups_create" href="#slack_sdk.WebClient.groups_create">groups_create</a></code></li>
 <li><code><a title="slack_sdk.WebClient.groups_createChild" href="#slack_sdk.WebClient.groups_createChild">groups_createChild</a></code></li>
