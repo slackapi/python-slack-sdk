@@ -89,6 +89,8 @@ class Block(JsonObject):
                     return HeaderBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
+                elif type == RichTextBlock.type:
+                    return RichTextBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
