@@ -973,6 +973,7 @@ class RichTextBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(dict_block, RichTextBlock(**dict_block).to_dict())
+        self.assertDictEqual(dict_block, Block.parse(dict_block).to_dict())
 
         _ = RichTextElementParts
         class_block = RichTextBlock(
