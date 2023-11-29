@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -U pip
-        pip install -e ".[testing]"
-        pip install -e ".[optional]"
+        pip install -r requirements/testing.txt
+        pip install -r requirements/optional.txt
         # As pytype can change its behavior in newer versions, we manually upgrade it
         # 2023.9.11 fails due to errors that only happen on GH Actions
         pip install "pytype==2023.5.24"

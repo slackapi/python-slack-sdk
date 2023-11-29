@@ -4,8 +4,8 @@
 script_dir=`dirname $0`
 cd ${script_dir}/..
 pip install -U pip && \
-  pip install -e ".[testing]" && \
-  pip install -e ".[optional]" && \
+  pip install -r requirements/testing.txt && \
+  pip install -r requirements/optional.txt && \
   black slack_sdk/ slack/ tests/ integration_tests/ && \
   python setup.py codegen && \
   python setup.py validate

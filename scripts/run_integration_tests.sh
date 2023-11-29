@@ -8,7 +8,9 @@ cd ${script_dir}/..
 
 test_target="$1"
 python_version=`python --version | awk '{print $2}'`
-pip install -e .
+pip install -U pip && \
+  pip install -r requirements/testing.txt && \
+  pip install -r requirements/optional.txt && \
 
 if [[ $test_target != "" ]]
 then
