@@ -2867,12 +2867,18 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         channel: str,
         users: Union[str, Sequence[str]],
+        force: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invites users to a channel.
         https://api.slack.com/methods/conversations.invite
         """
-        kwargs.update({"channel": channel})
+        kwargs.update(
+            {
+                "channel": channel,
+                "force": force,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
