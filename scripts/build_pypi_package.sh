@@ -2,7 +2,7 @@
 
 script_dir=`dirname $0`
 cd ${script_dir}/..
-rm -rf ./slack_bolt.egg-info
+rm -rf ./slack_sdk.egg-info
 
 pip install -U pip && \
   pip install twine build && \
