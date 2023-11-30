@@ -42,7 +42,7 @@ classifiers = [
 homepage = "https://github.com/slackapi/python-slack-sdk"
 
 [tool.setuptools.packages.find]
-include = ["slack_bolt*", "slack*"]
+include = ["slack*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "slack_sdk.version.__version__" }
