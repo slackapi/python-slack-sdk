@@ -1,11 +1,8 @@
-import re
 from datetime import datetime  # type: ignore
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
-from slack_sdk.oauth.installation_store.internals import (
-    _from_iso_format_to_unix_timestamp,
-)
+from slack_sdk.oauth.installation_store.internals import _timestamp_to_type
 from slack_sdk.oauth.installation_store.models.bot import Bot
 
 
@@ -100,14 +97,9 @@ class Installation:
         else:
             self.bot_scopes = bot_scopes
         self.bot_refresh_token = bot_refresh_token
+
         if bot_token_expires_at is not None:
-            if type(bot_token_expires_at) == datetime:
-                ts: float = bot_token_expires_at.timestamp()  # type: ignore
-                self.bot_token_expires_at = int(ts)
-            elif type(bot_token_expires_at) == str and not re.match("^\\d+$", bot_token_expires_at):
-                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
-            else:
-                self.bot_token_expires_at = bot_token_expires_at  # type: ignore
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
@@ -120,14 +112,9 @@ class Installation:
         else:
             self.user_scopes = user_scopes
         self.user_refresh_token = user_refresh_token
+
         if user_token_expires_at is not None:
-            if type(user_token_expires_at) == datetime:
-                ts: float = user_token_expires_at.timestamp()  # type: ignore
-                self.user_token_expires_at = int(ts)
-            elif type(user_token_expires_at) == str and not re.match("^\\d+$", user_token_expires_at):
-                self.user_token_expires_at = int(_from_iso_format_to_unix_timestamp(user_token_expires_at))
-            else:
-                self.user_token_expires_at = user_token_expires_at  # type: ignore
+            self.user_token_expires_at = _timestamp_to_type(user_token_expires_at, int)
         elif user_token_expires_in is not None:
             self.user_token_expires_at = int(time()) + user_token_expires_in
         else:
@@ -143,17 +130,8 @@ class Installation:
 
         if installed_at is None:
             self.installed_at = datetime.now().timestamp()
-        elif type(installed_at) == float:
-            self.installed_at = installed_at  # type: ignore
-        elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()  # type: ignore
-        elif type(installed_at) == str:
-            if re.match("^\\d+.\\d+$", installed_at):
-                self.installed_at = float(installed_at)
-            else:
-                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
         else:
-            raise ValueError(f"Unsupported data format for installed_at {installed_at}")
+            self.installed_at = _timestamp_to_type(installed_at, float)
 
         self.custom_values = custom_values if custom_values is not None else {}
 

@@ -90,7 +90,9 @@ class TestInteractionsWebsockets(unittest.TestCase):
             expected.sort()
 
             count = 0
-            while count < 10 and len(received_messages) < len(expected):
+            while count < 10 and (
+                len(received_messages) < len(expected) or len(received_socket_mode_requests) < len(socket_mode_envelopes)
+            ):
                 await asyncio.sleep(0.2)
                 count += 0.2
 

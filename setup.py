@@ -17,7 +17,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
     long_description = readme.read()
 
 validate_dependencies = [
-    "pytest>=6.2.5,<7",
+    "pytest>=7.0.1,<8",
     "pytest-asyncio<1",  # for async
     "Flask-Sockets>=0.2,<1",
     "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
@@ -25,7 +25,9 @@ validate_dependencies = [
     "itsdangerous==1.1.0",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
     "Jinja2==3.0.3",  # https://github.com/pallets/flask/issues/4494
     "pytest-cov>=2,<3",
-    "flake8>=5,<6",
+    # while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
+    # so 5.x should be kept in order to stay compatible with Python 3.6/3.7
+    "flake8>=5.0.4,<7",
     # Don't change this version without running CI builds;
     # The latest version may not be available for older Python runtime
     "black==22.8.0",
@@ -123,7 +125,7 @@ class CodegenCommand(BaseCommand):
             async_source = header + source
             async_source = re.sub("    def ", "    async def ", async_source)
             async_source = re.sub("from asyncio import Future\n", "", async_source)
-            async_source = re.sub("return self.api_call\(", "return await self.api_call(", async_source)
+            async_source = re.sub(r"return self.api_call\(", "return await self.api_call(", async_source)
             async_source = re.sub("-> SlackResponse", "-> AsyncSlackResponse", async_source)
             async_source = re.sub(
                 "from .base_client import BaseClient, SlackResponse",
@@ -132,7 +134,7 @@ class CodegenCommand(BaseCommand):
             )
             # from slack_sdk import WebClient
             async_source = re.sub(
-                "class WebClient\(BaseClient\):",
+                r"class WebClient\(BaseClient\):",
                 "class AsyncWebClient(AsyncBaseClient):",
                 async_source,
             )
@@ -141,19 +143,19 @@ class CodegenCommand(BaseCommand):
                 "from slack_sdk.web.async_client import AsyncWebClient",
                 async_source,
             )
-            async_source = re.sub("= WebClient\(", "= AsyncWebClient(", async_source)
+            async_source = re.sub(r"= WebClient\(", "= AsyncWebClient(", async_source)
             async_source = re.sub(
-                " self.files_getUploadURLExternal\(",
+                r" self.files_getUploadURLExternal\(",
                 " await self.files_getUploadURLExternal(",
                 async_source,
             )
             async_source = re.sub(
-                " self.files_completeUploadExternal\(",
+                r" self.files_completeUploadExternal\(",
                 " await self.files_completeUploadExternal(",
                 async_source,
             )
             async_source = re.sub(
-                " self.files_info\(",
+                r" self.files_info\(",
                 " await self.files_info(",
                 async_source,
             )
@@ -163,7 +165,7 @@ class CodegenCommand(BaseCommand):
                 async_source,
             )
             async_source = re.sub(
-                " _attach_full_file_metadata_async\(",
+                r" _attach_full_file_metadata_async\(",
                 " await _attach_full_file_metadata_async(",
                 async_source,
             )
@@ -178,7 +180,7 @@ class CodegenCommand(BaseCommand):
                 legacy_source,
             )
             legacy_source = re.sub(
-                "class WebClient\(BaseClient\):",
+                r"class WebClient\(BaseClient\):",
                 "class LegacyWebClient(LegacyBaseClient):",
                 legacy_source,
             )
@@ -187,7 +189,7 @@ class CodegenCommand(BaseCommand):
                 "from slack_sdk.web.legacy_client import LegacyWebClient",
                 legacy_source,
             )
-            legacy_source = re.sub("= WebClient\(", "= LegacyWebClient(", legacy_source)
+            legacy_source = re.sub(r"= WebClient\(", "= LegacyWebClient(", legacy_source)
             with open(f"{here}/slack_sdk/web/legacy_client.py", "w") as output:
                 output.write(legacy_source)
 
@@ -212,8 +214,10 @@ class ValidateCommand(BaseCommand):
             "Installing test dependencies ...",
             [sys.executable, "-m", "pip", "install"] + validate_dependencies,
         )
-        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack"])
-        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+
+        self._run("Running black for legacy packages ...", [sys.executable, "-m", "black", f"{here}/slack"])
+        self._run("Running black for slack_sdk package ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+
         self._run("Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"])
         self._run("Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"])
 
@@ -301,6 +305,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -308,6 +313,8 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Programming Language :: Python :: Implementation :: PyPy",
     ],
     keywords="slack slack-api web-api slack-rtm websocket chat chatbot chatops",
     packages=find_packages(
