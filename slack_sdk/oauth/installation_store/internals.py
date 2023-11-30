@@ -1,32 +1,47 @@
-import platform
-import datetime
-
-(major, minor, patch) = platform.python_version_tuple()
-is_python_3_6: bool = int(major) == 3 and int(minor) >= 6
-
-utc_timezone = datetime.timezone.utc
+import sys
+from datetime import datetime, timezone
+from typing import Type, TypeVar, Union
 
 
-def _from_iso_format_to_datetime(iso_datetime_str: str) -> datetime.datetime:
-    if is_python_3_6:
-        elements = iso_datetime_str.split(" ")
-        ymd = elements[0].split("-")
-        hms = elements[1].split(":")
-        return datetime.datetime(
-            int(ymd[0]),
-            int(ymd[1]),
-            int(ymd[2]),
-            int(hms[0]),
-            int(hms[1]),
-            int(hms[2]),
-            0,
-            utc_timezone,
-        )
+def _from_iso_format_to_datetime(iso_datetime_str: str) -> datetime:
+    if sys.version_info[:2] == (3, 6):
+        format = "%Y-%m-%d %H:%M:%S"
+        if "." in iso_datetime_str:
+            format += ".%f"
+        return datetime.strptime(iso_datetime_str, format).replace(tzinfo=timezone.utc)
     else:
         if "+" not in iso_datetime_str:
             iso_datetime_str += "+00:00"
-        return datetime.datetime.fromisoformat(iso_datetime_str)
+        return datetime.fromisoformat(iso_datetime_str)
 
 
 def _from_iso_format_to_unix_timestamp(iso_datetime_str: str) -> float:
     return _from_iso_format_to_datetime(iso_datetime_str).timestamp()
+
+
+TimestampType = TypeVar("TimestampType", float, int)
+
+
+def _timestamp_to_type(ts: Union[TimestampType, datetime, str], target_type: Type[TimestampType]) -> TimestampType:
+    result: TimestampType
+
+    if isinstance(ts, target_type):
+        # unnecessary type casting makes pytype happy
+        result = target_type(ts)
+
+        # although a type of the timestamp is just checked,
+        # pytype doesn't consider the following line valid:
+        # result = ts
+        # see https://github.com/google/pytype/issues/1012
+
+    elif isinstance(ts, datetime):
+        result = target_type(ts.timestamp())
+    elif isinstance(ts, str):
+        try:
+            result = target_type(ts)
+        except ValueError:
+            result = target_type(_from_iso_format_to_unix_timestamp(ts))
+    else:
+        raise ValueError(f"Unsupported data format for timestamp {ts}")
+
+    return result
