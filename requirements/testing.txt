@@ -1,5 +1,5 @@
 # pip install -r requirements/testing.txt
-pytest>=6.2.5,<7
+pytest>=7.0.1,<8
 pytest-asyncio<1  # for async
 Flask-Sockets>=0.2,<1
 Flask>=1,<2  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
@@ -7,7 +7,9 @@ Werkzeug<2  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
 itsdangerous==1.1.0  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
 Jinja2==3.0.3  # https://github.com/pallets/flask/issues/4494
 pytest-cov>=2,<3
-flake8>=5,<6
+# while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
+# so 5.x should be kept in order to stay compatible with Python 3.6/3.7
+flake8>=5.0.4,<7
 #  Don't change this version without running CI builds;
 #  The latest version may not be available for older Python runtime
 black>=22.8.0; python_version=="3.6"

@@ -27,7 +27,7 @@ classifiers = [
 	"Topic :: Office/Business",
 	"License :: OSI Approved :: MIT License",
 	"Programming Language :: Python",
-	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3 :: Only",
 	"Programming Language :: Python :: 3.6",
 	"Programming Language :: Python :: 3.7",
 	"Programming Language :: Python :: 3.8",
@@ -35,6 +35,8 @@ classifiers = [
 	"Programming Language :: Python :: 3.10",
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Programming Language :: Python :: Implementation :: PyPy",
 ]
 
 
@@ -63,5 +65,6 @@ log_date_format = "%Y-%m-%d %H:%M:%S"
 filterwarnings = [
 	"ignore:\"@coroutine\" decorator is deprecated since Python 3.8, use \"async def\" instead:DeprecationWarning",
 	"ignore:The loop argument is deprecated since Python 3.8, and scheduled for removal in Python 3.10.:DeprecationWarning",
+	"ignore:slack.* package is deprecated. Please use slack_sdk.* package instead.*:UserWarning",
 ]
 asyncio_mode = "auto"

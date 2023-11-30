@@ -60,7 +60,7 @@ class CodegenCommand(BaseCommand):
             async_source = header + source
             async_source = re.sub("    def ", "    async def ", async_source)
             async_source = re.sub("from asyncio import Future\n", "", async_source)
-            async_source = re.sub("return self.api_call\(", "return await self.api_call(", async_source)
+            async_source = re.sub(r"return self.api_call\(", "return await self.api_call(", async_source)
             async_source = re.sub("-> SlackResponse", "-> AsyncSlackResponse", async_source)
             async_source = re.sub(
                 "from .base_client import BaseClient, SlackResponse",
@@ -69,7 +69,7 @@ class CodegenCommand(BaseCommand):
             )
             # from slack_sdk import WebClient
             async_source = re.sub(
-                "class WebClient\(BaseClient\):",
+                r"class WebClient\(BaseClient\):",
                 "class AsyncWebClient(AsyncBaseClient):",
                 async_source,
             )
@@ -78,19 +78,19 @@ class CodegenCommand(BaseCommand):
                 "from slack_sdk.web.async_client import AsyncWebClient",
                 async_source,
             )
-            async_source = re.sub("= WebClient\(", "= AsyncWebClient(", async_source)
+            async_source = re.sub(r"= WebClient\(", "= AsyncWebClient(", async_source)
             async_source = re.sub(
-                " self.files_getUploadURLExternal\(",
+                r" self.files_getUploadURLExternal\(",
                 " await self.files_getUploadURLExternal(",
                 async_source,
             )
             async_source = re.sub(
-                " self.files_completeUploadExternal\(",
+                r" self.files_completeUploadExternal\(",
                 " await self.files_completeUploadExternal(",
                 async_source,
             )
             async_source = re.sub(
-                " self.files_info\(",
+                r" self.files_info\(",
                 " await self.files_info(",
                 async_source,
             )
@@ -100,7 +100,7 @@ class CodegenCommand(BaseCommand):
                 async_source,
             )
             async_source = re.sub(
-                " _attach_full_file_metadata_async\(",
+                r" _attach_full_file_metadata_async\(",
                 " await _attach_full_file_metadata_async(",
                 async_source,
             )
@@ -115,7 +115,7 @@ class CodegenCommand(BaseCommand):
                 legacy_source,
             )
             legacy_source = re.sub(
-                "class WebClient\(BaseClient\):",
+                r"class WebClient\(BaseClient\):",
                 "class LegacyWebClient(LegacyBaseClient):",
                 legacy_source,
             )
@@ -124,7 +124,7 @@ class CodegenCommand(BaseCommand):
                 "from slack_sdk.web.legacy_client import LegacyWebClient",
                 legacy_source,
             )
-            legacy_source = re.sub("= WebClient\(", "= LegacyWebClient(", legacy_source)
+            legacy_source = re.sub(r"= WebClient\(", "= LegacyWebClient(", legacy_source)
             with open(f"{here}/slack_sdk/web/legacy_client.py", "w") as output:
                 output.write(legacy_source)
 
@@ -149,8 +149,10 @@ class ValidateCommand(BaseCommand):
             "Installing test dependencies ...",
             [sys.executable, "-m", "pip", "install", "-r", "requirements/testing.txt"],
         )
-        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack"])
-        self._run("Running black ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+
+        self._run("Running black for legacy packages ...", [sys.executable, "-m", "black", f"{here}/slack"])
+        self._run("Running black for slack_sdk package ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+
         self._run("Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"])
         self._run("Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"])
 

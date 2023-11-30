@@ -10,10 +10,19 @@ jobs:
   build:
     # Avoiding -latest due to https://github.com/actions/setup-python/issues/162
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+          - '3.7'
+          - '3.6'
+          - 'pypy3.10'
     env:
       PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
@@ -23,12 +32,13 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: pip
     - name: Install dependencies
       run: |
         pip install -U pip wheel
         pip install -r requirements/testing.txt
         pip install -r requirements/optional.txt
-    - name: Run validation
+    - name: Run validation (black/flake8/pytest)
       run: |
         python setup.py validate
     - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
