@@ -5,6 +5,10 @@ import sys
 
 from setuptools import setup, Command
 
+###################################################################################
+#  Legacy package configuration, prefer pyproject.toml over setup.cfg or setup.py #
+###################################################################################
+
 here = os.path.abspath(os.path.dirname(__file__))
 
 codegen_dependencies = [

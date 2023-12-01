@@ -1,13 +1,12 @@
 [build-system]
-requires = ["setuptools", "pytest-runner", "wheel"]
+requires = ["setuptools", "pytest-runner"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "slack_sdk"
-dynamic = ["version", "readme"]
+dynamic = ["version", "readme", "authors"]
 description = "The Slack API Platform SDK for Python"
 license = { text = "MIT" }
-authors = [{ name = "Slack Technologies, LLC", email = "opensource@slack.com" }]
 requires-python = ">=3.6"
 keywords = [
 	"slack",
@@ -41,10 +40,10 @@ classifiers = [
 
 
 [project.urls]
-homepage = "https://github.com/slackapi/python-slack-sdk"
+Documentation = "https://slack.dev/python-slack-sdk/"
 
 [tool.setuptools.packages.find]
-include = ["slack*"]
+include = ["slack*", "slack_sdk*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "slack_sdk.version.__version__" }
