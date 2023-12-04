@@ -2885,12 +2885,18 @@ class WebClient(BaseClient):
         *,
         channel: str,
         users: Union[str, Sequence[str]],
+        force: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Invites users to a channel.
         https://api.slack.com/methods/conversations.invite
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel&#34;: channel})
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;force&#34;: force,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
         else:
@@ -8047,12 +8053,18 @@ removed at anytime.</p></div>
         *,
         channel: str,
         users: Union[str, Sequence[str]],
+        force: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Invites users to a channel.
         https://api.slack.com/methods/conversations.invite
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel&#34;: channel})
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;force&#34;: force,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
         else:
@@ -14712,7 +14724,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.conversations_invite"><code class="name flex">
-<span>def <span class="ident">conversations_invite</span></span>(<span>self, *, channel: str, users: Union[str, Sequence[str]], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">conversations_invite</span></span>(<span>self, *, channel: str, users: Union[str, Sequence[str]], force: Optional[bool] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Invites users to a channel.
@@ -14726,12 +14738,18 @@ Each authorization represents an app installation that the event is visible to.
     *,
     channel: str,
     users: Union[str, Sequence[str]],
+    force: Optional[bool] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Invites users to a channel.
     https://api.slack.com/methods/conversations.invite
     &#34;&#34;&#34;
-    kwargs.update({&#34;channel&#34;: channel})
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;force&#34;: force,
+        }
+    )
     if isinstance(users, (list, Tuple)):
         kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
     else:

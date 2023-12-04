@@ -162,30 +162,17 @@ __all__ = [
         else:
             self.bot_scopes = bot_scopes
         self.bot_refresh_token = bot_refresh_token
+
         if bot_token_expires_at is not None:
-            if type(bot_token_expires_at) == datetime:
-                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())  # type: ignore
-            elif type(bot_token_expires_at) == str and not re.match(&#34;^\\d+$&#34;, bot_token_expires_at):
-                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
-            else:
-                self.bot_token_expires_at = int(bot_token_expires_at)
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
             self.bot_token_expires_at = None
+
         self.is_enterprise_install = is_enterprise_install or False
 
-        if type(installed_at) == float:
-            self.installed_at = installed_at  # type: ignore
-        elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()  # type: ignore
-        elif type(installed_at) == str:
-            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
-                self.installed_at = float(installed_at)
-            else:
-                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
-        else:
-            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+        self.installed_at = _timestamp_to_type(installed_at, float)
 
         self.custom_values = custom_values if custom_values is not None else {}
 
@@ -340,7 +327,7 @@ __all__ = [
 </dd>
 <dt id="slack_sdk.oauth.installation_store.FileInstallationStore"><code class="flex name class">
 <span>class <span class="ident">FileInstallationStore</span></span>
-<span>(</span><span>*, base_dir: str = '/Users/seratch/.bolt-app-installation', historical_data_enabled: bool = True, client_id: Optional[str] = None, logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.file (WARNING)&gt;)</span>
+<span>(</span><span>*, base_dir: str = '/Users/kazuhiro.sera/.bolt-app-installation', historical_data_enabled: bool = True, client_id: Optional[str] = None, logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.file (WARNING)&gt;)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The installation store interface.</p>
@@ -429,6 +416,10 @@ the following methods should be implemented.</p>
                 f.write(entity)
 
     def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            return
+
         none = &#34;none&#34;
         e_id = bot.enterprise_id or none
         t_id = bot.team_id or none
@@ -521,10 +512,13 @@ the following methods should be implemented.</p>
                 data = json.loads(f.read())
                 installation = Installation(**data)
 
-            if installation is not None and user_id is not None:
+            has_user_installation = user_id is not None and installation is not None
+            no_bot_token_installation = installation is not None and installation.bot_token is None
+            should_find_bot_installation = has_user_installation or no_bot_token_installation
+            if should_find_bot_installation:
                 # Retrieve the latest bot token, just in case
                 # See also: https://github.com/slackapi/bolt-python/issues/664
-                latest_bot_installation = self.find_installation(
+                latest_bot_installation = self.find_bot(
                     enterprise_id=enterprise_id,
                     team_id=team_id,
                     is_enterprise_install=is_enterprise_install,
@@ -781,14 +775,9 @@ def logger(self) -&gt; Logger:
         else:
             self.bot_scopes = bot_scopes
         self.bot_refresh_token = bot_refresh_token
+
         if bot_token_expires_at is not None:
-            if type(bot_token_expires_at) == datetime:
-                ts: float = bot_token_expires_at.timestamp()  # type: ignore
-                self.bot_token_expires_at = int(ts)
-            elif type(bot_token_expires_at) == str and not re.match(&#34;^\\d+$&#34;, bot_token_expires_at):
-                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
-            else:
-                self.bot_token_expires_at = bot_token_expires_at  # type: ignore
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
@@ -801,14 +790,9 @@ def logger(self) -&gt; Logger:
         else:
             self.user_scopes = user_scopes
         self.user_refresh_token = user_refresh_token
+
         if user_token_expires_at is not None:
-            if type(user_token_expires_at) == datetime:
-                ts: float = user_token_expires_at.timestamp()  # type: ignore
-                self.user_token_expires_at = int(ts)
-            elif type(user_token_expires_at) == str and not re.match(&#34;^\\d+$&#34;, user_token_expires_at):
-                self.user_token_expires_at = int(_from_iso_format_to_unix_timestamp(user_token_expires_at))
-            else:
-                self.user_token_expires_at = user_token_expires_at  # type: ignore
+            self.user_token_expires_at = _timestamp_to_type(user_token_expires_at, int)
         elif user_token_expires_in is not None:
             self.user_token_expires_at = int(time()) + user_token_expires_in
         else:
@@ -824,17 +808,8 @@ def logger(self) -&gt; Logger:
 
         if installed_at is None:
             self.installed_at = datetime.now().timestamp()
-        elif type(installed_at) == float:
-            self.installed_at = installed_at  # type: ignore
-        elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()  # type: ignore
-        elif type(installed_at) == str:
-            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
-                self.installed_at = float(installed_at)
-            else:
-                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
         else:
-            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+            self.installed_at = _timestamp_to_type(installed_at, float)
 
         self.custom_values = custom_values if custom_values is not None else {}
 
