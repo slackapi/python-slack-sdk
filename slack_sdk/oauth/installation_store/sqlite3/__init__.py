@@ -59,9 +59,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 enterprise_url text,
                 team_id text not null default '',
                 team_name text,
-                bot_token text not null,
-                bot_id text not null,
-                bot_user_id text not null,
+                bot_token text,
+                bot_id text,
+                bot_user_id text,
                 bot_scopes text,
                 bot_refresh_token text,  -- since v3.8
                 bot_token_expires_at datetime,  -- since v3.8
@@ -224,6 +224,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         self.save_bot(installation.to_bot())
 
     def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug("Skipped saving a new row because of the absense of bot token in it")
+            return
+
         with self.connect() as conn:
             conn.execute(
                 """
