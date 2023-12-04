@@ -2895,12 +2895,18 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         channel: str,
         users: Union[str, Sequence[str]],
+        force: Optional[bool] = None,
         **kwargs,
     ) -&gt; Union[Future, SlackResponse]:
         &#34;&#34;&#34;Invites users to a channel.
         https://api.slack.com/methods/conversations.invite
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel&#34;: channel})
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;force&#34;: force,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
         else:
@@ -8057,12 +8063,18 @@ removed at anytime.</p></div>
         *,
         channel: str,
         users: Union[str, Sequence[str]],
+        force: Optional[bool] = None,
         **kwargs,
     ) -&gt; Union[Future, SlackResponse]:
         &#34;&#34;&#34;Invites users to a channel.
         https://api.slack.com/methods/conversations.invite
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel&#34;: channel})
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;force&#34;: force,
+            }
+        )
         if isinstance(users, (list, Tuple)):
             kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
         else:
@@ -14722,7 +14734,7 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.conversations_invite"><code class="name flex">
-<span>def <span class="ident">conversations_invite</span></span>(<span>self, *, channel: str, users: Union[str, Sequence[str]], **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+<span>def <span class="ident">conversations_invite</span></span>(<span>self, *, channel: str, users: Union[str, Sequence[str]], force: Optional[bool] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Invites users to a channel.
@@ -14736,12 +14748,18 @@ Each authorization represents an app installation that the event is visible to.
     *,
     channel: str,
     users: Union[str, Sequence[str]],
+    force: Optional[bool] = None,
     **kwargs,
 ) -&gt; Union[Future, SlackResponse]:
     &#34;&#34;&#34;Invites users to a channel.
     https://api.slack.com/methods/conversations.invite
     &#34;&#34;&#34;
-    kwargs.update({&#34;channel&#34;: channel})
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;force&#34;: force,
+        }
+    )
     if isinstance(users, (list, Tuple)):
         kwargs.update({&#34;users&#34;: &#34;,&#34;.join(users)})
     else:

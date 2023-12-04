@@ -209,6 +209,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     c.client_id == self.client_id,
                     c.enterprise_id == enterprise_id,
                     c.team_id == team_id,
+                    c.bot_token.is_not(None),  # the latest one that has a bot token
                 )
             )
             .order_by(desc(c.installed_at))
@@ -294,25 +295,24 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     installed_at=row["installed_at"],
                 )
 
-        if user_id is not None and installation is not None:
+        has_user_installation = user_id is not None and installation is not None
+        no_bot_token_installation = installation is not None and installation.bot_token is None
+        should_find_bot_installation = has_user_installation or no_bot_token_installation
+        if should_find_bot_installation:
             # Retrieve the latest bot token, just in case
             # See also: https://github.com/slackapi/bolt-python/issues/664
-            where_clause = and_(
-                c.client_id == self.client_id,
-                c.enterprise_id == enterprise_id,
-                c.team_id == team_id,
-                c.bot_token.is_not(None),  # the latest one that has a bot token
+            latest_bot_installation = self.find_bot(
+                enterprise_id=enterprise_id,
+                team_id=team_id,
+                is_enterprise_install=is_enterprise_install,
             )
-            query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
-            with self.engine.connect() as conn:
-                result: object = conn.execute(query)
-                for row in result.mappings():  # type: ignore
-                    installation.bot_token = row["bot_token"]
-                    installation.bot_id = row["bot_id"]
-                    installation.bot_user_id = row["bot_user_id"]
-                    installation.bot_scopes = row["bot_scopes"]
-                    installation.bot_refresh_token = row["bot_refresh_token"]
-                    installation.bot_token_expires_at = row["bot_token_expires_at"]
+            if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                installation.bot_id = latest_bot_installation.bot_id
+                installation.bot_user_id = latest_bot_installation.bot_user_id
+                installation.bot_token = latest_bot_installation.bot_token
+                installation.bot_scopes = latest_bot_installation.bot_scopes
+                installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
 
         return installation
 

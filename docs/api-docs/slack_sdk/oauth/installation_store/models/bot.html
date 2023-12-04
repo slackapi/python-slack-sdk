@@ -26,14 +26,11 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import re
-from datetime import datetime  # type: ignore
+<pre><code class="python">from datetime import datetime  # type: ignore
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
-from slack_sdk.oauth.installation_store.internals import (
-    _from_iso_format_to_unix_timestamp,
-)
+from slack_sdk.oauth.installation_store.internals import _timestamp_to_type
 
 
 class Bot:
@@ -98,30 +95,17 @@ class Bot:
         else:
             self.bot_scopes = bot_scopes
         self.bot_refresh_token = bot_refresh_token
+
         if bot_token_expires_at is not None:
-            if type(bot_token_expires_at) == datetime:
-                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())  # type: ignore
-            elif type(bot_token_expires_at) == str and not re.match(&#34;^\\d+$&#34;, bot_token_expires_at):
-                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
-            else:
-                self.bot_token_expires_at = int(bot_token_expires_at)
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
             self.bot_token_expires_at = None
+
         self.is_enterprise_install = is_enterprise_install or False
 
-        if type(installed_at) == float:
-            self.installed_at = installed_at  # type: ignore
-        elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()  # type: ignore
-        elif type(installed_at) == str:
-            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
-                self.installed_at = float(installed_at)
-            else:
-                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
-        else:
-            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+        self.installed_at = _timestamp_to_type(installed_at, float)
 
         self.custom_values = custom_values if custom_values is not None else {}
 
@@ -235,30 +219,17 @@ class Bot:
         else:
             self.bot_scopes = bot_scopes
         self.bot_refresh_token = bot_refresh_token
+
         if bot_token_expires_at is not None:
-            if type(bot_token_expires_at) == datetime:
-                self.bot_token_expires_at = int(bot_token_expires_at.timestamp())  # type: ignore
-            elif type(bot_token_expires_at) == str and not re.match(&#34;^\\d+$&#34;, bot_token_expires_at):
-                self.bot_token_expires_at = int(_from_iso_format_to_unix_timestamp(bot_token_expires_at))
-            else:
-                self.bot_token_expires_at = int(bot_token_expires_at)
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
         elif bot_token_expires_in is not None:
             self.bot_token_expires_at = int(time()) + bot_token_expires_in
         else:
             self.bot_token_expires_at = None
+
         self.is_enterprise_install = is_enterprise_install or False
 
-        if type(installed_at) == float:
-            self.installed_at = installed_at  # type: ignore
-        elif type(installed_at) == datetime:
-            self.installed_at = installed_at.timestamp()  # type: ignore
-        elif type(installed_at) == str:
-            if re.match(&#34;^\\d+.\\d+$&#34;, installed_at):
-                self.installed_at = float(installed_at)
-            else:
-                self.installed_at = _from_iso_format_to_unix_timestamp(installed_at)
-        else:
-            raise ValueError(f&#34;Unsupported data format for installed_at {installed_at}&#34;)
+        self.installed_at = _timestamp_to_type(installed_at, float)
 
         self.custom_values = custom_values if custom_values is not None else {}
 

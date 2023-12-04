@@ -242,3 +242,58 @@ class TestAmazonS3(unittest.TestCase):
         self.assertIsNone(i)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
+
+    def test_issue_1441_mixing_user_and_bot_installations(self):
+        store = self.build_store()
+
+        bot_installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+        store.save(bot_installation)
+
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
+        self.assertIsNone(bot)
+
+        installation = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(installation.bot_token)
+        installation = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(installation)
+        installation = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(installation)
+
+        user_installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_scopes=["openid"],
+            user_token="xoxp-111",
+        )
+        store.save(user_installation)
+
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot.bot_token)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
+        self.assertIsNone(bot)
+
+        installation = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(installation.bot_token)
+        installation = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(installation)
+        installation = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(installation)

@@ -77,6 +77,10 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 f.write(entity)
 
     def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug("Skipped saving a new row because of the absense of bot token in it")
+            return
+
         none = "none"
         e_id = bot.enterprise_id or none
         t_id = bot.team_id or none
@@ -169,10 +173,13 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 data = json.loads(f.read())
                 installation = Installation(**data)
 
-            if installation is not None and user_id is not None:
+            has_user_installation = user_id is not None and installation is not None
+            no_bot_token_installation = installation is not None and installation.bot_token is None
+            should_find_bot_installation = has_user_installation or no_bot_token_installation
+            if should_find_bot_installation:
                 # Retrieve the latest bot token, just in case
                 # See also: https://github.com/slackapi/bolt-python/issues/664
-                latest_bot_installation = self.find_installation(
+                latest_bot_installation = self.find_bot(
                     enterprise_id=enterprise_id,
                     team_id=team_id,
                     is_enterprise_install=is_enterprise_install,

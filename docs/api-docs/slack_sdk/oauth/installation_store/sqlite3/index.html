@@ -87,9 +87,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 enterprise_url text,
                 team_id text not null default &#39;&#39;,
                 team_name text,
-                bot_token text not null,
-                bot_id text not null,
-                bot_user_id text not null,
+                bot_token text,
+                bot_id text,
+                bot_user_id text,
                 bot_scopes text,
                 bot_refresh_token text,  -- since v3.8
                 bot_token_expires_at datetime,  -- since v3.8
@@ -252,6 +252,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
         self.save_bot(installation.to_bot())
 
     def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            return
+
         with self.connect() as conn:
             conn.execute(
                 &#34;&#34;&#34;
@@ -723,9 +727,9 @@ the following methods should be implemented.</p>
                 enterprise_url text,
                 team_id text not null default &#39;&#39;,
                 team_name text,
-                bot_token text not null,
-                bot_id text not null,
-                bot_user_id text not null,
+                bot_token text,
+                bot_id text,
+                bot_user_id text,
                 bot_scopes text,
                 bot_refresh_token text,  -- since v3.8
                 bot_token_expires_at datetime,  -- since v3.8
@@ -888,6 +892,10 @@ the following methods should be implemented.</p>
         self.save_bot(installation.to_bot())
 
     def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            return
+
         with self.connect() as conn:
             conn.execute(
                 &#34;&#34;&#34;
@@ -1335,9 +1343,9 @@ def logger(self) -&gt; Logger:
             enterprise_url text,
             team_id text not null default &#39;&#39;,
             team_name text,
-            bot_token text not null,
-            bot_id text not null,
-            bot_user_id text not null,
+            bot_token text,
+            bot_id text,
+            bot_user_id text,
             bot_scopes text,
             bot_refresh_token text,  -- since v3.8
             bot_token_expires_at datetime,  -- since v3.8
