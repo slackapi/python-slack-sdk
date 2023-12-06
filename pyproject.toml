@@ -1,4 +1,69 @@
-# black project prefers pyproject.toml
-# that's why we have this file in addition to other setting files
+[build-system]
+requires = ["setuptools", "pytest-runner"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slack_sdk"
+dynamic = ["version", "readme", "authors"]
+description = "The Slack API Platform SDK for Python"
+license = { text = "MIT" }
+requires-python = ">=3.6"
+keywords = [
+	"slack",
+	"slack-api",
+	"web-api",
+	"slack-rtm",
+	"websocket",
+	"chat",
+	"chatbot",
+	"chatops",
+]
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"Topic :: Communications :: Chat",
+	"Topic :: System :: Networking",
+	"Topic :: Office/Business",
+	"License :: OSI Approved :: MIT License",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: 3.6",
+	"Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"Programming Language :: Python :: Implementation :: PyPy",
+]
+
+
+[project.urls]
+Documentation = "https://slack.dev/python-slack-sdk/"
+
+[tool.setuptools.packages.find]
+include = ["slack*", "slack_sdk*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "slack_sdk.version.__version__" }
+readme = { file = ["README.md"], content-type = "text/markdown" }
+
+[tool.distutils.bdist_wheel]
+universal = true
+
 [tool.black]
 line-length = 125
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+log_file = "logs/pytest.log"
+log_file_level = "DEBUG"
+log_format = "%(asctime)s %(levelname)s %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+filterwarnings = [
+	"ignore:\"@coroutine\" decorator is deprecated since Python 3.8, use \"async def\" instead:DeprecationWarning",
+	"ignore:The loop argument is deprecated since Python 3.8, and scheduled for removal in Python 3.10.:DeprecationWarning",
+	"ignore:slack.* package is deprecated. Please use slack_sdk.* package instead.*:UserWarning",
+]
+asyncio_mode = "auto"

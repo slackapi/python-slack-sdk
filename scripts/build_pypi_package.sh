@@ -8,5 +8,4 @@ pip install -U pip && \
   pip install twine build && \
   rm -rf dist/ build/ slack_sdk.egg-info/ && \
   python -m build --sdist --wheel && \
-  twine check dist/* && \
-  twine upload dist/*
+  twine check dist/*

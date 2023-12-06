@@ -1,51 +1,21 @@
 # -*- coding: utf-8 -*-
-import codecs
 import os
 import subprocess
 import sys
-from shutil import rmtree
 
-from setuptools import setup, find_packages, Command
+from setuptools import setup, Command
+
+###################################################################################
+#  Legacy package configuration, prefer pyproject.toml over setup.cfg or setup.py #
+###################################################################################
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = None
-exec(open(f"{here}/slack_sdk/version.py").read())
-
-long_description = ""
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as readme:
-    long_description = readme.read()
-
-validate_dependencies = [
-    "pytest>=7.0.1,<8",
-    "pytest-asyncio<1",  # for async
-    "Flask-Sockets>=0.2,<1",
-    "Flask>=1,<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
-    "Werkzeug<2",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
-    "itsdangerous==1.1.0",  # TODO: Flask-Sockets is not yet compatible with Flask 2.x
-    "Jinja2==3.0.3",  # https://github.com/pallets/flask/issues/4494
-    "pytest-cov>=2,<3",
-    # while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
-    # so 5.x should be kept in order to stay compatible with Python 3.6/3.7
-    "flake8>=5.0.4,<7",
-    # Don't change this version without running CI builds;
-    # The latest version may not be available for older Python runtime
-    "black==22.8.0",
-    "click==8.0.4",  # black is affected by https://github.com/pallets/click/issues/2225
-    "psutil>=5,<6",
-    # used only under slack_sdk/*_store
-    "boto3<=2",
-    "moto>=3,<4",  # For AWS tests
-]
 codegen_dependencies = [
     # Don't change this version without running CI builds;
     # The latest version may not be available for older Python runtime
     "black==22.10.0",
 ]
-
-needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
-pytest_runner = ["pytest-runner"] if needs_pytest else []
-
 
 class BaseCommand(Command):
     user_options = []
@@ -67,37 +37,6 @@ class BaseCommand(Command):
             subprocess.check_call(command)
         except subprocess.CalledProcessError as error:
             sys.exit(error.returncode)
-
-
-class UploadCommand(BaseCommand):
-    """Support setup.py upload. Thanks @kennethreitz!"""
-
-    description = "Build and publish the package."
-
-    def run(self):
-        self._run(
-            "Installing upload dependencies ...",
-            [sys.executable, "-m", "pip", "install", "wheel"],
-        )
-        try:
-            self.status("Removing previous builds ...")
-            rmtree(os.path.join(here, "dist"))
-            rmtree(os.path.join(here, "build"))
-        except OSError:
-            pass
-
-        self._run(
-            "Building Source and Wheel (universal) distribution ...",
-            [sys.executable, "setup.py", "sdist", "bdist_wheel", "--universal"],
-        )
-        self._run(
-            "Installing Twine dependency ...",
-            [sys.executable, "-m", "pip", "install", "twine"],
-        )
-        self._run(
-            "Uploading the package to PyPI via Twine ...",
-            [sys.executable, "-m", "twine", "upload", "dist/*"],
-        )
 
 
 class CodegenCommand(BaseCommand):
@@ -212,7 +151,7 @@ class ValidateCommand(BaseCommand):
     def run(self):
         self._run(
             "Installing test dependencies ...",
-            [sys.executable, "-m", "pip", "install"] + validate_dependencies,
+            [sys.executable, "-m", "pip", "install", "-r", "requirements/testing.txt"],
         )
 
         self._run("Running black for legacy packages ...", [sys.executable, "-m", "black", f"{here}/slack"])
@@ -285,81 +224,7 @@ class IntegrationTestsCommand(BaseCommand):
 
 
 setup(
-    name="slack_sdk",
-    version=__version__,
-    description="The Slack API Platform SDK for Python",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/slackapi/python-slack-sdk",
-    author="Slack Technologies, LLC",
-    author_email="opensource@slack.com",
-    python_requires=">=3.6.0",
-    include_package_data=True,
-    license="MIT",
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Topic :: Communications :: Chat",
-        "Topic :: System :: Networking",
-        "Topic :: Office/Business",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
-    ],
-    keywords="slack slack-api web-api slack-rtm websocket chat chatbot chatops",
-    packages=find_packages(
-        exclude=[
-            "docs",
-            "docs-src",
-            "docs-v2",
-            "docs-src-v2",
-            "docs-v3",
-            "docs-src-v3",
-            "integration_tests",
-            "integration_tests_legacy",
-            "tests",
-            "tests.*",
-            "tutorial",
-        ]
-    ),
-    install_requires=[],
-    extras_require={
-        # pip install -e ".[testing]"
-        "testing": validate_dependencies,
-        # pip install -e ".[optional]"
-        "optional": [
-            # async modules depend on aiohttp
-            "aiodns>1.0",
-            # We recommend using 3.7.1+ for RTMClient
-            # https://github.com/slackapi/python-slack-sdk/issues/912
-            "aiohttp>=3.7.3,<4",
-            # used only under slack_sdk/*_store
-            "boto3<=2",
-            # InstallationStore/OAuthStateStore
-            # Since v3.20, we no longer support SQLAlchemy 1.3 or older.
-            # If you need to use a legacy version, please add our v3.19.5 code to your project.
-            "SQLAlchemy>=1.4,<3",
-            # Socket Mode
-            # websockets 9 is not compatible with Python 3.10
-            "websockets>=10,<11" if sys.version_info.minor > 6 else "websockets>=9.1,<10",
-            "websocket-client>=1,<2",
-        ],
-    },
-    setup_requires=pytest_runner,
-    test_suite="tests",
-    tests_require=validate_dependencies,
     cmdclass={
-        "upload": UploadCommand,
         "codegen": CodegenCommand,
         "validate": ValidateCommand,
         "unit_tests": UnitTestsCommand,

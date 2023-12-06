@@ -36,8 +36,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -U pip wheel
-        pip install -e ".[testing]"
-        pip install -e ".[optional]"
+        pip install -r requirements/testing.txt
+        pip install -r requirements/optional.txt
     - name: Run validation (black/flake8/pytest)
       run: |
         python setup.py validate
