@@ -3,22 +3,16 @@
 # all: ./scripts/run_integration_tests.sh
 # single: ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 
+set -e
+
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-test_target="$1"
-python_version=`python --version | awk '{print $2}'`
-pip install -U pip && \
-  pip install -r requirements/testing.txt && \
-  pip install -r requirements/optional.txt && \
+pip install -U pip
+pip install -r requirements/testing.txt \
+  -r requirements/optional.txt
 
-if [[ $test_target != "" ]]
-then
-  black slack_sdk/ slack/ tests/ && \
-    python setup.py codegen && \
-    python setup.py integration_tests --test-target $1
-else
-  black slack_sdk/ slack/ tests/ && \
-    python setup.py codegen && \
-    python setup.py integration_tests
-fi
+python setup.py codegen
+
+test_target="${1:-integration_tests/}"
+python setup.py integration_tests --test-target $test_target
