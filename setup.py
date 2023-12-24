@@ -11,11 +11,6 @@ from setuptools import setup, Command
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-codegen_dependencies = [
-    # Don't change this version without running CI builds;
-    # The latest version may not be available for older Python runtime
-    "black==22.10.0",
-]
 
 class BaseCommand(Command):
     user_options = []
@@ -41,11 +36,6 @@ class BaseCommand(Command):
 
 class CodegenCommand(BaseCommand):
     def run(self):
-        self._run(
-            "Installing required dependencies ...",
-            [sys.executable, "-m", "pip", "install"] + codegen_dependencies,
-        )
-
         header = (
             "# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
             "#\n"
@@ -149,16 +139,28 @@ class ValidateCommand(BaseCommand):
         self.test_target = ""
 
     def run(self):
-        self._run(
-            "Installing test dependencies ...",
-            [sys.executable, "-m", "pip", "install", "-r", "requirements/testing.txt"],
-        )
+        def run_black(target, target_name=None):
+            self._run(
+                f"Running black for {target_name or target} ...",
+                [sys.executable, "-m", "black", "--check", f"{here}/{target}"],
+            )
 
-        self._run("Running black for legacy packages ...", [sys.executable, "-m", "black", f"{here}/slack"])
-        self._run("Running black for slack_sdk package ...", [sys.executable, "-m", "black", f"{here}/slack_sdk"])
+        run_black("slack", "legacy packages")
+        run_black("slack_sdk", "slack_sdk package")
+        run_black("tests")
+        run_black("integration_tests")
 
-        self._run("Running flake8 for legacy packages ...", [sys.executable, "-m", "flake8", f"{here}/slack"])
-        self._run("Running flake8 for slack_sdk package ...", [sys.executable, "-m", "flake8", f"{here}/slack_sdk"])
+        def run_flake8(target, target_name=None):
+            self._run(
+                f"Running flake8 for {target_name or target} ...",
+                [sys.executable, "-m", "flake8", f"{here}/{target}"],
+            )
+
+        run_flake8("slack", "legacy packages")
+        run_flake8("slack_sdk", "slack_sdk package")
+        # TODO: resolve linting errors for tests
+        # run_flake8("tests")
+        # run_flake8("integration_tests")
 
         target = self.test_target.replace("tests/", "", 1)
         self._run(
@@ -175,7 +177,7 @@ class ValidateCommand(BaseCommand):
 
 
 class UnitTestsCommand(BaseCommand):
-    """Support setup.py validate."""
+    """Support setup.py unit_tests."""
 
     description = "Run unit tests (pytest)."
     user_options = [("test-target=", "i", "tests/{test-target}")]

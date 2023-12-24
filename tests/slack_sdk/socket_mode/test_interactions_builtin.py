@@ -4,6 +4,8 @@ import unittest
 from random import randint
 from threading import Thread
 
+import pytest
+
 from slack_sdk.errors import SlackClientConfigurationError, SlackClientNotConnectedError
 from slack_sdk.socket_mode.request import SocketModeRequest
 
@@ -66,7 +68,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
         try:
             buffer_size_list = [1024, 9000, 35, 49] + list([randint(16, 128) for _ in range(10)])
             for buffer_size in buffer_size_list:
-                self.reset_sever_state()
+                self.reset_server_state()
 
                 received_messages = []
                 received_socket_mode_requests = []
@@ -127,8 +129,8 @@ class TestInteractionsBuiltin(unittest.TestCase):
             # Restore the default value
             sys.setrecursionlimit(default_recursion_limit)
             client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)
 
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 
@@ -141,7 +143,7 @@ class TestInteractionsBuiltin(unittest.TestCase):
         time.sleep(2)  # wait for the server
 
         try:
-            self.reset_sever_state()
+            self.reset_server_state()
             client = SocketModeClient(
                 app_token="xapp-A111-222-xyz",
                 web_client=self.web_client,
@@ -155,16 +157,13 @@ class TestInteractionsBuiltin(unittest.TestCase):
 
             client.disconnect()
             time.sleep(1)  # wait for the connection
-            try:
+            with pytest.raises(SlackClientNotConnectedError):
                 client.send_message("foo")
-                self.fail("SlackClientNotConnectedError is expected here")
-            except SlackClientNotConnectedError as _:
-                pass
 
             client.connect()
             time.sleep(1)  # wait for the connection
             client.send_message("foo")
         finally:
             client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)

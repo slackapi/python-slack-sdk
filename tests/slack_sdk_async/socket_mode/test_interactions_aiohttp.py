@@ -5,7 +5,9 @@ import unittest
 from random import randint
 from threading import Thread
 
+import pytest
 from aiohttp import WSMessage
+
 from slack_sdk.socket_mode.request import SocketModeRequest
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
@@ -87,7 +89,9 @@ class TestInteractionsAiohttp(unittest.TestCase):
             expected.sort()
 
             count = 0
-            while count < 10 and len(received_messages) < len(expected):
+            while count < 10 and (
+                len(received_messages) < len(expected) or len(received_socket_mode_requests) < len(socket_mode_envelopes)
+            ):
                 await asyncio.sleep(0.2)
                 count += 0.2
 
@@ -97,8 +101,8 @@ class TestInteractionsAiohttp(unittest.TestCase):
             self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             await client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)
 
     @async_test
     async def test_send_message_while_disconnection(self):
@@ -124,16 +128,13 @@ class TestInteractionsAiohttp(unittest.TestCase):
 
             await client.disconnect()
             await asyncio.sleep(1)  # wait for the message receiver
-            try:
+            with pytest.raises(ConnectionError):
                 await client.send_message("foo")
-                self.fail("ConnectionError is expected here")
-            except ConnectionError as _:
-                pass
 
             await client.connect()
             await asyncio.sleep(1)  # wait for the message receiver
             await client.send_message("foo")
         finally:
             await client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)

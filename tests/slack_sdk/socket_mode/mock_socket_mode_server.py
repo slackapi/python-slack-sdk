@@ -1,5 +1,9 @@
+import asyncio
 import logging
 import os
+
+from aiohttp import WSMsgType, web
+
 
 socket_mode_envelopes = [
     """{"envelope_id":"1d3c79ab-0ffb-41f3-a080-d19e85f53649","payload":{"token":"verification-token","team_id":"T111","team_domain":"xxx","channel_id":"C111","channel_name":"random","user_id":"U111","user_name":"testxyz","command":"/hello-socket-mode","text":"","api_app_id":"A111","response_url":"https://hooks.slack.com/commands/T111/111/xxx","trigger_id":"111.222.xxx"},"type":"slash_commands","accepts_response_payload":true}""",
@@ -20,50 +24,61 @@ if os.environ.get("CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED") == "1":
 
 socket_mode_hello_message = """{"type":"hello","num_connections":2,"debug_info":{"host":"applink-111-xxx","build_number":10,"approximate_connection_time":18060},"connection_info":{"app_id":"A111"}}"""
 
-from flask import Flask
-from flask_sockets import Sockets
-
 
 def start_socket_mode_server(self, port: int):
-    def _start_socket_mode_server():
-        logger = logging.getLogger(__name__)
-        app: Flask = Flask(__name__)
-        sockets: Sockets = Sockets(app)
+    logger = logging.getLogger(__name__)
+    state = {}
 
-        state = {
-            "hello_sent": False,
-            "envelopes_to_consume": list(socket_mode_envelopes),
-        }
+    def reset_server_state():
+        state.update(
+            hello_sent=False,
+            envelopes_to_consume=list(socket_mode_envelopes),
+        )
 
-        @sockets.route("/link")
-        def link(ws):
-            while not ws.closed:
-                message = ws.read_message()
-                if message is not None:
-                    if not state["hello_sent"]:
-                        ws.send(socket_mode_hello_message)
-                        state["hello_sent"] = True
+    self.reset_server_state = reset_server_state
 
-                    if len(state.get("envelopes_to_consume")) > 0:
-                        e = state.get("envelopes_to_consume").pop(0)
-                        logger.debug(f"Send an envelope: {e}")
-                        ws.send(e)
+    async def link(request):
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
 
-                    logger.debug(f"Server received a message: {message}")
-                    ws.send(message)
+        async for msg in ws:
+            if msg.type != WSMsgType.TEXT:
+                continue
 
-        from gevent import pywsgi
-        from geventwebsocket.handler import WebSocketHandler
+            message = msg.data
+            logger.debug(f"Server received a message: {message}")
 
-        server = pywsgi.WSGIServer(("", port), app, handler_class=WebSocketHandler)
-        self.server = server
+            if not state["hello_sent"]:
+                state["hello_sent"] = True
+                await ws.send_str(socket_mode_hello_message)
 
-        def reset_sever_state():
-            state["hello_sent"] = False
-            state["envelopes_to_consume"] = list(socket_mode_envelopes)
+            if state["envelopes_to_consume"]:
+                e = state["envelopes_to_consume"].pop(0)
+                logger.debug(f"Send an envelope: {e}")
+                await ws.send_str(e)
 
-        self.reset_sever_state = reset_sever_state
+            await ws.send_str(message)
 
-        server.serve_forever(stop_timeout=1)
+        return ws
 
-    return _start_socket_mode_server
+    app = web.Application()
+    app.add_routes([web.get("/link", link)])
+    runner = web.AppRunner(app)
+
+    def run_server():
+        reset_server_state()
+
+        self.loop = loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(runner.setup())
+        site = web.TCPSite(runner, "127.0.0.1", port, reuse_port=True)
+        loop.run_until_complete(site.start())
+
+        # run until it's stopped from the main thread
+        loop.run_forever()
+
+        loop.run_until_complete(runner.cleanup())
+        loop.run_until_complete(asyncio.sleep(1))
+        loop.close()
+
+    return run_server
