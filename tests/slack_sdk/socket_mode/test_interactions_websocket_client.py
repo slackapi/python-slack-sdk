@@ -83,7 +83,9 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             expected.sort()
 
             count = 0
-            while count < 10 and len(received_messages) < len(expected):
+            while count < 10 and (
+                len(received_messages) < len(expected) or len(received_socket_mode_requests) < len(socket_mode_envelopes)
+            ):
                 time.sleep(0.2)
                 count += 0.2
 
@@ -93,8 +95,8 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)
 
     def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
@@ -105,7 +107,6 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
         time.sleep(2)  # wait for the server
 
         try:
-            self.reset_sever_state()
             client = SocketModeClient(
                 app_token="xapp-A111-222-xyz",
                 web_client=self.web_client,
@@ -131,5 +132,5 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             client.send_message("foo")
         finally:
             client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)

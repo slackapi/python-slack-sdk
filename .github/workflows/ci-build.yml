@@ -26,6 +26,7 @@ jobs:
     env:
       PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
+      FORCE_COLOR: '1'
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -35,9 +36,12 @@ jobs:
         cache: pip
     - name: Install dependencies
       run: |
-        pip install -U pip wheel
+        pip install -U pip setuptools wheel
         pip install -r requirements/testing.txt
         pip install -r requirements/optional.txt
+    - name: Run codegen
+      run: |
+        python setup.py codegen
     - name: Run validation (black/flake8/pytest)
       run: |
         python setup.py validate

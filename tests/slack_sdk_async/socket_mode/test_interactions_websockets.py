@@ -6,6 +6,7 @@ from random import randint
 from threading import Thread
 from typing import Optional
 
+import pytest
 from websockets.exceptions import WebSocketException
 
 from slack_sdk.socket_mode.request import SocketModeRequest
@@ -102,8 +103,8 @@ class TestInteractionsWebsockets(unittest.TestCase):
             self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             await client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)
 
     @async_test
     async def test_send_message_while_disconnection(self):
@@ -129,16 +130,13 @@ class TestInteractionsWebsockets(unittest.TestCase):
 
             await client.disconnect()
             await asyncio.sleep(1)  # wait for the message receiver
-            try:
+            with pytest.raises(WebSocketException):
                 await client.send_message("foo")
-                self.fail("WebSocketException is expected here")
-            except WebSocketException as _:
-                pass
 
             await client.connect()
             await asyncio.sleep(1)  # wait for the message receiver
             await client.send_message("foo")
         finally:
             await client.close()
-            self.server.stop()
-            self.server.close()
+            self.loop.stop()
+            t.join(timeout=5)
