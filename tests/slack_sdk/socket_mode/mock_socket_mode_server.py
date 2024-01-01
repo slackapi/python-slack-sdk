@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import time
 
 from aiohttp import WSMsgType, web
 
@@ -23,6 +24,8 @@ if os.environ.get("CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED") == "1":
     ]
 
 socket_mode_hello_message = """{"type":"hello","num_connections":2,"debug_info":{"host":"applink-111-xxx","build_number":10,"approximate_connection_time":18060},"connection_info":{"app_id":"A111"}}"""
+
+socket_mode_disconnect_message = """{"type":"disconnect","reason":"too_many_websockets","num_connections":2,"debug_info":{"host":"applink-111-xxx"},"connection_info":{"app_id":"A111"}}"""
 
 
 def start_socket_mode_server(self, port: int):
@@ -53,6 +56,80 @@ def start_socket_mode_server(self, port: int):
                 await ws.send_str(socket_mode_hello_message)
 
             if state["envelopes_to_consume"]:
+                e = state["envelopes_to_consume"].pop(0)
+                logger.debug(f"Send an envelope: {e}")
+                await ws.send_str(e)
+
+            await ws.send_str(message)
+
+        return ws
+
+    app = web.Application()
+    app.add_routes([web.get("/link", link)])
+    runner = web.AppRunner(app)
+
+    def run_server():
+        reset_server_state()
+
+        self.loop = loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(runner.setup())
+        site = web.TCPSite(runner, "127.0.0.1", port, reuse_port=True)
+        loop.run_until_complete(site.start())
+
+        # run until it's stopped from the main thread
+        loop.run_forever()
+
+        loop.run_until_complete(runner.cleanup())
+        loop.run_until_complete(asyncio.sleep(1))
+        loop.close()
+
+    return run_server
+
+
+def start_socket_mode_server_with_disconnection(self, port: int):
+    logger = logging.getLogger(__name__)
+    state = {}
+
+    def reset_server_state():
+        state.update(
+            hello_sent=False,
+            disconnect_sent=False,
+            envelopes_to_consume=list(socket_mode_envelopes),
+        )
+
+    self.reset_server_state = reset_server_state
+
+    async def link(request):
+        disconnected = False
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
+
+        async for msg in ws:
+            # To ensure disconnect message is received and handled,
+            # need to keep this ws alive to bypass client ping-pong check.
+            if msg.type == WSMsgType.PING:
+                t = time.time()
+                await ws.pong(f"sdk-ping-pong:{t}")
+                continue
+            if msg.type != WSMsgType.TEXT:
+                continue
+
+            message = msg.data
+            logger.debug(f"Server received a message: {message}")
+
+            if not state["hello_sent"]:
+                state["hello_sent"] = True
+                await ws.send_str(socket_mode_hello_message)
+
+            if not state["disconnect_sent"]:
+                state["hello_sent"] = False
+                state["disconnect_sent"] = True
+                disconnected = True
+                await ws.send_str(socket_mode_disconnect_message)
+                logger.debug(f"Disconnect message sent")
+
+            if state["envelopes_to_consume"] and not disconnected:
                 e = state["envelopes_to_consume"].pop(0)
                 logger.debug(f"Send an envelope: {e}")
                 await ws.send_str(e)
