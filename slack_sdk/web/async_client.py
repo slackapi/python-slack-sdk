@@ -4978,7 +4978,7 @@ class AsyncWebClient(AsyncBaseClient):
     ) -> AsyncSlackResponse:
         """Open a view for a user.
         https://api.slack.com/methods/views.open
-        See https://api.slack.com/block-kit/surfaces/modals for details.
+        See https://api.slack.com/surfaces/modals for details.
         """
         kwargs.update({"trigger_id": trigger_id})
         if isinstance(view, View):
@@ -5000,7 +5000,7 @@ class AsyncWebClient(AsyncBaseClient):
         Push a new view onto the existing view stack by passing a view
         payload and a valid trigger_id generated from an interaction
         within the existing modal.
-        Read the modals documentation (https://api.slack.com/block-kit/surfaces/modals)
+        Read the modals documentation (https://api.slack.com/surfaces/modals)
         to learn more about the lifecycle and intricacies of views.
         https://api.slack.com/methods/views.push
         """
@@ -5025,7 +5025,7 @@ class AsyncWebClient(AsyncBaseClient):
         """Update an existing view.
         Update a view by passing a new view definition along with the
         view_id returned in views.open or the external_id.
-        See the modals documentation (https://api.slack.com/block-kit/surfaces/modals#updating_views)
+        See the modals documentation (https://api.slack.com/surfaces/modals#updating_views)
         to learn more about updating views and avoiding race conditions with the hash argument.
         https://api.slack.com/methods/views.update
         """
