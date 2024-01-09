@@ -20,6 +20,8 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slack-sdk/](https://slack.dev/python-slack-sdk/)**
 
+---
+
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
 The **Python Slack SDK** allows interaction with:
