@@ -402,7 +402,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
                 break
             except Exception as e:
-                self.logger.exception(f"Failed to connect : {e}. Retrying...")
+                self.logger.exception(f"Failed to connect (error: {e}); Retrying...")
                 await asyncio.sleep(self.ping_interval)
 
     async def disconnect(self):
