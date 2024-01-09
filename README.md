@@ -1,14 +1,30 @@
-# Python Slack SDK
+<h1 style="text-align: center;" markdown="1">Python Slack SDK</h1>
+
+<div style="text-align: center;" markdown="1">
+    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
+        <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml?style=flat-square">
+    </a>
+    <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
+        <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk?style=flat-square">
+    </a>
+    <a href="https://pepy.tech/project/slack-sdk">
+        <img alt="Pepy Total Downlods" src="https://img.shields.io/pepy/dt/slack-sdk?style=flat-square">
+    </a>
+    <br>
+    <a href="https://pypi.org/project/slack-sdk/">
+        <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/slack-sdk?style=flat-square">
+    </a>
+    <a href="https://pypi.org/project/slack-sdk/">
+        <img alt="Python Version" src=" https://img.shields.io/pypi/pyversions/slack-sdk.svg?style=flat-square">
+    </a>
+    <a href="https://slack.dev/python-slack-sdk/">
+        <img alt="Documentation" src="https://img.shields.io/badge/dev-docs-yellow?style=flat-square">
+    </a>
+</div>
 
 The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
 **Comprehensive documentation on using the Slack Python can be found at [https://slack.dev/python-slack-sdk/](https://slack.dev/python-slack-sdk/)**
-
-[![pypi package][pypi-image]][pypi-url]
-[![Build Status][build-image]][build-url]
-[![Python Version][python-version]][pypi-url]
-[![codecov][codecov-image]][codecov-url]
-[![contact][contact-image]][contact-url]
 
 Whether you're building a custom app for your team, or integrating a third party service into your Slack workflows, Slack Developer Kit for Python allows you to leverage the flexibility of Python to get your project up and running as quickly as possible.
 
@@ -280,15 +296,6 @@ helpful and collaborative way.
 
 <!-- Markdown links -->
 
-[pypi-image]: https://badge.fury.io/py/slack-sdk.svg
-[pypi-url]: https://pypi.org/project/slack-sdk/
-[python-version]: https://img.shields.io/pypi/pyversions/slack-sdk.svg
-[build-image]: https://github.com/slackapi/python-slack-sdk/workflows/CI%20Build/badge.svg
-[build-url]: https://github.com/slackapi/python-slack-sdk/actions?query=workflow%3A%22CI+Build%22
-[codecov-image]: https://codecov.io/gh/slackapi/python-slack-sdk/branch/main/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/slackapi/python-slack-sdk
-[contact-image]: https://img.shields.io/badge/contact-support-green.svg
-[contact-url]: https://slack.com/support
 [slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
 [api-methods]: https://api.slack.com/methods
 [rtm-docs]: https://api.slack.com/rtm
@@ -299,4 +306,3 @@ helpful and collaborative way.
 [slack-community]: https://slackcommunity.com/
 [files_upload_v2]: https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0
 [aiohttp]: https://aiohttp.readthedocs.io/
-[urllib]: https://docs.python.org/3/library/urllib.request.html
