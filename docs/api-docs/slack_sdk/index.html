@@ -5208,7 +5208,7 @@ removed at anytime.</p></div>
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Open a view for a user.
         https://api.slack.com/methods/views.open
-        See https://api.slack.com/block-kit/surfaces/modals for details.
+        See https://api.slack.com/surfaces/modals for details.
         &#34;&#34;&#34;
         kwargs.update({&#34;trigger_id&#34;: trigger_id})
         if isinstance(view, View):
@@ -5230,7 +5230,7 @@ removed at anytime.</p></div>
         Push a new view onto the existing view stack by passing a view
         payload and a valid trigger_id generated from an interaction
         within the existing modal.
-        Read the modals documentation (https://api.slack.com/block-kit/surfaces/modals)
+        Read the modals documentation (https://api.slack.com/surfaces/modals)
         to learn more about the lifecycle and intricacies of views.
         https://api.slack.com/methods/views.push
         &#34;&#34;&#34;
@@ -5255,7 +5255,7 @@ removed at anytime.</p></div>
         &#34;&#34;&#34;Update an existing view.
         Update a view by passing a new view definition along with the
         view_id returned in views.open or the external_id.
-        See the modals documentation (https://api.slack.com/block-kit/surfaces/modals#updating_views)
+        See the modals documentation (https://api.slack.com/surfaces/modals#updating_views)
         to learn more about updating views and avoiding race conditions with the hash argument.
         https://api.slack.com/methods/views.update
         &#34;&#34;&#34;
@@ -13175,7 +13175,7 @@ multiparty direct message.</p></div>
 <dd>
 <div class="desc"><p>Open a view for a user.
 <a href="https://api.slack.com/methods/views.open">https://api.slack.com/methods/views.open</a>
-See <a href="https://api.slack.com/block-kit/surfaces/modals">https://api.slack.com/block-kit/surfaces/modals</a> for details.</p></div>
+See <a href="https://api.slack.com/surfaces/modals">https://api.slack.com/surfaces/modals</a> for details.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -13189,7 +13189,7 @@ See <a href="https://api.slack.com/block-kit/surfaces/modals">https://api.slack.
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Open a view for a user.
     https://api.slack.com/methods/views.open
-    See https://api.slack.com/block-kit/surfaces/modals for details.
+    See https://api.slack.com/surfaces/modals for details.
     &#34;&#34;&#34;
     kwargs.update({&#34;trigger_id&#34;: trigger_id})
     if isinstance(view, View):
@@ -13244,7 +13244,7 @@ app's Home tab (<a href="https://api.slack.com/surfaces/tabs">https://api.slack.
 Push a new view onto the existing view stack by passing a view
 payload and a valid trigger_id generated from an interaction
 within the existing modal.
-Read the modals documentation (<a href="https://api.slack.com/block-kit/surfaces/modals">https://api.slack.com/block-kit/surfaces/modals</a>)
+Read the modals documentation (<a href="https://api.slack.com/surfaces/modals">https://api.slack.com/surfaces/modals</a>)
 to learn more about the lifecycle and intricacies of views.
 <a href="https://api.slack.com/methods/views.push">https://api.slack.com/methods/views.push</a></p></div>
 <details class="source">
@@ -13262,7 +13262,7 @@ to learn more about the lifecycle and intricacies of views.
     Push a new view onto the existing view stack by passing a view
     payload and a valid trigger_id generated from an interaction
     within the existing modal.
-    Read the modals documentation (https://api.slack.com/block-kit/surfaces/modals)
+    Read the modals documentation (https://api.slack.com/surfaces/modals)
     to learn more about the lifecycle and intricacies of views.
     https://api.slack.com/methods/views.push
     &#34;&#34;&#34;
@@ -13283,7 +13283,7 @@ to learn more about the lifecycle and intricacies of views.
 <div class="desc"><p>Update an existing view.
 Update a view by passing a new view definition along with the
 view_id returned in views.open or the external_id.
-See the modals documentation (<a href="https://api.slack.com/block-kit/surfaces/modals#updating_views">https://api.slack.com/block-kit/surfaces/modals#updating_views</a>)
+See the modals documentation (<a href="https://api.slack.com/surfaces/modals#updating_views">https://api.slack.com/surfaces/modals#updating_views</a>)
 to learn more about updating views and avoiding race conditions with the hash argument.
 <a href="https://api.slack.com/methods/views.update">https://api.slack.com/methods/views.update</a></p></div>
 <details class="source">
@@ -13302,7 +13302,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
     &#34;&#34;&#34;Update an existing view.
     Update a view by passing a new view definition along with the
     view_id returned in views.open or the external_id.
-    See the modals documentation (https://api.slack.com/block-kit/surfaces/modals#updating_views)
+    See the modals documentation (https://api.slack.com/surfaces/modals#updating_views)
     to learn more about updating views and avoiding race conditions with the hash argument.
     https://api.slack.com/methods/views.update
     &#34;&#34;&#34;
