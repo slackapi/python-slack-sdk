@@ -1,6 +1,6 @@
-<h1 style="text-align: center;" markdown="1">Python Slack SDK</h1>
+<h1 style="text-align: center;">Python Slack SDK</h1>
 
-<div style="text-align: center;" markdown="1">
+<p align="center">
     <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
         <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml?style=flat-square">
     </a>
@@ -15,7 +15,7 @@
         <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/slack-sdk?style=flat-square">
     </a>
     <a href="https://pypi.org/project/slack-sdk/">
-        <img alt="Python Version" src=" https://img.shields.io/pypi/pyversions/slack-sdk.svg?style=flat-square">
+        <img alt="Python Version" src="https://img.shields.io/pypi/pyversions/slack-sdk.svg?style=flat-square">
     </a>
     <a href="https://slack.dev/python-slack-sdk/">
         <img alt="Documentation" src="https://img.shields.io/badge/dev-docs-yellow?style=flat-square">
