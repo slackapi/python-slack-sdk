@@ -56,7 +56,7 @@ class TestBuiltin(unittest.TestCase):
             web_client=self.web_client,
         )
         url = client.issue_new_wss_url()
-        self.assertTrue(url.startswith("wss://"))
+        self.assertTrue(url.startswith("ws://"))
 
         legacy_client = LegacyWebClient(token="xoxb-api_test", base_url="http://localhost:8888")
         response = legacy_client.apps_connections_open(app_token="xapp-A111-222-xyz")

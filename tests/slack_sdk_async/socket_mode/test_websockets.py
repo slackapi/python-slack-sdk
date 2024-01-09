@@ -36,7 +36,7 @@ class TestAiohttp(unittest.TestCase):
         )
         try:
             url = await client.issue_new_wss_url()
-            self.assertTrue(url.startswith("wss://"))
+            self.assertTrue(url.startswith("ws://"))
         finally:
             await client.close()
 

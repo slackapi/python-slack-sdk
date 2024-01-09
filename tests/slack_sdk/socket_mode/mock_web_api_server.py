@@ -89,7 +89,7 @@ class MockHandler(SimpleHTTPRequestHandler):
                 if self.path == "/apps.connections.open":
                     body = {
                         "ok": True,
-                        "url": "wss://test-server/link/?ticket=xxx&app_id=yyy",
+                        "url": "ws://0.0.0.0:3001/link",
                     }
                 if self.path == "/api.test" and request_body:
                     body = {"ok": True, "args": request_body}
