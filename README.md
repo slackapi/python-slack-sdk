@@ -1,26 +1,20 @@
-<h1 style="text-align: center;">Python Slack SDK</h1>
+<h1 align="center">Python Slack SDK</h1>
 
 <p align="center">
     <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
-        <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml?style=flat-square">
-    </a>
+        <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml?style=flat-square"></a>
     <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
-        <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk?style=flat-square">
-    </a>
+        <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk?style=flat-square"></a>
     <a href="https://pepy.tech/project/slack-sdk">
-        <img alt="Pepy Total Downlods" src="https://img.shields.io/pepy/dt/slack-sdk?style=flat-square">
-    </a>
+        <img alt="Pepy Total Downloads" src="https://img.shields.io/pepy/dt/slack-sdk?style=flat-square"></a>
     <br>
     <a href="https://pypi.org/project/slack-sdk/">
-        <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/slack-sdk?style=flat-square">
-    </a>
+        <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/slack-sdk?style=flat-square"></a>
     <a href="https://pypi.org/project/slack-sdk/">
-        <img alt="Python Version" src="https://img.shields.io/pypi/pyversions/slack-sdk.svg?style=flat-square">
-    </a>
+        <img alt="Python Versions" src="https://img.shields.io/pypi/pyversions/slack-sdk.svg?style=flat-square"></a>
     <a href="https://slack.dev/python-slack-sdk/">
-        <img alt="Documentation" src="https://img.shields.io/badge/dev-docs-yellow?style=flat-square">
-    </a>
-</div>
+        <img alt="Documentation" src="https://img.shields.io/badge/dev-docs-yellow?style=flat-square"></a>
+</p>
 
 The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
