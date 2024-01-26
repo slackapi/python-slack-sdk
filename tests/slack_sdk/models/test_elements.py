@@ -503,7 +503,7 @@ class ImageElementTests(unittest.TestCase):
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageElement(slack_file= {"url": "https://example.com"}, alt_text="not really an image").to_dict(),
+            ImageElement(slack_file={"url": "https://example.com"}, alt_text="not really an image").to_dict(),
         )
 
 

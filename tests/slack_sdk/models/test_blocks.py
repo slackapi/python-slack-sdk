@@ -334,11 +334,10 @@ class ImageBlockTests(unittest.TestCase):
         with self.assertRaises(SlackObjectFormationError):
             ImageBlock(image_url="https://example.com", alt_text="text", title=STRING_3001_CHARS).to_dict()
 
-
     def test_slack_file(self):
         self.assertDictEqual(
             {
-                "slack_file": {"url": "https://example.com" },
+                "slack_file": {"url": "https://example.com"},
                 "alt_text": "not really an image",
                 "type": "image",
             },
@@ -346,7 +345,7 @@ class ImageBlockTests(unittest.TestCase):
         )
         self.assertDictEqual(
             {
-                "slack_file": {"id": "F11111" },
+                "slack_file": {"id": "F11111"},
                 "alt_text": "not really an image",
                 "type": "image",
             },
@@ -354,20 +353,21 @@ class ImageBlockTests(unittest.TestCase):
         )
         self.assertDictEqual(
             {
-                "slack_file": {"url": "https://example.com" },
+                "slack_file": {"url": "https://example.com"},
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageBlock(slack_file= {"url": "https://example.com" }, alt_text="not really an image").to_dict(),
+            ImageBlock(slack_file={"url": "https://example.com"}, alt_text="not really an image").to_dict(),
         )
         self.assertDictEqual(
             {
-                "slack_file": {"id": "F11111" },
+                "slack_file": {"id": "F11111"},
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageBlock(slack_file={"id": "F11111" }, alt_text="not really an image").to_dict(),
+            ImageBlock(slack_file={"id": "F11111"}, alt_text="not really an image").to_dict(),
         )
+
 
 # ----------------------------------------------
 # Actions
