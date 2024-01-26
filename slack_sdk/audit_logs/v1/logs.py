@@ -166,14 +166,17 @@ class FeatureEnablement:
 
 class SharedWith:
     channel_id: Optional[str]
+    access_level: Optional[str]
 
     def __init__(
         self,
         *,
         channel_id: Optional[str] = None,
+        access_level: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.channel_id = channel_id
+        self.access_level = access_level
         self.unknown_fields = kwargs
 
 
@@ -234,19 +237,174 @@ class SpaceFileId:
         self.payload = payload
 
 
+class AttributeItems:
+    type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.type = type
+
+
 class Attribute:
     name: Optional[str]
     type: Optional[str]
+    items: Optional[AttributeItems]
 
     def __init__(
         self,
         *,
         name: Optional[str] = None,
         type: Optional[str] = None,
+        items: Optional[AttributeItems] = None,
         **kwargs,
     ) -> None:
         self.name = name
         self.type = type
+        self.items = items
+
+
+class AAARuleActionResolution:
+    value: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        value: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.value = value
+
+
+class AAARuleActionNotify:
+    entity_type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        entity_type: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.entity_type = entity_type
+
+
+class AAARuleAction:
+    resolution: Optional[AAARuleActionResolution]
+    notify: Optional[List[AAARuleActionNotify]]
+
+    def __init__(
+        self,
+        *,
+        resolution: Optional[Union[Dict[str, Any], AAARuleActionResolution]] = None,
+        notify: Optional[List[Union[Dict[str, Any], AAARuleActionNotify]]] = None,
+        **kwargs,
+    ) -> None:
+        self.resolution = (
+            resolution
+            if resolution is None or isinstance(resolution, AAARuleActionResolution)
+            else AAARuleActionResolution(**resolution)
+        )
+        self.notify = None
+        if notify is not None:
+            self.notify = []
+            for a in notify:
+                if isinstance(a, dict):
+                    self.notify.append(AAARuleActionNotify(**a))
+                else:
+                    self.notify.append(a)
+
+
+class AAARuleConditionValue:
+    field: Optional[str]
+    values: Optional[List[str]]
+    datatype: Optional[str]
+    operator: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        field: Optional[str] = None,
+        values: Optional[List[str]] = None,
+        datatype: Optional[str] = None,
+        operator: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.field = field
+        self.values = values
+        self.datatype = datatype
+        self.operator = operator
+
+
+class AAARuleCondition:
+    datatype: Optional[str]
+    operator: Optional[str]
+    values: Optional[List[AAARuleConditionValue]]
+    entity_type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        datatype: Optional[str] = None,
+        operator: Optional[str] = None,
+        values: Optional[List[Union[Dict[str, Any], AAARuleConditionValue]]] = None,
+        entity_type: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.datatype = datatype
+        self.operator = operator
+        self.values = None
+        if values is not None:
+            self.values = []
+            for a in values:
+                if isinstance(a, dict):
+                    self.values.append(AAARuleConditionValue(**a))
+                else:
+                    self.values.append(a)
+        self.entity_type = entity_type
+
+
+class AAARule:
+    id: Optional[str]
+    team_id: Optional[str]
+    title: Optional[str]
+    action: Optional[AAARuleAction]
+    condition: Optional[AAARuleCondition]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        title: Optional[str] = None,
+        action: Optional[Union[Dict[str, Any], AAARuleAction]] = None,
+        condition: Optional[Union[Dict[str, Any], AAARuleCondition]] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.team_id = team_id
+        self.title = title
+        self.action = action if action is None or isinstance(action, AAARuleAction) else AAARuleAction(**action)
+        self.condition = (
+            condition if condition is None or isinstance(condition, AAARuleCondition) else AAARuleCondition(**condition)
+        )
+
+
+class AAARequest:
+    id: Optional[str]
+    team_id: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.team_id = team_id
 
 
 class Details:
@@ -353,6 +511,17 @@ class Details:
     changed_permissions: Optional[List[str]]
     datastore_name: Optional[str]
     attributes: Optional[List[Attribute]]
+    channel: Optional[str]
+    entity_type: Optional[str]
+    actor: Optional[str]
+    access_level: Optional[str]
+    functions: Optional[List[str]]
+    workflows: Optional[List[str]]
+    datastores: Optional[List[str]]
+    permissions_updated: Optional[bool]
+    matched_rule: Optional[AAARule]
+    request: Optional[AAARequest]
+    rules_checked: Optional[List[AAARule]]
 
     def __init__(
         self,
@@ -459,6 +628,17 @@ class Details:
         changed_permissions: Optional[List[str]] = None,
         datastore_name: Optional[str] = None,
         attributes: Optional[List[Union[Dict[str, str], Attribute]]] = None,
+        channel: Optional[str] = None,
+        entity_type: Optional[str] = None,
+        actor: Optional[str] = None,
+        access_level: Optional[str] = None,
+        functions: Optional[List[str]] = None,
+        workflows: Optional[List[str]] = None,
+        datastores: Optional[List[str]] = None,
+        permissions_updated: Optional[bool] = None,
+        matched_rule: Optional[Union[Dict[str, Any], AAARule]] = None,
+        request: Optional[Union[Dict[str, Any], AAARequest]] = None,
+        rules_checked: Optional[List[Union[Dict[str, Any], AAARule]]] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -611,6 +791,26 @@ class Details:
                     self.attributes.append(Attribute(**a))
                 else:
                     self.attributes.append(a)
+        self.channel = channel
+        self.entity_type = entity_type
+        self.actor = actor
+        self.access_level = access_level
+        self.functions = functions
+        self.workflows = workflows
+        self.datastores = datastores
+        self.permissions_updated = permissions_updated
+        self.matched_rule = (
+            matched_rule if matched_rule is None or isinstance(matched_rule, AAARule) else AAARule(**matched_rule)
+        )
+        self.request = request if request is None or isinstance(request, AAARequest) else AAARequest(**request)
+        self.rules_checked = None
+        if rules_checked is not None:
+            self.rules_checked = []
+            for a in rules_checked:
+                if isinstance(a, dict):
+                    self.rules_checked.append(AAARule(**a))
+                else:
+                    self.rules_checked.append(a)
 
 
 class Channel:
@@ -771,6 +971,65 @@ class InformationBarrier:
         self.unknown_fields = kwargs
 
 
+class WorkflowV2StepConfiguration:
+    name: Optional[str]
+    step_function_type: Optional[str]
+    step_function_app_id: Optional[int]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        step_function_type: Optional[str] = None,
+        step_function_app_id: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.name = name
+        self.step_function_type = step_function_type
+        self.step_function_app_id = step_function_app_id
+        self.unknown_fields = kwargs
+
+
+class WorkflowV2:
+    id: Optional[str]
+    app_id: Optional[str]
+    date_updated: Optional[int]
+    callback_id: Optional[str]
+    name: Optional[str]
+    updated_by: Optional[str]
+    step_configuration: Optional[List[WorkflowV2StepConfiguration]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        app_id: Optional[str] = None,
+        date_updated: Optional[int] = None,
+        callback_id: Optional[str] = None,
+        name: Optional[str] = None,
+        updated_by: Optional[str] = None,
+        step_configuration: Optional[List[Union[Dict[str, Any], WorkflowV2StepConfiguration]]] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.app_id = app_id
+        self.date_updated = date_updated
+        self.callback_id = callback_id
+        self.name = name
+        self.updated_by = updated_by
+        self.step_configuration = None
+        if step_configuration is not None:
+            self.step_configuration = []
+            for a in step_configuration:
+                if isinstance(a, dict):
+                    self.step_configuration.append(WorkflowV2StepConfiguration(**a))
+                else:
+                    self.step_configuration.append(a)
+        self.unknown_fields = kwargs
+
+
 class AccountTypeRole:
     id: Optional[str]
     name: Optional[str]
@@ -801,6 +1060,7 @@ class Entity:
     usergroup: Optional[Usergroup]
     workflow: Optional[Workflow]
     barrier: Optional[InformationBarrier]
+    workflow_v2: Optional[WorkflowV2]
     account_type_role: Optional[AccountTypeRole]
     unknown_fields: Dict[str, Any]
 
@@ -819,6 +1079,7 @@ class Entity:
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
         workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
+        workflow_v2: Optional[Union[WorkflowV2, Dict[str, Any]]] = None,
         account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
@@ -834,6 +1095,7 @@ class Entity:
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
         self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
         self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
+        self.workflow_v2 = WorkflowV2(**workflow_v2) if isinstance(workflow_v2, dict) else workflow_v2
         self.account_type_role = (
             AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
         )
