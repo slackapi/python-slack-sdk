@@ -8,7 +8,7 @@ from slack_sdk.models.basic_objects import (
     JsonObject,
     JsonValidator,
 )
-from .basic_components import MarkdownTextObject
+from .basic_components import MarkdownTextObject, SlackFile
 from .basic_components import PlainTextObject
 from .basic_components import TextObject
 from .block_elements import BlockElement, RichTextElement
@@ -208,7 +208,7 @@ class ImageBlock(Block):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"alt_text", "image_url", "title"})
+        return super().attributes.union({"alt_text", "image_url", "title", "slack_file"})
 
     image_url_max_length = 3000
     alt_text_max_length = 2000
@@ -217,8 +217,9 @@ class ImageBlock(Block):
     def __init__(
         self,
         *,
-        image_url: str,
         alt_text: str,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         title: Optional[Union[str, dict, PlainTextObject]] = None,
         block_id: Optional[str] = None,
         **others: dict,
@@ -227,10 +228,11 @@ class ImageBlock(Block):
         https://api.slack.com/reference/block-kit/blocks#image
 
         Args:
-            image_url (required): The URL of the image to be displayed.
-                Maximum length for this field is 3000 characters.
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
                 Maximum length for this field is 2000 characters.
+            image_url: The URL of the image to be displayed.
+                Maximum length for this field is 3000 characters.
+            slack_file: A Slack image file object that defines the source of the image.
             title: An optional title for the image in the form of a text object that can only be of type: plain_text.
                 Maximum length for the text in this field is 2000 characters.
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -255,11 +257,15 @@ class ImageBlock(Block):
                 parsed_title = title
             else:
                 raise SlackObjectFormationError(f"Unsupported type for title in an image block: {type(title)}")
+        if slack_file is not None:
+            self.slack_file = (
+                slack_file if slack_file is None or isinstance(slack_file, SlackFile) else SlackFile(**slack_file)
+            )
         self.title = parsed_title
 
     @JsonValidator(f"image_url attribute cannot exceed {image_url_max_length} characters")
     def _validate_image_url_length(self):
-        return len(self.image_url) <= self.image_url_max_length
+        return self.image_url is None or len(self.image_url) <= self.image_url_max_length
 
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self):
