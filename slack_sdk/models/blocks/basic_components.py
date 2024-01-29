@@ -570,6 +570,13 @@ class SlackFile(JsonObject):
         id: Optional[str] = None,
         url: Optional[str] = None,
     ):
+        """An object containing Slack file information to be used in an image block or image element.
+        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+
+        Args:
+            id: Slack ID of the file.
+            url: This URL can be the url_private or the permalink of the Slack file.
+        """
         self._id = id
         self._url = url
 
