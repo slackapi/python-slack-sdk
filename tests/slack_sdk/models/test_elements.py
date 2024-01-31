@@ -28,6 +28,7 @@ from slack_sdk.models.blocks import (
     InteractiveElement,
     PlainTextObject,
 )
+from slack_sdk.models.blocks.basic_components import SlackFile
 from slack_sdk.models.blocks.block_elements import (
     DateTimePickerElement,
     EmailInputElement,
@@ -186,11 +187,11 @@ class ButtonElementTests(unittest.TestCase):
 
 class LinkButtonElementTests(unittest.TestCase):
     def test_json(self):
-        button = LinkButtonElement(action_id="test", text="button text", url="http://google.com")
+        button = LinkButtonElement(action_id="test", text="button text", url="https://example.com")
         self.assertDictEqual(
             {
                 "text": {"emoji": True, "text": "button text", "type": "plain_text"},
-                "url": "http://google.com",
+                "url": "https://example.com",
                 "type": "button",
                 "action_id": button.action_id,
             },
@@ -456,11 +457,11 @@ class ImageElementTests(unittest.TestCase):
     def test_json(self):
         self.assertDictEqual(
             {
-                "image_url": "http://google.com",
+                "image_url": "https://example.com",
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageElement(image_url="http://google.com", alt_text="not really an image").to_dict(),
+            ImageElement(image_url="https://example.com", alt_text="not really an image").to_dict(),
         )
 
     def test_image_url_length(self):
@@ -469,7 +470,41 @@ class ImageElementTests(unittest.TestCase):
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageElement(image_url="http://google.com", alt_text=STRING_3001_CHARS).to_dict()
+            ImageElement(image_url="https://example.com", alt_text=STRING_3001_CHARS).to_dict()
+
+    def test_slack_file(self):
+        self.assertDictEqual(
+            {
+                "slack_file": {"id": "F11111"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageElement(slack_file=SlackFile(id="F11111"), alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"url": "https://example.com"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageElement(slack_file=SlackFile(url="https://example.com"), alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"id": "F11111"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageElement(slack_file={"id": "F11111"}, alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"url": "https://example.com"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageElement(slack_file={"url": "https://example.com"}, alt_text="not really an image").to_dict(),
+        )
 
 
 # -------------------------------------------------

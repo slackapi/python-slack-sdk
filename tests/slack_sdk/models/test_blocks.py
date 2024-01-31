@@ -29,6 +29,7 @@ from slack_sdk.models.blocks import (
     RichTextPreformattedElement,
     RichTextElementParts,
 )
+from slack_sdk.models.blocks.basic_components import SlackFile
 from . import STRING_3001_CHARS
 
 
@@ -151,7 +152,7 @@ class SectionBlockTests(unittest.TestCase):
             SectionBlock(text="some text", fields=[f"field{i}" for i in range(5)]).to_dict(),
         )
 
-        button = LinkButtonElement(text="Click me!", url="http://google.com")
+        button = LinkButtonElement(text="Click me!", url="https://example.com")
         self.assertDictEqual(
             {
                 "type": "section",
@@ -314,11 +315,11 @@ class ImageBlockTests(unittest.TestCase):
     def test_json(self):
         self.assertDictEqual(
             {
-                "image_url": "http://google.com",
+                "image_url": "https://example.com",
                 "alt_text": "not really an image",
                 "type": "image",
             },
-            ImageBlock(image_url="http://google.com", alt_text="not really an image").to_dict(),
+            ImageBlock(image_url="https://example.com", alt_text="not really an image").to_dict(),
         )
 
     def test_image_url_length(self):
@@ -327,11 +328,45 @@ class ImageBlockTests(unittest.TestCase):
 
     def test_alt_text_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(image_url="http://google.com", alt_text=STRING_3001_CHARS).to_dict()
+            ImageBlock(image_url="https://example.com", alt_text=STRING_3001_CHARS).to_dict()
 
     def test_title_length(self):
         with self.assertRaises(SlackObjectFormationError):
-            ImageBlock(image_url="http://google.com", alt_text="text", title=STRING_3001_CHARS).to_dict()
+            ImageBlock(image_url="https://example.com", alt_text="text", title=STRING_3001_CHARS).to_dict()
+
+    def test_slack_file(self):
+        self.assertDictEqual(
+            {
+                "slack_file": {"url": "https://example.com"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageBlock(slack_file=SlackFile(url="https://example.com"), alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"id": "F11111"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageBlock(slack_file=SlackFile(id="F11111"), alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"url": "https://example.com"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageBlock(slack_file={"url": "https://example.com"}, alt_text="not really an image").to_dict(),
+        )
+        self.assertDictEqual(
+            {
+                "slack_file": {"id": "F11111"},
+                "alt_text": "not really an image",
+                "type": "image",
+            },
+            ImageBlock(slack_file={"id": "F11111"}, alt_text="not really an image").to_dict(),
+        )
 
 
 # ----------------------------------------------
@@ -446,7 +481,7 @@ class ActionsBlockTests(unittest.TestCase):
     def test_json(self):
         self.elements = [
             ButtonElement(text="Click me", action_id="reg_button", value="1"),
-            LinkButtonElement(text="URL Button", url="http://google.com"),
+            LinkButtonElement(text="URL Button", url="https://example.com"),
         ]
         self.dict_elements = []
         for e in self.elements:

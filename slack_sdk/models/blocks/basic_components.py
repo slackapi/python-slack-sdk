@@ -559,3 +559,32 @@ class Workflow(JsonObject):
         else:
             json["trigger"] = self._trigger
         return json
+
+
+class SlackFile(JsonObject):
+    attributes = {"id", "url"}
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        url: Optional[str] = None,
+    ):
+        """An object containing Slack file information to be used in an image block or image element.
+        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+
+        Args:
+            id: Slack ID of the file.
+            url: This URL can be the url_private or the permalink of the Slack file.
+        """
+        self._id = id
+        self._url = url
+
+    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if self._id is not None:
+            json["id"] = self._id
+        if self._url is not None:
+            json["url"] = self._url
+        return json

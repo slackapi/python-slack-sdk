@@ -11,7 +11,7 @@ from slack_sdk.models.basic_objects import (
     JsonValidator,
     EnumValidator,
 )
-from .basic_components import ButtonStyles, Workflow
+from .basic_components import ButtonStyles, Workflow, SlackFile
 from .basic_components import ConfirmObject
 from .basic_components import DispatchActionConfig
 from .basic_components import MarkdownTextObject
@@ -551,13 +551,14 @@ class ImageElement(BlockElement):
 
     @property
     def attributes(self) -> Set[str]:
-        return super().attributes.union({"alt_text", "image_url"})
+        return super().attributes.union({"alt_text", "image_url", "slack_file"})
 
     def __init__(
         self,
         *,
-        image_url: Optional[str] = None,
         alt_text: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         **others: dict,
     ):
         """An element to insert an image - this element can be used in section and
@@ -566,18 +567,20 @@ class ImageElement(BlockElement):
         https://api.slack.com/reference/block-kit/block-elements#image
 
         Args:
-            image_url (required): The URL of the image to be displayed.
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
+            image_url: The URL of the image to be displayed.
+            slack_file: A Slack image file object that defines the source of the image.
         """
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
 
         self.image_url = image_url
         self.alt_text = alt_text
+        self.slack_file = slack_file if slack_file is None or isinstance(slack_file, SlackFile) else SlackFile(**slack_file)
 
     @JsonValidator(f"image_url attribute cannot exceed {image_url_max_length} characters")
     def _validate_image_url_length(self) -> bool:
-        return len(self.image_url) <= self.image_url_max_length
+        return self.image_url is None or len(self.image_url) <= self.image_url_max_length
 
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self) -> bool:
