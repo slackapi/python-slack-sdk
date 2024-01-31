@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "slack_sdk"
-dynamic = ["version", "readme", "authors"]
+dynamic = ["version", "readme", "authors", "optional-dependencies"]
 description = "The Slack API Platform SDK for Python"
 license = { text = "MIT" }
 requires-python = ">=3.6"
@@ -48,6 +48,7 @@ include = ["slack*", "slack_sdk*"]
 [tool.setuptools.dynamic]
 version = { attr = "slack_sdk.version.__version__" }
 readme = { file = ["README.md"], content-type = "text/markdown" }
+optional-dependencies.optional = { file = ["requirements/optional.txt"] }
 
 [tool.distutils.bdist_wheel]
 universal = true
