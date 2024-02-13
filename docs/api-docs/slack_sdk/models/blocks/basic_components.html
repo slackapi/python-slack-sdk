@@ -586,6 +586,35 @@ class Workflow(JsonObject):
             json[&#34;trigger&#34;] = self._trigger.to_dict()
         else:
             json[&#34;trigger&#34;] = self._trigger
+        return json
+
+
+class SlackFile(JsonObject):
+    attributes = {&#34;id&#34;, &#34;url&#34;}
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        url: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;An object containing Slack file information to be used in an image block or image element.
+        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+
+        Args:
+            id: Slack ID of the file.
+            url: This URL can be the url_private or the permalink of the Slack file.
+        &#34;&#34;&#34;
+        self._id = id
+        self._url = url
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if self._id is not None:
+            json[&#34;id&#34;] = self._id
+        if self._url is not None:
+            json[&#34;url&#34;] = self._url
         return json</code></pre>
 </details>
 </section>
@@ -1706,6 +1735,70 @@ def attributes(self) -&gt; Set[str]:
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.basic_components.SlackFile"><code class="flex name class">
+<span>class <span class="ident">SlackFile</span></span>
+<span>(</span><span>*, id: Optional[str] = None, url: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>An object containing Slack file information to be used in an image block or image element.
+<a href="https://api.slack.com/reference/block-kit/composition-objects#slack_file">https://api.slack.com/reference/block-kit/composition-objects#slack_file</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>Slack ID of the file.</dd>
+<dt><strong><code>url</code></strong></dt>
+<dd>This URL can be the url_private or the permalink of the Slack file.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SlackFile(JsonObject):
+    attributes = {&#34;id&#34;, &#34;url&#34;}
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        url: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;An object containing Slack file information to be used in an image block or image element.
+        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+
+        Args:
+            id: Slack ID of the file.
+            url: This URL can be the url_private or the permalink of the Slack file.
+        &#34;&#34;&#34;
+        self._id = id
+        self._url = url
+
+    def to_dict(self) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
+        self.validate_json()
+        json = {}
+        if self._id is not None:
+            json[&#34;id&#34;] = self._id
+        if self._url is not None:
+            json[&#34;url&#34;] = self._url
+        return json</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.basic_components.TextObject"><code class="flex name class">
 <span>class <span class="ident">TextObject</span></span>
 <span>(</span><span>text: str, type: Optional[str] = None, subtype: Optional[str] = None, emoji: Optional[bool] = None, **kwargs)</span>
@@ -2020,6 +2113,9 @@ def subtype(self) -&gt; Optional[str]:
 <li><code><a title="slack_sdk.models.blocks.basic_components.PlainTextObject.from_str" href="#slack_sdk.models.blocks.basic_components.PlainTextObject.from_str">from_str</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.PlainTextObject.type" href="#slack_sdk.models.blocks.basic_components.PlainTextObject.type">type</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.SlackFile" href="#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a></code></h4>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a></code></h4>

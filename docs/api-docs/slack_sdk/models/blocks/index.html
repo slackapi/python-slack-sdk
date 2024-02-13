@@ -2892,7 +2892,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ImageBlock"><code class="flex name class">
 <span>class <span class="ident">ImageBlock</span></span>
-<span>(</span><span>*, image_url: str, alt_text: str, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, alt_text: str, image_url: Optional[str] = None, slack_file: Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.SlackFile" href="basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a>, ForwardRef(None)] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -2902,12 +2902,14 @@ to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>image_url</code></strong> :&ensp;<code>required</code></dt>
-<dd>The URL of the image to be displayed.
-Maximum length for this field is 3000 characters.</dd>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain-text summary of the image. This should not contain any markup.
 Maximum length for this field is 2000 characters.</dd>
+<dt><strong><code>image_url</code></strong></dt>
+<dd>The URL of the image to be displayed.
+Maximum length for this field is 3000 characters.</dd>
+<dt><strong><code>slack_file</code></strong></dt>
+<dd>A Slack image file object that defines the source of the image.</dd>
 <dt><strong><code>title</code></strong></dt>
 <dd>An optional title for the image in the form of a text object that can only be of type: plain_text.
 Maximum length for the text in this field is 2000 characters.</dd>
@@ -2926,7 +2928,7 @@ If a message is updated, use a new block_id.</dd>
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;})
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;, &#34;slack_file&#34;})
 
     image_url_max_length = 3000
     alt_text_max_length = 2000
@@ -2935,8 +2937,9 @@ If a message is updated, use a new block_id.</dd>
     def __init__(
         self,
         *,
-        image_url: str,
         alt_text: str,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         title: Optional[Union[str, dict, PlainTextObject]] = None,
         block_id: Optional[str] = None,
         **others: dict,
@@ -2945,10 +2948,11 @@ If a message is updated, use a new block_id.</dd>
         https://api.slack.com/reference/block-kit/blocks#image
 
         Args:
-            image_url (required): The URL of the image to be displayed.
-                Maximum length for this field is 3000 characters.
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
                 Maximum length for this field is 2000 characters.
+            image_url: The URL of the image to be displayed.
+                Maximum length for this field is 3000 characters.
+            slack_file: A Slack image file object that defines the source of the image.
             title: An optional title for the image in the form of a text object that can only be of type: plain_text.
                 Maximum length for the text in this field is 2000 characters.
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -2973,11 +2977,15 @@ If a message is updated, use a new block_id.</dd>
                 parsed_title = title
             else:
                 raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {type(title)}&#34;)
+        if slack_file is not None:
+            self.slack_file = (
+                slack_file if slack_file is None or isinstance(slack_file, SlackFile) else SlackFile(**slack_file)
+            )
         self.title = parsed_title
 
     @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self):
-        return len(self.image_url) &lt;= self.image_url_max_length
+        return self.image_url is None or len(self.image_url) &lt;= self.image_url_max_length
 
     @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
     def _validate_alt_text_length(self):
@@ -3025,7 +3033,7 @@ set(iterable) -&gt; new set object</p>
 </summary>
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:
-    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;})</code></pre>
+    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;, &#34;slack_file&#34;})</code></pre>
 </details>
 </dd>
 </dl>
@@ -3042,7 +3050,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.ImageElement"><code class="flex name class">
 <span>class <span class="ident">ImageElement</span></span>
-<span>(</span><span>*, image_url: Optional[str] = None, alt_text: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, alt_text: Optional[str] = None, image_url: Optional[str] = None, slack_file: Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.SlackFile" href="basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a>, ForwardRef(None)] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -3053,10 +3061,12 @@ you're looking for the image block.
 <a href="https://api.slack.com/reference/block-kit/block-elements#image">https://api.slack.com/reference/block-kit/block-elements#image</a></p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>image_url</code></strong> :&ensp;<code>required</code></dt>
-<dd>The URL of the image to be displayed.</dd>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain-text summary of the image. This should not contain any markup.</dd>
+<dt><strong><code>image_url</code></strong></dt>
+<dd>The URL of the image to be displayed.</dd>
+<dt><strong><code>slack_file</code></strong></dt>
+<dd>A Slack image file object that defines the source of the image.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -3069,13 +3079,14 @@ you're looking for the image block.
 
     @property
     def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;})
+        return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;slack_file&#34;})
 
     def __init__(
         self,
         *,
-        image_url: Optional[str] = None,
         alt_text: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         **others: dict,
     ):
         &#34;&#34;&#34;An element to insert an image - this element can be used in section and
@@ -3084,18 +3095,20 @@ you're looking for the image block.
         https://api.slack.com/reference/block-kit/block-elements#image
 
         Args:
-            image_url (required): The URL of the image to be displayed.
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
+            image_url: The URL of the image to be displayed.
+            slack_file: A Slack image file object that defines the source of the image.
         &#34;&#34;&#34;
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
 
         self.image_url = image_url
         self.alt_text = alt_text
+        self.slack_file = slack_file if slack_file is None or isinstance(slack_file, SlackFile) else SlackFile(**slack_file)
 
     @JsonValidator(f&#34;image_url attribute cannot exceed {image_url_max_length} characters&#34;)
     def _validate_image_url_length(self) -&gt; bool:
-        return len(self.image_url) &lt;= self.image_url_max_length
+        return self.image_url is None or len(self.image_url) &lt;= self.image_url_max_length
 
     @JsonValidator(f&#34;alt_text attribute cannot exceed {alt_text_max_length} characters&#34;)
     def _validate_alt_text_length(self) -&gt; bool:
@@ -3135,7 +3148,7 @@ set(iterable) -&gt; new set object</p>
 </summary>
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:
-    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;})</code></pre>
+    return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;slack_file&#34;})</code></pre>
 </details>
 </dd>
 </dl>
