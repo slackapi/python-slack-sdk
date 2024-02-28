@@ -244,6 +244,9 @@ class SocketModeClient(BaseSocketModeClient):
                 self.logger.info("Stopped receiving messages from a connection")
             except Exception as e:
                 self.logger.exception(f"Failed to start or stop the current session: {e}")
+                # To let the monitoring job detect the connection issue, closing this session
+                if self.current_session is not None:
+                    self.current_session.close()
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
