@@ -10,7 +10,7 @@ flake8>=5.0.4,<8
 #  The latest version may not be available for older Python runtime
 black>=22.8.0; python_version=="3.6"
 black==22.10.0; python_version>"3.6"
-click==8.1.7  # black is affected by https://github.com/pallets/click/issues/2225
+click==8.0.4; python_version=="3.6"  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=5,<6
 #  used only under slack_sdk/*_store
 boto3<=2
