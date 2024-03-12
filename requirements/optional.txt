@@ -12,6 +12,5 @@ boto3<=2
 SQLAlchemy>=1.4,<3
 # Socket Mode
 # websockets 9 is not compatible with Python 3.10
-websockets>=9.1,<10; python_version=="3.6"
-websockets>=10,<13; python_version>"3.6"
+websockets>=9.1,<13
 websocket-client>=1,<2
