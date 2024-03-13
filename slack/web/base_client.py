@@ -37,7 +37,7 @@ from slack.web.slack_response import SlackResponse
 
 
 class BaseClient:
-    BASE_URL = "https://www.slack.com/api/"
+    BASE_URL = "https://slack.com/api/"
 
     def __init__(
         self,

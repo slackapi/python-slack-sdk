@@ -17,7 +17,7 @@ from slack.web.deprecation import show_2020_01_deprecation
 
 
 class AsyncBaseClient:
-    BASE_URL = "https://www.slack.com/api/"
+    BASE_URL = "https://slack.com/api/"
 
     def __init__(
         self,
