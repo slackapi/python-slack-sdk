@@ -37,7 +37,7 @@ class WebClient(BaseClient):
     Attributes:
         token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is `'https://www.slack.com/api/'`
+            Default is `'https://slack.com/api/'`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
