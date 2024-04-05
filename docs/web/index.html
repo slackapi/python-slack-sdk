@@ -375,7 +375,7 @@ deletion of threaded replies works the same as regular messages.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0">files_upload_v2 method release notes</a> for more info.</p>
+<p>Files can still be uploaded via files.upload but it is less reliable than we'd like, especially for large files. We recommend that you retire any app functionality that relies on files.upload and use files.getUploadURLExternal and files.completeUploadExternal instead. See <a href="https://api.dev1247.slack.com/messaging/files#uploading_files">Uploading files</a> and <a class="reference external" href="https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0">files_upload_v2 method release notes</a>for more details.</p>
 <p><strong>Adding a remote file</strong></p>
 <p>You can add a file information that is stored in an external storage, not in Slack.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">files_remote_add</span><span class="p">(</span>
