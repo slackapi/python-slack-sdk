@@ -1868,7 +1868,7 @@ class RichTextListElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.style = style
         self.indent = indent
         self.offset = offset
@@ -1891,7 +1891,7 @@ class RichTextPreformattedElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.border = border
 
 
@@ -1910,7 +1910,7 @@ class RichTextQuoteElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
 
 
 class RichTextSectionElement(RichTextElement):
@@ -1928,7 +1928,7 @@ class RichTextSectionElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
 
 
 class RichTextElementParts:
