@@ -1083,3 +1083,38 @@ class RichTextBlockTests(unittest.TestCase):
             ],
         )
         self.assertDictEqual(dict_block, class_block.to_dict())
+
+    def test_elements_are_parsed(self):
+        dict_block = {
+            "type": "rich_text",
+            "elements": [
+                {
+                    "type": "rich_text_section",
+                    "elements": [{"type": "text", "text": "Hello there, I am a basic rich text block!"}],
+                },
+                {
+                    "type": "rich_text_quote",
+                    "elements": [{"type": "text", "text": "this is very important"}],
+                },
+                {
+                    "type": "rich_text_preformatted",
+                    "elements": [{"type": "text", "text": 'print("Hello world")'}],
+                },
+                {
+                    "type": "rich_text_list",
+                    "elements": [
+                        {"type": "rich_text_section", "elements": [{"type": "text", "text": "a"}]},
+                    ],
+                }
+            ],
+        }
+        block = RichTextBlock(**dict_block)
+        self.assertIsInstance(block.elements[0], RichTextSectionElement)
+        self.assertIsInstance(block.elements[0].elements[0], RichTextElementParts.Text)
+        self.assertIsInstance(block.elements[1], RichTextQuoteElement)
+        self.assertIsInstance(block.elements[1].elements[0], RichTextElementParts.Text)
+        self.assertIsInstance(block.elements[2], RichTextPreformattedElement)
+        self.assertIsInstance(block.elements[2].elements[0], RichTextElementParts.Text)
+        self.assertIsInstance(block.elements[3], RichTextListElement)
+        self.assertIsInstance(block.elements[3].elements[0], RichTextSectionElement)
+        self.assertIsInstance(block.elements[3].elements[0].elements[0], RichTextElementParts.Text)
