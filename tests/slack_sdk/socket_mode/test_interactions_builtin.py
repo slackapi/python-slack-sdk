@@ -13,7 +13,6 @@ from slack_sdk.socket_mode.client import BaseSocketModeClient
 
 from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
-from tests.helpers import is_ci_unstable_test_skip_enabled
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
@@ -48,9 +47,6 @@ class TestInteractionsBuiltin(unittest.TestCase):
             pass
 
     def test_interactions(self):
-        if is_ci_unstable_test_skip_enabled():
-            return
-
         default_recursion_limit = sys.getrecursionlimit()  # will restore later
         # This built-in WebSocket client internally has recursive method calls of _fetch_messages method.
         # In this test, the method calls can result in the following error when giving a quite small buffer size.
@@ -135,8 +131,6 @@ class TestInteractionsBuiltin(unittest.TestCase):
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 
     def test_send_message_while_disconnection(self):
-        if is_ci_unstable_test_skip_enabled():
-            return
         t = Thread(target=start_socket_mode_server(self, 3011))
         t.daemon = True
         t.start()
