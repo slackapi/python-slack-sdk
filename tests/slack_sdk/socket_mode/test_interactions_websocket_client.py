@@ -38,8 +38,6 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
         cleanup_mock_web_api_server(self)
 
     def test_interactions(self):
-        if is_ci_unstable_test_skip_enabled():
-            return
         t = Thread(target=start_socket_mode_server(self, 3012))
         t.daemon = True
         t.start()
@@ -100,6 +98,7 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
 
     def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
+            # this test tends to fail on the GitHub Actions platform
             return
         t = Thread(target=start_socket_mode_server(self, 3012))
         t.daemon = True
