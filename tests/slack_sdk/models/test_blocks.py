@@ -1105,7 +1105,7 @@ class RichTextBlockTests(unittest.TestCase):
                     "elements": [
                         {"type": "rich_text_section", "elements": [{"type": "text", "text": "a"}]},
                     ],
-                }
+                },
             ],
         }
         block = RichTextBlock(**dict_block)
