@@ -17,13 +17,13 @@ from typing import Union, Sequence, Optional, Dict, Tuple, Any, List
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
+from .async_internal_utils import _request_with_session
 from .internal_utils import (
     _parse_web_class_objects,
     _update_call_participants,
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
     _to_v2_file_upload_item,
-    _upload_file_via_v2_url,
     _validate_for_legacy_client,
     _print_files_upload_v2_suggestion,
 )
@@ -3583,16 +3583,17 @@ class AsyncWebClient(AsyncBaseClient):
             f["upload_url"] = url_response.get("upload_url")  # type: ignore
 
         # step2: "https://files.slack.com/upload/v1/..." per file
+        req_args = {"data": f["data"], "proxy": self.proxy, "ssl": self.ssl}
         for f in files:
-            upload_result = _upload_file_via_v2_url(
-                url=f["upload_url"],
-                data=f["data"],
-                logger=self._logger,
+            upload_result = await _request_with_session(
+                current_session=self.session,
                 timeout=self.timeout,
-                proxy=self.proxy,
-                ssl=self.ssl,
+                logger=self._logger,
+                http_verb="POST",
+                api_url=f["upload_url"],
+                req_args=req_args,
             )
-            if upload_result.get("status") != 200:
+            if upload_result.get("status_code") != 200:
                 status = upload_result.get("status")
                 body = upload_result.get("body")
                 message = (
