@@ -405,6 +405,9 @@ def _upload_file_via_v2_url(
         else:
             raise SlackRequestError(f&#34;Invalid proxy detected: {proxy} must be a str value&#34;)
 
+    if logger.level &lt;= logging.DEBUG:
+        logger.debug(f&#34;Sending a request: POST {url}&#34;)
+
     resp: Optional[HTTPResponse] = None
     req: Request = Request(method=&#34;POST&#34;, url=url, data=data, headers={})
     if opener:
@@ -416,8 +419,10 @@ def _upload_file_via_v2_url(
     body: str = resp.read().decode(charset)  # read the response body here
     if logger.level &lt;= logging.DEBUG:
         message = (
-            &#34;Received the following response - &#34;,
-            f&#34;status: {resp.status}, &#34; f&#34;headers: {dict(resp.headers)}, &#34; f&#34;body: {body}&#34;,
+            &#34;Received the following response - &#34;
+            f&#34;status: {resp.status}, &#34;
+            f&#34;headers: {dict(resp.headers)}, &#34;
+            f&#34;body: {body}&#34;
         )
         logger.debug(message)
 
