@@ -11,6 +11,7 @@ from .async_internal_utils import (
 )  # type: ignore
 from .async_slack_response import AsyncSlackResponse
 from .deprecation import show_deprecation_warning_if_any
+from .file_upload_v2_result import FileUploadV2Result
 from .internal_utils import (
     convert_bool_to_0_or_1,
     _build_req_args,
@@ -213,4 +214,29 @@ class AsyncBaseClient:
             api_url=api_url,
             req_args=req_args,
             retry_handlers=self.retry_handlers,
+        )
+
+    async def _upload_file(
+        self,
+        *,
+        url: str,
+        data: bytes,
+        logger: logging.Logger,
+        timeout: int,
+        proxy: Optional[str],
+        ssl: Optional[SSLContext],
+    ) -> FileUploadV2Result:
+        """Upload a file using the issued upload URL"""
+        result = await _request_with_session(
+            current_session=self.session,
+            timeout=timeout,
+            logger=logger,
+            http_verb="POST",
+            api_url=url,
+            req_args={"data": data, "proxy": proxy, "ssl": ssl},
+            retry_handlers=self.retry_handlers,
+        )
+        return FileUploadV2Result(
+            status=result.get("status_code"),
+            body=result.get("body"),
         )

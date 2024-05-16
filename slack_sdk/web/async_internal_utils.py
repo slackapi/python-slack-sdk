@@ -108,10 +108,18 @@ async def _request_with_session(
 
             try:
                 async with session.request(http_verb, api_url, **req_args) as res:
-                    data: Union[dict, bytes] = {}
+                    data: Union[dict, bytes, str] = {}
                     if res.content_type == "application/gzip":
                         # admin.analytics.getFile
                         data = await res.read()
+                        retry_response = RetryHttpResponse(
+                            status_code=res.status,
+                            headers=res.headers,
+                            data=data,
+                        )
+                    elif res.content_type == "text/plain":
+                        # https://files.slack.com/upload/v1/...
+                        data = await res.text()
                         retry_response = RetryHttpResponse(
                             status_code=res.status,
                             headers=res.headers,
@@ -143,7 +151,9 @@ async def _request_with_session(
                                 )
 
                     if logger.level <= logging.DEBUG:
-                        body = data if isinstance(data, dict) else "(binary)"
+                        body = "(binary)"
+                        if isinstance(data, dict) or isinstance(data, str):
+                            body = data
                         logger.debug(
                             "Received the following response - "
                             f"status: {res.status}, "
