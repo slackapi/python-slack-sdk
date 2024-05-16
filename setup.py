@@ -79,6 +79,11 @@ class CodegenCommand(BaseCommand):
                 async_source,
             )
             async_source = re.sub(
+                r" self._upload_file\(",
+                " await self._upload_file(",
+                async_source,
+            )
+            async_source = re.sub(
                 r" self.files_completeUploadExternal\(",
                 " await self.files_completeUploadExternal(",
                 async_source,
