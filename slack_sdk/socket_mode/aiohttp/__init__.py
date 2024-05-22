@@ -332,7 +332,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 f"session_id: {session_id}, "
                 f"closed: {self.closed}, "
                 f"stale: {self.stale}, "
-                f"current_session.closed: {self.current_session.closed}, "
+                f"current_session.closed: {self.current_session and self.current_session.closed}, "
                 f"is_ping_pong_failing: {is_ping_pong_failing}"
                 ")"
             )
