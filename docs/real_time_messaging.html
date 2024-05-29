@@ -245,7 +245,7 @@
             <span class="n">thread_ts</span><span class="o">=</span><span class="n">thread_ts</span>
         <span class="p">)</span>
 
-<span class="n">rtm</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">rtm</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Connecting to the RTM API (v1 client)</strong></p>
@@ -271,7 +271,7 @@
 
 <span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SLACK_BOT_TOKEN&quot;</span><span class="p">]</span>
 <span class="n">rtm_client</span> <span class="o">=</span> <span class="n">RTMClient</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="n">slack_token</span><span class="p">)</span>
-<span class="n">rtm_client</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">rtm_client</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>rtm.start vs rtm.connect (v1 client)</strong></p>
