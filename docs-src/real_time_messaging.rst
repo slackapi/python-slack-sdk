@@ -53,7 +53,7 @@ Note that the import here is not ``from slack_sdk.rtm import RTMClient`` but ``f
                 thread_ts=thread_ts
             )
 
-    rtm.connect()
+    rtm.start()
 
 
 **Connecting to the RTM API (v1 client)**
@@ -83,7 +83,7 @@ Below is a code snippet that uses the legacy version of ``RTMClient``. For new a
 
     slack_token = os.environ["SLACK_BOT_TOKEN"]
     rtm_client = RTMClient(token=slack_token)
-    rtm_client.connect()
+    rtm_client.start()
 
 **rtm.start vs rtm.connect (v1 client)**
 
