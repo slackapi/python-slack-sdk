@@ -19,7 +19,6 @@ from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server_with_disconnection,
     socket_mode_envelopes,
     socket_mode_hello_message,
-    socket_mode_disconnect_message,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_server import (
     setup_mock_web_api_server,

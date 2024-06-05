@@ -46,20 +46,20 @@ class TestAiohttp(unittest.TestCase):
         finally:
             await client.close()
 
-    @async_test
-    async def test_connect_to_new_endpoint(self):
-        client = SocketModeClient(
-            app_token="xapp-A111-222-xyz",
-            web_client=self.web_client,
-            auto_reconnect_enabled=False,
-        )
-        try:
-            await client.connect_to_new_endpoint()
-        except Exception as e:
-            # TODO: valida test to connect
-            pass
-        finally:
-            await client.close()
+    # TODO: valid test to connect
+    # @async_test
+    # async def test_connect_to_new_endpoint(self):
+    #     client = SocketModeClient(
+    #         app_token="xapp-A111-222-xyz",
+    #         web_client=self.web_client,
+    #         auto_reconnect_enabled=False,
+    #     )
+    #     try:
+    #         await client.connect_to_new_endpoint()
+    #     except Exception as e:
+    #         pass
+    #     finally:
+    #         await client.close()
 
     @async_test
     async def test_enqueue_message(self):
