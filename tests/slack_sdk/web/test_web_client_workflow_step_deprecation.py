@@ -23,12 +23,12 @@ class TestWebClient(unittest.TestCase):
     def test_workflow_step_completed_deprecation(self):
         client = WebClient(base_url="http://localhost:8888")
         client.workflows_stepCompleted(token="xoxb-api_test", workflow_step_execute_id="W1234")
-    
+
     @pytest.mark.skip()
     def test_workflow_step_failed_deprecation(self):
         client = WebClient(base_url="http://localhost:8888")
         client.workflows_stepFailed(token="xoxb-api_test", workflow_step_execute_id="W1234", error={})
-    
+
     @pytest.mark.skip()
     def test_workflow_update_step_deprecation(self):
         client = WebClient(base_url="http://localhost:8888")
