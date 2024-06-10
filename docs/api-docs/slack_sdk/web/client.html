@@ -43,7 +43,6 @@ from .internal_utils import (
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
     _to_v2_file_upload_item,
-    _upload_file_via_v2_url,
     _validate_for_legacy_client,
     _print_files_upload_v2_suggestion,
 )
@@ -3604,7 +3603,7 @@ class WebClient(BaseClient):
 
         # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
         for f in files:
-            upload_result = _upload_file_via_v2_url(
+            upload_result = self._upload_file(
                 url=f[&#34;upload_url&#34;],
                 data=f[&#34;data&#34;],
                 logger=self._logger,
@@ -3612,9 +3611,9 @@ class WebClient(BaseClient):
                 proxy=self.proxy,
                 ssl=self.ssl,
             )
-            if upload_result.get(&#34;status&#34;) != 200:
-                status = upload_result.get(&#34;status&#34;)
-                body = upload_result.get(&#34;body&#34;)
+            if upload_result.status != 200:
+                status = upload_result.status
+                body = upload_result.body
                 message = (
                     &#34;Failed to upload a file &#34;
                     f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
@@ -8772,7 +8771,7 @@ removed at anytime.</p></div>
 
         # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
         for f in files:
-            upload_result = _upload_file_via_v2_url(
+            upload_result = self._upload_file(
                 url=f[&#34;upload_url&#34;],
                 data=f[&#34;data&#34;],
                 logger=self._logger,
@@ -8780,9 +8779,9 @@ removed at anytime.</p></div>
                 proxy=self.proxy,
                 ssl=self.ssl,
             )
-            if upload_result.get(&#34;status&#34;) != 200:
-                status = upload_result.get(&#34;status&#34;)
-                body = upload_result.get(&#34;body&#34;)
+            if upload_result.status != 200:
+                status = upload_result.status
+                body = upload_result.body
                 message = (
                     &#34;Failed to upload a file &#34;
                     f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
@@ -15921,7 +15920,7 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
 
     # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
     for f in files:
-        upload_result = _upload_file_via_v2_url(
+        upload_result = self._upload_file(
             url=f[&#34;upload_url&#34;],
             data=f[&#34;data&#34;],
             logger=self._logger,
@@ -15929,9 +15928,9 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
             proxy=self.proxy,
             ssl=self.ssl,
         )
-        if upload_result.get(&#34;status&#34;) != 200:
-            status = upload_result.get(&#34;status&#34;)
-            body = upload_result.get(&#34;body&#34;)
+        if upload_result.status != 200:
+            status = upload_result.status
+            body = upload_result.body
             message = (
                 &#34;Failed to upload a file &#34;
                 f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;

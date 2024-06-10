@@ -1896,7 +1896,7 @@ class RichTextListElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.style = style
         self.indent = indent
         self.offset = offset
@@ -1919,7 +1919,7 @@ class RichTextPreformattedElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.border = border
 
 
@@ -1938,7 +1938,7 @@ class RichTextQuoteElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
 
 
 class RichTextSectionElement(RichTextElement):
@@ -1956,7 +1956,7 @@ class RichTextSectionElement(RichTextElement):
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
 
 
 class RichTextElementParts:
@@ -5350,7 +5350,7 @@ Only one element can be set to true. Defaults to false.</dd>
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.style = style
         self.indent = indent
         self.offset = offset
@@ -5425,7 +5425,7 @@ def attributes(self) -&gt; Set[str]:
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements
+        self.elements = BlockElement.parse_all(elements)
         self.border = border</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -5496,7 +5496,7 @@ def attributes(self) -&gt; Set[str]:
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements</code></pre>
+        self.elements = BlockElement.parse_all(elements)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -5566,7 +5566,7 @@ def attributes(self) -&gt; Set[str]:
     ):
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
-        self.elements = elements</code></pre>
+        self.elements = BlockElement.parse_all(elements)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

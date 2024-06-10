@@ -71,6 +71,10 @@ __all__ = [
 <dd>
 <div class="desc"></div>
 </dd>
+<dt><code class="name"><a title="slack_sdk.web.file_upload_v2_result" href="file_upload_v2_result.html">slack_sdk.web.file_upload_v2_result</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="slack_sdk.web.internal_utils" href="internal_utils.html">slack_sdk.web.internal_utils</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -4025,7 +4029,7 @@ removed at anytime.</p></div>
 
         # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
         for f in files:
-            upload_result = _upload_file_via_v2_url(
+            upload_result = self._upload_file(
                 url=f[&#34;upload_url&#34;],
                 data=f[&#34;data&#34;],
                 logger=self._logger,
@@ -4033,9 +4037,9 @@ removed at anytime.</p></div>
                 proxy=self.proxy,
                 ssl=self.ssl,
             )
-            if upload_result.get(&#34;status&#34;) != 200:
-                status = upload_result.get(&#34;status&#34;)
-                body = upload_result.get(&#34;body&#34;)
+            if upload_result.status != 200:
+                status = upload_result.status
+                body = upload_result.body
                 message = (
                     &#34;Failed to upload a file &#34;
                     f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
@@ -11174,7 +11178,7 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
 
     # step2: &#34;https://files.slack.com/upload/v1/...&#34; per file
     for f in files:
-        upload_result = _upload_file_via_v2_url(
+        upload_result = self._upload_file(
             url=f[&#34;upload_url&#34;],
             data=f[&#34;data&#34;],
             logger=self._logger,
@@ -11182,9 +11186,9 @@ and <a href="https://api.slack.com/methods/files.info">https://api.slack.com/met
             proxy=self.proxy,
             ssl=self.ssl,
         )
-        if upload_result.get(&#34;status&#34;) != 200:
-            status = upload_result.get(&#34;status&#34;)
-            body = upload_result.get(&#34;body&#34;)
+        if upload_result.status != 200:
+            status = upload_result.status
+            body = upload_result.body
             message = (
                 &#34;Failed to upload a file &#34;
                 f&#34;(status: {status}, body: {body}, filename: {f.get(&#39;filename&#39;)}, title: {f.get(&#39;title&#39;)})&#34;
@@ -13663,6 +13667,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.base_client" href="base_client.html">slack_sdk.web.base_client</a></code></li>
 <li><code><a title="slack_sdk.web.client" href="client.html">slack_sdk.web.client</a></code></li>
 <li><code><a title="slack_sdk.web.deprecation" href="deprecation.html">slack_sdk.web.deprecation</a></code></li>
+<li><code><a title="slack_sdk.web.file_upload_v2_result" href="file_upload_v2_result.html">slack_sdk.web.file_upload_v2_result</a></code></li>
 <li><code><a title="slack_sdk.web.internal_utils" href="internal_utils.html">slack_sdk.web.internal_utils</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_base_client" href="legacy_base_client.html">slack_sdk.web.legacy_base_client</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client" href="legacy_client.html">slack_sdk.web.legacy_client</a></code></li>

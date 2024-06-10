@@ -26,12 +26,14 @@ import slack_sdk.errors as err
 from slack_sdk.errors import SlackRequestError
 from .async_internal_utils import _files_to_data, _get_event_loop, _request_with_session
 from .deprecation import show_deprecation_warning_if_any
+from .file_upload_v2_result import FileUploadV2Result
 from .internal_utils import (
     convert_bool_to_0_or_1,
     get_user_agent,
     _get_url,
     _build_req_args,
     _build_unexpected_body_error_message,
+    _upload_file_via_v2_url,
 )
 from .legacy_slack_response import LegacySlackResponse as SlackResponse
 from ..proxy_env_variable_loader import load_http_proxy_from_env
@@ -521,9 +523,32 @@ class LegacyBaseClient:
         if has_json:
             headers.update({"Content-Type": "application/json;charset=utf-8"})
         if has_files:
-            # will be set afterwards
+            # will be set afterward
             headers.pop("Content-Type", None)
         return headers
+
+    def _upload_file(
+        self,
+        *,
+        url: str,
+        data: bytes,
+        logger: logging.Logger,
+        timeout: int,
+        proxy: Optional[str],
+        ssl: Optional[SSLContext],
+    ) -> FileUploadV2Result:
+        result = _upload_file_via_v2_url(
+            url=url,
+            data=data,
+            logger=logger,
+            timeout=timeout,
+            proxy=proxy,
+            ssl=ssl,
+        )
+        return FileUploadV2Result(
+            status=result.get("status"),
+            body=result.get("body"),
+        )
 
     # =================================================================
 

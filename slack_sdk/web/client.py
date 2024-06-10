@@ -14,7 +14,6 @@ from .internal_utils import (
     _warn_if_text_or_attachment_fallback_is_missing,
     _remove_none_values,
     _to_v2_file_upload_item,
-    _upload_file_via_v2_url,
     _validate_for_legacy_client,
     _print_files_upload_v2_suggestion,
 )
@@ -3575,7 +3574,7 @@ class WebClient(BaseClient):
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
-            upload_result = _upload_file_via_v2_url(
+            upload_result = self._upload_file(
                 url=f["upload_url"],
                 data=f["data"],
                 logger=self._logger,
@@ -3583,9 +3582,9 @@ class WebClient(BaseClient):
                 proxy=self.proxy,
                 ssl=self.ssl,
             )
-            if upload_result.get("status") != 200:
-                status = upload_result.get("status")
-                body = upload_result.get("body")
+            if upload_result.status != 200:
+                status = upload_result.status
+                body = upload_result.body
                 message = (
                     "Failed to upload a file "
                     f"(status: {status}, body: {body}, filename: {f.get('filename')}, title: {f.get('title')})"
