@@ -53,7 +53,7 @@ from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 
 
 class AsyncBaseClient:
-    BASE_URL = &#34;https://www.slack.com/api/&#34;
+    BASE_URL = &#34;https://slack.com/api/&#34;
 
     def __init__(
         self,
@@ -76,7 +76,7 @@ class AsyncBaseClient:
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -281,7 +281,7 @@ class AsyncBaseClient:
 <dl>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient"><code class="flex name class">
 <span>class <span class="ident">AsyncBaseClient</span></span>
-<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[slack_sdk.http_retry.async_handler.AsyncRetryHandler]] = None)</span>
+<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, session: Optional[aiohttp.client.ClientSession] = None, trust_env_in_session: bool = False, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[slack_sdk.http_retry.async_handler.AsyncRetryHandler]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -290,7 +290,7 @@ class AsyncBaseClient:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AsyncBaseClient:
-    BASE_URL = &#34;https://www.slack.com/api/&#34;
+    BASE_URL = &#34;https://slack.com/api/&#34;
 
     def __init__(
         self,
@@ -313,7 +313,7 @@ class AsyncBaseClient:
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -522,7 +522,7 @@ class AsyncBaseClient:
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
 <dd>
 <div class="desc"><p>A string representing the Slack API base URL.
-Default is <code>'https://www.slack.com/api/'</code>.</p></div>
+Default is <code>'https://slack.com/api/'</code>.</p></div>
 </dd>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient.headers"><code class="name">var <span class="ident">headers</span></code></dt>
 <dd>
