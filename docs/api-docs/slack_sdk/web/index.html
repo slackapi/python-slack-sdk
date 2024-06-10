@@ -412,7 +412,7 @@ This method returns it's own object. e.g. 'self'</p>
 </dd>
 <dt id="slack_sdk.web.WebClient"><code class="flex name class">
 <span>class <span class="ident">WebClient</span></span>
-<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
+<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A WebClient allows apps to communicate with the Slack Platform's Web API.</p>
@@ -427,7 +427,7 @@ as well as parsing any responses received into a <code><a title="slack_sdk.web.S
 <dd>A string specifying an <code>xoxp-*</code> or <code>xoxb-*</code> token.</dd>
 <dt><strong><code>base_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string representing the Slack API base URL.
-Default is <code>'https://www.slack.com/api/'</code></dd>
+Default is <code>'https://slack.com/api/'</code></dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>The maximum number of seconds the client will wait
 to connect and receive a response from Slack.
@@ -491,7 +491,7 @@ removed at anytime.</p></div>
     Attributes:
         token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is `&#39;https://www.slack.com/api/&#39;`
+            Default is `&#39;https://slack.com/api/&#39;`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.

@@ -40,6 +40,8 @@ deprecated_method_prefixes_2020_01 = [
 
 deprecated_method_prefixes_2023_07 = [&#34;stars.&#34;]
 
+deprecated_method_prefixes_2024_09 = [&#34;workflows.stepCompleted&#34;, &#34;workflows.updateStep&#34;, &#34;workflows.stepFailed&#34;]
+
 
 def show_deprecation_warning_if_any(method_name: str):
     &#34;&#34;&#34;Prints a warning if the given method is deprecated&#34;&#34;&#34;
@@ -66,6 +68,15 @@ def show_deprecation_warning_if_any(method_name: str):
         message = (
             f&#34;{method_name} is deprecated. For more info, go to &#34;
             &#34;https://api.slack.com/changelog/2023-07-its-later-already-for-stars-and-reminders&#34;
+        )
+        warnings.warn(message)
+
+    # 2024/09 workflow steps API deprecation
+    matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2024_09 if method_name.startswith(prefix)]
+    if len(matched_prefixes) &gt; 0:
+        message = (
+            f&#34;{method_name} is deprecated. For more info, go to &#34;
+            &#34;https://api.slack.com/changelog/2023-08-workflow-steps-from-apps-step-back&#34;
         )
         warnings.warn(message)</code></pre>
 </details>
@@ -111,6 +122,15 @@ def show_deprecation_warning_if_any(method_name: str):
         message = (
             f&#34;{method_name} is deprecated. For more info, go to &#34;
             &#34;https://api.slack.com/changelog/2023-07-its-later-already-for-stars-and-reminders&#34;
+        )
+        warnings.warn(message)
+
+    # 2024/09 workflow steps API deprecation
+    matched_prefixes = [prefix for prefix in deprecated_method_prefixes_2024_09 if method_name.startswith(prefix)]
+    if len(matched_prefixes) &gt; 0:
+        message = (
+            f&#34;{method_name} is deprecated. For more info, go to &#34;
+            &#34;https://api.slack.com/changelog/2023-08-workflow-steps-from-apps-step-back&#34;
         )
         warnings.warn(message)</code></pre>
 </details>

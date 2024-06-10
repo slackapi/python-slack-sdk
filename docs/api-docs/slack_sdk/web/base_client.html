@@ -69,7 +69,7 @@ from slack_sdk.proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class BaseClient:
-    BASE_URL = &#34;https://www.slack.com/api/&#34;
+    BASE_URL = &#34;https://slack.com/api/&#34;
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class BaseClient:
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -254,7 +254,7 @@ class BaseClient:
 
         Args:
             token: Slack API Token (either bot token or user token)
-            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
             query_params: Query string
             json_body: JSON data structure (it&#39;s still a dict at this point),
                 if you give this argument, body_params and files will be skipped
@@ -355,7 +355,7 @@ class BaseClient:
         &#34;&#34;&#34;Performs an HTTP request and parses the response.
 
         Args:
-            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
             args: args has &#34;headers&#34;, &#34;data&#34;, &#34;params&#34;, and &#34;json&#34;
                 &#34;headers&#34;: Dict[str, str]
                 &#34;data&#34;: Dict[str, Any]
@@ -668,7 +668,7 @@ class BaseClient:
 <dl>
 <dt id="slack_sdk.web.base_client.BaseClient"><code class="flex name class">
 <span>class <span class="ident">BaseClient</span></span>
-<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://www.slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
+<span>(</span><span>token: Optional[str] = None, base_url: str = 'https://slack.com/api/', timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, headers: Optional[dict] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, team_id: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -677,7 +677,7 @@ class BaseClient:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BaseClient:
-    BASE_URL = &#34;https://www.slack.com/api/&#34;
+    BASE_URL = &#34;https://slack.com/api/&#34;
 
     def __init__(
         self,
@@ -698,7 +698,7 @@ class BaseClient:
         &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://www.slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -862,7 +862,7 @@ class BaseClient:
 
         Args:
             token: Slack API Token (either bot token or user token)
-            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
             query_params: Query string
             json_body: JSON data structure (it&#39;s still a dict at this point),
                 if you give this argument, body_params and files will be skipped
@@ -963,7 +963,7 @@ class BaseClient:
         &#34;&#34;&#34;Performs an HTTP request and parses the response.
 
         Args:
-            url: Complete URL (e.g., https://www.slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
             args: args has &#34;headers&#34;, &#34;data&#34;, &#34;params&#34;, and &#34;json&#34;
                 &#34;headers&#34;: Dict[str, str]
                 &#34;data&#34;: Dict[str, Any]
@@ -1349,7 +1349,7 @@ def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, 
 <dt id="slack_sdk.web.base_client.BaseClient.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
 <dd>
 <div class="desc"><p>A string representing the Slack API base URL.
-Default is <code>'https://www.slack.com/api/'</code>.</p></div>
+Default is <code>'https://slack.com/api/'</code>.</p></div>
 </dd>
 <dt id="slack_sdk.web.base_client.BaseClient.headers"><code class="name">var <span class="ident">headers</span></code></dt>
 <dd>

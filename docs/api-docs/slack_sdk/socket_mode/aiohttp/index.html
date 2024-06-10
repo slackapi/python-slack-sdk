@@ -366,7 +366,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 f&#34;session_id: {session_id}, &#34;
                 f&#34;closed: {self.closed}, &#34;
                 f&#34;stale: {self.stale}, &#34;
-                f&#34;current_session.closed: {self.current_session.closed}, &#34;
+                f&#34;current_session.closed: {self.current_session and self.current_session.closed}, &#34;
                 f&#34;is_ping_pong_failing: {is_ping_pong_failing}&#34;
                 &#34;)&#34;
             )
@@ -842,7 +842,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 f&#34;session_id: {session_id}, &#34;
                 f&#34;closed: {self.closed}, &#34;
                 f&#34;stale: {self.stale}, &#34;
-                f&#34;current_session.closed: {self.current_session.closed}, &#34;
+                f&#34;current_session.closed: {self.current_session and self.current_session.closed}, &#34;
                 f&#34;is_ping_pong_failing: {is_ping_pong_failing}&#34;
                 &#34;)&#34;
             )
@@ -1228,7 +1228,7 @@ def build_session_id(cls, session: ClientWebSocketResponse) -&gt; str:
             f&#34;session_id: {session_id}, &#34;
             f&#34;closed: {self.closed}, &#34;
             f&#34;stale: {self.stale}, &#34;
-            f&#34;current_session.closed: {self.current_session.closed}, &#34;
+            f&#34;current_session.closed: {self.current_session and self.current_session.closed}, &#34;
             f&#34;is_ping_pong_failing: {is_ping_pong_failing}&#34;
             &#34;)&#34;
         )
