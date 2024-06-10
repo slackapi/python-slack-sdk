@@ -32,7 +32,7 @@ def _get_url(base_url: str, api_method: str) -> str:
 
     Returns:
         The absolute API URL.
-            e.g. 'https://www.slack.com/api/chat.postMessage'
+            e.g. 'https://slack.com/api/chat.postMessage'
     """
     return urljoin(base_url, api_method)
 

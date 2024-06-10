@@ -25,7 +25,7 @@ from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 
 
 class AsyncBaseClient:
-    BASE_URL = "https://www.slack.com/api/"
+    BASE_URL = "https://slack.com/api/"
 
     def __init__(
         self,
@@ -48,7 +48,7 @@ class AsyncBaseClient:
         """A string specifying an `xoxp-*` or `xoxb-*` token."""
         self.base_url = base_url
         """A string representing the Slack API base URL.
-        Default is `'https://www.slack.com/api/'`."""
+        Default is `'https://slack.com/api/'`."""
         self.timeout = timeout
         """The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
