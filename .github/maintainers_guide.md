@@ -152,8 +152,12 @@ $ ./scripts/generate_api_docs.sh
 
    **All Changes**
 
-   https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
+   * All issues/pull requests: https://github.com/slackapi/python-slack-sdk/milestone/{milestone for the release}
+   * All changes: https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
    ```
+
+   - Close the milestone relating to the Release
+   - Create the next patch version Milestone. To be used by the following release. 
 
 3. (Slack Internal) Communicate the release internally
 
