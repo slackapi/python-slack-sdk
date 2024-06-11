@@ -157,7 +157,7 @@ $ ./scripts/generate_api_docs.sh
    ```
 
    - Close the milestone relating to the Release
-   - Create the next patch version Milestone. To be used by the following release. 
+   - Create the next patch version Milestone. To be used by the following release.
 
 3. (Slack Internal) Communicate the release internally
 
