@@ -139,7 +139,7 @@ $ ./scripts/generate_api_docs.sh
 
    - Use the latest stable Python runtime
      - `python -m venv env`
-     - `python setup.py upload`
+     - `./scripts/deploy_to_prod_pypi_org.sh`
    - Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
 
    ```markdown
@@ -152,8 +152,12 @@ $ ./scripts/generate_api_docs.sh
 
    **All Changes**
 
-   https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
+   * All issues/pull requests: https://github.com/slackapi/python-slack-sdk/milestone/{milestone for the release}
+   * All changes: https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
    ```
+
+   - Close the milestone relating to the Release
+   - Create the next patch version Milestone. To be used by the following release.
 
 3. (Slack Internal) Communicate the release internally
 
