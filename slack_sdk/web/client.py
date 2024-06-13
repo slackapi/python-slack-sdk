@@ -5041,9 +5041,10 @@ class WebClient(BaseClient):
         email: str,
         **kwargs,
     ) -> SlackResponse:
-        """Delete the user profile photo
+        """Lookup an email address to see if someone is on Slack
         https://api.slack.com/methods/users.discoverableContacts.lookup
         """
+        kwargs.update({"email": email})
         return self.api_call("users.discoverableContacts.lookup", params=kwargs)
 
     def users_profile_get(

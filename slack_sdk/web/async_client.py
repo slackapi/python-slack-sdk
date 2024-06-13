@@ -5050,9 +5050,10 @@ class AsyncWebClient(AsyncBaseClient):
         email: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Delete the user profile photo
+        """Lookup an email address to see if someone is on Slack
         https://api.slack.com/methods/users.discoverableContacts.lookup
         """
+        kwargs.update({"email": email})
         return await self.api_call("users.discoverableContacts.lookup", params=kwargs)
 
     async def users_profile_get(
