@@ -2246,6 +2246,107 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("calls.update", http_verb="POST", params=kwargs)
 
+    def canvases_create(
+        self,
+        *,
+        title: Optional[str] = None,
+        document_content: Dict[str, str],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Create Canvas for a user
+        https://api.slack.com/methods/canvases.create
+        """
+        kwargs.update({"title": title, "document_content": json.dumps(document_content)})
+        return self.api_call("canvases.create", params=kwargs)
+
+    def canvases_edit(
+        self,
+        *,
+        canvas_id: str,
+        changes: Sequence[Dict[str, Any]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Update an existing canvas
+        https://api.slack.com/methods/canvases.edit
+        """
+        kwargs.update({"canvas_id": canvas_id, "changes": json.dumps(changes)})
+        return self.api_call("canvases.edit", params=kwargs)
+
+    def canvases_delete(
+        self,
+        *,
+        canvas_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Deletes a canvas
+        https://api.slack.com/methods/canvases.delete
+        """
+        kwargs.update({"canvas_id": canvas_id})
+        return self.api_call("canvases.delete", params=kwargs)
+
+    def canvases_access_set(
+        self,
+        *,
+        canvas_id: str,
+        access_level: str,
+        channel_ids: Optional[Union[Sequence[str], str]] = None,
+        user_ids: Optional[Union[Sequence[str], str]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Sets the access level to a canvas for specified entities
+        https://api.slack.com/methods/canvases.access.set
+        """
+        kwargs.update({"canvas_id": canvas_id, "access_level": access_level})
+        if channel_ids is not None:
+            if isinstance(channel_ids, (list, Tuple)):
+                kwargs.update({"channel_ids": ",".join(channel_ids)})
+            else:
+                kwargs.update({"channel_ids": channel_ids})
+        if user_ids is not None:
+            if isinstance(user_ids, (list, Tuple)):
+                kwargs.update({"user_ids": ",".join(user_ids)})
+            else:
+                kwargs.update({"user_ids": user_ids})
+
+        return self.api_call("canvases.access.set", params=kwargs)
+
+    def canvases_access_delete(
+        self,
+        *,
+        canvas_id: str,
+        channel_ids: Optional[Union[Sequence[str], str]] = None,
+        user_ids: Optional[Union[Sequence[str], str]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Create a Channel Canvas for a channel
+        https://api.slack.com/methods/canvases.access.delete
+        """
+        kwargs.update({"canvas_id": canvas_id})
+        if channel_ids is not None:
+            if isinstance(channel_ids, (list, Tuple)):
+                kwargs.update({"channel_ids": ",".join(channel_ids)})
+            else:
+                kwargs.update({"channel_ids": channel_ids})
+        if user_ids is not None:
+            if isinstance(user_ids, (list, Tuple)):
+                kwargs.update({"user_ids": ",".join(user_ids)})
+            else:
+                kwargs.update({"user_ids": user_ids})
+        return self.api_call("canvases.access.delete", params=kwargs)
+
+    def canvases_sections_lookup(
+        self,
+        *,
+        canvas_id: str,
+        criteria: Dict[str, Any],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Find sections matching the provided criteria
+        https://api.slack.com/methods/canvases.sections.lookup
+        """
+        kwargs.update({"canvas_id": canvas_id, "criteria": json.dumps(criteria)})
+        return self.api_call("canvases.sections.lookup", params=kwargs)
+
     # --------------------------
     # Deprecated: channels.*
     # You can use conversations.* APIs instead.
@@ -3114,6 +3215,19 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"channel": channel})
         return self.api_call("conversations.unarchive", params=kwargs)
+
+    def conversations_canvases_create(
+        self,
+        *,
+        channel_id: str,
+        document_content: Dict[str, str],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Create a Channel Canvas for a channel
+        https://api.slack.com/methods/conversations.canvases.create
+        """
+        kwargs.update({"channel_id": channel_id, "document_content": json.dumps(document_content)})
+        return self.api_call("conversations.canvases.create", params=kwargs)
 
     def dialog_open(
         self,
@@ -4932,6 +5046,17 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"presence": presence})
         return self.api_call("users.setPresence", params=kwargs)
+
+    def users_discoverableContacts_lookup(
+        self,
+        email: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lookup an email address to see if someone is on Slack
+        https://api.slack.com/methods/users.discoverableContacts.lookup
+        """
+        kwargs.update({"email": email})
+        return self.api_call("users.discoverableContacts.lookup", params=kwargs)
 
     def users_profile_get(
         self,
