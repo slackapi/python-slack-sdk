@@ -4,20 +4,20 @@ import unittest
 import slack_sdk.errors as e
 from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.views import View
+from slack_sdk.web import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.web.legacy_client import LegacyWebClient
-from slack_sdk.web import WebClient
-from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.web.mock_web_api_server import (
     setup_mock_web_api_server,
     cleanup_mock_web_api_server,
 )
+from tests.slack_sdk_async.helpers import async_test
 
 
 class TestWebClientCoverage(unittest.TestCase):
-    # 260 endpoints as of September 7, 2023
+    # 284 endpoints as of June 12, 2024
     # Can be fetched by running `var methodNames = [].slice.call(document.getElementsByClassName('apiReferenceFilterableList__listItemLink')).map(e => e.href.replace("https://api.slack.com/methods/", ""));console.log(methodNames.toString());console.log(methodNames.length);` on https://api.slack.com/methods
-    all_api_methods = "admin.analytics.getFile,admin.apps.activities.list,admin.apps.approve,admin.apps.clearResolution,admin.apps.restrict,admin.apps.uninstall,admin.apps.approved.list,admin.apps.config.lookup,admin.apps.config.set,admin.apps.requests.cancel,admin.apps.requests.list,admin.apps.restricted.list,admin.audit.anomaly.allow.getItem,admin.audit.anomaly.allow.updateItem,admin.auth.policy.assignEntities,admin.auth.policy.getEntities,admin.auth.policy.removeEntities,admin.barriers.create,admin.barriers.delete,admin.barriers.list,admin.barriers.update,admin.conversations.archive,admin.conversations.bulkArchive,admin.conversations.bulkDelete,admin.conversations.bulkMove,admin.conversations.convertToPrivate,admin.conversations.convertToPublic,admin.conversations.create,admin.conversations.delete,admin.conversations.disconnectShared,admin.conversations.getConversationPrefs,admin.conversations.getCustomRetention,admin.conversations.getTeams,admin.conversations.invite,admin.conversations.lookup,admin.conversations.removeCustomRetention,admin.conversations.rename,admin.conversations.search,admin.conversations.setConversationPrefs,admin.conversations.setCustomRetention,admin.conversations.setTeams,admin.conversations.unarchive,admin.conversations.ekm.listOriginalConnectedChannelInfo,admin.conversations.restrictAccess.addGroup,admin.conversations.restrictAccess.listGroups,admin.conversations.restrictAccess.removeGroup,admin.emoji.add,admin.emoji.addAlias,admin.emoji.list,admin.emoji.remove,admin.emoji.rename,admin.functions.list,admin.functions.permissions.lookup,admin.functions.permissions.set,admin.inviteRequests.approve,admin.inviteRequests.deny,admin.inviteRequests.list,admin.inviteRequests.approved.list,admin.inviteRequests.denied.list,admin.roles.addAssignments,admin.roles.listAssignments,admin.roles.removeAssignments,admin.teams.admins.list,admin.teams.create,admin.teams.list,admin.teams.owners.list,admin.teams.settings.info,admin.teams.settings.setDefaultChannels,admin.teams.settings.setDescription,admin.teams.settings.setDiscoverability,admin.teams.settings.setIcon,admin.teams.settings.setName,admin.usergroups.addChannels,admin.usergroups.addTeams,admin.usergroups.listChannels,admin.usergroups.removeChannels,admin.users.assign,admin.users.invite,admin.users.list,admin.users.remove,admin.users.setAdmin,admin.users.setExpiration,admin.users.setOwner,admin.users.setRegular,admin.users.session.clearSettings,admin.users.session.getSettings,admin.users.session.invalidate,admin.users.session.list,admin.users.session.reset,admin.users.session.resetBulk,admin.users.session.setSettings,admin.users.unsupportedVersions.export,admin.workflows.collaborators.add,admin.workflows.collaborators.remove,admin.workflows.permissions.lookup,admin.workflows.search,admin.workflows.unpublish,api.test,apps.activities.list,apps.auth.external.delete,apps.auth.external.get,apps.connections.open,apps.datastore.delete,apps.datastore.get,apps.datastore.put,apps.datastore.query,apps.datastore.update,apps.event.authorizations.list,apps.manifest.create,apps.manifest.delete,apps.manifest.export,apps.manifest.update,apps.manifest.validate,apps.uninstall,auth.revoke,auth.test,auth.teams.list,bookmarks.add,bookmarks.edit,bookmarks.list,bookmarks.remove,bots.info,calls.add,calls.end,calls.info,calls.update,calls.participants.add,calls.participants.remove,chat.delete,chat.deleteScheduledMessage,chat.getPermalink,chat.meMessage,chat.postEphemeral,chat.postMessage,chat.scheduleMessage,chat.unfurl,chat.update,chat.scheduledMessages.list,conversations.acceptSharedInvite,conversations.approveSharedInvite,conversations.archive,conversations.close,conversations.create,conversations.declineSharedInvite,conversations.history,conversations.info,conversations.invite,conversations.inviteShared,conversations.join,conversations.kick,conversations.leave,conversations.list,conversations.listConnectInvites,conversations.mark,conversations.members,conversations.open,conversations.rename,conversations.replies,conversations.setPurpose,conversations.setTopic,conversations.unarchive,dialog.open,dnd.endDnd,dnd.endSnooze,dnd.info,dnd.setSnooze,dnd.teamInfo,emoji.list,files.comments.delete,files.completeUploadExternal,files.delete,files.getUploadURLExternal,files.info,files.list,files.revokePublicURL,files.sharedPublicURL,files.upload,files.remote.add,files.remote.info,files.remote.list,files.remote.remove,files.remote.share,files.remote.update,functions.workflows.steps.list,functions.workflows.steps.responses.export,migration.exchange,oauth.access,oauth.v2.access,oauth.v2.exchange,openid.connect.token,openid.connect.userInfo,pins.add,pins.list,pins.remove,reactions.add,reactions.get,reactions.list,reactions.remove,reminders.add,reminders.complete,reminders.delete,reminders.info,reminders.list,rtm.connect,rtm.start,search.all,search.files,search.messages,stars.add,stars.list,stars.remove,team.accessLogs,team.billableInfo,team.info,team.integrationLogs,team.billing.info,team.preferences.list,team.profile.get,tooling.tokens.rotate,usergroups.create,usergroups.disable,usergroups.enable,usergroups.list,usergroups.update,usergroups.users.list,usergroups.users.update,users.conversations,users.deletePhoto,users.getPresence,users.identity,users.info,users.list,users.lookupByEmail,users.setActive,users.setPhoto,users.setPresence,users.profile.get,users.profile.set,views.open,views.publish,views.push,views.update,workflows.stepCompleted,workflows.stepFailed,workflows.updateStep,channels.create,channels.info,channels.invite,channels.mark,groups.create,groups.info,groups.invite,groups.mark,groups.open,im.list,im.mark,im.open,mpim.list,mpim.mark,mpim.open".split(
+    all_api_methods = "admin.analytics.getFile,admin.apps.activities.list,admin.apps.approve,admin.apps.clearResolution,admin.apps.restrict,admin.apps.uninstall,admin.apps.approved.list,admin.apps.config.lookup,admin.apps.config.set,admin.apps.requests.cancel,admin.apps.requests.list,admin.apps.restricted.list,admin.audit.anomaly.allow.getItem,admin.audit.anomaly.allow.updateItem,admin.auth.policy.assignEntities,admin.auth.policy.getEntities,admin.auth.policy.removeEntities,admin.barriers.create,admin.barriers.delete,admin.barriers.list,admin.barriers.update,admin.conversations.archive,admin.conversations.bulkArchive,admin.conversations.bulkDelete,admin.conversations.bulkMove,admin.conversations.convertToPrivate,admin.conversations.convertToPublic,admin.conversations.create,admin.conversations.delete,admin.conversations.disconnectShared,admin.conversations.getConversationPrefs,admin.conversations.getCustomRetention,admin.conversations.getTeams,admin.conversations.invite,admin.conversations.lookup,admin.conversations.removeCustomRetention,admin.conversations.rename,admin.conversations.search,admin.conversations.setConversationPrefs,admin.conversations.setCustomRetention,admin.conversations.setTeams,admin.conversations.unarchive,admin.conversations.ekm.listOriginalConnectedChannelInfo,admin.conversations.restrictAccess.addGroup,admin.conversations.restrictAccess.listGroups,admin.conversations.restrictAccess.removeGroup,admin.emoji.add,admin.emoji.addAlias,admin.emoji.list,admin.emoji.remove,admin.emoji.rename,admin.functions.list,admin.functions.permissions.lookup,admin.functions.permissions.set,admin.inviteRequests.approve,admin.inviteRequests.deny,admin.inviteRequests.list,admin.inviteRequests.approved.list,admin.inviteRequests.denied.list,admin.roles.addAssignments,admin.roles.listAssignments,admin.roles.removeAssignments,admin.teams.admins.list,admin.teams.create,admin.teams.list,admin.teams.owners.list,admin.teams.settings.info,admin.teams.settings.setDefaultChannels,admin.teams.settings.setDescription,admin.teams.settings.setDiscoverability,admin.teams.settings.setIcon,admin.teams.settings.setName,admin.usergroups.addChannels,admin.usergroups.addTeams,admin.usergroups.listChannels,admin.usergroups.removeChannels,admin.users.assign,admin.users.invite,admin.users.list,admin.users.remove,admin.users.setAdmin,admin.users.setExpiration,admin.users.setOwner,admin.users.setRegular,admin.users.session.clearSettings,admin.users.session.getSettings,admin.users.session.invalidate,admin.users.session.list,admin.users.session.reset,admin.users.session.resetBulk,admin.users.session.setSettings,admin.users.unsupportedVersions.export,admin.workflows.collaborators.add,admin.workflows.collaborators.remove,admin.workflows.permissions.lookup,admin.workflows.search,admin.workflows.unpublish,admin.workflows.triggers.types.permissions.lookup,admin.workflows.triggers.types.permissions.set,api.test,apps.activities.list,apps.auth.external.delete,apps.auth.external.get,apps.connections.open,apps.datastore.bulkDelete,apps.datastore.bulkGet,apps.datastore.bulkPut,apps.datastore.count,apps.datastore.delete,apps.datastore.get,apps.datastore.put,apps.datastore.query,apps.datastore.update,apps.event.authorizations.list,apps.manifest.create,apps.manifest.delete,apps.manifest.export,apps.manifest.update,apps.manifest.validate,apps.uninstall,auth.revoke,auth.test,auth.teams.list,bookmarks.add,bookmarks.edit,bookmarks.list,bookmarks.remove,bots.info,calls.add,calls.end,calls.info,calls.update,calls.participants.add,calls.participants.remove,canvases.access.delete,canvases.access.set,canvases.create,canvases.delete,canvases.edit,canvases.sections.lookup,chat.delete,chat.deleteScheduledMessage,chat.getPermalink,chat.meMessage,chat.postEphemeral,chat.postMessage,chat.scheduleMessage,chat.unfurl,chat.update,chat.scheduledMessages.list,conversations.acceptSharedInvite,conversations.approveSharedInvite,conversations.archive,conversations.close,conversations.create,conversations.declineSharedInvite,conversations.history,conversations.info,conversations.invite,conversations.inviteShared,conversations.join,conversations.kick,conversations.leave,conversations.list,conversations.listConnectInvites,conversations.mark,conversations.members,conversations.open,conversations.rename,conversations.replies,conversations.setPurpose,conversations.setTopic,conversations.unarchive,conversations.canvases.create,dialog.open,dnd.endDnd,dnd.endSnooze,dnd.info,dnd.setSnooze,dnd.teamInfo,emoji.list,files.comments.delete,files.completeUploadExternal,files.delete,files.getUploadURLExternal,files.info,files.list,files.revokePublicURL,files.sharedPublicURL,files.upload,files.remote.add,files.remote.info,files.remote.list,files.remote.remove,files.remote.share,files.remote.update,functions.completeError,functions.completeSuccess,functions.distributions.permissions.add,functions.distributions.permissions.list,functions.distributions.permissions.remove,functions.distributions.permissions.set,functions.workflows.steps.list,functions.workflows.steps.responses.export,migration.exchange,oauth.access,oauth.v2.access,oauth.v2.exchange,openid.connect.token,openid.connect.userInfo,pins.add,pins.list,pins.remove,reactions.add,reactions.get,reactions.list,reactions.remove,reminders.add,reminders.complete,reminders.delete,reminders.info,reminders.list,rtm.connect,rtm.start,search.all,search.files,search.messages,stars.add,stars.list,stars.remove,team.accessLogs,team.billableInfo,team.info,team.integrationLogs,team.billing.info,team.preferences.list,team.profile.get,tooling.tokens.rotate,usergroups.create,usergroups.disable,usergroups.enable,usergroups.list,usergroups.update,usergroups.users.list,usergroups.users.update,users.conversations,users.deletePhoto,users.getPresence,users.identity,users.info,users.list,users.lookupByEmail,users.setActive,users.setPhoto,users.setPresence,users.discoverableContacts.lookup,users.profile.get,users.profile.set,views.open,views.publish,views.push,views.update,workflows.stepCompleted,workflows.stepFailed,workflows.updateStep,workflows.triggers.permissions.add,workflows.triggers.permissions.list,workflows.triggers.permissions.remove,workflows.triggers.permissions.set,channels.create,channels.info,channels.invite,channels.mark,groups.create,groups.info,groups.invite,groups.mark,groups.open,im.list,im.mark,im.open,mpim.list,mpim.mark,mpim.open".split(
         ","
     )
 
@@ -50,8 +50,22 @@ class TestWebClientCoverage(unittest.TestCase):
                 "apps.datastore.put",
                 "apps.datastore.query",
                 "apps.datastore.update",
+                "apps.datastore.bulkDelete",
+                "apps.datastore.bulkGet",
+                "apps.datastore.bulkPut",
+                "apps.datastore.count",
                 "functions.workflows.steps.list",
                 "functions.workflows.steps.responses.export",
+                "functions.distributions.permissions.add",
+                "functions.distributions.permissions.list",
+                "functions.distributions.permissions.remove",
+                "functions.distributions.permissions.set",
+                "workflows.triggers.permissions.add",
+                "workflows.triggers.permissions.list",
+                "workflows.triggers.permissions.remove",
+                "workflows.triggers.permissions.set",
+                "admin.workflows.triggers.types.permissions.lookup",
+                "admin.workflows.triggers.types.permissions.set",
                 # TODO: admin.audit.anomaly.allow.* / The endpoints requires a "session" token
                 "admin.audit.anomaly.allow.getItem",
                 "admin.audit.anomaly.allow.updateItem",
@@ -462,6 +476,27 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "calls_update":
                 self.api_methods_to_call.remove(method(id="R111")["method"])
                 await async_method(id="R111")
+            elif method_name == "canvases_create":
+                self.api_methods_to_call.remove(method(document_content={})["method"])
+                await async_method(document_content={})
+            elif method_name == "conversations_canvases_create":
+                self.api_methods_to_call.remove(method(channel_id="C123", document_content={})["method"])
+                await async_method(channel_id="C123", document_content={})
+            elif method_name == "canvases_access_set":
+                self.api_methods_to_call.remove(method(canvas_id="F111", access_level="write")["method"])
+                await async_method(canvas_id="F111", access_level="write")
+            elif method_name == "canvases_access_delete":
+                self.api_methods_to_call.remove(method(canvas_id="F111")["method"])
+                await async_method(canvas_id="F111")
+            elif method_name == "canvases_delete":
+                self.api_methods_to_call.remove(method(canvas_id="F111")["method"])
+                await async_method(canvas_id="F111")
+            elif method_name == "canvases_edit":
+                self.api_methods_to_call.remove(method(canvas_id="F111", changes=[])["method"])
+                await async_method(canvas_id="F111", changes=[])
+            elif method_name == "canvases_sections_lookup":
+                self.api_methods_to_call.remove(method(canvas_id="F123", criteria={})["method"])
+                await async_method(canvas_id="F123", criteria={})
             elif method_name == "chat_delete":
                 self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
@@ -641,10 +676,10 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(files=[{"id": "F111"}])["method"])
                 await async_method(files=[{"id": "F111"}])
             elif method_name == "functions_completeSuccess":
-                self.api_methods_to_call.remove(method(function_execution_id="Fn111", outputs={"num": 123}))
+                self.api_methods_to_call.remove(method(function_execution_id="Fn111", outputs={"num": 123})["method"])
                 await async_method(function_execution_id="Fn111", outputs={"num": 123})
             elif method_name == "functions_completeError":
-                self.api_methods_to_call.remove(method(function_execution_id="Fn111", error="something wrong"))
+                self.api_methods_to_call.remove(method(function_execution_id="Fn111", error="something wrong")["method"])
                 await async_method(function_execution_id="Fn111", error="something wrong")
             elif method_name == "migration_exchange":
                 self.api_methods_to_call.remove(method(users="U123,U234")["method"])
@@ -956,6 +991,9 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "admin_conversations_lookup":
                 self.api_methods_to_call.remove(method(team_ids=["T111", "T222"], last_message_activity_before=10)["method"])
                 await async_method(team_ids=["T111", "T222"], last_message_activity_before=10)
+            elif method_name == "users_discoverableContacts_lookup":
+                self.api_methods_to_call.remove(method(email="foo@example.com")["method"])
+                await async_method(email="foo@example.com")
             else:
                 self.api_methods_to_call.remove(method(*{})["method"])
                 await async_method(*{})
