@@ -4695,6 +4695,34 @@ class AsyncWebClient(AsyncBaseClient):
         """
         return await self.api_call("team.billing.info", params=kwargs)
 
+    async def team_externalTeams_list(
+        self,
+        *,
+        connection_status_filter: Optional[str] = None,
+        slack_connect_pref_filter: Optional[List[str]] = None,
+        sort_direction: Optional[str] = None,
+        sort_field: Optional[str] = None,
+        workspace_filter: Optional[List[str]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Gets all the external teams connected with their connection detail.
+        https://api.slack.com/methods/team.externalTeams.list
+        """
+        kwargs.update(
+            {
+                "connection_status_filter": connection_status_filter,
+                "slack_connect_pref_filter": slack_connect_pref_filter,
+                "sort_direction": sort_direction,
+                "sort_field": sort_field,
+                "workspace_filter": workspace_filter,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return await self.api_call("team.externalTeams.list", http_verb="GET", params=kwargs)
+
     async def team_info(
         self,
         *,
