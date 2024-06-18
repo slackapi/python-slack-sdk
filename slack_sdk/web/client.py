@@ -4698,7 +4698,7 @@ class WebClient(BaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Gets all the external teams connected with their connection detail.
+        """Returns a list of all the external teams connected and details about the connection.
         https://api.slack.com/methods/team.externalTeams.list
         """
         kwargs.update(
