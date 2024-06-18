@@ -4690,7 +4690,7 @@ class WebClient(BaseClient):
         self,
         *,
         connection_status_filter: Optional[str] = None,
-        slack_connect_pref_filter: Optional[List[str]] = None,
+        slack_connect_pref_filter: Optional[Sequence[str]] = None,
         sort_direction: Optional[str] = None,
         sort_field: Optional[str] = None,
         workspace_filter: Optional[List[str]] = None,
