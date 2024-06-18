@@ -4693,7 +4693,7 @@ class WebClient(BaseClient):
         slack_connect_pref_filter: Optional[Sequence[str]] = None,
         sort_direction: Optional[str] = None,
         sort_field: Optional[str] = None,
-        workspace_filter: Optional[List[str]] = None,
+        workspace_filter: Optional[Sequence[str]] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
