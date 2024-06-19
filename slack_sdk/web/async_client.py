@@ -4713,14 +4713,22 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update(
             {
                 "connection_status_filter": connection_status_filter,
-                "slack_connect_pref_filter": slack_connect_pref_filter,
                 "sort_direction": sort_direction,
                 "sort_field": sort_field,
-                "workspace_filter": workspace_filter,
                 "cursor": cursor,
                 "limit": limit,
             }
         )
+        if slack_connect_pref_filter is not None:
+            if isinstance(slack_connect_pref_filter, (list, Tuple)):
+                kwargs.update({"slack_connect_pref_filter": ",".join(slack_connect_pref_filter)})
+            else:
+                kwargs.update({"slack_connect_pref_filter": slack_connect_pref_filter})
+        if workspace_filter is not None:
+            if isinstance(workspace_filter, (list, Tuple)):
+                kwargs.update({"workspace_filter": ",".join(workspace_filter)})
+            else:
+                kwargs.update({"workspace_filter": workspace_filter})
         return await self.api_call("team.externalTeams.list", http_verb="GET", params=kwargs)
 
     async def team_info(
