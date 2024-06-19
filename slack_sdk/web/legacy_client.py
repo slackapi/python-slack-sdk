@@ -4701,15 +4701,15 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         connection_status_filter: Optional[str] = None,
-        slack_connect_pref_filter: Optional[List[str]] = None,
+        slack_connect_pref_filter: Optional[Sequence[str]] = None,
         sort_direction: Optional[str] = None,
         sort_field: Optional[str] = None,
-        workspace_filter: Optional[List[str]] = None,
+        workspace_filter: Optional[Sequence[str]] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Gets all the external teams connected with their connection detail.
+        """Returns a list of all the external teams connected and details about the connection.
         https://api.slack.com/methods/team.externalTeams.list
         """
         kwargs.update(
