@@ -4697,6 +4697,42 @@ class LegacyWebClient(LegacyBaseClient):
         """
         return self.api_call("team.billing.info", params=kwargs)
 
+    def team_externalTeams_list(
+        self,
+        *,
+        connection_status_filter: Optional[str] = None,
+        slack_connect_pref_filter: Optional[Sequence[str]] = None,
+        sort_direction: Optional[str] = None,
+        sort_field: Optional[str] = None,
+        workspace_filter: Optional[Sequence[str]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Returns a list of all the external teams connected and details about the connection.
+        https://api.slack.com/methods/team.externalTeams.list
+        """
+        kwargs.update(
+            {
+                "connection_status_filter": connection_status_filter,
+                "sort_direction": sort_direction,
+                "sort_field": sort_field,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        if slack_connect_pref_filter is not None:
+            if isinstance(slack_connect_pref_filter, (list, Tuple)):
+                kwargs.update({"slack_connect_pref_filter": ",".join(slack_connect_pref_filter)})
+            else:
+                kwargs.update({"slack_connect_pref_filter": slack_connect_pref_filter})
+        if workspace_filter is not None:
+            if isinstance(workspace_filter, (list, Tuple)):
+                kwargs.update({"workspace_filter": ",".join(workspace_filter)})
+            else:
+                kwargs.update({"workspace_filter": workspace_filter})
+        return self.api_call("team.externalTeams.list", http_verb="GET", params=kwargs)
+
     def team_info(
         self,
         *,
