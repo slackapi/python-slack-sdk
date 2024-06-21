@@ -4725,6 +4725,42 @@ class LegacyWebClient(LegacyBaseClient):
         &#34;&#34;&#34;
         return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
 
+    def team_externalTeams_list(
+        self,
+        *,
+        connection_status_filter: Optional[str] = None,
+        slack_connect_pref_filter: Optional[Sequence[str]] = None,
+        sort_direction: Optional[str] = None,
+        sort_field: Optional[str] = None,
+        workspace_filter: Optional[Sequence[str]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Returns a list of all the external teams connected and details about the connection.
+        https://api.slack.com/methods/team.externalTeams.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;connection_status_filter&#34;: connection_status_filter,
+                &#34;sort_direction&#34;: sort_direction,
+                &#34;sort_field&#34;: sort_field,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        if slack_connect_pref_filter is not None:
+            if isinstance(slack_connect_pref_filter, (list, Tuple)):
+                kwargs.update({&#34;slack_connect_pref_filter&#34;: &#34;,&#34;.join(slack_connect_pref_filter)})
+            else:
+                kwargs.update({&#34;slack_connect_pref_filter&#34;: slack_connect_pref_filter})
+        if workspace_filter is not None:
+            if isinstance(workspace_filter, (list, Tuple)):
+                kwargs.update({&#34;workspace_filter&#34;: &#34;,&#34;.join(workspace_filter)})
+            else:
+                kwargs.update({&#34;workspace_filter&#34;: workspace_filter})
+        return self.api_call(&#34;team.externalTeams.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
     def team_info(
         self,
         *,
@@ -10017,6 +10053,42 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/team.billing.info
         &#34;&#34;&#34;
         return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
+
+    def team_externalTeams_list(
+        self,
+        *,
+        connection_status_filter: Optional[str] = None,
+        slack_connect_pref_filter: Optional[Sequence[str]] = None,
+        sort_direction: Optional[str] = None,
+        sort_field: Optional[str] = None,
+        workspace_filter: Optional[Sequence[str]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Returns a list of all the external teams connected and details about the connection.
+        https://api.slack.com/methods/team.externalTeams.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;connection_status_filter&#34;: connection_status_filter,
+                &#34;sort_direction&#34;: sort_direction,
+                &#34;sort_field&#34;: sort_field,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        if slack_connect_pref_filter is not None:
+            if isinstance(slack_connect_pref_filter, (list, Tuple)):
+                kwargs.update({&#34;slack_connect_pref_filter&#34;: &#34;,&#34;.join(slack_connect_pref_filter)})
+            else:
+                kwargs.update({&#34;slack_connect_pref_filter&#34;: slack_connect_pref_filter})
+        if workspace_filter is not None:
+            if isinstance(workspace_filter, (list, Tuple)):
+                kwargs.update({&#34;workspace_filter&#34;: &#34;,&#34;.join(workspace_filter)})
+            else:
+                kwargs.update({&#34;workspace_filter&#34;: workspace_filter})
+        return self.api_call(&#34;team.externalTeams.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     def team_info(
         self,
@@ -17925,6 +17997,53 @@ multiparty direct message.</p></div>
     return self.api_call(&#34;team.billing.info&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.team_externalTeams_list"><code class="name flex">
+<span>def <span class="ident">team_externalTeams_list</span></span>(<span>self, *, connection_status_filter: Optional[str] = None, slack_connect_pref_filter: Optional[Sequence[str]] = None, sort_direction: Optional[str] = None, sort_field: Optional[str] = None, workspace_filter: Optional[Sequence[str]] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a list of all the external teams connected and details about the connection.
+<a href="https://api.slack.com/methods/team.externalTeams.list">https://api.slack.com/methods/team.externalTeams.list</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def team_externalTeams_list(
+    self,
+    *,
+    connection_status_filter: Optional[str] = None,
+    slack_connect_pref_filter: Optional[Sequence[str]] = None,
+    sort_direction: Optional[str] = None,
+    sort_field: Optional[str] = None,
+    workspace_filter: Optional[Sequence[str]] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Returns a list of all the external teams connected and details about the connection.
+    https://api.slack.com/methods/team.externalTeams.list
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;connection_status_filter&#34;: connection_status_filter,
+            &#34;sort_direction&#34;: sort_direction,
+            &#34;sort_field&#34;: sort_field,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+        }
+    )
+    if slack_connect_pref_filter is not None:
+        if isinstance(slack_connect_pref_filter, (list, Tuple)):
+            kwargs.update({&#34;slack_connect_pref_filter&#34;: &#34;,&#34;.join(slack_connect_pref_filter)})
+        else:
+            kwargs.update({&#34;slack_connect_pref_filter&#34;: slack_connect_pref_filter})
+    if workspace_filter is not None:
+        if isinstance(workspace_filter, (list, Tuple)):
+            kwargs.update({&#34;workspace_filter&#34;: &#34;,&#34;.join(workspace_filter)})
+        else:
+            kwargs.update({&#34;workspace_filter&#34;: workspace_filter})
+    return self.api_call(&#34;team.externalTeams.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.team_info"><code class="name flex">
 <span>def <span class="ident">team_info</span></span>(<span>self, *, team: Optional[str] = None, domain: Optional[str] = None, **kwargs) ‑> Union[_asyncio.Future, <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a>]</span>
 </code></dt>
@@ -19133,6 +19252,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_accessLogs" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_accessLogs">team_accessLogs</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_billableInfo" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_billableInfo">team_billableInfo</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_billing_info" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_billing_info">team_billing_info</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_externalTeams_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_externalTeams_list">team_externalTeams_list</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_info" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_info">team_info</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_integrationLogs" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_integrationLogs">team_integrationLogs</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.team_preferences_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.team_preferences_list">team_preferences_list</a></code></li>
