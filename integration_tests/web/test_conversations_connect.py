@@ -138,8 +138,10 @@ class TestWebClient(unittest.TestCase):
             # receiver attempt to approve invite already accepted by an admin level token should fail
             with self.assertRaises(SlackApiError):
                 await receiver.conversations_approveSharedInvite(invite_id=invite["invite_id"])
-            
-            sender_approval = await sender.conversations_acceptSharedInvite(invite_id=invite["invite_id"], team_id=connect_team_id)
+
+            sender_approval = await sender.conversations_acceptSharedInvite(
+                invite_id=invite["invite_id"], team_id=connect_team_id
+            )
             self.assertIsNone(sender_approval["error"])
 
             downgrade = await sender.conversations_externalInvitePermissions_set(
