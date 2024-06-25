@@ -2914,6 +2914,20 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call("conversations.declineSharedInvite", http_verb="GET", params=kwargs)
 
+    def conversations_externalinvitepermissions_set(
+        self,
+        *,
+        action: str,
+        channel: str,
+        target_team: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Convert a team in a shared channel from an External Limited channel to a fully shared Slack Connect channel or vice versa.
+        https://api.slack.com/methods/conversations.externalInvitePermissions.set
+        """
+        kwargs.update({"action": action, "channel": channel, "target_team": target_team})
+        return self.api_call("conversations.externalInvitePermissions.set", http_verb="GET", params=kwargs)
+
     def conversations_history(
         self,
         *,
