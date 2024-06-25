@@ -2903,6 +2903,21 @@ class WebClient(BaseClient):
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return self.api_call("conversations.declineSharedInvite", http_verb="GET", params=kwargs)
 
+    def conversations_externalInvitePermissions_set(
+        self, *, action: str, channel: str, target_team: str, **kwargs
+    ) -> SlackResponse:
+        """Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+        https://api.slack.com/methods/conversations.externalInvitePermissions.set
+        """
+        kwargs.update(
+            {
+                "action": action,
+                "channel": channel,
+                "target_team": target_team,
+            }
+        )
+        return self.api_call("conversations.externalInvitePermissions.set", http_verb="GET", params=kwargs)
+
     def conversations_history(
         self,
         *,
