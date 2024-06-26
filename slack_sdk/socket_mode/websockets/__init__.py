@@ -26,7 +26,7 @@ from slack_sdk.socket_mode.async_listeners import (
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web.async_client import AsyncWebClient
 
-from ..logger.messages import debug_message_redact
+from ..logger.messages import debug_redacted_message_string
 
 
 class SocketModeClient(AsyncBaseSocketModeClient):
@@ -151,7 +151,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if isinstance(message, bytes):
                             message = message.decode("utf-8")
                         if self.logger.level <= logging.DEBUG:
-                            self.logger.debug(f"Received message: {debug_message_redact(message)}, session: {session_id}")
+                            self.logger.debug(
+                                f"Received message: {debug_redacted_message_string(message)}, session: {session_id}"
+                            )
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:
