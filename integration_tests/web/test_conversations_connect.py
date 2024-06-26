@@ -81,7 +81,9 @@ class TestWebClient(unittest.TestCase):
                 invite_id=invite["invite_id"],
             )
 
-            sender_approval = sender.conversations_approveSharedInvite(invite_id=invite["invite_id"], team_id=connect_team_id)
+            sender_approval = sender.conversations_approveSharedInvite(
+                invite_id=invite["invite_id"], team_id=connect_team_id
+            )
             self.assertIsNone(sender_approval["error"])
 
             downgrade = sender.conversations_externalInvitePermissions_set(
