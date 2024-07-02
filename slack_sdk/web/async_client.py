@@ -2925,7 +2925,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "target_team": target_team,
             }
         )
-        return await self.api_call("conversations.externalInvitePermissions.set", http_verb="GET", params=kwargs)
+        return await self.api_call("conversations.externalInvitePermissions.set", params=kwargs)
 
     async def conversations_history(
         self,

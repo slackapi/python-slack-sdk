@@ -2927,7 +2927,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "target_team": target_team,
             }
         )
-        return self.api_call("conversations.externalInvitePermissions.set", http_verb="GET", params=kwargs)
+        return self.api_call("conversations.externalInvitePermissions.set", params=kwargs)
 
     def conversations_history(
         self,
