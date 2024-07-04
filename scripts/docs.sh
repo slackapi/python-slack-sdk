@@ -3,7 +3,7 @@
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-pip install -U sphinx docutils
+pip install -U -r requirements/documentation.txt
 
 sphinx-build -E -c ./docs-src/_themes/slack/ -b html docs-src docs \
   && touch ./docs/.nojekyll \
