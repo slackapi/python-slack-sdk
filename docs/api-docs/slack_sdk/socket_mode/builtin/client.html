@@ -53,6 +53,7 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web import WebClient
 from .connection import Connection, ConnectionState
 from ..interval_runner import IntervalRunner
+from ..logger.messages import debug_redacted_message_string
 from ...errors import SlackClientConfigurationError, SlackClientNotConnectedError
 from ...proxy_env_variable_loader import load_http_proxy_from_env
 
@@ -264,7 +265,7 @@ class SocketModeClient(BaseSocketModeClient):
 
     def _on_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(f&#34;on_message invoked: (message: {message})&#34;)
+            self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
             listener(message)
@@ -581,7 +582,7 @@ class SocketModeClient(BaseSocketModeClient):
 
     def _on_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(f&#34;on_message invoked: (message: {message})&#34;)
+            self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
             listener(message)

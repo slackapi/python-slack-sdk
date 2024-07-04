@@ -311,7 +311,7 @@ __all__ = [
 
     def _on_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(f&#34;on_message invoked: (message: {message})&#34;)
+            self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
             listener(message)

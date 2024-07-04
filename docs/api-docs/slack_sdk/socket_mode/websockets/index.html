@@ -60,6 +60,8 @@ from slack_sdk.socket_mode.async_listeners import (
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web.async_client import AsyncWebClient
 
+from ..logger.messages import debug_redacted_message_string
+
 
 class SocketModeClient(AsyncBaseSocketModeClient):
     logger: Logger
@@ -183,7 +185,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if isinstance(message, bytes):
                             message = message.decode(&#34;utf-8&#34;)
                         if self.logger.level &lt;= logging.DEBUG:
-                            self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
+                            self.logger.debug(
+                                f&#34;Received message: {debug_redacted_message_string(message)}, session: {session_id}&#34;
+                            )
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:
@@ -442,7 +446,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if isinstance(message, bytes):
                             message = message.decode(&#34;utf-8&#34;)
                         if self.logger.level &lt;= logging.DEBUG:
-                            self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
+                            self.logger.debug(
+                                f&#34;Received message: {debug_redacted_message_string(message)}, session: {session_id}&#34;
+                            )
                         await self.enqueue_message(message)
                     consecutive_error_count = 0
                 except Exception as e:
@@ -798,7 +804,9 @@ def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
                     if isinstance(message, bytes):
                         message = message.decode(&#34;utf-8&#34;)
                     if self.logger.level &lt;= logging.DEBUG:
-                        self.logger.debug(f&#34;Received message: {message}, session: {session_id}&#34;)
+                        self.logger.debug(
+                            f&#34;Received message: {debug_redacted_message_string(message)}, session: {session_id}&#34;
+                        )
                     await self.enqueue_message(message)
                 consecutive_error_count = 0
             except Exception as e:

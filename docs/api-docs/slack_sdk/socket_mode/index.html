@@ -75,6 +75,10 @@ __all__ = [
 <dd>
 <div class="desc"></div>
 </dd>
+<dt><code class="name"><a title="slack_sdk.socket_mode.logger" href="logger/index.html">slack_sdk.socket_mode.logger</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="slack_sdk.socket_mode.request" href="request.html">slack_sdk.socket_mode.request</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -350,7 +354,7 @@ __all__ = [
 
     def _on_message(self, message: str):
         if self.logger.level &lt;= logging.DEBUG:
-            self.logger.debug(f&#34;on_message invoked: (message: {message})&#34;)
+            self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
             listener(message)
@@ -675,6 +679,7 @@ __all__ = [
 <li><code><a title="slack_sdk.socket_mode.client" href="client.html">slack_sdk.socket_mode.client</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.interval_runner" href="interval_runner.html">slack_sdk.socket_mode.interval_runner</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.listeners" href="listeners.html">slack_sdk.socket_mode.listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.logger" href="logger/index.html">slack_sdk.socket_mode.logger</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.request" href="request.html">slack_sdk.socket_mode.request</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.response" href="response.html">slack_sdk.socket_mode.response</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websocket_client" href="websocket_client/index.html">slack_sdk.socket_mode.websocket_client</a></code></li>

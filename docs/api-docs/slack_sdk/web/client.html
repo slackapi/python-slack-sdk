@@ -2932,6 +2932,21 @@ class WebClient(BaseClient):
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
         return self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def conversations_externalInvitePermissions_set(
+        self, *, action: str, channel: str, target_team: str, **kwargs
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+        https://api.slack.com/methods/conversations.externalInvitePermissions.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;action&#34;: action,
+                &#34;channel&#34;: channel,
+                &#34;target_team&#34;: target_team,
+            }
+        )
+        return self.api_call(&#34;conversations.externalInvitePermissions.set&#34;, params=kwargs)
+
     def conversations_history(
         self,
         *,
@@ -4714,6 +4729,22 @@ class WebClient(BaseClient):
         https://api.slack.com/methods/team.billing.info
         &#34;&#34;&#34;
         return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
+
+    def team_externalTeams_disconnect(
+        self,
+        *,
+        target_team: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Disconnects an external organization.
+        https://api.slack.com/methods/team.externalTeams.disconnect
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;target_team&#34;: target_team,
+            }
+        )
+        return self.api_call(&#34;team.externalTeams.disconnect&#34;, params=kwargs)
 
     def team_externalTeams_list(
         self,
@@ -8261,6 +8292,21 @@ removed at anytime.</p></div>
         kwargs.update({&#34;invite_id&#34;: invite_id, &#34;target_team&#34;: target_team})
         return self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def conversations_externalInvitePermissions_set(
+        self, *, action: str, channel: str, target_team: str, **kwargs
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+        https://api.slack.com/methods/conversations.externalInvitePermissions.set
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;action&#34;: action,
+                &#34;channel&#34;: channel,
+                &#34;target_team&#34;: target_team,
+            }
+        )
+        return self.api_call(&#34;conversations.externalInvitePermissions.set&#34;, params=kwargs)
+
     def conversations_history(
         self,
         *,
@@ -10043,6 +10089,22 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/team.billing.info
         &#34;&#34;&#34;
         return self.api_call(&#34;team.billing.info&#34;, params=kwargs)
+
+    def team_externalTeams_disconnect(
+        self,
+        *,
+        target_team: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Disconnects an external organization.
+        https://api.slack.com/methods/team.externalTeams.disconnect
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;target_team&#34;: target_team,
+            }
+        )
+        return self.api_call(&#34;team.externalTeams.disconnect&#34;, params=kwargs)
 
     def team_externalTeams_list(
         self,
@@ -15165,6 +15227,32 @@ Each authorization represents an app installation that the event is visible to.
     return self.api_call(&#34;conversations.declineSharedInvite&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.conversations_externalInvitePermissions_set"><code class="name flex">
+<span>def <span class="ident">conversations_externalInvitePermissions_set</span></span>(<span>self, *, action: str, channel: str, target_team: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+<a href="https://api.slack.com/methods/conversations.externalInvitePermissions.set">https://api.slack.com/methods/conversations.externalInvitePermissions.set</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def conversations_externalInvitePermissions_set(
+    self, *, action: str, channel: str, target_team: str, **kwargs
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+    https://api.slack.com/methods/conversations.externalInvitePermissions.set
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;action&#34;: action,
+            &#34;channel&#34;: channel,
+            &#34;target_team&#34;: target_team,
+        }
+    )
+    return self.api_call(&#34;conversations.externalInvitePermissions.set&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.conversations_history"><code class="name flex">
 <span>def <span class="ident">conversations_history</span></span>(<span>self, *, channel: str, cursor: Optional[str] = None, inclusive: Optional[bool] = None, include_all_metadata: Optional[bool] = None, latest: Optional[str] = None, limit: Optional[int] = None, oldest: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -17987,6 +18075,33 @@ multiparty direct message.</p></div>
     return self.api_call(&#34;team.billing.info&#34;, params=kwargs)</code></pre>
 </details>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.team_externalTeams_disconnect"><code class="name flex">
+<span>def <span class="ident">team_externalTeams_disconnect</span></span>(<span>self, *, target_team: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Disconnects an external organization.
+<a href="https://api.slack.com/methods/team.externalTeams.disconnect">https://api.slack.com/methods/team.externalTeams.disconnect</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def team_externalTeams_disconnect(
+    self,
+    *,
+    target_team: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Disconnects an external organization.
+    https://api.slack.com/methods/team.externalTeams.disconnect
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;target_team&#34;: target_team,
+        }
+    )
+    return self.api_call(&#34;team.externalTeams.disconnect&#34;, params=kwargs)</code></pre>
+</details>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.team_externalTeams_list"><code class="name flex">
 <span>def <span class="ident">team_externalTeams_list</span></span>(<span>self, *, connection_status_filter: Optional[str] = None, slack_connect_pref_filter: Optional[Sequence[str]] = None, sort_direction: Optional[str] = None, sort_field: Optional[str] = None, workspace_filter: Optional[Sequence[str]] = None, cursor: Optional[str] = None, limit: Optional[int] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -19143,6 +19258,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_close" href="#slack_sdk.web.client.WebClient.conversations_close">conversations_close</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_create" href="#slack_sdk.web.client.WebClient.conversations_create">conversations_create</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_declineSharedInvite" href="#slack_sdk.web.client.WebClient.conversations_declineSharedInvite">conversations_declineSharedInvite</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.conversations_externalInvitePermissions_set" href="#slack_sdk.web.client.WebClient.conversations_externalInvitePermissions_set">conversations_externalInvitePermissions_set</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_history" href="#slack_sdk.web.client.WebClient.conversations_history">conversations_history</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_info" href="#slack_sdk.web.client.WebClient.conversations_info">conversations_info</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_invite" href="#slack_sdk.web.client.WebClient.conversations_invite">conversations_invite</a></code></li>
@@ -19242,6 +19358,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.team_accessLogs" href="#slack_sdk.web.client.WebClient.team_accessLogs">team_accessLogs</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_billableInfo" href="#slack_sdk.web.client.WebClient.team_billableInfo">team_billableInfo</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_billing_info" href="#slack_sdk.web.client.WebClient.team_billing_info">team_billing_info</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.team_externalTeams_disconnect" href="#slack_sdk.web.client.WebClient.team_externalTeams_disconnect">team_externalTeams_disconnect</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_externalTeams_list" href="#slack_sdk.web.client.WebClient.team_externalTeams_list">team_externalTeams_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_info" href="#slack_sdk.web.client.WebClient.team_info">team_info</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.team_integrationLogs" href="#slack_sdk.web.client.WebClient.team_integrationLogs">team_integrationLogs</a></code></li>

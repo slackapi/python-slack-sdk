@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>slack_sdk.version API documentation</title>
-<meta name="description" content="Check the latest version at https://pypi.org/project/slack-sdk/" />
+<title>slack_sdk.socket_mode.logger.messages API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,16 +19,19 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>slack_sdk.version</code></h1>
+<h1 class="title">Module <code>slack_sdk.socket_mode.logger.messages</code></h1>
 </header>
 <section id="section-intro">
-<p>Check the latest version at <a href="https://pypi.org/project/slack-sdk/">https://pypi.org/project/slack-sdk/</a></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Check the latest version at https://pypi.org/project/slack-sdk/&#34;&#34;&#34;
-__version__ = &#34;3.31.0&#34;</code></pre>
+<pre><code class="python">import re
+
+
+def debug_redacted_message_string(message: str) -&gt; str:
+    xwfp_token_pattern = re.compile(r&#34;\&#34;xwfp-[A-Za-z0-9\-]+\&#34;&#34;)  # ex: &#34;xwfp-abc-ABC-1234&#34;
+    return re.sub(xwfp_token_pattern, &#34;[[REDACTED]]&#34;, message)</code></pre>
 </details>
 </section>
 <section>
@@ -36,6 +39,23 @@ __version__ = &#34;3.31.0&#34;</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="slack_sdk.socket_mode.logger.messages.debug_redacted_message_string"><code class="name flex">
+<span>def <span class="ident">debug_redacted_message_string</span></span>(<span>message: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def debug_redacted_message_string(message: str) -&gt; str:
+    xwfp_token_pattern = re.compile(r&#34;\&#34;xwfp-[A-Za-z0-9\-]+\&#34;&#34;)  # ex: &#34;xwfp-abc-ABC-1234&#34;
+    return re.sub(xwfp_token_pattern, &#34;[[REDACTED]]&#34;, message)</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 </section>
@@ -48,7 +68,12 @@ __version__ = &#34;3.31.0&#34;</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="slack_sdk" href="index.html">slack_sdk</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.logger" href="index.html">slack_sdk.socket_mode.logger</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="slack_sdk.socket_mode.logger.messages.debug_redacted_message_string" href="#slack_sdk.socket_mode.logger.messages.debug_redacted_message_string">debug_redacted_message_string</a></code></li>
 </ul>
 </li>
 </ul>
