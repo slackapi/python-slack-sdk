@@ -130,17 +130,28 @@ $ ./scripts/generate_api_docs.sh
    - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
    - Build the docs with `./scripts/docs.sh` and then `./scripts/generate_api_docs.sh`.
    - Create a branch for the release with `git checkout -b v2.5.0`
-   - Make a commit that includes the new version number: `git commit -m 'version 2.5.0'`.
+   - Make a commit that includes the new version number: `git commit -a -m 'version 2.5.0'`.
    - Open a PR and merge after receiving at least one approval from other maintainers.
-   - Create a git tag for the release. For example `git tag v2.5.0`.
-   - Push the tag up to github with `git push origin --tags`
 
 2. Distribute the release
 
    - Use the latest stable Python runtime
      - `python -m venv env`
      - `./scripts/deploy_to_prod_pypi_org.sh`
-   - Create a GitHub Release. You will select the commit with updated version number (e.g. `version 2.5.0`) to associate with the tag, and name the tag after this version (e.g. `v2.5.0`). This will also serve as a Changelog for the project. Add a description of changes to the Release. Mention Issue and PR #'s and @-mention contributors.
+   - Create a new GitHub Release from the [Releases page](https://github.com/slackapi/python-slack-sdk/releases) by clicking the "Draft a new release" button.
+      - Enter the new version number updated from the commit (e.g. `v2.5.0`) into the "Choose a tag" input.
+      - Ensure the tag `Target` branch is `main` (e.g `Target:main`).
+      - Click the "Create a new tag: x.x.x on publish" button. This won't create your tag immediately.
+      - Name the release after the version number updated from the commit (e.g. `version 2.5.0`)
+      - Auto-generate the release notes by clicking the "Auto-generate release
+      notes" button. This will pull in changes that will be included in your
+      release.
+      - Edit the resulting notes to ensure they have decent messaging that are
+      understandable by non-contributors, but each commit should still have it's
+      own line.
+      - Ensure that this version adheres to [semantic versioning][semver]. See
+      [Versioning](#versioning-and-tags) for correct version format. Version tags
+      should match the following pattern: `v2.5.0`.
 
    ```markdown
    Refer to [v{version} milestone](https://github.com/slackapi/python-slack-sdk/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
