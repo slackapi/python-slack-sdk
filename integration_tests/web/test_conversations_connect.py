@@ -45,6 +45,10 @@ class TestWebClient(unittest.TestCase):
         channel_id: Optional[str] = None
 
         try:
+            auth_test: SlackResponse = receiver.auth_test()
+            self.assertIsNotNone(auth_test["team_id"])
+            connect_team_id = auth_test["team_id"]
+
             # list senders pending connect invites
             connect_invites: SlackResponse = sender.conversations_listConnectInvites()
             self.assertIsNotNone(connect_invites["invites"])
@@ -76,6 +80,21 @@ class TestWebClient(unittest.TestCase):
                 receiver.conversations_approveSharedInvite,
                 invite_id=invite["invite_id"],
             )
+
+            sender_approval = sender.conversations_approveSharedInvite(
+                invite_id=invite["invite_id"], team_id=connect_team_id
+            )
+            self.assertIsNone(sender_approval["error"])
+
+            downgrade = sender.conversations_externalInvitePermissions_set(
+                channel=channel_id, target_team=connect_team_id, action="downgrade"
+            )
+            self.assertIsNone(downgrade["error"])
+
+            upgrade = sender.conversations_externalInvitePermissions_set(
+                channel=channel_id, target_team=connect_team_id, action="upgrade"
+            )
+            self.assertIsNone(upgrade["error"])
         finally:
             if channel_id is not None:
                 # clean up created channel
@@ -89,6 +108,10 @@ class TestWebClient(unittest.TestCase):
         channel_id: Optional[str] = None
 
         try:
+            auth_test: SlackResponse = await receiver.auth_test()
+            self.assertIsNotNone(auth_test["team_id"])
+            connect_team_id = auth_test["team_id"]
+
             # list senders pending connect invites
             connect_invites: SlackResponse = await sender.conversations_listConnectInvites()
             self.assertIsNotNone(connect_invites["invites"])
@@ -117,6 +140,21 @@ class TestWebClient(unittest.TestCase):
             # receiver attempt to approve invite already accepted by an admin level token should fail
             with self.assertRaises(SlackApiError):
                 await receiver.conversations_approveSharedInvite(invite_id=invite["invite_id"])
+
+            sender_approval = await sender.conversations_approveSharedInvite(
+                invite_id=invite["invite_id"], team_id=connect_team_id
+            )
+            self.assertIsNone(sender_approval["error"])
+
+            downgrade = await sender.conversations_externalInvitePermissions_set(
+                channel=channel_id, target_team=connect_team_id, action="downgrade"
+            )
+            self.assertIsNone(downgrade["error"])
+
+            upgrade = await sender.conversations_externalInvitePermissions_set(
+                channel=channel_id, target_team=connect_team_id, action="upgrade"
+            )
+            self.assertIsNone(upgrade["error"])
         finally:
             if channel_id is not None:
                 # clean up created channel
