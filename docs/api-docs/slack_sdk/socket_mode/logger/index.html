@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.1">
-<title>slack_sdk.socket_mode.async_listeners API documentation</title>
+<title>slack_sdk.socket_mode.logger API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
@@ -22,91 +22,24 @@ hljs.highlightAll();
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>slack_sdk.socket_mode.async_listeners</code></h1>
+<h1 class="title">Module <code>slack_sdk.socket_mode.logger</code></h1>
 </header>
 <section id="section-intro">
 </section>
 <section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt id="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener"><code class="flex name class">
-<span>class <span class="ident">AsyncSocketModeRequestListener</span></span>
-</code></dt>
+<dt><code class="name"><a title="slack_sdk.socket_mode.logger.messages" href="messages.html">slack_sdk.socket_mode.logger.messages</a></code></dt>
 <dd>
-<div class="desc"><p>Abstract base class for generic types.</p>
-<p>A generic type is typically declared by inheriting from
-this class parameterized with one or more type variables.
-For example, a generic mapping type might be defined as::</p>
-<p>class Mapping(Generic[KT, VT]):
-def <strong>getitem</strong>(self, key: KT) -&gt; VT:
-&hellip;
-# Etc.</p>
-<p>This class can then be used as follows::</p>
-<p>def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT:
-try:
-return mapping[key]
-except KeyError:
-return default</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class AsyncSocketModeRequestListener(Callable):
-    async def __call__(  # type: ignore
-        client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
-        request: SocketModeRequest,
-    ):  # noqa: F821
-        raise NotImplementedError()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>collections.abc.Callable</li>
-<li>typing.Generic</li>
-</ul>
-</dd>
-<dt id="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener"><code class="flex name class">
-<span>class <span class="ident">AsyncWebSocketMessageListener</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Abstract base class for generic types.</p>
-<p>A generic type is typically declared by inheriting from
-this class parameterized with one or more type variables.
-For example, a generic mapping type might be defined as::</p>
-<p>class Mapping(Generic[KT, VT]):
-def <strong>getitem</strong>(self, key: KT) -&gt; VT:
-&hellip;
-# Etc.</p>
-<p>This class can then be used as follows::</p>
-<p>def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -&gt; VT:
-try:
-return mapping[key]
-except KeyError:
-return default</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class AsyncWebSocketMessageListener(Callable):
-    async def __call__(  # type: ignore
-        client: &#34;AsyncBaseSocketModeClient&#34;,  # noqa: F821
-        message: dict,
-        raw_message: Optional[str] = None,
-    ):  # noqa: F821
-        raise NotImplementedError()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>collections.abc.Callable</li>
-<li>typing.Generic</li>
-</ul>
+<div class="desc"></div>
 </dd>
 </dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -116,17 +49,12 @@ return default</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="slack_sdk.socket_mode" href="index.html">slack_sdk.socket_mode</a></code></li>
+<li><code><a title="slack_sdk.socket_mode" href="../index.html">slack_sdk.socket_mode</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-classes">Classes</a></h3>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li>
-<h4><code><a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a></code></h4>
-</li>
-<li>
-<h4><code><a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a></code></h4>
-</li>
+<li><code><a title="slack_sdk.socket_mode.logger.messages" href="messages.html">slack_sdk.socket_mode.logger.messages</a></code></li>
 </ul>
 </li>
 </ul>

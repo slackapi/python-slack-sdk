@@ -220,6 +220,17 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.ConnectionErrorRetryHandler.interval_calculator"><code class="name">var <span class="ident">interval_calculator</span> : <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.ConnectionErrorRetryHandler.max_retry_count"><code class="name">var <span class="ident">max_retry_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="slack_sdk.http_retry.FixedValueRetryIntervalCalculator"><code class="flex name class">
 <span>class <span class="ident">FixedValueRetryIntervalCalculator</span></span>
@@ -507,6 +518,17 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.http_retry.RateLimitErrorRetryHandler.interval_calculator"><code class="name">var <span class="ident">interval_calculator</span> : <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.http_retry.RateLimitErrorRetryHandler.max_retry_count"><code class="name">var <span class="ident">max_retry_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.http_retry.RateLimitErrorRetryHandler.prepare_for_next_attempt"><code class="name flex">
@@ -773,6 +795,10 @@ You can pass an array of handlers to customize retry logics in supported API cli
 </li>
 <li>
 <h4><code><a title="slack_sdk.http_retry.ConnectionErrorRetryHandler" href="#slack_sdk.http_retry.ConnectionErrorRetryHandler">ConnectionErrorRetryHandler</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.http_retry.ConnectionErrorRetryHandler.interval_calculator" href="#slack_sdk.http_retry.ConnectionErrorRetryHandler.interval_calculator">interval_calculator</a></code></li>
+<li><code><a title="slack_sdk.http_retry.ConnectionErrorRetryHandler.max_retry_count" href="#slack_sdk.http_retry.ConnectionErrorRetryHandler.max_retry_count">max_retry_count</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.http_retry.FixedValueRetryIntervalCalculator" href="#slack_sdk.http_retry.FixedValueRetryIntervalCalculator">FixedValueRetryIntervalCalculator</a></code></h4>
@@ -809,6 +835,8 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <li>
 <h4><code><a title="slack_sdk.http_retry.RateLimitErrorRetryHandler" href="#slack_sdk.http_retry.RateLimitErrorRetryHandler">RateLimitErrorRetryHandler</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.http_retry.RateLimitErrorRetryHandler.interval_calculator" href="#slack_sdk.http_retry.RateLimitErrorRetryHandler.interval_calculator">interval_calculator</a></code></li>
+<li><code><a title="slack_sdk.http_retry.RateLimitErrorRetryHandler.max_retry_count" href="#slack_sdk.http_retry.RateLimitErrorRetryHandler.max_retry_count">max_retry_count</a></code></li>
 <li><code><a title="slack_sdk.http_retry.RateLimitErrorRetryHandler.prepare_for_next_attempt" href="#slack_sdk.http_retry.RateLimitErrorRetryHandler.prepare_for_next_attempt">prepare_for_next_attempt</a></code></li>
 </ul>
 </li>
