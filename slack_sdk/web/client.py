@@ -4701,6 +4701,22 @@ class WebClient(BaseClient):
         """
         return self.api_call("team.billing.info", params=kwargs)
 
+    def team_externalTeams_disconnect(
+        self,
+        *,
+        target_team: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Disconnects an external organization.
+        https://api.slack.com/methods/team.externalTeams.disconnect
+        """
+        kwargs.update(
+            {
+                "target_team": target_team,
+            }
+        )
+        return self.api_call("team.externalTeams.disconnect", params=kwargs)
+
     def team_externalTeams_list(
         self,
         *,

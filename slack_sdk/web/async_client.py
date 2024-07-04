@@ -4710,6 +4710,22 @@ class AsyncWebClient(AsyncBaseClient):
         """
         return await self.api_call("team.billing.info", params=kwargs)
 
+    async def team_externalTeams_disconnect(
+        self,
+        *,
+        target_team: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Disconnects an external organization.
+        https://api.slack.com/methods/team.externalTeams.disconnect
+        """
+        kwargs.update(
+            {
+                "target_team": target_team,
+            }
+        )
+        return await self.api_call("team.externalTeams.disconnect", params=kwargs)
+
     async def team_externalTeams_list(
         self,
         *,
