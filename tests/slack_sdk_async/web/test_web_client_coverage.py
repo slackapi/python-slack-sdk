@@ -617,6 +617,12 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "conversations_replies":
                 self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
+            elif method_name == "conversations_requestSharedInvite_approve":
+                self.api_methods_to_call.remove(method(invite_id="I123")["method"])
+                await async_method(channel="C123", ts="123.123")
+            elif method_name == "conversations_requestSharedInvite_deny":
+                self.api_methods_to_call.remove(method(invite_id="I123")["method"])
+                await async_method(channel="C123", ts="123.123")
             elif method_name == "conversations_setPurpose":
                 self.api_methods_to_call.remove(method(channel="C123", purpose="The purpose")["method"])
                 await async_method(channel="C123", purpose="The purpose")

@@ -3193,6 +3193,41 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("conversations.replies", http_verb="GET", params=kwargs)
 
+    def conversations_requestSharedInvite_approve(
+        self,
+        *,
+        invite_id: str,
+        channel_id: Optional[str] = None,
+        is_external_limited: Optional[str] = None,
+        message: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+        https://api.slack.com/methods/conversations.requestSharedInvite.approve
+        """
+        kwargs.update(
+            {
+                "invite_id": invite_id,
+                "channel_id": channel_id,
+                "is_external_limited": is_external_limited,
+                "message": message,
+            }
+        )
+        return self.api_call("conversations.requestSharedInvite.approve", params=kwargs)
+
+    def conversations_requestSharedInvite_deny(
+        self,
+        *,
+        invite_id: str,
+        message: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Deny a request to invite an external user to a channel.
+        https://api.slack.com/methods/conversations.requestSharedInvite.deny
+        """
+        kwargs.update({"invite_id": invite_id, "message": message})
+        return self.api_call("conversations.requestSharedInvite.deny", params=kwargs)
+
     def conversations_setPurpose(
         self,
         *,
