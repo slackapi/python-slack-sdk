@@ -3197,7 +3197,7 @@ class AsyncWebClient(AsyncBaseClient):
         invite_id: str,
         channel_id: Optional[str] = None,
         is_external_limited: Optional[str] = None,
-        message: Optional[str] = None,
+        message: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
