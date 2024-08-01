@@ -2099,17 +2099,23 @@ class RichTextElementParts:
 
         @property
         def attributes(self) -> Set[str]:
-            return super().attributes.union({"timestamp"})
+            return super().attributes.union({"timestamp", "format", "url", "fallback"})
 
         def __init__(
             self,
             *,
             timestamp: str,
+            format: str, 
+            url: Optional[str] = None,
+            fallback: Optional[str] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.timestamp = timestamp
+            self.format = format
+            self.url = url
+            self.fallback = fallback
 
     class Broadcast(RichTextElement):
         type = "broadcast"
