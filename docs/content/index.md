@@ -1,99 +1,62 @@
-.. toctree::
-     :hidden:
+# Python Slack SDK
 
-     self
-     v3-migration/index
-     installation/index
-     web/index
-     webhook/index
-     socket-mode/index
-     oauth/index
-     audit-logs/index
-     scim/index
-     real_time_messaging
-     faq
-     about
+The Slack platform offers several APIs to build apps. Each Slack API
+delivers part of the capabilities from the platform, so that you can
+pick just those that fit for your needs.
 
-==============================================
-|product_name|
-==============================================
+The Slack Python SDK offers a corresponding
+package for each of the Slack APIs. They are small and powerful when used
+independently, and work seamlessly when used together, too.
 
-The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
+## Features
 
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| Feature                        | What its for                                                                                  | Package                            |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| Web API                        | Send data to or query data from Slack using any of over 200 methods.                          | ``slack_sdk.web``                  |
-|                                |                                                                                               | ``slack_sdk.web.async_client``     |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
-| Webhooks / response_url        | Send a message using Incoming Webhooks or response_url                                        | ``slack_sdk.webhook``              |
-|                                |                                                                                               | ``slack_sdk.webhook.async_client`` |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
+| Feature                        | Use              | Package                            |
+|--------------------------------|----------|-------|
+| Web API                        | Send data to or query data from Slack using any of over 200 methods.                          | ``slack_sdk.web``, ``slack_sdk.web.async_client`` |
+| Webhooks / `response_url`        | Send a message using Incoming Webhooks or `response_url`                                      | ``slack_sdk.webhook``, ``slack_sdk.webhook.async_client``            |
 | Socket Mode                    | Receive and send messages over Socket Mode connections.                                       | ``slack_sdk.socket_mode``          |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | OAuth                          | Setup the authentication flow using V2 OAuth, OpenID Connect for Slack apps.                  | ``slack_sdk.oauth``                |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Audit Logs API                 | Receive audit logs API data.                                                                  | ``slack_sdk.audit_logs``           |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | SCIM API                       | Utilize the SCIM APIs for provisioning and managing user accounts and groups.                 | ``slack_sdk.scim``                 |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | RTM API                        | Listen for incoming messages and a limited set of events happening in Slack, using WebSocket. | ``slack_sdk.rtm_v2``               |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | Request Signature Verification | Verify incoming requests from the Slack API servers.                                          | ``slack_sdk.signature``            |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 | UI Builders                    | Construct UI components using easy-to-use builders.                                           | ``slack_sdk.models``               |
-+--------------------------------+-----------------------------------------------------------------------------------------------+------------------------------------+
 
-The Python module documents are available at https://slack.dev/python-slack-sdk/api-docs/slack_sdk/
+You can also view the [Python module documents](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)!
 
-Installation
-************
+## Reporting Bugs
 
-This package supports Python 3.6 and higher. We recommend using `PyPI <https://pypi.python.org/pypi>`_ to install |product_name|
+Let us know on the [Issue Tracker](https://github.com/slackapi/python-slack-sdk/issues). If
+you're feeling particularly ambitious, why not submit a [pull
+request](api.slack.com) with a bug fix?
 
-.. code-block:: bash
+## Requesting Features
 
-	pip install slack_sdk
+There's always something more that could be added! You can let us know
+in the [Issue Tracker](https://github.com/slackapi/python-slack-sdk/issues) to start a discussion around the proposed
+feature, that's a good start. If you're feeling particularly
+ambitious, why not write the feature yourself, and submit a [pull
+request](api.slack.com)! We love feedback and we love help and we don't bite. Much.
 
-Of course, you can always pull the source code directly into your project:
+## Contributing
 
-.. code-block:: bash
+Excellent! First, please have a look at our
+general [contributing guidelines](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md).
 
-	git clone https://github.com/slackapi/python-slack-sdk.git
-	cd python-slack-sdk
-	python3 -m venv .venv
-	source .venv/bin/activate
-	pip install -U pip
-	pip install -e .  # install the SDK project into the virtual env
+All done? Great! While we're super excited to incorporate your new
+feature, there are a couple of things we want to make sure you've given
+thought to.
 
-And then, save a few lines of code as ``./test.py``.
+* Please write unit tests for your new code. But don't **just** aim
+to increase the test coverage, rather, we expect you to have written
+**thoughtful** tests that ensure your new feature will continue to
+work as expected, and to help future contributors to ensure they
+don't break it!
 
-.. code-block:: python
+* Please document your new feature. Think about **concrete use cases**
+for your feature, and add a section to the appropriate document,
+including a **complete** sample program that demonstrates your
+feature.
 
-    # test.py
-    import sys
-    # Enable debug logging
-    import logging
-    logging.basicConfig(level=logging.DEBUG)
-    # Verify it works
-    from slack_sdk import WebClient
-    client = WebClient()
-    api_response = client.api_test()
-
-You can run the code this way.
-
-.. code-block:: bash
-
-	python test.py
-
-It's also good to try on the Python REPL.
-
-Getting Help
-************
-
-If you get stuck, we’re here to help. The following are the best ways to get assistance working through your issue:
-
-- `GitHub Issue Tracker <https://github.com/slackapi/python-slack-sdk/issues>`_ for questions, feature requests, bug reports and general discussion related to this package.
-- Visit the `Slack Developer Community <http://slackcommunity.com>`_ for getting help using |product_name| or just generally bond with your fellow Slack developers.
-
-.. include:: metadata.rst
+Including these two items with your pull request will totally make our
+day — and, more importantly, your future users' days!

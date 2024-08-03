@@ -13,9 +13,9 @@ const config = {
   favicon: "img/favicon.ico",
 
   url: "https://slack.dev",
-  baseUrl: "/bolt-python/",
+  baseUrl: "/python-slack-sdk/",
   organizationName: "slackapi",
-  projectName: "bolt-python",
+  projectName: "python-slack-sdk",
 
   onBrokenLinks: "ignore",
   onBrokenAnchors: "warn",
@@ -36,7 +36,8 @@ const config = {
           breadcrumbs: false,
           routeBasePath: "/", // Serve the docs at the site's root
           sidebarPath: "./sidebars.js",
-          editUrl: "https://github.com/slackapi/bolt-python/tree/main/docs",
+          editUrl:
+            "https://github.com/slackapi/python-slack-sdk/tree/main/docs",
         },
         blog: false,
         theme: {
@@ -55,10 +56,6 @@ const config = {
           {
             to: "/getting-started",
             from: ["/tutorial/getting-started"],
-          },
-          {
-            to: "/",
-            from: ["/concepts", "/concepts/basic", "/concepts/advanced"],
           },
         ],
       },
@@ -102,7 +99,7 @@ const config = {
               },
               {
                 label: "Python",
-                to: "https://slack.dev/bolt-python",
+                to: "https://slack.dev/python-slack-sdk",
                 target: "_self",
               },
             ],
@@ -163,7 +160,7 @@ const config = {
           {
             "aria-label": "GitHub Repository",
             className: "navbar-github-link",
-            href: "https://github.com/slackapi/bolt-python",
+            href: "https://github.com/slackapi/python-slack-sdk",
             position: "right",
             target: "_self",
           },
