@@ -11,20 +11,20 @@ retry handlers, and many more.
 
 :::
 
-The [Real Time Messaging (RTM) API](api.slack.com/rtm) is a WebSocket-based API that
+The [Real Time Messaging (RTM) API](https://api.slack.com/rtm) is a WebSocket-based API that
 allows you to receive events from Slack in real time and send messages
 as users.
 
 If you prefer events to be pushed to your app, we recommend using the
 HTTP-based [Events API](https://api.slack.com/events-api) instead. The
-Events API contains some events that aren\'t supported in the RTM API
+Events API contains some events that aren't supported in the RTM API
 (like [app_home_opened
 event](https://api.slack.com/events/app_home_opened)), and it supports
-most of the event types in the RTM API. If you\'d like to use the Events
+most of the event types in the RTM API. If you'd like to use the Events
 API, you can use the [Python Slack Events
 Adaptor](https://github.com/slackapi/python-slack-events-api).
 
-The RTMClient allows apps to communicate with the Slack Platform\'s RTM
+The RTMClient allows apps to communicate with the Slack RTM
 API.
 
 The event-driven architecture of this client allows you to simply link
@@ -45,13 +45,13 @@ Events using the RTM API **must** use a classic Slack app (with a plain
 `bot` scope).
 
 If you already have a classic Slack app, you can use those credentials.
-If you don\'t and need to use the RTM API, you can [create a classic
+If you don't and need to use the RTM API, you can [create a classic
 Slack app](https://api.slack.com/apps?new_classic_app=1). You can learn
 more in the [API
 documentation](https://api.slack.com/authentication/basics#soon).
 
 Also, even if the Slack app configuration pages encourage you to upgrade
-to the newer permission model, don\'t upgrade it and keep using the
+to the newer permission model, don't upgrade it and keep using the
 \"classic\" bot permission.
 
 ## Connecting to the RTM API
@@ -87,7 +87,7 @@ By default, the RTM client uses `rtm.connect` to establish a WebSocket
 connection with Slack. The response contains basic information about the
 team and WebSocket url.
 
-If you\'d rather use `rtm.start` to establish the connection, which
+If you'd rather use `rtm.start` to establish the connection, which
 provides more information about the conversations and users on the team,
 you can set the `connect_method` option to `rtm.start` when
 instantiating the RTM Client. Note that on larger teams, use of

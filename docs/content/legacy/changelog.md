@@ -15,7 +15,7 @@ Refer to [v3.0.0
 milestone](https://github.com/slackapi/python-slack-sdk/milestone/10?closed=1)
 and [the website](https://slack.dev/python-slack-sdk/) for details. If
 you\'re a slackclient user, the migration guide for
-[slackclient](slack.dev) v2.x users is available at
+`slackclient` v2.x users is available at
 https://slack.dev/python-slack-sdk/v3-migration/
 
 ## v2.9.3 (2020-10-20)
@@ -161,7 +161,7 @@ to know the complete list of the issues resolved by this release.
 ## v2.7.1 (2020-06-04)
 
 This release includes the fixes for regression bugs in
-[WebClient](slack.dev) since v2.6.0. Refer to [v2.7.1
+`WebClient` since v2.6.0. Refer to [v2.7.1
 milestone](https://github.com/slackapi/python-slackclient/milestone/11?closed=1)
 to know the complete list of the issues resolved by this release.
 
@@ -182,14 +182,14 @@ to know the complete list of the issues resolved by this release.
 
 **New Features**
 
-1.  \[WebhookClient\] #707 #270 #531 Add [WebhookClient](slack.dev) for
+1.  \[WebhookClient\] #707 #270 #531 Add `WebhookClient` for
     Incoming Webhooks & response_url - Thanks \@seratch \@chubz
     \@Ambro17
 
 **Updates**
 
-1.  \[WebClient\] #704 #695 Add [calls\_\*](slack.dev) methods to
-    [WebClient](slack.dev) and [CallBlock](slack.dev) in Block Kit
+1.  \[WebClient\] #704 #695 Add `calls\_\*` methods to
+    `WebClient` and `CallBlock` in Block Kit
     classes - Thanks \@seratch
 2.  \[WebClient\] #710 #536 Allow Tokens to be specified per request -
     Thanks \@seratch
@@ -236,8 +236,8 @@ to know the complete list of the issues resolved by this release.
 2.  \[Signature\] #686 Add slack.signature.SignatureVerifier for request
     verification - Thanks \@seratch
 3.  \[WebClient\] #682 Add missing Grid admin APIs
-    ([admin.usergroups.\*](slack.dev), [admin.users.\*](slack.dev),
-    [admin.apps.\*](slack.dev)) - Thanks \@stevengill \@seratch
+    (`admin.usergroups.\*`, `admin.users.\*`,
+    `admin.apps.\*`) - Thanks \@stevengill \@seratch
 
 **Updates**
 
@@ -292,7 +292,7 @@ Remove value from LinkButtonElement #563 (Thanks \@pedroma)
 
 1.  \[WebClient\] Fixing a regression that causes the client to close
     sessions prematurely. #544 (Thanks \@fatih-acar!)
-2.  \[WebClient\] Adding required missing [view](slack.dev) param to
+2.  \[WebClient\] Adding required missing view param to
     views.update Web API method. #542
 
 ## v2.3.0 (2019-10-22)
@@ -305,7 +305,7 @@ Remove value from LinkButtonElement #563 (Thanks \@pedroma)
 
 1.  \[WebClient\] Some server responses don\'t return json. Correcting
     initial assumption. #540
-2.  \[Maintenance\] Add [py.typed](slack.dev) to mark the library to
+2.  \[Maintenance\] Add `py.typed` to mark the library to
     support type hinting #524s
 
 ## v2.2.1 (2019-10-08)
@@ -336,7 +336,7 @@ Remove value from LinkButtonElement #563 (Thanks \@pedroma)
 3.  \[Docs\] Fix typo; recieved -\> received #478 (Thanks
     \@joakimnordling)
 4.  \[Docs\] Fix block kit link & update docs #484 (Thanks \@clavin)
-5.  \[RTMClient\] Return callback from [RTMClient.run_on](slack.dev)
+5.  \[RTMClient\] Return callback from `RTMClient.run_on`
     #490 (Thanks \@clavin)
 6.  \[Docs\] Fix link to Auth Guide in readme #498 (Thanks \@asherf)
 7.  \[Docs\] Fix missing word and typo #512 (Thanks \@marks)
@@ -345,7 +345,7 @@ Remove value from LinkButtonElement #563 (Thanks \@pedroma)
 9.  \[Docs\] Fixes formatting #515 (Thanks \@vpetersson)
 10. \[Docs\] Improve a code snippet on README #516 (Thanks \@seratch)
 11. \[WebClient\] Fixed an OAuth Headers bug and made the
-    [token](slack.dev) param optional. #517
+    `token` param optional. #517
 
 ## v2.1.0 (2019-07-01)
 
@@ -356,7 +356,7 @@ Remove value from LinkButtonElement #563 (Thanks \@pedroma)
 
 **Breaking Changes**
 
-1.  \[RTMClient\] Converted the [RTMClient#typing()](slack.dev)
+1.  \[RTMClient\] Converted the `RTMClient#typing()`
     function to async #446
 
 **Updates**
@@ -438,7 +438,7 @@ token refresh #347 (Thanks \@roach!)
 ## v1.2.0 (2018-03-20)
 
 -   You can now tell the RTM client to automatically reconnect by
-    passing [auto_reconnect=True](slack.dev)
+    passing `auto_reconnect=True`
 
 ## v1.1.3 (2018-03-01)
 
@@ -452,9 +452,9 @@ token refresh #347 (Thanks \@roach!)
 
 ## v1.1.1 (2018-01-30)
 
-> -   Adds HTTP response headers to [api_call](slack.dev) responses to
+> -   Adds HTTP response headers to `api_call` responses to
 >     expose things like rate limit info
-> -   Moves [token](slack.dev) into auth header rather than request
+> -   Moves `token` into auth header rather than request
 >     params
 
 ## v1.1.0 (2017-11-21)
@@ -530,7 +530,7 @@ token refresh #347 (Thanks \@roach!)
 >     object:
 >     -   `im.open`
 >     -   `mpim.open`, `groups.create`, `groups.createChild`
->     -   `channels.create`, [channels.join](slack.dev)\`
+>     -   `channels.create`, `channels.join`
 
 ## v0.18.0 (2016-02-21)
 

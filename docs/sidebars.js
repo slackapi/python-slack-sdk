@@ -35,7 +35,7 @@ const sidebars = {
     { type: "html", value: "<hr>" },
     {
       type: "category",
-      label: "Legacy slackclient",
+      label: "Legacy slackclient v2",
       items: [
         "legacy/index",
         "legacy/auth",
@@ -46,16 +46,12 @@ const sidebars = {
         "legacy/changelog",
       ],
     },
-    {
-      type: "category",
-      label: "slackclient migration",
-      items: ["migration/index", "migration/from1"],
-    },
+    "v3-migration",
     { type: "html", value: "<hr>" },
     {
       type: "link",
       label: "Reference",
-      href: "https://slack.dev/python-slack-sdk/api-docs/slack_bolt/",
+      href: "https://slack.dev/python-slack-sdk/api-docs/slack_sdk/",
     },
     { type: "html", value: "<hr>" },
     {

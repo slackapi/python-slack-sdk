@@ -1,6 +1,6 @@
 # OAuth Modules
 
-This section explains the details about how to handle Slack's OAuth
+This section explains the details about how to handle the Slack OAuth
 flow.
 
 If you're looking for a much easier way to do the same, check [Bolt for
@@ -20,7 +20,7 @@ OAuth](https://api.slack.com/authentication/oauth-v2) for details.
 Python Slack SDK provides the necessary modules for building the OAuth
 flow.
 
-**Starting an OAuth flow**
+### Starting an OAuth flow
 
 The first step of Slack OAuth flow is to redirect a Slack user to
 [authorize](https://slack.com/oauth/v2/authorize) with a valid `state` parameter.
@@ -71,7 +71,7 @@ When accessing `https://(your domain)/slack/install`, you will see \"Add
 to Slack\" button in the webpage. You can start the app's installation
 flow by clicking the button.
 
-**Handling a callback request from Slack**
+### Handling a callback request from Slack
 
 If all's well, a user goes through the Slack app installation UI and
 okays your app with all the scopes that it requests. After that happens,

@@ -1,12 +1,12 @@
 # Python Slack SDK
 
+The Slack Python SDK has corresponding
+package for Slack APIs. They are small and powerful when used
+independently, and work seamlessly when used together, too.
+
 The Slack platform offers several APIs to build apps. Each Slack API
 delivers part of the capabilities from the platform, so that you can
 pick just those that fit for your needs.
-
-The Slack Python SDK offers a corresponding
-package for each of the Slack APIs. They are small and powerful when used
-independently, and work seamlessly when used together, too.
 
 ## Features
 
@@ -24,39 +24,18 @@ independently, and work seamlessly when used together, too.
 
 You can also view the [Python module documents](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)!
 
-## Reporting Bugs
+## Getting help
 
-Let us know on the [Issue Tracker](https://github.com/slackapi/python-slack-sdk/issues). If
-you're feeling particularly ambitious, why not submit a [pull
-request](api.slack.com) with a bug fix?
+These docs have lots of information on the Python Slack SDK. There's also an in-depth Reference section. Please explore!
 
-## Requesting Features
+If you otherwise get stuck, we're here to help. The following are the best ways to get assistance working through your issue:
 
-There's always something more that could be added! You can let us know
-in the [Issue Tracker](https://github.com/slackapi/python-slack-sdk/issues) to start a discussion around the proposed
-feature, that's a good start. If you're feeling particularly
-ambitious, why not write the feature yourself, and submit a [pull
-request](api.slack.com)! We love feedback and we love help and we don't bite. Much.
+* [Issue Tracker](http://github.com/slackapi/python-slack-sdk/issues) for questions, bug reports, feature requests, and general discussion related to the Python Slack SDK. Try searching for an existing issue before creating a new one.
+* [Email](mailto:support@slack.com) our developer support team: `support@slack.com`.
 
 ## Contributing
 
-Excellent! First, please have a look at our
-general [contributing guidelines](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md).
+These docs live within the [Python Slack SDK](https://github.com/slackapi/python-slack-sdk) repository and are open source.
 
-All done? Great! While we're super excited to incorporate your new
-feature, there are a couple of things we want to make sure you've given
-thought to.
-
-* Please write unit tests for your new code. But don't **just** aim
-to increase the test coverage, rather, we expect you to have written
-**thoughtful** tests that ensure your new feature will continue to
-work as expected, and to help future contributors to ensure they
-don't break it!
-
-* Please document your new feature. Think about **concrete use cases**
-for your feature, and add a section to the appropriate document,
-including a **complete** sample program that demonstrates your
-feature.
-
-Including these two items with your pull request will totally make our
-day — and, more importantly, your future users' days!
+We welcome contributions from everyone! Please check out our
+[Contributor's Guide](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md) for how to contribute in a helpful and collaborative way.

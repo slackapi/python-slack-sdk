@@ -107,21 +107,15 @@ $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client
 
 ### Generating Documentation
 
-The documentation is generated from the source and templates in the `docs-src` directory. The generated documentation
-gets committed to the repo in `docs` and also published to a GitHub Pages website.
+See `/docs/README` for information on editing documentation pages.
 
-You can generate and preview the **SDK document pages** by running
-
-```bash
-$ ./scripts/docs.sh
-$ open docs/index.html
-```
-
-Similarly you can generate and preview the **API documents for `slack_sdk` package modules** by running
+The API reference is generated from a script. You can generate and preview the **API _reference_ documents for `slack_sdk` package modules** by running:
 
 ```bash
 $ ./scripts/generate_api_docs.sh
 ```
+
+Then run the "Deploy to GitHub Pages" workflow. 
 
 ### Releasing
 

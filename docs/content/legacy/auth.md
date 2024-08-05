@@ -16,8 +16,8 @@ retry handlers, and many more.
 The OAuth token you use to call the Slack API has access to the data on
 the workspace where it is installed. Depending on the scopes granted to
 the token, it potentially has the ability to read and write data. Treat
-these tokens just as you would a password \-- don\'t publish them,
-don\'t check them into source code, don\'t share them with others.
+these tokens just as you would a password — don't publish them,
+don't check them into source code, don't share them with others.
 
 🚫Avoid this:
 
@@ -45,10 +45,10 @@ Credentials](https://api.slack.com/authentication/best-practices) page.
 
 ## Single Workspace Install
 
-If you\'re building an application for a single Slack workspace,
-there\'s no need to build out the entire OAuth flow.
+If you're building an application for a single Slack workspace,
+there's no need to build out the entire OAuth flow.
 
-Once you\'ve setup your features, click on the **Install App to Team**
+Once you've setup your features, click on the **Install App to Team**
 button found on the **Install App** page. If you add new permission
 scopes or Slack app features after an app has been installed, you must
 reinstall the app to your workspace for changes to take effect.
@@ -65,16 +65,16 @@ OAuth protocol. You can read more about [how Slack handles
 Oauth](https://api.slack.com/authentication/oauth-v2).
 
 (The OAuth exchange is facilitated via HTTP and requires a webserver; in
-this example, we\'ll use [Flask](https://flask.palletsprojects.com/).)
+this example, we'll use [Flask](https://flask.palletsprojects.com/).)
 
-To configure your app for OAuth, you\'ll need a client ID, a client
+To configure your app for OAuth, you'll need a client ID, a client
 secret, and a set of one or more scopes that will be applied to the
 token once it is granted. The client ID and client secret are available
-from your [app\'s configuration page](https://api.slack.com/apps). The
-scopes are determined by the functionality of the app \-- every method
+from your [app's configuration page](https://api.slack.com/apps). The
+scopes are determined by the functionality of the app — every method
 you wish to access has a corresponding scope and your app will need to
 request that scope in order to be able to access the method. Review
-Slack\'s [full list of OAuth scopes](https://api.slack.com/scopes).
+the [full list of Slack OAuth scopes](https://api.slack.com/scopes).
 
 ``` python
 import os
@@ -91,13 +91,13 @@ app = Flask(__name__)
 **The OAuth initiation link**
 
 To begin the OAuth flow that will install your app on a workspace,
-you\'ll need to provide the user with a link to Slack\'s OAuth page.
+you'll need to provide the user with a link to the Slack OAuth page.
 This can be a simple link to `https://slack.com/oauth/v2/authorize` with
 `scope` and `client_id` query parameters, or you can use our pre-built
 [Add to Slack button](https://api.slack.com/docs/slack-button) to do all
 the work for you.
 
-This link directs the user to Slack\'s OAuth acceptance page, where the
+This link directs the user to the Slack OAuth acceptance page, where the
 user will review and accept or refuse the permissions your app is
 requesting as defined by the scope(s).
 
@@ -112,9 +112,9 @@ def pre_install():
 
 **The OAuth completion page**
 
-Once the user has agreed to the permissions you\'ve requested, Slack
+Once the user has agreed to the permissions you've requested, Slack
 will redirect the user to your auth completion page, which includes a
-`code` query string param. You\'ll use the `code` param to call the
+`code` query string param. You'll use the `code` param to call the
 `oauth.v2.access`
 [endpoint](https://api.slack.com/methods/oauth.v2.access) that will
 finally grant you the token.
@@ -171,9 +171,9 @@ if __name__ == "__main__":
   app.run("localhost", 3000)
 ```
 
-Once your user has completed the OAuth flow, you\'ll be able to use the
-provided tokens to call any of Slack\'s API methods that require an
+Once your user has completed the OAuth flow, you'll be able to use the
+provided tokens to call any of the Slack API methods that require an
 access token.
 
-See the [Basic Usage](./basic_usage.html) section of this documentation
+See the [Basic Usage](/legacy/basic_usage) section of the documentation
 for usage examples.

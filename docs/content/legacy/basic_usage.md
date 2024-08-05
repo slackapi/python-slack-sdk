@@ -15,7 +15,7 @@ The Slack Web API allows you to build applications that interact with
 Slack in more complex ways than the integrations we provide out of the
 box.
 
-Access Slack\'s API methods requires an OAuth token \-- see the [Tokens
+Accessing Slack API methods requires an OAuth token — see the [Tokens
 & Authentication](auth) section for more on how Slack uses OAuth tokens
 as well as best practices.
 
@@ -85,8 +85,8 @@ allows you to customize the layout of a message. Blocks specified in a
 single object literal, so just add additional keys for any optional
 argument.
 
-To send a message to a channel, use the channel\'s ID. For IMs, use the
-user\'s ID.
+To send a message to a channel, use the channel's ID. For IMs, use the
+user's ID.
 
 ``` python
 client.chat_postMessage(
@@ -127,7 +127,7 @@ client.chat_postMessage(
 
 **Note:** You can use the [Block Kit
 Builder](https://api.slack.com/tools/block-kit-builder) to prototype
-your message\'s look and feel.
+your message's look and feel.
 
 ------------------------------------------------------------------------
 
@@ -135,10 +135,10 @@ your message\'s look and feel.
 
 Threaded messages are a way of grouping messages together to provide
 greater context. You can reply to a thread or start a new threaded
-conversation by simply passing the original message\'s `ts` ID in the
-`thread_ts` attribute when posting a message. If you\'re replying to a
-threaded message, you\'ll pass the [thread_ts](slack.dev) ID of the
-message you\'re replying to.
+conversation by simply passing the original message's `ts` ID in the
+`thread_ts` attribute when posting a message. If you're replying to a
+threaded message, you'll pass the `thread_ts` ID of the
+message you're replying to.
 
 A channel or DM conversation is a nearly linear timeline of messages
 exchanged between people, bots, and apps. When one of these messages is
@@ -169,9 +169,9 @@ response = client.chat_postMessage(
 ```
 
 **Note:** While threaded messages may contain attachments and message
-buttons, when your reply is broadcast to the channel, it\'ll actually be
+buttons, when your reply is broadcast to the channel, it'll actually be
 a reference to your reply, not the reply itself. So, when appearing in
-the channel, it won\'t contain any attachments or message buttons. Also
+the channel, it won't contain any attachments or message buttons. Also
 note that updates and deletion of threaded replies works the same as
 regular messages.
 
@@ -183,8 +183,8 @@ article for more information.
 
 ## Updating a message
 
-Let\'s say you have a bot which posts the status of a request. When that
-request changes, you\'ll want to update the message to reflect it\'s
+Let's say you have a bot which posts the status of a request. When that
+request changes, you'll want to update the message to reflect it's
 state.
 
 ``` python
@@ -223,7 +223,7 @@ Modals allow you to collect data from users and display dynamic
 information in a focused surface.
 
 Modals use the same blocks that compose messages with the addition of an
-[input](slack.dev) block.
+`input` block.
 
 ``` python
 # This module is available since v2.6
@@ -315,8 +315,8 @@ configurations](https://api.slack.com/apps) are required.
 ## Updating and pushing modals
 
 You can dynamically update a view inside of a modal by calling
-[views.update](slack.dev) and passing the view ID returned in the
-previous [views.open](slack.dev) call.
+`views.update` and passing the view ID returned in the
+previous `views.open` call.
 
 ``` python
 private_metadata = "any str data you want to store"
@@ -385,7 +385,7 @@ response = client.reactions_add(
 )
 ```
 
-Removing an emoji reaction is basically the same format, but you\'ll use
+Removing an emoji reaction is basically the same format, but you'll use
 `reactions.remove` instead of `reactions.add`
 
 ``` python
@@ -404,7 +404,7 @@ more info.
 
 ## Listing public channels
 
-At some point, you\'ll want to find out what channels are available to
+At some point, you'll want to find out what channels are available to
 your app. This is how you get that list.
 
 ``` python
@@ -424,7 +424,7 @@ for more info.
 
 ------------------------------------------------------------------------
 
-## Getting a channel\'s info
+## Getting a channel's info
 
 Once you have the ID for a specific channel, you can fetch information
 about that channel.
@@ -441,7 +441,7 @@ for more info.
 
 ## Joining a channel
 
-Channels are the social hub of most Slack teams. Here\'s how you hop
+Channels are the social hub of most Slack teams. Here's how you hop
 into one:
 
 ``` python
@@ -461,7 +461,7 @@ for more info.
 
 ## Leaving a channel
 
-Maybe you\'ve finished up all the business you had in a channel, or
+Maybe you've finished up all the business you had in a channel, or
 maybe you joined one by accident. This is how you leave a channel.
 
 ``` python
@@ -506,7 +506,7 @@ info.
 
 This library covers all the public endpoints as the methods in
 `WebClient`. That said, you may see a bit delay of the library release.
-When you\'re in a hurry, you can directly use `api_call` method as
+When you're in a hurry, you can directly use `api_call` method as
 below.
 
 ``` python
@@ -529,7 +529,7 @@ When posting messages to a channel, Slack allows applications to send no
 more than one message per channel per second. We allow bursts over that
 limit for short periods. However, if your app continues to exceed the
 limit over a longer period of time it will be rate limited. Different
-API methods have other rate limits \-- be sure to [check the
+API methods have other rate limits — be sure to [check the
 limits](https://api.slack.com/docs/rate-limits) and test that your
 application has a graceful fallback if it should hit those limits.
 
@@ -538,7 +538,7 @@ Many Requests error, a JSON object containing the number of calls you
 have been making, and a Retry-After header containing the number of
 seconds until you can retry.
 
-Here\'s a very basic example of how one might deal with rate limited
+Here's a very basic example of how one might deal with rate limited
 requests.
 
 ``` python

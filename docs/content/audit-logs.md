@@ -16,8 +16,6 @@ for using Audit Logs API. The Slack app using the Audit Logs API needs
 to be installed in the Enterprise Grid Organization, not an individual
 workspace within the organization.
 
-View the [Python document for this module](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
-
 ---
 
 ## AuditLogsClient

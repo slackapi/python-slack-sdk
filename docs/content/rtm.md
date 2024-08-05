@@ -1,6 +1,6 @@
 # RTM API Client {#real-time-messaging}
 
-The [Real Time Messaging (RTM) API](api.slack.com) is a WebSocket-based API that
+The [Real Time Messaging (RTM) API](https://api.slack.com/rtm) is a WebSocket-based API that
 allows you to receive events from Slack in real time and send messages
 as users.
 
@@ -28,7 +28,7 @@ if its received, we call the `say_hello()` function. We then issue a
 call to the web client to post back to the channel saying \"Hi\" to the
 user.
 
-**Configuring the RTM API**
+## Configuring the RTM API
 
 Events using the RTM API **must** use a classic Slack app (with a plain
 `bot` scope).
@@ -43,7 +43,7 @@ Also, even if the Slack app configuration pages encourage you to upgrade
 to the newer permission model, don't upgrade it and keep using the
 \"classic\" bot permission.
 
-**Connecting to the RTM API**
+## Connecting to the RTM API
 
 Note that the import here is not `from slack_sdk.rtm import RTMClient`
 but `from slack_sdk.rtm_v2 import RTMClient` (`_v2` is added in the
@@ -72,7 +72,7 @@ def handle(client: RTMClient, event: dict):
 rtm.start()
 ```
 
-**Connecting to the RTM API (v1 client)**
+## Connecting to the RTM API (v1 client)
 
 Below is a code snippet that uses the legacy version of `RTMClient`. For
 new app development, we **do not recommend** using it as it contains
@@ -105,7 +105,7 @@ rtm_client = RTMClient(token=slack_token)
 rtm_client.start()
 ```
 
-**rtm.start vs rtm.connect (v1 client)**
+## rtm.start vs rtm.connect (v1 client)
 
 By default, the RTM client uses `rtm.connect` to establish a WebSocket
 connection with Slack. The response contains basic information about the
@@ -116,7 +116,7 @@ and the [rtm.start docs](https://api.slack.com/methods/rtm.start) for
 more details. Also, note that `slack.rtm_v2.RTMClient` does not support
 `rtm.start`.
 
-**RTM Events**
+## RTM Events
 
 ``` javascript
 {

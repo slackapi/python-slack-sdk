@@ -1,6 +1,6 @@
 # Socket Mode Client
 
-Socket Mode is a method of connecting your app to Slack's APIs using
+Socket Mode is a method of connecting your app to the Slack APIs using
 WebSockets instead of HTTP. You can use
 `slack_sdk.socket_mode.SocketModeClient` for managing [Socket
 Mode](https://api.slack.com/apis/connections/socket) connections and
@@ -169,8 +169,7 @@ with the built-in version.
 
 To use the asyncio-based ones such as aiohttp, your app needs to be
 compatible with asyncio's async/await programming model. The
-[SocketModeClient](api.slack.com) only works with
-[AsyncWebClient](api.slack.com) and async listeners.
+`SocketModeClient` only works with `AsyncWebClient` and async listeners.
 
 ``` python
 import asyncio

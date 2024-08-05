@@ -43,7 +43,6 @@ It's also good to try on the Python REPL.
 
 ## Access Tokens {#handling-tokens}
 
-
 **Always keep your access tokens safe.**
 
 The OAuth token you use to call the Slack API has access to the data on
@@ -51,7 +50,7 @@ the workspace where it is installed.
 
 Depending on the scopes granted to the token, it potentially has the
 ability to read and write data. Treat these tokens just as you would a
-password \-- don't publish them, don't check them into source code,
+password — don't publish them, don't check them into source code, and
 don't share them with others.
 
 
@@ -80,8 +79,8 @@ import os
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 ```
 
-For additional information, please see our [Safely Storing
-Credentials](https://api.slack.com/authentication/best-practices) page.
+For additional information, please see the [Safely Storing
+Credentials](https://api.slack.com/authentication/best-practices) page within the Slack API docs.
 
 ## Workspace Installations
 
@@ -95,11 +94,7 @@ button found on the **Install App** page. If you add new permission
 scopes or Slack app features after an app has been installed, you must
 reinstall the app to your workspace for changes to take effect.
 
-For additional information, see the [Installing
-Apps](https://api.slack.com/start/overview#installing_distributing) of
-our [Building Slack apps](https://api.slack.com/start) page.
-
-### Multiple Workspace Install
+## Multiple Workspace Install
 
 If you intend for an app to be installed on multiple Slack workspaces,
 you will need to handle this installation via the industry-standard
@@ -115,8 +110,7 @@ token once it is granted. The client ID and client secret are available
 from your [app's configuration page](https://api.slack.com/apps). The
 scopes are determined by the functionality of the app — every method
 you wish to access has a corresponding scope and your app will need to
-request that scope in order to be able to access the method. Review
-Slack's [full list of OAuth scopes](https://api.slack.com/scopes).
+request that scope in order to be able to access the method. Review the [full list of Slack OAuth scopes](https://api.slack.com/scopes).
 
 ``` python
 import os
@@ -133,13 +127,13 @@ app = Flask(__name__)
 ### The OAuth initiation link
 
 To begin the OAuth flow that will install your app on a workspace,
-you'll need to provide the user with a link to Slack's OAuth page.
+you'll need to provide the user with a link to the Slack OAuth page.
 This can be a simple link to `https://slack.com/oauth/v2/authorize` with
 `scope` and `client_id` query parameters, or you can use our pre-built
 [Add to Slack button](https://api.slack.com/docs/slack-button) to do all
 the work for you.
 
-This link directs the user to Slack's OAuth acceptance page, where the
+This link directs the user to the Slack OAuth acceptance page, where the
 user will review and accept or refuse the permissions your app is
 requesting as defined by the scope(s).
 
@@ -214,11 +208,8 @@ if __name__ == "__main__":
 ```
 
 Once your user has completed the OAuth flow, you'll be able to use the
-provided tokens to call any of Slack's API methods that require an
+provided tokens to call any of the Slack API methods that require an
 access token.
-
-See the [Basic Usage](../basic_usage.html) section of this documentation
-for usage examples.
 
 ## Installation Troubleshooting
 
@@ -252,7 +243,7 @@ client = WebClient(token=os.environ["SLACK_BOT_TOKEN"])
 res = client.api_test()
 ```
 
-As `slack` package is deprecated, we recommend switching to `slack_sdk`
+As the `slack` package is deprecated, we recommend switching to `slack_sdk`
 package. That being said, the code you're working on may be still using
 the old package. If you encounter an error saying
 `AttributeError: module 'slack' has no attribute 'WebClient'`, run

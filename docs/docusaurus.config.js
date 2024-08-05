@@ -8,7 +8,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Slack Developer Tools",
+  title: "Python Slack SDK",
   tagline: "Official frameworks, libraries, and SDKs for Slack developers",
   favicon: "img/favicon.ico",
 
@@ -17,13 +17,13 @@ const config = {
   organizationName: "slackapi",
   projectName: "python-slack-sdk",
 
-  onBrokenLinks: "ignore",
+  onBrokenLinks: "warn",
   onBrokenAnchors: "warn",
   onBrokenMarkdownLinks: "warn",
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "ja-jp"],
+    locales: ["en"],
   },
 
   presets: [
@@ -52,12 +52,7 @@ const config = {
     [
       "@docusaurus/plugin-client-redirects",
       {
-        redirects: [
-          {
-            to: "/getting-started",
-            from: ["/tutorial/getting-started"],
-          },
-        ],
+        redirects: [],
       },
     ],
   ],

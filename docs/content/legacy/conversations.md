@@ -111,7 +111,7 @@ for more info.
 To get a list of all the conversations in a workspace, use
 `conversations_list`. By default, only public conversations are
 returned; use the `types` parameter specify which types of conversations
-you\'re interested in (Note: `types` is a string of comma-separated
+you're interested in (Note: `types` is a string of comma-separated
 values)
 
 ``` python

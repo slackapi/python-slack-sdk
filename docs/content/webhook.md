@@ -42,7 +42,7 @@ response = webhook.send(
 )
 ```
 
-## response_url
+## `response_url`
 
 User actions in channels generates a
 [response_url](https://api.slack.com/interactivity/handling#message_responses)

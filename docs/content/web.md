@@ -4,8 +4,8 @@ The Slack Web API allows you to build applications that interact with
 Slack in more complex ways than the integrations we provide out of the
 box.
 
-Access Slack's API methods requires an OAuth token — see the [Tokens
-& Authentication](/installation/access-tokens) section for more on how
+Access the Slack API methods requires an OAuth token — see the [Tokens
+& Authentication](/installation#handling-tokens) section for more on how
 Slack uses OAuth tokens as well as best practices.
 
 [Each of these API methods](https://api.slack.com/methods) is fully
@@ -74,7 +74,7 @@ See
 [chat.postEphemeral](https://api.slack.com/methods/chat.postEphemeral)
 for more info.
 
-**Formatting with Block Kit**
+#### Formatting with Block Kit
 
 Messages posted from apps can contain more than just text, though. They
 can include full user interfaces composed of
@@ -126,17 +126,21 @@ client.chat_postMessage(
 )
 ```
 
-**Note:** You can use the [Block Kit
+:::tip
+
+You can use the [Block Kit
 Builder](https://api.slack.com/tools/block-kit-builder) to prototype
 your message's look and feel.
 
-**Threading Messages**
+:::
+
+### Threading Messages
 
 Threaded messages are a way of grouping messages together to provide
 greater context. You can reply to a thread or start a new threaded
 conversation by simply passing the original message's `ts` ID in the
 `thread_ts` attribute when posting a message. If you're replying to a
-threaded message, you'll pass the [thread_ts](api.slack.com) ID of the
+threaded message, you'll pass the `thread_ts` ID of the
 message you're replying to.
 
 A channel or DM conversation is a nearly linear timeline of messages
@@ -167,7 +171,7 @@ response = client.chat_postMessage(
 )
 ```
 
-**Note:** While threaded messages may contain attachments and message
+While threaded messages may contain attachments and message
 buttons, when your reply is broadcast to the channel, it'll actually be
 a reference to your reply, not the reply itself. So, when appearing in
 the channel, it won't contain any attachments or message buttons. Also
@@ -178,7 +182,7 @@ See the [Threading messages
 together](https://api.slack.com/docs/message-threading#forking_conversations)
 article for more information.
 
-**Updating a message**
+### Updating a message
 
 Let's say you have a bot which posts the status of a request. When that
 request changes, you'll want to update the message to reflect it's
@@ -196,7 +200,7 @@ See [chat.update](https://api.slack.com/methods/chat.update) for
 formatting options and some special considerations when calling this
 with a bot user.
 
-**Deleting a message**
+### Deleting a message
 
 Sometimes you need to delete things.
 
@@ -210,7 +214,7 @@ response = client.chat_delete(
 See [chat.delete](https://api.slack.com/methods/chat.delete) for more
 info.
 
-**Emoji reactions**
+### Emoji reactions
 
 You can quickly respond to any message on Slack with an emoji reaction.
 Reactions can be used for any purpose: voting, checking off to-do items,
@@ -564,15 +568,9 @@ configurations](https://api.slack.com/apps) are required.
     `https://{your-public-domain}/slack/events`
 -   Add a global shortcut with the Callback ID: `open-modal-shortcut`
 
-**Updating and pushing modals**
+### Updating and pushing modals
 
-In response to [view_submission](api.slack.com) requests, you can tell
-Slack to update the current modal view by having [\"response_action\":
-\"update\"](api.slack.com) and an updated view. Also, there are other
-response_action types such as [errors](api.slack.com) and
-[push](api.slack.com). Refer to [the API
-document](https://api.slack.com/surfaces/modals/using#updating_response)
-for more details.
+In response to `view_submission` requests, you can tell Slack to update the current modal view by having `"response_action": update` and an updated view. Also, there are other `response_action` types such as `errors` and `push`. Refer to [the API docs](https://api.slack.com/surfaces/modals/using#updating_response) for more details.
 
 ``` python
 if (
@@ -609,8 +607,8 @@ if (
 ```
 
 If your app modify the current modal view when receiving
-[block_actions](api.slack.com) requests from Slack, you can call
-[views.update](api.slack.com) API method with the given view ID.
+`block_actions` requests from Slack, you can call the
+`views.update` API method with the given view ID.
 
 ``` python
 private_metadata = "any str data you want to store"
@@ -664,7 +662,7 @@ When posting messages to a channel, Slack allows applications to send no
 more than one message per channel per second. We allow bursts over that
 limit for short periods. However, if your app continues to exceed the
 limit over a longer period of time it will be rate limited. Different
-API methods have other rate limits \-- be sure to [check the
+API methods have other rate limits — be sure to [check the
 limits](https://api.slack.com/docs/rate-limits) and test that your
 application has a graceful fallback if it should hit those limits.
 
@@ -717,7 +715,7 @@ RetryHandler section in this page for more details.
 To learn the Slack rate limits in general, see the documentation on
 [Rate Limiting](https://api.slack.com/docs/rate-limits).
 
-## Calling any API methods
+## Calling API methods
 
 This library covers all the public endpoints as the methods in
 `WebClient`. That said, you may see a bit delay of the library release.
