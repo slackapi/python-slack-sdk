@@ -5,26 +5,23 @@ This website is built using [Docusaurus](https://docusaurus.io/). 'Tis cool.
 Each Bolt/SDK has its own Docusaurus website, with matching CSS and nav/footer. There is also be a Docusaurus website of just the homepage and community tools. 
 
 ```
-website/
-├── docs/ (the good stuff. md/mdx files supported)
-│   ├── getting-started.md
-│   └── concepts
-│       └── sending-message.md
+docs/
+├── content/ (the good stuff. md/mdx files supported)
+│   ├── rtm.md
+│   └── oauth.md
 ├── static/
+│   ├── api_docs/ (generated reference docs)
+│   │   └── slack_sdk/
+│   │   │   └── index.html
 │   ├── css/
 │   │   └── custom.css (the css for everything!)
-│   ├── img/ (the pictures for the site)
-│   │   ├── rory.png 
-│   │   └── oslo.svg 
-│   └── api-docs/slack_bolt (the generated reference docs with their own HTML/CSS)
-│       ├── index.html 
-│       └── audit_logs 
-│           └── index.html 
+│   └── img/ (the pictures for the site)
+│       ├── rory.png 
+│       └── oslo.svg 
 ├── src/
-│   ├── pages/ (stuff that isn't docs. This is empty for this repo!)
-│   └── theme/ (only contains the 404 page)
+│   └── theme (only contains the 404 page)
 ├── docusaurus.config.js (main config file. also where to set navbar/footer)
-└── sidebar.js (manually set where the docs are in the sidebar.)
+└── sidebar.js (manually set where the content docs are in the sidebar.)
 ```
 
 A cheat-sheet:
