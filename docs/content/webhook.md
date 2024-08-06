@@ -2,14 +2,9 @@
 
 ## Incoming Webhooks
 
-You can use `slack_sdk.webhook.WebhookClient` for [Incoming
-Webhooks](https://api.slack.com/messaging/webhooks) and message
-responses using [response_url in
-payloads](https://api.slack.com/interactivity/handling#message_responses).
+You can use `slack_sdk.webhook.WebhookClient` for [Incoming Webhooks](https://api.slack.com/messaging/webhooks) and message responses using [response_url in payloads](https://api.slack.com/interactivity/handling#message_responses).
 
-To use [Incoming Webhooks](https://api.slack.com/messaging/webhooks),
-just calling `WebhookClient(url)#send(payload)` method works for you.
-The call posts a message in a channel associated with the webhook URL.
+To use [Incoming Webhooks](https://api.slack.com/messaging/webhooks), just calling `WebhookClient(url)#send(payload)` method works for you. The call posts a message in a channel associated with the webhook URL.
 
 ``` python
 from slack_sdk.webhook import WebhookClient

@@ -1,27 +1,18 @@
 # SCIM API Client
 
-[SCIM API](https://api.slack.com/scim) is a set of APIs for provisioning
-and managing user accounts and groups. SCIM is used by Single Sign-On
-(SSO) services and identity providers to manage people across a variety
-of tools, including Slack.
+[SCIM API](https://api.slack.com/scim) is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.
 
-[SCIM (System for Cross-domain Identity
-Management)](http://www.simplecloud.info/) is supported by a myriad of
-services. It behaves slightly differently from other Slack APIs.
+[SCIM (System for Cross-domain Identity Management)](http://www.simplecloud.info/) is supported by a myriad of services. It behaves slightly differently from other Slack APIs.
 
-Refer to [the API document](https://api.slack.com/scim) for more
-details.
+Refer to [the API document](https://api.slack.com/scim) for more details.
 
 View the [Python document for this module](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
 
 ## SCIMClient
 
-An OAuth token with [the admin
-scope](https://api.slack.com/scopes/admin) is required to access the
-SCIM API.
+An OAuth token with [the admin scope](https://api.slack.com/scopes/admin) is required to access the SCIM API.
 
-To fetch provisioned user data, you can use the `search_users` method in
-the client.
+To fetch provisioned user data, you can use the `search_users` method in the client.
 
 ``` python
 import os
@@ -37,9 +28,7 @@ response = client.search_users(
 response.users  # List[User]
 ```
 
-Check out [the class source
-code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py)
-to learn more about the structure of the `user` in `response.users`.
+Check out [the class source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py) to learn more about the structure of the `user` in `response.users`.
 
 Similarly, the `search_groups` method is available and the shape of the
 `Group` object can be [found

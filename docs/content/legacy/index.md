@@ -2,30 +2,15 @@
 
 :::danger
 
-The [slackclient](https://pypi.org/project/slackclient/) PyPI project is
-in maintenance mode now and
-[slack-sdk](https://pypi.org/project/slack-sdk/) project is the
-successor. The v3 SDK provides more functionalities such as Socket Mode,
-OAuth flow module, SCIM API, Audit Logs API, better asyncio support, and
-retry handlers.
+The [slackclient](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode now and [slack-sdk](https://pypi.org/project/slack-sdk/) project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, and retry handlers.
 
 :::
 
-Refer to [the migration
-guide](https://slack.dev/python-slack-sdk/v3-migration/index.html#from-slackclient-2-x)
-to learn how to smoothly migrate your existing code.
+Refer to [the migration guide](https://slack.dev/python-slack-sdk/v3-migration/index.html#from-slackclient-2-x) to learn how to smoothly migrate your existing code.
 
-Slack APIs allow anyone to build full featured integrations that
-extend and expand the capabilities of your Slack workspace. These APIs
-allow you to build applications that interact with Slack just like the
-people on your team — they can post messages, respond to events that
-happen — as well as build complex UIs for getting work done.
+Slack APIs allow anyone to build full featured integrations that extend and expand the capabilities of your Slack workspace. These APIs allow you to build applications that interact with Slack just like the people on your team — they can post messages, respond to events that happen — as well as build complex UIs for getting work done.
 
-To make it easier for Python programmers to build Slack applications,
-we've provided this open source SDK. will let you get started building
-Python apps as quickly as possible. The current version is built for
-Python 3.6 and higher — if you need to target Python 2.x, you might
-consider using v1 of the SDK.
+To make it easier for Python programmers to build Slack applications, we've provided this open source SDK. will let you get started building Python apps as quickly as possible. The current version is built for Python 3.6 and higher — if you need to target Python 2.x, you might consider using v1 of the SDK.
 
 ## Slack Platform Basics
 

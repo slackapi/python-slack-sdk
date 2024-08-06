@@ -1,15 +1,10 @@
 # Web Client
 
-The Slack Web API allows you to build applications that interact with
-Slack in more complex ways than the integrations we provide out of the
-box.
+The Slack Web API allows you to build applications that interact with Slack in more complex ways than the integrations we provide out of the box.
 
-Access the Slack API methods requires an OAuth token — see the [Tokens
-& Authentication](/installation#handling-tokens) section for more on how
-Slack uses OAuth tokens as well as best practices.
+Access the Slack API methods requires an OAuth token — see the [Tokens & Authentication](/installation#handling-tokens) section for more on how Slack uses OAuth tokens as well as best practices.
 
-[Each of these API methods](https://api.slack.com/methods) is fully
-documented in our [API documentation site](https://api.slack.com).
+[Each of these API methods](https://api.slack.com/methods) is fully documented in our [API documentation site](https://api.slack.com).
 
 ---
 
