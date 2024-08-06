@@ -94,7 +94,7 @@ const config = {
               },
               {
                 label: "Python",
-                to: "https://slack.dev/python-slack-sdk",
+                to: "https://slack.dev/bolt-python",
                 target: "_self",
               },
             ],
