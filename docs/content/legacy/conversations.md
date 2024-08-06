@@ -2,22 +2,13 @@
 
 :::danger
 
-The [slackclient](https://pypi.org/project/slackclient/) PyPI project is
-in maintenance mode now and
-[slack-sdk](https://pypi.org/project/slack-sdk/) project is the
-successor. The v3 SDK provides more functionalities such as Socket Mode,
-OAuth flow module, SCIM API, Audit Logs API, better asyncio support,
-retry handlers, and many more.
+The [slackclient](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode now and [slack-sdk](https://pypi.org/project/slack-sdk/) project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, retry handlers, and many more.
 
 :::
 
-The Slack Conversations API provides your app with a unified interface
-to work with all the channel-like things encountered in Slack; public
-channels, private channels, direct messages, group direct messages, and
-our newest channel type, Shared Channels.
+The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack; public channels, private channels, direct messages, group direct messages, and our newest channel type, Shared Channels.
 
-See [Conversations API](https://api.slack.com/docs/conversations-api)
-docs for more info.
+See [Conversations API](https://api.slack.com/docs/conversations-api) docs for more info.
 
 ------------------------------------------------------------------------
 

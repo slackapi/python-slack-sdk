@@ -2,42 +2,19 @@
 
 :::danger
 
-The [slackclient](https://pypi.org/project/slackclient/) PyPI project is
-in maintenance mode now and
-[slack-sdk](https://pypi.org/project/slack-sdk/) project is the
-successor. The v3 SDK provides more functionalities such as Socket Mode,
-OAuth flow module, SCIM API, Audit Logs API, better asyncio support,
-retry handlers, and many more.
+The [slackclient](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode now and [slack-sdk](https://pypi.org/project/slack-sdk/) project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, retry handlers, and many more.
 
 :::
 
-The [Real Time Messaging (RTM) API](https://api.slack.com/rtm) is a WebSocket-based API that
-allows you to receive events from Slack in real time and send messages
-as users.
+The [Real Time Messaging (RTM) API](https://api.slack.com/rtm) is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
 
-If you prefer events to be pushed to your app, we recommend using the
-HTTP-based [Events API](https://api.slack.com/events-api) instead. The
-Events API contains some events that aren't supported in the RTM API
-(like [app_home_opened
-event](https://api.slack.com/events/app_home_opened)), and it supports
-most of the event types in the RTM API. If you'd like to use the Events
-API, you can use the [Python Slack Events
-Adaptor](https://github.com/slackapi/python-slack-events-api).
+If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API](https://api.slack.com/events-api) instead. The Events API contains some events that aren't supported in the RTM API (like [app_home_opened event](https://api.slack.com/events/app_home_opened)), and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor](https://github.com/slackapi/python-slack-events-api).
 
-The RTMClient allows apps to communicate with the Slack RTM
-API.
+The RTMClient allows apps to communicate with the Slack RTM API.
 
-The event-driven architecture of this client allows you to simply link
-callbacks to their corresponding events. When an event occurs this
-client executes your callback while passing along any information it
-receives. We also give you the ability to call our web client from
-inside your callbacks.
+The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message
-event](https://api.slack.com/events/message) that contains \"Hello\" and
-if its received, we call the `say_hello()` function. We then issue a
-call to the web client to post back to the channel saying \"Hi\" to the
-user.
+In our example below, we watch for a [message event](https://api.slack.com/events/message) that contains \"Hello\" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying \"Hi\" to the user.
 
 ## Configuring the RTM API
 

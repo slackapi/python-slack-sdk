@@ -1,12 +1,8 @@
 # Python Slack SDK
 
-The Slack Python SDK has corresponding
-package for Slack APIs. They are small and powerful when used
-independently, and work seamlessly when used together, too.
+The Slack Python SDK has corresponding package for Slack APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
-The Slack platform offers several APIs to build apps. Each Slack API
-delivers part of the capabilities from the platform, so that you can
-pick just those that fit for your needs.
+The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs.
 
 ## Features
 
@@ -37,5 +33,4 @@ If you otherwise get stuck, we're here to help. The following are the best ways 
 
 These docs live within the [Python Slack SDK](https://github.com/slackapi/python-slack-sdk) repository and are open source.
 
-We welcome contributions from everyone! Please check out our
-[Contributor's Guide](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md) for how to contribute in a helpful and collaborative way.
+We welcome contributions from everyone! Please check out our [Contributor's Guide](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md) for how to contribute in a helpful and collaborative way.

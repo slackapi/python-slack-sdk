@@ -2,12 +2,7 @@
 
 :::danger
 
-The [slackclient](https://pypi.org/project/slackclient/) PyPI project is
-in maintenance mode now and
-[slack-sdk](https://pypi.org/project/slack-sdk/) project is the
-successor. The v3 SDK provides more functionalities such as Socket Mode,
-OAuth flow module, SCIM API, Audit Logs API, better asyncio support,
-retry handlers, and many more.
+The [slackclient](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode now and [slack-sdk](https://pypi.org/project/slack-sdk/) project is the successor. The v3 SDK provides more functionalities such as Socket Mode, OAuth flow module, SCIM API, Audit Logs API, better asyncio support, retry handlers, and many more.
 
 :::
 
