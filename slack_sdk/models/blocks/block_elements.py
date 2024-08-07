@@ -2105,7 +2105,7 @@ class RichTextElementParts:
             self,
             *,
             timestamp: str,
-            format: str, 
+            format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,
             **others: dict,
