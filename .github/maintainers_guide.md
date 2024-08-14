@@ -107,17 +107,9 @@ $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client
 
 ### Generating Documentation
 
-The documentation is generated from the source and templates in the `docs-src` directory. The generated documentation
-gets committed to the repo in `docs` and also published to a GitHub Pages website.
+See [`/docs/README`](https://github.com/slackapi/python-slack-sdk/blob/main/docs/README.md) for information on editing documentation pages.
 
-You can generate and preview the **SDK document pages** by running
-
-```bash
-$ ./scripts/docs.sh
-$ open docs/index.html
-```
-
-Similarly you can generate and preview the **API documents for `slack_sdk` package modules** by running
+The API reference is generated from a script. You can generate and preview the **API _reference_ documents for `slack_sdk` package modules** by running:
 
 ```bash
 $ ./scripts/generate_api_docs.sh
@@ -128,7 +120,7 @@ $ ./scripts/generate_api_docs.sh
 1. Create the commit for the release:
 
    - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
-   - Build the docs with `./scripts/docs.sh` and then `./scripts/generate_api_docs.sh`.
+   - Build the reference docs with `./scripts/generate_api_docs.sh`.
    - Create a branch for the release with `git checkout -b v2.5.0`
    - Make a commit that includes the new version number: `git commit -a -m 'version 2.5.0'`.
    - Open a PR and merge after receiving at least one approval from other maintainers.
