@@ -1003,6 +1003,25 @@ class RichTextBlockTests(unittest.TestCase):
                         {"type": "usergroup", "usergroup_id": "S01BL602YLU"},
                         {"type": "text", "text": " "},
                         {"type": "channel", "channel_id": "C02GD0YEHDJ"},
+                        {
+                            "type": "date",
+                            "timestamp": "1628633089",
+                            "format": "{date_long}",
+                            "url": "https://slack.com",
+                            "fallback": "August 10, 2021",
+                        },
+                        {"type": "date", "timestamp": "1720710212", "format": "{date_num} at {time}", "fallback": "timey"},
+                        {
+                            "type": "date",
+                            "timestamp": "1628633089",
+                            "format": "{date_short_pretty}",
+                            "url": "https://slack.com",
+                        },
+                        {
+                            "type": "date",
+                            "timestamp": "1628633089",
+                            "format": "{ago}",
+                        },
                     ],
                 },
             ],
@@ -1078,6 +1097,12 @@ class RichTextBlockTests(unittest.TestCase):
                         _.UserGroup(usergroup_id="S01BL602YLU"),
                         _.Text(text=" "),
                         _.Channel(channel_id="C02GD0YEHDJ"),
+                        _.Date(
+                            timestamp="1628633089", format="{date_long}", url="https://slack.com", fallback="August 10, 2021"
+                        ),
+                        _.Date(timestamp="1720710212", format="{date_num} at {time}", fallback="timey"),
+                        _.Date(timestamp="1628633089", format="{date_short_pretty}", url="https://slack.com"),
+                        _.Date(timestamp="1628633089", format="{ago}"),
                     ]
                 ),
             ],
