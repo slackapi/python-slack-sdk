@@ -16,3 +16,7 @@ updates:
     directory: "/docs"
     schedule:
       interval: "monthly"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
