@@ -1,10 +1,6 @@
 # general things to ignore
 build/
 dist/
-docs/_sources/
-docs/.doctrees
-docs-v2/_sources/
-docs-v2/.doctrees
 .eggs/
 *.egg-info/
 *.egg
