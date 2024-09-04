@@ -1,4 +1,5 @@
 """A Python module for interacting with Slack's Web API."""
+
 import json
 import os
 import warnings
@@ -3202,6 +3203,8 @@ class WebClient(BaseClient):
                 "message": message,
             }
         )
+        if message is not None:
+            kwargs.update({"message": json.dumps(message)})
         return self.api_call("conversations.requestSharedInvite.approve", params=kwargs)
 
     def conversations_requestSharedInvite_deny(
@@ -3216,6 +3219,38 @@ class WebClient(BaseClient):
         """
         kwargs.update({"invite_id": invite_id, "message": message})
         return self.api_call("conversations.requestSharedInvite.deny", params=kwargs)
+
+    def conversations_requestSharedInvite_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        include_approved: Optional[bool] = None,
+        include_denied: Optional[bool] = None,
+        include_expired: Optional[bool] = None,
+        invite_ids: Optional[Union[str, Sequence[str]]] = None,
+        limit: Optional[int] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists requests to add external users to channels with ability to filter.
+        https://api.slack.com/methods/conversations.requestSharedInvite.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "include_approved": include_approved,
+                "include_denied": include_denied,
+                "include_expired": include_expired,
+                "limit": limit,
+                "user_id": user_id,
+            }
+        )
+        if invite_ids is not None:
+            if isinstance(invite_ids, (list, Tuple)):
+                kwargs.update({"invite_ids": ",".join(invite_ids)})
+            else:
+                kwargs.update({"invite_ids": invite_ids})
+        return self.api_call("conversations.requestSharedInvite.list", params=kwargs)
 
     def conversations_setPurpose(
         self,
