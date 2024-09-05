@@ -3209,7 +3209,6 @@ class AsyncWebClient(AsyncBaseClient):
                 "invite_id": invite_id,
                 "channel_id": channel_id,
                 "is_external_limited": is_external_limited,
-                "message": message,
             }
         )
         if message is not None:
