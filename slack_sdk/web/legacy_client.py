@@ -10,6 +10,7 @@
 from asyncio import Future
 
 """A Python module for interacting with Slack's Web API."""
+
 import json
 import os
 import warnings
@@ -3192,6 +3193,74 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         return self.api_call("conversations.replies", http_verb="GET", params=kwargs)
+
+    def conversations_requestSharedInvite_approve(
+        self,
+        *,
+        invite_id: str,
+        channel_id: Optional[str] = None,
+        is_external_limited: Optional[str] = None,
+        message: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+        https://api.slack.com/methods/conversations.requestSharedInvite.approve
+        """
+        kwargs.update(
+            {
+                "invite_id": invite_id,
+                "channel_id": channel_id,
+                "is_external_limited": is_external_limited,
+            }
+        )
+        if message is not None:
+            kwargs.update({"message": json.dumps(message)})
+        return self.api_call("conversations.requestSharedInvite.approve", params=kwargs)
+
+    def conversations_requestSharedInvite_deny(
+        self,
+        *,
+        invite_id: str,
+        message: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Deny a request to invite an external user to a channel.
+        https://api.slack.com/methods/conversations.requestSharedInvite.deny
+        """
+        kwargs.update({"invite_id": invite_id, "message": message})
+        return self.api_call("conversations.requestSharedInvite.deny", params=kwargs)
+
+    def conversations_requestSharedInvite_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        include_approved: Optional[bool] = None,
+        include_denied: Optional[bool] = None,
+        include_expired: Optional[bool] = None,
+        invite_ids: Optional[Union[str, Sequence[str]]] = None,
+        limit: Optional[int] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists requests to add external users to channels with ability to filter.
+        https://api.slack.com/methods/conversations.requestSharedInvite.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "include_approved": include_approved,
+                "include_denied": include_denied,
+                "include_expired": include_expired,
+                "limit": limit,
+                "user_id": user_id,
+            }
+        )
+        if invite_ids is not None:
+            if isinstance(invite_ids, (list, Tuple)):
+                kwargs.update({"invite_ids": ",".join(invite_ids)})
+            else:
+                kwargs.update({"invite_ids": invite_ids})
+        return self.api_call("conversations.requestSharedInvite.list", params=kwargs)
 
     def conversations_setPurpose(
         self,
