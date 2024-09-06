@@ -2940,17 +2940,23 @@ Only one element can be set to true. Defaults to false.</dd>
 
         @property
         def attributes(self) -&gt; Set[str]:
-            return super().attributes.union({&#34;timestamp&#34;})
+            return super().attributes.union({&#34;timestamp&#34;, &#34;format&#34;, &#34;url&#34;, &#34;fallback&#34;})
 
         def __init__(
             self,
             *,
             timestamp: str,
+            format: str,
+            url: Optional[str] = None,
+            fallback: Optional[str] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.timestamp = timestamp
+            self.format = format
+            self.url = url
+            self.fallback = fallback
 
     class Broadcast(RichTextElement):
         type = &#34;broadcast&#34;
