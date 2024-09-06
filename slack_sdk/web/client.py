@@ -5154,7 +5154,8 @@ class WebClient(BaseClient):
     def views_open(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -> SlackResponse:
@@ -5162,7 +5163,7 @@ class WebClient(BaseClient):
         https://api.slack.com/methods/views.open
         See https://api.slack.com/surfaces/modals for details.
         """
-        kwargs.update({"trigger_id": trigger_id})
+        kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
@@ -5174,7 +5175,8 @@ class WebClient(BaseClient):
     def views_push(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -> SlackResponse:
@@ -5186,7 +5188,7 @@ class WebClient(BaseClient):
         to learn more about the lifecycle and intricacies of views.
         https://api.slack.com/methods/views.push
         """
-        kwargs.update({"trigger_id": trigger_id})
+        kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
