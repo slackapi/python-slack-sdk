@@ -3367,6 +3367,74 @@ removed at anytime.</p></div>
         )
         return self.api_call(&#34;conversations.replies&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def conversations_requestSharedInvite_approve(
+        self,
+        *,
+        invite_id: str,
+        channel_id: Optional[str] = None,
+        is_external_limited: Optional[str] = None,
+        message: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+        https://api.slack.com/methods/conversations.requestSharedInvite.approve
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;invite_id&#34;: invite_id,
+                &#34;channel_id&#34;: channel_id,
+                &#34;is_external_limited&#34;: is_external_limited,
+            }
+        )
+        if message is not None:
+            kwargs.update({&#34;message&#34;: json.dumps(message)})
+        return self.api_call(&#34;conversations.requestSharedInvite.approve&#34;, params=kwargs)
+
+    def conversations_requestSharedInvite_deny(
+        self,
+        *,
+        invite_id: str,
+        message: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Deny a request to invite an external user to a channel.
+        https://api.slack.com/methods/conversations.requestSharedInvite.deny
+        &#34;&#34;&#34;
+        kwargs.update({&#34;invite_id&#34;: invite_id, &#34;message&#34;: message})
+        return self.api_call(&#34;conversations.requestSharedInvite.deny&#34;, params=kwargs)
+
+    def conversations_requestSharedInvite_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        include_approved: Optional[bool] = None,
+        include_denied: Optional[bool] = None,
+        include_expired: Optional[bool] = None,
+        invite_ids: Optional[Union[str, Sequence[str]]] = None,
+        limit: Optional[int] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Lists requests to add external users to channels with ability to filter.
+        https://api.slack.com/methods/conversations.requestSharedInvite.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;cursor&#34;: cursor,
+                &#34;include_approved&#34;: include_approved,
+                &#34;include_denied&#34;: include_denied,
+                &#34;include_expired&#34;: include_expired,
+                &#34;limit&#34;: limit,
+                &#34;user_id&#34;: user_id,
+            }
+        )
+        if invite_ids is not None:
+            if isinstance(invite_ids, (list, Tuple)):
+                kwargs.update({&#34;invite_ids&#34;: &#34;,&#34;.join(invite_ids)})
+            else:
+                kwargs.update({&#34;invite_ids&#34;: invite_ids})
+        return self.api_call(&#34;conversations.requestSharedInvite.list&#34;, params=kwargs)
+
     def conversations_setPurpose(
         self,
         *,
@@ -5339,7 +5407,8 @@ removed at anytime.</p></div>
     def views_open(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -&gt; SlackResponse:
@@ -5347,7 +5416,7 @@ removed at anytime.</p></div>
         https://api.slack.com/methods/views.open
         See https://api.slack.com/surfaces/modals for details.
         &#34;&#34;&#34;
-        kwargs.update({&#34;trigger_id&#34;: trigger_id})
+        kwargs.update({&#34;trigger_id&#34;: trigger_id, &#34;interactivity_pointer&#34;: interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({&#34;view&#34;: view.to_dict()})
         else:
@@ -5359,7 +5428,8 @@ removed at anytime.</p></div>
     def views_push(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -&gt; SlackResponse:
@@ -5371,7 +5441,7 @@ removed at anytime.</p></div>
         to learn more about the lifecycle and intricacies of views.
         https://api.slack.com/methods/views.push
         &#34;&#34;&#34;
-        kwargs.update({&#34;trigger_id&#34;: trigger_id})
+        kwargs.update({&#34;trigger_id&#34;: trigger_id, &#34;interactivity_pointer&#34;: interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({&#34;view&#34;: view.to_dict()})
         else:
@@ -6696,6 +6766,27 @@ or received but have not yet been approved by all parties.
 <div class="desc"><p>Retrieve a thread of messages posted to a conversation
 <a href="https://api.slack.com/methods/conversations.replies">https://api.slack.com/methods/conversations.replies</a></p></div>
 </dd>
+<dt id="slack_sdk.WebClient.conversations_requestSharedInvite_approve"><code class="name flex">
+<span>def <span class="ident">conversations_requestSharedInvite_approve</span></span>(<span>self, *, invite_id: str, channel_id: Optional[str] = None, is_external_limited: Optional[str] = None, message: Optional[Dict[str, Any]] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+<a href="https://api.slack.com/methods/conversations.requestSharedInvite.approve">https://api.slack.com/methods/conversations.requestSharedInvite.approve</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.conversations_requestSharedInvite_deny"><code class="name flex">
+<span>def <span class="ident">conversations_requestSharedInvite_deny</span></span>(<span>self, *, invite_id: str, message: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Deny a request to invite an external user to a channel.
+<a href="https://api.slack.com/methods/conversations.requestSharedInvite.deny">https://api.slack.com/methods/conversations.requestSharedInvite.deny</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.conversations_requestSharedInvite_list"><code class="name flex">
+<span>def <span class="ident">conversations_requestSharedInvite_list</span></span>(<span>self, *, cursor: Optional[str] = None, include_approved: Optional[bool] = None, include_denied: Optional[bool] = None, include_expired: Optional[bool] = None, invite_ids: Union[str, Sequence[str], ForwardRef(None)] = None, limit: Optional[int] = None, user_id: Optional[str] = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lists requests to add external users to channels with ability to filter.
+<a href="https://api.slack.com/methods/conversations.requestSharedInvite.list">https://api.slack.com/methods/conversations.requestSharedInvite.list</a></p></div>
+</dd>
 <dt id="slack_sdk.WebClient.conversations_setPurpose"><code class="name flex">
 <span>def <span class="ident">conversations_setPurpose</span></span>(<span>self, *, channel: str, purpose: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -7458,7 +7549,7 @@ multiparty direct message.</p></div>
 <a href="https://api.slack.com/methods/users.setPresence">https://api.slack.com/methods/users.setPresence</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.views_open"><code class="name flex">
-<span>def <span class="ident">views_open</span></span>(<span>self, *, trigger_id: str, view: Union[dict, <a title="slack_sdk.models.views.View" href="models/views/index.html#slack_sdk.models.views.View">View</a>], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">views_open</span></span>(<span>self, *, trigger_id: Optional[str] = None, interactivity_pointer: Optional[str] = None, view: Union[dict, <a title="slack_sdk.models.views.View" href="models/views/index.html#slack_sdk.models.views.View">View</a>], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Open a view for a user.
@@ -7475,7 +7566,7 @@ app's Home tab (<a href="https://api.slack.com/surfaces/tabs">https://api.slack.
 <a href="https://api.slack.com/methods/views.publish">https://api.slack.com/methods/views.publish</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.views_push"><code class="name flex">
-<span>def <span class="ident">views_push</span></span>(<span>self, *, trigger_id: str, view: Union[dict, <a title="slack_sdk.models.views.View" href="models/views/index.html#slack_sdk.models.views.View">View</a>], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">views_push</span></span>(<span>self, *, trigger_id: Optional[str] = None, interactivity_pointer: Optional[str] = None, view: Union[dict, <a title="slack_sdk.models.views.View" href="models/views/index.html#slack_sdk.models.views.View">View</a>], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Push a view onto the stack of a root view.
@@ -8114,6 +8205,9 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.WebClient.conversations_open" href="#slack_sdk.WebClient.conversations_open">conversations_open</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_rename" href="#slack_sdk.WebClient.conversations_rename">conversations_rename</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_replies" href="#slack_sdk.WebClient.conversations_replies">conversations_replies</a></code></li>
+<li><code><a title="slack_sdk.WebClient.conversations_requestSharedInvite_approve" href="#slack_sdk.WebClient.conversations_requestSharedInvite_approve">conversations_requestSharedInvite_approve</a></code></li>
+<li><code><a title="slack_sdk.WebClient.conversations_requestSharedInvite_deny" href="#slack_sdk.WebClient.conversations_requestSharedInvite_deny">conversations_requestSharedInvite_deny</a></code></li>
+<li><code><a title="slack_sdk.WebClient.conversations_requestSharedInvite_list" href="#slack_sdk.WebClient.conversations_requestSharedInvite_list">conversations_requestSharedInvite_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_setPurpose" href="#slack_sdk.WebClient.conversations_setPurpose">conversations_setPurpose</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_setTopic" href="#slack_sdk.WebClient.conversations_setTopic">conversations_setTopic</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_unarchive" href="#slack_sdk.WebClient.conversations_unarchive">conversations_unarchive</a></code></li>
