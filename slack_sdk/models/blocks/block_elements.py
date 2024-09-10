@@ -2104,7 +2104,7 @@ class RichTextElementParts:
         def __init__(
             self,
             *,
-            timestamp: str,
+            timestamp: int,
             format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,
