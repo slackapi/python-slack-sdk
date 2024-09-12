@@ -51,7 +51,7 @@ const sidebars = {
     {
       type: "link",
       label: "Reference",
-      href: "https://slack.dev/python-slack-sdk/api-docs/slack_sdk/",
+      href: "https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/",
     },
     { type: "html", value: "<hr>" },
     {

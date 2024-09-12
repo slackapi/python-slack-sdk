@@ -12,7 +12,7 @@ const config = {
   tagline: "Official frameworks, libraries, and SDKs for Slack developers",
   favicon: "img/favicon.ico",
 
-  url: "https://slack.dev",
+  url: "https://tools.slack.dev",
   baseUrl: "/python-slack-sdk/",
   organizationName: "slackapi",
   projectName: "python-slack-sdk",
@@ -76,7 +76,7 @@ const config = {
         logo: {
           alt: "Slack logo",
           src: "img/slack-logo.svg",
-          href: "https://slack.dev",
+          href: "https://tools.slack.dev",
           target: "_self",
         },
         items: [
@@ -87,17 +87,17 @@ const config = {
             items: [
               {
                 label: "Java",
-                to: "https://slack.dev/java-slack-sdk/guides/bolt-basics",
+                to: "https://tools.slack.dev/java-slack-sdk/guides/bolt-basics",
                 target: "_self",
               },
               {
                 label: "JavaScript",
-                to: "https://slack.dev/bolt-js",
+                to: "https://tools.slack.dev/bolt-js",
                 target: "_self",
               },
               {
                 label: "Python",
-                to: "https://slack.dev/bolt-python",
+                to: "https://tools.slack.dev/bolt-python",
                 target: "_self",
               },
             ],
@@ -109,17 +109,17 @@ const config = {
             items: [
               {
                 label: "Java Slack SDK",
-                to: "https://slack.dev/java-slack-sdk/",
+                to: "https://tools.slack.dev/java-slack-sdk/",
                 target: "_self",
               },
               {
                 label: "Node Slack SDK",
-                to: "https://slack.dev/node-slack-sdk/",
+                to: "https://tools.slack.dev/node-slack-sdk/",
                 target: "_self",
               },
               {
                 label: "Python Slack SDK",
-                to: "https://slack.dev/python-slack-sdk/",
+                to: "https://tools.slack.dev/python-slack-sdk/",
                 target: "_self",
               },
               {
@@ -136,7 +136,7 @@ const config = {
             items: [
               {
                 label: "Community tools",
-                to: "https://slack.dev/community-tools",
+                to: "https://tools.slack.dev/community-tools",
                 target: "_self",
               },
               {

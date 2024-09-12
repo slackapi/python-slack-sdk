@@ -10,7 +10,7 @@ This is the first stable version of [slack_sdk](https://pypi.org/project/slack-s
     warnings
 
 Refer to [v3.0.0 milestone](https://github.com/slackapi/python-slack-sdk/milestone/10?closed=1)
-and [the website](https://slack.dev/python-slack-sdk/) for details. If you're a `slackclient` user, the migration guide for `slackclient` v2.x users is available at https://slack.dev/python-slack-sdk/v3-migration/
+and [the website](https://tools.slack.dev/python-slack-sdk/) for details. If you're a `slackclient` user, the migration guide for `slackclient` v2.x users is available at https://tools.slack.dev/python-slack-sdk/v3-migration/
 
 ## v2.9.3 (2020-10-20)
 

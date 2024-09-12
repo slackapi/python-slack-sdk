@@ -4,7 +4,7 @@ This section explains the details about how to handle the Slack OAuth flow.
 
 If you're looking for a much easier way to do the same, check [Bolt for Python](https://github.com/slackapi/bolt-python), which is a full-stack Slack App framework. With Bolt, you don't need to implement most of the following code on your own.
 
-View the [Python document for this module](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
+View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/)
 
 
 ## App Installation Flow
