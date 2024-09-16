@@ -2,6 +2,7 @@
 
 Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
 """
+
 import json
 import logging
 import urllib
@@ -344,12 +345,11 @@ class AuditLogsClient:
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
-        # NOTE: BAN-B310 is already checked above
-        http_resp: Optional[HTTPResponse] = None
+        http_resp: HTTPResponse
         if opener:
-            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)
         else:
-            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(

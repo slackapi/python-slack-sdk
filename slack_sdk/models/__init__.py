@@ -12,7 +12,7 @@ from .basic_objects import JsonValidator
 # NOTE: used only for legacy components - don't use this for Block Kit
 def extract_json(
     item_or_items: Union[JsonObject, Sequence[JsonObject]], *format_args
-) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:  # type: ignore
+) -> Union[Dict[Any, Any], List[Dict[Any, Any]]]:
     """
     Given a sequence (or single item), attempt to call the to_dict() method on each
     item and return a plain list. If item is not the expected type, return it
@@ -24,12 +24,10 @@ def extract_json(
             method
     """
     try:
-        return [  # type: ignore
-            elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem for elem in item_or_items
-        ]
+        return [elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem for elem in item_or_items]
     except TypeError:  # not iterable, so try returning it as a single item
-        return (  # type: ignore
-            item_or_items.to_dict(*format_args) if isinstance(item_or_items, JsonObject) else item_or_items
+        return (
+            item_or_items.to_dict(*format_args) if isinstance(item_or_items, JsonObject) else item_or_items  # type: ignore
         )
 
 

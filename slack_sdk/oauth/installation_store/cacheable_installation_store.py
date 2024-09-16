@@ -7,8 +7,8 @@ from slack_sdk.oauth.installation_store import Bot, Installation
 
 class CacheableInstallationStore(InstallationStore):
     underlying: InstallationStore
-    cached_bots: Dict[str, Bot]  # type: ignore
-    cached_installations: Dict[str, Installation]  # type: ignore
+    cached_bots: Dict[str, Bot]
+    cached_installations: Dict[str, Installation]
 
     def __init__(self, installation_store: InstallationStore):
         """A simple memory cache wrapper for any installation stores.

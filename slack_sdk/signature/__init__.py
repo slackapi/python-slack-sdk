@@ -1,4 +1,5 @@
 """Slack request signature verifier"""
+
 import hashlib
 import hmac
 from time import time

@@ -403,7 +403,7 @@ def _upload_file_via_v2_url(
 
 def _validate_for_legacy_client(
     response: Union["SlackResponse", Future],  # noqa: F821
-) -> None:  # type: ignore
+) -> None:
     # Only LegacyWebClient can return this union type
     if isinstance(response, Future):
         message = (

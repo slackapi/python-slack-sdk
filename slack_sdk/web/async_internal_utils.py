@@ -98,11 +98,11 @@ async def _request_with_session(
                 }
                 logger.debug(
                     f"Sending a request - url: {http_verb} {api_url}, "
-                    f"params: {convert_params(req_args.get('params'))}, "
-                    f"files: {convert_params(req_args.get('files'))}, "
-                    f"data: {convert_params(req_args.get('data'))}, "
-                    f"json: {convert_params(req_args.get('json'))}, "
-                    f"proxy: {convert_params(req_args.get('proxy'))}, "
+                    f"params: {convert_params(req_args.get('params', 'n/a'))}, "
+                    f"files: {convert_params(req_args.get('files', 'n/a'))}, "
+                    f"data: {convert_params(req_args.get('data', 'n/a'))}, "
+                    f"json: {convert_params(req_args.get('json', 'n/a'))}, "
+                    f"proxy: {convert_params(req_args.get('proxy', 'n/a'))}, "
                     f"headers: {headers}"
                 )
 

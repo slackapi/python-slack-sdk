@@ -16,3 +16,4 @@ psutil>=6.0.0,<7
 boto3<=2
 # For AWS tests
 moto>=4.0.13,<6
+mypy==1.11.1

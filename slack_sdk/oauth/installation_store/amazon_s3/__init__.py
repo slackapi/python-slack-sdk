@@ -3,7 +3,7 @@ import logging
 from logging import Logger
 from typing import Optional
 
-from botocore.client import BaseClient
+from botocore.client import BaseClient  # type: ignore[import-untyped]
 
 from slack_sdk.errors import SlackClientConfigurationError
 from slack_sdk.oauth.installation_store.async_installation_store import (
@@ -70,7 +70,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
             # per workspace per user
             u_id = installation.user_id or none
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -86,7 +86,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
         else:
             # per workspace
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -96,7 +96,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
             # per workspace per user
             u_id = installation.user_id or none
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -131,7 +131,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f"S3 put_object response: {response}")
 
         else:
-            entity: str = json.dumps(bot.__dict__)
+            entity = json.dumps(bot.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,

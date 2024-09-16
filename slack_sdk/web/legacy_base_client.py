@@ -1,4 +1,5 @@
 """A Python module for interacting with Slack's Web API."""
+# mypy: ignore-errors
 
 import asyncio
 import copy

@@ -65,7 +65,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                 d = copy.copy(block_element)
                 t = d.pop("type")
                 for subclass in cls._get_sub_block_elements():
-                    if t == subclass.type:  # type: ignore
+                    if t == subclass.type:
                         return subclass(**d)
                 if t == PlainTextObject.type:  # skipcq: PYL-R1705
                     return PlainTextObject(**d)

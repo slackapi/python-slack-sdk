@@ -337,6 +337,7 @@ class BaseClient:
             dict {status: int, headers: Headers, body: str}
         """
         headers = args["headers"]
+        body: Optional[Union[bytes, str]] = None
         if args["json"]:
             body = json.dumps(args["json"])
             headers["Content-Type"] = "application/json;charset=utf-8"
@@ -344,7 +345,7 @@ class BaseClient:
             boundary = f"--------------{uuid.uuid4()}"
             sep_boundary = b"\r\n--" + boundary.encode("ascii")
             end_boundary = sep_boundary + b"--\r\n"
-            body = io.BytesIO()
+            body_builder = io.BytesIO()
             data = args["data"]
             for key, value in data.items():
                 readable = getattr(value, "readable", None)
@@ -364,20 +365,18 @@ class BaseClient:
                 else:
                     title = f'\r\nContent-Disposition: form-data; name="{key}"\r\n'
                     value = str(value).encode("utf-8")
-                body.write(sep_boundary)
-                body.write(title.encode("utf-8"))
-                body.write(b"\r\n")
-                body.write(value)
+                body_builder.write(sep_boundary)
+                body_builder.write(title.encode("utf-8"))
+                body_builder.write(b"\r\n")
+                body_builder.write(value)
 
-            body.write(end_boundary)
-            body = body.getvalue()
+            body_builder.write(end_boundary)
+            body = body_builder.getvalue()
             headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
             headers["Content-Length"] = len(body)
         elif args["params"]:
             body = urlencode(args["params"])
             headers["Content-Type"] = "application/x-www-form-urlencoded"
-        else:
-            body = None
 
         if isinstance(body, str):
             body = body.encode("utf-8")
@@ -520,12 +519,10 @@ class BaseClient:
                 else:
                     raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
 
-            # NOTE: BAN-B310 is already checked above
-            resp: Optional[HTTPResponse] = None
             if opener:
-                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+                resp = opener.open(req, timeout=self.timeout)
             else:
-                resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+                resp = urlopen(req, context=self.ssl, timeout=self.timeout)
             if resp.headers.get_content_type() == "application/gzip":
                 # admin.analytics.getFile
                 body: bytes = resp.read()

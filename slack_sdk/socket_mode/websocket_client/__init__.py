@@ -5,6 +5,7 @@
 * https://pypi.org/project/websocket-client/
 
 """
+
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -218,8 +219,8 @@ class SocketModeClient(BaseSocketModeClient):
                 if self.is_connected():
                     self.current_session.send(message)
                 else:
-                    self.logger.warning(  # type: ignore
-                        f"The current session (session id: {self.session_id()}) is no longer active. "  # type: ignore
+                    self.logger.warning(
+                        f"The current session (session id: {self.session_id()}) is no longer active. "
                         "Failed to send a message"
                     )
                     raise e

@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from functools import wraps
-from typing import Callable, Iterable, Set, Union, Any, Tuple
+from typing import Callable, Iterable, Set, Union, Any
 
 from slack_sdk.errors import SlackObjectFormationError
 
@@ -37,13 +37,13 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         present on this object
         """
 
-        def to_dict_compatible(value: Union[dict, list, object, Tuple]) -> Union[dict, list, Any]:
-            if isinstance(value, (list, Tuple)):  # skipcq: PYL-R1705
+        def to_dict_compatible(value: Union[dict, list, object, tuple]) -> Union[dict, list, Any]:
+            if isinstance(value, (list, tuple)):  # skipcq: PYL-R1705
                 return [to_dict_compatible(v) for v in value]
             else:
                 to_dict = getattr(value, "to_dict", None)
                 if to_dict and callable(to_dict):  # skipcq: PYL-R1705
-                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore
+                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore[attr-defined]
                 else:
                     return value
 

@@ -421,7 +421,7 @@ class DialogExternalSelector(AbstractDialogSelector):
 
 
 class DialogBuilder(JsonObject):
-    attributes = {}  # no attributes because to_dict has unique implementation
+    attributes = Set()  # no attributes because to_dict has unique implementation
 
     _callback_id: Optional[str]
     _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]

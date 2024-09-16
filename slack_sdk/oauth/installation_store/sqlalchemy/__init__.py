@@ -65,7 +65,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f"{table_name}_idx",
@@ -100,7 +100,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f"{table_name}_idx",

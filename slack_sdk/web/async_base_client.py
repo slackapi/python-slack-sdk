@@ -8,7 +8,7 @@ from aiohttp import FormData, BasicAuth
 from .async_internal_utils import (
     _files_to_data,
     _request_with_session,
-)  # type: ignore
+)
 from .async_slack_response import AsyncSlackResponse
 from .deprecation import show_deprecation_warning_if_any
 from .file_upload_v2_result import FileUploadV2Result
@@ -92,7 +92,7 @@ class AsyncBaseClient:
         *,
         http_verb: str = "POST",
         files: Optional[dict] = None,
-        data: Union[dict, FormData] = None,
+        data: Optional[Union[dict, FormData]] = None,
         params: Optional[dict] = None,
         json: Optional[dict] = None,  # skipcq: PYL-W0621
         headers: Optional[dict] = None,
@@ -133,7 +133,7 @@ class AsyncBaseClient:
 
         api_url = _get_url(self.base_url, api_method)
         if auth is not None:
-            if isinstance(auth, dict):
+            if isinstance(auth, Dict):
                 auth = BasicAuth(auth["client_id"], auth["client_secret"])
             if isinstance(auth, BasicAuth):
                 if headers is None:

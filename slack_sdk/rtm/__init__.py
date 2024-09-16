@@ -534,11 +534,11 @@ class RTMClient(object):  # skipcq: PYL-R0205
             else:
                 resp = self._web_client.rtm_connect()
 
-        url = resp.get("url")  # type: ignore
+        url = resp.get("url")
         if url is None:
             msg = "Unable to retrieve RTM URL from Slack."
             raise client_err.SlackApiError(message=msg, response=resp)
-        return url, resp.data  # type: ignore
+        return url, resp.data
 
     async def _wait_exponentially(self, exception, max_wait_time=300):
         """Wait exponentially longer for each connection attempt.

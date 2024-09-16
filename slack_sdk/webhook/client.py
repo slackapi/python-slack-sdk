@@ -140,16 +140,16 @@ class WebhookClient:
         )
 
     def _perform_http_request(self, *, body: Dict[str, Any], headers: Dict[str, str]) -> WebhookResponse:
-        body = json.dumps(body)
+        raw_body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
-            self.logger.debug(f"Sending a request - url: {self.url}, body: {body}, headers: {headers}")
+            self.logger.debug(f"Sending a request - url: {self.url}, body: {raw_body}, headers: {headers}")
 
         url = self.url
         # NOTE: Intentionally ignore the `http_verb` here
         # Slack APIs accepts any API method requests with POST methods
-        req = Request(method="POST", url=url, data=body.encode("utf-8"), headers=headers)
+        req = Request(method="POST", url=url, data=raw_body.encode("utf-8"), headers=headers)
         resp = None
         last_error = None
 

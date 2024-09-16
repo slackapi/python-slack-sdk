@@ -136,7 +136,7 @@ def _build_request_headers(
     return request_headers
 
 
-def _debug_log_response(  # type: ignore
+def _debug_log_response(
     logger,
     resp: "SCIMResponse",  # noqa: F821
 ) -> None:

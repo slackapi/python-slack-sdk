@@ -1,6 +1,6 @@
 import logging
 import time
-from datetime import datetime  # type: ignore
+from datetime import datetime
 from logging import Logger
 from uuid import uuid4
 

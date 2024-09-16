@@ -466,7 +466,7 @@ class ConfirmObject(JsonObject):
         if option_type == "action":  # skipcq: PYL-R1705
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
-            json = {
+            json: Dict[str, Union[str, dict]] = {
                 "ok_text": self._confirm.text if self._confirm and self._confirm.text != "Yes" else "Okay",
                 "dismiss_text": self._deny.text if self._deny and self._deny.text != "No" else "Cancel",
             }

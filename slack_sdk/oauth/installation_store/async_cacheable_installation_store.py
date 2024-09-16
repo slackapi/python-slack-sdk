@@ -9,8 +9,8 @@ from slack_sdk.oauth.installation_store.async_installation_store import (
 
 class AsyncCacheableInstallationStore(AsyncInstallationStore):
     underlying: AsyncInstallationStore
-    cached_bots: Dict[str, Bot]  # type: ignore
-    cached_installations: Dict[str, Installation]  # type: ignore
+    cached_bots: Dict[str, Bot]
+    cached_installations: Dict[str, Installation]
 
     def __init__(self, installation_store: AsyncInstallationStore):
         """A simple memory cache wrapper for any installation stores.

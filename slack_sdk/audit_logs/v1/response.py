@@ -14,7 +14,7 @@ class AuditLogsResponse:
     typed_body: Optional[LogsResponse]
 
     @property
-    def typed_body(self) -> Optional[LogsResponse]:  # type: ignore
+    def typed_body(self) -> Optional[LogsResponse]:
         if self.body is None:
             return None
         return LogsResponse(**self.body)

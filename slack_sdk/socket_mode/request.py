@@ -30,7 +30,7 @@ class SocketModeRequest:
         elif isinstance(payload, str):
             self.payload = {"text": payload}
         else:
-            unexpected_payload_type = type(payload)  # type: ignore
+            unexpected_payload_type = type(payload)
             raise ValueError(f"Unsupported payload data type ({unexpected_payload_type})")
 
         self.accepts_response_payload = accepts_response_payload or False
@@ -41,9 +41,9 @@ class SocketModeRequest:
     def from_dict(cls, message: dict) -> Optional["SocketModeRequest"]:
         if all(k in message for k in ("type", "envelope_id", "payload")):
             return SocketModeRequest(
-                type=message.get("type"),
-                envelope_id=message.get("envelope_id"),
-                payload=message.get("payload"),
+                type=message["type"],
+                envelope_id=message["envelope_id"],
+                payload=message["payload"],
                 accepts_response_payload=message.get("accepts_response_payload") or False,
                 retry_attempt=message.get("retry_attempt"),
                 retry_reason=message.get("retry_reason"),
