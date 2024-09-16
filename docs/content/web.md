@@ -78,7 +78,7 @@ can include full user interfaces composed of
 The chat.postMessage method takes an optional `blocks` argument that
 allows you to customize the layout of a message. Blocks can be specified
 in a single array of either dict values or
-[slack_sdk.models.blocks.Block](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html)
+[slack_sdk.models.blocks.Block](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html)
 objects.
 
 To send a message to a channel, use the channel's ID. For IMs, use the

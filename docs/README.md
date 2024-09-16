@@ -1,4 +1,4 @@
-# slack.dev/python-slack-sdk
+# tools.slack.dev/python-slack-sdk
 
 This website is built using [Docusaurus](https://docusaurus.io/). 'Tis cool.
 

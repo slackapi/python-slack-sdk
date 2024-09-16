@@ -6,7 +6,7 @@
 
 Refer to [the API document](https://api.slack.com/scim) for more details.
 
-View the [Python document for this module](https://slack.dev/python-slack-sdk/api-docs/slack_sdk/)
+View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/)
 
 ## SCIMClient
 
