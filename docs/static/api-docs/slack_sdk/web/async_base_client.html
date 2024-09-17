@@ -2,21 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.web.async_base_client API documentation</title>
-<meta name="description" content="">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => {
-hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
-hljs.highlightAll();
-})</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -25,6 +22,253 @@ hljs.highlightAll();
 <h1 class="title">Module <code>slack_sdk.web.async_base_client</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import logging
+from ssl import SSLContext
+from typing import Optional, Union, Dict, Any, List
+
+import aiohttp
+from aiohttp import FormData, BasicAuth
+
+from .async_internal_utils import (
+    _files_to_data,
+    _request_with_session,
+)  # type: ignore
+from .async_slack_response import AsyncSlackResponse
+from .deprecation import show_deprecation_warning_if_any
+from .file_upload_v2_result import FileUploadV2Result
+from .internal_utils import (
+    convert_bool_to_0_or_1,
+    _build_req_args,
+    _get_url,
+    get_user_agent,
+)
+from ..proxy_env_variable_loader import load_http_proxy_from_env
+
+from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
+from slack_sdk.http_retry.async_handler import AsyncRetryHandler
+
+
+class AsyncBaseClient:
+    BASE_URL = &#34;https://slack.com/api/&#34;
+
+    def __init__(
+        self,
+        token: Optional[str] = None,
+        base_url: str = BASE_URL,
+        timeout: int = 30,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
+        session: Optional[aiohttp.ClientSession] = None,
+        trust_env_in_session: bool = False,
+        headers: Optional[dict] = None,
+        user_agent_prefix: Optional[str] = None,
+        user_agent_suffix: Optional[str] = None,
+        # for Org-Wide App installation
+        team_id: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
+        retry_handlers: Optional[List[AsyncRetryHandler]] = None,
+    ):
+        self.token = None if token is None else token.strip()
+        &#34;&#34;&#34;A string specifying an `xoxp-*` or `xoxb-*` token.&#34;&#34;&#34;
+        self.base_url = base_url
+        &#34;&#34;&#34;A string representing the Slack API base URL.
+        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
+        self.timeout = timeout
+        &#34;&#34;&#34;The maximum number of seconds the client will wait
+        to connect and receive a response from Slack.
+        Default is 30 seconds.&#34;&#34;&#34;
+        self.ssl = ssl
+        &#34;&#34;&#34;An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
+        instance, helpful for specifying your own custom
+        certificate chain.&#34;&#34;&#34;
+        self.proxy = proxy
+        &#34;&#34;&#34;String representing a fully-qualified URL to a proxy through which
+        to route all requests to the Slack API. Even if this parameter
+        is not specified, if any of the following environment variables are
+        present, they will be loaded into this parameter: `HTTPS_PROXY`,
+        `https_proxy`, `HTTP_PROXY` or `http_proxy`.&#34;&#34;&#34;
+        self.session = session
+        &#34;&#34;&#34;An [`aiohttp.ClientSession`](https://docs.aiohttp.org/en/stable/client_reference.html#client-session)
+        to attach to all outgoing requests.&#34;&#34;&#34;
+        # https://github.com/slackapi/python-slack-sdk/issues/738
+        self.trust_env_in_session = trust_env_in_session
+        &#34;&#34;&#34;Boolean setting whether aiohttp outgoing requests
+        are allowed to read environment variables. Commonly used in conjunction
+        with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
+        `http_proxy` environment variables.&#34;&#34;&#34;
+        self.headers = headers or {}
+        &#34;&#34;&#34;`dict` representing additional request headers to attach to all requests.&#34;&#34;&#34;
+        self.headers[&#34;User-Agent&#34;] = get_user_agent(user_agent_prefix, user_agent_suffix)
+        self.default_params = {}
+        if team_id is not None:
+            self.default_params[&#34;team_id&#34;] = team_id
+        self._logger = logger if logger is not None else logging.getLogger(__name__)
+        self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()
+
+        if self.proxy is None or len(self.proxy.strip()) == 0:
+            env_variable = load_http_proxy_from_env(self._logger)
+            if env_variable is not None:
+                self.proxy = env_variable
+
+    async def api_call(  # skipcq: PYL-R1710
+        self,
+        api_method: str,
+        *,
+        http_verb: str = &#34;POST&#34;,
+        files: Optional[dict] = None,
+        data: Union[dict, FormData] = None,
+        params: Optional[dict] = None,
+        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        headers: Optional[dict] = None,
+        auth: Optional[dict] = None,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Create a request and execute the API call to Slack.
+
+        Args:
+            api_method (str): The target Slack API method.
+                e.g. &#39;chat.postMessage&#39;
+            http_verb (str): HTTP Verb. e.g. &#39;POST&#39;
+            files (dict): Files to multipart upload.
+                e.g. {image OR file: file_object OR file_path}
+            data: The body to attach to the request. If a dictionary is
+                provided, form-encoding will take place.
+                e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+            params (dict): The URL parameters to append to the URL.
+                e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+            json (dict): JSON for the body to attach to the request
+                (if files or data is not specified).
+                e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+            headers (dict): Additional request headers
+            auth (dict): A dictionary that consists of client_id and client_secret
+
+        Returns:
+            (AsyncSlackResponse)
+                The server&#39;s response to an HTTP request. Data
+                from the response can be accessed like a dict.
+                If the response included &#39;next_cursor&#39; it can
+                be iterated on to execute subsequent requests.
+
+        Raises:
+            SlackApiError: The following Slack API call failed:
+                &#39;chat.postMessage&#39;.
+            SlackRequestError: Json data can only be submitted as
+                POST requests.
+        &#34;&#34;&#34;
+
+        api_url = _get_url(self.base_url, api_method)
+        if auth is not None:
+            if isinstance(auth, dict):
+                auth = BasicAuth(auth[&#34;client_id&#34;], auth[&#34;client_secret&#34;])
+            if isinstance(auth, BasicAuth):
+                if headers is None:
+                    headers = {}
+                headers[&#34;Authorization&#34;] = auth.encode()
+                auth = None
+
+        headers = headers or {}
+        headers.update(self.headers)
+        req_args = _build_req_args(
+            token=self.token,
+            http_verb=http_verb,
+            files=files,
+            data=data,
+            default_params=self.default_params,
+            params=params,
+            json=json,  # skipcq: PYL-W0621
+            headers=headers,
+            auth=auth,
+            ssl=self.ssl,
+            proxy=self.proxy,
+        )
+
+        show_deprecation_warning_if_any(api_method)
+
+        return await self._send(
+            http_verb=http_verb,
+            api_url=api_url,
+            req_args=req_args,
+        )
+
+    async def _send(self, http_verb: str, api_url: str, req_args: dict) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Sends the request out for transmission.
+
+        Args:
+            http_verb (str): The HTTP verb. e.g. &#39;GET&#39; or &#39;POST&#39;.
+            api_url (str): The Slack API url. e.g. &#39;https://slack.com/api/chat.postMessage&#39;
+            req_args (dict): The request arguments to be attached to the request.
+            e.g.
+            {
+                json: {
+                    &#39;attachments&#39;: [{&#34;pretext&#34;: &#34;pre-hello&#34;, &#34;text&#34;: &#34;text-world&#34;}],
+                    &#39;channel&#39;: &#39;#random&#39;
+                }
+            }
+        Returns:
+            The response parsed into a AsyncSlackResponse object.
+        &#34;&#34;&#34;
+        open_files = _files_to_data(req_args)
+        try:
+            if &#34;params&#34; in req_args:
+                # True/False -&gt; &#34;1&#34;/&#34;0&#34;
+                req_args[&#34;params&#34;] = convert_bool_to_0_or_1(req_args[&#34;params&#34;])
+
+            res = await self._request(http_verb=http_verb, api_url=api_url, req_args=req_args)
+        finally:
+            for f in open_files:
+                f.close()
+
+        data = {
+            &#34;client&#34;: self,
+            &#34;http_verb&#34;: http_verb,
+            &#34;api_url&#34;: api_url,
+            &#34;req_args&#34;: req_args,
+        }
+        return AsyncSlackResponse(**{**data, **res}).validate()
+
+    async def _request(self, *, http_verb, api_url, req_args) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;Submit the HTTP request with the running session or a new session.
+        Returns:
+            A dictionary of the response data.
+        &#34;&#34;&#34;
+        return await _request_with_session(
+            current_session=self.session,
+            timeout=self.timeout,
+            logger=self._logger,
+            http_verb=http_verb,
+            api_url=api_url,
+            req_args=req_args,
+            retry_handlers=self.retry_handlers,
+        )
+
+    async def _upload_file(
+        self,
+        *,
+        url: str,
+        data: bytes,
+        logger: logging.Logger,
+        timeout: int,
+        proxy: Optional[str],
+        ssl: Optional[SSLContext],
+    ) -&gt; FileUploadV2Result:
+        &#34;&#34;&#34;Upload a file using the issued upload URL&#34;&#34;&#34;
+        result = await _request_with_session(
+            current_session=self.session,
+            timeout=timeout,
+            logger=logger,
+            http_verb=&#34;POST&#34;,
+            api_url=url,
+            req_args={&#34;data&#34;: data, &#34;proxy&#34;: proxy, &#34;ssl&#34;: ssl},
+            retry_handlers=self.retry_handlers,
+        )
+        return FileUploadV2Result(
+            status=result.get(&#34;status_code&#34;),
+            body=result.get(&#34;body&#34;),
+        )</code></pre>
+</details>
 </section>
 <section>
 </section>
@@ -369,6 +613,89 @@ be iterated on to execute subsequent requests.</p>
 <dd>Json data can only be submitted as
 POST requests.</dd>
 </dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def api_call(  # skipcq: PYL-R1710
+    self,
+    api_method: str,
+    *,
+    http_verb: str = &#34;POST&#34;,
+    files: Optional[dict] = None,
+    data: Union[dict, FormData] = None,
+    params: Optional[dict] = None,
+    json: Optional[dict] = None,  # skipcq: PYL-W0621
+    headers: Optional[dict] = None,
+    auth: Optional[dict] = None,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Create a request and execute the API call to Slack.
+
+    Args:
+        api_method (str): The target Slack API method.
+            e.g. &#39;chat.postMessage&#39;
+        http_verb (str): HTTP Verb. e.g. &#39;POST&#39;
+        files (dict): Files to multipart upload.
+            e.g. {image OR file: file_object OR file_path}
+        data: The body to attach to the request. If a dictionary is
+            provided, form-encoding will take place.
+            e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+        params (dict): The URL parameters to append to the URL.
+            e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+        json (dict): JSON for the body to attach to the request
+            (if files or data is not specified).
+            e.g. {&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;}
+        headers (dict): Additional request headers
+        auth (dict): A dictionary that consists of client_id and client_secret
+
+    Returns:
+        (AsyncSlackResponse)
+            The server&#39;s response to an HTTP request. Data
+            from the response can be accessed like a dict.
+            If the response included &#39;next_cursor&#39; it can
+            be iterated on to execute subsequent requests.
+
+    Raises:
+        SlackApiError: The following Slack API call failed:
+            &#39;chat.postMessage&#39;.
+        SlackRequestError: Json data can only be submitted as
+            POST requests.
+    &#34;&#34;&#34;
+
+    api_url = _get_url(self.base_url, api_method)
+    if auth is not None:
+        if isinstance(auth, dict):
+            auth = BasicAuth(auth[&#34;client_id&#34;], auth[&#34;client_secret&#34;])
+        if isinstance(auth, BasicAuth):
+            if headers is None:
+                headers = {}
+            headers[&#34;Authorization&#34;] = auth.encode()
+            auth = None
+
+    headers = headers or {}
+    headers.update(self.headers)
+    req_args = _build_req_args(
+        token=self.token,
+        http_verb=http_verb,
+        files=files,
+        data=data,
+        default_params=self.default_params,
+        params=params,
+        json=json,  # skipcq: PYL-W0621
+        headers=headers,
+        auth=auth,
+        ssl=self.ssl,
+        proxy=self.proxy,
+    )
+
+    show_deprecation_warning_if_any(api_method)
+
+    return await self._send(
+        http_verb=http_verb,
+        api_url=api_url,
+        req_args=req_args,
+    )</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -376,6 +703,7 @@ POST requests.</dd>
 </section>
 </article>
 <nav id="sidebar">
+<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -408,7 +736,7 @@ POST requests.</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

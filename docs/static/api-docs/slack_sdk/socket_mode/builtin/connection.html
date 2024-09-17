@@ -2,21 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.socket_mode.builtin.connection API documentation</title>
-<meta name="description" content="">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => {
-hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
-hljs.highlightAll();
-})</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -25,6 +22,463 @@ hljs.highlightAll();
 <h1 class="title">Module <code>slack_sdk.socket_mode.builtin.connection</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import socket
+import ssl
+import struct
+import time
+from logging import Logger
+from threading import Lock
+from typing import Optional, Callable, Union, List, Tuple, Dict
+from urllib.parse import urlparse
+from uuid import uuid4
+
+from slack_sdk.errors import SlackClientNotConnectedError, SlackClientConfigurationError
+from .frame_header import FrameHeader
+from .internals import (
+    _parse_handshake_response,
+    _validate_sec_websocket_accept,
+    _generate_sec_websocket_key,
+    _to_readable_opcode,
+    _receive_messages,
+    _build_data_frame_for_sending,
+    _parse_text_payload,
+    _establish_new_socket_connection,
+)
+
+
+class ConnectionState:
+    # The flag supposed to be used for telling SocketModeClient
+    # when this connection is no longer available
+    terminated: bool
+
+    def __init__(self):
+        self.terminated = False
+
+
+class Connection:
+    url: str
+    logger: Logger
+    proxy: Optional[str]
+    proxy_headers: Optional[Dict[str, str]]
+
+    trace_enabled: bool
+    ping_pong_trace_enabled: bool
+    last_ping_pong_time: Optional[float]
+
+    session_id: str
+    sock: Optional[ssl.SSLSocket]
+
+    on_message_listener: Optional[Callable[[str], None]]
+    on_error_listener: Optional[Callable[[Exception], None]]
+    on_close_listener: Optional[Callable[[int, Optional[str]], None]]
+
+    def __init__(
+        self,
+        url: str,
+        logger: Logger,
+        proxy: Optional[str] = None,
+        proxy_headers: Optional[Dict[str, str]] = None,
+        ping_interval: float = 5,  # seconds
+        receive_timeout: float = 3,
+        receive_buffer_size: int = 1024,
+        trace_enabled: bool = False,
+        all_message_trace_enabled: bool = False,
+        ping_pong_trace_enabled: bool = False,
+        on_message_listener: Optional[Callable[[str], None]] = None,
+        on_error_listener: Optional[Callable[[Exception], None]] = None,
+        on_close_listener: Optional[Callable[[int, Optional[str]], None]] = None,
+        connection_type_name: str = &#34;Socket Mode&#34;,
+        ssl_context: Optional[ssl.SSLContext] = None,
+    ):
+        self.url = url
+        self.logger = logger
+        self.proxy = proxy
+        self.proxy_headers = proxy_headers
+
+        self.ping_interval = ping_interval
+        self.receive_timeout = receive_timeout
+        self.receive_buffer_size = receive_buffer_size
+        if self.receive_buffer_size &lt; 16:
+            raise SlackClientConfigurationError(&#34;Too small receive_buffer_size detected.&#34;)
+
+        self.session_id = str(uuid4())
+        self.trace_enabled = trace_enabled
+        self.all_message_trace_enabled = all_message_trace_enabled
+        self.ping_pong_trace_enabled = ping_pong_trace_enabled
+        self.last_ping_pong_time = None
+        self.consecutive_check_state_error_count = 0
+        self.sock = None
+        # To avoid ssl.SSLError: [SSL: BAD_LENGTH] bad length
+        self.sock_receive_lock = Lock()
+        self.sock_send_lock = Lock()
+
+        self.on_message_listener = on_message_listener
+        self.on_error_listener = on_error_listener
+        self.on_close_listener = on_close_listener
+        self.connection_type_name = connection_type_name
+
+        self.ssl_context = ssl_context
+
+    def connect(self) -&gt; None:
+        try:
+            parsed_url = urlparse(self.url.strip())
+            hostname: str = parsed_url.hostname
+            port: int = parsed_url.port or (443 if parsed_url.scheme == &#34;wss&#34; else 80)
+            if self.trace_enabled:
+                self.logger.debug(
+                    f&#34;Connecting to the address for handshake: {hostname}:{port} &#34; f&#34;(session id: {self.session_id})&#34;
+                )
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
+                session_id=self.session_id,
+                server_hostname=hostname,
+                server_port=port,
+                logger=self.logger,
+                sock_send_lock=self.sock_send_lock,
+                receive_timeout=self.receive_timeout,
+                proxy=self.proxy,
+                proxy_headers=self.proxy_headers,
+                trace_enabled=self.trace_enabled,
+                ssl_context=self.ssl_context,
+            )
+
+            # WebSocket handshake
+            try:
+                path = f&#34;{parsed_url.path}?{parsed_url.query}&#34;
+                sec_websocket_key = _generate_sec_websocket_key()
+                message = f&#34;&#34;&#34;GET {path} HTTP/1.1
+                    Host: {parsed_url.hostname}
+                    Upgrade: websocket
+                    Connection: Upgrade
+                    Sec-WebSocket-Key: {sec_websocket_key}
+                    Sec-WebSocket-Version: 13
+
+                &#34;&#34;&#34;
+                req: str = &#34;\r\n&#34;.join([line.lstrip() for line in message.split(&#34;\n&#34;)])
+                if self.trace_enabled:
+                    self.logger.debug(
+                        f&#34;{self.connection_type_name} handshake request (session id: {self.session_id}):\n{req}&#34;
+                    )
+                with self.sock_send_lock:
+                    sock.send(req.encode(&#34;utf-8&#34;))
+
+                status, headers, text = _parse_handshake_response(sock)
+                if self.trace_enabled:
+                    self.logger.debug(
+                        f&#34;{self.connection_type_name} handshake response (session id: {self.session_id}):\n{text}&#34;
+                    )
+                # HTTP/1.1 101 Switching Protocols
+                if status == 101:
+                    if not _validate_sec_websocket_accept(sec_websocket_key, headers):
+                        raise SlackClientNotConnectedError(
+                            f&#34;Invalid response header detected in {self.connection_type_name} handshake response&#34;
+                            f&#34; (session id: {self.session_id})&#34;
+                        )
+                    # set this successfully connected socket
+                    self.sock = sock
+                    self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+                else:
+                    message = (
+                        f&#34;Received an unexpected response for handshake &#34;
+                        f&#34;(status: {status}, response: {text}, session id: {self.session_id})&#34;
+                    )
+                    self.logger.warning(message)
+
+            except socket.error as e:
+                code: Optional[int] = None
+                if e.args and len(e.args) &gt; 1 and isinstance(e.args[0], int):
+                    code = e.args[0]
+                if code is not None:
+                    error_message = f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
+                raise
+
+        except Exception as e:
+            error_message = f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
+            if self.on_error_listener is not None:
+                self.on_error_listener(e)
+
+            self.disconnect()
+
+    def disconnect(self) -&gt; None:
+        if self.sock is not None:
+            with self.sock_send_lock:
+                with self.sock_receive_lock:
+                    # Synchronize before closing this instance&#39;s socket
+                    self.sock.close()
+                    self.sock = None
+                    # After this, all operations using self.sock will be skipped
+
+        self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)
+
+    def is_active(self) -&gt; bool:
+        return self.sock is not None
+
+    def close(self) -&gt; None:
+        self.disconnect()
+
+    def ping(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
+        if self.trace_enabled and self.ping_pong_trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode(&#34;utf-8&#34;)
+            self.logger.debug(&#34;Sending a ping data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
+        with self.sock_send_lock:
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(&#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;)
+
+    def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
+        if self.trace_enabled and self.ping_pong_trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode(&#34;utf-8&#34;)
+            self.logger.debug(&#34;Sending a pong data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
+        with self.sock_send_lock:
+            if self.sock is not None:
+                self.sock.send(data)
+            else:
+                if self.ping_pong_trace_enabled:
+                    self.logger.debug(&#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;)
+
+    def send(self, payload: str) -&gt; None:
+        if self.trace_enabled:
+            if isinstance(payload, bytes):
+                payload = payload.decode(&#34;utf-8&#34;)
+            self.logger.debug(&#34;Sending a text data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+        data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+        with self.sock_send_lock:
+            try:
+                self.sock.send(data)
+            except Exception as e:
+                # In most cases, we want to retry this operation with a newly established connection.
+                # Getting this exception means that this connection has been replaced with a new one
+                # and it&#39;s no longer usable.
+                # The SocketModeClient implementation can do one retry when it gets this exception.
+                raise SlackClientNotConnectedError(
+                    f&#34;Failed to send a message as the connection is no longer active &#34;
+                    f&#34;(session_id: {self.session_id}, error: {e})&#34;
+                )
+
+    def check_state(self) -&gt; None:
+        try:
+            if self.sock is not None:
+                try:
+                    self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+                except ssl.SSLZeroReturnError as e:
+                    self.logger.info(
+                        &#34;Unable to send a ping message. Closing the connection...&#34;
+                        f&#34; (session id: {self.session_id}, reason: {e})&#34;
+                    )
+                    self.disconnect()
+                    return
+
+                if self.last_ping_pong_time is not None:
+                    disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                    if self.trace_enabled and disconnected_seconds &gt; self.ping_interval:
+                        message = (
+                            f&#34;{disconnected_seconds} seconds have passed &#34;
+                            f&#34;since this client last received a pong response from the server &#34;
+                            f&#34;(session id: {self.session_id})&#34;
+                        )
+                        self.logger.debug(message)
+
+                    is_stale = disconnected_seconds &gt; self.ping_interval * 4
+                    if is_stale:
+                        self.logger.info(
+                            &#34;The connection seems to be stale. Disconnecting...&#34;
+                            f&#34; (session id: {self.session_id},&#34;
+                            f&#34; reason: disconnected for {disconnected_seconds}+ seconds)&#34;
+                        )
+                        self.disconnect()
+                        return
+            else:
+                self.logger.debug(&#34;This connection is already closed.&#34; f&#34; (session id: {self.session_id})&#34;)
+            self.consecutive_check_state_error_count = 0
+        except Exception as e:
+            error_message = (
+                &#34;Failed to check the state of sock &#34;
+                f&#34;(session id: {self.session_id}, error: {type(e).__name__}, message: {e})&#34;
+            )
+            if self.trace_enabled:
+                self.logger.exception(error_message)
+            else:
+                self.logger.error(error_message)
+
+            self.consecutive_check_state_error_count += 1
+            if self.consecutive_check_state_error_count &gt;= 5:
+                self.disconnect()
+
+    def run_until_completion(self, state: ConnectionState) -&gt; None:
+        repeated_messages = {&#34;payload&#34;: 0}
+        ping_count = 0
+        pong_count = 0
+        ping_pong_log_summary_size = 1000
+        while not state.terminated:
+            try:
+                if self.is_active():
+                    received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
+                        sock=self.sock,
+                        sock_receive_lock=self.sock_receive_lock,
+                        logger=self.logger,
+                        receive_buffer_size=self.receive_buffer_size,
+                        all_message_trace_enabled=self.all_message_trace_enabled,
+                    )
+                    for message in received_messages:
+                        header, data = message
+
+                        # -----------------
+                        # trace logging
+
+                        if self.trace_enabled is True:
+                            opcode: str = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
+                            payload: str = _parse_text_payload(data, self.logger)
+                            count: Optional[int] = repeated_messages.get(payload)
+                            if count is None:
+                                count = 1
+                            else:
+                                count += 1
+                            repeated_messages = {payload: count}
+                            if not self.ping_pong_trace_enabled and header is not None and header.opcode is not None:
+                                if header.opcode == FrameHeader.OPCODE_PING:
+                                    ping_count += 1
+                                    if ping_count % ping_pong_log_summary_size == 0:
+                                        self.logger.debug(
+                                            f&#34;Received {ping_pong_log_summary_size} ping data frame &#34;
+                                            f&#34;(session id: {self.session_id})&#34;
+                                        )
+                                        ping_count = 0
+                                if header.opcode == FrameHeader.OPCODE_PONG:
+                                    pong_count += 1
+                                    if pong_count % ping_pong_log_summary_size == 0:
+                                        self.logger.debug(
+                                            f&#34;Received {ping_pong_log_summary_size} pong data frame &#34;
+                                            f&#34;(session id: {self.session_id})&#34;
+                                        )
+                                        pong_count = 0
+
+                            ping_pong_to_skip = (
+                                header is not None
+                                and header.opcode is not None
+                                and (header.opcode == FrameHeader.OPCODE_PING or header.opcode == FrameHeader.OPCODE_PONG)
+                                and not self.ping_pong_trace_enabled
+                            )
+                            if not ping_pong_to_skip and count &lt; 5:
+                                # if so many same payloads came in, the trace logging should be skipped.
+                                # e.g., after receiving &#34;UNAUTHENTICATED: cache_error&#34;, many &#34;opcode: -, payload: &#34;
+                                self.logger.debug(
+                                    &#34;Received a new data frame &#34;
+                                    f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
+                                )
+
+                        if header is None:
+                            # Skip no header message
+                            continue
+
+                        # -----------------
+                        # message with opcode
+
+                        if header.opcode == FrameHeader.OPCODE_PING:
+                            self.pong(data)
+                        elif header.opcode == FrameHeader.OPCODE_PONG:
+                            str_message = data.decode(&#34;utf-8&#34;)
+                            elements = str_message.split(&#34;:&#34;)
+                            if len(elements) &gt;= 2:
+                                session_id, ping_time = elements[0], elements[1]
+                                if self.session_id == session_id:
+                                    try:
+                                        self.last_ping_pong_time = float(ping_time)
+                                    except Exception as e:
+                                        self.logger.debug(
+                                            &#34;Failed to parse a pong message &#34; f&#34; (message: {str_message}, error: {e}&#34;
+                                        )
+                        elif header.opcode == FrameHeader.OPCODE_TEXT:
+                            if self.on_message_listener is not None:
+                                text = data.decode(&#34;utf-8&#34;)
+                                self.on_message_listener(text)
+                        elif header.opcode == FrameHeader.OPCODE_CLOSE:
+                            if self.on_close_listener is not None:
+                                if len(data) &gt;= 2:
+                                    (code,) = struct.unpack(&#34;!H&#34;, data[:2])
+                                    reason = data[2:].decode(&#34;utf-8&#34;)
+                                    self.on_close_listener(code, reason)
+                                else:
+                                    self.on_close_listener(1005, &#34;&#34;)
+                            self.disconnect()
+                            state.terminated = True
+                        else:
+                            # Just warn logging
+                            opcode = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
+                            payload: Union[bytes, str] = data
+                            if header.opcode != FrameHeader.OPCODE_BINARY:
+                                try:
+                                    payload = data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
+                                except Exception as e:
+                                    self.logger.info(f&#34;Failed to convert the data to text {e}&#34;)
+                            message = (
+                                &#34;Received an unsupported data frame &#34;
+                                f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
+                            )
+                            self.logger.warning(message)
+                else:
+                    time.sleep(0.2)
+            except socket.timeout:
+                time.sleep(0.01)
+            except OSError as e:
+                # getting errno.EBADF and the socket is no longer available
+                if e.errno == 9 and state.terminated:
+                    self.logger.debug(
+                        &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34; &#34;the socket is no longer available.&#34;
+                    )
+                else:
+                    if self.on_error_listener is not None:
+                        self.on_error_listener(e)
+                    else:
+                        error_message = &#34;Got an OSError while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
+
+                # As this connection no longer works in any way, terminating it
+                if self.is_active():
+                    try:
+                        self.disconnect()
+                    except Exception as disconnection_error:
+                        error_message = (
+                            &#34;Failed to disconnect&#34; f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
+                        )
+                        if self.trace_enabled:
+                            self.logger.exception(error_message)
+                        else:
+                            self.logger.error(error_message)
+                state.terminated = True
+                break
+            except Exception as e:
+                if self.on_error_listener is not None:
+                    self.on_error_listener(e)
+                else:
+                    error_message = &#34;Got an exception while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
+
+        state.terminated = True</code></pre>
+</details>
 </section>
 <section>
 </section>
@@ -523,54 +977,446 @@ hljs.highlightAll();
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_state(self) -&gt; None:
+    try:
+        if self.sock is not None:
+            try:
+                self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+            except ssl.SSLZeroReturnError as e:
+                self.logger.info(
+                    &#34;Unable to send a ping message. Closing the connection...&#34;
+                    f&#34; (session id: {self.session_id}, reason: {e})&#34;
+                )
+                self.disconnect()
+                return
+
+            if self.last_ping_pong_time is not None:
+                disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                if self.trace_enabled and disconnected_seconds &gt; self.ping_interval:
+                    message = (
+                        f&#34;{disconnected_seconds} seconds have passed &#34;
+                        f&#34;since this client last received a pong response from the server &#34;
+                        f&#34;(session id: {self.session_id})&#34;
+                    )
+                    self.logger.debug(message)
+
+                is_stale = disconnected_seconds &gt; self.ping_interval * 4
+                if is_stale:
+                    self.logger.info(
+                        &#34;The connection seems to be stale. Disconnecting...&#34;
+                        f&#34; (session id: {self.session_id},&#34;
+                        f&#34; reason: disconnected for {disconnected_seconds}+ seconds)&#34;
+                    )
+                    self.disconnect()
+                    return
+        else:
+            self.logger.debug(&#34;This connection is already closed.&#34; f&#34; (session id: {self.session_id})&#34;)
+        self.consecutive_check_state_error_count = 0
+    except Exception as e:
+        error_message = (
+            &#34;Failed to check the state of sock &#34;
+            f&#34;(session id: {self.session_id}, error: {type(e).__name__}, message: {e})&#34;
+        )
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
+        self.consecutive_check_state_error_count += 1
+        if self.consecutive_check_state_error_count &gt;= 5:
+            self.disconnect()</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.close"><code class="name flex">
 <span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self) -&gt; None:
+    self.disconnect()</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.connect"><code class="name flex">
 <span>def <span class="ident">connect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def connect(self) -&gt; None:
+    try:
+        parsed_url = urlparse(self.url.strip())
+        hostname: str = parsed_url.hostname
+        port: int = parsed_url.port or (443 if parsed_url.scheme == &#34;wss&#34; else 80)
+        if self.trace_enabled:
+            self.logger.debug(
+                f&#34;Connecting to the address for handshake: {hostname}:{port} &#34; f&#34;(session id: {self.session_id})&#34;
+            )
+        sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
+            session_id=self.session_id,
+            server_hostname=hostname,
+            server_port=port,
+            logger=self.logger,
+            sock_send_lock=self.sock_send_lock,
+            receive_timeout=self.receive_timeout,
+            proxy=self.proxy,
+            proxy_headers=self.proxy_headers,
+            trace_enabled=self.trace_enabled,
+            ssl_context=self.ssl_context,
+        )
+
+        # WebSocket handshake
+        try:
+            path = f&#34;{parsed_url.path}?{parsed_url.query}&#34;
+            sec_websocket_key = _generate_sec_websocket_key()
+            message = f&#34;&#34;&#34;GET {path} HTTP/1.1
+                Host: {parsed_url.hostname}
+                Upgrade: websocket
+                Connection: Upgrade
+                Sec-WebSocket-Key: {sec_websocket_key}
+                Sec-WebSocket-Version: 13
+
+            &#34;&#34;&#34;
+            req: str = &#34;\r\n&#34;.join([line.lstrip() for line in message.split(&#34;\n&#34;)])
+            if self.trace_enabled:
+                self.logger.debug(
+                    f&#34;{self.connection_type_name} handshake request (session id: {self.session_id}):\n{req}&#34;
+                )
+            with self.sock_send_lock:
+                sock.send(req.encode(&#34;utf-8&#34;))
+
+            status, headers, text = _parse_handshake_response(sock)
+            if self.trace_enabled:
+                self.logger.debug(
+                    f&#34;{self.connection_type_name} handshake response (session id: {self.session_id}):\n{text}&#34;
+                )
+            # HTTP/1.1 101 Switching Protocols
+            if status == 101:
+                if not _validate_sec_websocket_accept(sec_websocket_key, headers):
+                    raise SlackClientNotConnectedError(
+                        f&#34;Invalid response header detected in {self.connection_type_name} handshake response&#34;
+                        f&#34; (session id: {self.session_id})&#34;
+                    )
+                # set this successfully connected socket
+                self.sock = sock
+                self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+            else:
+                message = (
+                    f&#34;Received an unexpected response for handshake &#34;
+                    f&#34;(status: {status}, response: {text}, session id: {self.session_id})&#34;
+                )
+                self.logger.warning(message)
+
+        except socket.error as e:
+            code: Optional[int] = None
+            if e.args and len(e.args) &gt; 1 and isinstance(e.args[0], int):
+                code = e.args[0]
+            if code is not None:
+                error_message = f&#34;Error code: {code} (session id: {self.session_id}, error: {e})&#34;
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
+            raise
+
+    except Exception as e:
+        error_message = f&#34;Failed to establish a connection (session id: {self.session_id}, error: {e})&#34;
+        if self.trace_enabled:
+            self.logger.exception(error_message)
+        else:
+            self.logger.error(error_message)
+
+        if self.on_error_listener is not None:
+            self.on_error_listener(e)
+
+        self.disconnect()</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.disconnect"><code class="name flex">
 <span>def <span class="ident">disconnect</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def disconnect(self) -&gt; None:
+    if self.sock is not None:
+        with self.sock_send_lock:
+            with self.sock_receive_lock:
+                # Synchronize before closing this instance&#39;s socket
+                self.sock.close()
+                self.sock = None
+                # After this, all operations using self.sock will be skipped
+
+    self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.is_active"><code class="name flex">
 <span>def <span class="ident">is_active</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_active(self) -&gt; bool:
+    return self.sock is not None</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.ping"><code class="name flex">
 <span>def <span class="ident">ping</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ping(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
+    if self.trace_enabled and self.ping_pong_trace_enabled:
+        if isinstance(payload, bytes):
+            payload = payload.decode(&#34;utf-8&#34;)
+        self.logger.debug(&#34;Sending a ping data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+    data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
+    with self.sock_send_lock:
+        if self.sock is not None:
+            self.sock.send(data)
+        else:
+            if self.ping_pong_trace_enabled:
+                self.logger.debug(&#34;Skipped sending a ping message as the underlying socket is no longer available.&#34;)</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.pong"><code class="name flex">
 <span>def <span class="ident">pong</span></span>(<span>self, payload: Union[str, bytes] = '') ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pong(self, payload: Union[str, bytes] = &#34;&#34;) -&gt; None:
+    if self.trace_enabled and self.ping_pong_trace_enabled:
+        if isinstance(payload, bytes):
+            payload = payload.decode(&#34;utf-8&#34;)
+        self.logger.debug(&#34;Sending a pong data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+    data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
+    with self.sock_send_lock:
+        if self.sock is not None:
+            self.sock.send(data)
+        else:
+            if self.ping_pong_trace_enabled:
+                self.logger.debug(&#34;Skipped sending a pong message as the underlying socket is no longer available.&#34;)</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.run_until_completion"><code class="name flex">
 <span>def <span class="ident">run_until_completion</span></span>(<span>self, state: <a title="slack_sdk.socket_mode.builtin.connection.ConnectionState" href="#slack_sdk.socket_mode.builtin.connection.ConnectionState">ConnectionState</a>) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_until_completion(self, state: ConnectionState) -&gt; None:
+    repeated_messages = {&#34;payload&#34;: 0}
+    ping_count = 0
+    pong_count = 0
+    ping_pong_log_summary_size = 1000
+    while not state.terminated:
+        try:
+            if self.is_active():
+                received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
+                    sock=self.sock,
+                    sock_receive_lock=self.sock_receive_lock,
+                    logger=self.logger,
+                    receive_buffer_size=self.receive_buffer_size,
+                    all_message_trace_enabled=self.all_message_trace_enabled,
+                )
+                for message in received_messages:
+                    header, data = message
+
+                    # -----------------
+                    # trace logging
+
+                    if self.trace_enabled is True:
+                        opcode: str = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
+                        payload: str = _parse_text_payload(data, self.logger)
+                        count: Optional[int] = repeated_messages.get(payload)
+                        if count is None:
+                            count = 1
+                        else:
+                            count += 1
+                        repeated_messages = {payload: count}
+                        if not self.ping_pong_trace_enabled and header is not None and header.opcode is not None:
+                            if header.opcode == FrameHeader.OPCODE_PING:
+                                ping_count += 1
+                                if ping_count % ping_pong_log_summary_size == 0:
+                                    self.logger.debug(
+                                        f&#34;Received {ping_pong_log_summary_size} ping data frame &#34;
+                                        f&#34;(session id: {self.session_id})&#34;
+                                    )
+                                    ping_count = 0
+                            if header.opcode == FrameHeader.OPCODE_PONG:
+                                pong_count += 1
+                                if pong_count % ping_pong_log_summary_size == 0:
+                                    self.logger.debug(
+                                        f&#34;Received {ping_pong_log_summary_size} pong data frame &#34;
+                                        f&#34;(session id: {self.session_id})&#34;
+                                    )
+                                    pong_count = 0
+
+                        ping_pong_to_skip = (
+                            header is not None
+                            and header.opcode is not None
+                            and (header.opcode == FrameHeader.OPCODE_PING or header.opcode == FrameHeader.OPCODE_PONG)
+                            and not self.ping_pong_trace_enabled
+                        )
+                        if not ping_pong_to_skip and count &lt; 5:
+                            # if so many same payloads came in, the trace logging should be skipped.
+                            # e.g., after receiving &#34;UNAUTHENTICATED: cache_error&#34;, many &#34;opcode: -, payload: &#34;
+                            self.logger.debug(
+                                &#34;Received a new data frame &#34;
+                                f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
+                            )
+
+                    if header is None:
+                        # Skip no header message
+                        continue
+
+                    # -----------------
+                    # message with opcode
+
+                    if header.opcode == FrameHeader.OPCODE_PING:
+                        self.pong(data)
+                    elif header.opcode == FrameHeader.OPCODE_PONG:
+                        str_message = data.decode(&#34;utf-8&#34;)
+                        elements = str_message.split(&#34;:&#34;)
+                        if len(elements) &gt;= 2:
+                            session_id, ping_time = elements[0], elements[1]
+                            if self.session_id == session_id:
+                                try:
+                                    self.last_ping_pong_time = float(ping_time)
+                                except Exception as e:
+                                    self.logger.debug(
+                                        &#34;Failed to parse a pong message &#34; f&#34; (message: {str_message}, error: {e}&#34;
+                                    )
+                    elif header.opcode == FrameHeader.OPCODE_TEXT:
+                        if self.on_message_listener is not None:
+                            text = data.decode(&#34;utf-8&#34;)
+                            self.on_message_listener(text)
+                    elif header.opcode == FrameHeader.OPCODE_CLOSE:
+                        if self.on_close_listener is not None:
+                            if len(data) &gt;= 2:
+                                (code,) = struct.unpack(&#34;!H&#34;, data[:2])
+                                reason = data[2:].decode(&#34;utf-8&#34;)
+                                self.on_close_listener(code, reason)
+                            else:
+                                self.on_close_listener(1005, &#34;&#34;)
+                        self.disconnect()
+                        state.terminated = True
+                    else:
+                        # Just warn logging
+                        opcode = _to_readable_opcode(header.opcode) if header else &#34;-&#34;
+                        payload: Union[bytes, str] = data
+                        if header.opcode != FrameHeader.OPCODE_BINARY:
+                            try:
+                                payload = data.decode(&#34;utf-8&#34;) if data is not None else &#34;&#34;
+                            except Exception as e:
+                                self.logger.info(f&#34;Failed to convert the data to text {e}&#34;)
+                        message = (
+                            &#34;Received an unsupported data frame &#34;
+                            f&#34;(session id: {self.session_id}, opcode: {opcode}, payload: {payload})&#34;
+                        )
+                        self.logger.warning(message)
+            else:
+                time.sleep(0.2)
+        except socket.timeout:
+            time.sleep(0.01)
+        except OSError as e:
+            # getting errno.EBADF and the socket is no longer available
+            if e.errno == 9 and state.terminated:
+                self.logger.debug(
+                    &#34;The reason why you got [Errno 9] Bad file descriptor here is &#34; &#34;the socket is no longer available.&#34;
+                )
+            else:
+                if self.on_error_listener is not None:
+                    self.on_error_listener(e)
+                else:
+                    error_message = &#34;Got an OSError while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
+
+            # As this connection no longer works in any way, terminating it
+            if self.is_active():
+                try:
+                    self.disconnect()
+                except Exception as disconnection_error:
+                    error_message = (
+                        &#34;Failed to disconnect&#34; f&#34; (session id: {self.session_id}, error: {disconnection_error})&#34;
+                    )
+                    if self.trace_enabled:
+                        self.logger.exception(error_message)
+                    else:
+                        self.logger.error(error_message)
+            state.terminated = True
+            break
+        except Exception as e:
+            if self.on_error_listener is not None:
+                self.on_error_listener(e)
+            else:
+                error_message = &#34;Got an exception while receiving data&#34; f&#34; (session id: {self.session_id}, error: {e})&#34;
+                if self.trace_enabled:
+                    self.logger.exception(error_message)
+                else:
+                    self.logger.error(error_message)
+
+    state.terminated = True</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.socket_mode.builtin.connection.Connection.send"><code class="name flex">
 <span>def <span class="ident">send</span></span>(<span>self, payload: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send(self, payload: str) -&gt; None:
+    if self.trace_enabled:
+        if isinstance(payload, bytes):
+            payload = payload.decode(&#34;utf-8&#34;)
+        self.logger.debug(&#34;Sending a text data frame &#34; f&#34;(session id: {self.session_id}, payload: {payload})&#34;)
+    data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+    with self.sock_send_lock:
+        try:
+            self.sock.send(data)
+        except Exception as e:
+            # In most cases, we want to retry this operation with a newly established connection.
+            # Getting this exception means that this connection has been replaced with a new one
+            # and it&#39;s no longer usable.
+            # The SocketModeClient implementation can do one retry when it gets this exception.
+            raise SlackClientNotConnectedError(
+                f&#34;Failed to send a message as the connection is no longer active &#34;
+                f&#34;(session_id: {self.session_id}, error: {e})&#34;
+            )</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -603,6 +1449,7 @@ hljs.highlightAll();
 </section>
 </article>
 <nav id="sidebar">
+<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -652,7 +1499,7 @@ hljs.highlightAll();
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>
