@@ -2015,6 +2015,49 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"refresh_token": refresh_token})
         return self.api_call("tooling.tokens.rotate", params=kwargs)
 
+    def assistant_threads_setStatus(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        status: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setStatus
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
+        return self.api_call("assistant.threads.setStatus", params=kwargs)
+
+    def assistant_threads_setTitle(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        title: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setTitle
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
+        return self.api_call("assistant.threads.setTitle", params=kwargs)
+
+    def assistant_threads_setSuggestedPrompts(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        title: Optional[str] = None,
+        prompts: List[Dict[str, str]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setSuggestedPrompts
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title, "prompts": prompts})
+        return self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
+
     def auth_revoke(
         self,
         *,
