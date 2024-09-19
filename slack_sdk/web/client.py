@@ -2044,7 +2044,9 @@ class WebClient(BaseClient):
         """Revokes a token.
         https://api.slack.com/methods/assistant.threads.setSuggestedPrompts
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title, "prompts": prompts})
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
+        if title is not None:
+            kwargs.update({"title": title})
         return self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
 
     def auth_revoke(
