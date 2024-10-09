@@ -522,6 +522,9 @@ class Details:
     matched_rule: Optional[AAARule]
     request: Optional[AAARequest]
     rules_checked: Optional[List[AAARule]]
+    disconnecting_team: Optional[str]
+    is_channel_canvas: Optional[bool]
+    linked_channel_id: Optional[str]
 
     def __init__(
         self,
@@ -639,6 +642,9 @@ class Details:
         matched_rule: Optional[Union[Dict[str, Any], AAARule]] = None,
         request: Optional[Union[Dict[str, Any], AAARequest]] = None,
         rules_checked: Optional[List[Union[Dict[str, Any], AAARule]]] = None,
+        disconnecting_team: Optional[str] = None,
+        is_channel_canvas: Optional[bool] = None,
+        linked_channel_id: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -811,6 +817,9 @@ class Details:
                     self.rules_checked.append(AAARule(**a))
                 else:
                     self.rules_checked.append(a)
+        self.disconnecting_team = disconnecting_team
+        self.is_channel_canvas = is_channel_canvas
+        self.linked_channel_id = linked_channel_id
 
 
 class Channel:
@@ -821,6 +830,7 @@ class Channel:
     is_org_shared: Optional[bool]
     teams_shared_with: Optional[List[str]]
     original_connected_channel_id: Optional[str]
+    is_salesforce_channel: Optional[bool]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -833,6 +843,7 @@ class Channel:
         is_org_shared: Optional[bool] = None,
         teams_shared_with: Optional[List[str]] = None,
         original_connected_channel_id: Optional[str] = None,
+        is_salesforce_channel: Optional[bool] = None,
         **kwargs,
     ) -> None:
         self.id = id
@@ -842,6 +853,7 @@ class Channel:
         self.is_org_shared = is_org_shared
         self.teams_shared_with = teams_shared_with
         self.original_connected_channel_id = original_connected_channel_id
+        self.is_salesforce_channel = is_salesforce_channel
         self.unknown_fields = kwargs
 
 
@@ -882,6 +894,26 @@ class Usergroup:
     ) -> None:
         self.id = id
         self.name = name
+        self.unknown_fields = kwargs
+
+
+class Message:
+    channel: Optional[str]
+    team: Optional[str]
+    timestamp: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        channel: Optional[str] = None,
+        team: Optional[str] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.channel = channel
+        self.team = team
+        self.timestamp = timestamp
         self.unknown_fields = kwargs
 
 
@@ -1055,6 +1087,7 @@ class Entity:
     channel: Optional[Channel]
     file: Optional[File]
     app: Optional[App]
+    message: Optional[Message]
     huddle: Optional[Huddle]
     role: Optional[Role]
     usergroup: Optional[Usergroup]
@@ -1074,6 +1107,7 @@ class Entity:
         channel: Optional[Union[Channel, Dict[str, Any]]] = None,
         file: Optional[Union[File, Dict[str, Any]]] = None,
         app: Optional[Union[App, Dict[str, Any]]] = None,
+        message: Optional[Union[Message, Dict[str, Any]]] = None,
         huddle: Optional[Union[Huddle, Dict[str, Any]]] = None,
         role: Optional[Union[Role, Dict[str, Any]]] = None,
         usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
@@ -1090,6 +1124,7 @@ class Entity:
         self.channel = Channel(**channel) if isinstance(channel, dict) else channel
         self.file = File(**file) if isinstance(file, dict) else file
         self.app = App(**app) if isinstance(app, dict) else app
+        self.message = Message(**message) if isinstance(message, dict) else message
         self.huddle = Huddle(**huddle) if isinstance(huddle, dict) else huddle
         self.role = Role(**role) if isinstance(role, dict) else role
         self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
