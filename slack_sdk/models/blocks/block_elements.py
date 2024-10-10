@@ -1352,7 +1352,7 @@ class RichTextInputElement(InputInteractiveElement):
             }
         )
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         *,
         action_id: Optional[str] = None,
