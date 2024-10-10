@@ -27,6 +27,7 @@ from slack_sdk.models.blocks import (
     InputInteractiveElement,
     InteractiveElement,
     PlainTextObject,
+    RichTextBlock,
 )
 from slack_sdk.models.blocks.basic_components import SlackFile
 from slack_sdk.models.blocks.block_elements import (
@@ -37,6 +38,8 @@ from slack_sdk.models.blocks.block_elements import (
     WorkflowButtonElement,
     RichTextInputElement,
     FileInputElement,
+    RichTextSectionElement,
+    RichTextElementParts,
 )
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
@@ -1068,6 +1071,43 @@ class RichTextInputElementTests(unittest.TestCase):
             "placeholder": {"type": "plain_text", "text": "Enter text"},
         }
         self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_issue_1571(self):
+        self.assertDictEqual(
+            RichTextInputElement(
+                action_id="contents",
+                initial_value=RichTextBlock(
+                    elements=[
+                        RichTextSectionElement(
+                            elements=[
+                                RichTextElementParts.Text(text="Hey, "),
+                                RichTextElementParts.Text(text="this", style={"italic": True}),
+                                RichTextElementParts.Text(text="is what you should be looking at. "),
+                                RichTextElementParts.Text(text="Please", style={"bold": True}),
+                            ]
+                        )
+                    ],
+                ),
+            ).to_dict(),
+            {
+                "action_id": "contents",
+                "initial_value": {
+                    "elements": [
+                        {
+                            "elements": [
+                                {"text": "Hey, ", "type": "text"},
+                                {"style": {"italic": True}, "text": "this", "type": "text"},
+                                {"text": "is what you should be looking at. ", "type": "text"},
+                                {"style": {"bold": True}, "text": "Please", "type": "text"},
+                            ],
+                            "type": "rich_text_section",
+                        }
+                    ],
+                    "type": "rich_text",
+                },
+                "type": "rich_text_input",
+            },
+        )
 
 
 class PlainTextInputElementTests(unittest.TestCase):
