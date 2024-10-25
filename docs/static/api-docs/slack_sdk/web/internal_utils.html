@@ -2,21 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>slack_sdk.web.internal_utils API documentation</title>
-<meta name="description" content="">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => {
-hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
-hljs.highlightAll();
-})</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -25,6 +22,433 @@ hljs.highlightAll();
 <h1 class="title">Module <code>slack_sdk.web.internal_utils</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import json
+import logging
+import os
+import platform
+import sys
+import urllib
+import warnings
+from asyncio import Future
+from http.client import HTTPResponse
+from io import IOBase
+from ssl import SSLContext
+from typing import Any, Dict, Optional, Sequence, Union
+from urllib.parse import urljoin
+from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
+
+from slack_sdk import version
+from slack_sdk.errors import SlackRequestError
+from slack_sdk.models.attachments import Attachment
+from slack_sdk.models.blocks import Block
+from slack_sdk.models.metadata import Metadata
+
+
+def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
+    &#34;&#34;&#34;Converts all bool values in dict to &#34;0&#34; or &#34;1&#34;.
+
+    Slack APIs safely accept &#34;0&#34;/&#34;1&#34; as boolean values.
+    Using True/False (bool in Python) doesn&#39;t work with aiohttp.
+    This method converts only the bool values in top-level of a given dict.
+
+    Args:
+        params: params as a dict
+
+    Returns:
+        Modified dict
+    &#34;&#34;&#34;
+    if params:
+        return {k: _to_0_or_1_if_bool(v) for k, v in params.items()}
+    return None
+
+
+def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
+    &#34;&#34;&#34;Construct the user-agent header with the package info,
+    Python version and OS version.
+
+    Returns:
+        The user agent string.
+        e.g. &#39;Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0&#39;
+    &#34;&#34;&#34;
+    # __name__ returns all classes, we only want the client
+    client = &#34;{0}/{1}&#34;.format(&#34;slackclient&#34;, version.__version__)
+    python_version = &#34;Python/{v.major}.{v.minor}.{v.micro}&#34;.format(v=sys.version_info)
+    system_info = &#34;{0}/{1}&#34;.format(platform.system(), platform.release())
+    user_agent_string = &#34; &#34;.join([python_version, client, system_info])
+    prefix = f&#34;{prefix} &#34; if prefix else &#34;&#34;
+    suffix = f&#34; {suffix}&#34; if suffix else &#34;&#34;
+    return prefix + user_agent_string + suffix
+
+
+def _get_url(base_url: str, api_method: str) -&gt; str:
+    &#34;&#34;&#34;Joins the base Slack URL and an API method to form an absolute URL.
+
+    Args:
+        base_url (str): The base URL
+        api_method (str): The Slack Web API method. e.g. &#39;chat.postMessage&#39;
+
+    Returns:
+        The absolute API URL.
+            e.g. &#39;https://slack.com/api/chat.postMessage&#39;
+    &#34;&#34;&#34;
+    return urljoin(base_url, api_method)
+
+
+def _get_headers(
+    *,
+    headers: dict,
+    token: Optional[str],
+    has_json: bool,
+    has_files: bool,
+    request_specific_headers: Optional[dict],
+) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;Constructs the headers need for a request.
+    Args:
+        has_json (bool): Whether or not the request has json.
+        has_files (bool): Whether or not the request has files.
+        request_specific_headers (dict): Additional headers specified by the user for a specific request.
+
+    Returns:
+        The headers dictionary.
+            e.g. {
+                &#39;Content-Type&#39;: &#39;application/json;charset=utf-8&#39;,
+                &#39;Authorization&#39;: &#39;Bearer xoxb-1234-1243&#39;,
+                &#39;User-Agent&#39;: &#39;Python/3.6.8 slack/2.1.0 Darwin/17.7.0&#39;
+            }
+    &#34;&#34;&#34;
+    final_headers = {
+        &#34;Content-Type&#34;: &#34;application/x-www-form-urlencoded&#34;,
+    }
+    if headers is None or &#34;User-Agent&#34; not in headers:
+        final_headers[&#34;User-Agent&#34;] = get_user_agent()
+
+    if token:
+        final_headers.update({&#34;Authorization&#34;: &#34;Bearer {}&#34;.format(token)})
+    if headers is None:
+        headers = {}
+
+    # Merge headers specified at client initialization.
+    final_headers.update(headers)
+
+    # Merge headers specified for a specific request. e.g. oauth.access
+    if request_specific_headers:
+        final_headers.update(request_specific_headers)
+
+    if has_json:
+        final_headers.update({&#34;Content-Type&#34;: &#34;application/json;charset=utf-8&#34;})
+
+    if has_files:
+        # These are set automatically by the aiohttp library.
+        final_headers.pop(&#34;Content-Type&#34;, None)
+
+    return final_headers
+
+
+def _set_default_params(target: dict, default_params: dict) -&gt; None:
+    for name, value in default_params.items():
+        if name not in target:
+            target[name] = value
+
+
+def _build_req_args(
+    *,
+    token: Optional[str],
+    http_verb: str,
+    files: dict,
+    data: dict,
+    default_params: dict,
+    params: dict,
+    json: dict,  # skipcq: PYL-W0621
+    headers: dict,
+    auth: dict,
+    ssl: Optional[SSLContext],
+    proxy: Optional[str],
+) -&gt; dict:
+    has_json = json is not None
+    has_files = files is not None
+    if has_json and http_verb != &#34;POST&#34;:
+        msg = &#34;Json data can only be submitted as POST requests. GET requests should use the &#39;params&#39; argument.&#34;
+        raise SlackRequestError(msg)
+
+    if data is not None and isinstance(data, dict):
+        data = {k: v for k, v in data.items() if v is not None}
+        _set_default_params(data, default_params)
+    if files is not None and isinstance(files, dict):
+        files = {k: v for k, v in files.items() if v is not None}
+        # NOTE: We do not need to all #_set_default_params here
+        # because other parameters in binary data requests can exist
+        # only in either data or params, not in files.
+    if params is not None and isinstance(params, dict):
+        params = {k: v for k, v in params.items() if v is not None}
+        _set_default_params(params, default_params)
+    if json is not None and isinstance(json, dict):
+        _set_default_params(json, default_params)
+
+    token: Optional[str] = token
+    if params is not None and &#34;token&#34; in params:
+        token = params.pop(&#34;token&#34;)
+    if json is not None and &#34;token&#34; in json:
+        token = json.pop(&#34;token&#34;)
+    req_args = {
+        &#34;headers&#34;: _get_headers(
+            headers=headers,
+            token=token,
+            has_json=has_json,
+            has_files=has_files,
+            request_specific_headers=headers,
+        ),
+        &#34;data&#34;: data,
+        &#34;files&#34;: files,
+        &#34;params&#34;: params,
+        &#34;json&#34;: json,
+        &#34;ssl&#34;: ssl,
+        &#34;proxy&#34;: proxy,
+        &#34;auth&#34;: auth,
+    }
+    return req_args
+
+
+def _parse_web_class_objects(kwargs) -&gt; None:
+    def to_dict(obj: Union[Dict, Block, Attachment, Metadata]):
+        if isinstance(obj, Block):
+            return obj.to_dict()
+        if isinstance(obj, Attachment):
+            return obj.to_dict()
+        if isinstance(obj, Metadata):
+            return obj.to_dict()
+        return obj
+
+    for blocks_name in [&#34;blocks&#34;, &#34;user_auth_blocks&#34;]:
+        blocks = kwargs.get(blocks_name, None)
+        if blocks is not None and isinstance(blocks, Sequence) and (not isinstance(blocks, str)):
+            dict_blocks = [to_dict(b) for b in blocks]
+            kwargs.update({blocks_name: dict_blocks})
+
+    attachments = kwargs.get(&#34;attachments&#34;, None)
+    if attachments is not None and isinstance(attachments, Sequence) and (not isinstance(attachments, str)):
+        dict_attachments = [to_dict(a) for a in attachments]
+        kwargs.update({&#34;attachments&#34;: dict_attachments})
+
+    metadata = kwargs.get(&#34;metadata&#34;, None)
+    if metadata is not None and isinstance(metadata, Metadata):
+        kwargs.update({&#34;metadata&#34;: to_dict(metadata)})
+
+
+def _update_call_participants(kwargs, users: Union[str, Sequence[Dict[str, str]]]) -&gt; None:
+    if users is None:
+        return
+
+    if isinstance(users, list):
+        kwargs.update({&#34;users&#34;: json.dumps(users)})
+    elif isinstance(users, str):
+        kwargs.update({&#34;users&#34;: users})
+    else:
+        raise SlackRequestError(&#34;users must be either str or Sequence[Dict[str, str]]&#34;)
+
+
+def _next_cursor_is_present(data) -&gt; bool:
+    &#34;&#34;&#34;Determine if the response contains &#39;next_cursor&#39;
+    and &#39;next_cursor&#39; is not empty.
+
+    Returns:
+        A boolean value.
+    &#34;&#34;&#34;
+    # Only admin.conversations.search returns next_cursor at the top level
+    present = (&#34;next_cursor&#34; in data and data[&#34;next_cursor&#34;] is not None and data[&#34;next_cursor&#34;] != &#34;&#34;) or (
+        &#34;response_metadata&#34; in data
+        and &#34;next_cursor&#34; in data[&#34;response_metadata&#34;]
+        and data[&#34;response_metadata&#34;][&#34;next_cursor&#34;] is not None
+        and data[&#34;response_metadata&#34;][&#34;next_cursor&#34;] != &#34;&#34;
+    )
+    return present
+
+
+def _to_0_or_1_if_bool(v: Any) -&gt; Union[Any, str]:
+    if isinstance(v, bool):
+        return &#34;1&#34; if v else &#34;0&#34;
+    return v
+
+
+def _warn_if_text_or_attachment_fallback_is_missing(endpoint: str, kwargs: Dict[str, Any]) -&gt; None:
+    text = kwargs.get(&#34;text&#34;)
+    if text and len(text.strip()) &gt; 0:
+        # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
+        return
+
+    # for unit tests etc.
+    skip_deprecation = os.environ.get(&#34;SKIP_SLACK_SDK_WARNING&#34;)
+    if skip_deprecation:
+        return
+
+    # if text argument is missing, Warn the user about this.
+    # However, do not warn if a fallback field exists for all attachments, since this can be substituted.
+    missing_text_message = (
+        f&#34;The top-level `text` argument is missing in the request payload for a {endpoint} call - &#34;
+        f&#34;It&#39;s a best practice to always provide a `text` argument when posting a message. &#34;
+        f&#34;The `text` argument is used in places where content cannot be rendered such as: &#34;
+        &#34;system push notifications, assistive technology such as screen readers, etc.&#34;
+    )
+
+    # https://api.slack.com/reference/messaging/attachments
+    # Check if the fallback field exists for all the attachments
+    # Not all attachments have a fallback property; warn about this too!
+    missing_fallback_message = (
+        f&#34;Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call&#34;
+        &#34; - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a&#34;
+        &#34; message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered&#34;
+        &#34; a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details).&#34;
+    )
+
+    # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
+    # Even with a missing text, one can provide a `fallback` per attachment.
+    # More details here: https://api.slack.com/reference/messaging/attachments#legacy_fields
+    attachments = kwargs.get(&#34;attachments&#34;)
+    # Note that this method does not verify attachments
+    # if the value is already serialized as a single str value.
+    if attachments is not None and isinstance(attachments, list):
+        if not all(
+            [isinstance(attachment, dict) and len(attachment.get(&#34;fallback&#34;, &#34;&#34;).strip()) &gt; 0 for attachment in attachments]
+        ):
+            warnings.warn(missing_text_message, UserWarning)
+            warnings.warn(missing_fallback_message, UserWarning)
+    else:
+        warnings.warn(missing_text_message, UserWarning)
+
+
+def _build_unexpected_body_error_message(body: str) -&gt; str:
+    body_for_logging = &#34;&#34;.join([line.strip() for line in body.replace(&#34;\r&#34;, &#34;\n&#34;).split(&#34;\n&#34;)])
+    if len(body_for_logging) &gt; 100:
+        body_for_logging = body_for_logging[:100] + &#34;...&#34;
+    message = f&#34;Received a response in a non-JSON format: {body_for_logging}&#34;
+    return message
+
+
+def _remove_none_values(d: dict) -&gt; dict:
+    # To avoid having null values in JSON (Slack API does not work with null in many situations)
+    #
+    # &gt;&gt;&gt; import json
+    # &gt;&gt;&gt; d = {&#34;a&#34;: None, &#34;b&#34;:123}
+    # &gt;&gt;&gt; json.dumps(d)
+    # &#39;{&#34;a&#34;: null, &#34;b&#34;: 123}&#39;
+    #
+    return {k: v for k, v in d.items() if v is not None}
+
+
+def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -&gt; Dict[str, Optional[Any]]:
+    file = upload_file.get(&#34;file&#34;)
+    content = upload_file.get(&#34;content&#34;)
+    data: Optional[bytes] = None
+    if file is not None:
+        if isinstance(file, str):  # filepath
+            with open(file.encode(&#34;utf-8&#34;, &#34;ignore&#34;), &#34;rb&#34;) as readable:
+                data = readable.read()
+        elif isinstance(file, bytes):
+            data = file
+        elif isinstance(file, IOBase):
+            data = file.read()
+            if isinstance(data, str):
+                data = data.encode()
+        else:
+            raise SlackRequestError(&#34;file parameter must be any of filepath, bytes, and io.IOBase&#34;)
+    elif content is not None:
+        if isinstance(content, str):
+            data = content.encode(&#34;utf-8&#34;)
+        elif isinstance(content, bytes):
+            data = content
+        else:
+            raise SlackRequestError(&#34;content for file upload must be &#39;str&#39; (UTF-8 encoded) or &#39;bytes&#39; (for data)&#34;)
+
+    filename = upload_file.get(&#34;filename&#34;)
+    if filename is None:
+        # use the local filename if filename is missing
+        if isinstance(file, str):
+            filename = file.split(os.path.sep)[-1]
+        else:
+            filename = &#34;Uploaded file&#34;
+
+    title = upload_file.get(&#34;title&#34;, &#34;Uploaded file&#34;)
+    if data is None:
+        raise SlackRequestError(f&#34;File content not found for filename: {filename}, title: {title}&#34;)
+
+    if title is None:
+        title = filename  # to be consistent with files.upload API
+
+    return {
+        &#34;filename&#34;: filename,
+        &#34;data&#34;: data,
+        &#34;length&#34;: len(data),
+        &#34;title&#34;: title,
+        &#34;alt_txt&#34;: upload_file.get(&#34;alt_txt&#34;),
+        &#34;snippet_type&#34;: upload_file.get(&#34;snippet_type&#34;),
+    }
+
+
+def _upload_file_via_v2_url(
+    url: str,
+    data: bytes,
+    timeout: int,
+    logger: logging.Logger,
+    proxy: Optional[str] = None,
+    ssl: Optional[SSLContext] = None,
+) -&gt; Dict[str, Any]:
+    opener: Optional[OpenerDirector] = None
+    if proxy is not None:
+        if isinstance(proxy, str):
+            opener = urllib.request.build_opener(
+                ProxyHandler({&#34;http&#34;: proxy, &#34;https&#34;: proxy}),
+                HTTPSHandler(context=ssl),
+            )
+        else:
+            raise SlackRequestError(f&#34;Invalid proxy detected: {proxy} must be a str value&#34;)
+
+    if logger.level &lt;= logging.DEBUG:
+        logger.debug(f&#34;Sending a request: POST {url}&#34;)
+
+    resp: Optional[HTTPResponse] = None
+    req: Request = Request(method=&#34;POST&#34;, url=url, data=data, headers={})
+    if opener:
+        resp = opener.open(req, timeout=timeout)
+    else:
+        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+
+    charset = resp.headers.get_content_charset() or &#34;utf-8&#34;
+    body: str = resp.read().decode(charset)  # read the response body here
+    if logger.level &lt;= logging.DEBUG:
+        message = (
+            &#34;Received the following response - &#34;
+            f&#34;status: {resp.status}, &#34;
+            f&#34;headers: {dict(resp.headers)}, &#34;
+            f&#34;body: {body}&#34;
+        )
+        logger.debug(message)
+
+    return {&#34;status&#34;: resp.status, &#34;headers&#34;: resp.headers, &#34;body&#34;: body}
+
+
+def _validate_for_legacy_client(
+    response: Union[&#34;SlackResponse&#34;, Future],  # noqa: F821
+) -&gt; None:  # type: ignore
+    # Only LegacyWebClient can return this union type
+    if isinstance(response, Future):
+        message = (
+            &#34;Sorry! This SDK does not support run_async=True option for this API calls. &#34;
+            &#34;Please migrate to AsyncWebClient, which is a new and stable way to go.&#34;
+        )
+        raise SlackRequestError(message)
+
+
+def _print_files_upload_v2_suggestion():
+    message = (
+        &#34;client.files_upload() may cause some issues like timeouts for relatively large files. &#34;
+        &#34;Our latest recommendation is to use client.files_upload_v2(), &#34;
+        &#34;which is mostly compatible and much stabler, instead.&#34;
+    )
+    warnings.warn(message)</code></pre>
+</details>
 </section>
 <section>
 </section>
@@ -48,6 +472,27 @@ This method converts only the bool values in top-level of a given dict.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>Modified dict</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -&gt; Optional[Dict[str, Any]]:
+    &#34;&#34;&#34;Converts all bool values in dict to &#34;0&#34; or &#34;1&#34;.
+
+    Slack APIs safely accept &#34;0&#34;/&#34;1&#34; as boolean values.
+    Using True/False (bool in Python) doesn&#39;t work with aiohttp.
+    This method converts only the bool values in top-level of a given dict.
+
+    Args:
+        params: params as a dict
+
+    Returns:
+        Modified dict
+    &#34;&#34;&#34;
+    if params:
+        return {k: _to_0_or_1_if_bool(v) for k, v in params.items()}
+    return None</code></pre>
+</details>
 </dd>
 <dt id="slack_sdk.web.internal_utils.get_user_agent"><code class="name flex">
 <span>def <span class="ident">get_user_agent</span></span>(<span>prefix: Optional[str] = None, suffix: Optional[str] = None)</span>
@@ -58,6 +503,27 @@ Python version and OS version.</p>
 <h2 id="returns">Returns</h2>
 <p>The user agent string.
 e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
+    &#34;&#34;&#34;Construct the user-agent header with the package info,
+    Python version and OS version.
+
+    Returns:
+        The user agent string.
+        e.g. &#39;Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0&#39;
+    &#34;&#34;&#34;
+    # __name__ returns all classes, we only want the client
+    client = &#34;{0}/{1}&#34;.format(&#34;slackclient&#34;, version.__version__)
+    python_version = &#34;Python/{v.major}.{v.minor}.{v.micro}&#34;.format(v=sys.version_info)
+    system_info = &#34;{0}/{1}&#34;.format(platform.system(), platform.release())
+    user_agent_string = &#34; &#34;.join([python_version, client, system_info])
+    prefix = f&#34;{prefix} &#34; if prefix else &#34;&#34;
+    suffix = f&#34; {suffix}&#34; if suffix else &#34;&#34;
+    return prefix + user_agent_string + suffix</code></pre>
+</details>
 </dd>
 </dl>
 </section>
@@ -65,6 +531,7 @@ e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'</p></div>
 </section>
 </article>
 <nav id="sidebar">
+<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -84,7 +551,7 @@ e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'</p></div>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>
