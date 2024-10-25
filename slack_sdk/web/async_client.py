@@ -2300,8 +2300,8 @@ class AsyncWebClient(AsyncBaseClient):
         """Create Canvas for a user
         https://api.slack.com/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": json.dumps(document_content)})
-        return await self.api_call("canvases.create", params=kwargs)
+        kwargs.update({"title": title, "document_content": document_content})
+        return await self.api_call("canvases.create", json=kwargs)
 
     async def canvases_edit(
         self,
@@ -2313,8 +2313,8 @@ class AsyncWebClient(AsyncBaseClient):
         """Update an existing canvas
         https://api.slack.com/methods/canvases.edit
         """
-        kwargs.update({"canvas_id": canvas_id, "changes": json.dumps(changes)})
-        return await self.api_call("canvases.edit", params=kwargs)
+        kwargs.update({"canvas_id": canvas_id, "changes": changes})
+        return await self.api_call("canvases.edit", json=kwargs)
 
     async def canvases_delete(
         self,
@@ -3353,8 +3353,8 @@ class AsyncWebClient(AsyncBaseClient):
         """Create a Channel Canvas for a channel
         https://api.slack.com/methods/conversations.canvases.create
         """
-        kwargs.update({"channel_id": channel_id, "document_content": json.dumps(document_content)})
-        return await self.api_call("conversations.canvases.create", params=kwargs)
+        kwargs.update({"channel_id": channel_id, "document_content": document_content})
+        return await self.api_call("conversations.canvases.create", json=kwargs)
 
     async def dialog_open(
         self,
