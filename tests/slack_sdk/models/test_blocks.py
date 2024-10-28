@@ -1143,3 +1143,21 @@ class RichTextBlockTests(unittest.TestCase):
         self.assertIsInstance(block.elements[3], RichTextListElement)
         self.assertIsInstance(block.elements[3].elements[0], RichTextSectionElement)
         self.assertIsInstance(block.elements[3].elements[0].elements[0], RichTextElementParts.Text)
+
+    def test_parsing_empty_block_elements(self):
+        empty_element_block = {
+            "block_id": "my-block",
+            "type": "rich_text",
+            "elements": [
+                {
+                    "type": "rich_text_section",
+                    "elements": [],
+                },
+            ],
+        }
+        block = RichTextBlock(**empty_element_block)
+        self.assertIsInstance(block.elements[0], RichTextSectionElement)
+        self.assertIsNotNone(block.elements[0].elements)
+
+        block_dict = block.to_dict()
+        self.assertIsNotNone(block_dict["elements"][0].get("elements"))

@@ -12,6 +12,11 @@ class BaseObject:
         return f"<slack_sdk.{self.__class__.__name__}>"
 
 
+# Usually, Block Kit components do not allow an empty array for a property value,
+# but there are some exceptions (as of October 2024, only rich_text_section's elements property).
+EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [{"type": "rich_text_section", "property": "elements"}]
+
+
 class JsonObject(BaseObject, metaclass=ABCMeta):
     """The base class for JSON serializable class objects"""
 
@@ -51,6 +56,15 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             value = getattr(self, key, None)
             if value is None:
                 return False
+
+            # Usually, Block Kit components do not allow an empty array for a property value,
+            # but there are some exceptions (as of October 2024, only rich_text_section's elements property).
+            # The following code deals with this exception:
+            type_value = getattr(self, "type", None)
+            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+                if type_value == empty_allowed["type"] and key == empty_allowed["property"]:
+                    return True
+
             has_len = getattr(value, "__len__", None) is not None
             if has_len:  # skipcq: PYL-R1705
                 return len(value) > 0
