@@ -12,9 +12,13 @@ class BaseObject:
         return f"<slack_sdk.{self.__class__.__name__}>"
 
 
-# Usually, Block Kit components do not allow an empty array for a property value,
-# but there are some exceptions (as of October 2024, only rich_text_section's elements property).
-EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [{"type": "rich_text_section", "property": "elements"}]
+# Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
+    {"type": "rich_text_section", "property": "elements"},
+    {"type": "rich_text_list", "property": "elements"},
+    {"type": "rich_text_preformatted", "property": "elements"},
+    {"type": "rich_text_quote", "property": "elements"},
+]
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
@@ -57,9 +61,8 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             if value is None:
                 return False
 
-            # Usually, Block Kit components do not allow an empty array for a property value,
-            # but there are some exceptions (as of October 2024, only rich_text_section's elements property).
-            # The following code deals with this exception:
+            # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+            # The following code deals with these exceptions:
             type_value = getattr(self, "type", None)
             for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
                 if type_value == empty_allowed["type"] and key == empty_allowed["property"]:

@@ -1149,15 +1149,21 @@ class RichTextBlockTests(unittest.TestCase):
             "block_id": "my-block",
             "type": "rich_text",
             "elements": [
-                {
-                    "type": "rich_text_section",
-                    "elements": [],
-                },
+                {"type": "rich_text_section", "elements": []},
+                {"type": "rich_text_list", "style": "bullet", "elements": []},
+                {"type": "rich_text_preformatted", "elements": []},
+                {"type": "rich_text_quote", "elements": []},
             ],
         }
         block = RichTextBlock(**empty_element_block)
         self.assertIsInstance(block.elements[0], RichTextSectionElement)
         self.assertIsNotNone(block.elements[0].elements)
+        self.assertIsNotNone(block.elements[1].elements)
+        self.assertIsNotNone(block.elements[2].elements)
+        self.assertIsNotNone(block.elements[3].elements)
 
         block_dict = block.to_dict()
         self.assertIsNotNone(block_dict["elements"][0].get("elements"))
+        self.assertIsNotNone(block_dict["elements"][1].get("elements"))
+        self.assertIsNotNone(block_dict["elements"][2].get("elements"))
+        self.assertIsNotNone(block_dict["elements"][3].get("elements"))
