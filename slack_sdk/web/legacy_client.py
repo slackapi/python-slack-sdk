@@ -2021,12 +2021,15 @@ class LegacyWebClient(LegacyBaseClient):
         channel_id: str,
         thread_ts: str,
         status: str,
+        is_send_allowed: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Revokes a token.
         https://api.slack.com/methods/assistant.threads.setStatus
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
+        kwargs.update(
+            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "is_send_allowed": is_send_allowed}
+        )
         return self.api_call("assistant.threads.setStatus", params=kwargs)
 
     def assistant_threads_setTitle(
