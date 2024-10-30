@@ -40,6 +40,15 @@ class BaseObject:
         return f&#34;&lt;slack_sdk.{self.__class__.__name__}&gt;&#34;
 
 
+# Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
+    {&#34;type&#34;: &#34;rich_text_section&#34;, &#34;property&#34;: &#34;elements&#34;},
+    {&#34;type&#34;: &#34;rich_text_list&#34;, &#34;property&#34;: &#34;elements&#34;},
+    {&#34;type&#34;: &#34;rich_text_preformatted&#34;, &#34;property&#34;: &#34;elements&#34;},
+    {&#34;type&#34;: &#34;rich_text_quote&#34;, &#34;property&#34;: &#34;elements&#34;},
+]
+
+
 class JsonObject(BaseObject, metaclass=ABCMeta):
     &#34;&#34;&#34;The base class for JSON serializable class objects&#34;&#34;&#34;
 
@@ -79,6 +88,14 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             value = getattr(self, key, None)
             if value is None:
                 return False
+
+            # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+            # The following code deals with these exceptions:
+            type_value = getattr(self, &#34;type&#34;, None)
+            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+                if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                    return True
+
             has_len = getattr(value, &#34;__len__&#34;, None) is not None
             if has_len:  # skipcq: PYL-R1705
                 return len(value) &gt; 0
@@ -244,6 +261,14 @@ functions should return true if valid, false if not.</p>
             value = getattr(self, key, None)
             if value is None:
                 return False
+
+            # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+            # The following code deals with these exceptions:
+            type_value = getattr(self, &#34;type&#34;, None)
+            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+                if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                    return True
+
             has_len = getattr(value, &#34;__len__&#34;, None) is not None
             if has_len:  # skipcq: PYL-R1705
                 return len(value) &gt; 0
@@ -357,6 +382,14 @@ present on this object</p></div>
         value = getattr(self, key, None)
         if value is None:
             return False
+
+        # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+        # The following code deals with these exceptions:
+        type_value = getattr(self, &#34;type&#34;, None)
+        for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+            if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                return True
+
         has_len = getattr(value, &#34;__len__&#34;, None) is not None
         if has_len:  # skipcq: PYL-R1705
             return len(value) &gt; 0
