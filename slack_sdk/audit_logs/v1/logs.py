@@ -525,6 +525,11 @@ class Details:
     disconnecting_team: Optional[str]
     is_channel_canvas: Optional[bool]
     linked_channel_id: Optional[str]
+    column_id: Optional[str]
+    row_id: Optional[str]
+    cell_date_updated: Optional[int]
+    view_id: Optional[str]
+    user: Optional[str]
 
     def __init__(
         self,
@@ -645,6 +650,11 @@ class Details:
         disconnecting_team: Optional[str] = None,
         is_channel_canvas: Optional[bool] = None,
         linked_channel_id: Optional[str] = None,
+        column_id: Optional[str] = None,
+        row_id: Optional[str] = None,
+        cell_date_updated: Optional[int] = None,
+        view_id: Optional[str] = None,
+        user: Optional[str] = None,
         **kwargs,
     ) -> None:
         self.name = name
@@ -820,6 +830,11 @@ class Details:
         self.disconnecting_team = disconnecting_team
         self.is_channel_canvas = is_channel_canvas
         self.linked_channel_id = linked_channel_id
+        self.column_id = column_id
+        self.row_id = row_id
+        self.cell_date_updated = cell_date_updated
+        self.view_id = view_id
+        self.user = user
 
 
 class Channel:
@@ -1079,6 +1094,20 @@ class AccountTypeRole:
         self.unknown_fields = kwargs
 
 
+class SlackList:
+    id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        self.id = id
+        self.unknown_fields = kwargs
+
+
 class Entity:
     type: Optional[str]
     user: Optional[User]
@@ -1095,6 +1124,7 @@ class Entity:
     barrier: Optional[InformationBarrier]
     workflow_v2: Optional[WorkflowV2]
     account_type_role: Optional[AccountTypeRole]
+    list: Optional[SlackList]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -1115,6 +1145,7 @@ class Entity:
         barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
         workflow_v2: Optional[Union[WorkflowV2, Dict[str, Any]]] = None,
         account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
+        list: Optional[Union[SlackList, Dict[str, Any]]] = None,
         **kwargs,
     ) -> None:
         self.type = type
@@ -1134,6 +1165,7 @@ class Entity:
         self.account_type_role = (
             AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
         )
+        self.list = SlackList(**list) if isinstance(list, dict) else list
         self.unknown_fields = kwargs
 
 
