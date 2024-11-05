@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1">
 <title>slack_sdk.models.blocks API documentation</title>
-<meta name="description" content="Block Kit data model objects …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Block Kit data model objects …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 </head>
 <body>
 <main>
@@ -29,132 +32,6 @@
 <li><a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></li>
 <li><a href="https://app.slack.com/block-kit-builder">https://app.slack.com/block-kit-builder</a></li>
 </ul>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;Block Kit data model objects
-
-To learn more about Block Kit, please check the following resources and tools:
-
-* https://api.slack.com/block-kit
-* https://api.slack.com/reference/block-kit/blocks
-* https://app.slack.com/block-kit-builder
-&#34;&#34;&#34;
-from .basic_components import ButtonStyles
-from .basic_components import ConfirmObject
-from .basic_components import DynamicSelectElementTypes
-from .basic_components import MarkdownTextObject
-from .basic_components import Option
-from .basic_components import OptionGroup
-from .basic_components import PlainTextObject
-from .basic_components import TextObject
-from .block_elements import BlockElement
-from .block_elements import ButtonElement
-from .block_elements import ChannelMultiSelectElement
-from .block_elements import ChannelSelectElement
-from .block_elements import CheckboxesElement
-from .block_elements import ConversationFilter
-from .block_elements import ConversationMultiSelectElement
-from .block_elements import ConversationSelectElement
-from .block_elements import DatePickerElement
-from .block_elements import TimePickerElement
-from .block_elements import DateTimePickerElement
-from .block_elements import ExternalDataMultiSelectElement
-from .block_elements import ExternalDataSelectElement
-from .block_elements import ImageElement
-from .block_elements import InputInteractiveElement
-from .block_elements import InteractiveElement
-from .block_elements import LinkButtonElement
-from .block_elements import OverflowMenuElement
-from .block_elements import RichTextInputElement
-from .block_elements import PlainTextInputElement
-from .block_elements import EmailInputElement
-from .block_elements import UrlInputElement
-from .block_elements import NumberInputElement
-from .block_elements import RadioButtonsElement
-from .block_elements import SelectElement
-from .block_elements import StaticMultiSelectElement
-from .block_elements import StaticSelectElement
-from .block_elements import UserMultiSelectElement
-from .block_elements import UserSelectElement
-from .block_elements import RichTextElement
-from .block_elements import RichTextElementParts
-from .block_elements import RichTextListElement
-from .block_elements import RichTextPreformattedElement
-from .block_elements import RichTextQuoteElement
-from .block_elements import RichTextSectionElement
-from .blocks import ActionsBlock
-from .blocks import Block
-from .blocks import CallBlock
-from .blocks import ContextBlock
-from .blocks import DividerBlock
-from .blocks import FileBlock
-from .blocks import HeaderBlock
-from .blocks import ImageBlock
-from .blocks import InputBlock
-from .blocks import SectionBlock
-from .blocks import VideoBlock
-from .blocks import RichTextBlock
-
-__all__ = [
-    &#34;ButtonStyles&#34;,
-    &#34;ConfirmObject&#34;,
-    &#34;DynamicSelectElementTypes&#34;,
-    &#34;MarkdownTextObject&#34;,
-    &#34;Option&#34;,
-    &#34;OptionGroup&#34;,
-    &#34;PlainTextObject&#34;,
-    &#34;TextObject&#34;,
-    &#34;BlockElement&#34;,
-    &#34;ButtonElement&#34;,
-    &#34;ChannelMultiSelectElement&#34;,
-    &#34;ChannelSelectElement&#34;,
-    &#34;CheckboxesElement&#34;,
-    &#34;ConversationFilter&#34;,
-    &#34;ConversationMultiSelectElement&#34;,
-    &#34;ConversationSelectElement&#34;,
-    &#34;DatePickerElement&#34;,
-    &#34;TimePickerElement&#34;,
-    &#34;DateTimePickerElement&#34;,
-    &#34;ExternalDataMultiSelectElement&#34;,
-    &#34;ExternalDataSelectElement&#34;,
-    &#34;ImageElement&#34;,
-    &#34;InputInteractiveElement&#34;,
-    &#34;InteractiveElement&#34;,
-    &#34;LinkButtonElement&#34;,
-    &#34;OverflowMenuElement&#34;,
-    &#34;RichTextInputElement&#34;,
-    &#34;PlainTextInputElement&#34;,
-    &#34;EmailInputElement&#34;,
-    &#34;UrlInputElement&#34;,
-    &#34;NumberInputElement&#34;,
-    &#34;RadioButtonsElement&#34;,
-    &#34;SelectElement&#34;,
-    &#34;StaticMultiSelectElement&#34;,
-    &#34;StaticSelectElement&#34;,
-    &#34;UserMultiSelectElement&#34;,
-    &#34;UserSelectElement&#34;,
-    &#34;RichTextElement&#34;,
-    &#34;RichTextElementParts&#34;,
-    &#34;RichTextListElement&#34;,
-    &#34;RichTextPreformattedElement&#34;,
-    &#34;RichTextQuoteElement&#34;,
-    &#34;RichTextSectionElement&#34;,
-    &#34;ActionsBlock&#34;,
-    &#34;Block&#34;,
-    &#34;CallBlock&#34;,
-    &#34;ContextBlock&#34;,
-    &#34;DividerBlock&#34;,
-    &#34;FileBlock&#34;,
-    &#34;HeaderBlock&#34;,
-    &#34;ImageBlock&#34;,
-    &#34;InputBlock&#34;,
-    &#34;SectionBlock&#34;,
-    &#34;VideoBlock&#34;,
-    &#34;RichTextBlock&#34;,
-]</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -263,7 +140,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ActionsBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ActionsBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -417,67 +294,17 @@ to create visually rich and compellingly interactive messages.
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#34;]:
-    if block is None:  # skipcq: PYL-R1705
-        return None
-    elif isinstance(block, Block):
-        return block
-    else:
-        if &#34;type&#34; in block:
-            type = block[&#34;type&#34;]  # skipcq: PYL-W0622
-            if type == SectionBlock.type:  # skipcq: PYL-R1705
-                return SectionBlock(**block)
-            elif type == DividerBlock.type:
-                return DividerBlock(**block)
-            elif type == ImageBlock.type:
-                return ImageBlock(**block)
-            elif type == ActionsBlock.type:
-                return ActionsBlock(**block)
-            elif type == ContextBlock.type:
-                return ContextBlock(**block)
-            elif type == InputBlock.type:
-                return InputBlock(**block)
-            elif type == FileBlock.type:
-                return FileBlock(**block)
-            elif type == CallBlock.type:
-                return CallBlock(**block)
-            elif type == HeaderBlock.type:
-                return HeaderBlock(**block)
-            elif type == VideoBlock.type:
-                return VideoBlock(**block)
-            elif type == RichTextBlock.type:
-                return RichTextBlock(**block)
-            else:
-                cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
-                return None
-        else:
-            cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
-            return None</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.Block.parse_all"><code class="name flex">
 <span>def <span class="ident">parse_all</span></span>(<span>blocks: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')]]]) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
-    return [cls.parse(b) for b in blocks or []]  # type: ignore</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.Block.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.Block.subtype"><code class="name">prop <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -601,51 +428,17 @@ def subtype(self) -&gt; Optional[str]:
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse(cls, block_element: Union[dict, &#34;BlockElement&#34;]) -&gt; Optional[Union[&#34;BlockElement&#34;, TextObject]]:
-    if block_element is None:  # skipcq: PYL-R1705
-        return None
-    elif isinstance(block_element, dict):
-        if &#34;type&#34; in block_element:
-            d = copy.copy(block_element)
-            t = d.pop(&#34;type&#34;)
-            for subclass in cls._get_sub_block_elements():
-                if t == subclass.type:  # type: ignore
-                    return subclass(**d)
-            if t == PlainTextObject.type:  # skipcq: PYL-R1705
-                return PlainTextObject(**d)
-            elif t == MarkdownTextObject.type:
-                return MarkdownTextObject(**d)
-    elif isinstance(block_element, (TextObject, BlockElement)):
-        return block_element
-    cls.logger.warning(f&#34;Unknown element detected and skipped ({block_element})&#34;)
-    return None</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
 <span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>'), <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]) ‑> List[Union[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse_all(
-    cls, block_elements: Sequence[Union[dict, &#34;BlockElement&#34;, TextObject]]
-) -&gt; List[Union[&#34;BlockElement&#34;, TextObject]]:
-    return [cls.parse(e) for e in block_elements or []]  # type: ignore</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.BlockElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.BlockElement.subtype"><code class="name">prop <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -896,7 +689,7 @@ to create visually rich and compellingly interactive messages.
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.CallBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.CallBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -1411,22 +1204,6 @@ offering a confirm and deny button.
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
-    if confirm:
-        if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
-            return confirm
-        elif isinstance(confirm, dict):
-            return ConfirmObject(**confirm)
-        else:
-            # Not yet implemented: show some warning here
-            return None
-    return None</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1436,56 +1213,24 @@ def parse(cls, confirm: Union[&#34;ConfirmObject&#34;, Dict[str, Any]]):
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@JsonValidator(f&#34;confirm attribute cannot exceed {confirm_max_length} characters&#34;)
-def confirm_length(self) -&gt; bool:
-    return self._confirm is None or len(self._confirm.text) &lt;= self.confirm_max_length</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.deny_length"><code class="name flex">
 <span>def <span class="ident">deny_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@JsonValidator(f&#34;deny attribute cannot exceed {deny_max_length} characters&#34;)
-def deny_length(self) -&gt; bool:
-    return self._deny is None or len(self._deny.text) &lt;= self.deny_max_length</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.text_length"><code class="name flex">
 <span>def <span class="ident">text_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
-def text_length(self) -&gt; bool:
-    return self._text is None or len(self._text.text) &lt;= self.text_max_length</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.ConfirmObject.title_length"><code class="name flex">
 <span>def <span class="ident">title_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
-def title_length(self) -&gt; bool:
-    return self._title is None or len(self._title.text) &lt;= self.title_max_length</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1577,7 +1322,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ContextBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ContextBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -1689,23 +1434,6 @@ from conversation lists. Defaults to false.</dd>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse(cls, filter: Union[dict, &#34;ConversationFilter&#34;]):  # skipcq: PYL-W0622
-    if filter is None:  # skipcq: PYL-R1705
-        return None
-    elif isinstance(filter, ConversationFilter):
-        return filter
-    elif isinstance(filter, dict):
-        d = copy.copy(filter)
-        return ConversationFilter(**d)
-    else:
-        cls.logger.warning(f&#34;Unknown conversation filter object detected and skipped ({filter})&#34;)
-        return None</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -2755,7 +2483,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.FileBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.FileBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -2864,7 +2592,7 @@ Maximum length for the text in this field is 150 characters.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.HeaderBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.HeaderBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3022,7 +2750,7 @@ If a message is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ImageBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ImageBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3137,7 +2865,7 @@ you're looking for the image block.
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ImageElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.ImageElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3292,7 +3020,7 @@ Defaults to false.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InputBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InputBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3416,7 +3144,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InputInteractiveElement.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InputInteractiveElement.subtype"><code class="name">prop <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -3509,7 +3237,7 @@ def subtype(self) -&gt; Optional[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.InteractiveElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.InteractiveElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -3736,33 +3464,12 @@ although you can still include manual parsing strings. This field is only usable
 <dd>
 <div class="desc"><p>Transform a Link object directly into the required object shape
 to act as a MarkdownTextObject</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;
-    Transform a Link object directly into the required object shape
-    to act as a MarkdownTextObject
-    &#34;&#34;&#34;
-    return MarkdownTextObject.from_link(link, title).to_dict()</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.direct_from_string"><code class="name flex">
 <span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def direct_from_string(text: str) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
-    return MarkdownTextObject.from_str(text).to_dict()</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.from_link"><code class="name flex">
 <span>def <span class="ident">from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>, title: str = '') ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
@@ -3770,40 +3477,17 @@ def direct_from_string(text: str) -&gt; Dict[str, Any]:
 <dd>
 <div class="desc"><p>Transform a Link object directly into the required object shape
 to act as a MarkdownTextObject</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_link(link: Link, title: str = &#34;&#34;) -&gt; &#34;MarkdownTextObject&#34;:
-    &#34;&#34;&#34;
-    Transform a Link object directly into the required object shape
-    to act as a MarkdownTextObject
-    &#34;&#34;&#34;
-    if title:
-        title = f&#34;: {title}&#34;
-    return MarkdownTextObject(text=f&#34;{link}{title}&#34;)</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.MarkdownTextObject.from_str"><code class="name flex">
 <span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_str(text: str) -&gt; &#34;MarkdownTextObject&#34;:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
-    return MarkdownTextObject(text=text)</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.MarkdownTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.MarkdownTextObject.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -4168,40 +3852,12 @@ dialogs.</dd>
 </code></dt>
 <dd>
 <div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_single_value(value_and_label: str):
-    &#34;&#34;&#34;Creates a simple Option instance with the same value and label&#34;&#34;&#34;
-    return Option(value=value_and_label, label=value_and_label)</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.Option.parse_all"><code class="name flex">
 <span>def <span class="ident">parse_all</span></span>(<span>options: Optional[Sequence[Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>')]]]) ‑> Optional[List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>]]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&#34;]]]) -&gt; Optional[List[&#34;Option&#34;]]:
-    if options is None:
-        return None
-    option_objects: List[Option] = []
-    for o in options:
-        if isinstance(o, dict):
-            d = copy.copy(o)
-            option_objects.append(Option(**d))
-        elif isinstance(o, Option):
-            option_objects.append(o)
-        else:
-            cls.logger.warning(f&#34;Unknown option object detected and skipped ({o})&#34;)
-    return option_objects</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -4213,38 +3869,6 @@ def parse_all(cls, options: Optional[Sequence[Union[Dict[str, Any], &#34;Option&
 <div class="desc"><p>Different parent classes must call this with a valid value from OptionTypes -
 either "dialog", "action", or "block", so that JSON is returned in the
 correct shape.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:  # skipcq: PYL-W0221
-    &#34;&#34;&#34;
-    Different parent classes must call this with a valid value from OptionTypes -
-    either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
-    correct shape.
-    &#34;&#34;&#34;
-    self.validate_json()
-    if option_type == &#34;dialog&#34;:  # skipcq: PYL-R1705
-        return {&#34;label&#34;: self.label, &#34;value&#34;: self.value}
-    elif option_type == &#34;action&#34; or option_type == &#34;attachment&#34;:
-        # &#34;action&#34; can be confusing but it means a legacy message action in attachments
-        # we don&#39;t remove the type name for backward compatibility though
-        json = {&#34;text&#34;: self.label, &#34;value&#34;: self.value}
-        if self.description is not None:
-            json[&#34;description&#34;] = self.description
-        return json
-    else:  # if option_type == &#34;block&#34;; this should be the most common case
-        text: TextObject = self._text or PlainTextObject.from_str(self.label)
-        json: Dict[str, Any] = {
-            &#34;text&#34;: text.to_dict(),
-            &#34;value&#34;: self.value,
-        }
-        if self._block_description:
-            json[&#34;description&#34;] = self._block_description.to_dict()
-        if self.url:
-            json[&#34;url&#34;] = self.url
-        return json</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -4397,27 +4021,6 @@ UI) and a list of Option objects.</p>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse_all(
-    cls, option_groups: Optional[Sequence[Union[Dict[str, Any], &#34;OptionGroup&#34;]]]
-) -&gt; Optional[List[&#34;OptionGroup&#34;]]:
-    if option_groups is None:
-        return None
-    option_group_objects = []
-    for o in option_groups:
-        if isinstance(o, dict):
-            d = copy.copy(o)
-            option_group_objects.append(OptionGroup(**d))
-        elif isinstance(o, OptionGroup):
-            option_group_objects.append(o)
-        else:
-            cls.logger.warning(f&#34;Unknown option group object detected and skipped ({o})&#34;)
-    return option_group_objects</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -4767,34 +4370,17 @@ This field is only usable when type is plain_text.</dd>
 </code></dt>
 <dd>
 <div class="desc"><p>Transforms a string into the required object shape to act as a PlainTextObject</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def direct_from_string(text: str) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
-    return PlainTextObject.from_str(text).to_dict()</code></pre>
-</details>
 </dd>
 <dt id="slack_sdk.models.blocks.PlainTextObject.from_str"><code class="name flex">
 <span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_str(text: str) -&gt; &#34;PlainTextObject&#34;:
-    return PlainTextObject(text=text, emoji=True)</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.PlainTextObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.PlainTextObject.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -4997,7 +4583,7 @@ If a message or view is updated, use a new block_id.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.RichTextBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.RichTextBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -5493,7 +5079,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.RichTextListElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.RichTextListElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -5565,7 +5151,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.RichTextPreformattedElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.RichTextPreformattedElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -5635,7 +5221,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.RichTextQuoteElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.RichTextQuoteElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -5705,7 +5291,7 @@ def attributes(self) -&gt; Set[str]:
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.RichTextSectionElement.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.RichTextSectionElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -5860,7 +5446,7 @@ Maximum number of items is 10. Maximum length for the text in each item is 2000 
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.SectionBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.SectionBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -6446,41 +6032,11 @@ Only one element can be set to true. Defaults to false.</dd>
 </code></dt>
 <dd>
 <div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def parse(
-    cls,
-    text: Union[str, Dict[str, Any], &#34;TextObject&#34;],
-    default_type: str = &#34;mrkdwn&#34;,
-) -&gt; Optional[&#34;TextObject&#34;]:
-    if not text:  # skipcq: PYL-R1705
-        return None
-    elif isinstance(text, str):
-        if default_type == PlainTextObject.type:  # skipcq: PYL-R1705
-            return PlainTextObject.from_str(text)
-        else:
-            return MarkdownTextObject.from_str(text)
-    elif isinstance(text, dict):
-        d = copy.copy(text)
-        t = d.pop(&#34;type&#34;)
-        if t == PlainTextObject.type:  # skipcq: PYL-R1705
-            return PlainTextObject(**d)
-        else:
-            return MarkdownTextObject(**d)
-    elif isinstance(text, TextObject):
-        return text
-    else:
-        cls.logger.warning(f&#34;Unknown type ({type(text)}) detected when parsing a TextObject&#34;)
-        return None</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.TextObject.subtype"><code class="name">var <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.TextObject.subtype"><code class="name">prop <span class="ident">subtype</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -7138,7 +6694,7 @@ Must go to an HTTPS URL.</dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.VideoBlock.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dt id="slack_sdk.models.blocks.VideoBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>set() -&gt; new empty set object
 set(iterable) -&gt; new set object</p>
@@ -7180,7 +6736,6 @@ def attributes(self) -&gt; Set[str]:
 </section>
 </article>
 <nav id="sidebar">
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -7603,7 +7158,7 @@ def attributes(self) -&gt; Set[str]:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
 </footer>
 </body>
 </html>
