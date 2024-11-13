@@ -256,9 +256,21 @@ error code).
 
 ``` python
 response = client.files_upload_v2(
-    channel="C3UKJTQAC",
-    file="files.pdf",
+    file="test.pdf",
     title="Test upload",
+    channel_id="C3UKJTQAC",
+    initial_comment="Here is the latest version of the file!",
+)
+```
+
+If you want to share files within a thread, you can pass "thread_ts" in addition to "channel_id" as shown below:
+
+``` python
+response = client.files_upload_v2(
+    file="test.pdf",
+    title="Test upload",
+    channel_id="C3UKJTQAC",
+    thread_ts="1731398999.934122",
     initial_comment="Here is the latest version of the file!",
 )
 ```
