@@ -172,7 +172,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         if self.last_ping_pong_time is None:
                             self.last_ping_pong_time = float(t)
                         try:
-                            await session.ping(f"sdk-ping-pong:{t}")
+                            await session.ping(f"sdk-ping-pong:{t}".encode("utf-8"))
                         except Exception as e:
                             # The ping() method can fail for some reason.
                             # To establish a new connection even in this scenario,
@@ -387,7 +387,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if self.logger.level <= logging.DEBUG:
                     self.logger.debug(f"Sending a ping message with the newly established connection ({session_id})...")
                 t = time.time()
-                await self.current_session.ping(f"sdk-ping-pong:{t}")
+                await self.current_session.ping(f"sdk-ping-pong:{t}".encode("utf-8"))
 
                 if self.current_session_monitor is not None:
                     self.current_session_monitor.cancel()
