@@ -12,6 +12,7 @@ from slack_sdk.web.internal_utils import (
     _parse_web_class_objects,
     _to_v2_file_upload_item,
     _next_cursor_is_present,
+    _get_url,
 )
 
 
@@ -108,3 +109,36 @@ class TestInternalUtils(unittest.TestCase):
         assert _next_cursor_is_present({"response_metadata": {"next_cursor": ""}}) is False
         assert _next_cursor_is_present({"response_metadata": {"next_cursor": None}}) is False
         assert _next_cursor_is_present({"something_else": {"next_cursor": "next-page"}}) is False
+
+    def test_get_url_prevent_double_slash(self):
+        # Test case: Prevent double slash when both base_url and api_method include slashes
+        api_url = _get_url("https://slack.com/api/", "/chat.postMessage")
+        self.assertEqual(
+            api_url,
+            "https://slack.com/api/chat.postMessage",
+            "Should correctly handle and remove double slashes between base_url and api_method",
+        )
+
+        # Test case: Handle base_url without trailing slash
+        api_url = _get_url("https://slack.com/api", "chat.postMessage")
+        self.assertEqual(
+            api_url,
+            "https://slack.com/chat.postMessage",
+            "Should correctly handle base_url without a trailing slash",
+        )
+
+        # Test case: Handle api_method without leading slash
+        api_url = _get_url("https://slack.com/api/", "chat.postMessage")
+        self.assertEqual(
+            api_url,
+            "https://slack.com/api/chat.postMessage",
+            "Should correctly handle api_method without a leading slash",
+        )
+
+        # Test case: Both inputs are clean
+        api_url = _get_url("https://slack.com/api", "/chat.postMessage")
+        self.assertEqual(
+            api_url,
+            "https://slack.com/chat.postMessage",
+            "Should correctly combine base_url and api_method with clean inputs",
+        )
