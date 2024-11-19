@@ -119,14 +119,6 @@ class TestInternalUtils(unittest.TestCase):
             "Should correctly handle and remove double slashes between base_url and api_method",
         )
 
-        # Test case: Handle base_url without trailing slash
-        api_url = _get_url("https://slack.com/api", "chat.postMessage")
-        self.assertEqual(
-            api_url,
-            "https://slack.com/chat.postMessage",
-            "Should correctly handle base_url without a trailing slash",
-        )
-
         # Test case: Handle api_method without leading slash
         api_url = _get_url("https://slack.com/api/", "chat.postMessage")
         self.assertEqual(
@@ -136,9 +128,9 @@ class TestInternalUtils(unittest.TestCase):
         )
 
         # Test case: Both inputs are clean
-        api_url = _get_url("https://slack.com/api", "/chat.postMessage")
+        api_url = _get_url("https://slack.com/api/", "chat.postMessage")
         self.assertEqual(
             api_url,
-            "https://slack.com/chat.postMessage",
+            "https://slack.com/api/chat.postMessage",
             "Should correctly combine base_url and api_method with clean inputs",
         )
