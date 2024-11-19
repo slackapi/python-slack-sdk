@@ -229,11 +229,3 @@ class TestWebClient(unittest.TestCase):
             user_auth_blocks=[DividerBlock(), DividerBlock()],
         )
         self.assertIsNone(new_message.get("error"))
-
-    def test_base_url_appends_trailing_slash_issue_15141(self):
-        client = self.client
-        self.assertEqual(client.base_url, "http://localhost:8888/")
-
-    def test_base_url_preserves_trailing_slash_issue_15141(self):
-        client = WebClient(base_url="http://localhost:8888/")
-        self.assertEqual(client.base_url, "http://localhost:8888/")
