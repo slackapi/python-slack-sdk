@@ -59,6 +59,9 @@ class BaseClient:
     ):
         self.token = None if token is None else token.strip()
         """A string specifying an `xoxp-*` or `xoxb-*` token."""
+        # self.base_url = base_url
+        if not base_url.endswith("/"):
+            base_url += "/"
         self.base_url = base_url
         """A string representing the Slack API base URL.
         Default is `'https://slack.com/api/'`."""
