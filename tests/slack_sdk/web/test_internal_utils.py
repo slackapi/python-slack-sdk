@@ -126,11 +126,3 @@ class TestInternalUtils(unittest.TestCase):
             "https://slack.com/api/chat.postMessage",
             "Should correctly handle api_method without a leading slash",
         )
-
-        # Test case: Both inputs are clean
-        api_url = _get_url("https://slack.com/api/", "chat.postMessage")
-        self.assertEqual(
-            api_url,
-            "https://slack.com/api/chat.postMessage",
-            "Should correctly combine base_url and api_method with clean inputs",
-        )
