@@ -1,5 +1,7 @@
 import asyncio
 import os
+import sys
+from types import ModuleType
 
 
 def async_test(coro):
@@ -43,3 +45,19 @@ def get_mock_server_mode() -> str:
 
 def is_ci_unstable_test_skip_enabled() -> bool:
     return os.environ.get("CI_UNSTABLE_TESTS_SKIP_ENABLED") == "1"
+
+
+def reload_module(root_module: ModuleType):
+    package_name = root_module.__name__
+    loaded_package_modules = {
+        key: value for key, value in sys.modules.items() if key.startswith(package_name) and isinstance(value, ModuleType)
+    }
+
+    for key in loaded_package_modules:
+        del sys.modules[key]
+
+    for key in loaded_package_modules:
+        new_module = __import__(key)
+        old_module = loaded_package_modules[key]
+        old_module.__dict__.clear()
+        old_module.__dict__.update(new_module.__dict__)
