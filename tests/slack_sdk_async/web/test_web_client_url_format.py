@@ -10,7 +10,7 @@ from tests.slack_sdk.web.mock_web_api_server import (
 )
 
 
-class TestWebClientUrlFormat(unittest.TestCase):
+class TestAsyncWebClientUrlFormat(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self)
 
