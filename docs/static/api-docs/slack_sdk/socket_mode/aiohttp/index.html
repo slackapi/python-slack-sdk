@@ -43,7 +43,7 @@ hljs.highlightAll();
 <dl>
 <dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient"><code class="flex name class">
 <span>class <span class="ident">SocketModeClient</span></span>
-<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, proxy: Optional[str] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 5, trace_enabled: bool = False, on_message_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]] = None, on_error_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]] = None, on_close_listeners: Optional[List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]] = None)</span>
+<span>(</span><span>app_token: str, logger: Optional[logging.Logger] = None, web_client: Optional[<a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a>] = None, proxy: Optional[str] = None, auto_reconnect_enabled: bool = True, ping_interval: float = 5, trace_enabled: bool = False, on_message_listeners: Optional[List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]] = None, on_error_listeners: Optional[List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]] = None, on_close_listeners: Optional[List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Socket Mode client</p>
@@ -220,7 +220,7 @@ hljs.highlightAll();
                         if self.last_ping_pong_time is None:
                             self.last_ping_pong_time = float(t)
                         try:
-                            await session.ping(f&#34;sdk-ping-pong:{t}&#34;)
+                            await session.ping(f&#34;sdk-ping-pong:{t}&#34;.encode(&#34;utf-8&#34;))
                         except Exception as e:
                             # The ping() method can fail for some reason.
                             # To establish a new connection even in this scenario,
@@ -435,7 +435,7 @@ hljs.highlightAll();
                 if self.logger.level &lt;= logging.DEBUG:
                     self.logger.debug(f&#34;Sending a ping message with the newly established connection ({session_id})...&#34;)
                 t = time.time()
-                await self.current_session.ping(f&#34;sdk-ping-pong:{t}&#34;)
+                await self.current_session.ping(f&#34;sdk-ping-pong:{t}&#34;.encode(&#34;utf-8&#34;))
 
                 if self.current_session_monitor is not None:
                     self.current_session_monitor.cancel()
@@ -565,15 +565,15 @@ hljs.highlightAll();
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_close_listeners"><code class="name">var <span class="ident">on_close_listeners</span> : List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_error_listeners"><code class="name">var <span class="ident">on_error_listeners</span> : List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[aiohttp.http_websocket.WSMessage], Awaitable[None]]]</code></dt>
+<dt id="slack_sdk.socket_mode.aiohttp.SocketModeClient.on_message_listeners"><code class="name">var <span class="ident">on_message_listeners</span> : List[Callable[[aiohttp._websocket.models.WSMessage], Awaitable[None]]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>

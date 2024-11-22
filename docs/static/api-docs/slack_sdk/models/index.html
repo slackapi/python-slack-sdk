@@ -190,6 +190,14 @@ functions should return true if valid, false if not.</p>
             value = getattr(self, key, None)
             if value is None:
                 return False
+
+            # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+            # The following code deals with these exceptions:
+            type_value = getattr(self, &#34;type&#34;, None)
+            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+                if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                    return True
+
             has_len = getattr(value, &#34;__len__&#34;, None) is not None
             if has_len:  # skipcq: PYL-R1705
                 return len(value) &gt; 0

@@ -2004,6 +2004,51 @@ class WebClient(BaseClient):
         kwargs.update({"refresh_token": refresh_token})
         return self.api_call("tooling.tokens.rotate", params=kwargs)
 
+    def assistant_threads_setStatus(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        status: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setStatus
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
+        return self.api_call("assistant.threads.setStatus", params=kwargs)
+
+    def assistant_threads_setTitle(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        title: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setTitle
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
+        return self.api_call("assistant.threads.setTitle", params=kwargs)
+
+    def assistant_threads_setSuggestedPrompts(
+        self,
+        *,
+        channel_id: str,
+        thread_ts: str,
+        title: Optional[str] = None,
+        prompts: List[Dict[str, str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Revokes a token.
+        https://api.slack.com/methods/assistant.threads.setSuggestedPrompts
+        """
+        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
+        if title is not None:
+            kwargs.update({"title": title})
+        return self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
+
     def auth_revoke(
         self,
         *,
@@ -2246,8 +2291,8 @@ class WebClient(BaseClient):
         """Create Canvas for a user
         https://api.slack.com/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": json.dumps(document_content)})
-        return self.api_call("canvases.create", params=kwargs)
+        kwargs.update({"title": title, "document_content": document_content})
+        return self.api_call("canvases.create", json=kwargs)
 
     def canvases_edit(
         self,
@@ -2259,8 +2304,8 @@ class WebClient(BaseClient):
         """Update an existing canvas
         https://api.slack.com/methods/canvases.edit
         """
-        kwargs.update({"canvas_id": canvas_id, "changes": json.dumps(changes)})
-        return self.api_call("canvases.edit", params=kwargs)
+        kwargs.update({"canvas_id": canvas_id, "changes": changes})
+        return self.api_call("canvases.edit", json=kwargs)
 
     def canvases_delete(
         self,
@@ -3183,6 +3228,74 @@ class WebClient(BaseClient):
         )
         return self.api_call("conversations.replies", http_verb="GET", params=kwargs)
 
+    def conversations_requestSharedInvite_approve(
+        self,
+        *,
+        invite_id: str,
+        channel_id: Optional[str] = None,
+        is_external_limited: Optional[str] = None,
+        message: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+        https://api.slack.com/methods/conversations.requestSharedInvite.approve
+        """
+        kwargs.update(
+            {
+                "invite_id": invite_id,
+                "channel_id": channel_id,
+                "is_external_limited": is_external_limited,
+            }
+        )
+        if message is not None:
+            kwargs.update({"message": json.dumps(message)})
+        return self.api_call("conversations.requestSharedInvite.approve", params=kwargs)
+
+    def conversations_requestSharedInvite_deny(
+        self,
+        *,
+        invite_id: str,
+        message: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Deny a request to invite an external user to a channel.
+        https://api.slack.com/methods/conversations.requestSharedInvite.deny
+        """
+        kwargs.update({"invite_id": invite_id, "message": message})
+        return self.api_call("conversations.requestSharedInvite.deny", params=kwargs)
+
+    def conversations_requestSharedInvite_list(
+        self,
+        *,
+        cursor: Optional[str] = None,
+        include_approved: Optional[bool] = None,
+        include_denied: Optional[bool] = None,
+        include_expired: Optional[bool] = None,
+        invite_ids: Optional[Union[str, Sequence[str]]] = None,
+        limit: Optional[int] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists requests to add external users to channels with ability to filter.
+        https://api.slack.com/methods/conversations.requestSharedInvite.list
+        """
+        kwargs.update(
+            {
+                "cursor": cursor,
+                "include_approved": include_approved,
+                "include_denied": include_denied,
+                "include_expired": include_expired,
+                "limit": limit,
+                "user_id": user_id,
+            }
+        )
+        if invite_ids is not None:
+            if isinstance(invite_ids, (list, Tuple)):
+                kwargs.update({"invite_ids": ",".join(invite_ids)})
+            else:
+                kwargs.update({"invite_ids": invite_ids})
+        return self.api_call("conversations.requestSharedInvite.list", params=kwargs)
+
     def conversations_setPurpose(
         self,
         *,
@@ -3231,8 +3344,8 @@ class WebClient(BaseClient):
         """Create a Channel Canvas for a channel
         https://api.slack.com/methods/conversations.canvases.create
         """
-        kwargs.update({"channel_id": channel_id, "document_content": json.dumps(document_content)})
-        return self.api_call("conversations.canvases.create", params=kwargs)
+        kwargs.update({"channel_id": channel_id, "document_content": document_content})
+        return self.api_call("conversations.canvases.create", json=kwargs)
 
     def dialog_open(
         self,
@@ -5155,7 +5268,8 @@ class WebClient(BaseClient):
     def views_open(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -> SlackResponse:
@@ -5163,7 +5277,7 @@ class WebClient(BaseClient):
         https://api.slack.com/methods/views.open
         See https://api.slack.com/surfaces/modals for details.
         """
-        kwargs.update({"trigger_id": trigger_id})
+        kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:
@@ -5175,7 +5289,8 @@ class WebClient(BaseClient):
     def views_push(
         self,
         *,
-        trigger_id: str,
+        trigger_id: Optional[str] = None,
+        interactivity_pointer: Optional[str] = None,
         view: Union[dict, View],
         **kwargs,
     ) -> SlackResponse:
@@ -5187,7 +5302,7 @@ class WebClient(BaseClient):
         to learn more about the lifecycle and intricacies of views.
         https://api.slack.com/methods/views.push
         """
-        kwargs.update({"trigger_id": trigger_id})
+        kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
         else:

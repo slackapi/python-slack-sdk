@@ -1352,12 +1352,13 @@ class RichTextInputElement(InputInteractiveElement):
             }
         )
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
-        initial_value: Optional[Dict[str, Any]] = None,  # TODO: Add rich_text block class and its element classes
+        # To avoid circular imports, the RichTextBlock type here is intentionally a string
+        initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
@@ -2104,7 +2105,7 @@ class RichTextElementParts:
         def __init__(
             self,
             *,
-            timestamp: str,
+            timestamp: int,
             format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,

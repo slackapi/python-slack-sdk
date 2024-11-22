@@ -4839,17 +4839,23 @@ def attributes(self) -&gt; Set[str]:
 
         @property
         def attributes(self) -&gt; Set[str]:
-            return super().attributes.union({&#34;timestamp&#34;})
+            return super().attributes.union({&#34;timestamp&#34;, &#34;format&#34;, &#34;url&#34;, &#34;fallback&#34;})
 
         def __init__(
             self,
             *,
-            timestamp: str,
+            timestamp: int,
+            format: str,
+            url: Optional[str] = None,
+            fallback: Optional[str] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.timestamp = timestamp
+            self.format = format
+            self.url = url
+            self.fallback = fallback
 
     class Broadcast(RichTextElement):
         type = &#34;broadcast&#34;
@@ -4945,7 +4951,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.RichTextInputElement"><code class="flex name class">
 <span>class <span class="ident">RichTextInputElement</span></span>
-<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Optional[Dict[str, Any]] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*, action_id: Optional[str] = None, placeholder: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, initial_value: Union[Dict[str, Any], ForwardRef('<a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a>'), ForwardRef(None)] = None, dispatch_action_config: Union[dict, <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>, ForwardRef(None)] = None, focus_on_load: Optional[bool] = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
@@ -4968,12 +4974,13 @@ def attributes(self) -&gt; Set[str]:
             }
         )
 
-    def __init__(
+    def __init__(  # type: ignore
         self,
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
-        initial_value: Optional[Dict[str, Any]] = None,  # TODO: Add rich_text block class and its element classes
+        # To avoid circular imports, the RichTextBlock type here is intentionally a string
+        initial_value: Optional[Union[Dict[str, Any], &#34;RichTextBlock&#34;]] = None,  # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,

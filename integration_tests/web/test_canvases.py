@@ -32,10 +32,14 @@ class TestWebClient(unittest.TestCase):
             document_content={
                 "type": "markdown",
                 "markdown": """# My canvas
-                ---
-                ## Hey
-                What's up?
-                """,
+
+## Hey
+
+What's up?
+
+- foo
+- bar
+""",
             },
         )
         self.assertIsNone(channel_canvas.get("error"))
@@ -46,10 +50,14 @@ class TestWebClient(unittest.TestCase):
             document_content={
                 "type": "markdown",
                 "markdown": """# My canvas
-                ---
-                ## Hey
-                What's up?
-                """,
+
+## Hey
+
+What's up?
+
+- foo
+- bar
+""",
             },
         )
         self.assertIsNone(standalone_canvas.get("error"))
@@ -96,10 +104,14 @@ class TestWebClient(unittest.TestCase):
             document_content={
                 "type": "markdown",
                 "markdown": """# My canvas
-                ---
-                ## Hey
-                What's up?
-                """,
+
+## Hey
+
+What's up?
+
+- foo
+- bar
+""",
             },
         )
         self.assertIsNone(channel_canvas.get("error"))
@@ -110,10 +122,14 @@ class TestWebClient(unittest.TestCase):
             document_content={
                 "type": "markdown",
                 "markdown": """# My canvas
-                ---
-                ## Hey
-                What's up?
-                """,
+
+## Hey
+
+What's up?
+
+- foo
+- bar
+""",
             },
         )
         self.assertIsNone(standalone_canvas.get("error"))
