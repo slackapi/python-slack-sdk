@@ -1,8 +1,6 @@
 import asyncio
 import os
 from queue import Queue
-import sys
-from types import ModuleType
 from typing import Optional, Union
 
 
