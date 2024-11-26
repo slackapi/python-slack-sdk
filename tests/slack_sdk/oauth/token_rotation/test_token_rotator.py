@@ -4,15 +4,13 @@ from slack_sdk.errors import SlackTokenRotationError
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.token_rotation import TokenRotator
 from slack_sdk.web import WebClient
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestTokenRotator(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
         self.token_rotator = TokenRotator(
             client=WebClient(base_url="http://localhost:8888", token=None),
             client_id="111.222",

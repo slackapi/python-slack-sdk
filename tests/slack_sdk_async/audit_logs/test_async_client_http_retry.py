@@ -3,19 +3,17 @@ import unittest
 from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
 from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler
 from tests.helpers import async_test
-from tests.slack_sdk.audit_logs.mock_web_api_server import (
-    cleanup_mock_web_api_server,
-    setup_mock_web_api_server,
-)
+from tests.slack_sdk.audit_logs.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 from ..my_retry_handler import MyRetryHandler
 
 
 class TestAsyncAuditLogsClient_HttpRetries(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_http_retries(self):

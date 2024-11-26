@@ -5,22 +5,20 @@ import unittest
 import slack.errors as err
 from slack import AsyncWebClient
 from tests.helpers import async_test
-from tests.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestAsyncWebClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.client = AsyncWebClient(
             token="xoxp-1234",
             base_url="http://localhost:8888",
         )
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
     pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
