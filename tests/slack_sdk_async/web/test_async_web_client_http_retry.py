@@ -5,8 +5,8 @@ from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetry
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
+    setup_mock_web_api_server_async,
+    cleanup_mock_web_api_server_async,
 )
 from ..fatal_error_retry_handler import FatalErrorRetryHandler
 from ..my_retry_handler import MyRetryHandler
@@ -14,10 +14,10 @@ from ..my_retry_handler import MyRetryHandler
 
 class TestAsyncWebClient_HttpRetries(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_remote_disconnected(self):

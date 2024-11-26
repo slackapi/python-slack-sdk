@@ -1,7 +1,9 @@
 import asyncio
 import os
+from queue import Queue
 import sys
 from types import ModuleType
+from typing import Optional, Union
 
 
 def async_test(coro):
@@ -47,17 +49,19 @@ def is_ci_unstable_test_skip_enabled() -> bool:
     return os.environ.get("CI_UNSTABLE_TESTS_SKIP_ENABLED") == "1"
 
 
-def reload_module(root_module: ModuleType):
-    package_name = root_module.__name__
-    loaded_package_modules = {
-        key: value for key, value in sys.modules.items() if key.startswith(package_name) and isinstance(value, ModuleType)
-    }
+class ReceivedRequests:
+    def __init__(self, queue: Union[Queue, asyncio.Queue]):
+        self.queue = queue
+        self.received_requests: dict = {}
 
-    for key in loaded_package_modules:
-        del sys.modules[key]
+    def get(self, key: str, default: Optional[int] = None) -> Optional[int]:
+        while not self.queue.empty():
+            path = self.queue.get()
+            self.received_requests[path] = self.received_requests.get(path, 0) + 1
+        return self.received_requests.get(key, default)
 
-    for key in loaded_package_modules:
-        new_module = __import__(key)
-        old_module = loaded_package_modules[key]
-        old_module.__dict__.clear()
-        old_module.__dict__.update(new_module.__dict__)
+    async def get_async(self, key: str, default: Optional[int] = None) -> Optional[int]:
+        while not self.queue.empty():
+            path = await self.queue.get()
+            self.received_requests[path] = self.received_requests.get(path, 0) + 1
+        return self.received_requests.get(key, default)

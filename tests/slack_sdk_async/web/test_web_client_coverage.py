@@ -8,8 +8,8 @@ from slack_sdk.web import WebClient
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.web.legacy_client import LegacyWebClient
 from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
+    setup_mock_web_api_server_async,
+    cleanup_mock_web_api_server_async,
 )
 from tests.slack_sdk_async.helpers import async_test
 
@@ -25,7 +25,7 @@ class TestWebClientCoverage(unittest.TestCase):
     os.environ.setdefault("SLACKCLIENT_SKIP_DEPRECATION", "1")
 
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self)
         self.client = WebClient(token="xoxb-coverage", base_url="http://localhost:8888")
         self.legacy_client = LegacyWebClient(token="xoxb-coverage", base_url="http://localhost:8888")
         self.async_client = AsyncWebClient(token="xoxb-coverage", base_url="http://localhost:8888")
@@ -74,7 +74,7 @@ class TestWebClientCoverage(unittest.TestCase):
             self.api_methods_to_call.append(api_method)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     async def run_method(self, method_name, method, async_method):
         # Run the api calls with required arguments
