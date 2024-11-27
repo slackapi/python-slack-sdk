@@ -5,15 +5,13 @@ import slack_sdk.errors as err
 from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server_async,
-    cleanup_mock_web_api_server_async,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestAsyncWebClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server_async(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.client = AsyncWebClient(
             token="xoxp-1234",
             base_url="http://localhost:8888",

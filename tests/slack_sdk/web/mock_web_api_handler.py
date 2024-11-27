@@ -1,20 +1,15 @@
 import asyncio
 import json
 import logging
+from queue import Queue
 import re
-import sys
 import threading
 import time
 from http import HTTPStatus
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-from multiprocessing.context import Process
-from queue import Queue
 from typing import Type, Union
 from unittest import TestCase
-from urllib.parse import parse_qs, urlparse
-from urllib.request import Request, urlopen
-
-from tests.helpers import ReceivedRequests, get_mock_server_mode
+from urllib.parse import urlparse, parse_qs
 
 
 class MockHandler(SimpleHTTPRequestHandler):
@@ -81,12 +76,6 @@ class MockHandler(SimpleHTTPRequestHandler):
         try:
             # put_nowait is common between Queue & asyncio.Queue, it does not need to be awaited
             self.server.queue.put_nowait(self.path)
-            if self.path == "/received_requests.json":
-                self.send_response(200)
-                self.set_common_headers()
-                self.wfile.write(json.dumps(self.received_requests).encode("utf-8"))
-                return
-
             if self.path in {"/oauth.access", "/oauth.v2.access"}:
                 self.send_response(200)
                 self.set_common_headers()
@@ -270,51 +259,6 @@ class MockHandler(SimpleHTTPRequestHandler):
         self._handle()
 
 
-class MockServerProcessTarget:
-    def __init__(self, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
-        self.handler = handler
-
-    def run(self):
-        self.handler.received_requests = {}
-        self.handler.state = {"ratelimited_count": 0}
-        self.server = HTTPServer(("localhost", 8888), self.handler)
-        try:
-            self.server.serve_forever(0.05)
-        finally:
-            self.server.server_close()
-
-    def stop(self):
-        self.handler.received_requests = {}
-        self.handler.state = {"ratelimited_count": 0}
-        self.server.shutdown()
-        self.join()
-
-
-class MonitorThread(threading.Thread):
-    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
-        threading.Thread.__init__(self, daemon=True)
-        self.handler = handler
-        self.test = test
-        self.test.mock_received_requests = None
-        self.is_running = True
-
-    def run(self) -> None:
-        while self.is_running:
-            try:
-                req = Request(f"{self.test.server_url}/received_requests.json")
-                resp = urlopen(req, timeout=1)
-                self.test.mock_received_requests = json.loads(resp.read().decode("utf-8"))
-            except Exception as e:
-                # skip logging for the initial request
-                if self.test.mock_received_requests is not None:
-                    logging.getLogger(__name__).exception(e)
-            time.sleep(0.01)
-
-    def stop(self):
-        self.is_running = False
-        self.join()
-
-
 class MockServerThread(threading.Thread):
     def __init__(
         self, queue: Union[Queue, asyncio.Queue], test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler
@@ -347,122 +291,3 @@ class MockServerThread(threading.Thread):
         del self.server.queue
         self.server.shutdown()
         self.join()
-
-
-def setup_mock_web_api_server(test: TestCase):
-    if get_mock_server_mode() == "threading":
-        test.server_started = threading.Event()
-        test.received_requests = ReceivedRequests(Queue())
-        test.thread = MockServerThread(test.received_requests.queue, test)
-        test.thread.start()
-        test.server_started.wait()
-    else:
-        # start a mock server as another process
-        target = MockServerProcessTarget()
-        test.server_url = "http://localhost:8888"
-        test.host, test.port = "localhost", 8888
-        test.process = Process(target=target.run, daemon=True)
-        test.process.start()
-
-        time.sleep(0.1)
-
-        # start a thread in the current process
-        # this thread fetches mock_received_requests from the remote process
-        test.monitor_thread = MonitorThread(test)
-        test.monitor_thread.start()
-        count = 0
-        # wait until the first successful data retrieval
-        while test.mock_received_requests is None:
-            time.sleep(0.01)
-            count += 1
-            if count >= 100:
-                raise Exception("The mock server is not yet running!")
-
-
-def cleanup_mock_web_api_server(test: TestCase):
-    if get_mock_server_mode() == "threading":
-        test.thread.stop()
-        test.thread = None
-    else:
-        # stop the thread to fetch mock_received_requests from the remote process
-        test.monitor_thread.stop()
-
-        retry_count = 0
-        # terminate the process
-        while test.process.is_alive():
-            test.process.terminate()
-            time.sleep(0.01)
-            retry_count += 1
-            if retry_count >= 100:
-                raise Exception("Failed to stop the mock server!")
-
-        # Python 3.6 does not have this method
-        if sys.version_info.major == 3 and sys.version_info.minor > 6:
-            # cleanup the process's resources
-            test.process.close()
-
-        test.process = None
-
-
-def assert_received_request_count(test: TestCase, path: str, min_count: int, timeout: float = 1):
-    start_time = time.time()
-    error = None
-    while time.time() - start_time < timeout:
-        try:
-            received_count = test.received_requests.get(path, 0)
-            assert (
-                received_count == min_count
-            ), f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
-            return
-        except Exception as e:
-            error = e
-            # waiting for some requests to be received
-            time.sleep(0.05)
-
-    if error is not None:
-        raise error
-
-
-def assert_auth_test_count(test: TestCase, expected_count: int):
-    assert_received_request_count(test, "/auth.test", expected_count, 0.5)
-
-
-#########
-# async #
-#########
-
-
-def setup_mock_web_api_server_async(test: TestCase):
-    test.server_started = threading.Event()
-    test.received_requests = ReceivedRequests(asyncio.Queue())
-    test.thread = MockServerThread(test.received_requests.queue, test)
-    test.thread.start()
-    test.server_started.wait()
-
-
-def cleanup_mock_web_api_server_async(test: TestCase):
-    test.thread.stop_unsafe()
-    test.thread = None
-
-
-async def assert_received_request_count_async(test: TestCase, path: str, min_count: int, timeout: float = 1):
-    start_time = time.time()
-    error = None
-    while time.time() - start_time < timeout:
-        try:
-            received_count = await test.received_requests.get_async(path, 0)
-            assert (
-                received_count == min_count
-            ), f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
-            return
-        except Exception as e:
-            error = e
-            # waiting for mock_received_requests updates
-            await asyncio.sleep(0.05)
-
-    if error is not None:
-        raise error
-
-
-async def assert_auth_test_count_async(test: TestCase, expected_count: int):
-    await assert_received_request_count_async(test, "/auth.test", expected_count, 0.5)

@@ -5,15 +5,13 @@ from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.token_rotation.async_rotator import AsyncTokenRotator
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.helpers import async_test
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server_async,
-    cleanup_mock_web_api_server_async,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestTokenRotator(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server_async(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.token_rotator = AsyncTokenRotator(
             client=AsyncWebClient(base_url="http://localhost:8888", token=None),
             client_id="111.222",
