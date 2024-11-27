@@ -1,18 +1,18 @@
 import unittest
 
-
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.slack_sdk_async.helpers import async_test
-from tests.slack_sdk.web.mock_web_api_server import (
-    assert_received_request_count_async,
-    cleanup_mock_web_api_server_async,
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import (
     setup_mock_web_api_server_async,
+    cleanup_mock_web_api_server_async,
+    assert_received_request_count_async,
 )
 
 
 class TestAsyncWebClientUrlFormat(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server_async(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.client = AsyncWebClient(token="xoxb-api_test", base_url="http://localhost:8888")
         self.client_base_url_slash = AsyncWebClient(token="xoxb-api_test", base_url="http://localhost:8888/")
 

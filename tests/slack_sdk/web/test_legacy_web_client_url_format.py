@@ -1,16 +1,13 @@
 from unittest import TestCase
 
 from slack_sdk.web.legacy_client import LegacyWebClient
-from tests.slack_sdk.web.mock_web_api_server import (
-    assert_received_request_count,
-    cleanup_mock_web_api_server,
-    setup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server, assert_received_request_count
 
 
 class TestLegacyWebClientUrlFormat(TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
         self.client = LegacyWebClient(token="xoxb-api_test", base_url="http://localhost:8888")
         self.client_base_url_slash = LegacyWebClient(token="xoxb-api_test", base_url="http://localhost:8888/")
 
