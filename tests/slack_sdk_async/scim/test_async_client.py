@@ -6,18 +6,16 @@ from slack_sdk.scim.v1.async_client import AsyncSCIMClient
 from slack_sdk.scim.v1.group import GroupMember
 from slack_sdk.scim.v1.user import UserName, UserEmail
 from tests.helpers import async_test
-from tests.slack_sdk.scim.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.scim.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestSCIMClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_users(self):

@@ -3,18 +3,16 @@ from logging import Logger
 
 from slack_sdk.web.async_client import AsyncWebClient
 from tests.helpers import async_test
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestWebClient_Issue_921_CustomLogger(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_if_it_uses_custom_logger(self):
