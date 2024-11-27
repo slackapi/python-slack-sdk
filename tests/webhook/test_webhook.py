@@ -5,15 +5,13 @@ import urllib
 from slack.web.classes.attachments import Attachment, AttachmentField
 from slack.web.classes.blocks import SectionBlock, ImageBlock
 from slack.webhook import WebhookClient, WebhookResponse
-from tests.webhook.mock_web_api_server import (
-    cleanup_mock_web_api_server,
-    setup_mock_web_api_server,
-)
+from tests.webhook.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestWebhook(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)

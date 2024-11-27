@@ -24,7 +24,6 @@ jobs:
           - '3.6'
           - 'pypy3.10'
     env:
-      PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
       CI_UNSTABLE_TESTS_SKIP_ENABLED: '1'
       FORCE_COLOR: '1'
@@ -59,3 +58,4 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         # python setup.py validate generates the coverage file
         files: ./coverage.xml
+

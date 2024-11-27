@@ -20,10 +20,8 @@ from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     socket_mode_envelopes,
     socket_mode_hello_message,
 )
-from tests.slack_sdk.socket_mode.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.socket_mode.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 from tests.slack_sdk_async.helpers import async_test
 
 
@@ -31,14 +29,14 @@ class TestInteractionsWebsockets(unittest.TestCase):
     logger = logging.getLogger(__name__)
 
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.web_client = AsyncWebClient(
             token="xoxb-api_test",
             base_url="http://localhost:8888",
         )
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_interactions(self):

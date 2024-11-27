@@ -2,16 +2,14 @@ import unittest
 
 from slack_sdk.http_retry import RateLimitErrorRetryHandler
 from slack_sdk.scim import SCIMClient
-from tests.slack_sdk.scim.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.scim.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 from ..my_retry_handler import MyRetryHandler
 
 
 class TestSCIMClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
