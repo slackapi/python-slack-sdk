@@ -10,6 +10,8 @@ class TestWebClientUrlFormat(TestCase):
         setup_mock_web_api_server(self, MockHandler)
         self.client = WebClient(token="xoxb-api_test", base_url="http://localhost:8888")
         self.client_base_url_slash = WebClient(token="xoxb-api_test", base_url="http://localhost:8888/")
+        self.client_api = WebClient(token="xoxb-api_test", base_url="http://localhost:8888/api")
+        self.client_api_slash = WebClient(token="xoxb-api_test", base_url="http://localhost:8888/api/")
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
@@ -33,3 +35,19 @@ class TestWebClientUrlFormat(TestCase):
     def test_base_url_without_slash_api_method_with_slash_and_trailing_slash(self):
         self.client.api_call("/chat.postMessage/")
         assert_received_request_count(self, "/chat.postMessage/", 1)
+
+    def test_base_url_with_api(self):
+        self.client_api.api_call("chat.postMessage")
+        assert_received_request_count(self, "/api/chat.postMessage", 1)
+
+    def test_base_url_with_api_method_with_slash(self):
+        self.client_api.api_call("/chat.postMessage")
+        assert_received_request_count(self, "/api/chat.postMessage", 1)
+
+    def test_base_url_with_api_slash(self):
+        self.client_api_slash.api_call("chat.postMessage")
+        assert_received_request_count(self, "/api/chat.postMessage", 1)
+
+    def test_base_url_with_api_slash_and_method_with_slash(self):
+        self.client_api_slash.api_call("/chat.postMessage")
+        assert_received_request_count(self, "/api/chat.postMessage", 1)
