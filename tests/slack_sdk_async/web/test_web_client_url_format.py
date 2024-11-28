@@ -49,7 +49,7 @@ class TestAsyncWebClientUrlFormat(unittest.TestCase):
     @async_test
     async def test_base_url_with_api(self):
         await self.client_api.api_call("chat.postMessage")
-        assert_received_request_count_async(self, "/api/chat.postMessage", 1)
+        await assert_received_request_count_async(self, "/api/chat.postMessage", 1)
 
     @async_test
     async def test_base_url_with_api_method_without_slash_method_with_slash(self):
