@@ -53,7 +53,7 @@ jobs:
         python setup.py unit_tests --test-target tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
     - name: Run codecov (only 3.9)
       if: startsWith(matrix.python-version, '3.9')
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         # python setup.py validate generates the coverage file
