@@ -5,18 +5,16 @@ from slack_sdk.models.attachments import Attachment, AttachmentField
 from slack_sdk.models.blocks import SectionBlock, ImageBlock
 from slack_sdk.webhook.async_client import AsyncWebhookClient, WebhookResponse
 from tests.slack_sdk_async.helpers import async_test
-from tests.slack_sdk.webhook.mock_web_api_server import (
-    cleanup_mock_web_api_server,
-    setup_mock_web_api_server,
-)
+from tests.slack_sdk.webhook.mock_web_api_server import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestAsyncWebhook(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_send(self):

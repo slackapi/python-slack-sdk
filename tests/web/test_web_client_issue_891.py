@@ -1,15 +1,13 @@
 import unittest
 
 from slack import WebClient
-from tests.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestWebClient_Issue_891(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)

@@ -18,17 +18,15 @@ from slack_sdk.socket_mode.builtin.internals import (
     _use_or_create_ssl_context,
 )
 from slack_sdk.web.legacy_client import LegacyWebClient
-from .mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from .mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestBuiltin(unittest.TestCase):
     logger = logging.getLogger(__name__)
 
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
         self.web_client = WebClient(
             token="xoxb-api_test",
             base_url="http://localhost:8888",

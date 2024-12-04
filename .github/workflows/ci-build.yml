@@ -24,7 +24,6 @@ jobs:
           - '3.6'
           - 'pypy3.10'
     env:
-      PYTHON_SLACK_SDK_MOCK_SERVER_MODE: 'threading'
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
       CI_UNSTABLE_TESTS_SKIP_ENABLED: '1'
       FORCE_COLOR: '1'
@@ -54,8 +53,9 @@ jobs:
         python setup.py unit_tests --test-target tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
     - name: Run codecov (only 3.9)
       if: startsWith(matrix.python-version, '3.9')
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         # python setup.py validate generates the coverage file
         files: ./coverage.xml
+
