@@ -8,6 +8,7 @@
 import asyncio
 import logging
 import time
+from asyncio import AbstractEventLoop
 from asyncio import Future, Lock
 from asyncio import Queue
 from logging import Logger
@@ -79,6 +80,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         on_message_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         on_error_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         on_close_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
+        loop: Optional[AbstractEventLoop] = None,
     ):
         """Socket Mode client
 
@@ -124,7 +126,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # over the lifetime of your application,
         # it is suggested you use a single session for the lifetime of your application
         # to benefit from connection pooling.
-        self.aiohttp_client_session = aiohttp.ClientSession()
+        self.aiohttp_client_session = aiohttp.ClientSession(loop=loop)
 
         self.on_message_listeners = on_message_listeners or []
         self.on_error_listeners = on_error_listeners or []
