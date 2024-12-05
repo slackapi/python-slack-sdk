@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>slack_sdk.models.blocks.blocks API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
@@ -37,7 +37,7 @@ hljs.highlightAll();
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.ActionsBlock"><code class="flex name class">
 <span>class <span class="ident">ActionsBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -146,7 +146,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block"><code class="flex name class">
 <span>class <span class="ident">Block</span></span>
-<span>(</span><span>*, type: Optional[str] = None, subtype: Optional[str] = None, block_id: Optional[str] = None)</span>
+<span>(</span><span>*,<br>type: str | None = None,<br>subtype: str | None = None,<br>block_id: str | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -268,13 +268,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')]) ‑> Optional[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Optional[Sequence[Union[dict, ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')]]]) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -282,7 +282,7 @@ to create visually rich and compellingly interactive messages.
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.blocks.Block.subtype"><code class="name">prop <span class="ident">subtype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.models.blocks.blocks.Block.subtype"><code class="name">prop <span class="ident">subtype</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -309,7 +309,7 @@ def subtype(self) -&gt; Optional[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.CallBlock"><code class="flex name class">
 <span>class <span class="ident">CallBlock</span></span>
-<span>(</span><span>*, call_id: str, api_decoration_available: Optional[bool] = None, call: Optional[Dict[str, Dict[str, Any]]] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>call_id: str,<br>api_decoration_available: bool | None = None,<br>call: Dict[str, Dict[str, Any]] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -390,7 +390,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.ContextBlock"><code class="flex name class">
 <span>class <span class="ident">ContextBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a>, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -493,7 +493,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.DividerBlock"><code class="flex name class">
 <span>class <span class="ident">DividerBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*, block_id: str | None = None, **others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -567,7 +567,7 @@ If a message is updated, use a new block_id.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.FileBlock"><code class="flex name class">
 <span>class <span class="ident">FileBlock</span></span>
-<span>(</span><span>*, external_id: str, source: str = 'remote', block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>external_id: str,<br>source: str = 'remote',<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -666,7 +666,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.HeaderBlock"><code class="flex name class">
 <span>class <span class="ident">HeaderBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -775,7 +775,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.ImageBlock"><code class="flex name class">
 <span>class <span class="ident">ImageBlock</span></span>
-<span>(</span><span>*, alt_text: str, image_url: Optional[str] = None, slack_file: Union[Dict[str, Any], <a title="slack_sdk.models.blocks.basic_components.SlackFile" href="basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a>, ForwardRef(None)] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>alt_text: str,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.SlackFile" href="basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a> | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -933,7 +933,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.InputBlock"><code class="flex name class">
 <span>class <span class="ident">InputBlock</span></span>
-<span>(</span><span>*, label: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>], element: Union[str, dict, <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>], block_id: Optional[str] = None, hint: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, dispatch_action: Optional[bool] = None, optional: Optional[bool] = None, **others: dict)</span>
+<span>(</span><span>*,<br>label: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>,<br>element: str | dict | <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>,<br>block_id: str | None = None,<br>hint: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>dispatch_action: bool | None = None,<br>optional: bool | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1088,7 +1088,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.RichTextBlock"><code class="flex name class">
 <span>class <span class="ident">RichTextBlock</span></span>
-<span>(</span><span>*, elements: Sequence[Union[dict, <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>]], block_id: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1184,7 +1184,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.SectionBlock"><code class="flex name class">
 <span>class <span class="ident">SectionBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, text: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>, ForwardRef(None)] = None, fields: Optional[Sequence[Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]]] = None, accessory: Union[dict, <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>, ForwardRef(None)] = None, **others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>fields: Sequence[str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] | None = None,<br>accessory: dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1339,7 +1339,7 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.VideoBlock"><code class="flex name class">
 <span>class <span class="ident">VideoBlock</span></span>
-<span>(</span><span>*, block_id: Optional[str] = None, alt_text: Optional[str] = None, video_url: Optional[str] = None, thumbnail_url: Optional[str] = None, title: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, title_url: Optional[str] = None, description: Union[str, dict, <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>, ForwardRef(None)] = None, provider_icon_url: Optional[str] = None, provider_name: Optional[str] = None, author_name: Optional[str] = None, **others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>alt_text: str | None = None,<br>video_url: str | None = None,<br>thumbnail_url: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>title_url: str | None = None,<br>description: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>provider_icon_url: str | None = None,<br>provider_name: str | None = None,<br>author_name: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Blocks are a series of components that can be combined
@@ -1658,7 +1658,7 @@ def attributes(self) -&gt; Set[str]:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>
