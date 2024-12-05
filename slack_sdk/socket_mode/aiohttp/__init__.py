@@ -95,6 +95,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             on_message_listeners: listener functions for on_message
             on_error_listeners: listener functions for on_error
             on_close_listeners: listener functions for on_close
+            loop: an existing asyncio event loop
         """
         self.app_token = app_token
         self.logger = logger or logging.getLogger(__name__)

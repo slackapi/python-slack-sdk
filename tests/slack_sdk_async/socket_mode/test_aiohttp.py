@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 
 from slack_sdk.socket_mode.aiohttp import SocketModeClient
@@ -24,6 +25,19 @@ class TestAiohttp(unittest.TestCase):
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
             auto_reconnect_enabled=False,
+        )
+        try:
+            self.assertIsNotNone(client)
+        finally:
+            await client.close()
+
+    @async_test
+    async def test_init_with_loop(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            loop=asyncio.new_event_loop(),
         )
         try:
             self.assertIsNotNone(client)
