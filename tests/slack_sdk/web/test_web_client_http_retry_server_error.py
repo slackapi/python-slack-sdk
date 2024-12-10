@@ -5,10 +5,8 @@ from slack_sdk.http_retry import RetryHandler, RetryIntervalCalculator
 from slack_sdk.http_retry.builtin_handlers import ServerErrorRetryHandler
 from slack_sdk.http_retry.handler import default_interval_calculator
 from slack_sdk.web import WebClient
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class MyServerErrorRetryHandler(RetryHandler):
@@ -36,7 +34,7 @@ class MyServerErrorRetryHandler(RetryHandler):
 
 class TestWebClient_HttpRetry_ServerError(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)

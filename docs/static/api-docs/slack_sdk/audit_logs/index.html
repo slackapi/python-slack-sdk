@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>slack_sdk.audit_logs API documentation</title>
 <meta name="description" content="Audit Logs API is a set of APIs for monitoring what’s happening in your Enterprise Grid organization …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
@@ -50,7 +50,7 @@ hljs.highlightAll();
 <dl>
 <dt id="slack_sdk.audit_logs.AuditLogsClient"><code class="flex name class">
 <span>class <span class="ident">AuditLogsClient</span></span>
-<span>(</span><span>token: str, timeout: int = 30, ssl: Optional[ssl.SSLContext] = None, proxy: Optional[str] = None, base_url: str = 'https://api.slack.com/audit/v1/', default_headers: Optional[Dict[str, str]] = None, user_agent_prefix: Optional[str] = None, user_agent_suffix: Optional[str] = None, logger: Optional[logging.Logger] = None, retry_handlers: Optional[List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]] = None)</span>
+<span>(</span><span>token: str,<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>base_url: str = 'https://api.slack.com/audit/v1/',<br>default_headers: Dict[str, str] | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>API client for Audit Logs API
@@ -434,7 +434,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.AuditLogsClient.proxy"><code class="name">var <span class="ident">proxy</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.AuditLogsClient.proxy"><code class="name">var <span class="ident">proxy</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -442,7 +442,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.AuditLogsClient.ssl"><code class="name">var <span class="ident">ssl</span> : Optional[ssl.SSLContext]</code></dt>
+<dt id="slack_sdk.audit_logs.AuditLogsClient.ssl"><code class="name">var <span class="ident">ssl</span> : ssl.SSLContext | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -458,7 +458,7 @@ See <a href="https://api.slack.com/admins/audit-logs">https://api.slack.com/admi
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.actions"><code class="name flex">
-<span>def <span class="ident">actions</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">actions</span></span>(<span>self,<br>*,<br>query_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of actions that the Audit Logs API
@@ -475,13 +475,13 @@ Authentication not required.</p>
 <p>API response</p></div>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.api_call"><code class="name flex">
-<span>def <span class="ident">api_call</span></span>(<span>self, *, http_verb: str = 'GET', path: str, query_params: Optional[Dict[str, Any]] = None, body_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">api_call</span></span>(<span>self,<br>*,<br>http_verb: str = 'GET',<br>path: str,<br>query_params: Dict[str, Any] | None = None,<br>body_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p></div>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.logs"><code class="name flex">
-<span>def <span class="ident">logs</span></span>(<span>self, *, latest: Optional[int] = None, oldest: Optional[int] = None, limit: Optional[int] = None, action: Optional[str] = None, actor: Optional[str] = None, entity: Optional[str] = None, cursor: Optional[str] = None, additional_query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">logs</span></span>(<span>self,<br>*,<br>latest: int | None = None,<br>oldest: int | None = None,<br>limit: int | None = None,<br>action: str | None = None,<br>actor: str | None = None,<br>entity: str | None = None,<br>cursor: str | None = None,<br>additional_query_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.
@@ -517,7 +517,7 @@ Data is not available prior to March 2018.</dd>
 <p>API response</p></div>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.schemas"><code class="name flex">
-<span>def <span class="ident">schemas</span></span>(<span>self, *, query_params: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
+<span>def <span class="ident">schemas</span></span>(<span>self,<br>*,<br>query_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns information about the kind of objects which the Audit Logs API
@@ -537,7 +537,7 @@ Authentication not required.</p>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsResponse"><code class="flex name class">
 <span>class <span class="ident">AuditLogsResponse</span></span>
-<span>(</span><span>*, url: str, status_code: int, raw_body: Optional[str], headers: dict)</span>
+<span>(</span><span>*, url: str, status_code: int, raw_body: str | None, headers: dict)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -575,7 +575,7 @@ Authentication not required.</p>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.AuditLogsResponse.body"><code class="name">var <span class="ident">body</span> : Optional[Dict[str, Any]]</code></dt>
+<dt id="slack_sdk.audit_logs.AuditLogsResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -583,7 +583,7 @@ Authentication not required.</p>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.AuditLogsResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.AuditLogsResponse.raw_body"><code class="name">var <span class="ident">raw_body</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -598,7 +598,7 @@ Authentication not required.</p>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.AuditLogsResponse.typed_body"><code class="name">prop <span class="ident">typed_body</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="v1/logs.html#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.AuditLogsResponse.typed_body"><code class="name">prop <span class="ident">typed_body</span> : <a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="v1/logs.html#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 <details class="source">
@@ -670,7 +670,7 @@ def typed_body(self) -&gt; Optional[LogsResponse]:  # type: ignore
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

@@ -3,23 +3,21 @@ import unittest
 
 from slack_sdk.socket_mode.aiohttp import SocketModeClient
 from slack_sdk.web.async_client import AsyncWebClient
-from tests.slack_sdk.socket_mode.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.socket_mode.mock_web_api_handler import MockHandler
 from tests.slack_sdk_async.helpers import async_test
+from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 
 
 class TestAiohttp(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server_async(self, MockHandler)
         self.web_client = AsyncWebClient(
             token="xoxb-api_test",
             base_url="http://localhost:8888",
         )
 
     def tearDown(self):
-        cleanup_mock_web_api_server(self)
+        cleanup_mock_web_api_server_async(self)
 
     @async_test
     async def test_init_close(self):
@@ -27,6 +25,19 @@ class TestAiohttp(unittest.TestCase):
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
             auto_reconnect_enabled=False,
+        )
+        try:
+            self.assertIsNotNone(client)
+        finally:
+            await client.close()
+
+    @async_test
+    async def test_init_with_loop(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            loop=asyncio.new_event_loop(),
         )
         try:
             self.assertIsNotNone(client)

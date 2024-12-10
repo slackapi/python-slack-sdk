@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>slack_sdk.audit_logs.v1.logs API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
@@ -37,7 +37,7 @@ hljs.highlightAll();
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARequest"><code class="flex name class">
 <span>class <span class="ident">AAARequest</span></span>
-<span>(</span><span>*, id: Optional[str] = None, team_id: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, id: str | None = None, team_id: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -61,11 +61,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.team_id"><code class="name">var <span class="ident">team_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -73,7 +73,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARule"><code class="flex name class">
 <span>class <span class="ident">AAARule</span></span>
-<span>(</span><span>*, id: Optional[str] = None, team_id: Optional[str] = None, title: Optional[str] = None, action: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a>, ForwardRef(None)] = None, condition: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a>, ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>team_id: str | None = None,<br>title: str | None = None,<br>action: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None = None,<br>condition: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a> | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -108,23 +108,23 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARule.action"><code class="name">var <span class="ident">action</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.action"><code class="name">var <span class="ident">action</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARule.condition"><code class="name">var <span class="ident">condition</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.condition"><code class="name">var <span class="ident">condition</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARule.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARule.team_id"><code class="name">var <span class="ident">team_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARule.title"><code class="name">var <span class="ident">title</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.title"><code class="name">var <span class="ident">title</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -132,7 +132,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction"><code class="flex name class">
 <span>class <span class="ident">AAARuleAction</span></span>
-<span>(</span><span>*, resolution: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a>, ForwardRef(None)] = None, notify: Optional[List[Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>]]] = None, **kwargs)</span>
+<span>(</span><span>*,<br>resolution: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a> | None = None,<br>notify: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -167,11 +167,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.notify"><code class="name">var <span class="ident">notify</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.notify"><code class="name">var <span class="ident">notify</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.resolution"><code class="name">var <span class="ident">resolution</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.resolution"><code class="name">var <span class="ident">resolution</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -179,7 +179,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify"><code class="flex name class">
 <span>class <span class="ident">AAARuleActionNotify</span></span>
-<span>(</span><span>*, entity_type: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, entity_type: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -200,7 +200,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type"><code class="name">var <span class="ident">entity_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -208,7 +208,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution"><code class="flex name class">
 <span>class <span class="ident">AAARuleActionResolution</span></span>
-<span>(</span><span>*, value: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, value: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -229,7 +229,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value"><code class="name">var <span class="ident">value</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value"><code class="name">var <span class="ident">value</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -237,7 +237,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition"><code class="flex name class">
 <span>class <span class="ident">AAARuleCondition</span></span>
-<span>(</span><span>*, datatype: Optional[str] = None, operator: Optional[str] = None, values: Optional[List[Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>]]] = None, entity_type: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>datatype: str | None = None,<br>operator: str | None = None,<br>values: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>] | None = None,<br>entity_type: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -274,19 +274,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype"><code class="name">var <span class="ident">datatype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.entity_type"><code class="name">var <span class="ident">entity_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.operator"><code class="name">var <span class="ident">operator</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.operator"><code class="name">var <span class="ident">operator</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.values"><code class="name">var <span class="ident">values</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.values"><code class="name">var <span class="ident">values</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -294,7 +294,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue"><code class="flex name class">
 <span>class <span class="ident">AAARuleConditionValue</span></span>
-<span>(</span><span>*, field: Optional[str] = None, values: Optional[List[str]] = None, datatype: Optional[str] = None, operator: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>field: str | None = None,<br>values: List[str] | None = None,<br>datatype: str | None = None,<br>operator: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -324,19 +324,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype"><code class="name">var <span class="ident">datatype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.field"><code class="name">var <span class="ident">field</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.field"><code class="name">var <span class="ident">field</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.operator"><code class="name">var <span class="ident">operator</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.operator"><code class="name">var <span class="ident">operator</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.values"><code class="name">var <span class="ident">values</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.values"><code class="name">var <span class="ident">values</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -344,7 +344,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole"><code class="flex name class">
 <span>class <span class="ident">AccountTypeRole</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -370,11 +370,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -386,7 +386,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Actor"><code class="flex name class">
 <span>class <span class="ident">Actor</span></span>
-<span>(</span><span>type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -411,7 +411,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Actor.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -419,7 +419,7 @@ hljs.highlightAll();
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Actor.user"><code class="name">var <span class="ident">user</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.user"><code class="name">var <span class="ident">user</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -427,7 +427,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.App"><code class="flex name class">
 <span>class <span class="ident">App</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, is_distributed: Optional[bool] = None, is_directory_approved: Optional[bool] = None, is_workflow_app: Optional[bool] = None, scopes: Optional[List[str]] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>is_distributed: bool | None = None,<br>is_directory_approved: bool | None = None,<br>is_workflow_app: bool | None = None,<br>scopes: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -465,27 +465,27 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.App.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.App.is_directory_approved"><code class="name">var <span class="ident">is_directory_approved</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_directory_approved"><code class="name">var <span class="ident">is_directory_approved</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.App.is_distributed"><code class="name">var <span class="ident">is_distributed</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_distributed"><code class="name">var <span class="ident">is_distributed</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.App.is_workflow_app"><code class="name">var <span class="ident">is_workflow_app</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_workflow_app"><code class="name">var <span class="ident">is_workflow_app</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.App.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.App.scopes"><code class="name">var <span class="ident">scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.App.scopes"><code class="name">var <span class="ident">scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -497,7 +497,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Attribute"><code class="flex name class">
 <span>class <span class="ident">Attribute</span></span>
-<span>(</span><span>*, name: Optional[str] = None, type: Optional[str] = None, items: Optional[<a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a>] = None, **kwargs)</span>
+<span>(</span><span>*,<br>name: str | None = None,<br>type: str | None = None,<br>items: <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -524,15 +524,15 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Attribute.items"><code class="name">var <span class="ident">items</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.items"><code class="name">var <span class="ident">items</span> : <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Attribute.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Attribute.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -540,7 +540,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.AttributeItems"><code class="flex name class">
 <span>class <span class="ident">AttributeItems</span></span>
-<span>(</span><span>*, type: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, type: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -561,7 +561,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.AttributeItems.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.AttributeItems.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -569,7 +569,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Channel"><code class="flex name class">
 <span>class <span class="ident">Channel</span></span>
-<span>(</span><span>*, id: Optional[str] = None, privacy: Optional[str] = None, name: Optional[str] = None, is_shared: Optional[bool] = None, is_org_shared: Optional[bool] = None, teams_shared_with: Optional[List[str]] = None, original_connected_channel_id: Optional[str] = None, is_salesforce_channel: Optional[bool] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>privacy: str | None = None,<br>name: str | None = None,<br>is_shared: bool | None = None,<br>is_org_shared: bool | None = None,<br>teams_shared_with: List[str] | None = None,<br>original_connected_channel_id: str | None = None,<br>is_salesforce_channel: bool | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -613,35 +613,35 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared"><code class="name">var <span class="ident">is_org_shared</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared"><code class="name">var <span class="ident">is_org_shared</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_salesforce_channel"><code class="name">var <span class="ident">is_salesforce_channel</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_salesforce_channel"><code class="name">var <span class="ident">is_salesforce_channel</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_shared"><code class="name">var <span class="ident">is_shared</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_shared"><code class="name">var <span class="ident">is_shared</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id"><code class="name">var <span class="ident">original_connected_channel_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id"><code class="name">var <span class="ident">original_connected_channel_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.privacy"><code class="name">var <span class="ident">privacy</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.privacy"><code class="name">var <span class="ident">privacy</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with"><code class="name">var <span class="ident">teams_shared_with</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with"><code class="name">var <span class="ident">teams_shared_with</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -653,7 +653,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Context"><code class="flex name class">
 <span>class <span class="ident">Context</span></span>
-<span>(</span><span>*, location: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, ua: Optional[str] = None, ip_address: Optional[str] = None, session_id: Optional[str] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*,<br>location: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>ua: str | None = None,<br>ip_address: str | None = None,<br>session_id: str | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -688,23 +688,23 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Context.app"><code class="name">var <span class="ident">app</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.app"><code class="name">var <span class="ident">app</span> : <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Context.ip_address"><code class="name">var <span class="ident">ip_address</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ip_address"><code class="name">var <span class="ident">ip_address</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Context.location"><code class="name">var <span class="ident">location</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.location"><code class="name">var <span class="ident">location</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Context.session_id"><code class="name">var <span class="ident">session_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.session_id"><code class="name">var <span class="ident">session_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Context.ua"><code class="name">var <span class="ident">ua</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ua"><code class="name">var <span class="ident">ua</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -716,7 +716,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.ConversationPref"><code class="flex name class">
 <span>class <span class="ident">ConversationPref</span></span>
-<span>(</span><span>*, type: Optional[List[str]] = None, user: Optional[List[str]] = None, **kwargs)</span>
+<span>(</span><span>*, type: List[str] | None = None, user: List[str] | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -741,11 +741,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.type"><code class="name">var <span class="ident">type</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.type"><code class="name">var <span class="ident">type</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.user"><code class="name">var <span class="ident">user</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.user"><code class="name">var <span class="ident">user</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -753,7 +753,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
 <span>class <span class="ident">Details</span></span>
-<span>(</span><span>*, name: Optional[str] = None, new_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, previous_value: Union[str, List[str], Dict[str, Any], ForwardRef(None)] = None, expires_on: Optional[int] = None, mobile_only: Optional[bool] = None, web_only: Optional[bool] = None, non_sso_only: Optional[bool] = None, type: Optional[str] = None, is_workflow: Optional[bool] = None, inviter: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, kicker: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, shared_to: Optional[str] = None, reason: Optional[str] = None, origin_team: Optional[str] = None, target_team: Optional[str] = None, is_internal_integration: Optional[bool] = None, cleared_resolution: Optional[str] = None, app_owner_id: Optional[str] = None, bot_scopes: Optional[List[str]] = None, new_scopes: Optional[List[str]] = None, previous_scopes: Optional[List[str]] = None, granular_bot_token: Optional[bool] = None, scopes: Optional[List[str]] = None, scopes_bot: Optional[List[str]] = None, resolution: Optional[str] = None, app_previously_resolved: Optional[bool] = None, admin_app_id: Optional[str] = None, bot_id: Optional[str] = None, installer_user_id: Optional[str] = None, approver_id: Optional[str] = None, approval_type: Optional[str] = None, app_previously_approved: Optional[bool] = None, old_scopes: Optional[List[str]] = None, channels: Optional[List[str]] = None, permissions: Optional[List[Dict[str, Any]]] = None, new_version_id: Optional[str] = None, trigger: Optional[str] = None, export_type: Optional[str] = None, export_start_ts: Optional[str] = None, export_end_ts: Optional[str] = None, barrier_id: Optional[str] = None, primary_usergroup_id: Optional[str] = None, barriered_from_usergroup_ids: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, duration: Optional[int] = None, desktop_app_browser_quit: Optional[bool] = None, invite_id: Optional[str] = None, external_organization_id: Optional[str] = None, external_organization_name: Optional[str] = None, external_user_id: Optional[str] = None, external_user_email: Optional[str] = None, channel_id: Optional[str] = None, added_team_id: Optional[str] = None, is_token_rotation_enabled_app: Optional[bool] = None, old_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, new_retention_policy: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>, ForwardRef(None)] = None, who_can_post: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, can_thread: Union[Dict[str, List[str]], <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>, ForwardRef(None)] = None, is_external_limited: Optional[bool] = None, exporting_team_id: Optional[int] = None, session_search_start: Optional[int] = None, deprecation_search_end: Optional[int] = None, is_error: Optional[bool] = None, creator: Optional[str] = None, team: Optional[str] = None, app_id: Optional[str] = None, enable_at_here: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, enable_at_channel: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, can_huddle: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>, ForwardRef(None)] = None, url_private: Optional[str] = None, shared_with: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a>, ForwardRef(None)] = None, initiated_by: Optional[str] = None, source_team: Optional[str] = None, destination_team: Optional[str] = None, succeeded_users: Union[List[str], str, ForwardRef(None)] = None, failed_users: Union[List[str], str, ForwardRef(None)] = None, enterprise: Optional[str] = None, subteam: Optional[str] = None, action: Optional[str] = None, idp_group_member_count: Optional[int] = None, workspace_member_count: Optional[int] = None, added_user_count: Optional[int] = None, added_user_error_count: Optional[int] = None, reactivated_user_count: Optional[int] = None, removed_user_count: Optional[int] = None, removed_user_error_count: Optional[int] = None, total_removal_count: Optional[int] = None, is_flagged: Optional[str] = None, target_user: Optional[str] = None, idp_config_id: Optional[str] = None, config_type: Optional[str] = None, idp_entity_id_hash: Optional[str] = None, label: Optional[str] = None, previous_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, new_profile: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>, ForwardRef(None)] = None, target_user_id: Optional[str] = None, space_file_id: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a>, ForwardRef(None)] = None, target_entity: Optional[str] = None, target_entity_id: Optional[str] = None, changed_permissions: Optional[List[str]] = None, datastore_name: Optional[str] = None, attributes: Optional[List[Union[Dict[str, str], <a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>]]] = None, channel: Optional[str] = None, entity_type: Optional[str] = None, actor: Optional[str] = None, access_level: Optional[str] = None, functions: Optional[List[str]] = None, workflows: Optional[List[str]] = None, datastores: Optional[List[str]] = None, permissions_updated: Optional[bool] = None, matched_rule: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>, ForwardRef(None)] = None, request: Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a>, ForwardRef(None)] = None, rules_checked: Optional[List[Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>]]] = None, disconnecting_team: Optional[str] = None, is_channel_canvas: Optional[bool] = None, linked_channel_id: Optional[str] = None, column_id: Optional[str] = None, row_id: Optional[str] = None, cell_date_updated: Optional[int] = None, view_id: Optional[str] = None, user: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>name: str | None = None,<br>new_value: str | List[str] | Dict[str, Any] | None = None,<br>previous_value: str | List[str] | Dict[str, Any] | None = None,<br>expires_on: int | None = None,<br>mobile_only: bool | None = None,<br>web_only: bool | None = None,<br>non_sso_only: bool | None = None,<br>type: str | None = None,<br>is_workflow: bool | None = None,<br>inviter: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>kicker: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>shared_to: str | None = None,<br>reason: str | None = None,<br>origin_team: str | None = None,<br>target_team: str | None = None,<br>is_internal_integration: bool | None = None,<br>cleared_resolution: str | None = None,<br>app_owner_id: str | None = None,<br>bot_scopes: List[str] | None = None,<br>new_scopes: List[str] | None = None,<br>previous_scopes: List[str] | None = None,<br>granular_bot_token: bool | None = None,<br>scopes: List[str] | None = None,<br>scopes_bot: List[str] | None = None,<br>resolution: str | None = None,<br>app_previously_resolved: bool | None = None,<br>admin_app_id: str | None = None,<br>bot_id: str | None = None,<br>installer_user_id: str | None = None,<br>approver_id: str | None = None,<br>approval_type: str | None = None,<br>app_previously_approved: bool | None = None,<br>old_scopes: List[str] | None = None,<br>channels: List[str] | None = None,<br>permissions: List[Dict[str, Any]] | None = None,<br>new_version_id: str | None = None,<br>trigger: str | None = None,<br>export_type: str | None = None,<br>export_start_ts: str | None = None,<br>export_end_ts: str | None = None,<br>barrier_id: str | None = None,<br>primary_usergroup_id: str | None = None,<br>barriered_from_usergroup_ids: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>duration: int | None = None,<br>desktop_app_browser_quit: bool | None = None,<br>invite_id: str | None = None,<br>external_organization_id: str | None = None,<br>external_organization_name: str | None = None,<br>external_user_id: str | None = None,<br>external_user_email: str | None = None,<br>channel_id: str | None = None,<br>added_team_id: str | None = None,<br>is_token_rotation_enabled_app: bool | None = None,<br>old_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>new_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>who_can_post: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>can_thread: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>is_external_limited: bool | None = None,<br>exporting_team_id: int | None = None,<br>session_search_start: int | None = None,<br>deprecation_search_end: int | None = None,<br>is_error: bool | None = None,<br>creator: str | None = None,<br>team: str | None = None,<br>app_id: str | None = None,<br>enable_at_here: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>enable_at_channel: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>can_huddle: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>url_private: str | None = None,<br>shared_with: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a> | None = None,<br>initiated_by: str | None = None,<br>source_team: str | None = None,<br>destination_team: str | None = None,<br>succeeded_users: List[str] | str | None = None,<br>failed_users: List[str] | str | None = None,<br>enterprise: str | None = None,<br>subteam: str | None = None,<br>action: str | None = None,<br>idp_group_member_count: int | None = None,<br>workspace_member_count: int | None = None,<br>added_user_count: int | None = None,<br>added_user_error_count: int | None = None,<br>reactivated_user_count: int | None = None,<br>removed_user_count: int | None = None,<br>removed_user_error_count: int | None = None,<br>total_removal_count: int | None = None,<br>is_flagged: str | None = None,<br>target_user: str | None = None,<br>idp_config_id: str | None = None,<br>config_type: str | None = None,<br>idp_entity_id_hash: str | None = None,<br>label: str | None = None,<br>previous_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>new_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>target_user_id: str | None = None,<br>space_file_id: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a> | None = None,<br>target_entity: str | None = None,<br>target_entity_id: str | None = None,<br>changed_permissions: List[str] | None = None,<br>datastore_name: str | None = None,<br>attributes: List[Dict[str, str] | <a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>] | None = None,<br>channel: str | None = None,<br>entity_type: str | None = None,<br>actor: str | None = None,<br>access_level: str | None = None,<br>functions: List[str] | None = None,<br>workflows: List[str] | None = None,<br>datastores: List[str] | None = None,<br>permissions_updated: bool | None = None,<br>matched_rule: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a> | None = None,<br>request: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a> | None = None,<br>rules_checked: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>] | None = None,<br>disconnecting_team: str | None = None,<br>is_channel_canvas: bool | None = None,<br>linked_channel_id: str | None = None,<br>column_id: str | None = None,<br>row_id: str | None = None,<br>cell_date_updated: int | None = None,<br>view_id: str | None = None,<br>user: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1192,459 +1192,459 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.access_level"><code class="name">var <span class="ident">access_level</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.action"><code class="name">var <span class="ident">action</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.action"><code class="name">var <span class="ident">action</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.actor"><code class="name">var <span class="ident">actor</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.actor"><code class="name">var <span class="ident">actor</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.added_team_id"><code class="name">var <span class="ident">added_team_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_team_id"><code class="name">var <span class="ident">added_team_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_count"><code class="name">var <span class="ident">added_user_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_count"><code class="name">var <span class="ident">added_user_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_error_count"><code class="name">var <span class="ident">added_user_error_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_error_count"><code class="name">var <span class="ident">added_user_error_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.admin_app_id"><code class="name">var <span class="ident">admin_app_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.admin_app_id"><code class="name">var <span class="ident">admin_app_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.app_id"><code class="name">var <span class="ident">app_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.app_owner_id"><code class="name">var <span class="ident">app_owner_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_owner_id"><code class="name">var <span class="ident">app_owner_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_approved"><code class="name">var <span class="ident">app_previously_approved</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_approved"><code class="name">var <span class="ident">app_previously_approved</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved"><code class="name">var <span class="ident">app_previously_resolved</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved"><code class="name">var <span class="ident">app_previously_resolved</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.approval_type"><code class="name">var <span class="ident">approval_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.approval_type"><code class="name">var <span class="ident">approval_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.approver_id"><code class="name">var <span class="ident">approver_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.approver_id"><code class="name">var <span class="ident">approver_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.attributes"><code class="name">var <span class="ident">attributes</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.attributes"><code class="name">var <span class="ident">attributes</span> : List[<a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.barrier_id"><code class="name">var <span class="ident">barrier_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.barrier_id"><code class="name">var <span class="ident">barrier_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids"><code class="name">var <span class="ident">barriered_from_usergroup_ids</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids"><code class="name">var <span class="ident">barriered_from_usergroup_ids</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_id"><code class="name">var <span class="ident">bot_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_id"><code class="name">var <span class="ident">bot_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.can_huddle"><code class="name">var <span class="ident">can_huddle</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.can_huddle"><code class="name">var <span class="ident">can_huddle</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.can_thread"><code class="name">var <span class="ident">can_thread</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.can_thread"><code class="name">var <span class="ident">can_thread</span> : <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.cell_date_updated"><code class="name">var <span class="ident">cell_date_updated</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.cell_date_updated"><code class="name">var <span class="ident">cell_date_updated</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.changed_permissions"><code class="name">var <span class="ident">changed_permissions</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.changed_permissions"><code class="name">var <span class="ident">changed_permissions</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.channel"><code class="name">var <span class="ident">channel</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channel"><code class="name">var <span class="ident">channel</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.channel_id"><code class="name">var <span class="ident">channel_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channel_id"><code class="name">var <span class="ident">channel_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.channels"><code class="name">var <span class="ident">channels</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channels"><code class="name">var <span class="ident">channels</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution"><code class="name">var <span class="ident">cleared_resolution</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution"><code class="name">var <span class="ident">cleared_resolution</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.column_id"><code class="name">var <span class="ident">column_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.column_id"><code class="name">var <span class="ident">column_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.config_type"><code class="name">var <span class="ident">config_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.config_type"><code class="name">var <span class="ident">config_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.creator"><code class="name">var <span class="ident">creator</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.creator"><code class="name">var <span class="ident">creator</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.datastore_name"><code class="name">var <span class="ident">datastore_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.datastore_name"><code class="name">var <span class="ident">datastore_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.datastores"><code class="name">var <span class="ident">datastores</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.datastores"><code class="name">var <span class="ident">datastores</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end"><code class="name">var <span class="ident">deprecation_search_end</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end"><code class="name">var <span class="ident">deprecation_search_end</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit"><code class="name">var <span class="ident">desktop_app_browser_quit</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit"><code class="name">var <span class="ident">desktop_app_browser_quit</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.destination_team"><code class="name">var <span class="ident">destination_team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.destination_team"><code class="name">var <span class="ident">destination_team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.disconnecting_team"><code class="name">var <span class="ident">disconnecting_team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.disconnecting_team"><code class="name">var <span class="ident">disconnecting_team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.duration"><code class="name">var <span class="ident">duration</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.duration"><code class="name">var <span class="ident">duration</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel"><code class="name">var <span class="ident">enable_at_channel</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel"><code class="name">var <span class="ident">enable_at_channel</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_here"><code class="name">var <span class="ident">enable_at_here</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_here"><code class="name">var <span class="ident">enable_at_here</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.enterprise"><code class="name">var <span class="ident">enterprise</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enterprise"><code class="name">var <span class="ident">enterprise</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.entity_type"><code class="name">var <span class="ident">entity_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.expires_on"><code class="name">var <span class="ident">expires_on</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.expires_on"><code class="name">var <span class="ident">expires_on</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.export_end_ts"><code class="name">var <span class="ident">export_end_ts</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_end_ts"><code class="name">var <span class="ident">export_end_ts</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.export_start_ts"><code class="name">var <span class="ident">export_start_ts</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_start_ts"><code class="name">var <span class="ident">export_start_ts</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.export_type"><code class="name">var <span class="ident">export_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_type"><code class="name">var <span class="ident">export_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.exporting_team_id"><code class="name">var <span class="ident">exporting_team_id</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.exporting_team_id"><code class="name">var <span class="ident">exporting_team_id</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_id"><code class="name">var <span class="ident">external_organization_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_id"><code class="name">var <span class="ident">external_organization_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_name"><code class="name">var <span class="ident">external_organization_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_name"><code class="name">var <span class="ident">external_organization_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_email"><code class="name">var <span class="ident">external_user_email</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_email"><code class="name">var <span class="ident">external_user_email</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_id"><code class="name">var <span class="ident">external_user_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_id"><code class="name">var <span class="ident">external_user_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.failed_users"><code class="name">var <span class="ident">failed_users</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.failed_users"><code class="name">var <span class="ident">failed_users</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.functions"><code class="name">var <span class="ident">functions</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.functions"><code class="name">var <span class="ident">functions</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token"><code class="name">var <span class="ident">granular_bot_token</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token"><code class="name">var <span class="ident">granular_bot_token</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_config_id"><code class="name">var <span class="ident">idp_config_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_config_id"><code class="name">var <span class="ident">idp_config_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_entity_id_hash"><code class="name">var <span class="ident">idp_entity_id_hash</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_entity_id_hash"><code class="name">var <span class="ident">idp_entity_id_hash</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_group_member_count"><code class="name">var <span class="ident">idp_group_member_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_group_member_count"><code class="name">var <span class="ident">idp_group_member_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.initiated_by"><code class="name">var <span class="ident">initiated_by</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.initiated_by"><code class="name">var <span class="ident">initiated_by</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.installer_user_id"><code class="name">var <span class="ident">installer_user_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.installer_user_id"><code class="name">var <span class="ident">installer_user_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.invite_id"><code class="name">var <span class="ident">invite_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.invite_id"><code class="name">var <span class="ident">invite_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.inviter"><code class="name">var <span class="ident">inviter</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.inviter"><code class="name">var <span class="ident">inviter</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_channel_canvas"><code class="name">var <span class="ident">is_channel_canvas</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_channel_canvas"><code class="name">var <span class="ident">is_channel_canvas</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_error"><code class="name">var <span class="ident">is_error</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_error"><code class="name">var <span class="ident">is_error</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_external_limited"><code class="name">var <span class="ident">is_external_limited</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_external_limited"><code class="name">var <span class="ident">is_external_limited</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_flagged"><code class="name">var <span class="ident">is_flagged</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_flagged"><code class="name">var <span class="ident">is_flagged</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration"><code class="name">var <span class="ident">is_internal_integration</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration"><code class="name">var <span class="ident">is_internal_integration</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_token_rotation_enabled_app"><code class="name">var <span class="ident">is_token_rotation_enabled_app</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_token_rotation_enabled_app"><code class="name">var <span class="ident">is_token_rotation_enabled_app</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.is_workflow"><code class="name">var <span class="ident">is_workflow</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_workflow"><code class="name">var <span class="ident">is_workflow</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.kicker"><code class="name">var <span class="ident">kicker</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.kicker"><code class="name">var <span class="ident">kicker</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.label"><code class="name">var <span class="ident">label</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.linked_channel_id"><code class="name">var <span class="ident">linked_channel_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.linked_channel_id"><code class="name">var <span class="ident">linked_channel_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.matched_rule"><code class="name">var <span class="ident">matched_rule</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.matched_rule"><code class="name">var <span class="ident">matched_rule</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.mobile_only"><code class="name">var <span class="ident">mobile_only</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.mobile_only"><code class="name">var <span class="ident">mobile_only</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.new_profile"><code class="name">var <span class="ident">new_profile</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_profile"><code class="name">var <span class="ident">new_profile</span> : <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.new_retention_policy"><code class="name">var <span class="ident">new_retention_policy</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_retention_policy"><code class="name">var <span class="ident">new_retention_policy</span> : <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.new_scopes"><code class="name">var <span class="ident">new_scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_scopes"><code class="name">var <span class="ident">new_scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.new_value"><code class="name">var <span class="ident">new_value</span> : Union[str, List[str], Dict[str, Any], ForwardRef(None)]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_value"><code class="name">var <span class="ident">new_value</span> : str | List[str] | Dict[str, Any] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.new_version_id"><code class="name">var <span class="ident">new_version_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_version_id"><code class="name">var <span class="ident">new_version_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.non_sso_only"><code class="name">var <span class="ident">non_sso_only</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.non_sso_only"><code class="name">var <span class="ident">non_sso_only</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.old_retention_policy"><code class="name">var <span class="ident">old_retention_policy</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.old_retention_policy"><code class="name">var <span class="ident">old_retention_policy</span> : <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.old_scopes"><code class="name">var <span class="ident">old_scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.old_scopes"><code class="name">var <span class="ident">old_scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.origin_team"><code class="name">var <span class="ident">origin_team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.origin_team"><code class="name">var <span class="ident">origin_team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions"><code class="name">var <span class="ident">permissions</span> : Optional[List[Dict[str, Any]]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions"><code class="name">var <span class="ident">permissions</span> : List[Dict[str, Any]] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions_updated"><code class="name">var <span class="ident">permissions_updated</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions_updated"><code class="name">var <span class="ident">permissions_updated</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_profile"><code class="name">var <span class="ident">previous_profile</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_profile"><code class="name">var <span class="ident">previous_profile</span> : <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_scopes"><code class="name">var <span class="ident">previous_scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_scopes"><code class="name">var <span class="ident">previous_scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_value"><code class="name">var <span class="ident">previous_value</span> : Union[str, List[str], Dict[str, Any], ForwardRef(None)]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_value"><code class="name">var <span class="ident">previous_value</span> : str | List[str] | Dict[str, Any] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.primary_usergroup_id"><code class="name">var <span class="ident">primary_usergroup_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.primary_usergroup_id"><code class="name">var <span class="ident">primary_usergroup_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.reactivated_user_count"><code class="name">var <span class="ident">reactivated_user_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.reactivated_user_count"><code class="name">var <span class="ident">reactivated_user_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.reason"><code class="name">var <span class="ident">reason</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.reason"><code class="name">var <span class="ident">reason</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_count"><code class="name">var <span class="ident">removed_user_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_count"><code class="name">var <span class="ident">removed_user_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_error_count"><code class="name">var <span class="ident">removed_user_error_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_error_count"><code class="name">var <span class="ident">removed_user_error_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.request"><code class="name">var <span class="ident">request</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.request"><code class="name">var <span class="ident">request</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.resolution"><code class="name">var <span class="ident">resolution</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.resolution"><code class="name">var <span class="ident">resolution</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.row_id"><code class="name">var <span class="ident">row_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.row_id"><code class="name">var <span class="ident">row_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.rules_checked"><code class="name">var <span class="ident">rules_checked</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.rules_checked"><code class="name">var <span class="ident">rules_checked</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes"><code class="name">var <span class="ident">scopes</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes"><code class="name">var <span class="ident">scopes</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes_bot"><code class="name">var <span class="ident">scopes_bot</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes_bot"><code class="name">var <span class="ident">scopes_bot</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.session_search_start"><code class="name">var <span class="ident">session_search_start</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.session_search_start"><code class="name">var <span class="ident">session_search_start</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_to"><code class="name">var <span class="ident">shared_to</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_to"><code class="name">var <span class="ident">shared_to</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_with"><code class="name">var <span class="ident">shared_with</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_with"><code class="name">var <span class="ident">shared_with</span> : <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.source_team"><code class="name">var <span class="ident">source_team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.source_team"><code class="name">var <span class="ident">source_team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.space_file_id"><code class="name">var <span class="ident">space_file_id</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.space_file_id"><code class="name">var <span class="ident">space_file_id</span> : <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.subteam"><code class="name">var <span class="ident">subteam</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.subteam"><code class="name">var <span class="ident">subteam</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.succeeded_users"><code class="name">var <span class="ident">succeeded_users</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.succeeded_users"><code class="name">var <span class="ident">succeeded_users</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity"><code class="name">var <span class="ident">target_entity</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity"><code class="name">var <span class="ident">target_entity</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity_id"><code class="name">var <span class="ident">target_entity_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity_id"><code class="name">var <span class="ident">target_entity_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user"><code class="name">var <span class="ident">target_user</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user"><code class="name">var <span class="ident">target_user</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user_id"><code class="name">var <span class="ident">target_user_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user_id"><code class="name">var <span class="ident">target_user_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.team"><code class="name">var <span class="ident">team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.total_removal_count"><code class="name">var <span class="ident">total_removal_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.total_removal_count"><code class="name">var <span class="ident">total_removal_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.trigger"><code class="name">var <span class="ident">trigger</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.trigger"><code class="name">var <span class="ident">trigger</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1652,31 +1652,31 @@ hljs.highlightAll();
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.url_private"><code class="name">var <span class="ident">url_private</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.url_private"><code class="name">var <span class="ident">url_private</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.user"><code class="name">var <span class="ident">user</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.user"><code class="name">var <span class="ident">user</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.view_id"><code class="name">var <span class="ident">view_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.view_id"><code class="name">var <span class="ident">view_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.web_only"><code class="name">var <span class="ident">web_only</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.web_only"><code class="name">var <span class="ident">web_only</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.who_can_post"><code class="name">var <span class="ident">who_can_post</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.who_can_post"><code class="name">var <span class="ident">who_can_post</span> : <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.workflows"><code class="name">var <span class="ident">workflows</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.workflows"><code class="name">var <span class="ident">workflows</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Details.workspace_member_count"><code class="name">var <span class="ident">workspace_member_count</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.workspace_member_count"><code class="name">var <span class="ident">workspace_member_count</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1684,7 +1684,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entity"><code class="flex name class">
 <span>class <span class="ident">Entity</span></span>
-<span>(</span><span>*, type: Optional[str] = None, user: Union[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>, Dict[str, Any], ForwardRef(None)] = None, workspace: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, enterprise: Union[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>, Dict[str, Any], ForwardRef(None)] = None, channel: Union[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>, Dict[str, Any], ForwardRef(None)] = None, file: Union[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>, Dict[str, Any], ForwardRef(None)] = None, app: Union[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>, Dict[str, Any], ForwardRef(None)] = None, message: Union[<a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a>, Dict[str, Any], ForwardRef(None)] = None, huddle: Union[<a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a>, Dict[str, Any], ForwardRef(None)] = None, role: Union[<a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a>, Dict[str, Any], ForwardRef(None)] = None, usergroup: Union[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>, Dict[str, Any], ForwardRef(None)] = None, workflow: Union[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>, Dict[str, Any], ForwardRef(None)] = None, barrier: Union[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>, Dict[str, Any], ForwardRef(None)] = None, workflow_v2: Union[<a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a>, Dict[str, Any], ForwardRef(None)] = None, account_type_role: Union[<a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a>, Dict[str, Any], ForwardRef(None)] = None, list: Union[<a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*,<br>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>workspace: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>enterprise: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>channel: <a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a> | Dict[str, Any] | None = None,<br>file: <a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a> | Dict[str, Any] | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>message: <a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a> | Dict[str, Any] | None = None,<br>huddle: <a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a> | Dict[str, Any] | None = None,<br>role: <a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a> | Dict[str, Any] | None = None,<br>usergroup: <a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a> | Dict[str, Any] | None = None,<br>workflow: <a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a> | Dict[str, Any] | None = None,<br>barrier: <a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a> | Dict[str, Any] | None = None,<br>workflow_v2: <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a> | Dict[str, Any] | None = None,<br>account_type_role: <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | Dict[str, Any] | None = None,<br>list: <a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1754,47 +1754,47 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.account_type_role"><code class="name">var <span class="ident">account_type_role</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.account_type_role"><code class="name">var <span class="ident">account_type_role</span> : <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.app"><code class="name">var <span class="ident">app</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.app"><code class="name">var <span class="ident">app</span> : <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.barrier"><code class="name">var <span class="ident">barrier</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.barrier"><code class="name">var <span class="ident">barrier</span> : <a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.channel"><code class="name">var <span class="ident">channel</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.channel"><code class="name">var <span class="ident">channel</span> : <a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.enterprise"><code class="name">var <span class="ident">enterprise</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.enterprise"><code class="name">var <span class="ident">enterprise</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.file"><code class="name">var <span class="ident">file</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.file"><code class="name">var <span class="ident">file</span> : <a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.huddle"><code class="name">var <span class="ident">huddle</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.huddle"><code class="name">var <span class="ident">huddle</span> : <a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.list"><code class="name">var <span class="ident">list</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.list"><code class="name">var <span class="ident">list</span> : <a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.message"><code class="name">var <span class="ident">message</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.message"><code class="name">var <span class="ident">message</span> : <a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.role"><code class="name">var <span class="ident">role</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.role"><code class="name">var <span class="ident">role</span> : <a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1802,23 +1802,23 @@ hljs.highlightAll();
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.user"><code class="name">var <span class="ident">user</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.user"><code class="name">var <span class="ident">user</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.usergroup"><code class="name">var <span class="ident">usergroup</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.usergroup"><code class="name">var <span class="ident">usergroup</span> : <a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow"><code class="name">var <span class="ident">workflow</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow"><code class="name">var <span class="ident">workflow</span> : <a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow_v2"><code class="name">var <span class="ident">workflow_v2</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow_v2"><code class="name">var <span class="ident">workflow_v2</span> : <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entity.workspace"><code class="name">var <span class="ident">workspace</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workspace"><code class="name">var <span class="ident">workspace</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1826,7 +1826,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Entry"><code class="flex name class">
 <span>class <span class="ident">Entry</span></span>
-<span>(</span><span>*, id: Optional[str] = None, date_create: Optional[int] = None, action: Optional[str] = None, actor: Union[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>, Dict[str, Any], ForwardRef(None)] = None, entity: Union[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>, Dict[str, Any], ForwardRef(None)] = None, context: Union[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>, Dict[str, Any], ForwardRef(None)] = None, details: Union[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>, Dict[str, Any], ForwardRef(None)] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>date_create: int | None = None,<br>action: str | None = None,<br>actor: <a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a> | Dict[str, Any] | None = None,<br>entity: <a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a> | Dict[str, Any] | None = None,<br>context: <a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a> | Dict[str, Any] | None = None,<br>details: <a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1867,31 +1867,31 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.action"><code class="name">var <span class="ident">action</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.action"><code class="name">var <span class="ident">action</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.actor"><code class="name">var <span class="ident">actor</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.actor"><code class="name">var <span class="ident">actor</span> : <a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.context"><code class="name">var <span class="ident">context</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.context"><code class="name">var <span class="ident">context</span> : <a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.date_create"><code class="name">var <span class="ident">date_create</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.date_create"><code class="name">var <span class="ident">date_create</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.details"><code class="name">var <span class="ident">details</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.details"><code class="name">var <span class="ident">details</span> : <a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.entity"><code class="name">var <span class="ident">entity</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.entity"><code class="name">var <span class="ident">entity</span> : <a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Entry.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1903,7 +1903,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement"><code class="flex name class">
 <span>class <span class="ident">FeatureEnablement</span></span>
-<span>(</span><span>*, enabled: Optional[bool] = None, **kwargs)</span>
+<span>(</span><span>*, enabled: bool | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1925,7 +1925,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled"><code class="name">var <span class="ident">enabled</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled"><code class="name">var <span class="ident">enabled</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1933,7 +1933,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.File"><code class="flex name class">
 <span>class <span class="ident">File</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, filetype: Optional[str] = None, title: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>filetype: str | None = None,<br>title: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1965,19 +1965,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.File.filetype"><code class="name">var <span class="ident">filetype</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.File.filetype"><code class="name">var <span class="ident">filetype</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.File.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.File.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.File.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.File.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.File.title"><code class="name">var <span class="ident">title</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.File.title"><code class="name">var <span class="ident">title</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1989,7 +1989,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Huddle"><code class="flex name class">
 <span>class <span class="ident">Huddle</span></span>
-<span>(</span><span>*, id: Optional[str] = None, date_start: Optional[int] = None, date_end: Optional[int] = None, participants: Optional[List[str]] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>date_start: int | None = None,<br>date_end: int | None = None,<br>participants: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2021,19 +2021,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_end"><code class="name">var <span class="ident">date_end</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_end"><code class="name">var <span class="ident">date_end</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_start"><code class="name">var <span class="ident">date_start</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_start"><code class="name">var <span class="ident">date_start</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Huddle.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Huddle.participants"><code class="name">var <span class="ident">participants</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.participants"><code class="name">var <span class="ident">participants</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2045,7 +2045,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier"><code class="flex name class">
 <span>class <span class="ident">InformationBarrier</span></span>
-<span>(</span><span>*, id: Optional[str] = None, primary_usergroup: Optional[str] = None, barriered_from_usergroups: Optional[List[str]] = None, restricted_subjects: Optional[List[str]] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>primary_usergroup: str | None = None,<br>barriered_from_usergroups: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2077,19 +2077,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups"><code class="name">var <span class="ident">barriered_from_usergroups</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups"><code class="name">var <span class="ident">barriered_from_usergroups</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.primary_usergroup"><code class="name">var <span class="ident">primary_usergroup</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.primary_usergroup"><code class="name">var <span class="ident">primary_usergroup</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : Optional[List[str]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : List[str] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2101,7 +2101,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Location"><code class="flex name class">
 <span>class <span class="ident">Location</span></span>
-<span>(</span><span>*, type: Optional[str] = None, id: Optional[str] = None, name: Optional[str] = None, domain: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>type: str | None = None,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2133,19 +2133,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Location.domain"><code class="name">var <span class="ident">domain</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Location.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Location.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Location.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2157,7 +2157,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.LogsResponse"><code class="flex name class">
 <span>class <span class="ident">LogsResponse</span></span>
-<span>(</span><span>*, entries: Optional[List[Union[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>, Dict[str, Any]]]] = None, response_metadata: Union[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>, Dict[str, Any], ForwardRef(None)] = None, ok: Optional[bool] = None, error: Optional[str] = None, needed: Optional[str] = None, provided: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>entries: List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a> | Dict[str, Any]] | None = None,<br>response_metadata: <a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a> | Dict[str, Any] | None = None,<br>ok: bool | None = None,<br>error: str | None = None,<br>needed: str | None = None,<br>provided: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2197,27 +2197,27 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.entries"><code class="name">var <span class="ident">entries</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.entries"><code class="name">var <span class="ident">entries</span> : List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.error"><code class="name">var <span class="ident">error</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.error"><code class="name">var <span class="ident">error</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.needed"><code class="name">var <span class="ident">needed</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.needed"><code class="name">var <span class="ident">needed</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.ok"><code class="name">var <span class="ident">ok</span> : Optional[bool]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.ok"><code class="name">var <span class="ident">ok</span> : bool | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.provided"><code class="name">var <span class="ident">provided</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.provided"><code class="name">var <span class="ident">provided</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata"><code class="name">var <span class="ident">response_metadata</span> : Optional[<a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a>]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata"><code class="name">var <span class="ident">response_metadata</span> : <a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a> | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2229,7 +2229,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Message"><code class="flex name class">
 <span>class <span class="ident">Message</span></span>
-<span>(</span><span>*, channel: Optional[str] = None, team: Optional[str] = None, timestamp: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>channel: str | None = None,<br>team: str | None = None,<br>timestamp: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2258,15 +2258,15 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Message.channel"><code class="name">var <span class="ident">channel</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.channel"><code class="name">var <span class="ident">channel</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Message.team"><code class="name">var <span class="ident">team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Message.timestamp"><code class="name">var <span class="ident">timestamp</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.timestamp"><code class="name">var <span class="ident">timestamp</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2278,7 +2278,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Profile"><code class="flex name class">
 <span>class <span class="ident">Profile</span></span>
-<span>(</span><span>*, real_name: Optional[str] = None, first_name: Optional[str] = None, last_name: Optional[str] = None, display_name: Optional[str] = None, image_original: Optional[str] = None, image_24: Optional[str] = None, image_32: Optional[str] = None, image_48: Optional[str] = None, image_72: Optional[str] = None, image_192: Optional[str] = None, image_512: Optional[str] = None, image_1024: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>real_name: str | None = None,<br>first_name: str | None = None,<br>last_name: str | None = None,<br>display_name: str | None = None,<br>image_original: str | None = None,<br>image_24: str | None = None,<br>image_32: str | None = None,<br>image_48: str | None = None,<br>image_72: str | None = None,<br>image_192: str | None = None,<br>image_512: str | None = None,<br>image_1024: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2332,51 +2332,51 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.display_name"><code class="name">var <span class="ident">display_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.display_name"><code class="name">var <span class="ident">display_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.first_name"><code class="name">var <span class="ident">first_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.first_name"><code class="name">var <span class="ident">first_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_1024"><code class="name">var <span class="ident">image_1024</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_1024"><code class="name">var <span class="ident">image_1024</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_192"><code class="name">var <span class="ident">image_192</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_192"><code class="name">var <span class="ident">image_192</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_24"><code class="name">var <span class="ident">image_24</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_24"><code class="name">var <span class="ident">image_24</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_32"><code class="name">var <span class="ident">image_32</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_32"><code class="name">var <span class="ident">image_32</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_48"><code class="name">var <span class="ident">image_48</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_48"><code class="name">var <span class="ident">image_48</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_512"><code class="name">var <span class="ident">image_512</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_512"><code class="name">var <span class="ident">image_512</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_72"><code class="name">var <span class="ident">image_72</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_72"><code class="name">var <span class="ident">image_72</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_original"><code class="name">var <span class="ident">image_original</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_original"><code class="name">var <span class="ident">image_original</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.last_name"><code class="name">var <span class="ident">last_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.last_name"><code class="name">var <span class="ident">last_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Profile.real_name"><code class="name">var <span class="ident">real_name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.real_name"><code class="name">var <span class="ident">real_name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2384,7 +2384,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata"><code class="flex name class">
 <span>class <span class="ident">ResponseMetadata</span></span>
-<span>(</span><span>*, next_cursor: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, next_cursor: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2407,7 +2407,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor"><code class="name">var <span class="ident">next_cursor</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor"><code class="name">var <span class="ident">next_cursor</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2419,7 +2419,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy"><code class="flex name class">
 <span>class <span class="ident">RetentionPolicy</span></span>
-<span>(</span><span>*, type: Optional[str] = None, duration_days: Optional[int] = None, **kwargs)</span>
+<span>(</span><span>*, type: str | None = None, duration_days: int | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2444,11 +2444,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days"><code class="name">var <span class="ident">duration_days</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days"><code class="name">var <span class="ident">duration_days</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2456,7 +2456,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Role"><code class="flex name class">
 <span>class <span class="ident">Role</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, type: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>type: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2485,15 +2485,15 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Role.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Role.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Role.type"><code class="name">var <span class="ident">type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2505,7 +2505,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.SharedWith"><code class="flex name class">
 <span>class <span class="ident">SharedWith</span></span>
-<span>(</span><span>*, channel_id: Optional[str] = None, access_level: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, channel_id: str | None = None, access_level: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2530,11 +2530,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.access_level"><code class="name">var <span class="ident">access_level</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.channel_id"><code class="name">var <span class="ident">channel_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.channel_id"><code class="name">var <span class="ident">channel_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2542,7 +2542,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.SlackList"><code class="flex name class">
 <span>class <span class="ident">SlackList</span></span>
-<span>(</span><span>*, id: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, id: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2565,7 +2565,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.SlackList.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.SlackList.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2577,7 +2577,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId"><code class="flex name class">
 <span>class <span class="ident">SpaceFileId</span></span>
-<span>(</span><span>*, payload: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, payload: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2598,7 +2598,7 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload"><code class="name">var <span class="ident">payload</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload"><code class="name">var <span class="ident">payload</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2606,7 +2606,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.User"><code class="flex name class">
 <span>class <span class="ident">User</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, email: Optional[str] = None, team: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>email: str | None = None,<br>team: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2638,19 +2638,19 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.User.email"><code class="name">var <span class="ident">email</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.User.email"><code class="name">var <span class="ident">email</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.User.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.User.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.User.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.User.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.User.team"><code class="name">var <span class="ident">team</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.User.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2662,7 +2662,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Usergroup"><code class="flex name class">
 <span>class <span class="ident">Usergroup</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2688,11 +2688,11 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2704,7 +2704,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.Workflow"><code class="flex name class">
 <span>class <span class="ident">Workflow</span></span>
-<span>(</span><span>*, id: Optional[str] = None, name: Optional[str] = None, domain: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2733,15 +2733,15 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.Workflow.domain"><code class="name">var <span class="ident">domain</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Workflow.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.Workflow.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2753,7 +2753,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2"><code class="flex name class">
 <span>class <span class="ident">WorkflowV2</span></span>
-<span>(</span><span>*, id: Optional[str] = None, app_id: Optional[str] = None, date_updated: Optional[int] = None, callback_id: Optional[str] = None, name: Optional[str] = None, updated_by: Optional[str] = None, step_configuration: Optional[List[Union[Dict[str, Any], <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>]]] = None, **kwargs)</span>
+<span>(</span><span>*,<br>id: str | None = None,<br>app_id: str | None = None,<br>date_updated: int | None = None,<br>callback_id: str | None = None,<br>name: str | None = None,<br>updated_by: str | None = None,<br>step_configuration: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2801,27 +2801,27 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id"><code class="name">var <span class="ident">app_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.callback_id"><code class="name">var <span class="ident">callback_id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.callback_id"><code class="name">var <span class="ident">callback_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.date_updated"><code class="name">var <span class="ident">date_updated</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.date_updated"><code class="name">var <span class="ident">date_updated</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.id"><code class="name">var <span class="ident">id</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.step_configuration"><code class="name">var <span class="ident">step_configuration</span> : Optional[List[<a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>]]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.step_configuration"><code class="name">var <span class="ident">step_configuration</span> : List[<a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2829,7 +2829,7 @@ hljs.highlightAll();
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.updated_by"><code class="name">var <span class="ident">updated_by</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.updated_by"><code class="name">var <span class="ident">updated_by</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2837,7 +2837,7 @@ hljs.highlightAll();
 </dd>
 <dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration"><code class="flex name class">
 <span>class <span class="ident">WorkflowV2StepConfiguration</span></span>
-<span>(</span><span>*, name: Optional[str] = None, step_function_type: Optional[str] = None, step_function_app_id: Optional[str] = None, **kwargs)</span>
+<span>(</span><span>*,<br>name: str | None = None,<br>step_function_type: str | None = None,<br>step_function_app_id: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2866,15 +2866,15 @@ hljs.highlightAll();
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name"><code class="name">var <span class="ident">name</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id"><code class="name">var <span class="ident">step_function_app_id</span> : Optional[int]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id"><code class="name">var <span class="ident">step_function_app_id</span> : int | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_type"><code class="name">var <span class="ident">step_function_type</span> : Optional[str]</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_type"><code class="name">var <span class="ident">step_function_type</span> : str | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -3371,7 +3371,7 @@ hljs.highlightAll();
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

@@ -3,15 +3,13 @@ import pytest
 
 from slack_sdk.web import WebClient
 from tests.helpers import remove_os_env_temporarily, restore_os_env
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestWebClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
         self.env_values = remove_os_env_temporarily()
 
     def tearDown(self):

@@ -7,15 +7,13 @@ import slack_sdk.errors as err
 from slack_sdk import WebClient
 from slack_sdk.models.blocks import DividerBlock
 from slack_sdk.models.metadata import Metadata
-from tests.slack_sdk.web.mock_web_api_server import (
-    setup_mock_web_api_server,
-    cleanup_mock_web_api_server,
-)
+from tests.slack_sdk.web.mock_web_api_handler import MockHandler
+from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
 class TestWebClient(unittest.TestCase):
     def setUp(self):
-        setup_mock_web_api_server(self)
+        setup_mock_web_api_server(self, MockHandler)
         self.client = WebClient(
             token="xoxb-api_test",
             base_url="http://localhost:8888",
@@ -229,3 +227,11 @@ class TestWebClient(unittest.TestCase):
             user_auth_blocks=[DividerBlock(), DividerBlock()],
         )
         self.assertIsNone(new_message.get("error"))
+
+    def test_base_url_appends_trailing_slash_issue_15141(self):
+        client = self.client
+        self.assertEqual(client.base_url, "http://localhost:8888/")
+
+    def test_base_url_preserves_trailing_slash_issue_15141(self):
+        client = WebClient(base_url="http://localhost:8888/")
+        self.assertEqual(client.base_url, "http://localhost:8888/")
