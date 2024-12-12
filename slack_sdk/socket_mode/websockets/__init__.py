@@ -35,7 +35,7 @@ from slack_sdk.web.async_client import AsyncWebClient
 from ..logger.messages import debug_redacted_message_string
 
 
-def _session_closed(session: Optional[ClientConnection]):
+def _session_closed(session: Optional[ClientConnection]) -> bool:
     if session is None:
         return True
     if hasattr(session, "closed"):
