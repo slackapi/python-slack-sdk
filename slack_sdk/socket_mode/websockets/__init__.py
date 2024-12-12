@@ -5,6 +5,7 @@
 * https://pypi.org/project/websockets/
 
 """
+
 import asyncio
 import logging
 from asyncio import Future, Lock
@@ -15,8 +16,13 @@ from typing import Union, Optional, List, Callable, Awaitable
 import websockets
 from websockets.exceptions import WebSocketException
 
-# To keep compatibility with websockets 8.x, we use this import over .legacy.client
-from websockets import WebSocketClientProtocol
+try:
+    from websockets.asyncio.client import ClientConnection
+except ImportError:
+    # To keep compatibility with websockets <14.x we use WebSocketClientProtocol
+    # To keep compatibility with websockets 8.x, we use this import over .legacy.client
+    from websockets import WebSocketClientProtocol as ClientConnection
+
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
 from slack_sdk.socket_mode.async_listeners import (
@@ -27,6 +33,12 @@ from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.web.async_client import AsyncWebClient
 
 from ..logger.messages import debug_redacted_message_string
+
+
+def _session_closed(session: Optional[ClientConnection]):
+    # WebSocket close code, defined in https://datatracker.ietf.org/doc/html/rfc6455.html#section-7.1.5
+    # None if the connection isn’t closed yet.
+    return session is None or session.close_code is not None
 
 
 class SocketModeClient(AsyncBaseSocketModeClient):
@@ -55,7 +67,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     ping_interval: float
     trace_enabled: bool
 
-    current_session: Optional[WebSocketClientProtocol]
+    current_session: Optional[ClientConnection]
     current_session_monitor: Optional[Future]
 
     auto_reconnect_enabled: bool
@@ -105,7 +117,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: WebSocketClientProtocol = self.current_session
+        session: ClientConnection = self.current_session
         session_id: str = await self.session_id()
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new monitor_current_session() execution loop for {session_id} started")
@@ -117,7 +129,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     break
                 await asyncio.sleep(self.ping_interval)
                 try:
-                    if self.auto_reconnect_enabled and (session is None or session.closed):
+                    if self.auto_reconnect_enabled and _session_closed(session=session):
                         self.logger.info(f"The session ({session_id}) seems to be already closed. Reconnecting...")
                         await self.connect_to_new_endpoint()
                 except Exception as e:
@@ -134,7 +146,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: WebSocketClientProtocol = self.current_session
+        session: ClientConnection = self.current_session
         session_id: str = await self.session_id()
         consecutive_error_count = 0
         if self.logger.level <= logging.DEBUG:
@@ -171,7 +183,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             raise
 
     async def is_connected(self) -> bool:
-        return not self.closed and self.current_session is not None and not self.current_session.closed
+        return not self.closed and not _session_closed(self.current_session)
 
     async def session_id(self) -> str:
         return self.build_session_id(self.current_session)
@@ -179,7 +191,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def connect(self):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        old_session: Optional[WebSocketClientProtocol] = None if self.current_session is None else self.current_session
+        old_session: Optional[ClientConnection] = None if self.current_session is None else self.current_session
         # NOTE: websockets does not support proxy settings
         self.current_session = await websockets.connect(
             uri=self.wss_uri,
@@ -250,7 +262,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.message_receiver.cancel()
 
     @classmethod
-    def build_session_id(cls, session: WebSocketClientProtocol) -> str:
+    def build_session_id(cls, session: ClientConnection) -> str:
         if session is None:
             return ""
         return "s_" + str(hash(session))
