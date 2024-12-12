@@ -36,9 +36,14 @@ from ..logger.messages import debug_redacted_message_string
 
 
 def _session_closed(session: Optional[ClientConnection]):
+    if session is None:
+        return True
+    if hasattr(session, "closed"):
+        # The session is a WebSocketClientProtocol instance
+        return session.closed
     # WebSocket close code, defined in https://datatracker.ietf.org/doc/html/rfc6455.html#section-7.1.5
     # None if the connection isn’t closed yet.
-    return session is None or session.close_code is not None
+    return session.close_code is not None
 
 
 class SocketModeClient(AsyncBaseSocketModeClient):
