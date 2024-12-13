@@ -159,3 +159,37 @@ def start_socket_mode_server_with_disconnection(self, port: int):
         loop.close()
 
     return run_server
+
+def start_bad_socket_mode_server(self, port: int):
+    logger = logging.getLogger(__name__)
+    state = {}
+
+    def reset_server_state():
+        self.state = {}
+
+    self.reset_server_state = reset_server_state
+
+    async def link(request):
+        return web.Response(status=409)
+
+    app = web.Application()
+    app.add_routes([web.get("/link", link)])
+    runner = web.AppRunner(app)
+
+    def run_server():
+        reset_server_state()
+
+        self.loop = loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(runner.setup())
+        site = web.TCPSite(runner, "127.0.0.1", port, reuse_port=True)
+        loop.run_until_complete(site.start())
+
+        # run until it's stopped from the main thread
+        loop.run_forever()
+
+        loop.run_until_complete(runner.cleanup())
+        loop.run_until_complete(asyncio.sleep(1))
+        loop.close()
+
+    return run_server

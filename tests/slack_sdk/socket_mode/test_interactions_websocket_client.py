@@ -14,6 +14,7 @@ from slack_sdk import WebClient
 from slack_sdk.socket_mode.websocket_client import SocketModeClient
 from tests.helpers import is_ci_unstable_test_skip_enabled
 from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
+    start_bad_socket_mode_server,
     start_socket_mode_server,
     socket_mode_envelopes,
     socket_mode_hello_message,
@@ -127,6 +128,31 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             client.connect()
             time.sleep(1)  # wait for the connection
             client.send_message("foo")
+        finally:
+            client.close()
+            self.loop.stop()
+            t.join(timeout=5)
+
+    def test_wss_craps_itself(self):
+        if is_ci_unstable_test_skip_enabled():
+            # this test tends to fail on the GitHub Actions platform
+            return
+        t = Thread(target=start_bad_socket_mode_server(self, 3012))
+        t.daemon = True
+        t.start()
+        time.sleep(2)  # wait for the server
+
+        try:
+            client = SocketModeClient(
+                app_token="xapp-A111-222-xyz",
+                web_client=self.web_client,
+                auto_reconnect_enabled=False,
+                trace_enabled=True,
+            )
+            client.wss_uri = "ws://0.0.0.0:3012/link"
+            client.connect()
+            time.sleep(1)  # wait for the connection
+            assert client.is_connected() is True
         finally:
             client.close()
             self.loop.stop()
