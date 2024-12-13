@@ -1,7 +1,12 @@
 import asyncio
 import logging
 import os
+import threading
 import time
+from typing import Any, Dict
+from urllib.error import URLError
+from urllib.request import urlopen
+from unittest import TestCase
 
 from aiohttp import WSMsgType, web
 
@@ -28,89 +33,40 @@ socket_mode_hello_message = """{"type":"hello","num_connections":2,"debug_info":
 socket_mode_disconnect_message = """{"type":"disconnect","reason":"too_many_websockets","num_connections":2,"debug_info":{"host":"applink-111-xxx"},"connection_info":{"app_id":"A111"}}"""
 
 
-def start_socket_mode_server(self, port: int):
+def start_thread_socket_mode_server(self, port: int):
     logger = logging.getLogger(__name__)
-    state = {}
+    state: Dict[str, Any] = {}
 
     def reset_server_state():
         state.update(
             hello_sent=False,
+            disconnect=False,
             envelopes_to_consume=list(socket_mode_envelopes),
         )
 
     self.reset_server_state = reset_server_state
 
+    async def health(request: web.Request):
+        wr = web.Response()
+        await wr.prepare(request)
+        wr.set_status(200)
+        return wr
+
+    async def disconnect(request: web.Request):
+        state["disconnect"] = True
+        wr = web.Response()
+        await wr.prepare(request)
+        wr.set_status(200)
+        return wr
+
     async def link(request):
+        connected = True
         ws = web.WebSocketResponse()
         await ws.prepare(request)
 
         async for msg in ws:
-            if msg.type != WSMsgType.TEXT:
-                continue
-
-            message = msg.data
-            logger.debug(f"Server received a message: {message}")
-
-            if not state["hello_sent"]:
-                state["hello_sent"] = True
-                await ws.send_str(socket_mode_hello_message)
-
-            if state["envelopes_to_consume"]:
-                e = state["envelopes_to_consume"].pop(0)
-                logger.debug(f"Send an envelope: {e}")
-                await ws.send_str(e)
-
-            await ws.send_str(message)
-
-        return ws
-
-    app = web.Application()
-    app.add_routes([web.get("/link", link)])
-    runner = web.AppRunner(app)
-
-    def run_server():
-        reset_server_state()
-
-        self.loop = loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(runner.setup())
-        site = web.TCPSite(runner, "127.0.0.1", port, reuse_port=True)
-        loop.run_until_complete(site.start())
-
-        # run until it's stopped from the main thread
-        loop.run_forever()
-
-        loop.run_until_complete(runner.cleanup())
-        loop.run_until_complete(asyncio.sleep(1))
-        loop.close()
-
-    return run_server
-
-
-def start_socket_mode_server_with_disconnection(self, port: int):
-    logger = logging.getLogger(__name__)
-    state = {}
-
-    def reset_server_state():
-        state.update(
-            hello_sent=False,
-            disconnect_sent=False,
-            envelopes_to_consume=list(socket_mode_envelopes),
-        )
-
-    self.reset_server_state = reset_server_state
-
-    async def link(request):
-        disconnected = False
-        ws = web.WebSocketResponse()
-        await ws.prepare(request)
-
-        async for msg in ws:
-            # To ensure disconnect message is received and handled,
-            # need to keep this ws alive to bypass client ping-pong check.
             if msg.type == WSMsgType.PING:
-                t = time.time()
-                await ws.pong(f"sdk-ping-pong:{t}")
+                await ws.pong(f"sdk-ping-pong:{time.time()}")
                 continue
             if msg.type != WSMsgType.TEXT:
                 continue
@@ -122,14 +78,14 @@ def start_socket_mode_server_with_disconnection(self, port: int):
                 state["hello_sent"] = True
                 await ws.send_str(socket_mode_hello_message)
 
-            if not state["disconnect_sent"]:
+            if state["disconnect"]:
                 state["hello_sent"] = False
-                state["disconnect_sent"] = True
-                disconnected = True
+                state["disconnect"] = False
+                connected = False
                 await ws.send_str(socket_mode_disconnect_message)
-                logger.debug(f"Disconnect message sent")
+                logger.debug("Disconnect message sent")
 
-            if state["envelopes_to_consume"] and not disconnected:
+            if state["envelopes_to_consume"] and connected:
                 e = state["envelopes_to_consume"].pop(0)
                 logger.debug(f"Send an envelope: {e}")
                 await ws.send_str(e)
@@ -139,7 +95,13 @@ def start_socket_mode_server_with_disconnection(self, port: int):
         return ws
 
     app = web.Application()
-    app.add_routes([web.get("/link", link)])
+    app.add_routes(
+        [
+            web.get("/link", link),
+            web.get("/health", health),
+            web.get("/disconnect", disconnect),
+        ]
+    )
     runner = web.AppRunner(app)
 
     def run_server():
@@ -155,7 +117,44 @@ def start_socket_mode_server_with_disconnection(self, port: int):
         loop.run_forever()
 
         loop.run_until_complete(runner.cleanup())
-        loop.run_until_complete(asyncio.sleep(1))
         loop.close()
 
     return run_server
+
+
+def start_socket_mode_server(test, port: int):
+    test.sm_thread = threading.Thread(target=start_thread_socket_mode_server(test, port))
+    test.sm_thread.daemon = True
+    test.sm_thread.start()
+    wait_for_socket_mode_server(port, 4)
+
+
+def stop_socket_mode_server(test: TestCase):
+    # An event loop runs in a thread and executes all callbacks and Tasks in
+    # its thread. While a Task is running in the event loop, no other Tasks
+    # can run in the same thread. When a Task executes an await expression, the
+    # running Task gets suspended, and the event loop executes the next Task.
+    # To schedule a callback from another OS thread, the loop.call_soon_threadsafe() method should be used.
+    # https://docs.python.org/3/library/asyncio-dev.html#asyncio-multithreading
+    test.loop.call_soon_threadsafe(test.loop.stop)
+    test.sm_thread.join(timeout=5)
+
+
+def wait_for_socket_mode_server(port: int, timeout: int):
+    start_time = time.time()
+    while (time.time() - start_time) < timeout:
+        try:
+            urlopen(f"http://127.0.0.1:{port}/health")
+            return
+        except URLError:
+            time.sleep(0.01)
+
+
+def request_socket_mode_server_disconnect(port: int, timeout: int):
+    start_time = time.time()
+    while (time.time() - start_time) < timeout:
+        try:
+            urlopen(f"http://127.0.0.1:{port}/disconnect")
+            return
+        except URLError:
+            time.sleep(0.01)

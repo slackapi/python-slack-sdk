@@ -2,7 +2,6 @@ import logging
 import time
 import unittest
 from random import randint
-from threading import Thread
 
 import pytest
 
@@ -17,6 +16,7 @@ from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
     socket_mode_hello_message,
+    stop_socket_mode_server,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
@@ -33,9 +33,11 @@ class TestInteractionsBuiltin(unittest.TestCase):
             token="xoxb-api_test",
             base_url="http://localhost:8888",
         )
+        start_socket_mode_server(self, 3011)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
+        stop_socket_mode_server(self)
 
     def test_buffer_size_validation(self):
         try:
@@ -53,11 +55,6 @@ class TestInteractionsBuiltin(unittest.TestCase):
         # Since the default buffer size is set to 1024, and it's enough to prevent the same situation happening,
         # we believe that the same situation never happens in the production usage.
         sys.setrecursionlimit(10000)
-
-        t = Thread(target=start_socket_mode_server(self, 3011))
-        t.daemon = True
-        t.start()
-        time.sleep(2)  # wait for the server
 
         try:
             buffer_size_list = [1024, 9000, 35, 49] + list([randint(16, 128) for _ in range(10)])
@@ -123,17 +120,10 @@ class TestInteractionsBuiltin(unittest.TestCase):
             # Restore the default value
             sys.setrecursionlimit(default_recursion_limit)
             client.close()
-            self.loop.stop()
-            t.join(timeout=5)
 
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 
     def test_send_message_while_disconnection(self):
-        t = Thread(target=start_socket_mode_server(self, 3011))
-        t.daemon = True
-        t.start()
-        time.sleep(2)  # wait for the server
-
         try:
             self.reset_server_state()
             client = SocketModeClient(
@@ -157,5 +147,3 @@ class TestInteractionsBuiltin(unittest.TestCase):
             client.send_message("foo")
         finally:
             client.close()
-            self.loop.stop()
-            t.join(timeout=5)

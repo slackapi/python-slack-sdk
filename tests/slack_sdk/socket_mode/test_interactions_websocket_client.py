@@ -2,7 +2,6 @@ import logging
 import time
 import unittest
 from random import randint
-from threading import Thread
 
 from websocket import WebSocketException
 
@@ -17,6 +16,7 @@ from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
     socket_mode_hello_message,
+    stop_socket_mode_server,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
@@ -31,15 +31,13 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             token="xoxb-api_test",
             base_url="http://localhost:8888",
         )
+        start_socket_mode_server(self, 3012)
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
+        stop_socket_mode_server(self)
 
     def test_interactions(self):
-        t = Thread(target=start_socket_mode_server(self, 3012))
-        t.daemon = True
-        t.start()
-
         received_messages = []
         received_socket_mode_requests = []
 
@@ -63,7 +61,6 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
         client.socket_mode_request_listeners.append(socket_mode_request_handler)
 
         try:
-            time.sleep(1)  # wait for the server
             client.wss_uri = "ws://0.0.0.0:3012/link"
             client.connect()
             time.sleep(1)  # wait for the message receiver
@@ -91,17 +88,11 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
         finally:
             client.close()
-            self.loop.stop()
-            t.join(timeout=5)
 
     def test_send_message_while_disconnection(self):
         if is_ci_unstable_test_skip_enabled():
             # this test tends to fail on the GitHub Actions platform
             return
-        t = Thread(target=start_socket_mode_server(self, 3012))
-        t.daemon = True
-        t.start()
-        time.sleep(2)  # wait for the server
 
         try:
             client = SocketModeClient(
@@ -129,5 +120,3 @@ class TestInteractionsWebSocketClient(unittest.TestCase):
             client.send_message("foo")
         finally:
             client.close()
-            self.loop.stop()
-            t.join(timeout=5)
