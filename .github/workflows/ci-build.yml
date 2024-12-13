@@ -3,7 +3,7 @@ name: CI Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -15,47 +15,47 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - '3.12'
-          - '3.11'
-          - '3.10'
-          - '3.9'
-          - '3.8'
-          - '3.7'
-          - '3.6'
-          - 'pypy3.10'
+          - "3.13"
+          - "3.12"
+          - "3.11"
+          - "3.10"
+          - "3.9"
+          - "3.8"
+          - "3.7"
+          - "3.6"
+          - "pypy3.10"
     env:
-      CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: '1'
-      CI_UNSTABLE_TESTS_SKIP_ENABLED: '1'
-      FORCE_COLOR: '1'
+      CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: "1"
+      CI_UNSTABLE_TESTS_SKIP_ENABLED: "1"
+      FORCE_COLOR: "1"
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: pip
-    - name: Install dependencies
-      run: |
-        pip install -U pip setuptools wheel
-        pip install -r requirements/testing.txt
-        pip install -r requirements/optional.txt
-    - name: Run codegen
-      run: |
-        python setup.py codegen
-    - name: Run validation (black/flake8/pytest)
-      run: |
-        python setup.py validate
-    - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
-      run: |
-        # Install v1.4 for testing
-        pip install "SQLAlchemy>=1.4,<2"
-        python setup.py unit_tests --test-target tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py && \
-        python setup.py unit_tests --test-target tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
-    - name: Run codecov (only 3.9)
-      if: startsWith(matrix.python-version, '3.9')
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        # python setup.py validate generates the coverage file
-        files: ./coverage.xml
-
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r requirements/testing.txt
+          pip install -r requirements/optional.txt
+      - name: Run codegen
+        run: |
+          python setup.py codegen
+      - name: Run validation (black/flake8/pytest)
+        run: |
+          python setup.py validate
+      - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
+        run: |
+          # Install v1.4 for testing
+          pip install "SQLAlchemy>=1.4,<2"
+          python setup.py unit_tests --test-target tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py && \
+          python setup.py unit_tests --test-target tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
+      - name: Run codecov (only with latest supported version)
+        if: startsWith(matrix.python-version, '3.13')
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # python setup.py validate generates the coverage file
+          files: ./coverage.xml
