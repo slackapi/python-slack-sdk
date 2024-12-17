@@ -24,7 +24,3 @@ def remove_os_env_temporarily() -> dict:
 
 def restore_os_env(old_env: dict) -> None:
     os.environ.update(old_env)
-
-
-def is_ci_unstable_test_skip_enabled() -> bool:
-    return os.environ.get("CI_UNSTABLE_TESTS_SKIP_ENABLED") == "1"
