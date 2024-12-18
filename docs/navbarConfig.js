@@ -49,15 +49,20 @@ const navbar = {
         },
         {
           label: 'Deno Slack SDK',
-          to: 'https://api.slack.com/automation/quickstart',
+          to: 'https://tools.slack.dev/deno-slack-sdk/',
           target: '_self',
         },
       ],
     },
     {
+      to: 'https://tools.slack.dev/slack-cli',
+      label: 'Slack CLI',
+      target: '_self',
+    },
+    {
       type: 'dropdown',
       label: 'Community',
-      position: 'left',
+      position: 'right',
       items: [
         {
           label: 'Community tools',
