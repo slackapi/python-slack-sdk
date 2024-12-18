@@ -180,10 +180,10 @@ class SocketModeClient(BaseSocketModeClient):
 
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
-            on_open=on_open,
-            on_message=on_message,
-            on_error=on_error,
-            on_close=on_close,
+            on_open=on_open,  # type: ignore[arg-type]
+            on_message=on_message,  # type: ignore[arg-type]
+            on_error=on_error,  # type: ignore[arg-type]
+            on_close=on_close,  # type: ignore[arg-type]
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
@@ -204,7 +204,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
         try:
-            self.current_session.send(message)
+            self.current_session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
@@ -217,7 +217,7 @@ class SocketModeClient(BaseSocketModeClient):
             # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
             with self.connect_operation_lock:
                 if self.is_connected():
-                    self.current_session.send(message)
+                    self.current_session.send(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(
                         f"The current session (session id: {self.session_id()}) is no longer active. "

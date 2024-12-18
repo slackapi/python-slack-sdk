@@ -67,9 +67,9 @@ class View(JsonObject):
         self.app_id = app_id
         self.root_view_id = root_view_id
         self.previous_view_id = previous_view_id
-        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
-        self.submit = TextObject.parse(submit, default_type=PlainTextObject.type)
-        self.close = TextObject.parse(close, default_type=PlainTextObject.type)
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.submit = TextObject.parse(submit, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.close = TextObject.parse(close, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.blocks = Block.parse_all(blocks)
         self.private_metadata = private_metadata
         self.state = state

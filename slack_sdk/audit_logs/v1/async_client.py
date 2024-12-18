@@ -2,6 +2,7 @@
 
 Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
 """
+
 import json
 import logging
 from ssl import SSLContext
@@ -252,7 +253,7 @@ class AsyncAuditLogsClient:
             retry_request = RetryHttpRequest(
                 method=http_verb,
                 url=url,
-                headers=headers,
+                headers=headers,  # type: ignore[arg-type]
                 body_params=body_params,
             )
 
@@ -278,19 +279,19 @@ class AsyncAuditLogsClient:
                     )
 
                 try:
-                    async with session.request(http_verb, url, **request_kwargs) as res:
+                    async with session.request(http_verb, url, **request_kwargs) as res:  # type: ignore[arg-type]
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                                 data=response_body.encode("utf-8") if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f"No response data returned from the following API call: {url}.")
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                         except json.decoder.JSONDecodeError as e:
                             message = f"Failed to parse the response body: {str(e)}"
@@ -320,7 +321,7 @@ class AsyncAuditLogsClient:
                                 url=url,
                                 status_code=res.status,
                                 raw_body=response_body,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                             _debug_log_response(self.logger, resp)
                             return resp
@@ -355,6 +356,6 @@ class AsyncAuditLogsClient:
 
         finally:
             if not use_running_session:
-                await session.close()
+                await session.close()  # type: ignore[union-attr]
 
         return resp

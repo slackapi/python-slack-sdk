@@ -142,10 +142,10 @@ class Installation:
             enterprise_name=self.enterprise_name,
             team_id=self.team_id,
             team_name=self.team_name,
-            bot_token=self.bot_token,
-            bot_id=self.bot_id,
-            bot_user_id=self.bot_user_id,
-            bot_scopes=self.bot_scopes,
+            bot_token=self.bot_token,  # type: ignore[arg-type]
+            bot_id=self.bot_id,  # type: ignore[arg-type]
+            bot_user_id=self.bot_user_id,  # type: ignore[arg-type]
+            bot_scopes=self.bot_scopes,  # type: ignore[arg-type]
             bot_refresh_token=self.bot_refresh_token,
             bot_token_expires_at=self.bot_token_expires_at,
             is_enterprise_install=self.is_enterprise_install,

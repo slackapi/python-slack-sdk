@@ -144,13 +144,13 @@ class BaseClient:
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
-            files=files,
-            data=data,
+            files=files,  # type: ignore[arg-type]
+            data=data,  # type: ignore[arg-type]
             default_params=self.default_params,
-            params=params,
-            json=json,  # skipcq: PYL-W0621
+            params=params,  # type: ignore[arg-type]
+            json=json,  # type: ignore[arg-type]
             headers=headers,
-            auth=auth,
+            auth=auth,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
         )
@@ -192,9 +192,9 @@ class BaseClient:
             url=api_url,
             query_params={},
             body_params=body_params,
-            files=files,
-            json_body=_json,
-            additional_headers=headers,
+            files=files,  # type: ignore[arg-type]
+            json_body=_json,  # type: ignore[arg-type]
+            additional_headers=headers,  # type: ignore[arg-type]
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
@@ -278,7 +278,7 @@ class BaseClient:
                         request_data.update({k: v})
 
             request_headers = self._build_urllib_request_headers(
-                token=token or self.token,
+                token=token or self.token,  # type: ignore[arg-type]
                 has_json=json is not None,
                 has_files=files is not None,
                 additional_headers=additional_headers,
@@ -294,7 +294,7 @@ class BaseClient:
                 q = urlencode(query_params)
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
-            response = self._perform_urllib_http_request(url=url, args=request_args)
+            response = self._perform_urllib_http_request(url=url, args=request_args)  # type: ignore[arg-type]
             response_body = response.get("body", None)  # skipcq: PTC-W0039
             response_body_data: Optional[Union[dict, bytes]] = response_body
             if response_body is not None and not isinstance(response_body, bytes):
@@ -315,7 +315,7 @@ class BaseClient:
                 http_verb="POST",  # you can use POST method for all the Web APIs
                 api_url=url,
                 req_args=request_args,
-                data=response_body_data,
+                data=response_body_data,  # type: ignore[arg-type]
                 headers=dict(response["headers"]),
                 status_code=response["status"],
             ).validate()
@@ -407,7 +407,7 @@ class BaseClient:
                     retry_response = RetryHttpResponse(
                         status_code=resp["status"],
                         headers=resp["headers"],
-                        body=body,
+                        body=body,  # type: ignore[arg-type]
                         data=body_bytes,
                     )
                     for handler in self.retry_handlers:
@@ -585,8 +585,8 @@ class BaseClient:
             ssl=ssl,
         )
         return FileUploadV2Result(
-            status=result.get("status"),
-            body=result.get("body"),
+            status=result.get("status"),  # type: ignore[arg-type]
+            body=result.get("body"),  # type: ignore[arg-type]
         )
 
     # =================================================================

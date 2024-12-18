@@ -36,7 +36,7 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
         if not status:
             status_line = line.split(" ", 2)
             status = int(status_line[1])
-    return status, "\n".join(lines)
+    return status, "\n".join(lines)  # type: ignore[arg-type]
 
 
 def _use_or_create_ssl_context(ssl_context: Optional[ssl.SSLContext] = None):
@@ -246,7 +246,7 @@ def _fetch_messages(
     if remaining_bytes is None or len(remaining_bytes) == 0:
         # no more bytes
         if current_header is not None:
-            _append_message(messages, current_header, current_data)
+            _append_message(messages, current_header, current_data)  # type: ignore[arg-type]
         return messages
 
     if current_header is None:
@@ -308,7 +308,7 @@ def _fetch_messages(
         if current_header.masked > 0:
             for i in range(data_to_append):
                 mask = current_mask_key[i % 4]
-                data_to_append[i] ^= mask  # type: ignore
+                data_to_append[i] ^= mask  # type: ignore[index]
             current_data += data_to_append
         else:
             current_data += data_to_append
@@ -342,7 +342,7 @@ def _fetch_messages(
 
     # work in progress with the current_header/current_data
     if current_header is not None:
-        length_needed = current_header.length - len(current_data)
+        length_needed = current_header.length - len(current_data)  # type: ignore[arg-type]
         if length_needed > len(remaining_bytes):
             current_data += remaining_bytes
             # need more bytes to complete this message

@@ -139,11 +139,11 @@ class RTMClient(object):  # skipcq: PYL-R0205
         self._stopped = False
         self._web_client = WebClient(
             token=self.token,
-            base_url=self.base_url,
-            timeout=self.timeout,
+            base_url=self.base_url,  # type: ignore[arg-type]
+            timeout=self.timeout,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
-            run_async=self.run_async,
+            run_async=self.run_async,  # type: ignore[arg-type]
             loop=self._event_loop,
             session=self._session,
             headers=self.headers,

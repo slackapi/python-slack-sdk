@@ -285,13 +285,13 @@ class Option(JsonObject):
         elif option_type == "action" or option_type == "attachment":
             # "action" can be confusing but it means a legacy message action in attachments
             # we don't remove the type name for backward compatibility though
-            json = {"text": self.label, "value": self.value}
+            json: Dict[str, Any] = {"text": self.label, "value": self.value}
             if self.description is not None:
                 json["description"] = self.description
             return json
         else:  # if option_type == "block"; this should be the most common case
-            text: TextObject = self._text or PlainTextObject.from_str(self.label)
-            json: Dict[str, Any] = {
+            text: TextObject = self._text or PlainTextObject.from_str(self.label)  # type: ignore[arg-type]
+            json = {
                 "text": text.to_dict(),
                 "value": self.value,
             }
@@ -343,7 +343,7 @@ class OptionGroup(JsonObject):
             options: A list of no more than 100 Option objects.
         """  # noqa prevent flake8 blowing up on the long URL
         # default_type=PlainTextObject.type is for backward-compatibility
-        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)
+        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.label: Optional[str] = self._label.text if self._label else None
         self.options = Option.parse_all(options)  # compatible with version 2.5
         show_unknown_key_warning(self, others)

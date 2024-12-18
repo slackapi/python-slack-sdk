@@ -163,8 +163,8 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         # It's fine to pass any kwargs to the held dict here although the class does not do any validation.
         # show_unknown_key_warning(self, others)
 
-        self.placeholder = TextObject.parse(placeholder)
-        self.confirm = ConfirmObject.parse(confirm)
+        self.placeholder = TextObject.parse(placeholder)  # type: ignore[arg-type]
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.focus_on_load = focus_on_load
 
     @JsonValidator(f"placeholder attribute cannot exceed {placeholder_max_length} characters")
@@ -240,7 +240,7 @@ class ButtonElement(InteractiveElement):
         self.url = url
         self.value = value
         self.style = style
-        self.confirm = ConfirmObject.parse(confirm)
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.accessibility_label = accessibility_label
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
@@ -350,7 +350,7 @@ class CheckboxesElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -403,8 +403,8 @@ class DatePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -468,8 +468,8 @@ class TimePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -527,7 +527,7 @@ class DateTimePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -584,7 +584,7 @@ class ImageElement(BlockElement):
 
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self) -> bool:
-        return len(self.alt_text) <= self.alt_text_max_length
+        return len(self.alt_text) <= self.alt_text_max_length  # type: ignore[arg-type]
 
 
 # -------------------------------------------------
@@ -639,8 +639,8 @@ class StaticSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -717,8 +717,8 @@ class StaticMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -793,8 +793,8 @@ class SelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -871,8 +871,8 @@ class ExternalDataSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -929,8 +929,8 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -983,8 +983,8 @@ class UserSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1033,8 +1033,8 @@ class UserMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1146,8 +1146,8 @@ class ConversationSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1213,8 +1213,8 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1222,7 +1222,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         self.initial_conversations = initial_conversations
         self.max_selected_items = max_selected_items
         self.default_to_current_conversation = default_to_current_conversation
-        self.filter = ConversationFilter.parse(filter)
+        self.filter = ConversationFilter.parse(filter)  # type: ignore[arg-type]
 
 
 # -------------------------------------------------
@@ -1273,8 +1273,8 @@ class ChannelSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1325,8 +1325,8 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1366,7 +1366,7 @@ class RichTextInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1437,7 +1437,7 @@ class PlainTextInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1495,7 +1495,7 @@ class EmailInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1552,7 +1552,7 @@ class UrlInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1617,7 +1617,7 @@ class NumberInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1719,7 +1719,7 @@ class RadioButtonsElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1777,7 +1777,7 @@ class OverflowMenuElement(InteractiveElement):
         show_unknown_key_warning(self, others)
 
         self.options = options
-        self.confirm = ConfirmObject.parse(confirm)
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
 
     @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
     def _validate_options_length(self) -> bool:

@@ -2209,10 +2209,10 @@ class AsyncWebClient(AsyncBaseClient):
                 "title": title,
             }
         )
-        _update_call_participants(  # skipcq: PTC-W0039
+        _update_call_participants(
             kwargs,
-            users if users is not None else kwargs.get("users"),  # skipcq: PTC-W0039
-        )  # skipcq: PTC-W0039
+            users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
+        )
         return await self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     async def calls_end(

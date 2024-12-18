@@ -200,7 +200,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_token,
                     installation.bot_id,
                     installation.bot_user_id,
-                    ",".join(installation.bot_scopes),
+                    ",".join(installation.bot_scopes),  # type: ignore[arg-type]
                     installation.bot_refresh_token,
                     installation.bot_token_expires_at,
                     installation.user_id,

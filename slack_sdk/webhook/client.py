@@ -135,7 +135,7 @@ class WebhookClient:
             Webhook response
         """
         return self._perform_http_request(
-            body=_build_body(body),
+            body=_build_body(body),  # type: ignore[arg-type]
             headers=_build_request_headers(self.default_headers, headers),
         )
 
@@ -262,19 +262,18 @@ class WebhookClient:
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
-        # NOTE: BAN-B310 is already checked above
         http_resp: Optional[HTTPResponse] = None
         if opener:
-            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)
         else:
-            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
-        charset: str = http_resp.headers.get_content_charset() or "utf-8"
-        response_body: str = http_resp.read().decode(charset)
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
+        charset: str = http_resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
+        response_body: str = http_resp.read().decode(charset)  # type: ignore[union-attr]
         resp = WebhookResponse(
             url=url,
-            status_code=http_resp.status,
+            status_code=http_resp.status,  # type: ignore[union-attr]
             body=response_body,
-            headers=http_resp.headers,
+            headers=http_resp.headers,  # type: ignore[arg-type, union-attr]
         )
         _debug_log_response(self.logger, resp)
         return resp

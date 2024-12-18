@@ -191,7 +191,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         return not self.closed and not _session_closed(self.current_session)
 
     async def session_id(self) -> str:
-        return self.build_session_id(self.current_session)
+        return self.build_session_id(self.current_session)  # type: ignore[arg-type]
 
     async def connect(self):
         if self.wss_uri is None:
@@ -231,7 +231,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     async def send_message(self, message: str):
         session = self.current_session
-        session_id = self.build_session_id(session)
+        session_id = self.build_session_id(session)  # type: ignore[arg-type]
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}, session: {session_id}")
         try:

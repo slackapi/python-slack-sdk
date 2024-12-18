@@ -148,24 +148,24 @@ class SectionBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text)
+        self.text = TextObject.parse(text)  # type: ignore[arg-type]
         field_objects = []
         for f in fields or []:
             if isinstance(f, str):
                 field_objects.append(MarkdownTextObject.from_str(f))
             elif isinstance(f, TextObject):
-                field_objects.append(f)
+                field_objects.append(f)  # type: ignore[arg-type]
             elif isinstance(f, dict) and "type" in f:
                 d = copy.copy(f)
                 t = d.pop("type")
                 if t == MarkdownTextObject.type:
                     field_objects.append(MarkdownTextObject(**d))
                 else:
-                    field_objects.append(PlainTextObject(**d))
+                    field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
                 self.logger.warning(f"Unsupported filed detected and skipped {f}")
         self.fields = field_objects
-        self.accessory = BlockElement.parse(accessory)
+        self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
 
     @JsonValidator("text or fields attribute must be specified")
     def _validate_text_or_fields_populated(self):
@@ -252,7 +252,7 @@ class ImageBlock(Block):
             elif isinstance(title, dict):
                 if title.get("type") != PlainTextObject.type:
                     raise SlackObjectFormationError(f"Unsupported type for title in an image block: {title.get('type')}")
-                parsed_title = PlainTextObject(text=title.get("text"), emoji=title.get("emoji"))
+                parsed_title = PlainTextObject(text=title.get("text"), emoji=title.get("emoji"))  # type: ignore[arg-type]
             elif isinstance(title, PlainTextObject):
                 parsed_title = title
             else:
@@ -394,8 +394,8 @@ class InputBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.label = TextObject.parse(label, default_type=PlainTextObject.type)
-        self.element = BlockElement.parse(element)
-        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
+        self.element = BlockElement.parse(element)  # type: ignore[arg-type]
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.dispatch_action = dispatch_action
         self.optional = optional
 
@@ -506,7 +506,7 @@ class HeaderBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)  # type: ignore[arg-type]
 
     @JsonValidator("text attribute must be specified")
     def _validate_text(self):
@@ -582,9 +582,9 @@ class VideoBlock(Block):
         self.alt_text = alt_text
         self.video_url = video_url
         self.thumbnail_url = thumbnail_url
-        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.title_url = title_url
-        self.description = TextObject.parse(description, default_type=PlainTextObject.type)
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.provider_icon_url = provider_icon_url
         self.provider_name = provider_name
         self.author_name = author_name

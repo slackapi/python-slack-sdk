@@ -414,7 +414,7 @@ class DialogExternalSelector(AbstractDialogSelector):
             name=name,
             label=label,
             value=value,
-            optional=optional,
+            optional=optional,  # type: ignore[arg-type]
             placeholder=placeholder,
         )
         self.min_query_length = min_query_length

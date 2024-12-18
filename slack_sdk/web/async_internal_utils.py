@@ -107,14 +107,14 @@ async def _request_with_session(
                 )
 
             try:
-                async with session.request(http_verb, api_url, **req_args) as res:
+                async with session.request(http_verb, api_url, **req_args) as res:  # type: ignore[union-attr]
                     data: Union[dict, bytes, str] = {}
                     if res.content_type == "application/gzip":
                         # admin.analytics.getFile
                         data = await res.read()
                         retry_response = RetryHttpResponse(
                             status_code=res.status,
-                            headers=res.headers,
+                            headers=res.headers,  # type: ignore[arg-type]
                             data=data,
                         )
                     elif res.content_type == "text/plain":
@@ -122,22 +122,22 @@ async def _request_with_session(
                         data = await res.text()
                         retry_response = RetryHttpResponse(
                             status_code=res.status,
-                            headers=res.headers,
-                            data=data,
+                            headers=res.headers,  # type: ignore[arg-type]
+                            data=data,  # type: ignore[arg-type]
                         )
                     else:
                         try:
                             data = await res.json()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
-                                body=data,
+                                headers=res.headers,  # type: ignore[arg-type]
+                                body=data,  # type: ignore[arg-type]
                             )
                         except aiohttp.ContentTypeError:
                             logger.debug(f"No response data returned from the following API call: {api_url}.")
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                         except json.decoder.JSONDecodeError:
                             try:
@@ -214,6 +214,6 @@ async def _request_with_session(
 
     finally:
         if not use_running_session:
-            await session.close()
+            await session.close()  # type: ignore[union-attr]
 
     return response

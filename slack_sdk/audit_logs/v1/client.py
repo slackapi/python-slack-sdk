@@ -356,7 +356,7 @@ class AuditLogsClient:
             url=url,
             status_code=http_resp.status,
             raw_body=response_body,
-            headers=http_resp.headers,
+            headers=http_resp.headers,  # type: ignore[arg-type]
         )
         _debug_log_response(self.logger, resp)
         return resp

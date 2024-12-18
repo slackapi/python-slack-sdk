@@ -2202,7 +2202,7 @@ class WebClient(BaseClient):
         )
         _update_call_participants(  # skipcq: PTC-W0039
             kwargs,
-            users if users is not None else kwargs.get("users"),  # skipcq: PTC-W0039
+            users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
         )  # skipcq: PTC-W0039
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 
@@ -3805,8 +3805,8 @@ class WebClient(BaseClient):
 
         for f in files:
             url_response = self.files_getUploadURLExternal(
-                filename=f.get("filename"),
-                length=f.get("length"),
+                filename=f.get("filename"),  # type: ignore[arg-type]
+                length=f.get("length"),  # type: ignore[arg-type]
                 alt_txt=f.get("alt_txt"),
                 snippet_type=f.get("snippet_type"),
                 token=kwargs.get("token"),

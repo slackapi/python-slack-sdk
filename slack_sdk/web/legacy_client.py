@@ -2213,7 +2213,7 @@ class LegacyWebClient(LegacyBaseClient):
         )
         _update_call_participants(  # skipcq: PTC-W0039
             kwargs,
-            users if users is not None else kwargs.get("users"),  # skipcq: PTC-W0039
+            users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
         )  # skipcq: PTC-W0039
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 

@@ -148,13 +148,13 @@ class AsyncBaseClient:
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
-            files=files,
-            data=data,
+            files=files,  # type: ignore[arg-type]
+            data=data,  # type: ignore[arg-type]
             default_params=self.default_params,
-            params=params,
-            json=json,  # skipcq: PYL-W0621
+            params=params,  # type: ignore[arg-type]
+            json=json,  # type: ignore[arg-type]
             headers=headers,
-            auth=auth,
+            auth=auth,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
         )
@@ -239,6 +239,6 @@ class AsyncBaseClient:
             retry_handlers=self.retry_handlers,
         )
         return FileUploadV2Result(
-            status=result.get("status_code"),
-            body=result.get("body"),
+            status=result.get("status_code"),  # type: ignore[arg-type]
+            body=result.get("body"),  # type: ignore[arg-type]
         )

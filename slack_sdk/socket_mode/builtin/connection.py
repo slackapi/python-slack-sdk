@@ -303,7 +303,7 @@ class Connection:
             try:
                 if self.is_active():
                     received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
-                        sock=self.sock,
+                        sock=self.sock,  # type: ignore[arg-type]
                         sock_receive_lock=self.sock_receive_lock,
                         logger=self.logger,
                         receive_buffer_size=self.receive_buffer_size,
