@@ -122,9 +122,13 @@ hljs.highlightAll();
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="slack_sdk.models.blocks.block_elements.BlockElement.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.BlockElement.logger"><code class="name">var <span class="ident">logger</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
@@ -161,7 +165,6 @@ def subtype(self) -&gt; Optional[str]:
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
 <ul class="hlist">
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
@@ -313,27 +316,29 @@ Maximum length for this field is 75 characters.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ButtonElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length"><code class="name">var <span class="ident">url_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length"><code class="name">var <span class="ident">value_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -440,21 +445,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_channels&#34;, &#34;max_selected_items&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -561,21 +579,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ChannelSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ChannelSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_channel&#34;, &#34;response_url_enabled&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -668,21 +699,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.CheckboxesElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.CheckboxesElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;options&#34;, &#34;initial_options&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -761,9 +805,13 @@ from conversation lists. Defaults to false.</dd>
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationFilter.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationFilter.logger"><code class="name">var <span class="ident">logger</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
@@ -779,7 +827,6 @@ from conversation lists. Defaults to false.</dd>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
 <ul class="hlist">
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
@@ -908,21 +955,41 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_conversations&#34;,
+            &#34;max_selected_items&#34;,
+            &#34;default_to_current_conversation&#34;,
+            &#34;filter&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1050,21 +1117,41 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ConversationSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ConversationSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_conversation&#34;,
+            &#34;response_url_enabled&#34;,
+            &#34;filter&#34;,
+            &#34;default_to_current_conversation&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1169,21 +1256,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.DatePickerElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.DatePickerElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_date&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1286,21 +1386,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.DateTimePickerElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.DateTimePickerElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_date_time&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1397,21 +1510,39 @@ email input. Maximum length for the text in this field is 150 characters.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.EmailInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.EmailInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_value&#34;,
+            &#34;dispatch_action_config&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1529,21 +1660,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;min_query_length&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1656,21 +1800,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;min_query_length&#34;, &#34;initial_option&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1757,21 +1914,39 @@ Minimum of 1, maximum of 10. Defaults to 10 if not specified.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.FileInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.FileInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;filetypes&#34;,
+            &#34;max_files&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1852,24 +2027,22 @@ you're looking for the image block.
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ImageElement.alt_text_max_length"><code class="name">var <span class="ident">alt_text_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ImageElement.image_url_max_length"><code class="name">var <span class="ident">image_url_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.ImageElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.ImageElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1885,6 +2058,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -1982,9 +2156,13 @@ def attributes(self) -&gt; Set[str]:
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length"><code class="name">var <span class="ident">placeholder_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -2006,8 +2184,9 @@ def subtype(self) -&gt; Optional[str]:
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
 <ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -2077,16 +2256,14 @@ def subtype(self) -&gt; Optional[str]:
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length"><code class="name">var <span class="ident">action_id_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2102,6 +2279,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -2203,10 +2381,16 @@ If you don't include this field, the default button style will be used.</dd>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.text_max_length">text_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.type" href="#slack_sdk.models.blocks.block_elements.ButtonElement.type">type</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.url_max_length">url_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length" href="#slack_sdk.models.blocks.block_elements.ButtonElement.value_max_length">value_max_length</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2323,21 +2507,42 @@ in the plain-text input. Maximum length for the text in this field is 150 charac
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.NumberInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.NumberInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_value&#34;,
+            &#34;is_decimal_allowed&#34;,
+            &#34;min_value&#34;,
+            &#34;max_value&#34;,
+            &#34;dispatch_action_config&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2437,23 +2642,25 @@ after a menu item is selected.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.options_min_length"><code class="name">var <span class="ident">options_min_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.OverflowMenuElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -2584,21 +2791,42 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.PlainTextInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.PlainTextInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_value&#34;,
+            &#34;multiline&#34;,
+            &#34;min_length&#34;,
+            &#34;max_length&#34;,
+            &#34;dispatch_action_config&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2691,21 +2919,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RadioButtonsElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;options&#34;, &#34;initial_option&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2751,14 +2992,11 @@ Only one element can be set to true. Defaults to false.</dd>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.attributes" href="#slack_sdk.models.blocks.block_elements.BlockElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3036,7 +3274,7 @@ Only one element can be set to true. Defaults to false.</dd>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.TextStyle"><code class="name">var <span class="ident">TextStyle</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextElementParts.User"><code class="name">var <span class="ident">User</span></code></dt>
 <dd>
@@ -3109,21 +3347,39 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.RichTextInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_value&#34;,
+            &#34;dispatch_action_config&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3175,16 +3431,14 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextListElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextListElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3200,6 +3454,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -3247,16 +3502,14 @@ def attributes(self) -&gt; Set[str]:
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextPreformattedElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3272,6 +3525,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -3317,16 +3571,14 @@ def attributes(self) -&gt; Set[str]:
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextQuoteElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3342,6 +3594,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -3387,16 +3640,14 @@ def attributes(self) -&gt; Set[str]:
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextSectionElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.RichTextSectionElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>set() -&gt; new empty set object
-set(iterable) -&gt; new set object</p>
-<p>Build an unordered collection of unique elements.</p></div>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3412,6 +3663,7 @@ def attributes(self) -&gt; Set[str]:
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a></b></code>:
 <ul class="hlist">
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -3544,29 +3796,42 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.SelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.SelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.SelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3705,29 +3970,42 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_options&#34;, &#34;max_selected_items&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3858,29 +4136,42 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length"><code class="name">var <span class="ident">option_groups_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length"><code class="name">var <span class="ident">options_max_length</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.StaticSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;options&#34;, &#34;option_groups&#34;, &#34;initial_option&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -3993,21 +4284,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.TimePickerElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.TimePickerElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_time&#34;, &#34;timezone&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4108,21 +4412,39 @@ Maximum length for the text in this field is 150 characters.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.UrlInputElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.UrlInputElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union(
+        {
+            &#34;initial_value&#34;,
+            &#34;dispatch_action_config&#34;,
+        }
+    )</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4225,21 +4547,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_users&#34;, &#34;max_selected_items&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4335,21 +4670,34 @@ Only one element can be set to true. Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.UserSelectElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.UserSelectElement.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:
+    return super().attributes.union({&#34;initial_user&#34;})</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>
@@ -4457,15 +4805,17 @@ Maximum length for this field is 75 characters.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.block_elements.WorkflowButtonElement.type"><code class="name">var <span class="ident">type</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
@@ -4490,6 +4840,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.attributes" href="#slack_sdk.models.blocks.block_elements.BlockElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.parse" href="#slack_sdk.models.blocks.block_elements.BlockElement.parse">parse</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.BlockElement.parse_all" href="#slack_sdk.models.blocks.block_elements.BlockElement.parse_all">parse_all</a></code></li>
@@ -4508,24 +4859,28 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement">ChannelMultiSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ChannelMultiSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement">ChannelSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ChannelSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ChannelSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement">CheckboxesElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement.attributes" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.CheckboxesElement.type" href="#slack_sdk.models.blocks.block_elements.CheckboxesElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter.attributes" href="#slack_sdk.models.blocks.block_elements.ConversationFilter.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter.logger" href="#slack_sdk.models.blocks.block_elements.ConversationFilter.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ConversationFilter.parse" href="#slack_sdk.models.blocks.block_elements.ConversationFilter.parse">parse</a></code></li>
 </ul>
@@ -4533,48 +4888,56 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement">ConversationMultiSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ConversationMultiSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement">ConversationSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ConversationSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ConversationSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.DatePickerElement" href="#slack_sdk.models.blocks.block_elements.DatePickerElement">DatePickerElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.DatePickerElement.attributes" href="#slack_sdk.models.blocks.block_elements.DatePickerElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.DatePickerElement.type" href="#slack_sdk.models.blocks.block_elements.DatePickerElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.DateTimePickerElement" href="#slack_sdk.models.blocks.block_elements.DateTimePickerElement">DateTimePickerElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.DateTimePickerElement.attributes" href="#slack_sdk.models.blocks.block_elements.DateTimePickerElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.DateTimePickerElement.type" href="#slack_sdk.models.blocks.block_elements.DateTimePickerElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.EmailInputElement" href="#slack_sdk.models.blocks.block_elements.EmailInputElement">EmailInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.EmailInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.EmailInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.EmailInputElement.type" href="#slack_sdk.models.blocks.block_elements.EmailInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement">ExternalDataMultiSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ExternalDataMultiSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement">ExternalDataSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type" href="#slack_sdk.models.blocks.block_elements.ExternalDataSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement" href="#slack_sdk.models.blocks.block_elements.FileInputElement">FileInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.FileInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement.type" href="#slack_sdk.models.blocks.block_elements.FileInputElement.type">type</a></code></li>
 </ul>
 </li>
@@ -4590,6 +4953,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.subtype" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.subtype">subtype</a></code></li>
 </ul>
@@ -4607,6 +4971,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.NumberInputElement" href="#slack_sdk.models.blocks.block_elements.NumberInputElement">NumberInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.NumberInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.NumberInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.NumberInputElement.type" href="#slack_sdk.models.blocks.block_elements.NumberInputElement.type">type</a></code></li>
 </ul>
 </li>
@@ -4621,12 +4986,14 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement">PlainTextInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.PlainTextInputElement.type" href="#slack_sdk.models.blocks.block_elements.PlainTextInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement">RadioButtonsElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement.attributes" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RadioButtonsElement.type" href="#slack_sdk.models.blocks.block_elements.RadioButtonsElement.type">type</a></code></li>
 </ul>
 </li>
@@ -4652,6 +5019,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement">RichTextInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.RichTextInputElement.type" href="#slack_sdk.models.blocks.block_elements.RichTextInputElement.type">type</a></code></li>
 </ul>
 </li>
@@ -4686,6 +5054,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.SelectElement" href="#slack_sdk.models.blocks.block_elements.SelectElement">SelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.SelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.SelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.SelectElement.options_max_length">options_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.SelectElement.type" href="#slack_sdk.models.blocks.block_elements.SelectElement.type">type</a></code></li>
@@ -4694,6 +5063,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement">StaticMultiSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.options_max_length">options_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.StaticMultiSelectElement.type">type</a></code></li>
@@ -4702,6 +5072,7 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement">StaticSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.option_groups_max_length">option_groups_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.options_max_length">options_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.StaticSelectElement.type" href="#slack_sdk.models.blocks.block_elements.StaticSelectElement.type">type</a></code></li>
@@ -4710,24 +5081,28 @@ Maximum length for this field is 75 characters.</dd>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.TimePickerElement" href="#slack_sdk.models.blocks.block_elements.TimePickerElement">TimePickerElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.TimePickerElement.attributes" href="#slack_sdk.models.blocks.block_elements.TimePickerElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.TimePickerElement.type" href="#slack_sdk.models.blocks.block_elements.TimePickerElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.UrlInputElement" href="#slack_sdk.models.blocks.block_elements.UrlInputElement">UrlInputElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.UrlInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.UrlInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.UrlInputElement.type" href="#slack_sdk.models.blocks.block_elements.UrlInputElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement">UserMultiSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type" href="#slack_sdk.models.blocks.block_elements.UserMultiSelectElement.type">type</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement" href="#slack_sdk.models.blocks.block_elements.UserSelectElement">UserSelectElement</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement.attributes" href="#slack_sdk.models.blocks.block_elements.UserSelectElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.UserSelectElement.type" href="#slack_sdk.models.blocks.block_elements.UserSelectElement.type">type</a></code></li>
 </ul>
 </li>

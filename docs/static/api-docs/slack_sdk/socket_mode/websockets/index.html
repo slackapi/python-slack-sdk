@@ -92,7 +92,7 @@ hljs.highlightAll();
     ping_interval: float
     trace_enabled: bool
 
-    current_session: Optional[WebSocketClientProtocol]
+    current_session: Optional[ClientConnection]
     current_session_monitor: Optional[Future]
 
     auto_reconnect_enabled: bool
@@ -142,7 +142,7 @@ hljs.highlightAll();
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: WebSocketClientProtocol = self.current_session
+        session: ClientConnection = self.current_session
         session_id: str = await self.session_id()
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;A new monitor_current_session() execution loop for {session_id} started&#34;)
@@ -154,7 +154,7 @@ hljs.highlightAll();
                     break
                 await asyncio.sleep(self.ping_interval)
                 try:
-                    if self.auto_reconnect_enabled and (session is None or session.closed):
+                    if self.auto_reconnect_enabled and _session_closed(session=session):
                         self.logger.info(f&#34;The session ({session_id}) seems to be already closed. Reconnecting...&#34;)
                         await self.connect_to_new_endpoint()
                 except Exception as e:
@@ -171,7 +171,7 @@ hljs.highlightAll();
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: WebSocketClientProtocol = self.current_session
+        session: ClientConnection = self.current_session
         session_id: str = await self.session_id()
         consecutive_error_count = 0
         if self.logger.level &lt;= logging.DEBUG:
@@ -208,7 +208,7 @@ hljs.highlightAll();
             raise
 
     async def is_connected(self) -&gt; bool:
-        return not self.closed and self.current_session is not None and not self.current_session.closed
+        return not self.closed and not _session_closed(self.current_session)
 
     async def session_id(self) -&gt; str:
         return self.build_session_id(self.current_session)
@@ -216,7 +216,7 @@ hljs.highlightAll();
     async def connect(self):
         if self.wss_uri is None:
             self.wss_uri = await self.issue_new_wss_url()
-        old_session: Optional[WebSocketClientProtocol] = None if self.current_session is None else self.current_session
+        old_session: Optional[ClientConnection] = None if self.current_session is None else self.current_session
         # NOTE: websockets does not support proxy settings
         self.current_session = await websockets.connect(
             uri=self.wss_uri,
@@ -287,7 +287,7 @@ hljs.highlightAll();
             self.message_receiver.cancel()
 
     @classmethod
-    def build_session_id(cls, session: WebSocketClientProtocol) -&gt; str:
+    def build_session_id(cls, session: ClientConnection) -&gt; str:
         if session is None:
             return &#34;&#34;
         return &#34;s_&#34; + str(hash(session))</code></pre>
@@ -298,79 +298,35 @@ hljs.highlightAll();
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.app_token"><code class="name">var <span class="ident">app_token</span> : str</code></dt>
+<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.current_session"><code class="name">var <span class="ident">current_session</span> : websockets.asyncio.client.ClientConnection | None</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.auto_reconnect_enabled"><code class="name">var <span class="ident">auto_reconnect_enabled</span> : bool</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.closed"><code class="name">var <span class="ident">closed</span> : bool</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock"><code class="name">var <span class="ident">connect_operation_lock</span> : asyncio.locks.Lock</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.current_session"><code class="name">var <span class="ident">current_session</span> : websockets.legacy.client.WebSocketClientProtocol | None</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.current_session_monitor"><code class="name">var <span class="ident">current_session_monitor</span> : _asyncio.Future | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.default_auto_reconnect_enabled"><code class="name">var <span class="ident">default_auto_reconnect_enabled</span> : bool</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.logger"><code class="name">var <span class="ident">logger</span> : logging.Logger</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners"><code class="name">var <span class="ident">message_listeners</span> : List[<a title="slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncWebSocketMessageListener">AsyncWebSocketMessageListener</a> | Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, dict, str | None], Awaitable[None]]]</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_processor"><code class="name">var <span class="ident">message_processor</span> : _asyncio.Future</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_queue"><code class="name">var <span class="ident">message_queue</span> : asyncio.queues.Queue</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.message_receiver"><code class="name">var <span class="ident">message_receiver</span> : _asyncio.Future | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.ping_interval"><code class="name">var <span class="ident">ping_interval</span> : float</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners"><code class="name">var <span class="ident">socket_mode_request_listeners</span> : List[<a title="slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener" href="../async_listeners.html#slack_sdk.socket_mode.async_listeners.AsyncSocketModeRequestListener">AsyncSocketModeRequestListener</a> | Callable[[<a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a>, <a title="slack_sdk.socket_mode.request.SocketModeRequest" href="../request.html#slack_sdk.socket_mode.request.SocketModeRequest">SocketModeRequest</a>], Awaitable[None]]]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled"><code class="name">var <span class="ident">trace_enabled</span> : bool</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.web_client"><code class="name">var <span class="ident">web_client</span> : <a title="slack_sdk.web.async_client.AsyncWebClient" href="../../web/async_client.html#slack_sdk.web.async_client.AsyncWebClient">AsyncWebClient</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.socket_mode.websockets.SocketModeClient.wss_uri"><code class="name">var <span class="ident">wss_uri</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.websockets.SocketModeClient.build_session_id"><code class="name flex">
-<span>def <span class="ident">build_session_id</span></span>(<span>session: websockets.legacy.client.WebSocketClientProtocol) ‑> str</span>
+<span>def <span class="ident">build_session_id</span></span>(<span>session: websockets.asyncio.client.ClientConnection) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -427,6 +383,24 @@ hljs.highlightAll();
 <div class="desc"></div>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient">AsyncBaseSocketModeClient</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.app_token" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.app_token">app_token</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.auto_reconnect_enabled" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.auto_reconnect_enabled">auto_reconnect_enabled</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.closed" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.closed">closed</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_operation_lock" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.connect_operation_lock">connect_operation_lock</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.logger" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_listeners">message_listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_queue" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.message_queue">message_queue</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.socket_mode_request_listeners">socket_mode_request_listeners</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.trace_enabled" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.trace_enabled">trace_enabled</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.web_client" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.web_client">web_client</a></code></li>
+<li><code><a title="slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.wss_uri" href="../async_client.html#slack_sdk.socket_mode.async_client.AsyncBaseSocketModeClient.wss_uri">wss_uri</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -446,32 +420,21 @@ hljs.highlightAll();
 <li>
 <h4><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient" href="#slack_sdk.socket_mode.websockets.SocketModeClient">SocketModeClient</a></code></h4>
 <ul class="">
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.app_token" href="#slack_sdk.socket_mode.websockets.SocketModeClient.app_token">app_token</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.auto_reconnect_enabled" href="#slack_sdk.socket_mode.websockets.SocketModeClient.auto_reconnect_enabled">auto_reconnect_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.build_session_id" href="#slack_sdk.socket_mode.websockets.SocketModeClient.build_session_id">build_session_id</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.close" href="#slack_sdk.socket_mode.websockets.SocketModeClient.close">close</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.closed" href="#slack_sdk.socket_mode.websockets.SocketModeClient.closed">closed</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.connect" href="#slack_sdk.socket_mode.websockets.SocketModeClient.connect">connect</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock" href="#slack_sdk.socket_mode.websockets.SocketModeClient.connect_operation_lock">connect_operation_lock</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.current_session" href="#slack_sdk.socket_mode.websockets.SocketModeClient.current_session">current_session</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.current_session_monitor" href="#slack_sdk.socket_mode.websockets.SocketModeClient.current_session_monitor">current_session_monitor</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.default_auto_reconnect_enabled" href="#slack_sdk.socket_mode.websockets.SocketModeClient.default_auto_reconnect_enabled">default_auto_reconnect_enabled</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.disconnect" href="#slack_sdk.socket_mode.websockets.SocketModeClient.disconnect">disconnect</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.is_connected" href="#slack_sdk.socket_mode.websockets.SocketModeClient.is_connected">is_connected</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.logger" href="#slack_sdk.socket_mode.websockets.SocketModeClient.logger">logger</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_listeners">message_listeners</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_processor" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_processor">message_processor</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_queue" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_queue">message_queue</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.message_receiver" href="#slack_sdk.socket_mode.websockets.SocketModeClient.message_receiver">message_receiver</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.monitor_current_session" href="#slack_sdk.socket_mode.websockets.SocketModeClient.monitor_current_session">monitor_current_session</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.ping_interval" href="#slack_sdk.socket_mode.websockets.SocketModeClient.ping_interval">ping_interval</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.receive_messages" href="#slack_sdk.socket_mode.websockets.SocketModeClient.receive_messages">receive_messages</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.send_message" href="#slack_sdk.socket_mode.websockets.SocketModeClient.send_message">send_message</a></code></li>
 <li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.session_id" href="#slack_sdk.socket_mode.websockets.SocketModeClient.session_id">session_id</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners" href="#slack_sdk.socket_mode.websockets.SocketModeClient.socket_mode_request_listeners">socket_mode_request_listeners</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled" href="#slack_sdk.socket_mode.websockets.SocketModeClient.trace_enabled">trace_enabled</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.web_client" href="#slack_sdk.socket_mode.websockets.SocketModeClient.web_client">web_client</a></code></li>
-<li><code><a title="slack_sdk.socket_mode.websockets.SocketModeClient.wss_uri" href="#slack_sdk.socket_mode.websockets.SocketModeClient.wss_uri">wss_uri</a></code></li>
 </ul>
 </li>
 </ul>
