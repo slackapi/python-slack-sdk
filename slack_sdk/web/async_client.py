@@ -2209,10 +2209,10 @@ class AsyncWebClient(AsyncBaseClient):
                 "title": title,
             }
         )
-        _update_call_participants(
+        _update_call_participants(  # skipcq: PTC-W0039
             kwargs,
             users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
-        )
+        )  # skipcq: PTC-W0039
         return await self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     async def calls_end(
@@ -3299,7 +3299,7 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         if invite_ids is not None:
-            if isinstance(invite_ids, (list, Tuple)):
+            if isinstance(invite_ids, (list, tuple)):
                 kwargs.update({"invite_ids": ",".join(invite_ids)})
             else:
                 kwargs.update({"invite_ids": invite_ids})
@@ -3814,8 +3814,8 @@ class AsyncWebClient(AsyncBaseClient):
 
         for f in files:
             url_response = await self.files_getUploadURLExternal(
-                filename=f["filename"],
-                length=f["length"],
+                filename=f.get("filename"),  # type: ignore[arg-type]
+                length=f.get("length"),  # type: ignore[arg-type]
                 alt_txt=f.get("alt_txt"),
                 snippet_type=f.get("snippet_type"),
                 token=kwargs.get("token"),

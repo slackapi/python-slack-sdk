@@ -32,7 +32,7 @@ class SocketModeClient(BaseSocketModeClient):
     logger: Logger
     web_client: WebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -58,7 +58,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
-    close: bool
+    close: bool  # type: ignore[assignment]
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]

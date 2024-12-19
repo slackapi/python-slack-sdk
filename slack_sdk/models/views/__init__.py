@@ -159,12 +159,12 @@ class ViewState(JsonObject):
                             self._show_warning_about_unknown(v)
                             continue
                         new_actions[action_id] = value_object
-                    value_objects[block_id] = new_actions
+                    value_objects[block_id] = new_actions  # type: ignore[assignment]
                 else:
                     self._show_warning_about_unknown(v)
         self.values = value_objects
 
-    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:  # type: ignore
+    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:
         self.validate_json()
         if self.values is not None:
             dict_values: Dict[str, Dict[str, dict]] = {}
@@ -229,4 +229,4 @@ class ViewStateValue(JsonObject):
                 elif isinstance(option, dict):
                     self.selected_options.append(Option(**option))
         else:
-            self.selected_options = selected_options
+            self.selected_options = selected_options  # type: ignore[assignment]

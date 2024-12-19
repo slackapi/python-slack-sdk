@@ -100,7 +100,7 @@ class InteractiveElement(BlockElement):
     action_id_max_length = 255
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "action_id"})
 
     def __init__(
@@ -188,7 +188,7 @@ class ButtonElement(InteractiveElement):
     value_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "url", "value", "style", "confirm", "accessibility_label"})
 
     def __init__(
@@ -318,7 +318,7 @@ class CheckboxesElement(InputInteractiveElement):
     type = "checkboxes"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "initial_options"})
 
     def __init__(
@@ -368,7 +368,7 @@ class DatePickerElement(InputInteractiveElement):
     type = "datepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_date"})
 
     def __init__(
@@ -428,7 +428,7 @@ class TimePickerElement(InputInteractiveElement):
     type = "timepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_time", "timezone"})
 
     def __init__(
@@ -491,7 +491,7 @@ class DateTimePickerElement(InputInteractiveElement):
     type = "datetimepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_date_time"})
 
     def __init__(
@@ -550,7 +550,7 @@ class ImageElement(BlockElement):
     alt_text_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "image_url", "slack_file"})
 
     def __init__(
@@ -598,7 +598,7 @@ class StaticSelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_option"})
 
     def __init__(
@@ -672,7 +672,7 @@ class StaticMultiSelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_options", "max_selected_items"})
 
     def __init__(
@@ -752,7 +752,7 @@ class SelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_option"})
 
     def __init__(
@@ -829,7 +829,7 @@ class ExternalDataSelectElement(InputInteractiveElement):
     type = "external_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length", "initial_option"})
 
     def __init__(
@@ -885,7 +885,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
     type = "multi_external_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length", "initial_options", "max_selected_items"})
 
     def __init__(
@@ -949,7 +949,7 @@ class UserSelectElement(InputInteractiveElement):
     type = "users_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_user"})
 
     def __init__(
@@ -996,7 +996,7 @@ class UserMultiSelectElement(InputInteractiveElement):
     type = "multi_users_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_users", "max_selected_items"})
 
     def __init__(
@@ -1094,7 +1094,7 @@ class ConversationSelectElement(InputInteractiveElement):
     type = "conversations_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_conversation",
@@ -1162,7 +1162,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
     type = "multi_conversations_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_conversations",
@@ -1234,7 +1234,7 @@ class ChannelSelectElement(InputInteractiveElement):
     type = "channels_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_channel", "response_url_enabled"})
 
     def __init__(
@@ -1287,7 +1287,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
     type = "multi_channels_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_channels", "max_selected_items"})
 
     def __init__(
@@ -1344,7 +1344,7 @@ class RichTextInputElement(InputInteractiveElement):
     type = "rich_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1352,13 +1352,13 @@ class RichTextInputElement(InputInteractiveElement):
             }
         )
 
-    def __init__(  # type: ignore
+    def __init__(
         self,
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         # To avoid circular imports, the RichTextBlock type here is intentionally a string
-        initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # noqa: F821
+        initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # type: ignore[name-defined] # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
@@ -1384,7 +1384,7 @@ class PlainTextInputElement(InputInteractiveElement):
     type = "plain_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1458,7 +1458,7 @@ class EmailInputElement(InputInteractiveElement):
     type = "email_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1513,7 +1513,7 @@ class UrlInputElement(InputInteractiveElement):
     type = "url_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1570,7 +1570,7 @@ class NumberInputElement(InputInteractiveElement):
     type = "number_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1638,7 +1638,7 @@ class FileInputElement(InputInteractiveElement):
     type = "file_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "filetypes",
@@ -1687,7 +1687,7 @@ class RadioButtonsElement(InputInteractiveElement):
     type = "radio_buttons"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "initial_option"})
 
     def __init__(
@@ -1739,7 +1739,7 @@ class OverflowMenuElement(InteractiveElement):
     options_max_length = 5
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"confirm", "options"})
 
     def __init__(
@@ -1793,7 +1793,7 @@ class WorkflowButtonElement(InteractiveElement):
     type = "workflow_button"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "workflow", "style", "accessibility_label"})
 
     def __init__(
@@ -1854,7 +1854,7 @@ class RichTextListElement(RichTextElement):
     type = "rich_text_list"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements", "style", "indent", "offset", "border"})
 
     def __init__(
@@ -1880,7 +1880,7 @@ class RichTextPreformattedElement(RichTextElement):
     type = "rich_text_preformatted"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements", "border"})
 
     def __init__(
@@ -1900,7 +1900,7 @@ class RichTextQuoteElement(RichTextElement):
     type = "rich_text_quote"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -1918,7 +1918,7 @@ class RichTextSectionElement(RichTextElement):
     type = "rich_text_section"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -1960,7 +1960,7 @@ class RichTextElementParts:
         type = "text"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"text", "style"})
 
         def __init__(
@@ -1979,7 +1979,7 @@ class RichTextElementParts:
         type = "channel"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"channel_id", "style"})
 
         def __init__(
@@ -1998,7 +1998,7 @@ class RichTextElementParts:
         type = "user"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"user_id", "style"})
 
         def __init__(
@@ -2017,7 +2017,7 @@ class RichTextElementParts:
         type = "emoji"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"name", "skin_tone", "unicode", "style"})
 
         def __init__(
@@ -2040,7 +2040,7 @@ class RichTextElementParts:
         type = "link"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"url", "text", "style"})
 
         def __init__(
@@ -2061,7 +2061,7 @@ class RichTextElementParts:
         type = "team"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"team_id", "style"})
 
         def __init__(
@@ -2080,7 +2080,7 @@ class RichTextElementParts:
         type = "usergroup"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"usergroup_id", "style"})
 
         def __init__(
@@ -2099,7 +2099,7 @@ class RichTextElementParts:
         type = "date"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"timestamp", "format", "url", "fallback"})
 
         def __init__(
@@ -2122,7 +2122,7 @@ class RichTextElementParts:
         type = "broadcast"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"range"})
 
         def __init__(
@@ -2139,7 +2139,7 @@ class RichTextElementParts:
         type = "color"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"value"})
 
         def __init__(

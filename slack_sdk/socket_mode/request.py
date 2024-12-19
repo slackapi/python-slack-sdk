@@ -53,5 +53,5 @@ class SocketModeRequest:
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
         d = {"envelope_id": self.envelope_id}
         if self.payload is not None:
-            d["payload"] = self.payload
+            d["payload"] = self.payload  # type: ignore[assignment]
         return d

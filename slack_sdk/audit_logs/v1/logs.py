@@ -822,7 +822,7 @@ class Details:
         self.rules_checked = None
         if rules_checked is not None:
             self.rules_checked = []
-            for a in rules_checked:
+            for a in rules_checked:  # type: ignore[assignment]
                 if isinstance(a, dict):
                     self.rules_checked.append(AAARule(**a))  # type: ignore[arg-type]
                 else:
@@ -1235,7 +1235,7 @@ class LogsResponse:
         provided: Optional[str] = None,
         **kwargs,
     ) -> None:
-        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]  # type: ignore[union-attr]
         self.response_metadata = (
             ResponseMetadata(**response_metadata) if isinstance(response_metadata, dict) else response_metadata
         )

@@ -218,7 +218,7 @@ class AuditLogsClient:
         headers: Dict[str, str],
     ) -> AuditLogsResponse:
         if body is not None:
-            body = json.dumps(body)
+            body = json.dumps(body)  # type: ignore[assignment]
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
@@ -230,7 +230,7 @@ class AuditLogsClient:
         req = Request(
             method=http_verb,
             url=url,
-            data=body.encode("utf-8") if body is not None else None,
+            data=body.encode("utf-8") if body is not None else None,  # type: ignore[attr-defined]
             headers=headers,
         )
         resp = None
@@ -328,7 +328,7 @@ class AuditLogsClient:
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     def _perform_http_request_internal(self, url: str, req: Request) -> AuditLogsResponse:
         opener: Optional[OpenerDirector] = None

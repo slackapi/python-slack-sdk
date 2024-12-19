@@ -374,7 +374,7 @@ class DialogExternalSelector(AbstractDialogSelector):
     data_source = "external"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length"})
 
     def __init__(

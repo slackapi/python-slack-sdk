@@ -3301,7 +3301,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if invite_ids is not None:
-            if isinstance(invite_ids, (list, Tuple)):
+            if isinstance(invite_ids, (list, tuple)):
                 kwargs.update({"invite_ids": ",".join(invite_ids)})
             else:
                 kwargs.update({"invite_ids": invite_ids})
@@ -3816,15 +3816,15 @@ class LegacyWebClient(LegacyBaseClient):
 
         for f in files:
             url_response = self.files_getUploadURLExternal(
-                filename=f["filename"],
-                length=f["length"],
+                filename=f.get("filename"),  # type: ignore[arg-type]
+                length=f.get("length"),  # type: ignore[arg-type]
                 alt_txt=f.get("alt_txt"),
                 snippet_type=f.get("snippet_type"),
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")  # type: ignore
-            f["upload_url"] = url_response.get("upload_url")  # type: ignore
+            f["file_id"] = url_response.get("file_id")
+            f["upload_url"] = url_response.get("upload_url")
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:

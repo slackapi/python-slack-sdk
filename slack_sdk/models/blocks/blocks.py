@@ -114,7 +114,7 @@ class SectionBlock(Block):
     text_max_length = 3000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "fields", "accessory"})
 
     def __init__(
@@ -207,7 +207,7 @@ class ImageBlock(Block):
     type = "image"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "image_url", "title", "slack_file"})
 
     image_url_max_length = 3000
@@ -281,7 +281,7 @@ class ActionsBlock(Block):
     elements_max_length = 25
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -319,7 +319,7 @@ class ContextBlock(Block):
     elements_max_length = 10
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -355,7 +355,7 @@ class InputBlock(Block):
     hint_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"label", "hint", "element", "optional", "dispatch_action"})
 
     def __init__(
@@ -421,7 +421,7 @@ class FileBlock(Block):
     type = "file"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"external_id", "source"})
 
     def __init__(
@@ -454,7 +454,7 @@ class CallBlock(Block):
     type = "call"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"call_id", "api_decoration_available", "call"})
 
     def __init__(
@@ -482,7 +482,7 @@ class HeaderBlock(Block):
     text_max_length = 150
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text"})
 
     def __init__(
@@ -523,7 +523,7 @@ class VideoBlock(Block):
     author_name_max_length = 50
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "alt_text",
@@ -618,7 +618,7 @@ class RichTextBlock(Block):
     type = "rich_text"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(

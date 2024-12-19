@@ -136,7 +136,7 @@ class AsyncBaseClient:
         api_url = _get_url(self.base_url, api_method)
         if auth is not None:
             if isinstance(auth, Dict):
-                auth = BasicAuth(auth["client_id"], auth["client_secret"])
+                auth = BasicAuth(auth["client_id"], auth["client_secret"])  # type: ignore[assignment]
             if isinstance(auth, BasicAuth):
                 if headers is None:
                     headers = {}

@@ -3290,7 +3290,7 @@ class WebClient(BaseClient):
             }
         )
         if invite_ids is not None:
-            if isinstance(invite_ids, (list, Tuple)):
+            if isinstance(invite_ids, (list, tuple)):
                 kwargs.update({"invite_ids": ",".join(invite_ids)})
             else:
                 kwargs.update({"invite_ids": invite_ids})

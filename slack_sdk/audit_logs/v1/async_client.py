@@ -226,7 +226,7 @@ class AsyncAuditLogsClient:
         headers: Dict[str, str],
     ) -> AuditLogsResponse:
         if body_params is not None:
-            body_params = json.dumps(body_params)
+            body_params = json.dumps(body_params)  # type: ignore[assignment]
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         session: Optional[ClientSession] = None
@@ -279,7 +279,7 @@ class AsyncAuditLogsClient:
                     )
 
                 try:
-                    async with session.request(http_verb, url, **request_kwargs) as res:  # type: ignore[arg-type]
+                    async with session.request(http_verb, url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr]
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(
@@ -352,7 +352,7 @@ class AsyncAuditLogsClient:
 
             if resp is not None:
                 return resp
-            raise last_error
+            raise last_error  # type: ignore[misc]
 
         finally:
             if not use_running_session:

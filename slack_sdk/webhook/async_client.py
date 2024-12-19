@@ -262,7 +262,7 @@ class AsyncWebhookClient:
 
             if resp is not None:
                 return resp
-            raise last_error
+            raise last_error  # type: ignore[misc]
 
         finally:
             if not use_running_session:

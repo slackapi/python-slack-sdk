@@ -30,7 +30,7 @@ class SocketModeClient(BaseSocketModeClient):
     logger: Logger
     web_client: WebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     message_queue: Queue
     message_listeners: List[
         Union[

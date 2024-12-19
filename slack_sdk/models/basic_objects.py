@@ -121,7 +121,7 @@ class JsonValidator:
             if not func(*args, **kwargs):
                 raise SlackObjectFormationError(self.message)
 
-        wrapped_f.validator = True
+        wrapped_f.validator = True  # type: ignore[attr-defined]
         return wrapped_f
 
 

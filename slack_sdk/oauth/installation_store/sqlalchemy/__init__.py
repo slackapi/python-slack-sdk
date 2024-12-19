@@ -306,7 +306,11 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 team_id=team_id,
                 is_enterprise_install=is_enterprise_install,
             )
-            if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+            if (
+                latest_bot_installation is not None
+                and installation is not None
+                and installation.bot_token != latest_bot_installation.bot_token
+            ):
                 installation.bot_id = latest_bot_installation.bot_id
                 installation.bot_user_id = latest_bot_installation.bot_user_id
                 installation.bot_token = latest_bot_installation.bot_token

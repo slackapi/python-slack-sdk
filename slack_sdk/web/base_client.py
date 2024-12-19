@@ -11,7 +11,6 @@ import urllib
 import uuid
 import warnings
 from base64 import b64encode
-from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import BinaryIO, Dict, List, Any
 from typing import Optional, Union
@@ -241,8 +240,8 @@ class BaseClient:
         files_to_close: List[BinaryIO] = []
         try:
             # True/False -> "1"/"0"
-            query_params = convert_bool_to_0_or_1(query_params)
-            body_params = convert_bool_to_0_or_1(body_params)
+            query_params = convert_bool_to_0_or_1(query_params)  # type: ignore[assignment]
+            body_params = convert_bool_to_0_or_1(body_params)  # type: ignore[assignment]
 
             if self._logger.level <= logging.DEBUG:
 
@@ -267,11 +266,11 @@ class BaseClient:
                     for k, v in body_params.items():
                         request_data.update({k: v})
 
-                for k, v in files.items():
+                for k, v in files.items():  # type: ignore[assignment]
                     if isinstance(v, str):
                         f: BinaryIO = open(v.encode("utf-8", "ignore"), "rb")
                         files_to_close.append(f)
-                        request_data.update({k: f})
+                        request_data.update({k: f})  # type: ignore[dict-item]
                     elif isinstance(v, (bytearray, bytes)):
                         request_data.update({k: io.BytesIO(v)})
                     else:
@@ -403,7 +402,10 @@ class BaseClient:
                     retry_request = RetryHttpRequest.from_urllib_http_request(req)
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
-                    body = json.loads(body_string) if body_string is not None and body_string.startswith("{") else {}
+                    if body_string is not None and body_string.startswith("{"):
+                        body = json.loads(body_string)
+                    else:
+                        body = {}  # type: ignore[assignment]
                     retry_response = RetryHttpResponse(
                         status_code=resp["status"],
                         headers=resp["headers"],
@@ -499,7 +501,7 @@ class BaseClient:
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     def _perform_urllib_http_request_internal(
         self,
@@ -538,15 +540,15 @@ class BaseClient:
                 return {"status": resp.code, "headers": resp.headers, "body": body}
 
             charset = resp.headers.get_content_charset() or "utf-8"
-            body: str = resp.read().decode(charset)  # read the response body here
+            decoded_body: str = resp.read().decode(charset)  # read the response body here
             if self._logger.level <= logging.DEBUG:
                 self._logger.debug(
                     "Received the following response - "
                     f"status: {resp.code}, "
                     f"headers: {dict(resp.headers)}, "
-                    f"body: {body}"
+                    f"body: {decoded_body}"
                 )
-            return {"status": resp.code, "headers": resp.headers, "body": body}
+            return {"status": resp.code, "headers": resp.headers, "body": decoded_body}
         raise SlackRequestError(f"Invalid URL detected: {url}")
 
     def _build_urllib_request_headers(

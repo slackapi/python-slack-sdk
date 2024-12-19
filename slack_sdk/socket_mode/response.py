@@ -5,7 +5,7 @@ from slack_sdk.models import JsonObject
 
 class SocketModeResponse:
     envelope_id: str
-    payload: dict
+    payload: Optional[dict]
 
     def __init__(self, envelope_id: str, payload: Optional[Union[dict, JsonObject, str]] = None):
         self.envelope_id = envelope_id
@@ -24,5 +24,5 @@ class SocketModeResponse:
     def to_dict(self) -> dict:  # skipcq: PYL-W0221
         d = {"envelope_id": self.envelope_id}
         if self.payload is not None:
-            d["payload"] = self.payload
+            d["payload"] = self.payload  # type: ignore[assignment]
         return d

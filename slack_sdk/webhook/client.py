@@ -151,7 +151,7 @@ class WebhookClient:
         # Slack APIs accepts any API method requests with POST methods
         req = Request(method="POST", url=url, data=raw_body.encode("utf-8"), headers=headers)
         resp = None
-        last_error = None
+        last_error = Exception("undefined internal error")
 
         retry_state = RetryState()
         counter_for_safety = 0

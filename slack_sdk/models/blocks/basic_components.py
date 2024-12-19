@@ -79,7 +79,7 @@ class PlainTextObject(TextObject):
     type = "plain_text"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"emoji"})
 
     def __init__(self, *, text: str, emoji: Optional[bool] = None):
@@ -112,7 +112,7 @@ class MarkdownTextObject(TextObject):
     type = "mrkdwn"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"verbatim"})
 
     def __init__(self, *, text: str, verbatim: Optional[bool] = None):
@@ -166,7 +166,7 @@ class Option(JsonObject):
     different required formats in different situations
     """
 
-    attributes = {}  # no attributes because to_dict has unique implementations
+    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
@@ -215,8 +215,8 @@ class Option(JsonObject):
             )
             self._label: Optional[str] = None
         else:
-            self._text: Optional[TextObject] = None
-            self._label: Optional[str] = label
+            self._text = None
+            self._label = label
 
         # for backward-compatibility with version 2.0-2.5, the following fields return str values
         self.text: Optional[str] = self._text.text if self._text else None
@@ -230,13 +230,13 @@ class Option(JsonObject):
             self._block_description = PlainTextObject.from_str(description)
         elif isinstance(description, dict):
             self.description = description["text"]
-            self._block_description = TextObject.parse(description)
+            self._block_description = TextObject.parse(description)  # type: ignore[assignment]
         elif isinstance(description, TextObject):
             self.description = description.text
-            self._block_description = description
+            self._block_description = description  # type: ignore[assignment]
         else:
-            self.description = None
-            self._block_description = None
+            self.description = None  # type: ignore[assignment]
+            self._block_description = None  # type: ignore[assignment]
 
         # A URL to load in the user's browser when the option is clicked.
         # The url attribute is only available in overflow menus.
@@ -313,7 +313,7 @@ class OptionGroup(JsonObject):
     different required formats in different situations
     """
 
-    attributes = {}  # no attributes because to_dict has unique implementations
+    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
@@ -375,7 +375,7 @@ class OptionGroup(JsonObject):
 
     def to_dict(self, option_type: str = "block") -> Dict[str, Any]:  # skipcq: PYL-W0221
         self.validate_json()
-        dict_options = [o.to_dict(option_type) for o in self.options]
+        dict_options = [o.to_dict(option_type) for o in self.options]  # type: ignore[union-attr]
         if option_type == "dialog":  # skipcq: PYL-R1705
             return {
                 "label": self.label,
@@ -387,7 +387,7 @@ class OptionGroup(JsonObject):
                 "options": dict_options,
             }
         else:  # if option_type == "block"; this should be the most common case
-            dict_label: Dict[str, Any] = self._label.to_dict()
+            dict_label: Dict[str, Any] = self._label.to_dict()  # type: ignore[union-attr]
             return {
                 "label": dict_label,
                 "options": dict_options,
@@ -395,7 +395,7 @@ class OptionGroup(JsonObject):
 
 
 class ConfirmObject(JsonObject):
-    attributes = {}  # no attributes because to_dict has unique implementations
+    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
 
     title_max_length = 100
     text_max_length = 300
@@ -537,7 +537,7 @@ class WorkflowTrigger(JsonObject):
         self.validate_json()
         json = {"url": self._url}
         if self._customizable_input_parameters is not None:
-            json.update({"customizable_input_parameters": self._customizable_input_parameters})
+            json.update({"customizable_input_parameters": self._customizable_input_parameters})  # type: ignore[dict-item]
         return json
 
 

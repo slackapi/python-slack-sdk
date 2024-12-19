@@ -153,7 +153,7 @@ async def _request_with_session(
                     if logger.level <= logging.DEBUG:
                         body = "(binary)"
                         if isinstance(data, dict) or isinstance(data, str):
-                            body = data
+                            body = data  # type: ignore[assignment]
                         logger.debug(
                             "Received the following response - "
                             f"status: {res.status}, "
@@ -210,7 +210,7 @@ async def _request_with_session(
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     finally:
         if not use_running_session:

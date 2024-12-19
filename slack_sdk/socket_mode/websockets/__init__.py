@@ -21,7 +21,7 @@ try:
 except ImportError:
     # To keep compatibility with websockets <14.x we use WebSocketClientProtocol
     # To keep compatibility with websockets 8.x, we use this import over .legacy.client
-    from websockets import WebSocketClientProtocol as ClientConnection
+    from websockets import WebSocketClientProtocol as ClientConnection  # type: ignore[no-redef, attr-defined]
 
 
 from slack_sdk.socket_mode.async_client import AsyncBaseSocketModeClient
@@ -50,7 +50,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     logger: Logger
     web_client: AsyncWebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     auto_reconnect_enabled: bool
     message_queue: Queue
     message_listeners: List[
@@ -75,7 +75,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     current_session: Optional[ClientConnection]
     current_session_monitor: Optional[Future]
 
-    auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
     connect_operation_lock: Lock
@@ -122,7 +121,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: ClientConnection = self.current_session
+        session: ClientConnection = self.current_session  # type: ignore[assignment]
         session_id: str = await self.session_id()
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new monitor_current_session() execution loop for {session_id} started")
@@ -151,7 +150,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: ClientConnection = self.current_session
+        session: ClientConnection = self.current_session  # type: ignore[assignment]
         session_id: str = await self.session_id()
         consecutive_error_count = 0
         if self.logger.level <= logging.DEBUG:
@@ -235,7 +234,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}, session: {session_id}")
         try:
-            await session.send(message)
+            await session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
@@ -248,7 +247,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
             try:
                 if await self.is_connected():
-                    await self.current_session.send(message)
+                    await self.current_session.send(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(f"The current session ({session_id}) is no longer active. Failed to send a message")
                     raise e

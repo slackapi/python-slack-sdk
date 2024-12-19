@@ -3,7 +3,7 @@ import time
 from logging import Logger
 from uuid import uuid4
 
-from botocore.client import BaseClient
+from botocore.client import BaseClient  # type:ignore[import-untyped]
 
 from ..async_state_store import AsyncOAuthStateStore
 from ..state_store import OAuthStateStore

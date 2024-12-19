@@ -212,7 +212,7 @@ class ActionExternalSelector(AbstractActionSelector):
     data_source = "external"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length"})
 
     def __init__(
@@ -469,7 +469,7 @@ class BlockAttachment(Attachment):
 
 class InteractiveAttachment(Attachment):
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"callback_id"})
 
     actions_max_length = 5
