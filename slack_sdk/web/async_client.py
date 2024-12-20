@@ -3857,8 +3857,8 @@ class AsyncWebClient(AsyncBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if len(completion.get("files")) == 1:  # type: ignore[arg-type]
-            completion.data["file"] = completion.get("files")[0]  # type: ignore[index]
+        if len(completion.get("files")) == 1:  # type: ignore[arg-type, union-attr, unused-ignore]
+            completion.data["file"] = completion.get("files")[0]  # type: ignore[index, union-attr, unused-ignore]
         return completion
 
     async def files_getUploadURLExternal(
