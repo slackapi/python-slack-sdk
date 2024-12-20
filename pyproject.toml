@@ -69,3 +69,11 @@ filterwarnings = [
 	"ignore:slack.* package is deprecated. Please use slack_sdk.* package instead.*:UserWarning",
 ]
 asyncio_mode = "auto"
+
+
+[tool.mypy]
+files = "slack_sdk/"
+exclude = ["slack_sdk/scim", "slack_sdk/rtm"]
+force_union_syntax = true
+warn_unused_ignores = true
+enable_error_code = "ignore-without-code"

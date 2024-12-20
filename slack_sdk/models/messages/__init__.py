@@ -1,4 +1,4 @@
-from datetime import datetime  # type: ignore
+from datetime import datetime
 from typing import Optional, Union
 
 from slack_sdk.models.basic_objects import BaseObject
@@ -33,7 +33,7 @@ class DateLink(Link):
         https://api.slack.com/reference/surfaces/formatting#date-formatting
         """
         if isinstance(date, datetime):
-            epoch = int(date.timestamp())  # type: ignore
+            epoch = int(date.timestamp())
         else:
             epoch = date
         if link is not None:

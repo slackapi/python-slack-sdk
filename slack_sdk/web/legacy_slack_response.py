@@ -11,7 +11,7 @@ from typing import Union
 import slack_sdk.errors as e
 
 
-class LegacySlackResponse(object):  # skipcq: PYL-R0205
+class LegacySlackResponse(object):
     """An iterable container of response data.
 
     Attributes:
@@ -112,7 +112,7 @@ class LegacySlackResponse(object):  # skipcq: PYL-R0205
         """
         if isinstance(self.data, bytes):
             raise ValueError("As the response.data is binary data, this operation is unsupported")
-        self._iteration = 0  # skipcq: PYL-W0201
+        self._iteration = 0
         self.data = self._initial_data
         return self
 
@@ -140,7 +140,7 @@ class LegacySlackResponse(object):  # skipcq: PYL-R0205
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if self._next_cursor_is_present(self.data):  # skipcq: PYL-R1705
+        if self._next_cursor_is_present(self.data):
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -150,7 +150,7 @@ class LegacySlackResponse(object):  # skipcq: PYL-R0205
             if self._use_sync_aiohttp:
                 # We no longer recommend going with this way
                 response = asyncio.get_event_loop().run_until_complete(
-                    self._client._request(  # skipcq: PYL-W0212
+                    self._client._request(
                         http_verb=self.http_verb,
                         api_url=self.api_url,
                         req_args=self.req_args,
@@ -158,9 +158,7 @@ class LegacySlackResponse(object):  # skipcq: PYL-R0205
                 )
             else:
                 # This method sends a request in a synchronous way
-                response = self._client._request_for_pagination(  # skipcq: PYL-W0212
-                    api_url=self.api_url, req_args=self.req_args
-                )
+                response = self._client._request_for_pagination(api_url=self.api_url, req_args=self.req_args)
 
             self.data = response["data"]
             self.headers = response["headers"]

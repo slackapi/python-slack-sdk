@@ -1,4 +1,4 @@
-from datetime import datetime  # type: ignore
+from datetime import datetime
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
@@ -142,10 +142,10 @@ class Installation:
             enterprise_name=self.enterprise_name,
             team_id=self.team_id,
             team_name=self.team_name,
-            bot_token=self.bot_token,
-            bot_id=self.bot_id,
-            bot_user_id=self.bot_user_id,
-            bot_scopes=self.bot_scopes,
+            bot_token=self.bot_token,  # type: ignore[arg-type]
+            bot_id=self.bot_id,  # type: ignore[arg-type]
+            bot_user_id=self.bot_user_id,  # type: ignore[arg-type]
+            bot_scopes=self.bot_scopes,  # type: ignore[arg-type]
             bot_refresh_token=self.bot_refresh_token,
             bot_token_expires_at=self.bot_token_expires_at,
             is_enterprise_install=self.is_enterprise_install,
@@ -172,16 +172,16 @@ class Installation:
             "bot_user_id": self.bot_user_id,
             "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
             "bot_refresh_token": self.bot_refresh_token,
-            "bot_token_expires_at": datetime.utcfromtimestamp(self.bot_token_expires_at)
-            if self.bot_token_expires_at is not None
-            else None,
+            "bot_token_expires_at": (
+                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+            ),
             "user_id": self.user_id,
             "user_token": self.user_token,
             "user_scopes": ",".join(self.user_scopes) if self.user_scopes else None,
             "user_refresh_token": self.user_refresh_token,
-            "user_token_expires_at": datetime.utcfromtimestamp(self.user_token_expires_at)
-            if self.user_token_expires_at is not None
-            else None,
+            "user_token_expires_at": (
+                datetime.utcfromtimestamp(self.user_token_expires_at) if self.user_token_expires_at is not None else None
+            ),
             "incoming_webhook_url": self.incoming_webhook_url,
             "incoming_webhook_channel": self.incoming_webhook_channel,
             "incoming_webhook_channel_id": self.incoming_webhook_channel_id,

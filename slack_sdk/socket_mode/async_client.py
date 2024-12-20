@@ -144,16 +144,16 @@ class AsyncBaseSocketModeClient:
 
             for listener in self.message_listeners:
                 try:
-                    await listener(self, message, raw_message)  # type: ignore
+                    await listener(self, message, raw_message)  # type: ignore[call-arg, arg-type, misc]
                 except Exception as e:
                     self.logger.exception(f"Failed to run a message listener: {e}, session: {session_id}")
 
             if len(self.socket_mode_request_listeners) > 0:
                 request = SocketModeRequest.from_dict(message)
                 if request is not None:
-                    for listener in self.socket_mode_request_listeners:
+                    for listener in self.socket_mode_request_listeners:  # type: ignore[assignment]
                         try:
-                            await listener(self, request)  # type: ignore
+                            await listener(self, request)  # type: ignore[call-arg, arg-type]
                         except Exception as e:
                             self.logger.exception(f"Failed to run a request listener: {e}, session: {session_id}")
         except Exception as e:

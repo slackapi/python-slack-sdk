@@ -65,7 +65,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f"{table_name}_idx",
@@ -100,7 +100,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 "installed_at",
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f"{table_name}_idx",
@@ -218,7 +218,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
+            for row in result.mappings():  # type: ignore[attr-defined]
                 return Bot(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -266,7 +266,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
+            for row in result.mappings():  # type: ignore[attr-defined]
                 installation = Installation(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -306,7 +306,11 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 team_id=team_id,
                 is_enterprise_install=is_enterprise_install,
             )
-            if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+            if (
+                latest_bot_installation is not None
+                and installation is not None
+                and installation.bot_token != latest_bot_installation.bot_token
+            ):
                 installation.bot_id = latest_bot_installation.bot_id
                 installation.bot_user_id = latest_bot_installation.bot_user_id
                 installation.bot_token = latest_bot_installation.bot_token

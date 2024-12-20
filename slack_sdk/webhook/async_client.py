@@ -144,7 +144,7 @@ class AsyncWebhookClient:
             Webhook response
         """
         return await self._perform_http_request(
-            body=_build_body(body),
+            body=_build_body(body),  # type: ignore[arg-type]
             headers=_build_request_headers(self.default_headers, headers),
         )
 
@@ -175,7 +175,7 @@ class AsyncWebhookClient:
             retry_request = RetryHttpRequest(
                 method="POST",
                 url=self.url,
-                headers=headers,
+                headers=headers,  # type: ignore[arg-type]
                 body_params=body,
             )
 
@@ -192,19 +192,19 @@ class AsyncWebhookClient:
                     self.logger.debug(f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}")
 
                 try:
-                    async with session.request("POST", self.url, **request_kwargs) as res:
+                    async with session.request("POST", self.url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr] # noqa: E501
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                                 data=response_body.encode("utf-8") if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f"No response data returned from the following API call: {self.url}")
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
 
                         if res.status == 429:
@@ -231,7 +231,7 @@ class AsyncWebhookClient:
                                 url=self.url,
                                 status_code=res.status,
                                 body=response_body,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                             _debug_log_response(self.logger, resp)
                             return resp
@@ -262,10 +262,10 @@ class AsyncWebhookClient:
 
             if resp is not None:
                 return resp
-            raise last_error
+            raise last_error  # type: ignore[misc]
 
         finally:
             if not use_running_session:
-                await session.close()
+                await session.close()  # type: ignore[union-attr]
 
         return resp

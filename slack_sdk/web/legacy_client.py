@@ -15,7 +15,7 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Tuple, Any, List
+from typing import Union, Sequence, Optional, Dict, Any, List
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
@@ -297,7 +297,7 @@ class LegacyWebClient(LegacyBaseClient):
         if enterprise_id is not None:
             kwargs.update({"enterprise_id": enterprise_id})
         if team_ids is not None:
-            if isinstance(team_ids, (list, Tuple)):
+            if isinstance(team_ids, (list, tuple)):
                 kwargs.update({"team_ids": ",".join(team_ids)})
             else:
                 kwargs.update({"team_ids": team_ids})
@@ -352,7 +352,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Look up the app config for connectors by their IDs
         https://api.slack.com/methods/admin.apps.config.lookup
         """
-        if isinstance(app_ids, (list, Tuple)):
+        if isinstance(app_ids, (list, tuple)):
             kwargs.update({"app_ids": ",".join(app_ids)})
         else:
             kwargs.update({"app_ids": app_ids})
@@ -411,7 +411,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Assign entities to a particular authentication policy.
         https://api.slack.com/methods/admin.auth.policy.assignEntities
         """
-        if isinstance(entity_ids, (list, Tuple)):
+        if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
             kwargs.update({"entity_ids": entity_ids})
@@ -430,7 +430,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Remove specified entities from a specified authentication policy.
         https://api.slack.com/methods/admin.auth.policy.removeEntities
         """
-        if isinstance(entity_ids, (list, Tuple)):
+        if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
             kwargs.update({"entity_ids": entity_ids})
@@ -450,11 +450,11 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.barriers.create
         """
         kwargs.update({"primary_usergroup_id": primary_usergroup_id})
-        if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
+        if isinstance(barriered_from_usergroup_ids, (list, tuple)):
             kwargs.update({"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)})
         else:
             kwargs.update({"barriered_from_usergroup_ids": barriered_from_usergroup_ids})
-        if isinstance(restricted_subjects, (list, Tuple)):
+        if isinstance(restricted_subjects, (list, tuple)):
             kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
         else:
             kwargs.update({"restricted_subjects": restricted_subjects})
@@ -485,11 +485,11 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.barriers.update
         """
         kwargs.update({"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id})
-        if isinstance(barriered_from_usergroup_ids, (list, Tuple)):
+        if isinstance(barriered_from_usergroup_ids, (list, tuple)):
             kwargs.update({"barriered_from_usergroup_ids": ",".join(barriered_from_usergroup_ids)})
         else:
             kwargs.update({"barriered_from_usergroup_ids": barriered_from_usergroup_ids})
-        if isinstance(restricted_subjects, (list, Tuple)):
+        if isinstance(restricted_subjects, (list, tuple)):
             kwargs.update({"restricted_subjects": ",".join(restricted_subjects)})
         else:
             kwargs.update({"restricted_subjects": restricted_subjects})
@@ -559,7 +559,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.conversations.invite
         """
         kwargs.update({"channel_id": channel_id})
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -628,12 +628,12 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
 
-        if isinstance(search_channel_types, (list, Tuple)):
+        if isinstance(search_channel_types, (list, tuple)):
             kwargs.update({"search_channel_types": ",".join(search_channel_types)})
         else:
             kwargs.update({"search_channel_types": search_channel_types})
 
-        if isinstance(team_ids, (list, Tuple)):
+        if isinstance(team_ids, (list, tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
@@ -704,7 +704,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.conversations.disconnectShared
         """
         kwargs.update({"channel_id": channel_id})
-        if isinstance(leaving_team_ids, (list, Tuple)):
+        if isinstance(leaving_team_ids, (list, tuple)):
             kwargs.update({"leaving_team_ids": ",".join(leaving_team_ids)})
         else:
             kwargs.update({"leaving_team_ids": leaving_team_ids})
@@ -731,7 +731,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "max_member_count": max_member_count,
             }
         )
-        if isinstance(team_ids, (list, Tuple)):
+        if isinstance(team_ids, (list, tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
@@ -757,11 +757,11 @@ class LegacyWebClient(LegacyBaseClient):
                 "limit": limit,
             }
         )
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
-        if isinstance(team_ids, (list, Tuple)):
+        if isinstance(team_ids, (list, tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
@@ -856,7 +856,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        if isinstance(target_team_ids, (list, Tuple)):
+        if isinstance(target_team_ids, (list, tuple)):
             kwargs.update({"target_team_ids": ",".join(target_team_ids)})
         else:
             kwargs.update({"target_team_ids": target_team_ids})
@@ -1037,7 +1037,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Look up functions by a set of apps
         https://api.slack.com/methods/admin.functions.list
         """
-        if isinstance(app_ids, (list, Tuple)):
+        if isinstance(app_ids, (list, tuple)):
             kwargs.update({"app_ids": ",".join(app_ids)})
         else:
             kwargs.update({"app_ids": app_ids})
@@ -1060,7 +1060,7 @@ class LegacyWebClient(LegacyBaseClient):
         and include the users if it is limited to particular named entities.
         https://api.slack.com/methods/admin.functions.permissions.lookup
         """
-        if isinstance(function_ids, (list, Tuple)):
+        if isinstance(function_ids, (list, tuple)):
             kwargs.update({"function_ids": ",".join(function_ids)})
         else:
             kwargs.update({"function_ids": function_ids})
@@ -1085,7 +1085,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if user_ids is not None:
-            if isinstance(user_ids, (list, Tuple)):
+            if isinstance(user_ids, (list, tuple)):
                 kwargs.update({"user_ids": ",".join(user_ids)})
             else:
                 kwargs.update({"user_ids": user_ids})
@@ -1103,11 +1103,11 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.roles.addAssignments
         """
         kwargs.update({"role_id": role_id})
-        if isinstance(entity_ids, (list, Tuple)):
+        if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
             kwargs.update({"entity_ids": entity_ids})
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1128,11 +1128,11 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.roles.listAssignments
         """
         kwargs.update({"cursor": cursor, "limit": limit, "sort_dir": sort_dir})
-        if isinstance(entity_ids, (list, Tuple)):
+        if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
             kwargs.update({"entity_ids": entity_ids})
-        if isinstance(role_ids, (list, Tuple)):
+        if isinstance(role_ids, (list, tuple)):
             kwargs.update({"role_ids": ",".join(role_ids)})
         else:
             kwargs.update({"role_ids": role_ids})
@@ -1150,11 +1150,11 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.roles.removeAssignments
         """
         kwargs.update({"role_id": role_id})
-        if isinstance(entity_ids, (list, Tuple)):
+        if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
         else:
             kwargs.update({"entity_ids": entity_ids})
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1191,7 +1191,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
         https://api.slack.com/methods/admin.users.session.resetBulk
         """
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1249,7 +1249,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.teams.settings.setDefaultChannels
         """
         kwargs.update({"team_id": team_id})
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1265,7 +1265,7 @@ class LegacyWebClient(LegacyBaseClient):
         and what happens when the client closes—given a list of users.
         https://api.slack.com/methods/admin.users.session.getSettings
         """
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1283,7 +1283,7 @@ class LegacyWebClient(LegacyBaseClient):
         and what happens when the client closes—for one or more users.
         https://api.slack.com/methods/admin.users.session.setSettings
         """
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1305,7 +1305,7 @@ class LegacyWebClient(LegacyBaseClient):
         and what happens when the client closes—for a list of users.
         https://api.slack.com/methods/admin.users.session.clearSettings
         """
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -1548,7 +1548,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.usergroups.addChannels
         """
         kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1566,7 +1566,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.usergroups.addTeams
         """
         kwargs.update({"usergroup_id": usergroup_id, "auto_provision": auto_provision})
-        if isinstance(team_ids, (list, Tuple)):
+        if isinstance(team_ids, (list, tuple)):
             kwargs.update({"team_ids": ",".join(team_ids)})
         else:
             kwargs.update({"team_ids": team_ids})
@@ -1603,7 +1603,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.usergroups.removeChannels
         """
         kwargs.update({"usergroup_id": usergroup_id})
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1630,7 +1630,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "is_ultra_restricted": is_ultra_restricted,
             }
         )
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1667,7 +1667,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "resend": resend,
             }
         )
-        if isinstance(channel_ids, (list, Tuple)):
+        if isinstance(channel_ids, (list, tuple)):
             kwargs.update({"channel_ids": ",".join(channel_ids)})
         else:
             kwargs.update({"channel_ids": channel_ids})
@@ -1782,7 +1782,7 @@ class LegacyWebClient(LegacyBaseClient):
         https://api.slack.com/methods/admin.workflows.search
         """
         if collaborator_ids is not None:
-            if isinstance(collaborator_ids, (list, Tuple)):
+            if isinstance(collaborator_ids, (list, tuple)):
                 kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
             else:
                 kwargs.update({"collaborator_ids": collaborator_ids})
@@ -1811,7 +1811,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Look up the permissions for a set of workflows
         https://api.slack.com/methods/admin.workflows.permissions.lookup
         """
-        if isinstance(workflow_ids, (list, Tuple)):
+        if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
         else:
             kwargs.update({"workflow_ids": workflow_ids})
@@ -1832,11 +1832,11 @@ class LegacyWebClient(LegacyBaseClient):
         """Add collaborators to workflows within the team or enterprise
         https://api.slack.com/methods/admin.workflows.collaborators.add
         """
-        if isinstance(collaborator_ids, (list, Tuple)):
+        if isinstance(collaborator_ids, (list, tuple)):
             kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
         else:
             kwargs.update({"collaborator_ids": collaborator_ids})
-        if isinstance(workflow_ids, (list, Tuple)):
+        if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
         else:
             kwargs.update({"workflow_ids": workflow_ids})
@@ -1852,11 +1852,11 @@ class LegacyWebClient(LegacyBaseClient):
         """Remove collaborators from workflows within the team or enterprise
         https://api.slack.com/methods/admin.workflows.collaborators.remove
         """
-        if isinstance(collaborator_ids, (list, Tuple)):
+        if isinstance(collaborator_ids, (list, tuple)):
             kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
         else:
             kwargs.update({"collaborator_ids": collaborator_ids})
-        if isinstance(workflow_ids, (list, Tuple)):
+        if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
         else:
             kwargs.update({"workflow_ids": workflow_ids})
@@ -1871,7 +1871,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Unpublish workflows within the team or enterprise
         https://api.slack.com/methods/admin.workflows.unpublish
         """
-        if isinstance(workflow_ids, (list, Tuple)):
+        if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
         else:
             kwargs.update({"workflow_ids": workflow_ids})
@@ -2211,10 +2211,10 @@ class LegacyWebClient(LegacyBaseClient):
                 "title": title,
             }
         )
-        _update_call_participants(  # skipcq: PTC-W0039
+        _update_call_participants(
             kwargs,
-            users if users is not None else kwargs.get("users"),  # skipcq: PTC-W0039
-        )  # skipcq: PTC-W0039
+            users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
+        )
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     def calls_end(
@@ -2223,7 +2223,7 @@ class LegacyWebClient(LegacyBaseClient):
         id: str,
         duration: Optional[int] = None,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Ends a Call.
         https://api.slack.com/methods/calls.end
         """
@@ -2235,7 +2235,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         id: str,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Returns information about a Call.
         https://api.slack.com/methods/calls.info
         """
@@ -2245,7 +2245,7 @@ class LegacyWebClient(LegacyBaseClient):
     def calls_participants_add(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2259,7 +2259,7 @@ class LegacyWebClient(LegacyBaseClient):
     def calls_participants_remove(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2278,7 +2278,7 @@ class LegacyWebClient(LegacyBaseClient):
         join_url: Optional[str] = None,
         title: Optional[str] = None,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Updates information about a Call.
         https://api.slack.com/methods/calls.update
         """
@@ -2344,12 +2344,12 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"canvas_id": canvas_id, "access_level": access_level})
         if channel_ids is not None:
-            if isinstance(channel_ids, (list, Tuple)):
+            if isinstance(channel_ids, (list, tuple)):
                 kwargs.update({"channel_ids": ",".join(channel_ids)})
             else:
                 kwargs.update({"channel_ids": channel_ids})
         if user_ids is not None:
-            if isinstance(user_ids, (list, Tuple)):
+            if isinstance(user_ids, (list, tuple)):
                 kwargs.update({"user_ids": ",".join(user_ids)})
             else:
                 kwargs.update({"user_ids": user_ids})
@@ -2369,12 +2369,12 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"canvas_id": canvas_id})
         if channel_ids is not None:
-            if isinstance(channel_ids, (list, Tuple)):
+            if isinstance(channel_ids, (list, tuple)):
                 kwargs.update({"channel_ids": ",".join(channel_ids)})
             else:
                 kwargs.update({"channel_ids": channel_ids})
         if user_ids is not None:
-            if isinstance(user_ids, (list, Tuple)):
+            if isinstance(user_ids, (list, tuple)):
                 kwargs.update({"user_ids": ",".join(user_ids)})
             else:
                 kwargs.update({"user_ids": user_ids})
@@ -2832,7 +2832,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "metadata": metadata,
             }
         )
-        if isinstance(file_ids, (list, Tuple)):
+        if isinstance(file_ids, (list, tuple)):
             kwargs.update({"file_ids": ",".join(file_ids)})
         else:
             kwargs.update({"file_ids": file_ids})
@@ -3040,7 +3040,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "force": force,
             }
         )
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -3060,11 +3060,11 @@ class LegacyWebClient(LegacyBaseClient):
         if emails is None and user_ids is None:
             raise e.SlackRequestError("Either emails or user ids must be provided.")
         kwargs.update({"channel": channel})
-        if isinstance(emails, (list, Tuple)):
+        if isinstance(emails, (list, tuple)):
             kwargs.update({"emails": ",".join(emails)})
         else:
             kwargs.update({"emails": emails})
-        if isinstance(user_ids, (list, Tuple)):
+        if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
         else:
             kwargs.update({"user_ids": user_ids})
@@ -3128,7 +3128,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        if isinstance(types, (list, Tuple)):
+        if isinstance(types, (list, tuple)):
             kwargs.update({"types": ",".join(types)})
         else:
             kwargs.update({"types": types})
@@ -3190,7 +3190,7 @@ class LegacyWebClient(LegacyBaseClient):
         if channel is None and users is None:
             raise e.SlackRequestError("Either channel or users must be provided.")
         kwargs.update({"channel": channel, "return_im": return_im})
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -3301,7 +3301,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if invite_ids is not None:
-            if isinstance(invite_ids, (list, Tuple)):
+            if isinstance(invite_ids, (list, tuple)):
                 kwargs.update({"invite_ids": ",".join(invite_ids)})
             else:
                 kwargs.update({"invite_ids": invite_ids})
@@ -3425,7 +3425,7 @@ class LegacyWebClient(LegacyBaseClient):
         """Retrieves the Do Not Disturb status for users on a team.
         https://api.slack.com/methods/dnd.teamInfo
         """
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -3448,7 +3448,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         file: str,
         id: str,
-        **kwargs,  # skipcq: PYL-W0622
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes an existing comment on a file.
         https://api.slack.com/methods/files.comments.delete
@@ -3521,7 +3521,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "user": user,
             }
         )
-        if isinstance(types, (list, Tuple)):
+        if isinstance(types, (list, tuple)):
             kwargs.update({"types": ",".join(types)})
         else:
             kwargs.update({"types": types})
@@ -3668,7 +3668,7 @@ class LegacyWebClient(LegacyBaseClient):
         """
         if external_id is None and file is None:
             raise e.SlackRequestError("Either external_id or file must be provided.")
-        if isinstance(channels, (list, Tuple)):
+        if isinstance(channels, (list, tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
@@ -3722,7 +3722,7 @@ class LegacyWebClient(LegacyBaseClient):
         if file is not None and content is not None:
             raise e.SlackRequestError("You cannot specify both the file and the content argument.")
 
-        if isinstance(channels, (list, Tuple)):
+        if isinstance(channels, (list, tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
@@ -3786,7 +3786,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "Although the channels parameter is still supported for smooth migration from legacy files.upload, "
                 "we recommend using the new channel parameter with a single str value instead for more clarity."
             )
-            if (isinstance(channels, (list, Tuple)) and len(channels) > 1) or (
+            if (isinstance(channels, (list, tuple)) and len(channels) > 1) or (
                 isinstance(channels, str) and len(channels.split(",")) > 1
             ):
                 raise e.SlackRequestError(
@@ -3816,15 +3816,15 @@ class LegacyWebClient(LegacyBaseClient):
 
         for f in files:
             url_response = self.files_getUploadURLExternal(
-                filename=f.get("filename"),
-                length=f.get("length"),
+                filename=f.get("filename"),  # type: ignore[arg-type]
+                length=f.get("length"),  # type: ignore[arg-type]
                 alt_txt=f.get("alt_txt"),
                 snippet_type=f.get("snippet_type"),
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")  # type: ignore
-            f["upload_url"] = url_response.get("upload_url")  # type: ignore
+            f["file_id"] = url_response.get("file_id")  # type: ignore[union-attr, unused-ignore]
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore[union-attr, unused-ignore]
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
@@ -3859,8 +3859,8 @@ class LegacyWebClient(LegacyBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if len(completion.get("files")) == 1:  # type: ignore
-            completion.data["file"] = completion.get("files")[0]  # type: ignore
+        if len(completion.get("files")) == 1:  # type: ignore[arg-type, union-attr, unused-ignore]
+            completion.data["file"] = completion.get("files")[0]  # type: ignore[index, union-attr, unused-ignore]
         return completion
 
     def files_getUploadURLExternal(
@@ -4196,7 +4196,7 @@ class LegacyWebClient(LegacyBaseClient):
         """For Enterprise Grid workspaces, map local user IDs to global user IDs
         https://api.slack.com/methods/migration.exchange
         """
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -4256,7 +4256,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """This method opens a multiparty direct message."""
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -4867,12 +4867,12 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         if slack_connect_pref_filter is not None:
-            if isinstance(slack_connect_pref_filter, (list, Tuple)):
+            if isinstance(slack_connect_pref_filter, (list, tuple)):
                 kwargs.update({"slack_connect_pref_filter": ",".join(slack_connect_pref_filter)})
             else:
                 kwargs.update({"slack_connect_pref_filter": slack_connect_pref_filter})
         if workspace_filter is not None:
-            if isinstance(workspace_filter, (list, Tuple)):
+            if isinstance(workspace_filter, (list, tuple)):
                 kwargs.update({"workspace_filter": ",".join(workspace_filter)})
             else:
                 kwargs.update({"workspace_filter": workspace_filter})
@@ -4963,7 +4963,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        if isinstance(channels, (list, Tuple)):
+        if isinstance(channels, (list, tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
@@ -5044,7 +5044,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        if isinstance(channels, (list, Tuple)):
+        if isinstance(channels, (list, tuple)):
             kwargs.update({"channels": ",".join(channels)})
         else:
             kwargs.update({"channels": channels})
@@ -5089,7 +5089,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "team_id": team_id,
             }
         )
-        if isinstance(users, (list, Tuple)):
+        if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
         else:
             kwargs.update({"users": users})
@@ -5118,7 +5118,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "user": user,
             }
         )
-        if isinstance(types, (list, Tuple)):
+        if isinstance(types, (list, tuple)):
             kwargs.update({"types": ",".join(types)})
         else:
             kwargs.update({"types": types})

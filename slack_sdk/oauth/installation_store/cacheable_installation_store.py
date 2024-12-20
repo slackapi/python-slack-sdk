@@ -7,8 +7,8 @@ from slack_sdk.oauth.installation_store import Bot, Installation
 
 class CacheableInstallationStore(InstallationStore):
     underlying: InstallationStore
-    cached_bots: Dict[str, Bot]  # type: ignore
-    cached_installations: Dict[str, Installation]  # type: ignore
+    cached_bots: Dict[str, Bot]
+    cached_installations: Dict[str, Installation]
 
     def __init__(self, installation_store: InstallationStore):
         """A simple memory cache wrapper for any installation stores.
@@ -24,7 +24,7 @@ class CacheableInstallationStore(InstallationStore):
     def logger(self) -> Logger:
         return self.underlying.logger
 
-    def save(self, installation: Installation):  # type: ignore
+    def save(self, installation: Installation):  # type: ignore[explicit-override]
         # Invalidate cache data for update operations
         key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}"
         if key in self.cached_bots:
@@ -35,14 +35,14 @@ class CacheableInstallationStore(InstallationStore):
 
         return self.underlying.save(installation)
 
-    def save_bot(self, bot: Bot):  # type: ignore
+    def save_bot(self, bot: Bot):  # type: ignore[explicit-override]
         # Invalidate cache data for update operations
         key = f"{bot.enterprise_id or ''}-{bot.team_id or ''}"
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return self.underlying.save_bot(bot)
 
-    def find_bot(  # type: ignore
+    def find_bot(  # type: ignore[explicit-override]
         self,
         *,
         enterprise_id: Optional[str],
@@ -63,7 +63,7 @@ class CacheableInstallationStore(InstallationStore):
             self.cached_bots[key] = bot
         return bot
 
-    def find_installation(  # type: ignore
+    def find_installation(  # type: ignore[explicit-override]
         self,
         *,
         enterprise_id: Optional[str],
