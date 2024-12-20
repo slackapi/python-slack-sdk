@@ -1,16 +1,64 @@
 :root {
+  --ifm-font-size-base: 15px;
+
   /* set hex colors here pls */
-  --aubergine: #4a154b;
-  /* aubergine-active is used in light mode. 
-  use something like #853c8c if you use as a link vs black text ( 3:1 contr) */
-  --aubergine-active: #7c3085;
-  /* horchata is that beige color we use a lot */
-  --horchata: #f4ede4;
-  /* cloud blue from slack.dev. used for dark-mode links */
-  --slack-cloud-blue: #1ab9ff;
-  /* slack marketing color for links 1264A3. used for light-mode links */
-  --slack-dark-blue: #1264a3;
   --dim: #eef2f6;
+
+  --aubergine: #4a154b;
+  --aubergine-background: #552555;
+  --aubergine-dark: #2c0134;
+
+  --aubergine-active: #7c3085;
+  --aubergine-active-70: #7c308570;
+  --aubergine-active-50: #7c308550;
+  --aubergine-active-30: #7c308530;
+
+  --horchata: #f4ede4;
+
+  --slack-red: #e3066a;
+  --slack-red-70: #e3066a70;
+  --slack-red-50: #e3066a50;
+  --slack-red-30: #e3066a30;
+  --slack-red-20: #e3066a20;
+
+  --slack-yellow: #fcc003;
+  --slack-yellow-70: #fcc00370;
+  --slack-yellow-50: #fcc00350;
+  --slack-yellow-30: #fcc00330;
+  --slack-yellow-20: #fcc00320;
+
+  --slack-green: #41b658;
+  --slack-green-70: #41b65870;
+  --slack-green-50: #41b65850;
+  --slack-green-30: #41b65830;
+  --slack-green-20: #41b65820;
+
+  --slack-blue: #1ab9ff;
+  --slack-blue-70: #1ab9ff70;
+  --slack-blue-50: #1ab9ff70;
+  --slack-blue-30: #1ab9ff30;
+  --slack-blue-20: #1ab9ff20;
+
+  /* used for dark-mode links */
+  --slack-cloud-blue: #1ab9ff;
+  /* slack marketing color used for light-mode links */
+  --slack-dark-blue: #1264a3;
+
+  /* used for functions */
+  --unofficial-orange: #e36606;
+  --unofficial-orange-70: #e3660670;
+  --unofficial-orange-50: #e3660650;
+  --unofficial-orange-30: #e3660630;
+
+  /* turns opacity into flat colors for bubbles on top of things */
+  --slack-yellow-70-flat: #fcc00370;
+
+  --slack-yellow-30-on-white: #feecb3;
+  --slack-green-30-on-white: #c6e9cc;
+  --slack-red-30-on-white: #f6b4d2;
+  --slack-blue-30-on-white: #baeaff;
+  --unofficial-orange-30-on-white: #f6d1b4;
+  --aubergine-active-30-on-white: #d7c0da;
 }
 
 /* resets striped tables that hurt me eyes */
@@ -18,9 +66,20 @@ table tr:nth-child(even) {
   background-color: inherit;
 }
 
+h1 {
+  font-size: 2.5rem;
+}
+
 /* changing the links to blue for accessibility  */
-p a, .markdown a {
+p a,
+.markdown a {
   color: var(--slack-cloud-blue);
+  text-decoration: none;
+}
+
+p a,
+.markdown a:hover {
+  text-decoration: underline;
 }
 
 a:hover {
@@ -31,10 +90,9 @@ a:hover {
 [data-theme="light"] {
   --docusaurus-highlighted-code-line-bg: var(--dim);
   --ifm-color-primary: var(--aubergine-active);
-  --ifm-footer-background-color: var(--horchata);
-  --ifm-footer-color: black;
+  --ifm-footer-background-color: white;
   --slack-cloud-blue: var(--slack-dark-blue);
-  --ifm-table-stripe-background: var(--horchata);
+  --reference-section-color: var(--horchata);
 }
 
 [data-theme="dark"] {
@@ -45,6 +103,46 @@ a:hover {
   --ifm-footer-color: white;
 }
 
+.alert--warning {
+  --ifm-alert-background-color: var(--slack-yellow-30);
+  --ifm-alert-border-color: var(--slack-yellow);
+  --ifm-alert-background-color-highlight: var(--slack-yellow-30);
+}
+
+.alert--info {
+  --ifm-alert-background-color: var(--slack-blue-30);
+  --ifm-alert-border-color: var(--slack-blue);
+  /* --ifm-alert-background-color-highlight: var(--slack-blue-30); */
+}
+
+.alert--danger {
+  --ifm-alert-background-color: var(--slack-red-30);
+  --ifm-alert-border-color: var(--slack-red);
+}
+
+.alert--success {
+  --ifm-alert-background-color: var(--slack-green-30);
+  --ifm-alert-border-color: var(--slack-green);
+}
+
+.footer {
+  font-size: 80%;
+  padding-bottom: 0rem;
+}
+
+.footer__items a {
+  color: inherit;
+}
+
+.footer .container {
+  margin: 0;
+}
+
+/* adjusting size */
+.table-of-contents__link {
+  font-size: 1rem;
+}
+
 /* bolding ToC for contrast */
 .table-of-contents__link--active {
   font-weight: bold;
@@ -53,19 +151,38 @@ a:hover {
 /* removing ToC line */
 .table-of-contents__left-border {
   border-left: none !important;
-} 
+}
 
-/* increasing name of SDK in sidebar */
+/* increasing name of site in sidebar */
 .sidebar-title {
-  font-size: 1.25em; /* Adjust the size as needed */
+  /* padding-bottom: 0.5rem;
+  font-size: 1.25em;  */
   font-weight: bold;
-  color: #000;
+}
+
+.theme-doc-sidebar-item-link hr {
+  margin: 1rem;
+}
+
+.sidebar-sdk-title {
+  /* margin: 0.5rem 0; */
+  padding: 0.5rem;
+  /* border-radius: 4px; */
+  border-bottom: .5px solid grey;
+}
+
+.theme-doc-sidebar-item-category-level-1 .menu__link {
+  font-weight: bold;
+}
+
+.theme-doc-sidebar-item-category-level-1 .menu__list-item .menu__link {
+  font-weight: normal;
 }
 
 /* removing sidebar line and adding space to match ToC */
 .theme-doc-sidebar-container {
-    border-right: none !important;
-    margin-right: 2rem;
+  border-right: none !important;
+  margin-right: 2rem;
 }
 
 /* announcement bar up top */
@@ -105,53 +222,167 @@ html[data-theme="dark"] .navbar-github-link::before {
 
 /* Delineate tab blocks */
 .tabs-container {
-  border: 1px solid var(--ifm-color-primary); /* Adjust the color and thickness as needed */
-  border-radius: 5px; /* To give rounded corners */
-  padding: 0.5em; /* To add spacing inside the tab */
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 5px;
+  padding: 0.5em;
 }
 
 /* Docs code bubbles */
 [data-theme="light"] {
-  --code-link-background: #CFE9FE; 
-  --code-link-text:  rgb(21, 50, 59);
+  --contrast-color: black;
+  --code-link-background: var(--slack-blue-30);
+  --code-link-text: rgb(21, 50, 59);
 
-  --method-link-background: #CDEFC4;
+  --method-link-background: var(--slack-green-30-on-white);
   --method-link-text: rgb(0, 41, 0);
 
-  --scope-link-background: #FBF3E0; 
+  --scope-link-background: var(--slack-yellow-30-on-white);
   --scope-link-text: rgb(63, 46, 0);
 
-  --event-link-background: #FDDDE3;
-  --event-link-text:  rgb(74, 21, 75);
+  --event-link-background: var(--slack-red-30-on-white);
+  --event-link-text: rgb(63, 0, 24);
+
+  --function-link-background: var(--unofficial-orange-30-on-white);
+  --function-link-text: rgb(75, 35, 0);
+
+  --command-link-background: var(--aubergine-active-30-on-white);
+  --command-link-text: rgb(75, 0, 75);
 }
 
 [data-theme="dark"] {
+  --contrast-color: white;
   --code-link-text: white;
   --method-link-text: white;
   --scope-link-text: white;
   --event-link-text: white;
-  --code-link-background: #1AB9FF50;
-  --method-link-background: #41B65850;
-  --scope-link-background: #FCC00350;
-  --event-link-background: #E3066A50;
+  --function-link-text: white;
+  --command-link-text: white;
+
+  --code-link-background: var(--slack-blue-70);
+  --method-link-background: var(--slack-green-70);
+  --scope-link-background: var(--slack-yellow-70);
+  --event-link-background: var(--slack-red-70);
+  --command-link-background: var(--aubergine-active);
+  --function-link-background: var(--unofficial-orange-70);
 }
 
 a code {
   background-color: var(--code-link-background);
-  color:  var(--code-link-text);
+  color: var(--code-link-text);
 }
 
 a[href^="https://api.slack.com/methods"] > code {
   background-color: var(--method-link-background);
-  color:  var(--method-link-text);
+  color: var(--method-link-text);
 }
 
 a[href^="https://api.slack.com/scopes"] > code {
   background-color: var(--scope-link-background);
-  color:  var(--scope-link-text);
+  color: var(--scope-link-text);
 }
 
 a[href^="https://api.slack.com/events"] > code {
   background-color: var(--event-link-background);
-  color:  var(--event-link-text);
+  color: var(--event-link-text);
+}
+
+a[href^="/deno-slack-sdk/reference/slack-functions/"] > code {
+  background-color: var(--function-link-background);
+  color: var(--function-link-text);
+}
+
+a[href^="/deno-slack-sdk/reference/connector-functions/"] > code {
+  background-color: var(--function-link-background);
+  color: var(--function-link-text);
+}
+
+a[href^="/slack-cli/reference/commands"] > code {
+  background-color: var(--command-link-background);
+  color: var(--command-link-text);
+}
+
+.facts-section {
+  background-color: var(--slack-green-20) !important;
+}
+
+.auth-section {
+  background-color: var(--slack-red-20) !important;
+}
+
+.inputs-section {
+  background-color: var(--slack-blue-20) !important;
+}
+
+.functions-section {
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.scope-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scope-item {
+  display: inline-block;
+}
+
+.functions-section .type {
+  text-align: right;
+}
+
+.param-required-section {
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.param-container {
+  border-top: 0.5px solid;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.param-container:last-child {
+  padding-bottom: 0;
+}
+
+.param-top-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* left-align param name */
+.param-top-row .name {
+  flex: 1;
+}
+
+/* right-align Required and Type */
+.param-top-row .required,
+.param-top-row .type {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* add space between Required and Type */
+.param-top-row .required {
+  margin-left: 10px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.info-key {
+  flex: 0 0 10rem;
+  align-items: center;
+}
+
+/* hides next and previous */
+.pagination-nav__link {
+  display: none;
 }
