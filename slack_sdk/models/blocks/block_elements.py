@@ -34,7 +34,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     attributes = {"type"}
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):  # skipcq: PYL-R0201
+    def _subtype_warning(self):
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -47,7 +47,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -58,7 +58,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 
     @classmethod
     def parse(cls, block_element: Union[dict, "BlockElement"]) -> Optional[Union["BlockElement", TextObject]]:
-        if block_element is None:  # skipcq: PYL-R1705
+        if block_element is None:
             return None
         elif isinstance(block_element, dict):
             if "type" in block_element:
@@ -67,7 +67,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                 for subclass in cls._get_sub_block_elements():
                     if t == subclass.type:
                         return subclass(**d)
-                if t == PlainTextObject.type:  # skipcq: PYL-R1705
+                if t == PlainTextObject.type:
                     return PlainTextObject(**d)
                 elif t == MarkdownTextObject.type:
                     return MarkdownTextObject(**d)
@@ -80,7 +80,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def parse_all(
         cls, block_elements: Sequence[Union[dict, "BlockElement", TextObject]]
     ) -> List[Union["BlockElement", TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]  # type: ignore
+        return [cls.parse(e) for e in block_elements or []]  # type: ignore[arg-type, misc]
 
     @classmethod
     def _get_sub_block_elements(cls: Type["BlockElement"]) -> Iterator[Type["BlockElement"]]:
@@ -107,7 +107,7 @@ class InteractiveElement(BlockElement):
         self,
         *,
         action_id: Optional[str] = None,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -145,7 +145,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, TextObject]] = None,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         focus_on_load: Optional[bool] = None,
@@ -1077,8 +1077,8 @@ class ConversationFilter(JsonObject):
         self.exclude_external_shared_channels = exclude_external_shared_channels
 
     @classmethod
-    def parse(cls, filter: Union[dict, "ConversationFilter"]):  # skipcq: PYL-W0622
-        if filter is None:  # skipcq: PYL-R1705
+    def parse(cls, filter: Union[dict, "ConversationFilter"]):
+        if filter is None:
             return None
         elif isinstance(filter, ConversationFilter):
             return filter
@@ -1113,7 +1113,7 @@ class ConversationSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        filter: Optional[ConversationFilter] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
@@ -1181,7 +1181,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        filter: Optional[Union[dict, ConversationFilter]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):

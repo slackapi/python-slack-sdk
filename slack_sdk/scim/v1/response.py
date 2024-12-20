@@ -61,7 +61,7 @@ class SCIMResponse:
         for key, value in vars(self).items():
             dict_value[key] = value.to_dict() if hasattr(value, "to_dict") else value
 
-        if dict_value:  # skipcq: PYL-R1705
+        if dict_value:
             return f"<slack_sdk.scim.v1.{self.__class__.__name__}: {dict_value}>"
         else:
             return self.__str__()

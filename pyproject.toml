@@ -76,3 +76,4 @@ files = "slack_sdk/"
 exclude = ["slack_sdk/scim", "slack_sdk/rtm"]
 force_union_syntax = true
 warn_unused_ignores = true
+enable_error_code = "ignore-without-code"

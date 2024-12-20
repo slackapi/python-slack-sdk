@@ -81,7 +81,7 @@ class AsyncRateLimitErrorRetryHandler(AsyncRetryHandler):
             # This situation usually does not arise. Just in case.
             duration += random.random()  # type: ignore[assignment]
         else:
-            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[assignment, index]
+            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[assignment, index] # noqa: E501
         await asyncio.sleep(duration)
         state.increment_current_attempt()
 

@@ -23,7 +23,7 @@ from slack_sdk.web.legacy_client import LegacyWebClient as WebClient
 validate_aiohttp_version(aiohttp.__version__)
 
 
-class RTMClient(object):  # skipcq: PYL-R0205
+class RTMClient(object):
     """An RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
     The event-driven architecture of this client allows you to simply
@@ -412,7 +412,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     payload = message.json()
                     event = payload.pop("type", "Unknown")
                     await self._dispatch_event(event, data=payload)
-                except Exception as err:  # skipcq: PYL-W0703
+                except Exception as err:
                     data = message.data if message else message
                     self._logger.info(f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})")
                     # Raised exceptions here happen in users' code and were just unhandled.
@@ -562,9 +562,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         futures = []
         close_method = getattr(self._websocket, "close", None)
         if callable(close_method):
-            future = asyncio.ensure_future(  # skipcq: PYL-E1102
-                close_method(), loop=self._event_loop  # skipcq: PYL-E1102
-            )  # skipcq: PYL-E1102
+            future = asyncio.ensure_future(close_method(), loop=self._event_loop)
             futures.append(future)
         self._websocket = None
         event_f = asyncio.ensure_future(self._dispatch_event(event="close"), loop=self._event_loop)

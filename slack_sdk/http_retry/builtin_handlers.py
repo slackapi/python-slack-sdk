@@ -84,7 +84,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
             # This situation usually does not arise. Just in case.
             duration += random.random()  # type: ignore[assignment]
         else:
-            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[index, assignment]
+            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[index, assignment] # noqa: E501
         time.sleep(duration)
         state.increment_current_attempt()
 

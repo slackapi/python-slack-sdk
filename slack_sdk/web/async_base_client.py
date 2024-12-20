@@ -88,7 +88,7 @@ class AsyncBaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
-    async def api_call(  # skipcq: PYL-R1710
+    async def api_call(
         self,
         api_method: str,
         *,
@@ -96,7 +96,7 @@ class AsyncBaseClient:
         files: Optional[dict] = None,
         data: Optional[Union[dict, FormData]] = None,
         params: Optional[dict] = None,
-        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        json: Optional[dict] = None,
         headers: Optional[dict] = None,
         auth: Optional[dict] = None,
     ) -> AsyncSlackResponse:

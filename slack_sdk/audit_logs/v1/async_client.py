@@ -279,7 +279,7 @@ class AsyncAuditLogsClient:
                     )
 
                 try:
-                    async with session.request(http_verb, url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr]
+                    async with session.request(http_verb, url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr] # noqa: E501
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(

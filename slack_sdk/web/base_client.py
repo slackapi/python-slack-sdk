@@ -92,7 +92,7 @@ class BaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
-    def api_call(  # skipcq: PYL-R1710
+    def api_call(
         self,
         api_method: str,
         *,
@@ -100,7 +100,7 @@ class BaseClient:
         files: Optional[dict] = None,
         data: Optional[dict] = None,
         params: Optional[dict] = None,
-        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        json: Optional[dict] = None,
         headers: Optional[dict] = None,
         auth: Optional[dict] = None,
     ) -> SlackResponse:
@@ -294,7 +294,7 @@ class BaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)  # type: ignore[arg-type]
-            response_body = response.get("body", None)  # skipcq: PTC-W0039
+            response_body = response.get("body", None)
             response_body_data: Optional[Union[dict, bytes]] = response_body
             if response_body is not None and not isinstance(response_body, bytes):
                 try:

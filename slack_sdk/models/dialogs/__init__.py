@@ -178,7 +178,7 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
     def data_source_valid(self) -> bool:
         return self.data_source in self.DataSourceTypes
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> dict:
         json = super().to_dict()
         if self.data_source == "external":
             if isinstance(self.value, Option):
@@ -262,7 +262,7 @@ class DialogStaticSelector(AbstractDialogSelector):
 class DialogUserSelector(AbstractDialogSelector):
     data_source = "users"
 
-    def __init__(  # skipcq: PYL-W0235
+    def __init__(
         self,
         *,
         name: str,
@@ -300,7 +300,7 @@ class DialogUserSelector(AbstractDialogSelector):
 class DialogChannelSelector(AbstractDialogSelector):
     data_source = "channels"
 
-    def __init__(  # skipcq: PYL-W0235
+    def __init__(
         self,
         *,
         name: str,
@@ -336,7 +336,7 @@ class DialogChannelSelector(AbstractDialogSelector):
 class DialogConversationSelector(AbstractDialogSelector):
     data_source = "conversations"
 
-    def __init__(  # skipcq: PYL-W0235
+    def __init__(
         self,
         *,
         name: str,
@@ -421,7 +421,7 @@ class DialogExternalSelector(AbstractDialogSelector):
 
 
 class DialogBuilder(JsonObject):
-    attributes = Set()  # no attributes because to_dict has unique implementation
+    attributes = set()  # no attributes because to_dict has unique implementation
 
     _callback_id: Optional[str]
     _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]
@@ -837,7 +837,7 @@ class DialogBuilder(JsonObject):
     def state_length(self) -> bool:
         return not self._state or len(self._state) <= self.state_max_length
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> dict:
         self.validate_json()
         json = {
             "title": self._title,

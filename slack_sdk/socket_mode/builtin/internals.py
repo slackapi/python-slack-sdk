@@ -241,7 +241,7 @@ def _fetch_messages(
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
     if remaining_bytes is None:
         # Fetch more to complete the current message
-        remaining_bytes = receive()  # type: ignore
+        remaining_bytes = receive()  # type: ignore[call-arg]
 
     if remaining_bytes is None or len(remaining_bytes) == 0:
         # no more bytes
@@ -252,7 +252,7 @@ def _fetch_messages(
     if current_header is None:
         # new message
         if len(remaining_bytes) <= 2:
-            remaining_bytes += receive()  # type: ignore
+            remaining_bytes += receive()  # type: ignore[call-arg]
 
         if remaining_bytes[0] == 10:  # \n
             if current_data is not None and len(current_data) >= 0:

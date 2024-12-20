@@ -192,7 +192,7 @@ class AsyncWebhookClient:
                     self.logger.debug(f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}")
 
                 try:
-                    async with session.request("POST", self.url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr]
+                    async with session.request("POST", self.url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr] # noqa: E501
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(

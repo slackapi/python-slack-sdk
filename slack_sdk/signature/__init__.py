@@ -7,7 +7,7 @@ from typing import Dict, Optional, Union
 
 
 class Clock:
-    def now(self) -> float:  # skipcq: PYL-R0201
+    def now(self) -> float:
         return time()
 
 

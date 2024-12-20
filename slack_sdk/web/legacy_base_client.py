@@ -1,4 +1,5 @@
 """A Python module for interacting with Slack's Web API."""
+
 # mypy: ignore-errors
 
 import asyncio
@@ -99,7 +100,7 @@ class LegacyBaseClient:
 
         self._event_loop = loop
 
-    def api_call(  # skipcq: PYL-R1710
+    def api_call(
         self,
         api_method: str,
         *,
@@ -107,7 +108,7 @@ class LegacyBaseClient:
         files: Optional[dict] = None,
         data: Union[dict, FormData] = None,
         params: Optional[dict] = None,
-        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        json: Optional[dict] = None,
         headers: Optional[dict] = None,
         auth: Optional[dict] = None,
     ) -> Union[asyncio.Future, SlackResponse]:
@@ -159,7 +160,7 @@ class LegacyBaseClient:
             data=data,
             default_params=self.default_params,
             params=params,
-            json=json,  # skipcq: PYL-W0621
+            json=json,
             headers=headers,
             auth=auth,
             ssl=self.ssl,
@@ -370,7 +371,7 @@ class LegacyBaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)
-            body = response.get("body", None)  # skipcq: PTC-W0039
+            body = response.get("body", None)
             response_body_data: Optional[Union[dict, bytes]] = body
             if body is not None and not isinstance(body, bytes):
                 try:
@@ -481,9 +482,9 @@ class LegacyBaseClient:
                 # NOTE: BAN-B310 is already checked above
                 resp: Optional[HTTPResponse] = None
                 if opener:
-                    resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+                    resp = opener.open(req, timeout=self.timeout)
                 else:
-                    resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+                    resp = urlopen(req, context=self.ssl, timeout=self.timeout)
                 if resp.headers.get_content_type() == "application/gzip":
                     # admin.analytics.getFile
                     body: bytes = resp.read()

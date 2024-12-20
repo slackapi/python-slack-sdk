@@ -20,7 +20,7 @@ class TextObject(JsonObject):
     attributes = {"text", "type", "emoji"}
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):  # skipcq: PYL-R0201
+    def _subtype_warning(self):
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -36,17 +36,17 @@ class TextObject(JsonObject):
         text: Union[str, Dict[str, Any], "TextObject"],
         default_type: str = "mrkdwn",
     ) -> Optional["TextObject"]:
-        if not text:  # skipcq: PYL-R1705
+        if not text:
             return None
         elif isinstance(text, str):
-            if default_type == PlainTextObject.type:  # skipcq: PYL-R1705
+            if default_type == PlainTextObject.type:
                 return PlainTextObject.from_str(text)
             else:
                 return MarkdownTextObject.from_str(text)
         elif isinstance(text, dict):
             d = copy.copy(text)
             t = d.pop("type")
-            if t == PlainTextObject.type:  # skipcq: PYL-R1705
+            if t == PlainTextObject.type:
                 return PlainTextObject(**d)
             else:
                 return MarkdownTextObject(**d)
@@ -59,7 +59,7 @@ class TextObject(JsonObject):
     def __init__(
         self,
         text: str,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         emoji: Optional[bool] = None,
         **kwargs,
@@ -273,14 +273,14 @@ class Option(JsonObject):
                 cls.logger.warning(f"Unknown option object detected and skipped ({o})")
         return option_objects
 
-    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:
         """
         Different parent classes must call this with a valid value from OptionTypes -
         either "dialog", "action", or "block", so that JSON is returned in the
         correct shape.
         """
         self.validate_json()
-        if option_type == "dialog":  # skipcq: PYL-R1705
+        if option_type == "dialog":
             return {"label": self.label, "value": self.value}
         elif option_type == "action" or option_type == "attachment":
             # "action" can be confusing but it means a legacy message action in attachments
@@ -343,7 +343,7 @@ class OptionGroup(JsonObject):
             options: A list of no more than 100 Option objects.
         """  # noqa prevent flake8 blowing up on the long URL
         # default_type=PlainTextObject.type is for backward-compatibility
-        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self._label: Optional[TextObject] = TextObject.parse(label, default_type=PlainTextObject.type)  # type: ignore[arg-type] # noqa: E501
         self.label: Optional[str] = self._label.text if self._label else None
         self.options = Option.parse_all(options)  # compatible with version 2.5
         show_unknown_key_warning(self, others)
@@ -373,10 +373,10 @@ class OptionGroup(JsonObject):
                 cls.logger.warning(f"Unknown option group object detected and skipped ({o})")
         return option_group_objects
 
-    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:
         self.validate_json()
         dict_options = [o.to_dict(option_type) for o in self.options]  # type: ignore[union-attr]
-        if option_type == "dialog":  # skipcq: PYL-R1705
+        if option_type == "dialog":
             return {
                 "label": self.label,
                 "options": dict_options,
@@ -405,7 +405,7 @@ class ConfirmObject(JsonObject):
     @classmethod
     def parse(cls, confirm: Union["ConfirmObject", Dict[str, Any]]):
         if confirm:
-            if isinstance(confirm, ConfirmObject):  # skipcq: PYL-R1705
+            if isinstance(confirm, ConfirmObject):
                 return confirm
             elif isinstance(confirm, dict):
                 return ConfirmObject(**confirm)
@@ -462,8 +462,8 @@ class ConfirmObject(JsonObject):
     def _validate_confirm_style(self) -> bool:
         return self._style is None or self._style in ["primary", "danger"]
 
-    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:  # skipcq: PYL-W0221
-        if option_type == "action":  # skipcq: PYL-R1705
+    def to_dict(self, option_type: str = "block") -> Dict[str, Any]:
+        if option_type == "action":
             # deliberately skipping JSON validators here - can't find documentation
             # on actual limits here
             json: Dict[str, Union[str, dict]] = {
@@ -498,7 +498,7 @@ class DispatchActionConfig(JsonObject):
     @classmethod
     def parse(cls, config: Union["DispatchActionConfig", Dict[str, Any]]):
         if config:
-            if isinstance(config, DispatchActionConfig):  # skipcq: PYL-R1705
+            if isinstance(config, DispatchActionConfig):
                 return config
             elif isinstance(config, dict):
                 return DispatchActionConfig(**config)
@@ -518,7 +518,7 @@ class DispatchActionConfig(JsonObject):
         """
         self._trigger_actions_on = trigger_actions_on or []
 
-    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self) -> Dict[str, Any]:
         self.validate_json()
         json = {}
         if self._trigger_actions_on:
@@ -533,7 +533,7 @@ class WorkflowTrigger(JsonObject):
         self._url = url
         self._customizable_input_parameters = customizable_input_parameters
 
-    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self) -> Dict[str, Any]:
         self.validate_json()
         json = {"url": self._url}
         if self._customizable_input_parameters is not None:
@@ -551,7 +551,7 @@ class Workflow(JsonObject):
     ):
         self._trigger = trigger
 
-    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self) -> Dict[str, Any]:
         self.validate_json()
         json = {}
         if isinstance(self._trigger, WorkflowTrigger):
@@ -580,7 +580,7 @@ class SlackFile(JsonObject):
         self._id = id
         self._url = url
 
-    def to_dict(self) -> Dict[str, Any]:  # skipcq: PYL-W0221
+    def to_dict(self) -> Dict[str, Any]:
         self.validate_json()
         json = {}
         if self._id is not None:

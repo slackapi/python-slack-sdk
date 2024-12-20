@@ -2211,10 +2211,10 @@ class LegacyWebClient(LegacyBaseClient):
                 "title": title,
             }
         )
-        _update_call_participants(  # skipcq: PTC-W0039
+        _update_call_participants(
             kwargs,
             users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
-        )  # skipcq: PTC-W0039
+        )
         return self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     def calls_end(
@@ -2223,7 +2223,7 @@ class LegacyWebClient(LegacyBaseClient):
         id: str,
         duration: Optional[int] = None,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Ends a Call.
         https://api.slack.com/methods/calls.end
         """
@@ -2235,7 +2235,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         id: str,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Returns information about a Call.
         https://api.slack.com/methods/calls.info
         """
@@ -2245,7 +2245,7 @@ class LegacyWebClient(LegacyBaseClient):
     def calls_participants_add(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2259,7 +2259,7 @@ class LegacyWebClient(LegacyBaseClient):
     def calls_participants_remove(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2278,7 +2278,7 @@ class LegacyWebClient(LegacyBaseClient):
         join_url: Optional[str] = None,
         title: Optional[str] = None,
         **kwargs,
-    ) -> Union[Future, SlackResponse]:  # skipcq: PYL-W0622
+    ) -> Union[Future, SlackResponse]:
         """Updates information about a Call.
         https://api.slack.com/methods/calls.update
         """
@@ -3448,7 +3448,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         file: str,
         id: str,
-        **kwargs,  # skipcq: PYL-W0622
+        **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes an existing comment on a file.
         https://api.slack.com/methods/files.comments.delete
@@ -3823,8 +3823,8 @@ class LegacyWebClient(LegacyBaseClient):
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")
-            f["upload_url"] = url_response.get("upload_url")
+            f["file_id"] = url_response.get("file_id")  # type: ignore[union-attr, unused-ignore]
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore[union-attr, unused-ignore]
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
@@ -3859,8 +3859,8 @@ class LegacyWebClient(LegacyBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if len(completion.get("files")) == 1:  # type: ignore
-            completion.data["file"] = completion.get("files")[0]  # type: ignore
+        if len(completion.get("files")) == 1:  # type: ignore[arg-type]
+            completion.data["file"] = completion.get("files")[0]  # type: ignore[index]
         return completion
 
     def files_getUploadURLExternal(

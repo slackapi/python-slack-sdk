@@ -220,12 +220,12 @@ class SocketModeClient(BaseSocketModeClient):
                     self.current_session.send(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(
-                        f"The current session (session id: {self.session_id()}) is no longer active. "
+                        f"The current session (session id: {self.session_id()}) is no longer active. "  # type: ignore[attr-defined] # noqa: E501
                         "Failed to send a message"
                     )
                     raise e
 
-    def close(self) -> None:  # type: ignore
+    def close(self) -> None:  # type: ignore[explicit-override, no-redef]
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()

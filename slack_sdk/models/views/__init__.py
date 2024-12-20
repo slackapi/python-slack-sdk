@@ -38,8 +38,8 @@ class View(JsonObject):
     def __init__(
         self,
         # "modal", "home", and "workflow_step"
-        type: str,  # skipcq: PYL-W0622
-        id: Optional[str] = None,  # skipcq: PYL-W0622
+        type: str,
+        id: Optional[str] = None,
         callback_id: Optional[str] = None,
         external_id: Optional[str] = None,
         team_id: Optional[str] = None,
@@ -53,7 +53,7 @@ class View(JsonObject):
         blocks: Optional[Sequence[Union[dict, Block]]] = None,
         private_metadata: Optional[str] = None,
         state: Optional[Union[dict, "ViewState"]] = None,
-        hash: Optional[str] = None,  # skipcq: PYL-W0622
+        hash: Optional[str] = None,
         clear_on_close: Optional[bool] = None,
         notify_on_close: Optional[bool] = None,
         **kwargs,
@@ -145,7 +145,7 @@ class ViewState(JsonObject):
         new_state_values = copy.copy(values)
         if isinstance(new_state_values, dict):  # just in case
             for block_id, actions in new_state_values.items():
-                if actions is None:  # skipcq: PYL-R1724
+                if actions is None:
                     continue
                 elif isinstance(actions, dict):
                     new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
@@ -196,7 +196,7 @@ class ViewStateValue(JsonObject):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         value: Optional[str] = None,
         selected_date: Optional[str] = None,
         selected_time: Optional[str] = None,

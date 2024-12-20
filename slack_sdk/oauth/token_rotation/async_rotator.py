@@ -135,7 +135,7 @@ class AsyncTokenRotator:
             refreshed_installation = Installation(**installation.to_dict())
             refreshed_installation.user_token = refresh_response.get("access_token")
             refreshed_installation.user_refresh_token = refresh_response.get("refresh_token")
-            refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))  # type: ignore[arg-type]
+            refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))  # type: ignore[arg-type] # noqa: E501
             return refreshed_installation
 
         except SlackApiError as e:

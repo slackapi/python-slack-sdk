@@ -2209,10 +2209,10 @@ class AsyncWebClient(AsyncBaseClient):
                 "title": title,
             }
         )
-        _update_call_participants(  # skipcq: PTC-W0039
+        _update_call_participants(
             kwargs,
             users if users is not None else kwargs.get("users"),  # type: ignore[arg-type]
-        )  # skipcq: PTC-W0039
+        )
         return await self.api_call("calls.add", http_verb="POST", params=kwargs)
 
     async def calls_end(
@@ -2221,7 +2221,7 @@ class AsyncWebClient(AsyncBaseClient):
         id: str,
         duration: Optional[int] = None,
         **kwargs,
-    ) -> AsyncSlackResponse:  # skipcq: PYL-W0622
+    ) -> AsyncSlackResponse:
         """Ends a Call.
         https://api.slack.com/methods/calls.end
         """
@@ -2233,7 +2233,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         id: str,
         **kwargs,
-    ) -> AsyncSlackResponse:  # skipcq: PYL-W0622
+    ) -> AsyncSlackResponse:
         """Returns information about a Call.
         https://api.slack.com/methods/calls.info
         """
@@ -2243,7 +2243,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def calls_participants_add(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> AsyncSlackResponse:
@@ -2257,7 +2257,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def calls_participants_remove(
         self,
         *,
-        id: str,  # skipcq: PYL-W0622
+        id: str,
         users: Union[str, Sequence[Dict[str, str]]],
         **kwargs,
     ) -> AsyncSlackResponse:
@@ -2276,7 +2276,7 @@ class AsyncWebClient(AsyncBaseClient):
         join_url: Optional[str] = None,
         title: Optional[str] = None,
         **kwargs,
-    ) -> AsyncSlackResponse:  # skipcq: PYL-W0622
+    ) -> AsyncSlackResponse:
         """Updates information about a Call.
         https://api.slack.com/methods/calls.update
         """
@@ -3446,7 +3446,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         file: str,
         id: str,
-        **kwargs,  # skipcq: PYL-W0622
+        **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes an existing comment on a file.
         https://api.slack.com/methods/files.comments.delete
@@ -3821,8 +3821,8 @@ class AsyncWebClient(AsyncBaseClient):
                 token=kwargs.get("token"),
             )
             _validate_for_legacy_client(url_response)
-            f["file_id"] = url_response.get("file_id")
-            f["upload_url"] = url_response.get("upload_url")
+            f["file_id"] = url_response.get("file_id")  # type: ignore[union-attr, unused-ignore]
+            f["upload_url"] = url_response.get("upload_url")  # type: ignore[union-attr, unused-ignore]
 
         # step2: "https://files.slack.com/upload/v1/..." per file
         for f in files:
@@ -3857,8 +3857,8 @@ class AsyncWebClient(AsyncBaseClient):
             thread_ts=thread_ts,
             **kwargs,
         )
-        if len(completion.get("files")) == 1:  # type: ignore
-            completion.data["file"] = completion.get("files")[0]  # type: ignore
+        if len(completion.get("files")) == 1:  # type: ignore[arg-type]
+            completion.data["file"] = completion.get("files")[0]  # type: ignore[index]
         return completion
 
     async def files_getUploadURLExternal(

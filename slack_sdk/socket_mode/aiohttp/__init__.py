@@ -419,7 +419,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message} from session: {session_id}")
         try:
-            await self.current_session.send_str(message)  # type:ignore[union-attr]
+            await self.current_session.send_str(message)  # type: ignore[union-attr]
         except ConnectionError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.

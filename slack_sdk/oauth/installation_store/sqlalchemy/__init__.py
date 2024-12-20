@@ -218,7 +218,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
+            for row in result.mappings():  # type: ignore[attr-defined]
                 return Bot(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],
@@ -266,7 +266,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
+            for row in result.mappings():  # type: ignore[attr-defined]
                 installation = Installation(
                     app_id=row["app_id"],
                     enterprise_id=row["enterprise_id"],

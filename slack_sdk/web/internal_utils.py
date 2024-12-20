@@ -136,7 +136,7 @@ def _build_req_args(
     data: dict,
     default_params: dict,
     params: dict,
-    json: dict,  # skipcq: PYL-W0621
+    json: dict,
     headers: dict,
     auth: dict,
     ssl: Optional[SSLContext],
@@ -387,25 +387,25 @@ def _upload_file_via_v2_url(
     if opener:
         resp = opener.open(req, timeout=timeout)
     else:
-        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+        resp = urlopen(req, context=ssl, timeout=timeout)
 
-    charset = resp.headers.get_content_charset() or "utf-8"  # type:ignore[union-attr]
+    charset = resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
     # read the response body here
-    body: str = resp.read().decode(charset)  # type:ignore[union-attr]
+    body: str = resp.read().decode(charset)  # type: ignore[union-attr]
     if logger.level <= logging.DEBUG:
         message = (
             "Received the following response - "
-            f"status: {resp.status}, "  # type:ignore[union-attr]
-            f"headers: {dict(resp.headers)}, "  # type:ignore[union-attr]
+            f"status: {resp.status}, "  # type: ignore[union-attr]
+            f"headers: {dict(resp.headers)}, "  # type: ignore[union-attr]
             f"body: {body}"
         )
         logger.debug(message)
 
-    return {"status": resp.status, "headers": resp.headers, "body": body}  # type:ignore[union-attr]
+    return {"status": resp.status, "headers": resp.headers, "body": body}  # type: ignore[union-attr]
 
 
 def _validate_for_legacy_client(
-    response: Union["SlackResponse", Future],  # type:ignore[name-defined] # noqa: F821
+    response: Union["SlackResponse", Future],  # type: ignore[name-defined] # noqa: F821
 ) -> None:
     # Only LegacyWebClient can return this union type
     if isinstance(response, Future):
