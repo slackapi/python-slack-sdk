@@ -141,7 +141,7 @@ class AsyncSlackResponse:
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if _next_cursor_is_present(self.data):  # skipcq: PYL-R1705
+        if _next_cursor_is_present(self.data):
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -149,7 +149,7 @@ class AsyncSlackResponse:
             params.update({"cursor": next_cursor})
             self.req_args.update({"params": params})
 
-            response = await self._client._request(  # skipcq: PYL-W0212
+            response = await self._client._request(
                 http_verb=self.http_verb,
                 api_url=self.api_url,
                 req_args=self.req_args,

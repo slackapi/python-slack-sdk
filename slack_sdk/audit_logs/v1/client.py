@@ -2,6 +2,7 @@
 
 Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
 """
+
 import json
 import logging
 import urllib
@@ -217,7 +218,7 @@ class AuditLogsClient:
         headers: Dict[str, str],
     ) -> AuditLogsResponse:
         if body is not None:
-            body = json.dumps(body)
+            body = json.dumps(body)  # type: ignore[assignment]
         headers["Content-Type"] = "application/json;charset=utf-8"
 
         if self.logger.level <= logging.DEBUG:
@@ -229,7 +230,7 @@ class AuditLogsClient:
         req = Request(
             method=http_verb,
             url=url,
-            data=body.encode("utf-8") if body is not None else None,
+            data=body.encode("utf-8") if body is not None else None,  # type: ignore[attr-defined]
             headers=headers,
         )
         resp = None
@@ -327,7 +328,7 @@ class AuditLogsClient:
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     def _perform_http_request_internal(self, url: str, req: Request) -> AuditLogsResponse:
         opener: Optional[OpenerDirector] = None
@@ -344,19 +345,18 @@ class AuditLogsClient:
         else:
             raise SlackRequestError(f"Invalid URL detected: {url}")
 
-        # NOTE: BAN-B310 is already checked above
-        http_resp: Optional[HTTPResponse] = None
+        http_resp: HTTPResponse
         if opener:
-            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)
         else:
-            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = AuditLogsResponse(
             url=url,
             status_code=http_resp.status,
             raw_body=response_body,
-            headers=http_resp.headers,
+            headers=http_resp.headers,  # type: ignore[arg-type]
         )
         _debug_log_response(self.logger, resp)
         return resp

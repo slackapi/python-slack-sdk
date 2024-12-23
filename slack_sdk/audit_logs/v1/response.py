@@ -13,8 +13,8 @@ class AuditLogsResponse:
     body: Optional[Dict[str, Any]]
     typed_body: Optional[LogsResponse]
 
-    @property
-    def typed_body(self) -> Optional[LogsResponse]:  # type: ignore
+    @property  # type: ignore[no-redef]
+    def typed_body(self) -> Optional[LogsResponse]:
         if self.body is None:
             return None
         return LogsResponse(**self.body)

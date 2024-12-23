@@ -34,7 +34,7 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 cur = conn.execute("select count(1) from oauth_states;")
                 row_num = cur.fetchone()[0]
                 self.logger.debug(f"{row_num} oauth states are stored in {self.database}")
-        except Exception:  # skipcq: PYL-W0703
+        except Exception:
             self.create_tables()
         self.init_called = True
 
@@ -85,12 +85,12 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 row = cur.fetchone()
                 self.logger.debug(f"consume's query result: {row} (database: {self.database})")
                 if row and len(row) > 0:
-                    id = row[0]  # skipcq: PYL-W0622
+                    id = row[0]
                     conn.execute("delete from oauth_states where id = ?;", [id])
                     conn.commit()
                     return True
             return False
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find any persistent data for state: {state} - {e}"
             self.logger.warning(message)
             return False

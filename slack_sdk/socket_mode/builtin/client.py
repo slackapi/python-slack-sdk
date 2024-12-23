@@ -4,6 +4,7 @@
 * https://slack.dev/python-slack-sdk/socket-mode/
 
 """
+
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -29,7 +30,7 @@ class SocketModeClient(BaseSocketModeClient):
     logger: Logger
     web_client: WebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -199,7 +200,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message (session id: {self.session_id()}, message: {message})")
         try:
-            self.current_session.send(message)
+            self.current_session.send(message)  # type: ignore[union-attr]
         except SlackClientNotConnectedError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
@@ -212,7 +213,7 @@ class SocketModeClient(BaseSocketModeClient):
             # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
             with self.connect_operation_lock:
                 if self.is_connected():
-                    self.current_session.send(message)
+                    self.current_session.send(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(
                         f"The current session (session id: {self.session_id()}) is no longer active. "

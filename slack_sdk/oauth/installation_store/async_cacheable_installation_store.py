@@ -9,8 +9,8 @@ from slack_sdk.oauth.installation_store.async_installation_store import (
 
 class AsyncCacheableInstallationStore(AsyncInstallationStore):
     underlying: AsyncInstallationStore
-    cached_bots: Dict[str, Bot]  # type: ignore
-    cached_installations: Dict[str, Installation]  # type: ignore
+    cached_bots: Dict[str, Bot]
+    cached_installations: Dict[str, Installation]
 
     def __init__(self, installation_store: AsyncInstallationStore):
         """A simple memory cache wrapper for any installation stores.
@@ -26,7 +26,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
     def logger(self) -> Logger:
         return self.underlying.logger
 
-    async def async_save(self, installation: Installation):  # type: ignore
+    async def async_save(self, installation: Installation):  # type: ignore[explicit-override]
         # Invalidate cache data for update operations
         key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}"
         if key in self.cached_bots:
@@ -36,14 +36,14 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             self.cached_installations.pop(key)
         return await self.underlying.async_save(installation)
 
-    async def async_save_bot(self, bot: Bot):  # type: ignore
+    async def async_save_bot(self, bot: Bot):  # type: ignore[explicit-override]
         # Invalidate cache data for update operations
         key = f"{bot.enterprise_id or ''}-{bot.team_id or ''}"
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return await self.underlying.async_save_bot(bot)
 
-    async def async_find_bot(  # type: ignore
+    async def async_find_bot(  # type: ignore[explicit-override]
         self,
         *,
         enterprise_id: Optional[str],
@@ -64,7 +64,7 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             self.cached_bots[key] = bot
         return bot
 
-    async def async_find_installation(  # type: ignore
+    async def async_find_installation(  # type: ignore[explicit-override]
         self,
         *,
         enterprise_id: Optional[str],

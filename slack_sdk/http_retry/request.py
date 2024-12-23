@@ -29,8 +29,8 @@ class HttpRequest:
     @classmethod
     def from_urllib_http_request(cls, req: Request) -> "HttpRequest":
         return HttpRequest(
-            method=req.method,
+            method=req.method,  # type: ignore[arg-type]
             url=req.full_url,
             headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
-            data=req.data,
+            data=req.data,  # type: ignore[arg-type]
         )

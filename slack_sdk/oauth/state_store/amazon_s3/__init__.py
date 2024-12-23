@@ -3,7 +3,7 @@ import time
 from logging import Logger
 from uuid import uuid4
 
-from botocore.client import BaseClient
+from botocore.client import BaseClient  # type: ignore[import-untyped]
 
 from ..async_state_store import AsyncOAuthStateStore
 from ..state_store import OAuthStateStore
@@ -63,7 +63,7 @@ class AmazonS3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
             )
             self.logger.debug(f"S3 delete_object response: {deletion_response}")
             return still_valid
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find any persistent data for state: {state} - {e}"
             self.logger.warning(message)
             return False

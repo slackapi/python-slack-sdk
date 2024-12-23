@@ -23,7 +23,7 @@ from slack_sdk.web.legacy_client import LegacyWebClient as WebClient
 validate_aiohttp_version(aiohttp.__version__)
 
 
-class RTMClient(object):  # skipcq: PYL-R0205
+class RTMClient(object):
     """An RTMClient allows apps to communicate with the Slack Platform's RTM API.
 
     The event-driven architecture of this client allows you to simply
@@ -139,11 +139,11 @@ class RTMClient(object):  # skipcq: PYL-R0205
         self._stopped = False
         self._web_client = WebClient(
             token=self.token,
-            base_url=self.base_url,
-            timeout=self.timeout,
+            base_url=self.base_url,  # type: ignore[arg-type]
+            timeout=self.timeout,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
-            run_async=self.run_async,
+            run_async=self.run_async,  # type: ignore[arg-type]
             loop=self._event_loop,
             session=self._session,
             headers=self.headers,
@@ -412,7 +412,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
                     payload = message.json()
                     event = payload.pop("type", "Unknown")
                     await self._dispatch_event(event, data=payload)
-                except Exception as err:  # skipcq: PYL-W0703
+                except Exception as err:
                     data = message.data if message else message
                     self._logger.info(f"Caught a raised exception ({err}) while dispatching a TEXT message ({data})")
                     # Raised exceptions here happen in users' code and were just unhandled.
@@ -534,11 +534,11 @@ class RTMClient(object):  # skipcq: PYL-R0205
             else:
                 resp = self._web_client.rtm_connect()
 
-        url = resp.get("url")  # type: ignore
+        url = resp.get("url")
         if url is None:
             msg = "Unable to retrieve RTM URL from Slack."
             raise client_err.SlackApiError(message=msg, response=resp)
-        return url, resp.data  # type: ignore
+        return url, resp.data
 
     async def _wait_exponentially(self, exception, max_wait_time=300):
         """Wait exponentially longer for each connection attempt.
@@ -562,9 +562,7 @@ class RTMClient(object):  # skipcq: PYL-R0205
         futures = []
         close_method = getattr(self._websocket, "close", None)
         if callable(close_method):
-            future = asyncio.ensure_future(  # skipcq: PYL-E1102
-                close_method(), loop=self._event_loop  # skipcq: PYL-E1102
-            )  # skipcq: PYL-E1102
+            future = asyncio.ensure_future(close_method(), loop=self._event_loop)
             futures.append(future)
         self._websocket = None
         event_f = asyncio.ensure_future(self._dispatch_event(event="close"), loop=self._event_loop)

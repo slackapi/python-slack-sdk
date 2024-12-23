@@ -4,6 +4,7 @@ including Slack.
 
 Refer to https://slack.dev/python-slack-sdk/scim/ for details.
 """
+
 import json
 import logging
 import urllib
@@ -145,9 +146,9 @@ class SCIMClient:
             self.api_call(
                 http_verb="PATCH",
                 path=f"Users/{quote(id)}",
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -210,9 +211,11 @@ class SCIMClient:
             self.api_call(
                 http_verb="PATCH",
                 path=f"Groups/{quote(id)}",
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 
@@ -403,9 +406,9 @@ class SCIMClient:
         # NOTE: BAN-B310 is already checked above
         http_resp: Optional[HTTPResponse] = None
         if opener:
-            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)
         else:
-            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
         charset: str = http_resp.headers.get_content_charset() or "utf-8"
         response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(

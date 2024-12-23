@@ -8,7 +8,7 @@ from aiohttp import FormData, BasicAuth
 from .async_internal_utils import (
     _files_to_data,
     _request_with_session,
-)  # type: ignore
+)
 from .async_slack_response import AsyncSlackResponse
 from .deprecation import show_deprecation_warning_if_any
 from .file_upload_v2_result import FileUploadV2Result
@@ -88,15 +88,15 @@ class AsyncBaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
-    async def api_call(  # skipcq: PYL-R1710
+    async def api_call(
         self,
         api_method: str,
         *,
         http_verb: str = "POST",
         files: Optional[dict] = None,
-        data: Union[dict, FormData] = None,
+        data: Optional[Union[dict, FormData]] = None,
         params: Optional[dict] = None,
-        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        json: Optional[dict] = None,
         headers: Optional[dict] = None,
         auth: Optional[dict] = None,
     ) -> AsyncSlackResponse:
@@ -135,8 +135,8 @@ class AsyncBaseClient:
 
         api_url = _get_url(self.base_url, api_method)
         if auth is not None:
-            if isinstance(auth, dict):
-                auth = BasicAuth(auth["client_id"], auth["client_secret"])
+            if isinstance(auth, Dict):
+                auth = BasicAuth(auth["client_id"], auth["client_secret"])  # type: ignore[assignment]
             if isinstance(auth, BasicAuth):
                 if headers is None:
                     headers = {}
@@ -148,13 +148,13 @@ class AsyncBaseClient:
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
-            files=files,
-            data=data,
+            files=files,  # type: ignore[arg-type]
+            data=data,  # type: ignore[arg-type]
             default_params=self.default_params,
-            params=params,
-            json=json,  # skipcq: PYL-W0621
+            params=params,  # type: ignore[arg-type]
+            json=json,  # type: ignore[arg-type]
             headers=headers,
-            auth=auth,
+            auth=auth,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
         )
@@ -239,6 +239,6 @@ class AsyncBaseClient:
             retry_handlers=self.retry_handlers,
         )
         return FileUploadV2Result(
-            status=result.get("status_code"),
-            body=result.get("body"),
+            status=result.get("status_code"),  # type: ignore[arg-type]
+            body=result.get("body"),  # type: ignore[arg-type]
         )

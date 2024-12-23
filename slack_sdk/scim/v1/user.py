@@ -171,34 +171,42 @@ class User:
         **kwargs,
     ) -> None:
         self.active = active
-        self.addresses = (  # type: ignore
-            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]
+        self.addresses = (
+            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]  # type: ignore
             if _is_iterable(addresses)
             else addresses
         )
         self.display_name = display_name
-        self.emails = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails] if _is_iterable(emails) else emails
+        self.emails = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]  # type: ignore
+            if _is_iterable(emails)
+            else emails
         )
         self.external_id = external_id
-        self.groups = (  # type: ignore
-            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups] if _is_iterable(groups) else groups
+        self.groups = (
+            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]  # type: ignore
+            if _is_iterable(groups)
+            else groups
         )
         self.id = id
-        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta  # type: ignore
-        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name  # type: ignore
+        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
+        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name
         self.nick_name = nick_name
-        self.phone_numbers = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]
+        self.phone_numbers = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]  # type: ignore
             if _is_iterable(phone_numbers)
             else phone_numbers
         )
-        self.photos = (  # type: ignore
-            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos] if _is_iterable(photos) else photos
+        self.photos = (
+            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]  # type: ignore
+            if _is_iterable(photos)
+            else photos
         )
         self.profile_url = profile_url
-        self.roles = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles] if _is_iterable(roles) else roles
+        self.roles = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]  # type: ignore
+            if _is_iterable(roles)
+            else roles
         )
         self.schemas = schemas
         self.timezone = timezone
