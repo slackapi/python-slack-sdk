@@ -16,7 +16,7 @@ class TestWebClient(unittest.TestCase):
 
     export SLACK_SDK_TEST_BOT_TOKEN=xoxb-xxx
     export SLACK_SDK_TEST_WEB_TEST_CHANNEL_ID=C111
-    python setup.py run_integration_tests --test-target integration_tests/web/test_issue_770.py
+    ./scripts/run_integration_tests.sh integration_tests/web/test_issue_770.py
 
     https://github.com/slackapi/python-slack-sdk/issues/770
     """

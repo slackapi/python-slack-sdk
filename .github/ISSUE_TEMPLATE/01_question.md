@@ -30,7 +30,7 @@ sw_vers && uname -v # or `ver`
 
 #### Steps to reproduce:
 
-(Share the commands to run, source code, and project settings (e.g., setup.py))
+(Share the commands to run, source code, and project settings (e.g., pyproject.toml))
 
 1.
 2.

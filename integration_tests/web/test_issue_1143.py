@@ -12,7 +12,7 @@ class TestWebClient(unittest.TestCase):
     """Runs integration tests with real Slack API
 
     export SLACK_SDK_TEST_BOT_TOKEN=xoxb-xxx
-    python setup.py run_integration_tests --test-target integration_tests/web/test_issue_1143.py
+    ./scripts/run_integration_tests.sh integration_tests/web/test_issue_1143.py
 
     https://github.com/slackapi/python-slack-sdk/issues/1143
     """
