@@ -12,7 +12,8 @@ pip install -U pip
 pip install -r requirements/testing.txt \
   -r requirements/optional.txt
 
-python setup.py codegen
+echo "Generating code ..." && python scripts/codegen.py --path .
+echo "Running black (code formatter) ..." && black slack_sdk/
 
 test_target="${1:-tests/}"
-python setup.py unit_tests --test-target $test_target
+PYTHONPATH=$PWD:$PYTHONPATH pytest $test_target
