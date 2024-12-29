@@ -98,13 +98,13 @@ class Connection:
     def connect(self) -> None:
         try:
             parsed_url = urlparse(self.url.strip())
-            hostname: str = parsed_url.hostname
+            hostname: str = parsed_url.hostname  # type: ignore[assignment]
             port: int = parsed_url.port or (443 if parsed_url.scheme == "wss" else 80)
             if self.trace_enabled:
                 self.logger.debug(
                     f"Connecting to the address for handshake: {hostname}:{port} " f"(session id: {self.session_id})"
                 )
-            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore
+            sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore[valid-type]
                 session_id=self.session_id,
                 server_hostname=hostname,
                 server_port=port,
@@ -135,7 +135,7 @@ class Connection:
                         f"{self.connection_type_name} handshake request (session id: {self.session_id}):\n{req}"
                     )
                 with self.sock_send_lock:
-                    sock.send(req.encode("utf-8"))
+                    sock.send(req.encode("utf-8"))  # type: ignore[union-attr]
 
                 status, headers, text = _parse_handshake_response(sock)
                 if self.trace_enabled:
@@ -234,7 +234,7 @@ class Connection:
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
             try:
-                self.sock.send(data)
+                self.sock.send(data)  # type: ignore[union-attr]
             except Exception as e:
                 # In most cases, we want to retry this operation with a newly established connection.
                 # Getting this exception means that this connection has been replaced with a new one
@@ -303,7 +303,7 @@ class Connection:
             try:
                 if self.is_active():
                     received_messages: List[Tuple[Optional[FrameHeader], bytes]] = _receive_messages(
-                        sock=self.sock,
+                        sock=self.sock,  # type: ignore[arg-type]
                         sock_receive_lock=self.sock_receive_lock,
                         logger=self.logger,
                         receive_buffer_size=self.receive_buffer_size,
@@ -394,14 +394,14 @@ class Connection:
                         else:
                             # Just warn logging
                             opcode = _to_readable_opcode(header.opcode) if header else "-"
-                            payload: Union[bytes, str] = data
+                            payload: Union[bytes, str] = data  # type: ignore[no-redef]
                             if header.opcode != FrameHeader.OPCODE_BINARY:
                                 try:
                                     payload = data.decode("utf-8") if data is not None else ""
                                 except Exception as e:
                                     self.logger.info(f"Failed to convert the data to text {e}")
                             message = (
-                                "Received an unsupported data frame "
+                                "Received an unsupported data frame "  # type: ignore[assignment]
                                 f"(session id: {self.session_id}, opcode: {opcode}, payload: {payload})"
                             )
                             self.logger.warning(message)

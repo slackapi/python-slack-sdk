@@ -1,4 +1,5 @@
 """Slack request signature verifier"""
+
 import hashlib
 import hmac
 from time import time
@@ -6,7 +7,7 @@ from typing import Dict, Optional, Union
 
 
 class Clock:
-    def now(self) -> float:  # skipcq: PYL-R0201
+    def now(self) -> float:
         return time()
 
 
@@ -33,8 +34,8 @@ class SignatureVerifier:
         normalized_headers = {k.lower(): v for k, v in headers.items()}
         return self.is_valid(
             body=body,
-            timestamp=normalized_headers.get("x-slack-request-timestamp", None),
-            signature=normalized_headers.get("x-slack-signature", None),
+            timestamp=normalized_headers.get("x-slack-request-timestamp", None),  # type: ignore[arg-type]
+            signature=normalized_headers.get("x-slack-signature", None),  # type: ignore[arg-type]
         )
 
     def is_valid(

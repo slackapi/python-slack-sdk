@@ -37,7 +37,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 cur = conn.execute("select count(1) from slack_installations;")
                 row_num = cur.fetchone()[0]
                 self.logger.debug(f"{row_num} installations are stored in {self.database}")
-        except Exception:  # skipcq: PYL-W0703
+        except Exception:
             self.create_tables()
         self.init_called = True
 
@@ -200,7 +200,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     installation.bot_token,
                     installation.bot_id,
                     installation.bot_user_id,
-                    ",".join(installation.bot_scopes),
+                    ",".join(installation.bot_scopes),  # type: ignore[arg-type]
                     installation.bot_refresh_token,
                     installation.bot_token_expires_at,
                     installation.user_id,
@@ -357,7 +357,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     return bot
                 return None
 
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             if self.logger.level <= logging.DEBUG:
                 self.logger.exception(message)
@@ -532,7 +532,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     return installation
                 return None
 
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             if self.logger.level <= logging.DEBUG:
                 self.logger.exception(message)
@@ -558,7 +558,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                     [self.client_id, enterprise_id or "", team_id or ""],
                 )
                 conn.commit()
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             if self.logger.level <= logging.DEBUG:
                 self.logger.exception(message)
@@ -607,7 +607,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         [self.client_id, enterprise_id or "", team_id, user_id],
                     )
                 conn.commit()
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
             if self.logger.level <= logging.DEBUG:
                 self.logger.exception(message)

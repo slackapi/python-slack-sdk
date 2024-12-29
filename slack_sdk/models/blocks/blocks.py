@@ -33,7 +33,7 @@ class Block(JsonObject):
     block_id_max_length = 255
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):  # skipcq: PYL-R0201
+    def _subtype_warning(self):
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -46,7 +46,7 @@ class Block(JsonObject):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,  # deprecated
         block_id: Optional[str] = None,
     ):
@@ -62,14 +62,14 @@ class Block(JsonObject):
 
     @classmethod
     def parse(cls, block: Union[dict, "Block"]) -> Optional["Block"]:
-        if block is None:  # skipcq: PYL-R1705
+        if block is None:
             return None
         elif isinstance(block, Block):
             return block
         else:
             if "type" in block:
-                type = block["type"]  # skipcq: PYL-W0622
-                if type == SectionBlock.type:  # skipcq: PYL-R1705
+                type = block["type"]
+                if type == SectionBlock.type:
                     return SectionBlock(**block)
                 elif type == DividerBlock.type:
                     return DividerBlock(**block)
@@ -100,7 +100,7 @@ class Block(JsonObject):
 
     @classmethod
     def parse_all(cls, blocks: Optional[Sequence[Union[dict, "Block"]]]) -> List["Block"]:
-        return [cls.parse(b) for b in blocks or []]  # type: ignore
+        return [cls.parse(b) for b in blocks or []]  # type: ignore[misc]
 
 
 # -------------------------------------------------
@@ -114,7 +114,7 @@ class SectionBlock(Block):
     text_max_length = 3000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "fields", "accessory"})
 
     def __init__(
@@ -148,24 +148,24 @@ class SectionBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text)
+        self.text = TextObject.parse(text)  # type: ignore[arg-type]
         field_objects = []
         for f in fields or []:
             if isinstance(f, str):
                 field_objects.append(MarkdownTextObject.from_str(f))
             elif isinstance(f, TextObject):
-                field_objects.append(f)
+                field_objects.append(f)  # type: ignore[arg-type]
             elif isinstance(f, dict) and "type" in f:
                 d = copy.copy(f)
                 t = d.pop("type")
                 if t == MarkdownTextObject.type:
                     field_objects.append(MarkdownTextObject(**d))
                 else:
-                    field_objects.append(PlainTextObject(**d))
+                    field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
                 self.logger.warning(f"Unsupported filed detected and skipped {f}")
         self.fields = field_objects
-        self.accessory = BlockElement.parse(accessory)
+        self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
 
     @JsonValidator("text or fields attribute must be specified")
     def _validate_text_or_fields_populated(self):
@@ -207,7 +207,7 @@ class ImageBlock(Block):
     type = "image"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "image_url", "title", "slack_file"})
 
     image_url_max_length = 3000
@@ -252,7 +252,7 @@ class ImageBlock(Block):
             elif isinstance(title, dict):
                 if title.get("type") != PlainTextObject.type:
                     raise SlackObjectFormationError(f"Unsupported type for title in an image block: {title.get('type')}")
-                parsed_title = PlainTextObject(text=title.get("text"), emoji=title.get("emoji"))
+                parsed_title = PlainTextObject(text=title.get("text"), emoji=title.get("emoji"))  # type: ignore[arg-type]
             elif isinstance(title, PlainTextObject):
                 parsed_title = title
             else:
@@ -281,7 +281,7 @@ class ActionsBlock(Block):
     elements_max_length = 25
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -319,7 +319,7 @@ class ContextBlock(Block):
     elements_max_length = 10
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -355,7 +355,7 @@ class InputBlock(Block):
     hint_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"label", "hint", "element", "optional", "dispatch_action"})
 
     def __init__(
@@ -394,8 +394,8 @@ class InputBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.label = TextObject.parse(label, default_type=PlainTextObject.type)
-        self.element = BlockElement.parse(element)
-        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
+        self.element = BlockElement.parse(element)  # type: ignore[arg-type]
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.dispatch_action = dispatch_action
         self.optional = optional
 
@@ -421,7 +421,7 @@ class FileBlock(Block):
     type = "file"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"external_id", "source"})
 
     def __init__(
@@ -454,7 +454,7 @@ class CallBlock(Block):
     type = "call"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"call_id", "api_decoration_available", "call"})
 
     def __init__(
@@ -482,7 +482,7 @@ class HeaderBlock(Block):
     text_max_length = 150
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text"})
 
     def __init__(
@@ -506,7 +506,7 @@ class HeaderBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)  # type: ignore[arg-type]
 
     @JsonValidator("text attribute must be specified")
     def _validate_text(self):
@@ -523,7 +523,7 @@ class VideoBlock(Block):
     author_name_max_length = 50
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "alt_text",
@@ -582,9 +582,9 @@ class VideoBlock(Block):
         self.alt_text = alt_text
         self.video_url = video_url
         self.thumbnail_url = thumbnail_url
-        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.title_url = title_url
-        self.description = TextObject.parse(description, default_type=PlainTextObject.type)
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.provider_icon_url = provider_icon_url
         self.provider_name = provider_name
         self.author_name = author_name
@@ -618,7 +618,7 @@ class RichTextBlock(Block):
     type = "rich_text"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(

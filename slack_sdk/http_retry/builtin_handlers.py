@@ -71,7 +71,7 @@ class RateLimitErrorRetryHandler(RetryHandler):
         error: Optional[Exception] = None,
     ) -> None:
         if response is None:
-            raise error
+            raise error  # type: ignore[misc]
 
         state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
@@ -82,9 +82,9 @@ class RateLimitErrorRetryHandler(RetryHandler):
         duration = 1
         if retry_after_header_name is None:
             # This situation usually does not arise. Just in case.
-            duration += random.random()
+            duration += random.random()  # type: ignore[assignment]
         else:
-            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
+            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[index, assignment] # noqa: E501
         time.sleep(duration)
         state.increment_current_attempt()
 

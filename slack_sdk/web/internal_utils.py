@@ -136,7 +136,7 @@ def _build_req_args(
     data: dict,
     default_params: dict,
     params: dict,
-    json: dict,  # skipcq: PYL-W0621
+    json: dict,
     headers: dict,
     auth: dict,
     ssl: Optional[SSLContext],
@@ -162,7 +162,7 @@ def _build_req_args(
     if json is not None and isinstance(json, dict):
         _set_default_params(json, default_params)
 
-    token: Optional[str] = token
+    token = token
     if params is not None and "token" in params:
         token = params.pop("token")
     if json is not None and "token" in json:
@@ -387,25 +387,26 @@ def _upload_file_via_v2_url(
     if opener:
         resp = opener.open(req, timeout=timeout)
     else:
-        resp = urlopen(req, context=ssl, timeout=timeout)  # skipcq: BAN-B310
+        resp = urlopen(req, context=ssl, timeout=timeout)
 
-    charset = resp.headers.get_content_charset() or "utf-8"
-    body: str = resp.read().decode(charset)  # read the response body here
+    charset = resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
+    # read the response body here
+    body: str = resp.read().decode(charset)  # type: ignore[union-attr]
     if logger.level <= logging.DEBUG:
         message = (
             "Received the following response - "
-            f"status: {resp.status}, "
-            f"headers: {dict(resp.headers)}, "
+            f"status: {resp.status}, "  # type: ignore[union-attr]
+            f"headers: {dict(resp.headers)}, "  # type: ignore[union-attr]
             f"body: {body}"
         )
         logger.debug(message)
 
-    return {"status": resp.status, "headers": resp.headers, "body": body}
+    return {"status": resp.status, "headers": resp.headers, "body": body}  # type: ignore[union-attr]
 
 
 def _validate_for_legacy_client(
-    response: Union["SlackResponse", Future],  # noqa: F821
-) -> None:  # type: ignore
+    response: Union["SlackResponse", Future],  # type: ignore[name-defined] # noqa: F821
+) -> None:
     # Only LegacyWebClient can return this union type
     if isinstance(response, Future):
         message = (

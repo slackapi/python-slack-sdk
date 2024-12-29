@@ -34,7 +34,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     attributes = {"type"}
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):  # skipcq: PYL-R0201
+    def _subtype_warning(self):
         warnings.warn(
             "subtype is deprecated since slackclient 2.6.0, use type instead",
             DeprecationWarning,
@@ -47,7 +47,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -58,16 +58,16 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
 
     @classmethod
     def parse(cls, block_element: Union[dict, "BlockElement"]) -> Optional[Union["BlockElement", TextObject]]:
-        if block_element is None:  # skipcq: PYL-R1705
+        if block_element is None:
             return None
         elif isinstance(block_element, dict):
             if "type" in block_element:
                 d = copy.copy(block_element)
                 t = d.pop("type")
                 for subclass in cls._get_sub_block_elements():
-                    if t == subclass.type:  # type: ignore
+                    if t == subclass.type:
                         return subclass(**d)
-                if t == PlainTextObject.type:  # skipcq: PYL-R1705
+                if t == PlainTextObject.type:
                     return PlainTextObject(**d)
                 elif t == MarkdownTextObject.type:
                     return MarkdownTextObject(**d)
@@ -80,7 +80,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
     def parse_all(
         cls, block_elements: Sequence[Union[dict, "BlockElement", TextObject]]
     ) -> List[Union["BlockElement", TextObject]]:
-        return [cls.parse(e) for e in block_elements or []]  # type: ignore
+        return [cls.parse(e) for e in block_elements or []]  # type: ignore[arg-type, misc]
 
     @classmethod
     def _get_sub_block_elements(cls: Type["BlockElement"]) -> Iterator[Type["BlockElement"]]:
@@ -100,14 +100,14 @@ class InteractiveElement(BlockElement):
     action_id_max_length = 255
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "action_id"})
 
     def __init__(
         self,
         *,
         action_id: Optional[str] = None,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         **others: dict,
     ):
@@ -145,7 +145,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, TextObject]] = None,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         focus_on_load: Optional[bool] = None,
@@ -163,8 +163,8 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         # It's fine to pass any kwargs to the held dict here although the class does not do any validation.
         # show_unknown_key_warning(self, others)
 
-        self.placeholder = TextObject.parse(placeholder)
-        self.confirm = ConfirmObject.parse(confirm)
+        self.placeholder = TextObject.parse(placeholder)  # type: ignore[arg-type]
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.focus_on_load = focus_on_load
 
     @JsonValidator(f"placeholder attribute cannot exceed {placeholder_max_length} characters")
@@ -188,7 +188,7 @@ class ButtonElement(InteractiveElement):
     value_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "url", "value", "style", "confirm", "accessibility_label"})
 
     def __init__(
@@ -240,7 +240,7 @@ class ButtonElement(InteractiveElement):
         self.url = url
         self.value = value
         self.style = style
-        self.confirm = ConfirmObject.parse(confirm)
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.accessibility_label = accessibility_label
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
@@ -318,7 +318,7 @@ class CheckboxesElement(InputInteractiveElement):
     type = "checkboxes"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "initial_options"})
 
     def __init__(
@@ -350,7 +350,7 @@ class CheckboxesElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -368,7 +368,7 @@ class DatePickerElement(InputInteractiveElement):
     type = "datepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_date"})
 
     def __init__(
@@ -403,8 +403,8 @@ class DatePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -428,7 +428,7 @@ class TimePickerElement(InputInteractiveElement):
     type = "timepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_time", "timezone"})
 
     def __init__(
@@ -468,8 +468,8 @@ class TimePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -491,7 +491,7 @@ class DateTimePickerElement(InputInteractiveElement):
     type = "datetimepicker"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_date_time"})
 
     def __init__(
@@ -527,7 +527,7 @@ class DateTimePickerElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -550,7 +550,7 @@ class ImageElement(BlockElement):
     alt_text_max_length = 2000
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"alt_text", "image_url", "slack_file"})
 
     def __init__(
@@ -584,7 +584,7 @@ class ImageElement(BlockElement):
 
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self) -> bool:
-        return len(self.alt_text) <= self.alt_text_max_length
+        return len(self.alt_text) <= self.alt_text_max_length  # type: ignore[arg-type]
 
 
 # -------------------------------------------------
@@ -598,7 +598,7 @@ class StaticSelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_option"})
 
     def __init__(
@@ -639,8 +639,8 @@ class StaticSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -672,7 +672,7 @@ class StaticMultiSelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_options", "max_selected_items"})
 
     def __init__(
@@ -717,8 +717,8 @@ class StaticMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -752,7 +752,7 @@ class SelectElement(InputInteractiveElement):
     option_groups_max_length = 100
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "option_groups", "initial_option"})
 
     def __init__(
@@ -793,8 +793,8 @@ class SelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -829,7 +829,7 @@ class ExternalDataSelectElement(InputInteractiveElement):
     type = "external_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length", "initial_option"})
 
     def __init__(
@@ -871,8 +871,8 @@ class ExternalDataSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -885,7 +885,7 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
     type = "multi_external_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length", "initial_options", "max_selected_items"})
 
     def __init__(
@@ -929,8 +929,8 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -949,7 +949,7 @@ class UserSelectElement(InputInteractiveElement):
     type = "users_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_user"})
 
     def __init__(
@@ -983,8 +983,8 @@ class UserSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -996,7 +996,7 @@ class UserMultiSelectElement(InputInteractiveElement):
     type = "multi_users_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_users", "max_selected_items"})
 
     def __init__(
@@ -1033,8 +1033,8 @@ class UserMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1077,8 +1077,8 @@ class ConversationFilter(JsonObject):
         self.exclude_external_shared_channels = exclude_external_shared_channels
 
     @classmethod
-    def parse(cls, filter: Union[dict, "ConversationFilter"]):  # skipcq: PYL-W0622
-        if filter is None:  # skipcq: PYL-R1705
+    def parse(cls, filter: Union[dict, "ConversationFilter"]):
+        if filter is None:
             return None
         elif isinstance(filter, ConversationFilter):
             return filter
@@ -1094,7 +1094,7 @@ class ConversationSelectElement(InputInteractiveElement):
     type = "conversations_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_conversation",
@@ -1113,7 +1113,7 @@ class ConversationSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         response_url_enabled: Optional[bool] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[ConversationFilter] = None,  # skipcq: PYL-W0622
+        filter: Optional[ConversationFilter] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
@@ -1146,8 +1146,8 @@ class ConversationSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1162,7 +1162,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
     type = "multi_conversations_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_conversations",
@@ -1181,7 +1181,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         max_selected_items: Optional[int] = None,
         default_to_current_conversation: Optional[bool] = None,
-        filter: Optional[Union[dict, ConversationFilter]] = None,  # skipcq: PYL-W0622
+        filter: Optional[Union[dict, ConversationFilter]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
@@ -1213,8 +1213,8 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1222,7 +1222,7 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         self.initial_conversations = initial_conversations
         self.max_selected_items = max_selected_items
         self.default_to_current_conversation = default_to_current_conversation
-        self.filter = ConversationFilter.parse(filter)
+        self.filter = ConversationFilter.parse(filter)  # type: ignore[arg-type]
 
 
 # -------------------------------------------------
@@ -1234,7 +1234,7 @@ class ChannelSelectElement(InputInteractiveElement):
     type = "channels_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_channel", "response_url_enabled"})
 
     def __init__(
@@ -1273,8 +1273,8 @@ class ChannelSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1287,7 +1287,7 @@ class ChannelMultiSelectElement(InputInteractiveElement):
     type = "multi_channels_select"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"initial_channels", "max_selected_items"})
 
     def __init__(
@@ -1325,8 +1325,8 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
-            confirm=ConfirmObject.parse(confirm),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1344,7 +1344,7 @@ class RichTextInputElement(InputInteractiveElement):
     type = "rich_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1352,13 +1352,13 @@ class RichTextInputElement(InputInteractiveElement):
             }
         )
 
-    def __init__(  # type: ignore
+    def __init__(
         self,
         *,
         action_id: Optional[str] = None,
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         # To avoid circular imports, the RichTextBlock type here is intentionally a string
-        initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # noqa: F821
+        initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # type: ignore[name-defined] # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
         **others: dict,
@@ -1366,7 +1366,7 @@ class RichTextInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1384,7 +1384,7 @@ class PlainTextInputElement(InputInteractiveElement):
     type = "plain_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1437,7 +1437,7 @@ class PlainTextInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1458,7 +1458,7 @@ class EmailInputElement(InputInteractiveElement):
     type = "email_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1495,7 +1495,7 @@ class EmailInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1513,7 +1513,7 @@ class UrlInputElement(InputInteractiveElement):
     type = "url_text_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1552,7 +1552,7 @@ class UrlInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1570,7 +1570,7 @@ class NumberInputElement(InputInteractiveElement):
     type = "number_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "initial_value",
@@ -1617,7 +1617,7 @@ class NumberInputElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            placeholder=TextObject.parse(placeholder, PlainTextObject.type),
+            placeholder=TextObject.parse(placeholder, PlainTextObject.type),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1638,7 +1638,7 @@ class FileInputElement(InputInteractiveElement):
     type = "file_input"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "filetypes",
@@ -1687,7 +1687,7 @@ class RadioButtonsElement(InputInteractiveElement):
     type = "radio_buttons"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"options", "initial_option"})
 
     def __init__(
@@ -1719,7 +1719,7 @@ class RadioButtonsElement(InputInteractiveElement):
         super().__init__(
             type=self.type,
             action_id=action_id,
-            confirm=ConfirmObject.parse(confirm),
+            confirm=ConfirmObject.parse(confirm),  # type: ignore[arg-type]
             focus_on_load=focus_on_load,
         )
         show_unknown_key_warning(self, others)
@@ -1739,7 +1739,7 @@ class OverflowMenuElement(InteractiveElement):
     options_max_length = 5
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"confirm", "options"})
 
     def __init__(
@@ -1777,7 +1777,7 @@ class OverflowMenuElement(InteractiveElement):
         show_unknown_key_warning(self, others)
 
         self.options = options
-        self.confirm = ConfirmObject.parse(confirm)
+        self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
 
     @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
     def _validate_options_length(self) -> bool:
@@ -1793,7 +1793,7 @@ class WorkflowButtonElement(InteractiveElement):
     type = "workflow_button"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"text", "workflow", "style", "accessibility_label"})
 
     def __init__(
@@ -1854,7 +1854,7 @@ class RichTextListElement(RichTextElement):
     type = "rich_text_list"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements", "style", "indent", "offset", "border"})
 
     def __init__(
@@ -1880,7 +1880,7 @@ class RichTextPreformattedElement(RichTextElement):
     type = "rich_text_preformatted"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements", "border"})
 
     def __init__(
@@ -1900,7 +1900,7 @@ class RichTextQuoteElement(RichTextElement):
     type = "rich_text_quote"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -1918,7 +1918,7 @@ class RichTextSectionElement(RichTextElement):
     type = "rich_text_section"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"elements"})
 
     def __init__(
@@ -1960,7 +1960,7 @@ class RichTextElementParts:
         type = "text"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"text", "style"})
 
         def __init__(
@@ -1979,7 +1979,7 @@ class RichTextElementParts:
         type = "channel"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"channel_id", "style"})
 
         def __init__(
@@ -1998,7 +1998,7 @@ class RichTextElementParts:
         type = "user"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"user_id", "style"})
 
         def __init__(
@@ -2017,7 +2017,7 @@ class RichTextElementParts:
         type = "emoji"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"name", "skin_tone", "unicode", "style"})
 
         def __init__(
@@ -2040,7 +2040,7 @@ class RichTextElementParts:
         type = "link"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"url", "text", "style"})
 
         def __init__(
@@ -2061,7 +2061,7 @@ class RichTextElementParts:
         type = "team"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"team_id", "style"})
 
         def __init__(
@@ -2080,7 +2080,7 @@ class RichTextElementParts:
         type = "usergroup"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"usergroup_id", "style"})
 
         def __init__(
@@ -2099,7 +2099,7 @@ class RichTextElementParts:
         type = "date"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"timestamp", "format", "url", "fallback"})
 
         def __init__(
@@ -2122,7 +2122,7 @@ class RichTextElementParts:
         type = "broadcast"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"range"})
 
         def __init__(
@@ -2139,7 +2139,7 @@ class RichTextElementParts:
         type = "color"
 
         @property
-        def attributes(self) -> Set[str]:
+        def attributes(self) -> Set[str]:  # type: ignore[override]
             return super().attributes.union({"value"})
 
         def __init__(

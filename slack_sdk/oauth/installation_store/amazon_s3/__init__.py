@@ -3,7 +3,7 @@ import logging
 from logging import Logger
 from typing import Optional
 
-from botocore.client import BaseClient
+from botocore.client import BaseClient  # type: ignore[import-untyped]
 
 from slack_sdk.errors import SlackClientConfigurationError
 from slack_sdk.oauth.installation_store.async_installation_store import (
@@ -70,7 +70,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
             # per workspace per user
             u_id = installation.user_id or none
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -86,7 +86,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
         else:
             # per workspace
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -96,7 +96,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
             # per workspace per user
             u_id = installation.user_id or none
-            entity: str = json.dumps(installation.__dict__)
+            entity = json.dumps(installation.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -131,7 +131,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             self.logger.debug(f"S3 put_object response: {response}")
 
         else:
-            entity: str = json.dumps(bot.__dict__)
+            entity = json.dumps(bot.__dict__)
             response = self.s3_client.put_object(
                 Bucket=self.bucket_name,
                 Body=entity,
@@ -174,7 +174,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
             body = fetch_response["Body"].read().decode("utf-8")
             data = json.loads(body)
             return Bot(**data)
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
@@ -243,7 +243,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
             return installation
 
-        except Exception as e:  # skipcq: PYL-W0703
+        except Exception as e:
             message = f"Failed to find an installation data for enterprise: {e_id}, team: {t_id}: {e}"
             self.logger.warning(message)
             return None
@@ -272,7 +272,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                         Bucket=self.bucket_name,
                         Key=content.get("Key"),
                     )
-                except Exception as e:  # skipcq: PYL-W0703
+                except Exception as e:
                     message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
                     raise SlackClientConfigurationError(message)
 
@@ -315,7 +315,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                         Key=key,
                     )
                     deleted_keys.append(key)
-                except Exception as e:  # skipcq: PYL-W0703
+                except Exception as e:
                     message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
                     raise SlackClientConfigurationError(message)
 
@@ -327,7 +327,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                             Key=no_user_id_key,
                         )
                         deleted_keys.append(no_user_id_key)
-                except Exception as e:  # skipcq: PYL-W0703
+                except Exception as e:
                     message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
                     raise SlackClientConfigurationError(message)
 
@@ -346,6 +346,6 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
                     Bucket=self.bucket_name,
                     Key=content.get("Key"),
                 )
-            except Exception as e:  # skipcq: PYL-W0703
+            except Exception as e:
                 message = f"Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}"
                 raise SlackClientConfigurationError(message)

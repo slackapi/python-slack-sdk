@@ -5,7 +5,7 @@ class HttpResponse:
     """HTTP response representation"""
 
     status_code: int
-    headers: Dict[str, List[str]]
+    headers: Dict[str, Union[List[str], str]]
     body: Optional[Dict[str, Any]]
     data: Optional[bytes]
 

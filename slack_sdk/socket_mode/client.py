@@ -131,16 +131,16 @@ class BaseSocketModeClient:
 
             for listener in self.message_listeners:
                 try:
-                    listener(self, message, raw_message)  # type: ignore
+                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type]
                 except Exception as e:
                     self.logger.exception(f"Failed to run a message listener: {e}")
 
             if len(self.socket_mode_request_listeners) > 0:
                 request = SocketModeRequest.from_dict(message)
                 if request is not None:
-                    for listener in self.socket_mode_request_listeners:
+                    for listener in self.socket_mode_request_listeners:  # type: ignore[assignment]
                         try:
-                            listener(self, request)  # type: ignore
+                            listener(self, request)  # type: ignore[call-arg, arg-type]
                         except Exception as e:
                             self.logger.exception(f"Failed to run a request listener: {e}")
         except Exception as e:

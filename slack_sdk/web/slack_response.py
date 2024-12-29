@@ -139,7 +139,7 @@ class SlackResponse:
         self._iteration += 1
         if self._iteration == 1:
             return self
-        if _next_cursor_is_present(self.data):  # skipcq: PYL-R1705
+        if _next_cursor_is_present(self.data):
             params = self.req_args.get("params", {})
             if params is None:
                 params = {}
@@ -148,9 +148,7 @@ class SlackResponse:
             self.req_args.update({"params": params})
 
             # This method sends a request in a synchronous way
-            response = self._client._request_for_pagination(  # skipcq: PYL-W0212
-                api_url=self.api_url, req_args=self.req_args
-            )
+            response = self._client._request_for_pagination(api_url=self.api_url, req_args=self.req_args)
             self.data = response["data"]
             self.headers = response["headers"]
             self.status_code = response["status_code"]

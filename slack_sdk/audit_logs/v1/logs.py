@@ -804,7 +804,7 @@ class Details:
             self.attributes = []
             for a in attributes:
                 if isinstance(a, dict):
-                    self.attributes.append(Attribute(**a))
+                    self.attributes.append(Attribute(**a))  # type: ignore[arg-type]
                 else:
                     self.attributes.append(a)
         self.channel = channel
@@ -822,11 +822,11 @@ class Details:
         self.rules_checked = None
         if rules_checked is not None:
             self.rules_checked = []
-            for a in rules_checked:
+            for a in rules_checked:  # type: ignore[assignment]
                 if isinstance(a, dict):
-                    self.rules_checked.append(AAARule(**a))
+                    self.rules_checked.append(AAARule(**a))  # type: ignore[arg-type]
                 else:
-                    self.rules_checked.append(a)
+                    self.rules_checked.append(a)  # type: ignore[arg-type]
         self.disconnecting_team = disconnecting_team
         self.is_channel_canvas = is_channel_canvas
         self.linked_channel_id = linked_channel_id
@@ -1021,7 +1021,7 @@ class InformationBarrier:
 class WorkflowV2StepConfiguration:
     name: Optional[str]
     step_function_type: Optional[str]
-    step_function_app_id: Optional[int]
+    step_function_app_id: Optional[str]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -1235,7 +1235,7 @@ class LogsResponse:
         provided: Optional[str] = None,
         **kwargs,
     ) -> None:
-        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]  # type: ignore[union-attr]
         self.response_metadata = (
             ResponseMetadata(**response_metadata) if isinstance(response_metadata, dict) else response_metadata
         )

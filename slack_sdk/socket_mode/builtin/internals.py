@@ -29,14 +29,14 @@ def _parse_connect_response(sock: Socket) -> Tuple[Optional[int], str]:
             line.append(c)
             if c == b"\n":
                 break
-        line = b"".join(line).decode("utf-8").strip()
+        line = b"".join(line).decode("utf-8").strip()  # type: ignore[assignment]
         if line is None or len(line) == 0:
             break
         lines.append(line)
         if not status:
-            status_line = line.split(" ", 2)
+            status_line = line.split(" ", 2)  # type: ignore[attr-defined]
             status = int(status_line[1])
-    return status, "\n".join(lines)
+    return status, "\n".join(lines)  # type: ignore[arg-type]
 
 
 def _use_or_create_ssl_context(ssl_context: Optional[ssl.SSLContext] = None):
@@ -88,7 +88,7 @@ def _establish_new_socket_connection(
         if status != 200:
             raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
 
-        sock = ssl_context.wrap_socket(
+        sock = ssl_context.wrap_socket(  # type: ignore[union-attr]
             sock,
             do_handshake_on_connect=True,
             suppress_ragged_eofs=True,
@@ -103,7 +103,7 @@ def _establish_new_socket_connection(
         return sock
 
     sock = socket.create_connection((server_hostname, server_port), receive_timeout)
-    sock = ssl_context.wrap_socket(
+    sock = ssl_context.wrap_socket(  # type: ignore[union-attr]
         sock,
         do_handshake_on_connect=True,
         suppress_ragged_eofs=True,
@@ -137,7 +137,7 @@ def _parse_handshake_response(sock: ssl.SSLSocket) -> Tuple[Optional[int], dict,
     """
     lines = []
     status = None
-    headers = {}
+    headers: Dict[str, str] = {}
     while True:
         line = _read_http_response_line(sock)
         if status is None:
@@ -189,7 +189,7 @@ def _parse_text_payload(data: Optional[bytes], logger: Logger) -> str:
         else:
             return ""
     except UnicodeDecodeError as e:
-        logger.debug(f"Failed to parse a payload (data: {data}, error: {e})")
+        logger.debug(f"Failed to parse a payload (data: {data!r}, error: {e})")
         return ""
 
 
@@ -207,7 +207,7 @@ def _receive_messages(
                 received_bytes = sock.recv(size)
                 if all_message_trace_enabled:
                     if len(received_bytes) > 0:
-                        logger.debug(f"Received bytes: {received_bytes}")
+                        logger.debug(f"Received bytes: {received_bytes!r}")
                 return received_bytes
             except OSError as e:
                 # For Linux/macOS, errno.EBADF is the expected error for bad connections.
@@ -241,18 +241,18 @@ def _fetch_messages(
 ) -> List[Tuple[Optional[FrameHeader], bytes]]:
     if remaining_bytes is None:
         # Fetch more to complete the current message
-        remaining_bytes = receive()  # type: ignore
+        remaining_bytes = receive()  # type: ignore[call-arg]
 
     if remaining_bytes is None or len(remaining_bytes) == 0:
         # no more bytes
         if current_header is not None:
-            _append_message(messages, current_header, current_data)
+            _append_message(messages, current_header, current_data)  # type: ignore[arg-type]
         return messages
 
     if current_header is None:
         # new message
         if len(remaining_bytes) <= 2:
-            remaining_bytes += receive()  # type: ignore
+            remaining_bytes += receive()  # type: ignore[call-arg]
 
         if remaining_bytes[0] == 10:  # \n
             if current_data is not None and len(current_data) >= 0:
@@ -298,7 +298,7 @@ def _fetch_messages(
         if current_header.masked > 0:
             if current_mask_key is None:
                 idx1, idx2 = idx_after_length_part, idx_after_length_part + 4
-                current_mask_key = remaining_bytes[idx1:idx2]
+                current_mask_key = remaining_bytes[idx1:idx2]  # type: ignore[assignment]
                 idx_after_length_part += 4
 
         start, end = idx_after_length_part, idx_after_length_part + current_data_length
@@ -306,9 +306,9 @@ def _fetch_messages(
 
         current_data = bytes()
         if current_header.masked > 0:
-            for i in range(data_to_append):
-                mask = current_mask_key[i % 4]
-                data_to_append[i] ^= mask  # type: ignore
+            for i in range(data_to_append):  # type: ignore[call-overload]
+                mask = current_mask_key[i % 4]  # type: ignore[index]
+                data_to_append[i] ^= mask  # type: ignore[index]
             current_data += data_to_append
         else:
             current_data += data_to_append
@@ -337,14 +337,14 @@ def _fetch_messages(
             )
         else:
             # This pattern is unexpected but set data with the expected length anyway
-            _append_message(current_header, current_data[:current_data_length])  # type: ignore
+            _append_message(current_header, current_data[:current_data_length])  # type: ignore[call-arg, arg-type]
             return messages
 
     # work in progress with the current_header/current_data
     if current_header is not None:
-        length_needed = current_header.length - len(current_data)
+        length_needed = current_header.length - len(current_data)  # type: ignore[arg-type]
         if length_needed > len(remaining_bytes):
-            current_data += remaining_bytes
+            current_data += remaining_bytes  # type: ignore[operator]
             # need more bytes to complete this message
             return _fetch_messages(
                 messages=messages,
@@ -355,7 +355,7 @@ def _fetch_messages(
                 logger=logger,
             )
         else:
-            current_data += remaining_bytes[:length_needed]
+            current_data += remaining_bytes[:length_needed]  # type: ignore[operator]
             _append_message(messages, current_header, current_data)
             remaining_bytes = remaining_bytes[length_needed:]
             if len(remaining_bytes) == 0:

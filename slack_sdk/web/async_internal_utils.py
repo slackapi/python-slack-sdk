@@ -98,23 +98,23 @@ async def _request_with_session(
                 }
                 logger.debug(
                     f"Sending a request - url: {http_verb} {api_url}, "
-                    f"params: {convert_params(req_args.get('params'))}, "
-                    f"files: {convert_params(req_args.get('files'))}, "
-                    f"data: {convert_params(req_args.get('data'))}, "
-                    f"json: {convert_params(req_args.get('json'))}, "
-                    f"proxy: {convert_params(req_args.get('proxy'))}, "
+                    f"params: {convert_params(req_args.get('params', 'n/a'))}, "
+                    f"files: {convert_params(req_args.get('files', 'n/a'))}, "
+                    f"data: {convert_params(req_args.get('data', 'n/a'))}, "
+                    f"json: {convert_params(req_args.get('json', 'n/a'))}, "
+                    f"proxy: {convert_params(req_args.get('proxy', 'n/a'))}, "
                     f"headers: {headers}"
                 )
 
             try:
-                async with session.request(http_verb, api_url, **req_args) as res:
+                async with session.request(http_verb, api_url, **req_args) as res:  # type: ignore[union-attr]
                     data: Union[dict, bytes, str] = {}
                     if res.content_type == "application/gzip":
                         # admin.analytics.getFile
                         data = await res.read()
                         retry_response = RetryHttpResponse(
                             status_code=res.status,
-                            headers=res.headers,
+                            headers=res.headers,  # type: ignore[arg-type]
                             data=data,
                         )
                     elif res.content_type == "text/plain":
@@ -122,22 +122,22 @@ async def _request_with_session(
                         data = await res.text()
                         retry_response = RetryHttpResponse(
                             status_code=res.status,
-                            headers=res.headers,
-                            data=data,
+                            headers=res.headers,  # type: ignore[arg-type]
+                            data=data,  # type: ignore[arg-type]
                         )
                     else:
                         try:
                             data = await res.json()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
-                                body=data,
+                                headers=res.headers,  # type: ignore[arg-type]
+                                body=data,  # type: ignore[arg-type]
                             )
                         except aiohttp.ContentTypeError:
                             logger.debug(f"No response data returned from the following API call: {api_url}.")
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                         except json.decoder.JSONDecodeError:
                             try:
@@ -153,7 +153,7 @@ async def _request_with_session(
                     if logger.level <= logging.DEBUG:
                         body = "(binary)"
                         if isinstance(data, dict) or isinstance(data, str):
-                            body = data
+                            body = data  # type: ignore[assignment]
                         logger.debug(
                             "Received the following response - "
                             f"status: {res.status}, "
@@ -210,10 +210,10 @@ async def _request_with_session(
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     finally:
         if not use_running_session:
-            await session.close()
+            await session.close()  # type: ignore[union-attr]
 
     return response

@@ -38,8 +38,8 @@ class View(JsonObject):
     def __init__(
         self,
         # "modal", "home", and "workflow_step"
-        type: str,  # skipcq: PYL-W0622
-        id: Optional[str] = None,  # skipcq: PYL-W0622
+        type: str,
+        id: Optional[str] = None,
         callback_id: Optional[str] = None,
         external_id: Optional[str] = None,
         team_id: Optional[str] = None,
@@ -53,7 +53,7 @@ class View(JsonObject):
         blocks: Optional[Sequence[Union[dict, Block]]] = None,
         private_metadata: Optional[str] = None,
         state: Optional[Union[dict, "ViewState"]] = None,
-        hash: Optional[str] = None,  # skipcq: PYL-W0622
+        hash: Optional[str] = None,
         clear_on_close: Optional[bool] = None,
         notify_on_close: Optional[bool] = None,
         **kwargs,
@@ -67,9 +67,9 @@ class View(JsonObject):
         self.app_id = app_id
         self.root_view_id = root_view_id
         self.previous_view_id = previous_view_id
-        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
-        self.submit = TextObject.parse(submit, default_type=PlainTextObject.type)
-        self.close = TextObject.parse(close, default_type=PlainTextObject.type)
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.submit = TextObject.parse(submit, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.close = TextObject.parse(close, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.blocks = Block.parse_all(blocks)
         self.private_metadata = private_metadata
         self.state = state
@@ -145,7 +145,7 @@ class ViewState(JsonObject):
         new_state_values = copy.copy(values)
         if isinstance(new_state_values, dict):  # just in case
             for block_id, actions in new_state_values.items():
-                if actions is None:  # skipcq: PYL-R1724
+                if actions is None:
                     continue
                 elif isinstance(actions, dict):
                     new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
@@ -159,23 +159,20 @@ class ViewState(JsonObject):
                             self._show_warning_about_unknown(v)
                             continue
                         new_actions[action_id] = value_object
-                    value_objects[block_id] = new_actions
+                    value_objects[block_id] = new_actions  # type: ignore[assignment]
                 else:
                     self._show_warning_about_unknown(v)
         self.values = value_objects
 
-    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:  # type: ignore
+    def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:
         self.validate_json()
         if self.values is not None:
             dict_values: Dict[str, Dict[str, dict]] = {}
             for block_id, actions in self.values.items():
                 if actions:
-                    dict_value: Dict[str, dict] = {
-                        action_id: value.to_dict()  # type: ignore
-                        for action_id, value in actions.items()  # type: ignore
-                    }
+                    dict_value: Dict[str, dict] = {action_id: value.to_dict() for action_id, value in actions.items()}
                     dict_values[block_id] = dict_value
-            return {"values": dict_values}  # type: ignore
+            return {"values": dict_values}
         else:
             return {}
 
@@ -199,7 +196,7 @@ class ViewStateValue(JsonObject):
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         value: Optional[str] = None,
         selected_date: Optional[str] = None,
         selected_time: Optional[str] = None,
@@ -232,4 +229,4 @@ class ViewStateValue(JsonObject):
                 elif isinstance(option, dict):
                     self.selected_options.append(Option(**option))
         else:
-            self.selected_options = selected_options
+            self.selected_options = selected_options  # type: ignore[assignment]

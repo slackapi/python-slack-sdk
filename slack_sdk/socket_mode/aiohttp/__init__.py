@@ -5,6 +5,7 @@
 * https://pypi.org/project/aiohttp/
 
 """
+
 import asyncio
 import logging
 import time
@@ -31,7 +32,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     logger: Logger
     web_client: AsyncWebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     auto_reconnect_enabled: bool
     message_queue: Queue
     message_listeners: List[
@@ -58,7 +59,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     current_session: Optional[ClientWebSocketResponse]
     current_session_monitor: Optional[Future]
 
-    auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
     closed: bool
     stale: bool
@@ -140,7 +140,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # In the asyncio runtime, accessing a shared object (self.current_session here) from
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
-        session: ClientWebSocketResponse = self.current_session
+        session: ClientWebSocketResponse = self.current_session  # type: ignore[assignment]
         session_id: str = self.build_session_id(session)
 
         if self.logger.level <= logging.DEBUG:
@@ -189,7 +189,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             should_reconnect = True
 
                         if await self.is_ping_pong_failing():
-                            disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                            disconnected_seconds = int(time.time() - self.last_ping_pong_time)  # type: ignore[operator]
                             self.logger.info(
                                 f"The session ({session_id}) seems to be stale. Reconnecting..."
                                 f" reason: disconnected for {disconnected_seconds}+ seconds)"
@@ -216,7 +216,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # multiple tasks can cause race conditions and errors.
         # To avoid such, we access only the session that is active when this loop starts.
         session = self.current_session
-        session_id = self.build_session_id(session)
+        session_id = self.build_session_id(session)  # type: ignore[arg-type]
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"A new receive_messages() execution loop with {session_id} started")
         try:
@@ -230,7 +230,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
                     break
                 try:
-                    message: WSMessage = await session.receive()
+                    message: WSMessage = await session.receive()  # type: ignore[union-attr]
                     # just in case, checking if the value is not None
                     if message is not None:
                         if self.logger.level <= logging.DEBUG:
@@ -282,7 +282,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             await asyncio.sleep(self.ping_interval)
                             continue
                         elif message.type == WSMsgType.PING:
-                            await session.pong(message.data)
+                            await session.pong(message.data)  # type: ignore[union-attr]
                             continue
                         elif message.type == WSMsgType.PONG:
                             if message.data is not None:
@@ -342,7 +342,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         return connected
 
     async def session_id(self) -> str:
-        return self.build_session_id(self.current_session)
+        return self.build_session_id(self.current_session)  # type: ignore[arg-type]
 
     async def connect(self):
         # This loop is used to ensure when a new session is created,
@@ -419,7 +419,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message} from session: {session_id}")
         try:
-            await self.current_session.send_str(message)
+            await self.current_session.send_str(message)  # type: ignore[union-attr]
         except ConnectionError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
@@ -433,7 +433,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             try:
                 await self.connect_operation_lock.acquire()
                 if await self.is_connected():
-                    await self.current_session.send_str(message)
+                    await self.current_session.send_str(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(
                         f"The current session ({session_id}) is no longer active. " "Failed to send a message"

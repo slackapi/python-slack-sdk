@@ -57,7 +57,7 @@ class Message(JsonObject):
     def attachments_length(self):
         return self.attachments is None or len(self.attachments) <= self.attachments_max_length
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> dict:
         json = super().to_dict()
         if len(self.text) > 40000:
             LOGGER.error("Messages over 40,000 characters are automatically truncated by Slack")

@@ -42,7 +42,7 @@ class Action(JsonObject):
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> dict:
         json = super().to_dict()
         json["type"] = self.subtype
         return json
@@ -212,7 +212,7 @@ class ActionExternalSelector(AbstractActionSelector):
     data_source = "external"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"min_query_length"})
 
     def __init__(
@@ -417,7 +417,7 @@ class Attachment(JsonObject):
     def author_link_without_author_icon(self) -> bool:
         return self.author_link is None or self.author_icon is not None
 
-    def to_dict(self) -> dict:  # skipcq: PYL-W0221
+    def to_dict(self) -> dict:
         json = super().to_dict()
         if self.fields is not None:
             json["fields"] = extract_json(self.fields)
@@ -469,7 +469,7 @@ class BlockAttachment(Attachment):
 
 class InteractiveAttachment(Attachment):
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union({"callback_id"})
 
     actions_max_length = 5

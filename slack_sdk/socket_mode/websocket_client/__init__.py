@@ -5,6 +5,7 @@
 * https://pypi.org/project/websocket-client/
 
 """
+
 import logging
 from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
@@ -31,7 +32,7 @@ class SocketModeClient(BaseSocketModeClient):
     logger: Logger
     web_client: WebClient
     app_token: str
-    wss_uri: Optional[str]
+    wss_uri: Optional[str]  # type: ignore[assignment]
     message_queue: Queue
     message_listeners: List[
         Union[
@@ -57,7 +58,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
-    close: bool
+    close: bool  # type: ignore[assignment]
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]
@@ -179,10 +180,10 @@ class SocketModeClient(BaseSocketModeClient):
 
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
-            on_open=on_open,
-            on_message=on_message,
-            on_error=on_error,
-            on_close=on_close,
+            on_open=on_open,  # type: ignore[arg-type]
+            on_message=on_message,  # type: ignore[arg-type]
+            on_error=on_error,  # type: ignore[arg-type]
+            on_close=on_close,  # type: ignore[arg-type]
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
@@ -203,7 +204,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a message: {message}")
         try:
-            self.current_session.send(message)
+            self.current_session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
@@ -216,15 +217,15 @@ class SocketModeClient(BaseSocketModeClient):
             # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
             with self.connect_operation_lock:
                 if self.is_connected():
-                    self.current_session.send(message)
+                    self.current_session.send(message)  # type: ignore[union-attr]
                 else:
-                    self.logger.warning(  # type: ignore
-                        f"The current session (session id: {self.session_id()}) is no longer active. "  # type: ignore
+                    self.logger.warning(
+                        f"The current session (session id: {self.session_id()}) is no longer active. "  # type: ignore[attr-defined] # noqa: E501
                         "Failed to send a message"
                     )
                     raise e
 
-    def close(self) -> None:  # type: ignore
+    def close(self) -> None:  # type: ignore[explicit-override, no-redef]
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()

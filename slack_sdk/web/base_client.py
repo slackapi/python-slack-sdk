@@ -11,7 +11,6 @@ import urllib
 import uuid
 import warnings
 from base64 import b64encode
-from http.client import HTTPResponse
 from ssl import SSLContext
 from typing import BinaryIO, Dict, List, Any
 from typing import Optional, Union
@@ -93,7 +92,7 @@ class BaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
-    def api_call(  # skipcq: PYL-R1710
+    def api_call(
         self,
         api_method: str,
         *,
@@ -101,7 +100,7 @@ class BaseClient:
         files: Optional[dict] = None,
         data: Optional[dict] = None,
         params: Optional[dict] = None,
-        json: Optional[dict] = None,  # skipcq: PYL-W0621
+        json: Optional[dict] = None,
         headers: Optional[dict] = None,
         auth: Optional[dict] = None,
     ) -> SlackResponse:
@@ -144,13 +143,13 @@ class BaseClient:
         req_args = _build_req_args(
             token=self.token,
             http_verb=http_verb,
-            files=files,
-            data=data,
+            files=files,  # type: ignore[arg-type]
+            data=data,  # type: ignore[arg-type]
             default_params=self.default_params,
-            params=params,
-            json=json,  # skipcq: PYL-W0621
+            params=params,  # type: ignore[arg-type]
+            json=json,  # type: ignore[arg-type]
             headers=headers,
-            auth=auth,
+            auth=auth,  # type: ignore[arg-type]
             ssl=self.ssl,
             proxy=self.proxy,
         )
@@ -192,9 +191,9 @@ class BaseClient:
             url=api_url,
             query_params={},
             body_params=body_params,
-            files=files,
-            json_body=_json,
-            additional_headers=headers,
+            files=files,  # type: ignore[arg-type]
+            json_body=_json,  # type: ignore[arg-type]
+            additional_headers=headers,  # type: ignore[arg-type]
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
@@ -241,8 +240,8 @@ class BaseClient:
         files_to_close: List[BinaryIO] = []
         try:
             # True/False -> "1"/"0"
-            query_params = convert_bool_to_0_or_1(query_params)
-            body_params = convert_bool_to_0_or_1(body_params)
+            query_params = convert_bool_to_0_or_1(query_params)  # type: ignore[assignment]
+            body_params = convert_bool_to_0_or_1(body_params)  # type: ignore[assignment]
 
             if self._logger.level <= logging.DEBUG:
 
@@ -267,18 +266,18 @@ class BaseClient:
                     for k, v in body_params.items():
                         request_data.update({k: v})
 
-                for k, v in files.items():
+                for k, v in files.items():  # type: ignore[assignment]
                     if isinstance(v, str):
                         f: BinaryIO = open(v.encode("utf-8", "ignore"), "rb")
                         files_to_close.append(f)
-                        request_data.update({k: f})
+                        request_data.update({k: f})  # type: ignore[dict-item]
                     elif isinstance(v, (bytearray, bytes)):
                         request_data.update({k: io.BytesIO(v)})
                     else:
                         request_data.update({k: v})
 
             request_headers = self._build_urllib_request_headers(
-                token=token or self.token,
+                token=token or self.token,  # type: ignore[arg-type]
                 has_json=json is not None,
                 has_files=files is not None,
                 additional_headers=additional_headers,
@@ -294,8 +293,8 @@ class BaseClient:
                 q = urlencode(query_params)
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
-            response = self._perform_urllib_http_request(url=url, args=request_args)
-            response_body = response.get("body", None)  # skipcq: PTC-W0039
+            response = self._perform_urllib_http_request(url=url, args=request_args)  # type: ignore[arg-type]
+            response_body = response.get("body", None)
             response_body_data: Optional[Union[dict, bytes]] = response_body
             if response_body is not None and not isinstance(response_body, bytes):
                 try:
@@ -315,7 +314,7 @@ class BaseClient:
                 http_verb="POST",  # you can use POST method for all the Web APIs
                 api_url=url,
                 req_args=request_args,
-                data=response_body_data,
+                data=response_body_data,  # type: ignore[arg-type]
                 headers=dict(response["headers"]),
                 status_code=response["status"],
             ).validate()
@@ -339,6 +338,7 @@ class BaseClient:
             dict {status: int, headers: Headers, body: str}
         """
         headers = args["headers"]
+        body: Optional[Union[bytes, str]] = None
         if args["json"]:
             body = json.dumps(args["json"])
             headers["Content-Type"] = "application/json;charset=utf-8"
@@ -346,7 +346,7 @@ class BaseClient:
             boundary = f"--------------{uuid.uuid4()}"
             sep_boundary = b"\r\n--" + boundary.encode("ascii")
             end_boundary = sep_boundary + b"--\r\n"
-            body = io.BytesIO()
+            body_builder = io.BytesIO()
             data = args["data"]
             for key, value in data.items():
                 readable = getattr(value, "readable", None)
@@ -366,20 +366,18 @@ class BaseClient:
                 else:
                     title = f'\r\nContent-Disposition: form-data; name="{key}"\r\n'
                     value = str(value).encode("utf-8")
-                body.write(sep_boundary)
-                body.write(title.encode("utf-8"))
-                body.write(b"\r\n")
-                body.write(value)
+                body_builder.write(sep_boundary)
+                body_builder.write(title.encode("utf-8"))
+                body_builder.write(b"\r\n")
+                body_builder.write(value)
 
-            body.write(end_boundary)
-            body = body.getvalue()
+            body_builder.write(end_boundary)
+            body = body_builder.getvalue()
             headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
             headers["Content-Length"] = len(body)
         elif args["params"]:
             body = urlencode(args["params"])
             headers["Content-Type"] = "application/x-www-form-urlencoded"
-        else:
-            body = None
 
         if isinstance(body, str):
             body = body.encode("utf-8")
@@ -404,11 +402,14 @@ class BaseClient:
                     retry_request = RetryHttpRequest.from_urllib_http_request(req)
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
-                    body = json.loads(body_string) if body_string is not None and body_string.startswith("{") else {}
+                    if body_string is not None and body_string.startswith("{"):
+                        body = json.loads(body_string)
+                    else:
+                        body = {}  # type: ignore[assignment]
                     retry_response = RetryHttpResponse(
                         status_code=resp["status"],
                         headers=resp["headers"],
-                        body=body,
+                        body=body,  # type: ignore[arg-type]
                         data=body_bytes,
                     )
                     for handler in self.retry_handlers:
@@ -500,7 +501,7 @@ class BaseClient:
 
         if resp is not None:
             return resp
-        raise last_error
+        raise last_error  # type: ignore[misc]
 
     def _perform_urllib_http_request_internal(
         self,
@@ -522,12 +523,10 @@ class BaseClient:
                 else:
                     raise SlackRequestError(f"Invalid proxy detected: {self.proxy} must be a str value")
 
-            # NOTE: BAN-B310 is already checked above
-            resp: Optional[HTTPResponse] = None
             if opener:
-                resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+                resp = opener.open(req, timeout=self.timeout)
             else:
-                resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+                resp = urlopen(req, context=self.ssl, timeout=self.timeout)
             if resp.headers.get_content_type() == "application/gzip":
                 # admin.analytics.getFile
                 body: bytes = resp.read()
@@ -541,15 +540,15 @@ class BaseClient:
                 return {"status": resp.code, "headers": resp.headers, "body": body}
 
             charset = resp.headers.get_content_charset() or "utf-8"
-            body: str = resp.read().decode(charset)  # read the response body here
+            decoded_body: str = resp.read().decode(charset)  # read the response body here
             if self._logger.level <= logging.DEBUG:
                 self._logger.debug(
                     "Received the following response - "
                     f"status: {resp.code}, "
                     f"headers: {dict(resp.headers)}, "
-                    f"body: {body}"
+                    f"body: {decoded_body}"
                 )
-            return {"status": resp.code, "headers": resp.headers, "body": body}
+            return {"status": resp.code, "headers": resp.headers, "body": decoded_body}
         raise SlackRequestError(f"Invalid URL detected: {url}")
 
     def _build_urllib_request_headers(
@@ -588,8 +587,8 @@ class BaseClient:
             ssl=ssl,
         )
         return FileUploadV2Result(
-            status=result.get("status"),
-            body=result.get("body"),
+            status=result.get("status"),  # type: ignore[arg-type]
+            body=result.get("body"),  # type: ignore[arg-type]
         )
 
     # =================================================================
