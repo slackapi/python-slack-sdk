@@ -6,6 +6,7 @@ aiodns>1.0
 aiohttp>=3.7.3,<4
 # used only under slack_sdk/*_store
 boto3<=2
+google-cloud-storage>=2.7.0,<3
 # InstallationStore/OAuthStateStore
 # Since v3.20, we no longer support SQLAlchemy 1.3 or older.
 # If you need to use a legacy version, please add our v3.19.5 code to your project.
