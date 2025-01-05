@@ -13,10 +13,10 @@ from google.cloud.storage.client import Client
 from slack_sdk.oauth.state_store.google_cloud_storage import GoogleCloudStorageOAuthStateStore
 
 
-class TestGoogleStateStore(unittest.IsolatedAsyncioTestCase):
+class TestGoogleStateStore(unittest.TestCase):
     """Test GoogleCloudStorageOAuthStateStore class"""
 
-    async def asyncSetUp(self):
+    def setUp(self):
         """Setup tests"""
         self.blob = Mock(spec=Blob)
         self.blob.download_as_text.return_value = str(time.time())
@@ -39,20 +39,20 @@ class TestGoogleStateStore(unittest.IsolatedAsyncioTestCase):
         """Test get_logger method"""
         self.assertEqual(self.state_store.logger, self.logger)
 
-    async def test_async_issue(self):
-        """Test async_issue method"""
-        state = await self.state_store.async_issue()
+    def test_issue(self):
+        """Test issue method"""
+        state = self.state_store.issue()
         self.storage_client.bucket.assert_called_once_with(self.bucket_name)
         self.bucket.blob.assert_called_once()
         self.assertEqual(self.bucket.blob.call_args.args[0], state)
         self.blob.upload_from_string.assert_called_once()
         self.assertRegex(self.blob.upload_from_string.call_args.args[0], r"\d{10,}.\d{5,}")
 
-    async def test_async_comsume(self):
-        """Test async_comsume method"""
+    def test_consume(self):
+        """Test consume method"""
         state = "state"
         # test consume returns valid
-        valid = await self.state_store.async_consume(state=state)
+        valid = self.state_store.consume(state=state)
         self.storage_client.bucket.assert_called_once_with(self.bucket_name)
         self.bucket.blob.assert_called_once_with(state)
         self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
@@ -64,7 +64,7 @@ class TestGoogleStateStore(unittest.IsolatedAsyncioTestCase):
 
         # test consume returns invalid
         self.state_store.expiration_seconds = 0
-        valid = await self.state_store.async_consume(state=state)
+        valid = self.state_store.consume(state=state)
         self.assertFalse(time.time() < float(self.blob.download_as_text.return_value) + self.state_store.expiration_seconds)
         self.assertFalse(valid)
 
@@ -72,6 +72,6 @@ class TestGoogleStateStore(unittest.IsolatedAsyncioTestCase):
 
         # test consume throw exception
         self.blob.download_as_text.side_effect = Exception()
-        valid = await self.state_store.async_consume(state=state)
+        valid = self.state_store.consume(state=state)
         self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
         self.assertFalse(valid)
