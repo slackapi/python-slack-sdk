@@ -99,7 +99,7 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
         """Save bot user authorization.
 
         Args:
-            bot (Bot): data bout the bot
+            bot (Bot): data about the bot
         """
         self.save_bot(bot)
 
@@ -107,7 +107,7 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
         """Save bot user authorization.
 
         Args:
-            bot (Bot): data bout the bot
+            bot (Bot): data about the bot
         """
         entity = json.dumps(bot.__dict__)
         self._save_entity(data_type="bot", entity=entity, enterprise_id=bot.enterprise_id, team_id=bot.team_id, user_id=None)
@@ -255,10 +255,6 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
                 "Failed to find an installation data for enterprise: %s, team: %s: %s", enterprise_id, team_id, exc
             )
             return None
-
-    #
-    # adaptation of https://gist.github.com/seratch/d81a445ef4467b16f047156bf859cda8
-    #
 
     async def async_delete_installation(
         self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None
