@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for oauth/installation_store/google_cloud_storage/__init__.py"""
 
-import json
-import time
-import logging
 import unittest
-from unittest.mock import Mock, call, patch
+from unittest.mock import Mock
 from google.cloud.storage.blob import Blob
 from google.cloud.storage.bucket import Bucket
 
@@ -14,211 +11,333 @@ from slack_sdk.oauth.installation_store.models.installation import Installation
 from slack_sdk.oauth.installation_store.google_cloud_storage import GoogleCloudStorageInstallationStore
 
 
-class TestGoogleInstallationStore(unittest.TestCase):
-    """Tests for GoogleCloudStorageInstallationStore"""
+class CloudStorageMockRecorder:
+    def __init__(self):
+        self.storage = {}  # simulate cloud storage
 
+    def mock_bucket_method(self, method_name: str):
+        """Mock bucket blob creation"""
+
+        def wrapper(*args, **kwargs):
+            if method_name == "blob":
+                return self._make_blob_mock(args[0])  # make mock with the blob path when one is created
+            elif method_name == "list_blobs":
+                prefix = kwargs.get("prefix", "")
+                blob_names = [  # check how many recorded blobs start with the prefix
+                    blob_name for blob_name in self.storage.keys() if blob_name.startswith(prefix)
+                ]
+                # return list of mocked blobs with the matched names
+                return [self._make_blob_mock(blob_name) for blob_name in blob_names]
+
+        return wrapper
+
+    def mock_blob_method(self, blob_name: str, method_name: str):
+        """Record blob activity"""
+
+        def wrapper(*args, **kwargs):
+            if method_name == "upload_from_string":
+                self.storage[blob_name] = args[0]  # blob value
+            elif method_name == "download_as_text":
+                return self.storage.get(blob_name, None)  # return saved blob data or None
+            elif method_name == "delete":
+                self.storage.pop(blob_name, None)  # remove saved blob if it exists
+
+        return wrapper
+
+    def _make_blob_mock(self, blob_name: str) -> Mock:
+        """Helper method to make a `Mock` of a `Blob`"""
+        blob_mock = Mock(spec=Blob)
+        blob_mock.name = blob_name
+        blob_mock.upload_from_string.side_effect = self.mock_blob_method(blob_name, "upload_from_string")
+        blob_mock.download_as_text.side_effect = self.mock_blob_method(blob_name, "download_as_text")
+        blob_mock.delete.side_effect = self.mock_blob_method(blob_name, "delete")
+        return blob_mock
+
+
+class TestGoogleInstallationStore(unittest.TestCase):
     def setUp(self):
-        """Setup test"""
-        self.blob = Mock(spec=Blob)
+        # self.blob = Mock(spec=Blob)
         self.bucket = Mock(spec=Bucket)
-        self.bucket.blob.return_value = self.blob
+        recorder = CloudStorageMockRecorder()
+
+        self.bucket.blob.side_effect = recorder.mock_bucket_method("blob")
+        self.bucket.list_blobs.side_effect = recorder.mock_bucket_method("list_blobs")
 
         self.storage_client = Mock(spec=Client)
         self.storage_client.bucket.return_value = self.bucket
 
-        self.bucket_name = "bucket"
-        self.client_id = "clid"
-        self.logger = logging.getLogger()
-        self.logger.handlers = []
-
-        self.installation_store = GoogleCloudStorageInstallationStore(
-            storage_client=self.storage_client, bucket_name=self.bucket_name, client_id=self.client_id, logger=self.logger
+    def _build_store(self) -> GoogleCloudStorageInstallationStore:
+        return GoogleCloudStorageInstallationStore(
+            storage_client=self.storage_client, bucket_name="bucket_name", client_id="client_id"
         )
 
-        self.entr_installation = Installation(user_id="uid", team_id=None, is_enterprise_install=True, enterprise_id="eid")
-        self.team_installation = Installation(user_id="uid", team_id="tid", is_enterprise_install=False, enterprise_id=None)
+    def test_instance(self):
+        self.assertIsNotNone(self._build_store())
 
-    def test_get_logger(self):
-        """Test get_logger method"""
-        self.assertEqual(self.installation_store.logger, self.logger)
-
-    @patch("slack_sdk.oauth.installation_store.google_cloud_storage.GoogleCloudStorageInstallationStore._save_entity")
-    def test_save_install(self, save_entity: Mock):
-        """Test save method"""
-        self.installation_store.save(self.entr_installation)
-        self.storage_client.bucket.assert_called_once_with(self.bucket_name)
-        save_entity.assert_has_calls(
-            [
-                call(
-                    data_type="bot",
-                    entity=json.dumps(self.entr_installation.to_bot().__dict__),
-                    enterprise_id=self.entr_installation.enterprise_id,
-                    team_id=self.entr_installation.team_id,
-                    user_id=None,
-                ),
-                call(
-                    data_type="installer",
-                    entity=json.dumps(self.entr_installation.__dict__),
-                    enterprise_id=self.entr_installation.enterprise_id,
-                    team_id=self.entr_installation.team_id,
-                    user_id=None,
-                ),
-                call(
-                    data_type="installer",
-                    entity=json.dumps(self.entr_installation.__dict__),
-                    enterprise_id=self.entr_installation.enterprise_id,
-                    team_id=self.entr_installation.team_id,
-                    user_id=self.entr_installation.user_id,
-                ),
-            ]
+    def test_save_and_find(self):
+        store = self._build_store()
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
         )
+        store.save(installation)
 
-    @patch("slack_sdk.oauth.installation_store.google_cloud_storage.GoogleCloudStorageInstallationStore._save_entity")
-    def test_save_bot(self, save_entity: Mock):
-        """Test save_bot method"""
-        self.installation_store.save_bot(bot=self.entr_installation.to_bot())
-        save_entity.assert_called_once_with(
-            data_type="bot",
-            entity=json.dumps(self.entr_installation.to_bot().__dict__),
-            enterprise_id=self.entr_installation.enterprise_id,
-            team_id=self.entr_installation.team_id,
-            user_id=None,
-        )
-
-    def test_save_entity_and_test_key(self):
-        """Test _save_entity and _key methods"""
-        entity = "some data"
-        # test upload user data enterprise install + normal workspace
-        for install in [self.entr_installation, self.team_installation]:
-            self.installation_store._save_entity(
-                data_type="dtype",
-                entity=entity,
-                enterprise_id=install.enterprise_id,
-                team_id=install.team_id,
-                user_id=install.user_id,
-            )
-            self.bucket.blob.assert_called_once_with(
-                f"{self.client_id}/{install.enterprise_id or 'none'}-{install.team_id or 'none'}" f"/dtype-{install.user_id}"
-            )
-            self.blob.upload_from_string.assert_called_once_with(entity)
-
-            self.bucket.reset_mock()
-
-        # test upload user data enterprise install + normal workspace
-        for install in [self.entr_installation, self.team_installation]:
-            self.installation_store._save_entity(
-                data_type="dtype", entity=entity, enterprise_id=install.enterprise_id, team_id=install.team_id, user_id=None
-            )
-            self.bucket.blob.assert_called_once_with(
-                f"{self.client_id}/{install.enterprise_id or 'none'}-{install.team_id or 'none'}/dtype"
-            )
-
-            self.bucket.reset_mock()
-
-    def test_find_bot(self):
-        """Test find_bot method"""
-        self.blob.download_as_text.return_value = json.dumps(
-            {"bot_token": "xoxb-token", "bot_id": "bid", "bot_user_id": "buid", "installed_at": time.time()}
-        )
-        # test bot found enterprise installation + normal workspace
-        for install in [self.entr_installation, self.team_installation]:
-            bot = self.installation_store.find_bot(
-                enterprise_id=install.enterprise_id,
-                team_id=install.team_id,
-                is_enterprise_install=install.is_enterprise_install,
-            )
-            self.storage_client.bucket.assert_called_once_with(self.bucket_name)
-            self.bucket.blob.assert_called_once_with(
-                f"{self.client_id}/{install.enterprise_id or 'none'}-{install.team_id or 'none'}/bot"
-            )
-            self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
-            self.assertIsNotNone(bot)
-            self.assertEqual(bot.bot_token, "xoxb-token")
-
-            self.blob.reset_mock()
-            self.bucket.reset_mock()
-
-        # test bot not found
-        self.blob.download_as_text.side_effect = Exception()
-        bot = self.installation_store.find_bot(
-            enterprise_id=self.entr_installation.enterprise_id,
-            team_id=self.entr_installation.team_id,
-            is_enterprise_install=self.entr_installation.is_enterprise_install,
-        )
-        self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
         self.assertIsNone(bot)
 
-    def test_find_installation(self):
-        """Test find_installation method"""
-        self.blob.download_as_text.return_value = json.dumps({"user_id": self.entr_installation.user_id})
-        # test installation found on enterprise install + normal workspace
-        for expect_install in [self.entr_installation, self.team_installation]:
-            actual_install = self.installation_store.find_installation(
-                enterprise_id=expect_install.enterprise_id,
-                team_id=expect_install.team_id,
-                user_id=expect_install.user_id,
-                is_enterprise_install=expect_install.is_enterprise_install,
-            )
-            self.storage_client.bucket.assert_called_once_with(self.bucket_name)
-            self.bucket.blob.assert_called_once_with(
-                f"{self.client_id}/{expect_install.enterprise_id or 'none'}-{expect_install.team_id or 'none'}/"
-                f"installer-{expect_install.user_id}"
-            )
-            self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
-            self.assertIsNotNone(actual_install)
-            self.assertEqual(actual_install.user_id, self.entr_installation.user_id)
+        # delete bots
+        store.delete_bot(enterprise_id="E111", team_id="T222")
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
 
-            self.blob.reset_mock()
-            self.bucket.reset_mock()
+        # find installations
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(i)
 
-        # test installation not found
-        self.blob.download_as_text.side_effect = Exception()
-        actual_install = self.installation_store.find_installation(
-            enterprise_id=self.entr_installation.enterprise_id,
-            team_id=self.entr_installation.team_id,
-            user_id=self.entr_installation.user_id,
-            is_enterprise_install=self.entr_installation.is_enterprise_install,
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U222")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T222", user_id="U111")
+        self.assertIsNone(i)
+
+        # delete installations
+        store.delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+
+        # delete all
+        store.save(installation)
+        store.delete_all(enterprise_id="E111", team_id="T111")
+
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNone(i)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+
+    def test_org_installation(self):
+        store = self._build_store()
+        installation = Installation(
+            app_id="AO111",
+            enterprise_id="EO111",
+            user_id="UO111",
+            bot_id="BO111",
+            bot_token="xoxb-O111",
+            bot_scopes=["chat:write"],
+            bot_user_id="UO222",
+            is_enterprise_install=True,
         )
-        self.blob.download_as_text.assert_called_once_with(encoding="utf-8")
-        self.assertIsNone(actual_install)
+        store.save(installation)
 
-    def test_delete_installation_and_test_delete_entity(self):
-        """Test delete_installation and test_delete_entity methods"""
-        self.blob.exists.return_value = True
-        # test delete enterprise install + normal workspace when blob exists
-        for install in [self.entr_installation, self.team_installation]:
-            self.installation_store.delete_installation(
-                enterprise_id=install.enterprise_id, team_id=install.team_id, user_id=install.user_id
-            )
-            self.storage_client.bucket.assert_called_once_with(self.bucket_name)
-            self.bucket.blob.assert_called_once_with(
-                f"{self.client_id}/{install.enterprise_id or 'none'}-{install.team_id or 'none'}/"
-                f"installer-{self.entr_installation.user_id}"
-            )
-            self.blob.exists.assert_called_once()
-            self.blob.delete.assert_called_once()
+        # find bots
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(bot)
+        bot = store.find_bot(enterprise_id="EO111", team_id="TO222", is_enterprise_install=True)
+        self.assertIsNotNone(bot)
+        bot = store.find_bot(enterprise_id="EO111", team_id="TO222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="TO111")
+        self.assertIsNone(bot)
 
-            self.blob.reset_mock()
-            self.bucket.reset_mock()
+        # delete bots
+        store.delete_bot(enterprise_id="EO111", team_id="TO222")
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(bot)
 
-        # test delete blob doesn't exist
-        self.blob.exists.return_value = False
-        self.installation_store.delete_installation(
-            enterprise_id=self.entr_installation.enterprise_id,
-            team_id=self.entr_installation.team_id,
-            user_id=self.entr_installation.user_id,
+        store.delete_bot(enterprise_id="EO111", team_id=None)
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNone(bot)
+
+        # find installations
+        i = store.find_installation(enterprise_id="EO111", team_id=None)
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="EO111", team_id="T111", is_enterprise_install=True)
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="EO111", team_id="T222")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(i)
+
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
+        self.assertIsNotNone(i)
+        i = store.find_installation(
+            enterprise_id="E111",
+            team_id="T111",
+            is_enterprise_install=True,
+            user_id="U222",
         )
-        self.blob.exists.assert_called_once()
-        self.blob.delete.assert_not_called()
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id=None, team_id="T222", user_id="U111")
+        self.assertIsNone(i)
 
-    @patch("slack_sdk.oauth.installation_store.google_cloud_storage.GoogleCloudStorageInstallationStore._delete_entity")
-    def test_delete_bot(self, delete_entity: Mock):
-        """Test delete_bot method"""
-        # test delete bot from enterprise install + normal workspace
-        for install in [self.entr_installation, self.team_installation]:
-            self.installation_store.delete_bot(enterprise_id=install.enterprise_id, team_id=install.team_id)
-            delete_entity.assert_called_once_with(
-                data_type="bot", enterprise_id=install.enterprise_id, team_id=install.team_id, user_id=None
-            )
+        # delete installations
+        store.delete_installation(enterprise_id="E111", team_id=None)
+        i = store.find_installation(enterprise_id="E111", team_id=None)
+        self.assertIsNone(i)
 
-            delete_entity.reset_mock()
+        # delete all
+        store.save(installation)
+        store.delete_all(enterprise_id="E111", team_id=None)
+
+        i = store.find_installation(enterprise_id="E111", team_id=None)
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id=None, user_id="U111")
+        self.assertIsNone(i)
+        bot = store.find_bot(enterprise_id=None, team_id="T222")
+        self.assertIsNone(bot)
+
+    def test_save_and_find_token_rotation(self):
+        store = self._build_store()
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxe.xoxp-1-initial",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+            bot_refresh_token="xoxe-1-initial",
+            bot_token_expires_in=43200,
+        )
+        store.save(installation)
+
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+        self.assertEqual(bot.bot_refresh_token, "xoxe-1-initial")
+
+        # Update the existing data
+        refreshed_installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxe.xoxp-1-refreshed",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+            bot_refresh_token="xoxe-1-refreshed",
+            bot_token_expires_in=43200,
+        )
+        store.save(refreshed_installation)
+
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+        self.assertEqual(bot.bot_refresh_token, "xoxe-1-refreshed")
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
+        self.assertIsNone(bot)
+
+        # delete bots
+        store.delete_bot(enterprise_id="E111", team_id="T222")
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+
+        # find installations
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(i)
+
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNotNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U222")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T222", user_id="U111")
+        self.assertIsNone(i)
+
+        # delete installations
+        store.delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+
+        # delete all
+        store.save(installation)
+        store.delete_all(enterprise_id="E111", team_id="T111")
+
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNone(i)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+
+    def test_issue_1441_mixing_user_and_bot_installations(self):
+        store = self._build_store()
+
+        bot_installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+        store.save(bot_installation)
+
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
+        self.assertIsNone(bot)
+
+        installation = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(installation.bot_token)
+        installation = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(installation)
+        installation = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(installation)
+
+        user_installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_scopes=["openid"],
+            user_token="xoxp-111",
+        )
+        store.save(user_installation)
+
+        # find bots
+        bot = store.find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(bot.bot_token)
+        bot = store.find_bot(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(bot)
+        bot = store.find_bot(enterprise_id=None, team_id="T111")
+        self.assertIsNone(bot)
+
+        installation = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(installation.bot_token)
+        installation = store.find_installation(enterprise_id="E111", team_id="T222")
+        self.assertIsNone(installation)
+        installation = store.find_installation(enterprise_id=None, team_id="T111")
+        self.assertIsNone(installation)

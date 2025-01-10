@@ -109,6 +109,10 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
         Args:
             bot (Bot): data about the bot
         """
+        if bot.bot_token is None:
+            self.logger.debug("Skipped saving bot install due to absense of bot token in it")
+            return
+
         entity = json.dumps(bot.__dict__)
         self._save_entity(data_type="bot", entity=entity, enterprise_id=bot.enterprise_id, team_id=bot.team_id, user_id=None)
         self.logger.debug("Uploaded %s to Google bucket as bot", entity)
@@ -249,7 +253,31 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
             body = blob.download_as_text(encoding="utf-8")
             self.logger.debug("Downloaded %s from Google bucket", body)
             data = json.loads(body)
-            return Installation(**data)
+            installation = Installation(**data)
+
+            has_user_installation = user_id is not None and installation is not None
+            no_bot_token_installation = installation is not None and installation.bot_token is None
+            should_find_bot_installation = has_user_installation or no_bot_token_installation
+            if should_find_bot_installation:
+                # Retrieve the latest bot token, just in case
+                # See also: https://github.com/slackapi/bolt-python/issues/664
+                latest_bot_installation = self.find_bot(
+                    enterprise_id=enterprise_id,
+                    team_id=team_id,
+                    is_enterprise_install=is_enterprise_install,
+                )
+                if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                    # NOTE: this logic is based on the assumption that every single installation has bot scopes
+                    # If you need to installation patterns without bot scopes in the same GCS bucket,
+                    # please fork this code and implement your own logic.
+                    installation.bot_id = latest_bot_installation.bot_id
+                    installation.bot_user_id = latest_bot_installation.bot_user_id
+                    installation.bot_token = latest_bot_installation.bot_token
+                    installation.bot_scopes = latest_bot_installation.bot_scopes
+                    installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                    installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+            return installation
         except Exception as exc:
             self.logger.warning(
                 "Failed to find an installation data for enterprise: %s, team: %s: %s", enterprise_id, team_id, exc
@@ -271,15 +299,31 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
     def delete_installation(
         self, *, enterprise_id: Optional[str], team_id: Optional[str], user_id: Optional[str] = None
     ) -> None:
-        """Deletes a user's Slack installation data.
+        """Deletes a user's Slack installation data and any leftover installs.
 
         Args:
             enterprise_id (Optional[str]): Slack Enterprise Grid ID
             team_id (Optional[str]): Slack workspace/team ID
             user_id (Optional[str]): Slack user ID
         """
-        self._delete_entity(data_type="installer", enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
-        self.logger.debug("Uninstalled app for enterprise: %s, team: %s, user: %s", enterprise_id, team_id, user_id)
+        prefix = self._key(data_type="installer", enterprise_id=enterprise_id, team_id=team_id, user_id=None)
+        if user_id:
+            # delete the user install
+            self._delete_entity(data_type="installer", enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
+            self.logger.debug("Uninstalled app for enterprise: %s, team: %s, user: %s", enterprise_id, team_id, user_id)
+            # list remaining installer* files
+            blobs = self.bucket.list_blobs(prefix=prefix, max_results=2)
+            # if just one blob and name is "installer" then delete it
+            if len(blobs) == 1 and blobs[0].name.endswith("installer"):
+                blobs[0].delete()
+                self.logger.debug("Uninstalled app for enterprise: %s, team: %s", enterprise_id, team_id)
+        else:
+            # delete the whole installation
+            blobs = self.bucket.list_blobs(prefix=prefix)
+            for blob in blobs:
+                blob.delete()
+
+            self.logger.debug("Uninstalled app for enterprise: %s, team: %s, and all users", enterprise_id, team_id)
 
     async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         """Deletes Slack bot user install data from the workspace.
