@@ -312,7 +312,7 @@ class GoogleCloudStorageInstallationStore(InstallationStore, AsyncInstallationSt
             self._delete_entity(data_type="installer", enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
             self.logger.debug("Uninstalled app for enterprise: %s, team: %s, user: %s", enterprise_id, team_id, user_id)
             # list remaining installer* files
-            blobs = self.bucket.list_blobs(prefix=prefix, max_results=2)
+            blobs = list(self.bucket.list_blobs(prefix=prefix, max_results=2))
             # if just one blob and name is "installer" then delete it
             if len(blobs) == 1 and blobs[0].name.endswith("installer"):
                 blobs[0].delete()
