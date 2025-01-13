@@ -241,7 +241,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                             message_data = message.data
                             if isinstance(message_data, bytes):
                                 message_data = message_data.decode("utf-8")
-                            if message_data is not None and len(message_data) > 0:
+                            if message_data is not None and isinstance(message_data, (str, bytes)) and len(message_data) > 0:
                                 # To skip the empty message that Slack server-side often sends
                                 self.logger.debug(
                                     f"Received message "
