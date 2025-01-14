@@ -115,7 +115,7 @@ class SectionBlock(Block):
 
     @property
     def attributes(self) -> Set[str]:  # type: ignore[override]
-        return super().attributes.union({"text", "fields", "accessory"})
+        return super().attributes.union({"text", "fields", "accessory", "expand"})
 
     def __init__(
         self,
@@ -124,6 +124,7 @@ class SectionBlock(Block):
         text: Optional[Union[str, dict, TextObject]] = None,
         fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
         accessory: Optional[Union[dict, BlockElement]] = None,
+        expand: Optional[bool] = None,
         **others: dict,
     ):
         """A section is one of the most flexible blocks available.
@@ -144,6 +145,10 @@ class SectionBlock(Block):
                 in a compact format that allows for 2 columns of side-by-side text.
                 Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
             accessory: One of the available element objects.
+            expand: Whether or not this section block's text should always expand when rendered.
+                If false or not provided, it may be rendered with a 'see more' option to expand and show the full text.
+                For AI Assistant apps, this allows the app to post long messages without users needing
+                to click 'see more' to expand the message.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -166,6 +171,7 @@ class SectionBlock(Block):
                 self.logger.warning(f"Unsupported filed detected and skipped {f}")
         self.fields = field_objects
         self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
+        self.expand = expand
 
     @JsonValidator("text or fields attribute must be specified")
     def _validate_text_or_fields_populated(self):
