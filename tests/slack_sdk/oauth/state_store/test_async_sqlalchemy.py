@@ -1,4 +1,4 @@
-import time
+import asyncio
 import unittest
 
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
@@ -29,6 +29,6 @@ class TestSQLAlchemy(unittest.IsolatedAsyncioTestCase):
 
     async def test_expiration(self):
         state = await self.store.async_issue()
-        time.sleep(3)
+        await asyncio.sleep(3)
         result = await self.store.async_consume(state)
         self.assertFalse(result)

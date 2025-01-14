@@ -222,21 +222,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result.mappings():  # type: ignore[attr-defined]
-                return Bot(
-                    app_id=row["app_id"],
-                    enterprise_id=row["enterprise_id"],
-                    enterprise_name=row["enterprise_name"],
-                    team_id=row["team_id"],
-                    team_name=row["team_name"],
-                    bot_token=row["bot_token"],
-                    bot_id=row["bot_id"],
-                    bot_user_id=row["bot_user_id"],
-                    bot_scopes=row["bot_scopes"],
-                    bot_refresh_token=row["bot_refresh_token"],
-                    bot_token_expires_at=row["bot_token_expires_at"],
-                    is_enterprise_install=row["is_enterprise_install"],
-                    installed_at=row["installed_at"],
-                )
+                return self.build_bot_entity(row)
             return None
 
     def find_installation(
@@ -270,33 +256,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result.mappings():  # type: ignore[attr-defined]
-                installation = Installation(
-                    app_id=row["app_id"],
-                    enterprise_id=row["enterprise_id"],
-                    enterprise_name=row["enterprise_name"],
-                    enterprise_url=row["enterprise_url"],
-                    team_id=row["team_id"],
-                    team_name=row["team_name"],
-                    bot_token=row["bot_token"],
-                    bot_id=row["bot_id"],
-                    bot_user_id=row["bot_user_id"],
-                    bot_scopes=row["bot_scopes"],
-                    bot_refresh_token=row["bot_refresh_token"],
-                    bot_token_expires_at=row["bot_token_expires_at"],
-                    user_id=row["user_id"],
-                    user_token=row["user_token"],
-                    user_scopes=row["user_scopes"],
-                    user_refresh_token=row["user_refresh_token"],
-                    user_token_expires_at=row["user_token_expires_at"],
-                    # Only the incoming webhook issued in the latest installation is set in this logic
-                    incoming_webhook_url=row["incoming_webhook_url"],
-                    incoming_webhook_channel=row["incoming_webhook_channel"],
-                    incoming_webhook_channel_id=row["incoming_webhook_channel_id"],
-                    incoming_webhook_configuration_url=row["incoming_webhook_configuration_url"],
-                    is_enterprise_install=row["is_enterprise_install"],
-                    token_type=row["token_type"],
-                    installed_at=row["installed_at"],
-                )
+                (row)
+                installation = self.build_installation_entity(row)
 
         has_user_installation = user_id is not None and installation is not None
         no_bot_token_installation = installation is not None and installation.bot_token is None
@@ -365,6 +326,54 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     )
                 )
                 conn.execute(deletion)
+
+    @classmethod
+    def build_installation_entity(cls, row) -> Installation:
+        return Installation(
+            app_id=row["app_id"],
+            enterprise_id=row["enterprise_id"],
+            enterprise_name=row["enterprise_name"],
+            enterprise_url=row["enterprise_url"],
+            team_id=row["team_id"],
+            team_name=row["team_name"],
+            bot_token=row["bot_token"],
+            bot_id=row["bot_id"],
+            bot_user_id=row["bot_user_id"],
+            bot_scopes=row["bot_scopes"],
+            bot_refresh_token=row["bot_refresh_token"],
+            bot_token_expires_at=row["bot_token_expires_at"],
+            user_id=row["user_id"],
+            user_token=row["user_token"],
+            user_scopes=row["user_scopes"],
+            user_refresh_token=row["user_refresh_token"],
+            user_token_expires_at=row["user_token_expires_at"],
+            # Only the incoming webhook issued in the latest installation is set in this logic
+            incoming_webhook_url=row["incoming_webhook_url"],
+            incoming_webhook_channel=row["incoming_webhook_channel"],
+            incoming_webhook_channel_id=row["incoming_webhook_channel_id"],
+            incoming_webhook_configuration_url=row["incoming_webhook_configuration_url"],
+            is_enterprise_install=row["is_enterprise_install"],
+            token_type=row["token_type"],
+            installed_at=row["installed_at"],
+        )
+
+    @classmethod
+    def build_bot_entity(cls, row) -> Bot:
+        return Bot(
+            app_id=row["app_id"],
+            enterprise_id=row["enterprise_id"],
+            enterprise_name=row["enterprise_name"],
+            team_id=row["team_id"],
+            team_name=row["team_name"],
+            bot_token=row["bot_token"],
+            bot_id=row["bot_id"],
+            bot_user_id=row["bot_user_id"],
+            bot_scopes=row["bot_scopes"],
+            bot_refresh_token=row["bot_refresh_token"],
+            bot_token_expires_at=row["bot_token_expires_at"],
+            is_enterprise_install=row["is_enterprise_install"],
+            installed_at=row["installed_at"],
+        )
 
 
 class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
@@ -493,21 +502,7 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
         async with self.engine.connect() as conn:
             result: object = await conn.execute(query)
             for row in result.mappings():  # type: ignore[attr-defined]
-                return Bot(
-                    app_id=row["app_id"],
-                    enterprise_id=row["enterprise_id"],
-                    enterprise_name=row["enterprise_name"],
-                    team_id=row["team_id"],
-                    team_name=row["team_name"],
-                    bot_token=row["bot_token"],
-                    bot_id=row["bot_id"],
-                    bot_user_id=row["bot_user_id"],
-                    bot_scopes=row["bot_scopes"],
-                    bot_refresh_token=row["bot_refresh_token"],
-                    bot_token_expires_at=row["bot_token_expires_at"],
-                    is_enterprise_install=row["is_enterprise_install"],
-                    installed_at=row["installed_at"],
-                )
+                return SQLAlchemyInstallationStore.build_bot_entity(row)
             return None
 
     async def async_find_installation(
@@ -541,33 +536,7 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
         async with self.engine.connect() as conn:
             result: object = await conn.execute(query)
             for row in result.mappings():  # type: ignore[attr-defined]
-                installation = Installation(
-                    app_id=row["app_id"],
-                    enterprise_id=row["enterprise_id"],
-                    enterprise_name=row["enterprise_name"],
-                    enterprise_url=row["enterprise_url"],
-                    team_id=row["team_id"],
-                    team_name=row["team_name"],
-                    bot_token=row["bot_token"],
-                    bot_id=row["bot_id"],
-                    bot_user_id=row["bot_user_id"],
-                    bot_scopes=row["bot_scopes"],
-                    bot_refresh_token=row["bot_refresh_token"],
-                    bot_token_expires_at=row["bot_token_expires_at"],
-                    user_id=row["user_id"],
-                    user_token=row["user_token"],
-                    user_scopes=row["user_scopes"],
-                    user_refresh_token=row["user_refresh_token"],
-                    user_token_expires_at=row["user_token_expires_at"],
-                    # Only the incoming webhook issued in the latest installation is set in this logic
-                    incoming_webhook_url=row["incoming_webhook_url"],
-                    incoming_webhook_channel=row["incoming_webhook_channel"],
-                    incoming_webhook_channel_id=row["incoming_webhook_channel_id"],
-                    incoming_webhook_configuration_url=row["incoming_webhook_configuration_url"],
-                    is_enterprise_install=row["is_enterprise_install"],
-                    token_type=row["token_type"],
-                    installed_at=row["installed_at"],
-                )
+                installation = SQLAlchemyInstallationStore.build_installation_entity(row)
 
         has_user_installation = user_id is not None and installation is not None
         no_bot_token_installation = installation is not None and installation.bot_token is None
