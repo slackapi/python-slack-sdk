@@ -256,7 +256,6 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
             for row in result.mappings():  # type: ignore[attr-defined]
-                (row)
                 installation = self.build_installation_entity(row)
 
         has_user_installation = user_id is not None and installation is not None

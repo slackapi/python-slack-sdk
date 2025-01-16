@@ -102,7 +102,7 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
     def __init__(
         self,
         expiration_seconds: int,
-        engine: Engine,
+        engine: AsyncEngine,
         logger: Logger = logging.getLogger(__name__),
         table_name: str = default_table_name,
     ):
