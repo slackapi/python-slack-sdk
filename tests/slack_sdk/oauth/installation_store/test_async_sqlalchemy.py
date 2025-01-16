@@ -1,25 +1,28 @@
 import unittest
-
+from tests.helpers import async_test
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.sqlalchemy import AsyncSQLAlchemyInstallationStore
 
 
-class TestAsyncSQLAlchemy(unittest.IsolatedAsyncioTestCase):
+class TestAsyncSQLAlchemy(unittest.TestCase):
     engine: AsyncEngine
 
-    async def asyncSetUp(self):
+    @async_test
+    async def setUp(self):
         self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
         self.store = AsyncSQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         async with self.engine.begin() as conn:
             await conn.run_sync(self.store.metadata.create_all)
 
-    async def asyncTearDown(self):
+    @async_test
+    async def tearDown(self):
         async with self.engine.begin() as conn:
             await conn.run_sync(self.store.metadata.drop_all)
         await self.engine.dispose()
 
+    @async_test
     async def test_save_and_find(self):
         installation = Installation(
             app_id="A111",
@@ -81,6 +84,7 @@ class TestAsyncSQLAlchemy(unittest.IsolatedAsyncioTestCase):
         bot = await store.async_find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
 
+    @async_test
     async def test_org_installation(self):
         installation = Installation(
             app_id="AO111",
@@ -153,6 +157,7 @@ class TestAsyncSQLAlchemy(unittest.IsolatedAsyncioTestCase):
         bot = await store.async_find_bot(enterprise_id=None, team_id="T222")
         self.assertIsNone(bot)
 
+    @async_test
     async def test_save_and_find_token_rotation(self):
         store = self.store
 
@@ -236,6 +241,7 @@ class TestAsyncSQLAlchemy(unittest.IsolatedAsyncioTestCase):
         bot = await store.async_find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
 
+    @async_test
     async def test_issue_1441_mixing_user_and_bot_installations(self):
         store = self.store
 

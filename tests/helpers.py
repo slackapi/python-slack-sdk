@@ -3,11 +3,12 @@ import os
 
 
 def async_test(coro):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
     def wrapper(*args, **kwargs):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
         future = coro(*args, **kwargs)
-        return loop.run_until_complete(future)
+        return asyncio.get_event_loop().run_until_complete(future)
 
     return wrapper
 
