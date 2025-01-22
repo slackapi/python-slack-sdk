@@ -20,6 +20,7 @@ class TestModels(unittest.TestCase):
         )
         self.assertIsNotNone(bot)
         self.assertIsNotNone(bot.to_dict())
+        self.assertIsNotNone(bot.to_dict_for_copying())
 
     def test_bot_custom_fields(self):
         bot = Bot(
@@ -33,6 +34,7 @@ class TestModels(unittest.TestCase):
         bot.set_custom_value("app_id", "A222")
         self.assertEqual(bot.get_custom_value("service_user_id"), "XYZ123")
         self.assertEqual(bot.to_dict().get("service_user_id"), "XYZ123")
+        self.assertEqual(bot.to_dict_for_copying().get("custom_values").get("service_user_id"), "XYZ123")
 
     def test_installation(self):
         installation = Installation(
@@ -73,6 +75,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(installation.get_custom_value("service_user_id"), "XYZ123")
         self.assertEqual(installation.to_dict().get("service_user_id"), "XYZ123")
         self.assertEqual(installation.to_dict().get("app_id"), "A111")
+        self.assertEqual(installation.to_dict_for_copying().get("custom_values").get("app_id"), "A222")
 
         bot = installation.to_bot()
         self.assertEqual(bot.app_id, "A111")
@@ -80,3 +83,4 @@ class TestModels(unittest.TestCase):
 
         self.assertEqual(bot.to_dict().get("app_id"), "A111")
         self.assertEqual(bot.to_dict().get("service_user_id"), "XYZ123")
+        self.assertEqual(bot.to_dict_for_copying().get("custom_values").get("app_id"), "A222")
