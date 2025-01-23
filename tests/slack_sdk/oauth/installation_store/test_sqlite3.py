@@ -87,6 +87,7 @@ class TestSQLite3(unittest.TestCase):
         installation = Installation(
             app_id="AO111",
             enterprise_id="EO111",
+            team_id="TO111",
             user_id="UO111",
             bot_id="BO111",
             bot_token="xoxb-O111",

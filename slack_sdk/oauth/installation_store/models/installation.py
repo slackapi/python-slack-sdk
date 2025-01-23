@@ -87,7 +87,12 @@ class Installation:
         self.enterprise_id = enterprise_id
         self.enterprise_name = enterprise_name
         self.enterprise_url = enterprise_url
-        self.team_id = team_id
+        # Note: when performing an enterprise install a team id
+        # is still supplied by Python Bolt, but it is not relevant.
+        if not is_enterprise_install:
+            self.team_id = team_id
+        else:
+            self.team_id = "none"
         self.team_name = team_name
         self.bot_token = bot_token
         self.bot_id = bot_id
