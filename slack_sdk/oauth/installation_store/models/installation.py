@@ -92,7 +92,7 @@ class Installation:
         if not is_enterprise_install:
             self.team_id = team_id
         else:
-            self.team_id = "none"
+            self.team_id = None
         self.team_name = team_name
         self.bot_token = bot_token
         self.bot_id = bot_id
