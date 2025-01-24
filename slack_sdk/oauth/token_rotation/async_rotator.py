@@ -54,7 +54,7 @@ class AsyncTokenRotator:
 
         if rotated_bot is not None:
             if rotated_installation is None:
-                rotated_installation = Installation(**installation.to_dict())
+                rotated_installation = Installation(**installation.to_dict_for_copying())
             rotated_installation.bot_token = rotated_bot.bot_token
             rotated_installation.bot_refresh_token = rotated_bot.bot_refresh_token
             rotated_installation.bot_token_expires_at = rotated_bot.bot_token_expires_at
@@ -93,7 +93,7 @@ class AsyncTokenRotator:
             if refresh_response.get("token_type") != "bot":
                 return None
 
-            refreshed_bot = Bot(**bot.to_dict())
+            refreshed_bot = Bot(**bot.to_dict_for_copying())
             refreshed_bot.bot_token = refresh_response["access_token"]
             refreshed_bot.bot_refresh_token = refresh_response.get("refresh_token")
             refreshed_bot.bot_token_expires_at = int(time()) + int(refresh_response["expires_in"])
@@ -132,7 +132,7 @@ class AsyncTokenRotator:
             if refresh_response.get("token_type") != "user":
                 return None
 
-            refreshed_installation = Installation(**installation.to_dict())
+            refreshed_installation = Installation(**installation.to_dict_for_copying())
             refreshed_installation.user_token = refresh_response.get("access_token")
             refreshed_installation.user_refresh_token = refresh_response.get("refresh_token")
             refreshed_installation.user_token_expires_at = int(time()) + int(refresh_response.get("expires_in"))  # type: ignore[arg-type] # noqa: E501
