@@ -3759,6 +3759,7 @@ class LegacyWebClient(LegacyBaseClient):
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
         channel: Optional[str] = None,
+        channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
         request_file_info: bool = True,  # since v3.23, this flag is no longer necessary
@@ -3780,20 +3781,8 @@ class LegacyWebClient(LegacyBaseClient):
             raise e.SlackRequestError("You cannot specify both the file and the content argument.")
 
         # deprecated arguments:
-        channels, filetype = kwargs.get("channels"), kwargs.get("filetype")
+        filetype = kwargs.get("filetype")
 
-        if channels is not None:
-            warnings.warn(
-                "Although the channels parameter is still supported for smooth migration from legacy files.upload, "
-                "we recommend using the new channel parameter with a single str value instead for more clarity."
-            )
-            if (isinstance(channels, (list, tuple)) and len(channels) > 1) or (
-                isinstance(channels, str) and len(channels.split(",")) > 1
-            ):
-                raise e.SlackRequestError(
-                    "Sharing files with multiple channels is no longer supported in v2. "
-                    "Share files in each channel separately instead."
-                )
         if filetype is not None:
             warnings.warn("The filetype parameter is no longer supported. Please remove it from the arguments.")
 
@@ -3847,15 +3836,10 @@ class LegacyWebClient(LegacyBaseClient):
                 raise e.SlackRequestError(message)
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
-        channel_to_share = channel
-        if channels is not None:
-            if isinstance(channels, str):
-                channel_to_share = channels.split(",")[0]
-            else:
-                channel_to_share = channels[0]
         completion = self.files_completeUploadExternal(
             files=[{"id": f["file_id"], "title": f["title"]} for f in files],
-            channel_id=channel_to_share,
+            channel_id=channel,
+            channels=channels,
             initial_comment=initial_comment,
             thread_ts=thread_ts,
             **kwargs,
@@ -3891,6 +3875,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         files: List[Dict[str, str]],
         channel_id: Optional[str] = None,
+        channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,
         thread_ts: Optional[str] = None,
         **kwargs,
@@ -3907,6 +3892,8 @@ class LegacyWebClient(LegacyBaseClient):
                 "thread_ts": thread_ts,
             }
         )
+        if channels:
+            kwargs["channels"] = ",".join(channels)
         return self.api_call("files.completeUploadExternal", params=kwargs)
 
     def functions_completeSuccess(
