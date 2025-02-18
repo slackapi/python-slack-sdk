@@ -1,6 +1,7 @@
 import json
 import unittest
 from io import BytesIO
+from pathlib import Path
 from typing import Dict, Sequence, Union
 
 import pytest
@@ -100,6 +101,13 @@ class TestInternalUtils(unittest.TestCase):
         assert file_io_item.get("filename") == "Uploaded file"
         file_io_item = _to_v2_file_upload_item({"file": file_io, "filename": "foo.txt"})
         assert file_io_item.get("filename") == "foo.txt"
+
+    def test_to_v2_file_upload_item_can_accept_file_as_path(self):
+        filepath = "tests/slack_sdk/web/test_internal_utils.py"
+        upload_item_str = _to_v2_file_upload_item({"file": filepath})
+        upload_item_path = _to_v2_file_upload_item({"file": Path(filepath)})
+        assert upload_item_path == upload_item_str
+        assert upload_item_str.get("filename") == "test_internal_utils.py"
 
     def test_next_cursor_is_present(self):
         assert _next_cursor_is_present({"next_cursor": "next-page"}) is True

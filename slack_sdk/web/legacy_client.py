@@ -3751,7 +3751,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         # for sending a single file
         filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
-        file: Optional[Union[str, bytes, IOBase]] = None,
+        file: Optional[Union[str, bytes, IOBase, os.PathLike]] = None,
         content: Optional[Union[str, bytes]] = None,
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
