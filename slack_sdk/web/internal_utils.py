@@ -317,8 +317,8 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
     content = upload_file.get("content")
     data: Optional[bytes] = None
     if file is not None:
-        if isinstance(file, str):  # filepath
-            with open(file.encode("utf-8", "ignore"), "rb") as readable:
+        if isinstance(file, (str, os.PathLike)):  # filepath
+            with open(os.fsencode(file), "rb") as readable:
                 data = readable.read()
         elif isinstance(file, bytes):
             data = file
