@@ -1,7 +1,8 @@
 const navbar = {
+  style: 'dark',
   title: 'Slack Developer Tools',
   logo: {
-    src: 'img/slack-logo.svg',
+    src: 'img/slack-logo-on-white.png',
     href: 'https://tools.slack.dev',
   },
   items: [
@@ -60,26 +61,24 @@ const navbar = {
       target: '_self',
     },
     {
-      type: 'dropdown',
-      label: 'Community',
+      to: 'https://api.slack.com',
+      label: 'API Docs',
       position: 'right',
-      items: [
-        {
-          label: 'Community tools',
-          to: 'https://tools.slack.dev/community-tools',
-          target: '_self',
-        },
-        {
-          label: 'Slack Community',
-          to: 'https://slackcommunity.com/',
-          target: '_self',
-        },
-      ],
+      target: '_self',
     },
     {
-      to: 'https://api.slack.com/docs',
-      label: 'API Docs',
-      target: '_self',
+      label: 'Developer Program',
+      position: 'right',
+      to: 'https://api.slack.com/developer-program',
+      target: '_blank',
+      rel: "noopener noreferrer"
+    },
+    {
+      label: 'Your apps',
+      to: 'https:api.slack.com/apps',
+      position: 'right',
+      target: '_blank',
+      rel: "noopener noreferrer"
     },
     {
       'aria-label': 'GitHub Repository',
