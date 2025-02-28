@@ -4,7 +4,7 @@
   /* set hex colors here pls */
   --dim: #eef2f6;
 
-  --aubergine: #4a154b;
+  --aubergine: #481a54;
   --aubergine-background: #552555;
   --aubergine-dark: #2c0134;
 
@@ -59,6 +59,34 @@
   --slack-blue-30-on-white: #baeaff;
   --unofficial-orange-30-on-white: #f6d1b4;
   --aubergine-active-30-on-white: #d7c0da;
+
+  --ifm-h5-font-size: 1rem;
+  /* --ifm-heading-font-family: 'AvantGardeForSalesforce', sans-serif; */
+  /* --ifm-font-family-base: 'Salesforce_Sans', sans-serif; */
+  --ifm-navbar-height: 83px;
+
+
+}
+
+.navbar__logo img {
+  height: 150%;
+  margin-top: -8px;
+}
+
+.navbar--dark {
+  --ifm-navbar-background-color: #000 !important;
+  --ifm-navbar-link-hover-color: var(--slack-blue);
+}
+
+.footer {
+  --ifm-footer-background-color: #000 !important;
+  --ifm-footer-link-hover-color: var(--slack-blue);
+  --ifm-footer-color: white !important;
+}
+
+.theme-admonition div{
+  text-transform: none !important; /* Disables uppercase transformation */
+
 }
 
 /* resets striped tables that hurt me eyes */
@@ -68,6 +96,18 @@ table tr:nth-child(even) {
 
 h1 {
   font-size: 2.5rem;
+}
+
+/* Reduce title size in blog list */
+.blog-list-page h2[class*="title"]
+{
+  font-size: 2rem;
+}
+
+/* Reduce title size in blog page */
+.blog-post-page h1[class*="title"]
+{
+  font-size: 2rem;
 }
 
 /* changing the links to blue for accessibility  */
@@ -86,11 +126,20 @@ a:hover {
   color: var(--slack-cloud-blue);
 }
 
+.article h1 {
+  font-size: 1rem !important; /* Adjust the size as needed */
+}
+
+.card {
+  box-shadow: none;
+}
+
 /* adjusting for light and dark modes */
 [data-theme="light"] {
   --docusaurus-highlighted-code-line-bg: var(--dim);
   --ifm-color-primary: var(--aubergine-active);
-  --ifm-footer-background-color: white;
+  --ifm-navbar-background-color: black;
+  --ifm-footer-background-color: black;
   --slack-cloud-blue: var(--slack-dark-blue);
   --reference-section-color: var(--horchata);
 }
@@ -98,8 +147,8 @@ a:hover {
 [data-theme="dark"] {
   --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 30%);
   --ifm-color-primary: var(--slack-cloud-blue);
-  --ifm-navbar-background-color: var(--aubergine) !important;
-  --ifm-footer-background-color: var(--aubergine) !important;
+  --ifm-navbar-background-color: #000 !important;
+  --ifm-footer-background-color: #000 !important;
   --ifm-footer-color: white;
 }
 
@@ -126,8 +175,8 @@ a:hover {
 }
 
 .footer {
-  font-size: 80%;
-  padding-bottom: 0rem;
+  /* font-size: 80%; */
+  padding-bottom: 0.5rem;
 }
 
 .footer__items a {
@@ -138,9 +187,8 @@ a:hover {
   margin: 0;
 }
 
-/* adjusting size */
 .table-of-contents__link {
-  font-size: 1rem;
+  font-size: .9rem;
 }
 
 /* bolding ToC for contrast */
@@ -151,6 +199,11 @@ a:hover {
 /* removing ToC line */
 .table-of-contents__left-border {
   border-left: none !important;
+}
+
+
+.dropdown-hr {
+  margin: 0
 }
 
 /* increasing name of site in sidebar */
@@ -168,12 +221,12 @@ a:hover {
   /* margin: 0.5rem 0; */
   padding: 0.5rem;
   /* border-radius: 4px; */
-  border-bottom: .5px solid grey;
+  border-bottom: 0.5px solid grey;
 }
 
-.theme-doc-sidebar-item-category-level-1 .menu__link {
+/* .theme-doc-sidebar-item-category-level-1 .menu__link {
   font-weight: bold;
-}
+} */
 
 .theme-doc-sidebar-item-category-level-1 .menu__list-item .menu__link {
   font-weight: normal;
@@ -204,18 +257,13 @@ div[class^="announcementBar_"] {
 }
 
 .navbar-github-link:hover {
-  background: var(--ifm-color-emphasis-200);
+  background: var(--ifm-color-gray-800);
 }
 
 .navbar-github-link::before {
   content: "";
   height: 100%;
   display: block;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
-    no-repeat;
-}
-
-html[data-theme="dark"] .navbar-github-link::before {
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
     no-repeat;
 }
@@ -223,8 +271,26 @@ html[data-theme="dark"] .navbar-github-link::before {
 /* Delineate tab blocks */
 .tabs-container {
   border: 1px solid var(--ifm-color-primary);
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 0.5em;
+}
+
+summary {
+  background-color: var(--ifm-background-color);
+  --docusaurus-details-decoration-color: var(--ifm-color-primary);
+}
+
+details {
+  border: 1px solid var(--ifm-color-primary)!important;
+  background-color: var(--ifm-background-color)!important;
+  --docusaurus-details-decoration-color: var(--ifm-color-primary);
+}
+
+details[open] {
+  border: 1px solid var(--ifm-color-primary);
+  background-color: var(--ifm-background-color);
+  --docusaurus-details-decoration-color: var(--ifm-color-primary);
+
 }
 
 /* Docs code bubbles */
@@ -239,8 +305,9 @@ html[data-theme="dark"] .navbar-github-link::before {
   --scope-link-background: var(--slack-yellow-30-on-white);
   --scope-link-text: rgb(63, 46, 0);
 
-  --event-link-background: var(--slack-red-30-on-white);
-  --event-link-text: rgb(63, 0, 24);
+  --event-link-background:#fad4e5;
+  /* --event-link-text: rgb(63, 0, 24); */
+  --event-link-text: rgb(0, 0, 0);
 
   --function-link-background: var(--unofficial-orange-30-on-white);
   --function-link-text: rgb(75, 35, 0);
@@ -271,17 +338,38 @@ a code {
   color: var(--code-link-text);
 }
 
-a[href^="https://api.slack.com/methods"] > code {
+a[href^="https://api.slack.com/methods"] > code
+{
   background-color: var(--method-link-background);
   color: var(--method-link-text);
 }
 
-a[href^="https://api.slack.com/scopes"] > code {
+a[href^="/reference/methods"] > code
+{
+  background-color: var(--method-link-background);
+  color: var(--method-link-text);
+}
+
+a[href^="https://api.slack.com/scopes"] > code
+{
   background-color: var(--scope-link-background);
   color: var(--scope-link-text);
 }
 
-a[href^="https://api.slack.com/events"] > code {
+a[href^="/reference/scopes"] > code
+{
+  background-color: var(--scope-link-background);
+  color: var(--scope-link-text);
+}
+
+a[href^="https://api.slack.com/events"] > code
+{
+  background-color: var(--event-link-background);
+  color: var(--event-link-text);
+}
+
+a[href^="/reference/events"] > code
+{
   background-color: var(--event-link-background);
   color: var(--event-link-text);
 }
@@ -302,12 +390,32 @@ a[href^="/slack-cli/reference/commands"] > code {
 }
 
 .facts-section {
+  margin-top: 2rem;
   background-color: var(--slack-green-20) !important;
 }
 
-.auth-section {
+
+.facts-section .tabs-container {
+  border: none;
+  border-radius: 0px;
+  padding: 0em;
+  --ifm-leading: 0rem
+
+}
+
+.facts-section .tabs__item {
+  padding: 0 0.5rem;
+  color: inherit;
+}
+
+.facts-section .tabs__item--active {
+  border-bottom-color: inherit
+}
+
+.errors-section {
   background-color: var(--slack-red-20) !important;
 }
+
 
 .inputs-section {
   background-color: var(--slack-blue-20) !important;
@@ -319,14 +427,23 @@ a[href^="/slack-cli/reference/commands"] > code {
   margin-bottom: 2rem;
 }
 
-.scope-list {
+.facts-row-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+  align-items: baseline; /* Aligns items to the same baseline */
 }
 
-.scope-item {
+.facts-row-list-item {
   display: inline-block;
+}
+
+
+.inline-icon {
+  height: 1.9em; /* Matches the height of the text */
+  width: auto; /* Maintains aspect ratio */
+  vertical-align: middle; /* Aligns with the text */
 }
 
 .functions-section .type {
@@ -338,8 +455,57 @@ a[href^="/slack-cli/reference/commands"] > code {
   margin-bottom: 1rem;
 }
 
+.reference-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* border: 1px solid #ddd; */
+  border-radius: 8px;
+  overflow: hidden;
+}
+.reference-facts-header {
+  display: flex;
+  /* background: #f4f4f4; */
+  padding: 10px 0;
+  font-weight: bold;
+}
+.reference-facts-item {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+.reference-facts-item:last-child {
+  border-bottom: none;
+}
+
+.reference-name {
+  flex: 2;
+  /* padding: 5px;*/
+  min-width: 200px;
+}
+
+.reference-description {
+  flex: 2; /* Makes description take extra space */
+  padding: 5px;
+}
+
+.reference-last-column {
+  flex: 1;
+  padding: 5px 0;
+}
+
+.reference-subitems-bubble {
+  display: inline-block;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-1000);
+  padding: 2px 6px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
 .param-container {
-  border-top: 0.5px solid;
+  border-top: 1px solid lightgray;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -373,8 +539,10 @@ a[href^="/slack-cli/reference/commands"] > code {
 
 .info-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
+  /* align-items: center; */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid  var(--ifm-color-emphasis-400);
 }
 
 .info-key {
@@ -385,4 +553,31 @@ a[href^="/slack-cli/reference/commands"] > code {
 /* hides next and previous */
 .pagination-nav__link {
   display: none;
+}
+
+/* 
+html[data-theme="dark"] .button:hover {
+  background-color: var(--slack-blue-30-on-white);
+}
+
+html[data-theme="light"] .button:hover {
+  background-color: var(--aubergine-active-30-on-white);
+} */
+
+.button {
+  background-color: var(--aubergine); /* Change color on hover */
+  border: 0;
+  color: white;
+}
+
+.button:hover {
+  background-color: var(--aubergine-active);
+  border: 0;
+  color: white;
+}
+
+.footer-spaced {
+  display: flex; 
+  gap: 20px; 
+  padding-bottom: 1rem
 }
