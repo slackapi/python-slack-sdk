@@ -36,6 +36,7 @@ class OAuthStateUtils:
         for cookie in cookies:
             values = cookie.split(";")
             for value in values:
-                if value.strip() == f"{self.cookie_name}={state}":
+                # handle quoted cookie values (e.g. due to base64 encoding)
+                if value.strip().replace('"', "").replace("'", "") == f"{self.cookie_name}={state}":
                     return True
         return False

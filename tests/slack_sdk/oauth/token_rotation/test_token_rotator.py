@@ -43,6 +43,31 @@ class TestTokenRotator(unittest.TestCase):
         )
         self.assertIsNone(should_not_be_refreshed)
 
+    def test_refresh_with_custom_values(self):
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxe.xoxp-1-initial",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+            bot_refresh_token="xoxe-1-initial",
+            bot_token_expires_in=43200,
+            custom_values={"foo": "bar"},
+        )
+        refreshed = self.token_rotator.perform_token_rotation(
+            installation=installation, minutes_before_expiration=60 * 24 * 365
+        )
+        self.assertIsNotNone(refreshed)
+        self.assertIsNotNone(refreshed.custom_values)
+
+        should_not_be_refreshed = self.token_rotator.perform_token_rotation(
+            installation=installation, minutes_before_expiration=1
+        )
+        self.assertIsNone(should_not_be_refreshed)
+
     def test_token_rotation_disabled(self):
         installation = Installation(
             app_id="A111",

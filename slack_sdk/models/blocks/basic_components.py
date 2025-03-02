@@ -170,7 +170,7 @@ class Option(JsonObject):
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
-    value_max_length = 75
+    value_max_length = 150
 
     def __init__(
         self,
@@ -201,7 +201,7 @@ class Option(JsonObject):
                 Cannot exceed 75 characters.
             value: A short string that identifies this particular option to your
                 application. It will be part of the payload when this option is selected
-                . Cannot exceed 75 characters.
+                . Cannot exceed 150 characters.
             description: A user-facing string that provides more details about
                 this option. Only supported in legacy message actions, not in blocks or
                 dialogs.

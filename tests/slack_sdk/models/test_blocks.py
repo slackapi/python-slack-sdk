@@ -127,6 +127,18 @@ class SectionBlockTests(unittest.TestCase):
         }
         self.assertDictEqual(input, SectionBlock(**input).to_dict())
 
+    def test_parse_2(self):
+        input = {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": "This is a plain text section block.",
+                "emoji": True,
+            },
+            "expand": True,
+        }
+        self.assertDictEqual(input, SectionBlock(**input).to_dict())
+
     def test_json(self):
         self.assertDictEqual(
             {
