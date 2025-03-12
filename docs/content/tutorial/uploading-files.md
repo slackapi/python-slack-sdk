@@ -182,11 +182,11 @@ By doing this, you'll be able to see the file within Slack.
 
 ### Specifying a channel when uploading a file {#specifying-channel}
 
-While this exercise was very informative, having to do these two steps every time we upload a file is a bit cumbersome. Instead, we can specify the `channel_id` parameter to the function. This is the more common way of uploading a file from an app.
+While this exercise was very informative, having to do these two steps every time we upload a file is a bit cumbersome. Instead, we can specify the `channel` parameter to the function. This is the more common way of uploading a file from an app.
 
 ```python
 upload_and_then_share_file = client.files_upload_v2(
-    channel_id="C123456789",
+    channel="C123456789",
     title="Test text data",
     filename="test.txt",
     content="Hi there! This is a text file!",
@@ -210,7 +210,7 @@ Next, within the same directory, execute the following code. We'll specify the f
 
 ```python
 upload_text_file = client.files_upload_v2(
-    channel_id="C123456789",
+    channel="C123456789",
     title="Test text data",
     file="./test.txt",
     initial_comment="Here is the file:",
