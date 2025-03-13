@@ -65,7 +65,9 @@ our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/v3
 
 ## Tasks
 
-### Testing (Unit Tests)
+### Testing
+
+#### Unit Tests
 
 When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests and formatting/linter with the below scripts.
 
@@ -89,7 +91,7 @@ $ ./scripts/run_unit_tests.sh tests/web/test_web_client.py
 
 You can rely on GitHub Actions builds for running the tests on a variety of Python runtimes.
 
-### Testing (Integration Tests with Real Slack APIs)
+#### Integration Tests with Real Slack APIs
 
 This project also has integration tests that verify the SDK works with the Slack API platform. As a preparation, you need to set [the required env variables](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/env_variable_names.py) properly. You don't need to setup all of them if you just want to run some of the tests. Commonly, `SLACK_SDK_TEST_BOT_TOKEN` and `SLACK_SDK_TEST_USER_TOKEN` are used for running `WebClient` tests.
 
@@ -104,6 +106,24 @@ Run a specific integration test:
 ```bash
 $ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 ```
+
+#### Develop Locally
+
+If you want to test the package locally you can.
+
+1. Build the package locally
+   - Run
+     ```bash
+     scripts/build_pypi_package.sh
+     ```
+   - This will create a `.whl` file in the `./dist` folder
+2. Use the built package
+   - Example `/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` was created
+   - From anywhere on your machine you can install this package to a project with
+     ```bash
+     pip install <project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl
+     ```
+   - It is also possible to include `slack_sdk @ file:///<project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` in a [requirements.txt](https://pip.pypa.io/en/stable/user_guide/#requirements-files) file
 
 ### Generating Documentation
 
