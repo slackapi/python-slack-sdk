@@ -123,7 +123,7 @@ If you want to test the package locally you can.
      ```bash
      pip install <project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl
      ```
-   - It is also possible to include `<project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` in a [requirements.txt](https://pip.pypa.io/en/stable/user_guide/#requirements-files) file
+   - It is also possible to include `slack_sdk @ file:///<project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` in a [requirements.txt](https://pip.pypa.io/en/stable/user_guide/#requirements-files) file
 
 ### Generating Documentation
 
