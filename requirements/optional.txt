@@ -13,5 +13,5 @@ google-cloud-storage>=2.7.0,<3
 SQLAlchemy>=1.4,<3
 # Socket Mode
 # websockets 9 is not compatible with Python 3.10
-websockets>=9.1,<15
+websockets>=9.1,<16
 websocket-client>=1,<2

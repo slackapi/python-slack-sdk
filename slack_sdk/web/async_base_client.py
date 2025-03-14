@@ -88,6 +88,17 @@ class AsyncBaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
+    # -------------------------
+    # accessors
+
+    @property
+    def logger(self) -> logging.Logger:
+        """The logger this client uses."""
+        return self._logger
+
+    # -------------------------
+    # api call
+
     async def api_call(
         self,
         api_method: str,

@@ -20,3 +20,7 @@ updates:
       docusaurus:
         patterns:
           - "@docusaurus/*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"

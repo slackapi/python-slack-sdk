@@ -75,7 +75,7 @@ const navbar = {
     },
     {
       label: 'Your apps',
-      to: 'https:api.slack.com/apps',
+      to: 'https://api.slack.com/apps',
       position: 'right',
       target: '_blank',
       rel: "noopener noreferrer"
