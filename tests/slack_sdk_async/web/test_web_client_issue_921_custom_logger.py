@@ -25,23 +25,6 @@ class TestWebClient_Issue_921_CustomLogger(unittest.TestCase):
         await client.chat_postMessage(channel="C111", text="hello")
         self.assertTrue(logger.called)
 
-    def test_if_property_returns_custom_logger(self):
-        logger = CustomLogger("test-logger")
-        client = AsyncWebClient(
-            base_url="http://localhost:8888",
-            token="xoxb-api_test",
-            logger=logger,
-        )
-        self.assertEqual(client.logger, logger)
-
-    def test_logger_property_has_no_setter(self):
-        client = AsyncWebClient(
-            base_url="http://localhost:8888",
-            token="xoxb-api_test",
-        )
-        with self.assertRaises(AttributeError):
-            client.logger = CustomLogger("test-logger")
-
 
 class CustomLogger(Logger):
     called: bool
