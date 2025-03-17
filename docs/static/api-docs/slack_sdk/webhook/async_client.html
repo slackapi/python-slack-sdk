@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.webhook.async_client API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -40,33 +51,6 @@ hljs.highlightAll();
 <span>(</span><span>url: str,<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>session: aiohttp.client.ClientSession | None = None,<br>trust_env_in_session: bool = False,<br>auth: aiohttp.helpers.BasicAuth | None = None,<br>default_headers: Dict[str, str] | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[slack_sdk.http_retry.async_handler.AsyncRetryHandler] | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>API client for Incoming Webhooks and <code>response_url</code></p>
-<p><a href="https://api.slack.com/messaging/webhooks">https://api.slack.com/messaging/webhooks</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>url</code></strong></dt>
-<dd>Complete URL to send data (e.g., <code>https://hooks.slack.com/XXX</code>)</dd>
-<dt><strong><code>timeout</code></strong></dt>
-<dd>Request timeout (in seconds)</dd>
-<dt><strong><code>ssl</code></strong></dt>
-<dd><code>ssl.SSLContext</code> to use for requests</dd>
-<dt><strong><code>proxy</code></strong></dt>
-<dd>Proxy URL (e.g., <code>localhost:9000</code>, <code>http://localhost:9000</code>)</dd>
-<dt><strong><code>session</code></strong></dt>
-<dd><code>aiohttp.ClientSession</code> instance</dd>
-<dt><strong><code>trust_env_in_session</code></strong></dt>
-<dd>True/False for <code>aiohttp.ClientSession</code></dd>
-<dt><strong><code>auth</code></strong></dt>
-<dd>Basic auth info for <code>aiohttp.ClientSession</code></dd>
-<dt><strong><code>default_headers</code></strong></dt>
-<dd>Request headers to add to all requests</dd>
-<dt><strong><code>user_agent_prefix</code></strong></dt>
-<dd>Prefix for User-Agent header value</dd>
-<dt><strong><code>user_agent_suffix</code></strong></dt>
-<dd>Suffix for User-Agent header value</dd>
-<dt><strong><code>logger</code></strong></dt>
-<dd>Custom logger</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -191,7 +175,7 @@ hljs.highlightAll();
             Webhook response
         &#34;&#34;&#34;
         return await self._perform_http_request(
-            body=_build_body(body),
+            body=_build_body(body),  # type: ignore[arg-type]
             headers=_build_request_headers(self.default_headers, headers),
         )
 
@@ -222,7 +206,7 @@ hljs.highlightAll();
             retry_request = RetryHttpRequest(
                 method=&#34;POST&#34;,
                 url=self.url,
-                headers=headers,
+                headers=headers,  # type: ignore[arg-type]
                 body_params=body,
             )
 
@@ -239,19 +223,19 @@ hljs.highlightAll();
                     self.logger.debug(f&#34;Sending a request - url: {self.url}, body: {str_body}, headers: {headers}&#34;)
 
                 try:
-                    async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:
+                    async with session.request(&#34;POST&#34;, self.url, **request_kwargs) as res:  # type: ignore[arg-type, union-attr] # noqa: E501
                         try:
                             response_body = await res.text()
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                                 data=response_body.encode(&#34;utf-8&#34;) if response_body is not None else None,
                             )
                         except aiohttp.ContentTypeError:
                             self.logger.debug(f&#34;No response data returned from the following API call: {self.url}&#34;)
                             retry_response = RetryHttpResponse(
                                 status_code=res.status,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
 
                         if res.status == 429:
@@ -278,7 +262,7 @@ hljs.highlightAll();
                                 url=self.url,
                                 status_code=res.status,
                                 body=response_body,
-                                headers=res.headers,
+                                headers=res.headers,  # type: ignore[arg-type]
                             )
                             _debug_log_response(self.logger, resp)
                             return resp
@@ -309,14 +293,41 @@ hljs.highlightAll();
 
             if resp is not None:
                 return resp
-            raise last_error
+            raise last_error  # type: ignore[misc]
 
         finally:
             if not use_running_session:
-                await session.close()
+                await session.close()  # type: ignore[union-attr]
 
         return resp</code></pre>
 </details>
+<div class="desc"><p>API client for Incoming Webhooks and <code>response_url</code></p>
+<p><a href="https://api.slack.com/messaging/webhooks">https://api.slack.com/messaging/webhooks</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>url</code></strong></dt>
+<dd>Complete URL to send data (e.g., <code>https://hooks.slack.com/XXX</code>)</dd>
+<dt><strong><code>timeout</code></strong></dt>
+<dd>Request timeout (in seconds)</dd>
+<dt><strong><code>ssl</code></strong></dt>
+<dd><code>ssl.SSLContext</code> to use for requests</dd>
+<dt><strong><code>proxy</code></strong></dt>
+<dd>Proxy URL (e.g., <code>localhost:9000</code>, <code>http://localhost:9000</code>)</dd>
+<dt><strong><code>session</code></strong></dt>
+<dd><code>aiohttp.ClientSession</code> instance</dd>
+<dt><strong><code>trust_env_in_session</code></strong></dt>
+<dd>True/False for <code>aiohttp.ClientSession</code></dd>
+<dt><strong><code>auth</code></strong></dt>
+<dd>Basic auth info for <code>aiohttp.ClientSession</code></dd>
+<dt><strong><code>default_headers</code></strong></dt>
+<dd>Request headers to add to all requests</dd>
+<dt><strong><code>user_agent_prefix</code></strong></dt>
+<dd>Prefix for User-Agent header value</dd>
+<dt><strong><code>user_agent_suffix</code></strong></dt>
+<dd>Suffix for User-Agent header value</dd>
+<dt><strong><code>logger</code></strong></dt>
+<dd>Custom logger</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.webhook.async_client.AsyncWebhookClient.auth"><code class="name">var <span class="ident">auth</span> : aiohttp.helpers.BasicAuth | None</code></dt>
@@ -366,6 +377,58 @@ hljs.highlightAll();
 <span>async def <span class="ident">send</span></span>(<span>self,<br>*,<br>text: str | None = None,<br>attachments: Sequence[Dict[str, Any] | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>response_type: str | None = None,<br>replace_original: bool | None = None,<br>delete_original: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>metadata: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send(
+    self,
+    *,
+    text: Optional[str] = None,
+    attachments: Optional[Sequence[Union[Dict[str, Any], Attachment]]] = None,
+    blocks: Optional[Sequence[Union[Dict[str, Any], Block]]] = None,
+    response_type: Optional[str] = None,
+    replace_original: Optional[bool] = None,
+    delete_original: Optional[bool] = None,
+    unfurl_links: Optional[bool] = None,
+    unfurl_media: Optional[bool] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+    headers: Optional[Dict[str, str]] = None,
+) -&gt; WebhookResponse:
+    &#34;&#34;&#34;Performs a Slack API request and returns the result.
+
+    Args:
+        text: The text message (even when having blocks, setting this as well is recommended as it works as fallback)
+        attachments: A collection of attachments
+        blocks: A collection of Block Kit UI components
+        response_type: The type of message (either &#39;in_channel&#39; or &#39;ephemeral&#39;)
+        replace_original: True if you use this option for response_url requests
+        delete_original: True if you use this option for response_url requests
+        unfurl_links: Option to indicate whether text url should unfurl
+        unfurl_media: Option to indicate whether media url should unfurl
+        metadata: Metadata attached to the message
+        headers: Request headers to append only for this request
+
+    Returns:
+        Webhook response
+    &#34;&#34;&#34;
+    return await self.send_dict(
+        # It&#39;s fine to have None value elements here
+        # because _build_body() filters them out when constructing the actual body data
+        body={
+            &#34;text&#34;: text,
+            &#34;attachments&#34;: attachments,
+            &#34;blocks&#34;: blocks,
+            &#34;response_type&#34;: response_type,
+            &#34;replace_original&#34;: replace_original,
+            &#34;delete_original&#34;: delete_original,
+            &#34;unfurl_links&#34;: unfurl_links,
+            &#34;unfurl_media&#34;: unfurl_media,
+            &#34;metadata&#34;: metadata,
+        },
+        headers=headers,
+    )</code></pre>
+</details>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -397,6 +460,25 @@ hljs.highlightAll();
 <span>async def <span class="ident">send_dict</span></span>(<span>self, body: Dict[str, Any], headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def send_dict(self, body: Dict[str, Any], headers: Optional[Dict[str, str]] = None) -&gt; WebhookResponse:
+    &#34;&#34;&#34;Performs a Slack API request and returns the result.
+
+    Args:
+        body: JSON data structure (it&#39;s still a dict at this point),
+            if you give this argument, body_params and files will be skipped
+        headers: Request headers to append only for this request
+    Returns:
+        Webhook response
+    &#34;&#34;&#34;
+    return await self._perform_http_request(
+        body=_build_body(body),  # type: ignore[arg-type]
+        headers=_build_request_headers(self.default_headers, headers),
+    )</code></pre>
+</details>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -449,7 +531,7 @@ if you give this argument, body_params and files will be skipped</dd>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.http_retry API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -82,12 +93,29 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>def <span class="ident">all_builtin_retry_handlers</span></span>(<span>) ‑> List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def all_builtin_retry_handlers() -&gt; List[RetryHandler]:
+    return [
+        connect_error_retry_handler,
+        rate_limit_error_retry_handler,
+    ]</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.http_retry.default_retry_handlers"><code class="name flex">
 <span>def <span class="ident">default_retry_handlers</span></span>(<span>) ‑> List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>]</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def default_retry_handlers() -&gt; List[RetryHandler]:
+    return [connect_error_retry_handler]</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -100,16 +128,6 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>(</span><span>backoff_factor: float = 0.5,<br>jitter: <a title="slack_sdk.http_retry.jitter.Jitter" href="jitter.html#slack_sdk.http_retry.jitter.Jitter">Jitter</a> | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
-see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
-<p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>backoff_factor</code></strong></dt>
-<dd>The factor for the backoff interval calculation</dd>
-<dt><strong><code>jitter</code></strong></dt>
-<dd>The jitter logic implementation</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -137,6 +155,16 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         sleep_duration = self.jitter.recalculate(interval)
         return sleep_duration</code></pre>
 </details>
+<div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
+<p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>backoff_factor</code></strong></dt>
+<dd>The factor for the backoff interval calculation</dd>
+<dt><strong><code>jitter</code></strong></dt>
+<dd>The jitter logic implementation</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></li>
@@ -166,15 +194,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>max_retry_count: int = 1,<br>interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;,<br>error_types: List[Type[Exception]] = [&lt;class &#x27;urllib.error.URLError&#x27;&gt;, &lt;class &#x27;ConnectionResetError&#x27;&gt;, &lt;class &#x27;http.client.RemoteDisconnected&#x27;&gt;])</span>
 </code></dt>
 <dd>
-<div class="desc"><p>RetryHandler that does retries for connectivity issues.</p>
-<p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>max_retry_count</code></strong></dt>
-<dd>The maximum times to do retries</dd>
-<dt><strong><code>interval_calculator</code></strong></dt>
-<dd>Pass an interval calculator for customizing the logic</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -216,6 +235,15 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
                 return True
         return False</code></pre>
 </details>
+<div class="desc"><p>RetryHandler that does retries for connectivity issues.</p>
+<p>RetryHandler interface.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_retry_count</code></strong></dt>
+<dd>The maximum times to do retries</dd>
+<dt><strong><code>interval_calculator</code></strong></dt>
+<dd>Pass an interval calculator for customizing the logic</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a></li>
@@ -235,13 +263,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>fixed_internal: float = 0.5)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Retry interval calculator that uses a fixed value.</p>
-<p>Retry interval calculator that uses a fixed value.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>fixed_internal</code></strong></dt>
-<dd>The fixed interval seconds</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -262,6 +283,13 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
     def calculate_sleep_duration(self, current_attempt: int) -&gt; float:
         return self.fixed_interval</code></pre>
 </details>
+<div class="desc"><p>Retry interval calculator that uses a fixed value.</p>
+<p>Retry interval calculator that uses a fixed value.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>fixed_internal</code></strong></dt>
+<dd>The fixed interval seconds</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a></li>
@@ -287,7 +315,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>*,<br>method: str,<br>url: str,<br>headers: Dict[str, str | List[str]],<br>body_params: Dict[str, Any] | None = None,<br>data: bytes | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>HTTP request representation</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -319,12 +346,13 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
     @classmethod
     def from_urllib_http_request(cls, req: Request) -&gt; &#34;HttpRequest&#34;:
         return HttpRequest(
-            method=req.method,
+            method=req.method,  # type: ignore[arg-type]
             url=req.full_url,
             headers={k: v if isinstance(v, list) else [v] for k, v in req.headers.items()},
-            data=req.data,
+            data=req.data,  # type: ignore[arg-type]
         )</code></pre>
 </details>
+<div class="desc"><p>HTTP request representation</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.http_retry.HttpRequest.body_params"><code class="name">var <span class="ident">body_params</span> : Dict[str, Any] | None</code></dt>
@@ -363,7 +391,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>*,<br>status_code: str | int,<br>headers: Dict[str, str | List[str]],<br>body: Dict[str, Any] | None = None,<br>data: bytes | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>HTTP response representation</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -372,7 +399,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
     &#34;&#34;&#34;HTTP response representation&#34;&#34;&#34;
 
     status_code: int
-    headers: Dict[str, List[str]]
+    headers: Dict[str, Union[List[str], str]]
     body: Optional[Dict[str, Any]]
     data: Optional[bytes]
 
@@ -389,6 +416,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         self.body = body
         self.data = data</code></pre>
 </details>
+<div class="desc"><p>HTTP response representation</p></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.http_retry.HttpResponse.body"><code class="name">var <span class="ident">body</span> : Dict[str, Any] | None</code></dt>
@@ -399,7 +427,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
-<dt id="slack_sdk.http_retry.HttpResponse.headers"><code class="name">var <span class="ident">headers</span> : Dict[str, List[str]]</code></dt>
+<dt id="slack_sdk.http_retry.HttpResponse.headers"><code class="name">var <span class="ident">headers</span> : Dict[str, str | List[str]]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -413,7 +441,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>class <span class="ident">Jitter</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Jitter interface</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -433,6 +460,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         &#34;&#34;&#34;
         raise NotImplementedError()</code></pre>
 </details>
+<div class="desc"><p>Jitter interface</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.jitter.RandomJitter" href="jitter.html#slack_sdk.http_retry.jitter.RandomJitter">RandomJitter</a></li>
@@ -443,6 +471,22 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>def <span class="ident">recalculate</span></span>(<span>self, duration: float) ‑> float</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def recalculate(self, duration: float) -&gt; float:
+    &#34;&#34;&#34;Recalculate the given duration.
+    see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+
+    Args:
+        duration: the duration in seconds
+
+    Returns:
+        A new duration that the jitter amount is added
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
 <div class="desc"><p>Recalculate the given duration.
 see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
 <h2 id="args">Args</h2>
@@ -460,15 +504,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>max_retry_count: int = 1,<br>interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>RetryHandler that does retries for rate limited errors.</p>
-<p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>max_retry_count</code></strong></dt>
-<dd>The maximum times to do retries</dd>
-<dt><strong><code>interval_calculator</code></strong></dt>
-<dd>Pass an interval calculator for customizing the logic</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -495,7 +530,7 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         error: Optional[Exception] = None,
     ) -&gt; None:
         if response is None:
-            raise error
+            raise error  # type: ignore[misc]
 
         state.next_attempt_requested = True
         retry_after_header_name: Optional[str] = None
@@ -506,12 +541,21 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
         duration = 1
         if retry_after_header_name is None:
             # This situation usually does not arise. Just in case.
-            duration += random.random()
+            duration += random.random()  # type: ignore[assignment]
         else:
-            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()
+            duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[index, assignment] # noqa: E501
         time.sleep(duration)
         state.increment_current_attempt()</code></pre>
 </details>
+<div class="desc"><p>RetryHandler that does retries for rate limited errors.</p>
+<p>RetryHandler interface.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_retry_count</code></strong></dt>
+<dd>The maximum times to do retries</dd>
+<dt><strong><code>interval_calculator</code></strong></dt>
+<dd>Pass an interval calculator for customizing the logic</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.handler.RetryHandler" href="handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a></li>
@@ -522,6 +566,36 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>def <span class="ident">prepare_for_next_attempt</span></span>(<span>self,<br>*,<br>state: <a title="slack_sdk.http_retry.state.RetryState" href="state.html#slack_sdk.http_retry.state.RetryState">RetryState</a>,<br>request: <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a>,<br>response: <a title="slack_sdk.http_retry.response.HttpResponse" href="response.html#slack_sdk.http_retry.response.HttpResponse">HttpResponse</a> | None = None,<br>error: Exception | None = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_for_next_attempt(
+    self,
+    *,
+    state: RetryState,
+    request: HttpRequest,
+    response: Optional[HttpResponse] = None,
+    error: Optional[Exception] = None,
+) -&gt; None:
+    if response is None:
+        raise error  # type: ignore[misc]
+
+    state.next_attempt_requested = True
+    retry_after_header_name: Optional[str] = None
+    for k in response.headers.keys():
+        if k.lower() == &#34;retry-after&#34;:
+            retry_after_header_name = k
+            break
+    duration = 1
+    if retry_after_header_name is None:
+        # This situation usually does not arise. Just in case.
+        duration += random.random()  # type: ignore[assignment]
+    else:
+        duration = int(response.headers.get(retry_after_header_name)[0]) + random.random()  # type: ignore[index, assignment] # noqa: E501
+    time.sleep(duration)
+    state.increment_current_attempt()</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -540,16 +614,6 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <span>(</span><span>max_retry_count: int = 1,<br>interval_calculator: <a title="slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator" href="interval_calculator.html#slack_sdk.http_retry.interval_calculator.RetryIntervalCalculator">RetryIntervalCalculator</a> = &lt;slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator object&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>RetryHandler interface.
-You can pass an array of handlers to customize retry logics in supported API clients.</p>
-<p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>max_retry_count</code></strong></dt>
-<dd>The maximum times to do retries</dd>
-<dt><strong><code>interval_calculator</code></strong></dt>
-<dd>Pass an interval calculator for customizing the logic</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -616,6 +680,16 @@ You can pass an array of handlers to customize retry logics in supported API cli
         time.sleep(duration)
         state.increment_current_attempt()</code></pre>
 </details>
+<div class="desc"><p>RetryHandler interface.
+You can pass an array of handlers to customize retry logics in supported API clients.</p>
+<p>RetryHandler interface.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_retry_count</code></strong></dt>
+<dd>The maximum times to do retries</dd>
+<dt><strong><code>interval_calculator</code></strong></dt>
+<dd>Pass an interval calculator for customizing the logic</dd>
+</dl></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.builtin_handlers.ConnectionErrorRetryHandler" href="builtin_handlers.html#slack_sdk.http_retry.builtin_handlers.ConnectionErrorRetryHandler">ConnectionErrorRetryHandler</a></li>
@@ -639,12 +713,50 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>def <span class="ident">can_retry</span></span>(<span>self,<br>*,<br>state: <a title="slack_sdk.http_retry.state.RetryState" href="state.html#slack_sdk.http_retry.state.RetryState">RetryState</a>,<br>request: <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a>,<br>response: <a title="slack_sdk.http_retry.response.HttpResponse" href="response.html#slack_sdk.http_retry.response.HttpResponse">HttpResponse</a> | None = None,<br>error: Exception | None = None) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def can_retry(
+    self,
+    *,
+    state: RetryState,
+    request: HttpRequest,
+    response: Optional[HttpResponse] = None,
+    error: Optional[Exception] = None,
+) -&gt; bool:
+    if state.current_attempt &gt;= self.max_retry_count:
+        return False
+    return self._can_retry(
+        state=state,
+        request=request,
+        response=response,
+        error=error,
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.http_retry.RetryHandler.prepare_for_next_attempt"><code class="name flex">
 <span>def <span class="ident">prepare_for_next_attempt</span></span>(<span>self,<br>*,<br>state: <a title="slack_sdk.http_retry.state.RetryState" href="state.html#slack_sdk.http_retry.state.RetryState">RetryState</a>,<br>request: <a title="slack_sdk.http_retry.request.HttpRequest" href="request.html#slack_sdk.http_retry.request.HttpRequest">HttpRequest</a>,<br>response: <a title="slack_sdk.http_retry.response.HttpResponse" href="response.html#slack_sdk.http_retry.response.HttpResponse">HttpResponse</a> | None = None,<br>error: Exception | None = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare_for_next_attempt(
+    self,
+    *,
+    state: RetryState,
+    request: HttpRequest,
+    response: Optional[HttpResponse] = None,
+    error: Optional[Exception] = None,
+) -&gt; None:
+    state.next_attempt_requested = True
+    duration = self.interval_calculator.calculate_sleep_duration(state.current_attempt)
+    time.sleep(duration)
+    state.increment_current_attempt()</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -653,7 +765,6 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>class <span class="ident">RetryIntervalCalculator</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Retry interval calculator interface.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -671,6 +782,7 @@ You can pass an array of handlers to customize retry logics in supported API cli
         &#34;&#34;&#34;
         raise NotImplementedError()</code></pre>
 </details>
+<div class="desc"><p>Retry interval calculator interface.</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator" href="builtin_interval_calculators.html#slack_sdk.http_retry.builtin_interval_calculators.BackoffRetryIntervalCalculator">BackoffRetryIntervalCalculator</a></li>
@@ -682,6 +794,20 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>def <span class="ident">calculate_sleep_duration</span></span>(<span>self, current_attempt: int) ‑> float</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calculate_sleep_duration(self, current_attempt: int) -&gt; float:
+    &#34;&#34;&#34;Calculates an interval duration in seconds.
+
+    Args:
+        current_attempt: the number of the current attempt (zero-origin; 0 means no retries are done so far)
+    Returns:
+        calculated interval duration in seconds
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
 <div class="desc"><p>Calculates an interval duration in seconds.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -698,7 +824,6 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>(</span><span>*, current_attempt: int = 0, custom_values: Dict[str, Any] | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -722,6 +847,7 @@ You can pass an array of handlers to customize retry logics in supported API cli
         self.current_attempt += 1
         return self.current_attempt</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.http_retry.RetryState.current_attempt"><code class="name">var <span class="ident">current_attempt</span> : int</code></dt>
@@ -743,6 +869,14 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <span>def <span class="ident">increment_current_attempt</span></span>(<span>self) ‑> int</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def increment_current_attempt(self) -&gt; int:
+    self.current_attempt += 1
+    return self.current_attempt</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -860,7 +994,7 @@ You can pass an array of handlers to customize retry logics in supported API cli
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

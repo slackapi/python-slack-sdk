@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.models.attachments API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -40,9 +51,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>name: str,<br>text: str,<br>selected_option: <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -73,6 +81,9 @@ hljs.highlightAll();
             json[&#34;selected_options&#34;] = extract_json([self.selected_option], &#34;action&#34;)
         return json</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a></li>
@@ -98,7 +109,6 @@ hljs.highlightAll();
 <dl>
 <dt id="slack_sdk.models.attachments.AbstractActionSelector.data_source"><code class="name">prop <span class="ident">data_source</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -108,6 +118,7 @@ hljs.highlightAll();
 def data_source(self) -&gt; str:
     pass</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -116,6 +127,14 @@ def data_source(self) -&gt; str:
 <span>def <span class="ident">data_source_valid</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;data_source&#34;, DataSourceTypes)
+def data_source_valid(self):
+    return self.data_source in self.DataSourceTypes</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -136,9 +155,6 @@ def data_source(self) -&gt; str:
 <span>(</span><span>*, text: str, subtype: str, name: str | None = None, url: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -168,11 +184,14 @@ def data_source(self) -&gt; str:
     def name_or_url_present(self):
         return self.name is not None or self.url is not None
 
-    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(self) -&gt; dict:
         json = super().to_dict()
         json[&#34;type&#34;] = self.subtype
         return json</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -197,6 +216,14 @@ def data_source(self) -&gt; str:
 <span>def <span class="ident">name_or_url_present</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;name or url attribute is required&#34;)
+def name_or_url_present(self):
+    return self.name is not None or self.url is not None</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -216,33 +243,6 @@ def data_source(self) -&gt; str:
 <span>(</span><span>*,<br>name: str,<br>text: str,<br>value: str,<br>confirm: <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a> | None = None,<br>style: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>Simple button for use inside attachments</p>
-<p><a href="https://api.slack.com/legacy/message-buttons">https://api.slack.com/legacy/message-buttons</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong></dt>
-<dd>Name this specific action. The name will be returned to your
-Action URL along with the message's callback_id when this action is
-invoked. Use it to identify this particular response path.</dd>
-<dt><strong><code>text</code></strong></dt>
-<dd>The user-facing label for the message button or menu
-representing this action. Cannot contain markup.</dd>
-<dt><strong><code>value</code></strong></dt>
-<dd>Provide a string identifying this specific action. It will be
-sent to your Action URL along with the name and attachment's
-callback_id . If providing multiple actions with the same name, value
-can be strategically used to differentiate intent. Cannot exceed 2000
-characters.</dd>
-<dt><strong><code>confirm</code></strong></dt>
-<dd>a ConfirmObject that will appear in a dialog to confirm
-user's choice.</dd>
-<dt><strong><code>style</code></strong></dt>
-<dd>Leave blank to indicate that this is an ordinary button. Use
-"primary" or "danger" to mark important buttons.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -302,6 +302,33 @@ user's choice.</dd>
             json[&#34;confirm&#34;] = extract_json(self.confirm, &#34;action&#34;)
         return json</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>Simple button for use inside attachments</p>
+<p><a href="https://api.slack.com/legacy/message-buttons">https://api.slack.com/legacy/message-buttons</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name this specific action. The name will be returned to your
+Action URL along with the message's callback_id when this action is
+invoked. Use it to identify this particular response path.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The user-facing label for the message button or menu
+representing this action. Cannot contain markup.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>Provide a string identifying this specific action. It will be
+sent to your Action URL along with the name and attachment's
+callback_id . If providing multiple actions with the same name, value
+can be strategically used to differentiate intent. Cannot exceed 2000
+characters.</dd>
+<dt><strong><code>confirm</code></strong></dt>
+<dd>a ConfirmObject that will appear in a dialog to confirm
+user's choice.</dd>
+<dt><strong><code>style</code></strong></dt>
+<dd>Leave blank to indicate that this is an ordinary button. Use
+"primary" or "danger" to mark important buttons.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a></li>
@@ -319,7 +346,6 @@ user's choice.</dd>
 <dl>
 <dt id="slack_sdk.models.attachments.ActionButton.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -328,6 +354,7 @@ user's choice.</dd>
 def attributes(self):
     return super().attributes.union({&#34;style&#34;, &#34;value&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -336,12 +363,28 @@ def attributes(self):
 <span>def <span class="ident">style_valid</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;style&#34;, ButtonStyles)
+def style_valid(self):
+    return self.style is None or self.style in ButtonStyles</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.attachments.ActionButton.value_length"><code class="name flex">
 <span>def <span class="ident">value_length</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
+def value_length(self):
+    return len(self.value) &lt;= self.value_max_length</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -361,25 +404,6 @@ def attributes(self):
 <span>(</span><span>name: str,<br>text: str,<br>selected_channel: <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>Automatically populate the selector with a list of public channels in the
-workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong></dt>
-<dd>Name this specific action. The name will be returned to your
-Action URL along with the message's callback_id when this action is
-invoked. Use it to identify this particular response path.</dd>
-<dt><strong><code>text</code></strong></dt>
-<dd>The user-facing label for the message button or menu
-representing this action. Cannot contain markup.</dd>
-<dt><strong><code>selected_channel</code></strong></dt>
-<dd>An Option object to pre-select as the default
-value.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -405,6 +429,25 @@ value.</dd>
         &#34;&#34;&#34;
         super().__init__(name=name, text=text, selected_option=selected_channel)</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>Automatically populate the selector with a list of public channels in the
+workspace.</p>
+<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name this specific action. The name will be returned to your
+Action URL along with the message's callback_id when this action is
+invoked. Use it to identify this particular response path.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The user-facing label for the message button or menu
+representing this action. Cannot contain markup.</dd>
+<dt><strong><code>selected_channel</code></strong></dt>
+<dd>An Option object to pre-select as the default
+value.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.AbstractActionSelector" href="#slack_sdk.models.attachments.AbstractActionSelector">AbstractActionSelector</a></li>
@@ -437,25 +480,6 @@ value.</dd>
 <span>(</span><span>name: str,<br>text: str,<br>selected_conversation: <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>Automatically populate the selector with a list of conversations they have in
-the workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong></dt>
-<dd>Name this specific action. The name will be returned to your
-Action URL along with the message's callback_id when this action is
-invoked. Use it to identify this particular response path.</dd>
-<dt><strong><code>text</code></strong></dt>
-<dd>The user-facing label for the message button or menu
-representing this action. Cannot contain markup.</dd>
-<dt><strong><code>selected_conversation</code></strong></dt>
-<dd>An Option object to pre-select as the default
-value.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -481,6 +505,25 @@ value.</dd>
         &#34;&#34;&#34;
         super().__init__(name=name, text=text, selected_option=selected_conversation)</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>Automatically populate the selector with a list of conversations they have in
+the workspace.</p>
+<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name this specific action. The name will be returned to your
+Action URL along with the message's callback_id when this action is
+invoked. Use it to identify this particular response path.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The user-facing label for the message button or menu
+representing this action. Cannot contain markup.</dd>
+<dt><strong><code>selected_conversation</code></strong></dt>
+<dd>An Option object to pre-select as the default
+value.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.AbstractActionSelector" href="#slack_sdk.models.attachments.AbstractActionSelector">AbstractActionSelector</a></li>
@@ -513,27 +556,6 @@ value.</dd>
 <span>(</span><span>*,<br>name: str,<br>text: str,<br>selected_option: <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None,<br>min_query_length: int | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>Populate a message select menu from your own application dynamically.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically">https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong></dt>
-<dd>Name this specific action. The name will be returned to your
-Action URL along with the message's callback_id when this action is
-invoked. Use it to identify this particular response path.</dd>
-<dt><strong><code>text</code></strong></dt>
-<dd>The user-facing label for the message button or menu
-representing this action. Cannot contain markup.</dd>
-<dt><strong><code>selected_option</code></strong></dt>
-<dd>An Option object to pre-select as the default
-value.</dd>
-<dt><strong><code>min_query_length</code></strong></dt>
-<dd>Specify the number of characters that must be typed
-by a user into a dynamic select menu before dispatching to the app.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -542,7 +564,7 @@ by a user into a dynamic select menu before dispatching to the app.</dd>
     data_source = &#34;external&#34;
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;min_query_length&#34;})
 
     def __init__(
@@ -572,6 +594,27 @@ by a user into a dynamic select menu before dispatching to the app.</dd>
         super().__init__(name=name, text=text, selected_option=selected_option)
         self.min_query_length = min_query_length</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>Populate a message select menu from your own application dynamically.</p>
+<p><a href="https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically">https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name this specific action. The name will be returned to your
+Action URL along with the message's callback_id when this action is
+invoked. Use it to identify this particular response path.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The user-facing label for the message button or menu
+representing this action. Cannot contain markup.</dd>
+<dt><strong><code>selected_option</code></strong></dt>
+<dd>An Option object to pre-select as the default
+value.</dd>
+<dt><strong><code>min_query_length</code></strong></dt>
+<dd>Specify the number of characters that must be typed
+by a user into a dynamic select menu before dispatching to the app.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.AbstractActionSelector" href="#slack_sdk.models.attachments.AbstractActionSelector">AbstractActionSelector</a></li>
@@ -590,15 +633,15 @@ by a user into a dynamic select menu before dispatching to the app.</dd>
 <dl>
 <dt id="slack_sdk.models.attachments.ActionExternalSelector.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;min_query_length&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -618,18 +661,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*, text: str, url: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>A simple interactive button that just opens a URL</p>
-<p><a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>text</code></strong></dt>
-<dd>text to display on the button, eg 'Click Me!"</dd>
-<dt><strong><code>url</code></strong></dt>
-<dd>the URL to open</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -646,6 +677,18 @@ def attributes(self) -&gt; Set[str]:
         &#34;&#34;&#34;
         super().__init__(text=text, url=url, subtype=&#34;button&#34;)</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>A simple interactive button that just opens a URL</p>
+<p><a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong></dt>
+<dd>text to display on the button, eg 'Click Me!"</dd>
+<dt><strong><code>url</code></strong></dt>
+<dd>the URL to open</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a></li>
@@ -669,24 +712,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>name: str,<br>text: str,<br>selected_user: <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
-<p>Automatically populate the selector with a list of users in the workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members">https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>name</code></strong></dt>
-<dd>Name this specific action. The name will be returned to your
-Action URL along with the message's callback_id when this action is
-invoked. Use it to identify this particular response path.</dd>
-<dt><strong><code>text</code></strong></dt>
-<dd>The user-facing label for the message button or menu
-representing this action. Cannot contain markup.</dd>
-<dt><strong><code>selected_user</code></strong></dt>
-<dd>An Option object to pre-select as the default
-value.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -710,6 +735,24 @@ value.</dd>
         &#34;&#34;&#34;
         super().__init__(name=name, text=text, selected_option=selected_user)</code></pre>
 </details>
+<div class="desc"><p>Action in attachments
+<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
+<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<p>Automatically populate the selector with a list of users in the workspace.</p>
+<p><a href="https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members">https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>Name this specific action. The name will be returned to your
+Action URL along with the message's callback_id when this action is
+invoked. Use it to identify this particular response path.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The user-facing label for the message button or menu
+representing this action. Cannot contain markup.</dd>
+<dt><strong><code>selected_user</code></strong></dt>
+<dd>An Option object to pre-select as the default
+value.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.AbstractActionSelector" href="#slack_sdk.models.attachments.AbstractActionSelector">AbstractActionSelector</a></li>
@@ -742,81 +785,6 @@ value.</dd>
 <span>(</span><span>*,<br>text: str,<br>fallback: str | None = None,<br>fields: Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>] | None = None,<br>color: str | None = None,<br>markdown_in: Sequence[str] | None = None,<br>title: str | None = None,<br>title_link: str | None = None,<br>pretext: str | None = None,<br>author_name: str | None = None,<br>author_subname: str | None = None,<br>author_link: str | None = None,<br>author_icon: str | None = None,<br>image_url: str | None = None,<br>thumb_url: str | None = None,<br>footer: str | None = None,<br>footer_icon: str | None = None,<br>ts: int | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>A supplemental object that will display after the rest of the message.
-Considered legacy - recommended replacement is to use message blocks instead.</p>
-<p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>text</code></strong></dt>
-<dd>The main body text of the attachment. It can be formatted as
-plain text, or with markdown by including it in the markdown_in
-parameter. The content will automatically collapse if it contains 700+
-characters or 5+ linebreaks, and will display a "Show more&hellip;" link to
-expand the content.</dd>
-<dt><strong><code>fallback</code></strong></dt>
-<dd>A plain text summary of the attachment used in clients that
-don't show formatted text (eg. IRC, mobile notifications).</dd>
-<dt><strong><code>fields</code></strong></dt>
-<dd>An array of AttachmentField objects that get displayed in a
-table-like way. For best results, include no more than 2-3 field
-objects.</dd>
-<dt><strong><code>color</code></strong></dt>
-<dd>Changes the color of the border on the left side of this attachment
-from the default gray. Can be any hex color code (eg. #439FE0)</dd>
-<dt><strong><code>markdown_in</code></strong></dt>
-<dd>An array of field names that should be formatted by
-markdown syntax - allowed values: "pretext", "text", "fields"</dd>
-<dt><strong><code>title</code></strong></dt>
-<dd>Large title text near the top of the attachment.</dd>
-<dt><strong><code>title_link</code></strong></dt>
-<dd>A valid URL that turns the title text into a hyperlink.</dd>
-<dt><strong><code>pretext</code></strong></dt>
-<dd>Text that appears above the message attachment block. It can
-be formatted as plain text, or with markdown by including it in the
-markdown_in parameter.</dd>
-<dt><strong><code>author_name</code></strong></dt>
-<dd>Small text used to display the author's name.</dd>
-<dt><strong><code>author_subname</code></strong></dt>
-<dd>Small text used to display the author's sub name.</dd>
-<dt><strong><code>author_link</code></strong></dt>
-<dd>A valid URL that will hyperlink the author_name text.
-Will only work if author_name is present.</dd>
-<dt><strong><code>author_icon</code></strong></dt>
-<dd>A valid URL that displays a small 16px by 16px image to
-the left of the author_name text. Will only work if author_name is
-present.</dd>
-<dt><strong><code>image_url</code></strong></dt>
-<dd>A valid URL to an image file that will be displayed at the
-bottom of the attachment. We support GIF, JPEG, PNG, and BMP formats.
-Large images will be resized to a maximum width of 360px or a maximum
-height of 500px, while still maintaining the original aspect ratio.
-Cannot be used with thumb_url.</dd>
-<dt><strong><code>thumb_url</code></strong></dt>
-<dd>A valid URL to an image file that will be displayed as a
-thumbnail on the right side of a message attachment. We currently
-support the following formats: GIF, JPEG, PNG, and BMP. The thumbnail's
-longest dimension will be scaled down to 75px while maintaining the
-aspect ratio of the image. The filesize of the image must also be less
-than 500 KB. For best results, please use images that are already 75px
-by 75px.</dd>
-<dt><strong><code>footer</code></strong></dt>
-<dd>Some brief text to help contextualize and identify an
-attachment. Limited to 300 characters, and may be truncated further when
-displayed to users in environments with limited screen real estate.</dd>
-<dt><strong><code>footer_icon</code></strong></dt>
-<dd>A valid URL to an image file that will be displayed
-beside the footer text. Will only work if footer is present. We'll
-render what you provide at 16px by 16px. It's best to use an image that
-is similarly sized.</dd>
-<dt><strong><code>ts</code></strong></dt>
-<dd>An integer Unix timestamp that is used to related your attachment
-to a specific time. The attachment will display the additional timestamp
-value as part of the attachment's footer. Your message's timestamp will
-be displayed in varying ways, depending on how far in the past or future
-it is, relative to the present. Form factors, like mobile versus
-desktop may also transform its rendered appearance.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -977,7 +945,7 @@ desktop may also transform its rendered appearance.</dd>
     def author_link_without_author_icon(self) -&gt; bool:
         return self.author_link is None or self.author_icon is not None
 
-    def to_dict(self) -&gt; dict:  # skipcq: PYL-W0221
+    def to_dict(self) -&gt; dict:
         json = super().to_dict()
         if self.fields is not None:
             json[&#34;fields&#34;] = extract_json(self.fields)
@@ -985,271 +953,12 @@ desktop may also transform its rendered appearance.</dd>
             json[&#34;mrkdwn_in&#34;] = self.markdown_in
         return json</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
-<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="slack_sdk.models.attachments.BlockAttachment" href="#slack_sdk.models.attachments.BlockAttachment">BlockAttachment</a></li>
-<li><a title="slack_sdk.models.attachments.InteractiveAttachment" href="#slack_sdk.models.attachments.InteractiveAttachment">InteractiveAttachment</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.Attachment.MarkdownFields"><code class="name">var <span class="ident">MarkdownFields</span></code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.fields"><code class="name">var <span class="ident">fields</span> : Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.footer_max_length"><code class="name">var <span class="ident">footer_max_length</span></code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_icon"><code class="name flex">
-<span>def <span class="ident">author_link_without_author_icon</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_name"><code class="name flex">
-<span>def <span class="ident">author_link_without_author_name</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.color_valid"><code class="name flex">
-<span>def <span class="ident">color_valid</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.footer_length"><code class="name flex">
-<span>def <span class="ident">footer_length</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.image_url_and_thumb_url_populated"><code class="name flex">
-<span>def <span class="ident">image_url_and_thumb_url_populated</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.markdown_in_valid"><code class="name flex">
-<span>def <span class="ident">markdown_in_valid</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="slack_sdk.models.attachments.Attachment.ts_without_footer"><code class="name flex">
-<span>def <span class="ident">ts_without_footer</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="slack_sdk.models.attachments.AttachmentField"><code class="flex name class">
-<span>class <span class="ident">AttachmentField</span></span>
-<span>(</span><span>*, title: str | None = None, value: str | None = None, short: bool = True)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class AttachmentField(JsonObject):
-    attributes = {&#34;short&#34;, &#34;title&#34;, &#34;value&#34;}
-
-    def __init__(
-        self,
-        *,
-        title: Optional[str] = None,
-        value: Optional[str] = None,
-        short: bool = True,
-    ):
-        self.title = title
-        self.value = value
-        self.short = short</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
-<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.AttachmentField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
-<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="slack_sdk.models.attachments.BlockAttachment"><code class="flex name class">
-<span>class <span class="ident">BlockAttachment</span></span>
-<span>(</span><span>*,<br>blocks: Sequence[<a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>],<br>color: str | None = None,<br>fallback: str | None = None)</span>
-</code></dt>
-<dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>A bridge between legacy attachments and Block Kit formatting - pass a list of
-Block objects directly to this attachment.</p>
+<p>A supplemental object that will display after the rest of the message.
+Considered legacy - recommended replacement is to use message blocks instead.</p>
 <p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>blocks</code></strong></dt>
-<dd>a sequence of Block objects</dd>
-<dt><strong><code>color</code></strong></dt>
-<dd>Changes the color of the border on the left side of this
-attachment from the default gray. Can either be one of "good" (green),
-"warning" (yellow), "danger" (red), or any hex color code (eg. #439FE0)</dd>
-<dt><strong><code>fallback</code></strong></dt>
-<dd>fallback text</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class BlockAttachment(Attachment):
-    blocks: List[Block]
-
-    @property
-    def attributes(self):
-        return super().attributes.union({&#34;blocks&#34;, &#34;color&#34;})
-
-    def __init__(
-        self,
-        *,
-        blocks: Sequence[Block],
-        color: Optional[str] = None,
-        fallback: Optional[str] = None,
-    ):
-        &#34;&#34;&#34;
-        A bridge between legacy attachments and Block Kit formatting - pass a list of
-        Block objects directly to this attachment.
-
-        https://api.slack.com/reference/messaging/attachments#fields
-
-        Args:
-            blocks: a sequence of Block objects
-            color: Changes the color of the border on the left side of this
-                attachment from the default gray. Can either be one of &#34;good&#34; (green),
-                &#34;warning&#34; (yellow), &#34;danger&#34; (red), or any hex color code (eg. #439FE0)
-            fallback: fallback text
-        &#34;&#34;&#34;
-        super().__init__(text=&#34;&#34;, fallback=fallback, color=color)
-        self.blocks = list(blocks)
-
-    @JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
-    def fields_attribute_absent(self) -&gt; bool:
-        return not self.fields
-
-    def to_dict(self) -&gt; dict:
-        json = super().to_dict()
-        json.update({&#34;blocks&#34;: extract_json(self.blocks)})
-        del json[&#34;fields&#34;]  # cannot supply fields and blocks at the same time
-        return json</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></li>
-<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
-<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.BlockAttachment.blocks"><code class="name">var <span class="ident">blocks</span> : List[<a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</code></dt>
-<dd>
-<div class="desc"><p>The type of the None singleton.</p></div>
-</dd>
-</dl>
-<h3>Instance variables</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.BlockAttachment.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
-<dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def attributes(self):
-    return super().attributes.union({&#34;blocks&#34;, &#34;color&#34;})</code></pre>
-</details>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="slack_sdk.models.attachments.BlockAttachment.fields_attribute_absent"><code class="name flex">
-<span>def <span class="ident">fields_attribute_absent</span></span>(<span>self) ‑> bool</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></b></code>:
-<ul class="hlist">
-<li><code><a title="slack_sdk.models.attachments.Attachment.MarkdownFields" href="#slack_sdk.models.attachments.Attachment.MarkdownFields">MarkdownFields</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.fields" href="#slack_sdk.models.attachments.Attachment.fields">fields</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.footer_max_length" href="#slack_sdk.models.attachments.Attachment.footer_max_length">footer_max_length</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
-<li><code><a title="slack_sdk.models.attachments.Attachment.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="slack_sdk.models.attachments.InteractiveAttachment"><code class="flex name class">
-<span>class <span class="ident">InteractiveAttachment</span></span>
-<span>(</span><span>*,<br>actions: Sequence[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>],<br>callback_id: str,<br>text: str,<br>fallback: str | None = None,<br>fields: Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>] | None = None,<br>color: str | None = None,<br>markdown_in: Sequence[str] | None = None,<br>title: str | None = None,<br>title_link: str | None = None,<br>pretext: str | None = None,<br>author_name: str | None = None,<br>author_subname: str | None = None,<br>author_link: str | None = None,<br>author_icon: str | None = None,<br>image_url: str | None = None,<br>thumb_url: str | None = None,<br>footer: str | None = None,<br>footer_icon: str | None = None,<br>ts: int | None = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>An Attachment, but designed to contain interactive Actions
-Considered legacy - recommended replacement is to use message blocks instead.</p>
-<p><a href="https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields">https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields</a>
-<a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>actions</code></strong></dt>
-<dd>A collection of Action objects to include in the attachment.
-Cannot exceed 5 elements.</dd>
-<dt><strong><code>callback_id</code></strong></dt>
-<dd>The ID used to identify this attachment. Will be part of the
-payload sent back to your application.</dd>
 <dt><strong><code>text</code></strong></dt>
 <dd>The main body text of the attachment. It can be formatted as
 plain text, or with markdown by including it in the markdown_in
@@ -1265,8 +974,7 @@ table-like way. For best results, include no more than 2-3 field
 objects.</dd>
 <dt><strong><code>color</code></strong></dt>
 <dd>Changes the color of the border on the left side of this attachment
-from the default gray. Can either be one of "good" (green), "warning"
-(yellow), "danger" (red), or any hex color code (eg. #439FE0)</dd>
+from the default gray. Can be any hex color code (eg. #439FE0)</dd>
 <dt><strong><code>markdown_in</code></strong></dt>
 <dd>An array of field names that should be formatted by
 markdown syntax - allowed values: "pretext", "text", "fields"</dd>
@@ -1320,13 +1028,333 @@ be displayed in varying ways, depending on how far in the past or future
 it is, relative to the present. Form factors, like mobile versus
 desktop may also transform its rendered appearance.</dd>
 </dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.attachments.BlockAttachment" href="#slack_sdk.models.attachments.BlockAttachment">BlockAttachment</a></li>
+<li><a title="slack_sdk.models.attachments.InteractiveAttachment" href="#slack_sdk.models.attachments.InteractiveAttachment">InteractiveAttachment</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.Attachment.MarkdownFields"><code class="name">var <span class="ident">MarkdownFields</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.fields"><code class="name">var <span class="ident">fields</span> : Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.footer_max_length"><code class="name">var <span class="ident">footer_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_icon"><code class="name flex">
+<span>def <span class="ident">author_link_without_author_icon</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;icon must be present if link is present&#34;)
+def author_link_without_author_icon(self) -&gt; bool:
+    return self.author_link is None or self.author_icon is not None</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.author_link_without_author_name"><code class="name flex">
+<span>def <span class="ident">author_link_without_author_name</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;name must be present if link is present&#34;)
+def author_link_without_author_name(self) -&gt; bool:
+    return self.author_link is None or self.author_name is not None</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.color_valid"><code class="name flex">
+<span>def <span class="ident">color_valid</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;color attribute must be &#39;good&#39;, &#39;warning&#39;, &#39;danger&#39;, or a hex color code&#34;)
+def color_valid(self) -&gt; bool:
+    return (
+        self.color is None
+        or self.color in SeededColors
+        or re.match(&#34;^#(?:[0-9A-F]{2}){3}$&#34;, self.color, re.IGNORECASE) is not None
+    )</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.footer_length"><code class="name flex">
+<span>def <span class="ident">footer_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;footer attribute cannot exceed {footer_max_length} characters&#34;)
+def footer_length(self) -&gt; bool:
+    return self.footer is None or len(self.footer) &lt;= self.footer_max_length</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.image_url_and_thumb_url_populated"><code class="name flex">
+<span>def <span class="ident">image_url_and_thumb_url_populated</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;image_url attribute cannot be present if thumb_url is populated&#34;)
+def image_url_and_thumb_url_populated(self) -&gt; bool:
+    return self.image_url is None or self.thumb_url is None</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.markdown_in_valid"><code class="name flex">
+<span>def <span class="ident">markdown_in_valid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;markdown_in&#34;, MarkdownFields)
+def markdown_in_valid(self):
+    return not self.markdown_in or all(e in self.MarkdownFields for e in self.markdown_in)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.attachments.Attachment.ts_without_footer"><code class="name flex">
+<span>def <span class="ident">ts_without_footer</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;ts attribute cannot be present if footer attribute is absent&#34;)
+def ts_without_footer(self) -&gt; bool:
+    return self.ts is None or self.footer is not None</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.attachments.AttachmentField"><code class="flex name class">
+<span>class <span class="ident">AttachmentField</span></span>
+<span>(</span><span>*, title: str | None = None, value: str | None = None, short: bool = True)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AttachmentField(JsonObject):
+    attributes = {&#34;short&#34;, &#34;title&#34;, &#34;value&#34;}
+
+    def __init__(
+        self,
+        *,
+        title: Optional[str] = None,
+        value: Optional[str] = None,
+        short: bool = True,
+    ):
+        self.title = title
+        self.value = value
+        self.short = short</code></pre>
+</details>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.AttachmentField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.attachments.BlockAttachment"><code class="flex name class">
+<span>class <span class="ident">BlockAttachment</span></span>
+<span>(</span><span>*,<br>blocks: Sequence[<a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>],<br>color: str | None = None,<br>fallback: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BlockAttachment(Attachment):
+    blocks: List[Block]
+
+    @property
+    def attributes(self):
+        return super().attributes.union({&#34;blocks&#34;, &#34;color&#34;})
+
+    def __init__(
+        self,
+        *,
+        blocks: Sequence[Block],
+        color: Optional[str] = None,
+        fallback: Optional[str] = None,
+    ):
+        &#34;&#34;&#34;
+        A bridge between legacy attachments and Block Kit formatting - pass a list of
+        Block objects directly to this attachment.
+
+        https://api.slack.com/reference/messaging/attachments#fields
+
+        Args:
+            blocks: a sequence of Block objects
+            color: Changes the color of the border on the left side of this
+                attachment from the default gray. Can either be one of &#34;good&#34; (green),
+                &#34;warning&#34; (yellow), &#34;danger&#34; (red), or any hex color code (eg. #439FE0)
+            fallback: fallback text
+        &#34;&#34;&#34;
+        super().__init__(text=&#34;&#34;, fallback=fallback, color=color)
+        self.blocks = list(blocks)
+
+    @JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
+    def fields_attribute_absent(self) -&gt; bool:
+        return not self.fields
+
+    def to_dict(self) -&gt; dict:
+        json = super().to_dict()
+        json.update({&#34;blocks&#34;: extract_json(self.blocks)})
+        del json[&#34;fields&#34;]  # cannot supply fields and blocks at the same time
+        return json</code></pre>
+</details>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>A bridge between legacy attachments and Block Kit formatting - pass a list of
+Block objects directly to this attachment.</p>
+<p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>blocks</code></strong></dt>
+<dd>a sequence of Block objects</dd>
+<dt><strong><code>color</code></strong></dt>
+<dd>Changes the color of the border on the left side of this
+attachment from the default gray. Can either be one of "good" (green),
+"warning" (yellow), "danger" (red), or any hex color code (eg. #439FE0)</dd>
+<dt><strong><code>fallback</code></strong></dt>
+<dd>fallback text</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.BlockAttachment.blocks"><code class="name">var <span class="ident">blocks</span> : List[<a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.BlockAttachment.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self):
+    return super().attributes.union({&#34;blocks&#34;, &#34;color&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.attachments.BlockAttachment.fields_attribute_absent"><code class="name flex">
+<span>def <span class="ident">fields_attribute_absent</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(&#34;fields attribute cannot be populated on BlockAttachment&#34;)
+def fields_attribute_absent(self) -&gt; bool:
+    return not self.fields</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.attachments.Attachment.MarkdownFields" href="#slack_sdk.models.attachments.Attachment.MarkdownFields">MarkdownFields</a></code></li>
+<li><code><a title="slack_sdk.models.attachments.Attachment.fields" href="#slack_sdk.models.attachments.Attachment.fields">fields</a></code></li>
+<li><code><a title="slack_sdk.models.attachments.Attachment.footer_max_length" href="#slack_sdk.models.attachments.Attachment.footer_max_length">footer_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.attachments.Attachment.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.attachments.Attachment.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.attachments.Attachment.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.attachments.InteractiveAttachment"><code class="flex name class">
+<span>class <span class="ident">InteractiveAttachment</span></span>
+<span>(</span><span>*,<br>actions: Sequence[<a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a>],<br>callback_id: str,<br>text: str,<br>fallback: str | None = None,<br>fields: Sequence[<a title="slack_sdk.models.attachments.AttachmentField" href="#slack_sdk.models.attachments.AttachmentField">AttachmentField</a>] | None = None,<br>color: str | None = None,<br>markdown_in: Sequence[str] | None = None,<br>title: str | None = None,<br>title_link: str | None = None,<br>pretext: str | None = None,<br>author_name: str | None = None,<br>author_subname: str | None = None,<br>author_link: str | None = None,<br>author_icon: str | None = None,<br>image_url: str | None = None,<br>thumb_url: str | None = None,<br>footer: str | None = None,<br>footer_icon: str | None = None,<br>ts: int | None = None)</span>
+</code></dt>
+<dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class InteractiveAttachment(Attachment):
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;callback_id&#34;})
 
     actions_max_length = 5
@@ -1450,6 +1478,89 @@ desktop may also transform its rendered appearance.</dd>
         json[&#34;actions&#34;] = extract_json(self.actions)
         return json</code></pre>
 </details>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>An Attachment, but designed to contain interactive Actions
+Considered legacy - recommended replacement is to use message blocks instead.</p>
+<p><a href="https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields">https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields</a>
+<a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>actions</code></strong></dt>
+<dd>A collection of Action objects to include in the attachment.
+Cannot exceed 5 elements.</dd>
+<dt><strong><code>callback_id</code></strong></dt>
+<dd>The ID used to identify this attachment. Will be part of the
+payload sent back to your application.</dd>
+<dt><strong><code>text</code></strong></dt>
+<dd>The main body text of the attachment. It can be formatted as
+plain text, or with markdown by including it in the markdown_in
+parameter. The content will automatically collapse if it contains 700+
+characters or 5+ linebreaks, and will display a "Show more&hellip;" link to
+expand the content.</dd>
+<dt><strong><code>fallback</code></strong></dt>
+<dd>A plain text summary of the attachment used in clients that
+don't show formatted text (eg. IRC, mobile notifications).</dd>
+<dt><strong><code>fields</code></strong></dt>
+<dd>An array of AttachmentField objects that get displayed in a
+table-like way. For best results, include no more than 2-3 field
+objects.</dd>
+<dt><strong><code>color</code></strong></dt>
+<dd>Changes the color of the border on the left side of this attachment
+from the default gray. Can either be one of "good" (green), "warning"
+(yellow), "danger" (red), or any hex color code (eg. #439FE0)</dd>
+<dt><strong><code>markdown_in</code></strong></dt>
+<dd>An array of field names that should be formatted by
+markdown syntax - allowed values: "pretext", "text", "fields"</dd>
+<dt><strong><code>title</code></strong></dt>
+<dd>Large title text near the top of the attachment.</dd>
+<dt><strong><code>title_link</code></strong></dt>
+<dd>A valid URL that turns the title text into a hyperlink.</dd>
+<dt><strong><code>pretext</code></strong></dt>
+<dd>Text that appears above the message attachment block. It can
+be formatted as plain text, or with markdown by including it in the
+markdown_in parameter.</dd>
+<dt><strong><code>author_name</code></strong></dt>
+<dd>Small text used to display the author's name.</dd>
+<dt><strong><code>author_subname</code></strong></dt>
+<dd>Small text used to display the author's sub name.</dd>
+<dt><strong><code>author_link</code></strong></dt>
+<dd>A valid URL that will hyperlink the author_name text.
+Will only work if author_name is present.</dd>
+<dt><strong><code>author_icon</code></strong></dt>
+<dd>A valid URL that displays a small 16px by 16px image to
+the left of the author_name text. Will only work if author_name is
+present.</dd>
+<dt><strong><code>image_url</code></strong></dt>
+<dd>A valid URL to an image file that will be displayed at the
+bottom of the attachment. We support GIF, JPEG, PNG, and BMP formats.
+Large images will be resized to a maximum width of 360px or a maximum
+height of 500px, while still maintaining the original aspect ratio.
+Cannot be used with thumb_url.</dd>
+<dt><strong><code>thumb_url</code></strong></dt>
+<dd>A valid URL to an image file that will be displayed as a
+thumbnail on the right side of a message attachment. We currently
+support the following formats: GIF, JPEG, PNG, and BMP. The thumbnail's
+longest dimension will be scaled down to 75px while maintaining the
+aspect ratio of the image. The filesize of the image must also be less
+than 500 KB. For best results, please use images that are already 75px
+by 75px.</dd>
+<dt><strong><code>footer</code></strong></dt>
+<dd>Some brief text to help contextualize and identify an
+attachment. Limited to 300 characters, and may be truncated further when
+displayed to users in environments with limited screen real estate.</dd>
+<dt><strong><code>footer_icon</code></strong></dt>
+<dd>A valid URL to an image file that will be displayed
+beside the footer text. Will only work if footer is present. We'll
+render what you provide at 16px by 16px. It's best to use an image that
+is similarly sized.</dd>
+<dt><strong><code>ts</code></strong></dt>
+<dd>An integer Unix timestamp that is used to related your attachment
+to a specific time. The attachment will display the additional timestamp
+value as part of the attachment's footer. Your message's timestamp will
+be displayed in varying ways, depending on how far in the past or future
+it is, relative to the present. Form factors, like mobile versus
+desktop may also transform its rendered appearance.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.Attachment" href="#slack_sdk.models.attachments.Attachment">Attachment</a></li>
@@ -1467,15 +1578,15 @@ desktop may also transform its rendered appearance.</dd>
 <dl>
 <dt id="slack_sdk.models.attachments.InteractiveAttachment.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;callback_id&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1484,6 +1595,14 @@ def attributes(self) -&gt; Set[str]:
 <span>def <span class="ident">actions_length</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;actions attribute cannot exceed {actions_max_length} elements&#34;)
+def actions_length(self) -&gt; bool:
+    return len(self.actions) &lt;= self.actions_max_length</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -1612,7 +1731,7 @@ def attributes(self) -&gt; Set[str]:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

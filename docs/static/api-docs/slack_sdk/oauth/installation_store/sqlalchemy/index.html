@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.oauth.installation_store.sqlalchemy API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -35,30 +46,367 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore"><code class="flex name class">
+<span>class <span class="ident">AsyncSQLAlchemyInstallationStore</span></span>
+<span>(</span><span>client_id: str,<br>engine: sqlalchemy.ext.asyncio.engine.AsyncEngine,<br>bots_table_name: str = 'slack_bots',<br>installations_table_name: str = 'slack_installations',<br>logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.sqlalchemy (WARNING)&gt;)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
+    default_bots_table_name: str = &#34;slack_bots&#34;
+    default_installations_table_name: str = &#34;slack_installations&#34;
+
+    client_id: str
+    engine: AsyncEngine
+    metadata: MetaData
+    installations: Table
+
+    def __init__(
+        self,
+        client_id: str,
+        engine: AsyncEngine,
+        bots_table_name: str = default_bots_table_name,
+        installations_table_name: str = default_installations_table_name,
+        logger: Logger = logging.getLogger(__name__),
+    ):
+        self.metadata = sqlalchemy.MetaData()
+        self.bots = self.build_bots_table(metadata=self.metadata, table_name=bots_table_name)
+        self.installations = self.build_installations_table(metadata=self.metadata, table_name=installations_table_name)
+        self.client_id = client_id
+        self._logger = logger
+        self.engine = engine
+
+    @classmethod
+    def build_installations_table(cls, metadata: MetaData, table_name: str) -&gt; Table:
+        return SQLAlchemyInstallationStore.build_installations_table(metadata, table_name)
+
+    @classmethod
+    def build_bots_table(cls, metadata: MetaData, table_name: str) -&gt; Table:
+        return SQLAlchemyInstallationStore.build_bots_table(metadata, table_name)
+
+    async def create_tables(self):
+        async with self.engine.begin() as conn:
+            await conn.run_sync(self.metadata.create_all)
+
+    @property
+    def logger(self) -&gt; Logger:
+        return self._logger
+
+    async def async_save(self, installation: Installation):
+        async with self.engine.begin() as conn:
+            i = installation.to_dict()
+            i[&#34;client_id&#34;] = self.client_id
+
+            i_column = self.installations.c
+            installations_rows = await conn.execute(
+                sqlalchemy.select(i_column.id)
+                .where(
+                    and_(
+                        i_column.client_id == self.client_id,
+                        i_column.enterprise_id == installation.enterprise_id,
+                        i_column.team_id == installation.team_id,
+                        i_column.installed_at == i.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            installations_row_id: Optional[str] = None
+            for row in installations_rows.mappings():
+                installations_row_id = row[&#34;id&#34;]
+            if installations_row_id is None:
+                await conn.execute(self.installations.insert(), i)
+            else:
+                update_statement = self.installations.update().where(i_column.id == installations_row_id).values(**i)
+                await conn.execute(update_statement, i)
+
+        # bots
+        await self.async_save_bot(installation.to_bot())
+
+    async def async_save_bot(self, bot: Bot):
+        async with self.engine.begin() as conn:
+            # bots
+            b = bot.to_dict()
+            b[&#34;client_id&#34;] = self.client_id
+
+            b_column = self.bots.c
+            bots_rows = await conn.execute(
+                sqlalchemy.select(b_column.id)
+                .where(
+                    and_(
+                        b_column.client_id == self.client_id,
+                        b_column.enterprise_id == bot.enterprise_id,
+                        b_column.team_id == bot.team_id,
+                        b_column.installed_at == b.get(&#34;installed_at&#34;),
+                    )
+                )
+                .limit(1)
+            )
+            bots_row_id: Optional[str] = None
+            for row in bots_rows.mappings():
+                bots_row_id = row[&#34;id&#34;]
+            if bots_row_id is None:
+                await conn.execute(self.bots.insert(), b)
+            else:
+                update_statement = self.bots.update().where(b_column.id == bots_row_id).values(**b)
+                await conn.execute(update_statement, b)
+
+    async def async_find_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Bot]:
+        if is_enterprise_install or team_id is None:
+            team_id = None
+
+        c = self.bots.c
+        query = (
+            self.bots.select()
+            .where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                    c.bot_token.is_not(None),  # the latest one that has a bot token
+                )
+            )
+            .order_by(desc(c.installed_at))
+            .limit(1)
+        )
+
+        async with self.engine.connect() as conn:
+            result: object = await conn.execute(query)
+            for row in result.mappings():  # type: ignore[attr-defined]
+                return SQLAlchemyInstallationStore.build_bot_entity(row)
+            return None
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Installation]:
+        if is_enterprise_install or team_id is None:
+            team_id = None
+
+        c = self.installations.c
+        where_clause = and_(
+            c.client_id == self.client_id,
+            c.enterprise_id == enterprise_id,
+            c.team_id == team_id,
+        )
+        if user_id is not None:
+            where_clause = and_(
+                c.client_id == self.client_id,
+                c.enterprise_id == enterprise_id,
+                c.team_id == team_id,
+                c.user_id == user_id,
+            )
+
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+
+        installation: Optional[Installation] = None
+        async with self.engine.connect() as conn:
+            result: object = await conn.execute(query)
+            for row in result.mappings():  # type: ignore[attr-defined]
+                installation = SQLAlchemyInstallationStore.build_installation_entity(row)
+
+        has_user_installation = user_id is not None and installation is not None
+        no_bot_token_installation = installation is not None and installation.bot_token is None
+        should_find_bot_installation = has_user_installation or no_bot_token_installation
+        if should_find_bot_installation:
+            # Retrieve the latest bot token, just in case
+            # See also: https://github.com/slackapi/bolt-python/issues/664
+            latest_bot_installation = await self.async_find_bot(
+                enterprise_id=enterprise_id,
+                team_id=team_id,
+                is_enterprise_install=is_enterprise_install,
+            )
+            if (
+                latest_bot_installation is not None
+                and installation is not None
+                and installation.bot_token != latest_bot_installation.bot_token
+            ):
+                installation.bot_id = latest_bot_installation.bot_id
+                installation.bot_user_id = latest_bot_installation.bot_user_id
+                installation.bot_token = latest_bot_installation.bot_token
+                installation.bot_scopes = latest_bot_installation.bot_scopes
+                installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+        return installation
+
+    async def async_delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -&gt; None:
+        table = self.bots
+        c = table.c
+        async with self.engine.begin() as conn:
+            deletion = table.delete().where(
+                and_(
+                    c.client_id == self.client_id,
+                    c.enterprise_id == enterprise_id,
+                    c.team_id == team_id,
+                )
+            )
+            await conn.execute(deletion)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        table = self.installations
+        c = table.c
+        async with self.engine.begin() as conn:
+            if user_id is not None:
+                deletion = table.delete().where(
+                    and_(
+                        c.client_id == self.client_id,
+                        c.enterprise_id == enterprise_id,
+                        c.team_id == team_id,
+                        c.user_id == user_id,
+                    )
+                )
+                await conn.execute(deletion)
+            else:
+                deletion = table.delete().where(
+                    and_(
+                        c.client_id == self.client_id,
+                        c.enterprise_id == enterprise_id,
+                        c.team_id == team_id,
+                    )
+                )
+                await conn.execute(deletion)</code></pre>
+</details>
+<div class="desc"><p>The installation store interface for asyncio-based apps.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>async_save(installation)</li>
+<li>async_find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>async_delete_installation(enterprise_id, team_id, user_id)</li>
+<li>async_delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>async_save(installation)</li>
+<li>async_find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>async_delete_bot(enterprise_id, team_id)</li>
+<li>async_delete_all(enterprise_id, team_id)</li>
+</ul></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.client_id"><code class="name">var <span class="ident">client_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_bots_table_name"><code class="name">var <span class="ident">default_bots_table_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_installations_table_name"><code class="name">var <span class="ident">default_installations_table_name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.engine"><code class="name">var <span class="ident">engine</span> : sqlalchemy.ext.asyncio.engine.AsyncEngine</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.installations"><code class="name">var <span class="ident">installations</span> : sqlalchemy.sql.schema.Table</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.metadata"><code class="name">var <span class="ident">metadata</span> : sqlalchemy.sql.schema.MetaData</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_bots_table"><code class="name flex">
+<span>def <span class="ident">build_bots_table</span></span>(<span>metadata: sqlalchemy.sql.schema.MetaData, table_name: str) ‑> sqlalchemy.sql.schema.Table</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_installations_table"><code class="name flex">
+<span>def <span class="ident">build_installations_table</span></span>(<span>metadata: sqlalchemy.sql.schema.MetaData, table_name: str) ‑> sqlalchemy.sql.schema.Table</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.logger"><code class="name">prop <span class="ident">logger</span> : logging.Logger</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def logger(self) -&gt; Logger:
+    return self._logger</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.create_tables"><code class="name flex">
+<span>async def <span class="ident">create_tables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def create_tables(self):
+    async with self.engine.begin() as conn:
+        await conn.run_sync(self.metadata.create_all)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore"><code class="flex name class">
 <span>class <span class="ident">SQLAlchemyInstallationStore</span></span>
 <span>(</span><span>client_id: str,<br>engine: sqlalchemy.engine.base.Engine,<br>bots_table_name: str = 'slack_bots',<br>installations_table_name: str = 'slack_installations',<br>logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.sqlalchemy (WARNING)&gt;)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>The installation store interface.</p>
-<p>The minimum required methods are:</p>
-<ul>
-<li>save(installation)</li>
-<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
-</ul>
-<p>If you would like to properly handle app uninstallations and token revocations,
-the following methods should be implemented.</p>
-<ul>
-<li>delete_installation(enterprise_id, team_id, user_id)</li>
-<li>delete_all(enterprise_id, team_id)</li>
-</ul>
-<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
-<ul>
-<li>save(installation)</li>
-<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
-<li>delete_bot(enterprise_id, team_id)</li>
-<li>delete_all(enterprise_id, team_id)</li>
-</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -106,7 +454,7 @@ the following methods should be implemented.</p>
                 &#34;installed_at&#34;,
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f&#34;{table_name}_idx&#34;,
@@ -141,7 +489,7 @@ the following methods should be implemented.</p>
                 &#34;installed_at&#34;,
                 DateTime,
                 nullable=False,
-                default=sqlalchemy.sql.func.now(),  # type: ignore
+                default=sqlalchemy.sql.func.now(),
             ),
             Index(
                 f&#34;{table_name}_idx&#34;,
@@ -259,22 +607,8 @@ the following methods should be implemented.</p>
 
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
-                return Bot(
-                    app_id=row[&#34;app_id&#34;],
-                    enterprise_id=row[&#34;enterprise_id&#34;],
-                    enterprise_name=row[&#34;enterprise_name&#34;],
-                    team_id=row[&#34;team_id&#34;],
-                    team_name=row[&#34;team_name&#34;],
-                    bot_token=row[&#34;bot_token&#34;],
-                    bot_id=row[&#34;bot_id&#34;],
-                    bot_user_id=row[&#34;bot_user_id&#34;],
-                    bot_scopes=row[&#34;bot_scopes&#34;],
-                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
-                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
-                    is_enterprise_install=row[&#34;is_enterprise_install&#34;],
-                    installed_at=row[&#34;installed_at&#34;],
-                )
+            for row in result.mappings():  # type: ignore[attr-defined]
+                return self.build_bot_entity(row)
             return None
 
     def find_installation(
@@ -307,34 +641,8 @@ the following methods should be implemented.</p>
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
             result: object = conn.execute(query)
-            for row in result.mappings():  # type: ignore
-                installation = Installation(
-                    app_id=row[&#34;app_id&#34;],
-                    enterprise_id=row[&#34;enterprise_id&#34;],
-                    enterprise_name=row[&#34;enterprise_name&#34;],
-                    enterprise_url=row[&#34;enterprise_url&#34;],
-                    team_id=row[&#34;team_id&#34;],
-                    team_name=row[&#34;team_name&#34;],
-                    bot_token=row[&#34;bot_token&#34;],
-                    bot_id=row[&#34;bot_id&#34;],
-                    bot_user_id=row[&#34;bot_user_id&#34;],
-                    bot_scopes=row[&#34;bot_scopes&#34;],
-                    bot_refresh_token=row[&#34;bot_refresh_token&#34;],
-                    bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
-                    user_id=row[&#34;user_id&#34;],
-                    user_token=row[&#34;user_token&#34;],
-                    user_scopes=row[&#34;user_scopes&#34;],
-                    user_refresh_token=row[&#34;user_refresh_token&#34;],
-                    user_token_expires_at=row[&#34;user_token_expires_at&#34;],
-                    # Only the incoming webhook issued in the latest installation is set in this logic
-                    incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
-                    incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
-                    incoming_webhook_channel_id=row[&#34;incoming_webhook_channel_id&#34;],
-                    incoming_webhook_configuration_url=row[&#34;incoming_webhook_configuration_url&#34;],
-                    is_enterprise_install=row[&#34;is_enterprise_install&#34;],
-                    token_type=row[&#34;token_type&#34;],
-                    installed_at=row[&#34;installed_at&#34;],
-                )
+            for row in result.mappings():  # type: ignore[attr-defined]
+                installation = self.build_installation_entity(row)
 
         has_user_installation = user_id is not None and installation is not None
         no_bot_token_installation = installation is not None and installation.bot_token is None
@@ -347,7 +655,11 @@ the following methods should be implemented.</p>
                 team_id=team_id,
                 is_enterprise_install=is_enterprise_install,
             )
-            if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+            if (
+                latest_bot_installation is not None
+                and installation is not None
+                and installation.bot_token != latest_bot_installation.bot_token
+            ):
                 installation.bot_id = latest_bot_installation.bot_id
                 installation.bot_user_id = latest_bot_installation.bot_user_id
                 installation.bot_token = latest_bot_installation.bot_token
@@ -398,8 +710,75 @@ the following methods should be implemented.</p>
                         c.team_id == team_id,
                     )
                 )
-                conn.execute(deletion)</code></pre>
+                conn.execute(deletion)
+
+    @classmethod
+    def build_installation_entity(cls, row) -&gt; Installation:
+        return Installation(
+            app_id=row[&#34;app_id&#34;],
+            enterprise_id=row[&#34;enterprise_id&#34;],
+            enterprise_name=row[&#34;enterprise_name&#34;],
+            enterprise_url=row[&#34;enterprise_url&#34;],
+            team_id=row[&#34;team_id&#34;],
+            team_name=row[&#34;team_name&#34;],
+            bot_token=row[&#34;bot_token&#34;],
+            bot_id=row[&#34;bot_id&#34;],
+            bot_user_id=row[&#34;bot_user_id&#34;],
+            bot_scopes=row[&#34;bot_scopes&#34;],
+            bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+            bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
+            user_id=row[&#34;user_id&#34;],
+            user_token=row[&#34;user_token&#34;],
+            user_scopes=row[&#34;user_scopes&#34;],
+            user_refresh_token=row[&#34;user_refresh_token&#34;],
+            user_token_expires_at=row[&#34;user_token_expires_at&#34;],
+            # Only the incoming webhook issued in the latest installation is set in this logic
+            incoming_webhook_url=row[&#34;incoming_webhook_url&#34;],
+            incoming_webhook_channel=row[&#34;incoming_webhook_channel&#34;],
+            incoming_webhook_channel_id=row[&#34;incoming_webhook_channel_id&#34;],
+            incoming_webhook_configuration_url=row[&#34;incoming_webhook_configuration_url&#34;],
+            is_enterprise_install=row[&#34;is_enterprise_install&#34;],
+            token_type=row[&#34;token_type&#34;],
+            installed_at=row[&#34;installed_at&#34;],
+        )
+
+    @classmethod
+    def build_bot_entity(cls, row) -&gt; Bot:
+        return Bot(
+            app_id=row[&#34;app_id&#34;],
+            enterprise_id=row[&#34;enterprise_id&#34;],
+            enterprise_name=row[&#34;enterprise_name&#34;],
+            team_id=row[&#34;team_id&#34;],
+            team_name=row[&#34;team_name&#34;],
+            bot_token=row[&#34;bot_token&#34;],
+            bot_id=row[&#34;bot_id&#34;],
+            bot_user_id=row[&#34;bot_user_id&#34;],
+            bot_scopes=row[&#34;bot_scopes&#34;],
+            bot_refresh_token=row[&#34;bot_refresh_token&#34;],
+            bot_token_expires_at=row[&#34;bot_token_expires_at&#34;],
+            is_enterprise_install=row[&#34;is_enterprise_install&#34;],
+            installed_at=row[&#34;installed_at&#34;],
+        )</code></pre>
 </details>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></li>
@@ -433,8 +812,20 @@ the following methods should be implemented.</p>
 </dl>
 <h3>Static methods</h3>
 <dl>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bot_entity"><code class="name flex">
+<span>def <span class="ident">build_bot_entity</span></span>(<span>row) ‑> <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="../models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bots_table"><code class="name flex">
 <span>def <span class="ident">build_bots_table</span></span>(<span>metadata: sqlalchemy.sql.schema.MetaData, table_name: str) ‑> sqlalchemy.sql.schema.Table</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_installation_entity"><code class="name flex">
+<span>def <span class="ident">build_installation_entity</span></span>(<span>row) ‑> <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a></span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -450,7 +841,6 @@ the following methods should be implemented.</p>
 <dl>
 <dt id="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.logger"><code class="name">prop <span class="ident">logger</span> : logging.Logger</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -459,6 +849,7 @@ the following methods should be implemented.</p>
 def logger(self) -&gt; Logger:
     return self._logger</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -467,6 +858,13 @@ def logger(self) -&gt; Logger:
 <span>def <span class="ident">create_tables</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_tables(self):
+    self.metadata.create_all(self.engine)</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -501,9 +899,26 @@ def logger(self) -&gt; Logger:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore">AsyncSQLAlchemyInstallationStore</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_bots_table" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_bots_table">build_bots_table</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_installations_table" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.build_installations_table">build_installations_table</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.client_id" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.client_id">client_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.create_tables" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.create_tables">create_tables</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_bots_table_name" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_bots_table_name">default_bots_table_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_installations_table_name" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.default_installations_table_name">default_installations_table_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.engine" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.engine">engine</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.installations" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.installations">installations</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.logger" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.metadata" href="#slack_sdk.oauth.installation_store.sqlalchemy.AsyncSQLAlchemyInstallationStore.metadata">metadata</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore">SQLAlchemyInstallationStore</a></code></h4>
 <ul class="">
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bot_entity" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bot_entity">build_bot_entity</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bots_table" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_bots_table">build_bots_table</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_installation_entity" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_installation_entity">build_installation_entity</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_installations_table" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.build_installations_table">build_installations_table</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.client_id" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.client_id">client_id</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.create_tables" href="#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore.create_tables">create_tables</a></code></li>
@@ -521,7 +936,7 @@ def logger(self) -&gt; Logger:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

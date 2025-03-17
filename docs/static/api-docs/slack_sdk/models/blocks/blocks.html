@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.models.blocks.blocks API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -40,24 +51,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A block that is used to hold interactive elements.
-<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
-<dd>An array of interactive element objects - buttons, select menus, overflow menus,
-or date pickers. There is a maximum of 25 elements in each action block.</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block.
-If not specified, a block_id will be generated.
-You can use this block_id when you receive an interaction payload to identify the source of the action.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -67,7 +60,7 @@ If a message is updated, use a new block_id.</dd>
     elements_max_length = 25
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;elements&#34;})
 
     def __init__(
@@ -99,6 +92,24 @@ If a message is updated, use a new block_id.</dd>
     def _validate_elements_length(self):
         return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A block that is used to hold interactive elements.
+<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of interactive element objects - buttons, select menus, overflow menus,
+or date pickers. There is a maximum of 25 elements in each action block.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block.
+If not specified, a block_id will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -120,15 +131,15 @@ If a message is updated, use a new block_id.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.ActionsBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;elements&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -149,9 +160,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>type: str | None = None,<br>subtype: str | None = None,<br>block_id: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -166,7 +174,7 @@ to create visually rich and compellingly interactive messages.
     block_id_max_length = 255
     logger = logging.getLogger(__name__)
 
-    def _subtype_warning(self):  # skipcq: PYL-R0201
+    def _subtype_warning(self):
         warnings.warn(
             &#34;subtype is deprecated since slackclient 2.6.0, use type instead&#34;,
             DeprecationWarning,
@@ -179,7 +187,7 @@ to create visually rich and compellingly interactive messages.
     def __init__(
         self,
         *,
-        type: Optional[str] = None,  # skipcq: PYL-W0622
+        type: Optional[str] = None,
         subtype: Optional[str] = None,  # deprecated
         block_id: Optional[str] = None,
     ):
@@ -195,14 +203,14 @@ to create visually rich and compellingly interactive messages.
 
     @classmethod
     def parse(cls, block: Union[dict, &#34;Block&#34;]) -&gt; Optional[&#34;Block&#34;]:
-        if block is None:  # skipcq: PYL-R1705
+        if block is None:
             return None
         elif isinstance(block, Block):
             return block
         else:
             if &#34;type&#34; in block:
-                type = block[&#34;type&#34;]  # skipcq: PYL-W0622
-                if type == SectionBlock.type:  # skipcq: PYL-R1705
+                type = block[&#34;type&#34;]
+                if type == SectionBlock.type:
                     return SectionBlock(**block)
                 elif type == DividerBlock.type:
                     return DividerBlock(**block)
@@ -233,8 +241,11 @@ to create visually rich and compellingly interactive messages.
 
     @classmethod
     def parse_all(cls, blocks: Optional[Sequence[Union[dict, &#34;Block&#34;]]]) -&gt; List[&#34;Block&#34;]:
-        return [cls.parse(b) for b in blocks or []]  # type: ignore</code></pre>
+        return [cls.parse(b) for b in blocks or []]  # type: ignore[misc]</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -288,7 +299,6 @@ to create visually rich and compellingly interactive messages.
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.subtype"><code class="name">prop <span class="ident">subtype</span> : str | None</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -297,6 +307,7 @@ to create visually rich and compellingly interactive messages.
 def subtype(self) -&gt; Optional[str]:
     return self.type</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -315,11 +326,6 @@ def subtype(self) -&gt; Optional[str]:
 <span>(</span><span>*,<br>call_id: str,<br>api_decoration_available: bool | None = None,<br>call: Dict[str, Dict[str, Any]] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>Displays a call information
-<a href="https://api.slack.com/reference/block-kit/blocks#call">https://api.slack.com/reference/block-kit/blocks#call</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -328,7 +334,7 @@ to create visually rich and compellingly interactive messages.
     type = &#34;call&#34;
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})
 
     def __init__(
@@ -350,6 +356,11 @@ to create visually rich and compellingly interactive messages.
         self.api_decoration_available = api_decoration_available
         self.call = call</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays a call information
+<a href="https://api.slack.com/reference/block-kit/blocks#call">https://api.slack.com/reference/block-kit/blocks#call</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -367,15 +378,15 @@ to create visually rich and compellingly interactive messages.
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.CallBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -396,21 +407,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>Displays message context, which can include both images and text.
-<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
-<dd>An array of image elements and text objects. Maximum number of items is 10.</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -420,7 +416,7 @@ If a message is updated, use a new block_id.</dd>
     elements_max_length = 10
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;elements&#34;})
 
     def __init__(
@@ -449,6 +445,21 @@ If a message is updated, use a new block_id.</dd>
     def _validate_elements_length(self):
         return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays message context, which can include both images and text.
+<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of image elements and text objects. Maximum number of items is 10.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -470,15 +481,15 @@ If a message is updated, use a new block_id.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.ContextBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;elements&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -499,20 +510,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*, block_id: str | None = None, **others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A content divider, like an <hr>, to split up different blocks inside of a message.
-<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-You can use this block_id when you receive an interaction payload to identify the source of the action.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -539,6 +536,20 @@ If a message is updated, use a new block_id.</dd>
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A content divider, like an <hr>, to split up different blocks inside of a message.
+<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -571,23 +582,6 @@ If a message is updated, use a new block_id.</dd>
 <span>(</span><span>*,<br>external_id: str,<br>source: str = 'remote',<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>Displays a remote file.
-<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
-<dd>The external unique ID for this file.</dd>
-<dt><strong><code>source</code></strong> :&ensp;<code>required</code></dt>
-<dd>At the moment, source will always be remote for a remote file.</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -596,7 +590,7 @@ If a message is updated, use a new block_id.</dd>
     type = &#34;file&#34;
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;external_id&#34;, &#34;source&#34;})
 
     def __init__(
@@ -624,6 +618,23 @@ If a message is updated, use a new block_id.</dd>
         self.external_id = external_id
         self.source = source</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays a remote file.
+<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>The external unique ID for this file.</dd>
+<dt><strong><code>source</code></strong> :&ensp;<code>required</code></dt>
+<dd>At the moment, source will always be remote for a remote file.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -641,15 +652,15 @@ If a message is updated, use a new block_id.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.FileBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;external_id&#34;, &#34;source&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -670,22 +681,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>block_id: str | None = None,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A header is a plain-text block that displays in a larger, bold font.
-<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
-<dd>The text for the block, in the form of a plain_text text object.
-Maximum length for the text in this field is 150 characters.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -695,7 +690,7 @@ Maximum length for the text in this field is 150 characters.</dd>
     text_max_length = 150
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;text&#34;})
 
     def __init__(
@@ -719,7 +714,7 @@ Maximum length for the text in this field is 150 characters.</dd>
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text, default_type=PlainTextObject.type)
+        self.text = TextObject.parse(text, default_type=PlainTextObject.type)  # type: ignore[arg-type]
 
     @JsonValidator(&#34;text attribute must be specified&#34;)
     def _validate_text(self):
@@ -729,6 +724,22 @@ Maximum length for the text in this field is 150 characters.</dd>
     def _validate_alt_text_length(self):
         return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A header is a plain-text block that displays in a larger, bold font.
+<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The text for the block, in the form of a plain_text text object.
+Maximum length for the text in this field is 150 characters.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -750,15 +761,15 @@ Maximum length for the text in this field is 150 characters.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.HeaderBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;text&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -779,30 +790,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>alt_text: str,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.SlackFile" href="basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a> | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A simple image block, designed to make those cat photos really pop.
-<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
-<dd>A plain-text summary of the image. This should not contain any markup.
-Maximum length for this field is 2000 characters.</dd>
-<dt><strong><code>image_url</code></strong></dt>
-<dd>The URL of the image to be displayed.
-Maximum length for this field is 3000 characters.</dd>
-<dt><strong><code>slack_file</code></strong></dt>
-<dd>A Slack image file object that defines the source of the image.</dd>
-<dt><strong><code>title</code></strong></dt>
-<dd>An optional title for the image in the form of a text object that can only be of type: plain_text.
-Maximum length for the text in this field is 2000 characters.</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -811,7 +798,7 @@ If a message is updated, use a new block_id.</dd>
     type = &#34;image&#34;
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;, &#34;slack_file&#34;})
 
     image_url_max_length = 3000
@@ -856,7 +843,7 @@ If a message is updated, use a new block_id.</dd>
             elif isinstance(title, dict):
                 if title.get(&#34;type&#34;) != PlainTextObject.type:
                     raise SlackObjectFormationError(f&#34;Unsupported type for title in an image block: {title.get(&#39;type&#39;)}&#34;)
-                parsed_title = PlainTextObject(text=title.get(&#34;text&#34;), emoji=title.get(&#34;emoji&#34;))
+                parsed_title = PlainTextObject(text=title.get(&#34;text&#34;), emoji=title.get(&#34;emoji&#34;))  # type: ignore[arg-type]
             elif isinstance(title, PlainTextObject):
                 parsed_title = title
             else:
@@ -879,6 +866,30 @@ If a message is updated, use a new block_id.</dd>
     def _validate_title_length(self):
         return self.title is None or self.title.text is None or len(self.title.text) &lt;= self.title_max_length</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A simple image block, designed to make those cat photos really pop.
+<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
+<dd>A plain-text summary of the image. This should not contain any markup.
+Maximum length for this field is 2000 characters.</dd>
+<dt><strong><code>image_url</code></strong></dt>
+<dd>The URL of the image to be displayed.
+Maximum length for this field is 3000 characters.</dd>
+<dt><strong><code>slack_file</code></strong></dt>
+<dd>A Slack image file object that defines the source of the image.</dd>
+<dt><strong><code>title</code></strong></dt>
+<dd>An optional title for the image in the form of a text object that can only be of type: plain_text.
+Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -908,15 +919,15 @@ If a message is updated, use a new block_id.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.ImageBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;alt_text&#34;, &#34;image_url&#34;, &#34;title&#34;, &#34;slack_file&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -937,36 +948,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>label: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>,<br>element: str | dict | <a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a>,<br>block_id: str | None = None,<br>hint: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>dispatch_action: bool | None = None,<br>optional: bool | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A block that collects information from users - it can hold a plain-text input element,
-a select menu element, a multi-select menu element, or a datepicker.
-<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
-<dd>A label that appears above an input element in the form of a text object
-that must have type of plain_text. Maximum length for the text in this field is 2000 characters.</dd>
-<dt><strong><code>element</code></strong> :&ensp;<code>required</code></dt>
-<dd>An plain-text input element, a checkbox element, a radio button element,
-a select menu element, a multi-select menu element, or a datepicker.</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message or view and each iteration of a message or view.
-If a message or view is updated, use a new block_id.</dd>
-<dt><strong><code>hint</code></strong></dt>
-<dd>An optional hint that appears below an input element in a lighter grey.
-It must be a text object with a type of plain_text.
-Maximum length for the text in this field is 2000 characters.</dd>
-<dt><strong><code>dispatch_action</code></strong></dt>
-<dd>A boolean that indicates whether or not the use of elements in this block
-should dispatch a block_actions payload. Defaults to false.</dd>
-<dt><strong><code>optional</code></strong></dt>
-<dd>A boolean that indicates whether the input element may be empty when a user submits the modal.
-Defaults to false.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -977,7 +958,7 @@ Defaults to false.</dd>
     hint_max_length = 2000
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})
 
     def __init__(
@@ -1016,8 +997,8 @@ Defaults to false.</dd>
         show_unknown_key_warning(self, others)
 
         self.label = TextObject.parse(label, default_type=PlainTextObject.type)
-        self.element = BlockElement.parse(element)
-        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)
+        self.element = BlockElement.parse(element)  # type: ignore[arg-type]
+        self.hint = TextObject.parse(hint, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.dispatch_action = dispatch_action
         self.optional = optional
 
@@ -1038,6 +1019,36 @@ Defaults to false.</dd>
     def _validate_element_type(self):
         return self.element is None or isinstance(self.element, (str, InputInteractiveElement))</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A block that collects information from users - it can hold a plain-text input element,
+a select menu element, a multi-select menu element, or a datepicker.
+<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
+<dd>A label that appears above an input element in the form of a text object
+that must have type of plain_text. Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>element</code></strong> :&ensp;<code>required</code></dt>
+<dd>An plain-text input element, a checkbox element, a radio button element,
+a select menu element, a multi-select menu element, or a datepicker.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message or view and each iteration of a message or view.
+If a message or view is updated, use a new block_id.</dd>
+<dt><strong><code>hint</code></strong></dt>
+<dd>An optional hint that appears below an input element in a lighter grey.
+It must be a text object with a type of plain_text.
+Maximum length for the text in this field is 2000 characters.</dd>
+<dt><strong><code>dispatch_action</code></strong></dt>
+<dd>A boolean that indicates whether or not the use of elements in this block
+should dispatch a block_actions payload. Defaults to false.</dd>
+<dt><strong><code>optional</code></strong></dt>
+<dd>A boolean that indicates whether the input element may be empty when a user submits the modal.
+Defaults to false.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -1063,15 +1074,15 @@ Defaults to false.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.InputBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;label&#34;, &#34;hint&#34;, &#34;element&#34;, &#34;optional&#34;, &#34;dispatch_action&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1092,22 +1103,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A block that is used to hold interactive elements.
-<a href="https://api.slack.com/reference/block-kit/blocks#rich_text">https://api.slack.com/reference/block-kit/blocks#rich_text</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
-<dd>An array of rich text objects -
-rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted</dd>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message or view and each iteration of a message or view.
-If a message or view is updated, use a new block_id.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1116,7 +1111,7 @@ If a message or view is updated, use a new block_id.</dd>
     type = &#34;rich_text&#34;
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union({&#34;elements&#34;})
 
     def __init__(
@@ -1142,6 +1137,22 @@ If a message or view is updated, use a new block_id.</dd>
 
         self.elements = BlockElement.parse_all(elements)</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A block that is used to hold interactive elements.
+<a href="https://api.slack.com/reference/block-kit/blocks#rich_text">https://api.slack.com/reference/block-kit/blocks#rich_text</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of rich text objects -
+rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message or view and each iteration of a message or view.
+If a message or view is updated, use a new block_id.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -1159,15 +1170,15 @@ If a message or view is updated, use a new block_id.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.RichTextBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;elements&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1185,9 +1196,90 @@ def attributes(self) -&gt; Set[str]:
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.SectionBlock"><code class="flex name class">
 <span>class <span class="ident">SectionBlock</span></span>
-<span>(</span><span>*,<br>block_id: str | None = None,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>fields: Sequence[str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] | None = None,<br>accessory: dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>fields: Sequence[str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>] | None = None,<br>accessory: dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | None = None,<br>expand: bool | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SectionBlock(Block):
+    type = &#34;section&#34;
+    fields_max_length = 10
+    text_max_length = 3000
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;, &#34;expand&#34;})
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        text: Optional[Union[str, dict, TextObject]] = None,
+        fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
+        accessory: Optional[Union[dict, BlockElement]] = None,
+        expand: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;A section is one of the most flexible blocks available.
+        https://api.slack.com/reference/block-kit/blocks#section
+
+        Args:
+            block_id (required): A string acting as a unique identifier for a block.
+                If not specified, one will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (preferred): The text for the block, in the form of a text object.
+                Maximum length for the text in this field is 3000 characters.
+                This field is not required if a valid array of fields objects is provided instead.
+            fields (required if no text is provided): Required if no text is provided.
+                An array of text objects. Any text objects included with fields will be rendered
+                in a compact format that allows for 2 columns of side-by-side text.
+                Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
+            accessory: One of the available element objects.
+            expand: Whether or not this section block&#39;s text should always expand when rendered.
+                If false or not provided, it may be rendered with a &#39;see more&#39; option to expand and show the full text.
+                For AI Assistant apps, this allows the app to post long messages without users needing
+                to click &#39;see more&#39; to expand the message.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)  # type: ignore[arg-type]
+        field_objects = []
+        for f in fields or []:
+            if isinstance(f, str):
+                field_objects.append(MarkdownTextObject.from_str(f))
+            elif isinstance(f, TextObject):
+                field_objects.append(f)  # type: ignore[arg-type]
+            elif isinstance(f, dict) and &#34;type&#34; in f:
+                d = copy.copy(f)
+                t = d.pop(&#34;type&#34;)
+                if t == MarkdownTextObject.type:
+                    field_objects.append(MarkdownTextObject(**d))
+                else:
+                    field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
+            else:
+                self.logger.warning(f&#34;Unsupported filed detected and skipped {f}&#34;)
+        self.fields = field_objects
+        self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
+        self.expand = expand
+
+    @JsonValidator(&#34;text or fields attribute must be specified&#34;)
+    def _validate_text_or_fields_populated(self):
+        return self.text is not None or self.fields
+
+    @JsonValidator(f&#34;fields attribute cannot exceed {fields_max_length} items&#34;)
+    def _validate_fields_length(self):
+        return self.fields is None or len(self.fields) &lt;= self.fields_max_length
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
+</details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
@@ -1213,82 +1305,12 @@ in a compact format that allows for 2 columns of side-by-side text.
 Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.</dd>
 <dt><strong><code>accessory</code></strong></dt>
 <dd>One of the available element objects.</dd>
+<dt><strong><code>expand</code></strong></dt>
+<dd>Whether or not this section block's text should always expand when rendered.
+If false or not provided, it may be rendered with a 'see more' option to expand and show the full text.
+For AI Assistant apps, this allows the app to post long messages without users needing
+to click 'see more' to expand the message.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class SectionBlock(Block):
-    type = &#34;section&#34;
-    fields_max_length = 10
-    text_max_length = 3000
-
-    @property
-    def attributes(self) -&gt; Set[str]:
-        return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;})
-
-    def __init__(
-        self,
-        *,
-        block_id: Optional[str] = None,
-        text: Optional[Union[str, dict, TextObject]] = None,
-        fields: Optional[Sequence[Union[str, dict, TextObject]]] = None,
-        accessory: Optional[Union[dict, BlockElement]] = None,
-        **others: dict,
-    ):
-        &#34;&#34;&#34;A section is one of the most flexible blocks available.
-        https://api.slack.com/reference/block-kit/blocks#section
-
-        Args:
-            block_id (required): A string acting as a unique identifier for a block.
-                If not specified, one will be generated.
-                You can use this block_id when you receive an interaction payload to identify the source of the action.
-                Maximum length for this field is 255 characters.
-                block_id should be unique for each message and each iteration of a message.
-                If a message is updated, use a new block_id.
-            text (preferred): The text for the block, in the form of a text object.
-                Maximum length for the text in this field is 3000 characters.
-                This field is not required if a valid array of fields objects is provided instead.
-            fields (required if no text is provided): Required if no text is provided.
-                An array of text objects. Any text objects included with fields will be rendered
-                in a compact format that allows for 2 columns of side-by-side text.
-                Maximum number of items is 10. Maximum length for the text in each item is 2000 characters.
-            accessory: One of the available element objects.
-        &#34;&#34;&#34;
-        super().__init__(type=self.type, block_id=block_id)
-        show_unknown_key_warning(self, others)
-
-        self.text = TextObject.parse(text)
-        field_objects = []
-        for f in fields or []:
-            if isinstance(f, str):
-                field_objects.append(MarkdownTextObject.from_str(f))
-            elif isinstance(f, TextObject):
-                field_objects.append(f)
-            elif isinstance(f, dict) and &#34;type&#34; in f:
-                d = copy.copy(f)
-                t = d.pop(&#34;type&#34;)
-                if t == MarkdownTextObject.type:
-                    field_objects.append(MarkdownTextObject(**d))
-                else:
-                    field_objects.append(PlainTextObject(**d))
-            else:
-                self.logger.warning(f&#34;Unsupported filed detected and skipped {f}&#34;)
-        self.fields = field_objects
-        self.accessory = BlockElement.parse(accessory)
-
-    @JsonValidator(&#34;text or fields attribute must be specified&#34;)
-    def _validate_text_or_fields_populated(self):
-        return self.text is not None or self.fields
-
-    @JsonValidator(f&#34;fields attribute cannot exceed {fields_max_length} items&#34;)
-    def _validate_fields_length(self):
-        return self.fields is None or len(self.fields) &lt;= self.fields_max_length
-
-    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
-    def _validate_alt_text_length(self):
-        return self.text is None or len(self.text.text) &lt;= self.text_max_length</code></pre>
-</details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -1314,15 +1336,15 @@ Maximum number of items is 10. Maximum length for the text in each item is 2000 
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.SectionBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
-    return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;})</code></pre>
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;text&#34;, &#34;fields&#34;, &#34;accessory&#34;, &#34;expand&#34;})</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1343,42 +1365,6 @@ def attributes(self) -&gt; Set[str]:
 <span>(</span><span>*,<br>block_id: str | None = None,<br>alt_text: str | None = None,<br>video_url: str | None = None,<br>thumbnail_url: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>title_url: str | None = None,<br>description: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>provider_icon_url: str | None = None,<br>provider_name: str | None = None,<br>author_name: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Blocks are a series of components that can be combined
-to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
-<p>A video block is designed to embed videos in all app surfaces
-(e.g. link unfurls, messages, modals, App Home) —
-anywhere you can put blocks! To use the video block within your app,
-you must have the links.embed:write scope.
-<a href="https://api.slack.com/reference/block-kit/blocks#video">https://api.slack.com/reference/block-kit/blocks#video</a></p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>block_id</code></strong></dt>
-<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
-Maximum length for this field is 255 characters.
-block_id should be unique for each message and each iteration of a message.
-If a message is updated, use a new block_id.</dd>
-<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
-<dd>A tooltip for the video. Required for accessibility</dd>
-<dt><strong><code>video_url</code></strong> :&ensp;<code>required</code></dt>
-<dd>The URL to be embedded. Must match any existing unfurl domains within the app
-and point to a HTTPS URL.</dd>
-<dt><strong><code>thumbnail_url</code></strong> :&ensp;<code>required</code></dt>
-<dd>The thumbnail image URL</dd>
-<dt><strong><code>title</code></strong> :&ensp;<code>required</code></dt>
-<dd>Video title in plain text format. Must be less than 200 characters.</dd>
-<dt><strong><code>title_url</code></strong></dt>
-<dd>Hyperlink for the title text. Must correspond to the non-embeddable URL for the video.
-Must go to an HTTPS URL.</dd>
-<dt><strong><code>description</code></strong></dt>
-<dd>Description for video in plain text format.</dd>
-<dt><strong><code>provider_icon_url</code></strong></dt>
-<dd>Icon for the video provider - ex. Youtube icon</dd>
-<dt><strong><code>provider_name</code></strong></dt>
-<dd>The originating application or domain of the video ex. Youtube</dd>
-<dt><strong><code>author_name</code></strong></dt>
-<dd>Author name to be displayed. Must be less than 50 characters.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1389,7 +1375,7 @@ Must go to an HTTPS URL.</dd>
     author_name_max_length = 50
 
     @property
-    def attributes(self) -&gt; Set[str]:
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 &#34;alt_text&#34;,
@@ -1448,9 +1434,9 @@ Must go to an HTTPS URL.</dd>
         self.alt_text = alt_text
         self.video_url = video_url
         self.thumbnail_url = thumbnail_url
-        self.title = TextObject.parse(title, default_type=PlainTextObject.type)
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.title_url = title_url
-        self.description = TextObject.parse(description, default_type=PlainTextObject.type)
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)  # type: ignore[arg-type]
         self.provider_icon_url = provider_icon_url
         self.provider_name = provider_name
         self.author_name = author_name
@@ -1479,6 +1465,42 @@ Must go to an HTTPS URL.</dd>
     def _validate_author_name_length(self):
         return self.author_name is None or len(self.author_name) &lt; self.author_name_max_length</code></pre>
 </details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>A video block is designed to embed videos in all app surfaces
+(e.g. link unfurls, messages, modals, App Home) —
+anywhere you can put blocks! To use the video block within your app,
+you must have the links.embed:write scope.
+<a href="https://api.slack.com/reference/block-kit/blocks#video">https://api.slack.com/reference/block-kit/blocks#video</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
+<dd>A tooltip for the video. Required for accessibility</dd>
+<dt><strong><code>video_url</code></strong> :&ensp;<code>required</code></dt>
+<dd>The URL to be embedded. Must match any existing unfurl domains within the app
+and point to a HTTPS URL.</dd>
+<dt><strong><code>thumbnail_url</code></strong> :&ensp;<code>required</code></dt>
+<dd>The thumbnail image URL</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>required</code></dt>
+<dd>Video title in plain text format. Must be less than 200 characters.</dd>
+<dt><strong><code>title_url</code></strong></dt>
+<dd>Hyperlink for the title text. Must correspond to the non-embeddable URL for the video.
+Must go to an HTTPS URL.</dd>
+<dt><strong><code>description</code></strong></dt>
+<dd>Description for video in plain text format.</dd>
+<dt><strong><code>provider_icon_url</code></strong></dt>
+<dd>Icon for the video provider - ex. Youtube icon</dd>
+<dt><strong><code>provider_name</code></strong></dt>
+<dd>The originating application or domain of the video ex. Youtube</dd>
+<dt><strong><code>author_name</code></strong></dt>
+<dd>Author name to be displayed. Must be less than 50 characters.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -1504,13 +1526,12 @@ Must go to an HTTPS URL.</dd>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.VideoBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
-<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def attributes(self) -&gt; Set[str]:
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union(
         {
             &#34;alt_text&#34;,
@@ -1525,6 +1546,7 @@ def attributes(self) -&gt; Set[str]:
         }
     )</code></pre>
 </details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1660,7 +1682,7 @@ def attributes(self) -&gt; Set[str]:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>
