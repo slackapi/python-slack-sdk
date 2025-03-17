@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.scim API documentation</title>
 <meta name="description" content="SCIM API is a set of APIs for provisioning and managing user accounts and groups.
 SCIM is used by Single Sign-On (SSO) services and identity providers …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -57,7 +68,6 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <span>(</span><span>*,<br>display_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>id: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>members: List[<a title="slack_sdk.scim.v1.group.GroupMember" href="v1/group.html#slack_sdk.scim.v1.group.GroupMember">GroupMember</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>meta: <a title="slack_sdk.scim.v1.group.GroupMeta" href="v1/group.html#slack_sdk.scim.v1.group.GroupMeta">GroupMeta</a> | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>schemas: List[str] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -95,6 +105,7 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
     def __repr__(self):
         return f&#34;&lt;slack_sdk.scim.{self.__class__.__name__}: {self.to_dict()}&gt;&#34;</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.scim.Group.display_name"><code class="name">var <span class="ident">display_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
@@ -128,6 +139,13 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <span>def <span class="ident">to_dict</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -137,7 +155,6 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -146,7 +163,7 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
     group: Group
 
     @property
-    def group(self) -&gt; Group:  # type: ignore
+    def group(self) -&gt; Group:
         return Group(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -158,6 +175,7 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
         self.body = underlying.body
         self._snake_cased_body = None</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
@@ -166,15 +184,15 @@ SCIM is used by Single Sign-On (SSO) services and identity providers …</p></di
 <dl>
 <dt id="slack_sdk.scim.ReadGroupResponse.group"><code class="name">prop <span class="ident">group</span> : <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a></code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def group(self) -&gt; Group:  # type: ignore
+def group(self) -&gt; Group:
     return Group(**self.snake_cased_body)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -195,7 +213,6 @@ def group(self) -&gt; Group:  # type: ignore
 <span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -204,7 +221,7 @@ def group(self) -&gt; Group:  # type: ignore
     user: User
 
     @property
-    def user(self) -&gt; User:  # type: ignore
+    def user(self) -&gt; User:
         return User(**self.snake_cased_body)
 
     def __init__(self, underlying: SCIMResponse):
@@ -216,6 +233,7 @@ def group(self) -&gt; Group:  # type: ignore
         self.body = underlying.body
         self._snake_cased_body = None</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
@@ -224,15 +242,15 @@ def group(self) -&gt; Group:  # type: ignore
 <dl>
 <dt id="slack_sdk.scim.ReadUserResponse.user"><code class="name">prop <span class="ident">user</span> : <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a></code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def user(self) -&gt; User:  # type: ignore
+def user(self) -&gt; User:
     return User(**self.snake_cased_body)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -253,31 +271,6 @@ def user(self) -&gt; User:  # type: ignore
 <span>(</span><span>token: str,<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>base_url: str = 'https://api.slack.com/scim/v1/',<br>default_headers: Dict[str, str] | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>API client for SCIM API
-See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more details</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>token</code></strong></dt>
-<dd>An admin user's token, which starts with <code>xoxp-</code></dd>
-<dt><strong><code>timeout</code></strong></dt>
-<dd>Request timeout (in seconds)</dd>
-<dt><strong><code>ssl</code></strong></dt>
-<dd><code>ssl.SSLContext</code> to use for requests</dd>
-<dt><strong><code>proxy</code></strong></dt>
-<dd>Proxy URL (e.g., <code>localhost:9000</code>, <code>http://localhost:9000</code>)</dd>
-<dt><strong><code>base_url</code></strong></dt>
-<dd>The base URL for API calls</dd>
-<dt><strong><code>default_headers</code></strong></dt>
-<dd>Request headers to add to all requests</dd>
-<dt><strong><code>user_agent_prefix</code></strong></dt>
-<dd>Prefix for User-Agent header value</dd>
-<dt><strong><code>user_agent_suffix</code></strong></dt>
-<dd>Suffix for User-Agent header value</dd>
-<dt><strong><code>logger</code></strong></dt>
-<dd>Custom logger</dd>
-<dt><strong><code>retry_handlers</code></strong></dt>
-<dd>Retry handlers</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -378,9 +371,9 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
             self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Users/{quote(id)}&#34;,
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -443,9 +436,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
             self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Groups/{quote(id)}&#34;,
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 
@@ -636,9 +631,9 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         # NOTE: BAN-B310 is already checked above
         http_resp: Optional[HTTPResponse] = None
         if opener:
-            http_resp = opener.open(req, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = opener.open(req, timeout=self.timeout)
         else:
-            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)  # skipcq: BAN-B310
+            http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
         charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
         response_body: str = http_resp.read().decode(charset)
         resp = SCIMResponse(
@@ -650,6 +645,31 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
 </details>
+<div class="desc"><p>API client for SCIM API
+See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more details</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>token</code></strong></dt>
+<dd>An admin user's token, which starts with <code>xoxp-</code></dd>
+<dt><strong><code>timeout</code></strong></dt>
+<dd>Request timeout (in seconds)</dd>
+<dt><strong><code>ssl</code></strong></dt>
+<dd><code>ssl.SSLContext</code> to use for requests</dd>
+<dt><strong><code>proxy</code></strong></dt>
+<dd>Proxy URL (e.g., <code>localhost:9000</code>, <code>http://localhost:9000</code>)</dd>
+<dt><strong><code>base_url</code></strong></dt>
+<dd>The base URL for API calls</dd>
+<dt><strong><code>default_headers</code></strong></dt>
+<dd>Request headers to add to all requests</dd>
+<dt><strong><code>user_agent_prefix</code></strong></dt>
+<dd>Prefix for User-Agent header value</dd>
+<dt><strong><code>user_agent_suffix</code></strong></dt>
+<dd>Suffix for User-Agent header value</dd>
+<dt><strong><code>logger</code></strong></dt>
+<dd>Custom logger</dd>
+<dt><strong><code>retry_handlers</code></strong></dt>
+<dd>Retry handlers</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.scim.SCIMClient.BASE_URL"><code class="name">var <span class="ident">BASE_URL</span></code></dt>
@@ -695,78 +715,280 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>def <span class="ident">api_call</span></span>(<span>self,<br>*,<br>http_verb: str,<br>path: str,<br>query_params: Dict[str, Any] | None = None,<br>body_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def api_call(
+    self,
+    *,
+    http_verb: str,
+    path: str,
+    query_params: Optional[Dict[str, Any]] = None,
+    body_params: Optional[Dict[str, Any]] = None,
+    headers: Optional[Dict[str, str]] = None,
+) -&gt; SCIMResponse:
+    &#34;&#34;&#34;Performs a Slack API request and returns the result.&#34;&#34;&#34;
+    url = f&#34;{self.base_url}{path}&#34;
+    query = _build_query(query_params)
+    if len(query) &gt; 0:
+        url += f&#34;?{query}&#34;
+
+    return self._perform_http_request(
+        http_verb=http_verb,
+        url=url,
+        body=body_params,
+        headers=_build_request_headers(
+            token=self.token,
+            default_headers=self.default_headers,
+            additional_headers=headers,
+        ),
+    )</code></pre>
+</details>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.create_group"><code class="name flex">
 <span>def <span class="ident">create_group</span></span>(<span>self,<br>group: Dict[str, Any] | <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>) ‑> <a title="slack_sdk.scim.v1.response.GroupCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupCreateResponse">GroupCreateResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupCreateResponse:
+    return GroupCreateResponse(
+        self.api_call(
+            http_verb=&#34;POST&#34;,
+            path=&#34;Groups&#34;,
+            body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.create_user"><code class="name flex">
 <span>def <span class="ident">create_user</span></span>(<span>self,<br>user: Dict[str, Any] | <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>) ‑> <a title="slack_sdk.scim.v1.response.UserCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserCreateResponse">UserCreateResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_user(self, user: Union[Dict[str, Any], User]) -&gt; UserCreateResponse:
+    return UserCreateResponse(
+        self.api_call(
+            http_verb=&#34;POST&#34;,
+            path=&#34;Users&#34;,
+            body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.delete_group"><code class="name flex">
 <span>def <span class="ident">delete_group</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.GroupDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupDeleteResponse">GroupDeleteResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_group(self, id: str) -&gt; GroupDeleteResponse:
+    return GroupDeleteResponse(
+        self.api_call(
+            http_verb=&#34;DELETE&#34;,
+            path=f&#34;Groups/{quote(id)}&#34;,
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.delete_user"><code class="name flex">
 <span>def <span class="ident">delete_user</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.UserDeleteResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserDeleteResponse">UserDeleteResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_user(self, id: str) -&gt; UserDeleteResponse:
+    return UserDeleteResponse(
+        self.api_call(
+            http_verb=&#34;DELETE&#34;,
+            path=f&#34;Users/{quote(id)}&#34;,
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.patch_group"><code class="name flex">
 <span>def <span class="ident">patch_group</span></span>(<span>self,<br>id: str,<br>partial_group: Dict[str, Any] | <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>) ‑> <a title="slack_sdk.scim.v1.response.GroupPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupPatchResponse">GroupPatchResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def patch_group(self, id: str, partial_group: Union[Dict[str, Any], Group]) -&gt; GroupPatchResponse:
+    return GroupPatchResponse(
+        self.api_call(
+            http_verb=&#34;PATCH&#34;,
+            path=f&#34;Groups/{quote(id)}&#34;,
+            body_params=(
+                partial_group.to_dict()
+                if isinstance(partial_group, Group)
+                else _to_dict_without_not_given(partial_group)
+            ),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.patch_user"><code class="name flex">
 <span>def <span class="ident">patch_user</span></span>(<span>self,<br>id: str,<br>partial_user: Dict[str, Any] | <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>) ‑> <a title="slack_sdk.scim.v1.response.UserPatchResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserPatchResponse">UserPatchResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def patch_user(self, id: str, partial_user: Union[Dict[str, Any], User]) -&gt; UserPatchResponse:
+    return UserPatchResponse(
+        self.api_call(
+            http_verb=&#34;PATCH&#34;,
+            path=f&#34;Users/{quote(id)}&#34;,
+            body_params=(
+                partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+            ),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.read_group"><code class="name flex">
 <span>def <span class="ident">read_group</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.ReadGroupResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadGroupResponse">ReadGroupResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_group(self, id: str) -&gt; ReadGroupResponse:
+    return ReadGroupResponse(self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Groups/{quote(id)}&#34;))</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.read_user"><code class="name flex">
 <span>def <span class="ident">read_user</span></span>(<span>self, id: str) ‑> <a title="slack_sdk.scim.v1.response.ReadUserResponse" href="v1/response.html#slack_sdk.scim.v1.response.ReadUserResponse">ReadUserResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_user(self, id: str) -&gt; ReadUserResponse:
+    return ReadUserResponse(self.api_call(http_verb=&#34;GET&#34;, path=f&#34;Users/{quote(id)}&#34;))</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.search_groups"><code class="name flex">
 <span>def <span class="ident">search_groups</span></span>(<span>self, *, count: int, start_index: int, filter: str | None = None) ‑> <a title="slack_sdk.scim.v1.response.SearchGroupsResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchGroupsResponse">SearchGroupsResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_groups(
+    self,
+    *,
+    # Pagination required as of August 30, 2019.
+    count: int,
+    start_index: int,
+    filter: Optional[str] = None,
+) -&gt; SearchGroupsResponse:
+    return SearchGroupsResponse(
+        self.api_call(
+            http_verb=&#34;GET&#34;,
+            path=&#34;Groups&#34;,
+            query_params={
+                &#34;filter&#34;: filter,
+                &#34;count&#34;: count,
+                &#34;startIndex&#34;: start_index,
+            },
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.search_users"><code class="name flex">
 <span>def <span class="ident">search_users</span></span>(<span>self, *, count: int, start_index: int, filter: str | None = None) ‑> <a title="slack_sdk.scim.v1.response.SearchUsersResponse" href="v1/response.html#slack_sdk.scim.v1.response.SearchUsersResponse">SearchUsersResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_users(
+    self,
+    *,
+    # Pagination required as of August 30, 2019.
+    count: int,
+    start_index: int,
+    filter: Optional[str] = None,
+) -&gt; SearchUsersResponse:
+    return SearchUsersResponse(
+        self.api_call(
+            http_verb=&#34;GET&#34;,
+            path=&#34;Users&#34;,
+            query_params={
+                &#34;filter&#34;: filter,
+                &#34;count&#34;: count,
+                &#34;startIndex&#34;: start_index,
+            },
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.update_group"><code class="name flex">
 <span>def <span class="ident">update_group</span></span>(<span>self,<br>group: Dict[str, Any] | <a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>) ‑> <a title="slack_sdk.scim.v1.response.GroupUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupUpdateResponse">GroupUpdateResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_group(self, group: Union[Dict[str, Any], Group]) -&gt; GroupUpdateResponse:
+    group_id = group.id if isinstance(group, Group) else group[&#34;id&#34;]
+    return GroupUpdateResponse(
+        self.api_call(
+            http_verb=&#34;PUT&#34;,
+            path=f&#34;Groups/{quote(group_id)}&#34;,
+            body_params=group.to_dict() if isinstance(group, Group) else _to_dict_without_not_given(group),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMClient.update_user"><code class="name flex">
 <span>def <span class="ident">update_user</span></span>(<span>self,<br>user: Dict[str, Any] | <a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>) ‑> <a title="slack_sdk.scim.v1.response.UserUpdateResponse" href="v1/response.html#slack_sdk.scim.v1.response.UserUpdateResponse">UserUpdateResponse</a></span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_user(self, user: Union[Dict[str, Any], User]) -&gt; UserUpdateResponse:
+    user_id = user.id if isinstance(user, User) else user[&#34;id&#34;]
+    return UserUpdateResponse(
+        self.api_call(
+            http_verb=&#34;PUT&#34;,
+            path=f&#34;Users/{quote(user_id)}&#34;,
+            body_params=user.to_dict() if isinstance(user, User) else _to_dict_without_not_given(user),
+        )
+    )</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -776,7 +998,6 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <span>(</span><span>*, url: str, status_code: int, raw_body: str | None, headers: dict)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -792,13 +1013,13 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
     errors: Optional[Errors]
 
     @property
-    def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
+    def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:
         if self._snake_cased_body is None:
             self._snake_cased_body = _to_snake_cased(self.body)
         return self._snake_cased_body
 
     @property
-    def errors(self) -&gt; Optional[Errors]:  # type: ignore
+    def errors(self) -&gt; Optional[Errors]:
         errors = self.snake_cased_body.get(&#34;errors&#34;)
         if errors is None:
             return None
@@ -824,11 +1045,12 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         for key, value in vars(self).items():
             dict_value[key] = value.to_dict() if hasattr(value, &#34;to_dict&#34;) else value
 
-        if dict_value:  # skipcq: PYL-R1705
+        if dict_value:
             return f&#34;&lt;slack_sdk.scim.v1.{self.__class__.__name__}: {dict_value}&gt;&#34;
         else:
             return self.__str__()</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.scim.v1.response.GroupCreateResponse" href="v1/response.html#slack_sdk.scim.v1.response.GroupCreateResponse">GroupCreateResponse</a></li>
@@ -871,32 +1093,32 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
 <dl>
 <dt id="slack_sdk.scim.SCIMResponse.errors"><code class="name">prop <span class="ident">errors</span> : <a title="slack_sdk.scim.v1.response.Errors" href="v1/response.html#slack_sdk.scim.v1.response.Errors">Errors</a> | None</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def errors(self) -&gt; Optional[Errors]:  # type: ignore
+def errors(self) -&gt; Optional[Errors]:
     errors = self.snake_cased_body.get(&#34;errors&#34;)
     if errors is None:
         return None
     return Errors(**errors)</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="slack_sdk.scim.SCIMResponse.snake_cased_body"><code class="name">prop <span class="ident">snake_cased_body</span> : Dict[str, Any] | None</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
+def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:
     if self._snake_cased_body is None:
         self._snake_cased_body = _to_snake_cased(self.body)
     return self._snake_cased_body</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -905,7 +1127,6 @@ def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
 <span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -914,7 +1135,7 @@ def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
     groups: List[Group]
 
     @property
-    def groups(self) -&gt; List[Group]:  # type: ignore
+    def groups(self) -&gt; List[Group]:
         return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -926,6 +1147,7 @@ def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
         self.body = underlying.body
         self._snake_cased_body = None</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
@@ -934,15 +1156,15 @@ def snake_cased_body(self) -&gt; Optional[Dict[str, Any]]:  # type: ignore
 <dl>
 <dt id="slack_sdk.scim.SearchGroupsResponse.groups"><code class="name">prop <span class="ident">groups</span> : List[<a title="slack_sdk.scim.v1.group.Group" href="v1/group.html#slack_sdk.scim.v1.group.Group">Group</a>]</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def groups(self) -&gt; List[Group]:  # type: ignore
+def groups(self) -&gt; List[Group]:
     return [Group(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -963,7 +1185,6 @@ def groups(self) -&gt; List[Group]:  # type: ignore
 <span>(</span><span>underlying: <a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -972,7 +1193,7 @@ def groups(self) -&gt; List[Group]:  # type: ignore
     users: List[User]
 
     @property
-    def users(self) -&gt; List[User]:  # type: ignore
+    def users(self) -&gt; List[User]:
         return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]
 
     def __init__(self, underlying: SCIMResponse):
@@ -984,6 +1205,7 @@ def groups(self) -&gt; List[Group]:  # type: ignore
         self.body = underlying.body
         self._snake_cased_body = None</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.scim.v1.response.SCIMResponse" href="v1/response.html#slack_sdk.scim.v1.response.SCIMResponse">SCIMResponse</a></li>
@@ -992,15 +1214,15 @@ def groups(self) -&gt; List[Group]:  # type: ignore
 <dl>
 <dt id="slack_sdk.scim.SearchUsersResponse.users"><code class="name">prop <span class="ident">users</span> : List[<a title="slack_sdk.scim.v1.user.User" href="v1/user.html#slack_sdk.scim.v1.user.User">User</a>]</code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def users(self) -&gt; List[User]:  # type: ignore
+def users(self) -&gt; List[User]:
     return [User(**r) for r in self.snake_cased_body.get(&#34;resources&#34;)]</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1021,7 +1243,6 @@ def users(self) -&gt; List[User]:  # type: ignore
 <span>(</span><span>*,<br>active: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>addresses: List[<a title="slack_sdk.scim.v1.user.UserAddress" href="v1/user.html#slack_sdk.scim.v1.user.UserAddress">UserAddress</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>display_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>emails: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>external_id: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>groups: List[<a title="slack_sdk.scim.v1.user.UserGroup" href="v1/user.html#slack_sdk.scim.v1.user.UserGroup">UserGroup</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>id: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>meta: <a title="slack_sdk.scim.v1.user.UserMeta" href="v1/user.html#slack_sdk.scim.v1.user.UserMeta">UserMeta</a> | Dict[str, Any] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>name: <a title="slack_sdk.scim.v1.user.UserName" href="v1/user.html#slack_sdk.scim.v1.user.UserName">UserName</a> | Dict[str, Any] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>nick_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>phone_numbers: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>photos: List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="v1/user.html#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>profile_url: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>roles: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="v1/types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>schemas: List[str] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>timezone: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>title: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>user_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1071,34 +1292,42 @@ def users(self) -&gt; List[User]:  # type: ignore
         **kwargs,
     ) -&gt; None:
         self.active = active
-        self.addresses = (  # type: ignore
-            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]
+        self.addresses = (
+            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]  # type: ignore
             if _is_iterable(addresses)
             else addresses
         )
         self.display_name = display_name
-        self.emails = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails] if _is_iterable(emails) else emails
+        self.emails = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]  # type: ignore
+            if _is_iterable(emails)
+            else emails
         )
         self.external_id = external_id
-        self.groups = (  # type: ignore
-            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups] if _is_iterable(groups) else groups
+        self.groups = (
+            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]  # type: ignore
+            if _is_iterable(groups)
+            else groups
         )
         self.id = id
-        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta  # type: ignore
-        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name  # type: ignore
+        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
+        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name
         self.nick_name = nick_name
-        self.phone_numbers = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]
+        self.phone_numbers = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]  # type: ignore
             if _is_iterable(phone_numbers)
             else phone_numbers
         )
-        self.photos = (  # type: ignore
-            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos] if _is_iterable(photos) else photos
+        self.photos = (
+            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]  # type: ignore
+            if _is_iterable(photos)
+            else photos
         )
         self.profile_url = profile_url
-        self.roles = (  # type: ignore
-            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles] if _is_iterable(roles) else roles
+        self.roles = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]  # type: ignore
+            if _is_iterable(roles)
+            else roles
         )
         self.schemas = schemas
         self.timezone = timezone
@@ -1113,6 +1342,7 @@ def users(self) -&gt; List[User]:  # type: ignore
     def __repr__(self):
         return f&#34;&lt;slack_sdk.scim.{self.__class__.__name__}: {self.to_dict()}&gt;&#34;</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.scim.User.active"><code class="name">var <span class="ident">active</span> : bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="v1/default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
@@ -1198,6 +1428,13 @@ def users(self) -&gt; List[User]:  # type: ignore
 <span>def <span class="ident">to_dict</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -1329,7 +1566,7 @@ def users(self) -&gt; List[User]:  # type: ignore
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

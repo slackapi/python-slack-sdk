@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>slack_sdk.audit_logs.v1.logs API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -40,7 +51,6 @@ hljs.highlightAll();
 <span>(</span><span>*, id: str | None = None, team_id: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -59,6 +69,7 @@ hljs.highlightAll();
         self.id = id
         self.team_id = team_id</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARequest.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -76,7 +87,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>team_id: str | None = None,<br>title: str | None = None,<br>action: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None = None,<br>condition: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a> | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -106,6 +116,7 @@ hljs.highlightAll();
             condition if condition is None or isinstance(condition, AAARuleCondition) else AAARuleCondition(**condition)
         )</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARule.action"><code class="name">var <span class="ident">action</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None</code></dt>
@@ -135,7 +146,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>resolution: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a> | None = None,<br>notify: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -165,6 +175,7 @@ hljs.highlightAll();
                 else:
                     self.notify.append(a)</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.notify"><code class="name">var <span class="ident">notify</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None</code></dt>
@@ -182,7 +193,6 @@ hljs.highlightAll();
 <span>(</span><span>*, entity_type: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -198,6 +208,7 @@ hljs.highlightAll();
     ) -&gt; None:
         self.entity_type = entity_type</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
@@ -211,7 +222,6 @@ hljs.highlightAll();
 <span>(</span><span>*, value: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -227,6 +237,7 @@ hljs.highlightAll();
     ) -&gt; None:
         self.value = value</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value"><code class="name">var <span class="ident">value</span> : str | None</code></dt>
@@ -240,7 +251,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>datatype: str | None = None,<br>operator: str | None = None,<br>values: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>] | None = None,<br>entity_type: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -272,6 +282,7 @@ hljs.highlightAll();
                     self.values.append(a)
         self.entity_type = entity_type</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
@@ -297,7 +308,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>field: str | None = None,<br>values: List[str] | None = None,<br>datatype: str | None = None,<br>operator: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -322,6 +332,7 @@ hljs.highlightAll();
         self.datatype = datatype
         self.operator = operator</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
@@ -347,7 +358,6 @@ hljs.highlightAll();
 <span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -368,6 +378,7 @@ hljs.highlightAll();
         self.name = name
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -389,7 +400,6 @@ hljs.highlightAll();
 <span>(</span><span>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -409,6 +419,7 @@ hljs.highlightAll();
         self.user = User(**user) if isinstance(user, dict) else user
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Actor.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
@@ -430,7 +441,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>is_distributed: bool | None = None,<br>is_directory_approved: bool | None = None,<br>is_workflow_app: bool | None = None,<br>scopes: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -463,6 +473,7 @@ hljs.highlightAll();
         self.scopes = scopes
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.App.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -500,7 +511,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>name: str | None = None,<br>type: str | None = None,<br>items: <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -522,6 +532,7 @@ hljs.highlightAll();
         self.type = type
         self.items = items</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Attribute.items"><code class="name">var <span class="ident">items</span> : <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None</code></dt>
@@ -543,7 +554,6 @@ hljs.highlightAll();
 <span>(</span><span>*, type: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -559,6 +569,7 @@ hljs.highlightAll();
     ) -&gt; None:
         self.type = type</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.AttributeItems.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
@@ -572,7 +583,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>privacy: str | None = None,<br>name: str | None = None,<br>is_shared: bool | None = None,<br>is_org_shared: bool | None = None,<br>teams_shared_with: List[str] | None = None,<br>original_connected_channel_id: str | None = None,<br>is_salesforce_channel: bool | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -611,6 +621,7 @@ hljs.highlightAll();
         self.is_salesforce_channel = is_salesforce_channel
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Channel.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -656,7 +667,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>location: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>ua: str | None = None,<br>ip_address: str | None = None,<br>session_id: str | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -686,6 +696,7 @@ hljs.highlightAll();
         self.app = App(**app) if isinstance(app, dict) else app
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Context.app"><code class="name">var <span class="ident">app</span> : <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | None</code></dt>
@@ -719,7 +730,6 @@ hljs.highlightAll();
 <span>(</span><span>*, type: List[str] | None = None, user: List[str] | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -739,6 +749,7 @@ hljs.highlightAll();
         self.user = user
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.type"><code class="name">var <span class="ident">type</span> : List[str] | None</code></dt>
@@ -756,7 +767,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>name: str | None = None,<br>new_value: str | List[str] | Dict[str, Any] | None = None,<br>previous_value: str | List[str] | Dict[str, Any] | None = None,<br>expires_on: int | None = None,<br>mobile_only: bool | None = None,<br>web_only: bool | None = None,<br>non_sso_only: bool | None = None,<br>type: str | None = None,<br>is_workflow: bool | None = None,<br>inviter: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>kicker: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>shared_to: str | None = None,<br>reason: str | None = None,<br>origin_team: str | None = None,<br>target_team: str | None = None,<br>is_internal_integration: bool | None = None,<br>cleared_resolution: str | None = None,<br>app_owner_id: str | None = None,<br>bot_scopes: List[str] | None = None,<br>new_scopes: List[str] | None = None,<br>previous_scopes: List[str] | None = None,<br>granular_bot_token: bool | None = None,<br>scopes: List[str] | None = None,<br>scopes_bot: List[str] | None = None,<br>resolution: str | None = None,<br>app_previously_resolved: bool | None = None,<br>admin_app_id: str | None = None,<br>bot_id: str | None = None,<br>installer_user_id: str | None = None,<br>approver_id: str | None = None,<br>approval_type: str | None = None,<br>app_previously_approved: bool | None = None,<br>old_scopes: List[str] | None = None,<br>channels: List[str] | None = None,<br>permissions: List[Dict[str, Any]] | None = None,<br>new_version_id: str | None = None,<br>trigger: str | None = None,<br>export_type: str | None = None,<br>export_start_ts: str | None = None,<br>export_end_ts: str | None = None,<br>barrier_id: str | None = None,<br>primary_usergroup_id: str | None = None,<br>barriered_from_usergroup_ids: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>duration: int | None = None,<br>desktop_app_browser_quit: bool | None = None,<br>invite_id: str | None = None,<br>external_organization_id: str | None = None,<br>external_organization_name: str | None = None,<br>external_user_id: str | None = None,<br>external_user_email: str | None = None,<br>channel_id: str | None = None,<br>added_team_id: str | None = None,<br>is_token_rotation_enabled_app: bool | None = None,<br>old_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>new_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>who_can_post: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>can_thread: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>is_external_limited: bool | None = None,<br>exporting_team_id: int | None = None,<br>session_search_start: int | None = None,<br>deprecation_search_end: int | None = None,<br>is_error: bool | None = None,<br>creator: str | None = None,<br>team: str | None = None,<br>app_id: str | None = None,<br>enable_at_here: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>enable_at_channel: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>can_huddle: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>url_private: str | None = None,<br>shared_with: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a> | None = None,<br>initiated_by: str | None = None,<br>source_team: str | None = None,<br>destination_team: str | None = None,<br>succeeded_users: List[str] | str | None = None,<br>failed_users: List[str] | str | None = None,<br>enterprise: str | None = None,<br>subteam: str | None = None,<br>action: str | None = None,<br>idp_group_member_count: int | None = None,<br>workspace_member_count: int | None = None,<br>added_user_count: int | None = None,<br>added_user_error_count: int | None = None,<br>reactivated_user_count: int | None = None,<br>removed_user_count: int | None = None,<br>removed_user_error_count: int | None = None,<br>total_removal_count: int | None = None,<br>is_flagged: str | None = None,<br>target_user: str | None = None,<br>idp_config_id: str | None = None,<br>config_type: str | None = None,<br>idp_entity_id_hash: str | None = None,<br>label: str | None = None,<br>previous_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>new_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>target_user_id: str | None = None,<br>space_file_id: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a> | None = None,<br>target_entity: str | None = None,<br>target_entity_id: str | None = None,<br>changed_permissions: List[str] | None = None,<br>datastore_name: str | None = None,<br>attributes: List[Dict[str, str] | <a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>] | None = None,<br>channel: str | None = None,<br>entity_type: str | None = None,<br>actor: str | None = None,<br>access_level: str | None = None,<br>functions: List[str] | None = None,<br>workflows: List[str] | None = None,<br>datastores: List[str] | None = None,<br>permissions_updated: bool | None = None,<br>matched_rule: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a> | None = None,<br>request: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a> | None = None,<br>rules_checked: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>] | None = None,<br>disconnecting_team: str | None = None,<br>is_channel_canvas: bool | None = None,<br>linked_channel_id: str | None = None,<br>column_id: str | None = None,<br>row_id: str | None = None,<br>cell_date_updated: int | None = None,<br>view_id: str | None = None,<br>user: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1158,7 +1168,7 @@ hljs.highlightAll();
             self.attributes = []
             for a in attributes:
                 if isinstance(a, dict):
-                    self.attributes.append(Attribute(**a))
+                    self.attributes.append(Attribute(**a))  # type: ignore[arg-type]
                 else:
                     self.attributes.append(a)
         self.channel = channel
@@ -1176,11 +1186,11 @@ hljs.highlightAll();
         self.rules_checked = None
         if rules_checked is not None:
             self.rules_checked = []
-            for a in rules_checked:
+            for a in rules_checked:  # type: ignore[assignment]
                 if isinstance(a, dict):
-                    self.rules_checked.append(AAARule(**a))
+                    self.rules_checked.append(AAARule(**a))  # type: ignore[arg-type]
                 else:
-                    self.rules_checked.append(a)
+                    self.rules_checked.append(a)  # type: ignore[arg-type]
         self.disconnecting_team = disconnecting_team
         self.is_channel_canvas = is_channel_canvas
         self.linked_channel_id = linked_channel_id
@@ -1190,6 +1200,7 @@ hljs.highlightAll();
         self.view_id = view_id
         self.user = user</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Details.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
@@ -1687,7 +1698,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>workspace: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>enterprise: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>channel: <a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a> | Dict[str, Any] | None = None,<br>file: <a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a> | Dict[str, Any] | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>message: <a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a> | Dict[str, Any] | None = None,<br>huddle: <a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a> | Dict[str, Any] | None = None,<br>role: <a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a> | Dict[str, Any] | None = None,<br>usergroup: <a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a> | Dict[str, Any] | None = None,<br>workflow: <a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a> | Dict[str, Any] | None = None,<br>barrier: <a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a> | Dict[str, Any] | None = None,<br>workflow_v2: <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a> | Dict[str, Any] | None = None,<br>account_type_role: <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | Dict[str, Any] | None = None,<br>list: <a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1752,6 +1762,7 @@ hljs.highlightAll();
         self.list = SlackList(**list) if isinstance(list, dict) else list
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Entity.account_type_role"><code class="name">var <span class="ident">account_type_role</span> : <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | None</code></dt>
@@ -1829,7 +1840,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>date_create: int | None = None,<br>action: str | None = None,<br>actor: <a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a> | Dict[str, Any] | None = None,<br>entity: <a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a> | Dict[str, Any] | None = None,<br>context: <a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a> | Dict[str, Any] | None = None,<br>details: <a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1865,6 +1875,7 @@ hljs.highlightAll();
         self.details = Details(**details) if isinstance(details, dict) else details
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Entry.action"><code class="name">var <span class="ident">action</span> : str | None</code></dt>
@@ -1906,7 +1917,6 @@ hljs.highlightAll();
 <span>(</span><span>*, enabled: bool | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1923,6 +1933,7 @@ hljs.highlightAll();
         self.enabled = enabled
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled"><code class="name">var <span class="ident">enabled</span> : bool | None</code></dt>
@@ -1936,7 +1947,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>filetype: str | None = None,<br>title: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1963,6 +1973,7 @@ hljs.highlightAll();
         self.title = title
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.File.filetype"><code class="name">var <span class="ident">filetype</span> : str | None</code></dt>
@@ -1992,7 +2003,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>date_start: int | None = None,<br>date_end: int | None = None,<br>participants: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2019,6 +2029,7 @@ hljs.highlightAll();
         self.participants = participants
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_end"><code class="name">var <span class="ident">date_end</span> : int | None</code></dt>
@@ -2048,7 +2059,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>primary_usergroup: str | None = None,<br>barriered_from_usergroups: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2075,6 +2085,7 @@ hljs.highlightAll();
         self.restricted_subjects = restricted_subjects
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups"><code class="name">var <span class="ident">barriered_from_usergroups</span> : List[str] | None</code></dt>
@@ -2104,7 +2115,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>type: str | None = None,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2131,6 +2141,7 @@ hljs.highlightAll();
         self.domain = domain
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Location.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
@@ -2160,7 +2171,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>entries: List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a> | Dict[str, Any]] | None = None,<br>response_metadata: <a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a> | Dict[str, Any] | None = None,<br>ok: bool | None = None,<br>error: str | None = None,<br>needed: str | None = None,<br>provided: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2185,7 +2195,7 @@ hljs.highlightAll();
         provided: Optional[str] = None,
         **kwargs,
     ) -&gt; None:
-        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]  # type: ignore[union-attr]
         self.response_metadata = (
             ResponseMetadata(**response_metadata) if isinstance(response_metadata, dict) else response_metadata
         )
@@ -2195,6 +2205,7 @@ hljs.highlightAll();
         self.provided = provided
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.entries"><code class="name">var <span class="ident">entries</span> : List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>] | None</code></dt>
@@ -2232,7 +2243,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>channel: str | None = None,<br>team: str | None = None,<br>timestamp: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2256,6 +2266,7 @@ hljs.highlightAll();
         self.timestamp = timestamp
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Message.channel"><code class="name">var <span class="ident">channel</span> : str | None</code></dt>
@@ -2281,7 +2292,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>real_name: str | None = None,<br>first_name: str | None = None,<br>last_name: str | None = None,<br>display_name: str | None = None,<br>image_original: str | None = None,<br>image_24: str | None = None,<br>image_32: str | None = None,<br>image_48: str | None = None,<br>image_72: str | None = None,<br>image_192: str | None = None,<br>image_512: str | None = None,<br>image_1024: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2330,6 +2340,7 @@ hljs.highlightAll();
         self.image_512 = image_512
         self.image_1024 = image_1024</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Profile.display_name"><code class="name">var <span class="ident">display_name</span> : str | None</code></dt>
@@ -2387,7 +2398,6 @@ hljs.highlightAll();
 <span>(</span><span>*, next_cursor: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2405,6 +2415,7 @@ hljs.highlightAll();
         self.next_cursor = next_cursor
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor"><code class="name">var <span class="ident">next_cursor</span> : str | None</code></dt>
@@ -2422,7 +2433,6 @@ hljs.highlightAll();
 <span>(</span><span>*, type: str | None = None, duration_days: int | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2442,6 +2452,7 @@ hljs.highlightAll();
         self.duration_days = duration_days
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days"><code class="name">var <span class="ident">duration_days</span> : int | None</code></dt>
@@ -2459,7 +2470,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>type: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2483,6 +2493,7 @@ hljs.highlightAll();
         self.type = type
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Role.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -2508,7 +2519,6 @@ hljs.highlightAll();
 <span>(</span><span>*, channel_id: str | None = None, access_level: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2528,6 +2538,7 @@ hljs.highlightAll();
         self.access_level = access_level
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.SharedWith.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
@@ -2545,7 +2556,6 @@ hljs.highlightAll();
 <span>(</span><span>*, id: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2563,6 +2573,7 @@ hljs.highlightAll();
         self.id = id
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.SlackList.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -2580,7 +2591,6 @@ hljs.highlightAll();
 <span>(</span><span>*, payload: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2596,6 +2606,7 @@ hljs.highlightAll();
     ) -&gt; None:
         self.payload = payload</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload"><code class="name">var <span class="ident">payload</span> : str | None</code></dt>
@@ -2609,7 +2620,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>email: str | None = None,<br>team: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2636,6 +2646,7 @@ hljs.highlightAll();
         self.team = team
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.User.email"><code class="name">var <span class="ident">email</span> : str | None</code></dt>
@@ -2665,7 +2676,6 @@ hljs.highlightAll();
 <span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2686,6 +2696,7 @@ hljs.highlightAll();
         self.name = name
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Usergroup.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
@@ -2707,7 +2718,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2731,6 +2741,7 @@ hljs.highlightAll();
         self.domain = domain
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.Workflow.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
@@ -2756,7 +2767,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>id: str | None = None,<br>app_id: str | None = None,<br>date_updated: int | None = None,<br>callback_id: str | None = None,<br>name: str | None = None,<br>updated_by: str | None = None,<br>step_configuration: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2799,6 +2809,7 @@ hljs.highlightAll();
                     self.step_configuration.append(a)
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
@@ -2840,7 +2851,6 @@ hljs.highlightAll();
 <span>(</span><span>*,<br>name: str | None = None,<br>step_function_type: str | None = None,<br>step_function_app_id: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2848,7 +2858,7 @@ hljs.highlightAll();
 <pre><code class="python">class WorkflowV2StepConfiguration:
     name: Optional[str]
     step_function_type: Optional[str]
-    step_function_app_id: Optional[int]
+    step_function_app_id: Optional[str]
     unknown_fields: Dict[str, Any]
 
     def __init__(
@@ -2864,13 +2874,14 @@ hljs.highlightAll();
         self.step_function_app_id = step_function_app_id
         self.unknown_fields = kwargs</code></pre>
 </details>
+<div class="desc"></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
-<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id"><code class="name">var <span class="ident">step_function_app_id</span> : int | None</code></dt>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id"><code class="name">var <span class="ident">step_function_app_id</span> : str | None</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -3371,7 +3382,7 @@ hljs.highlightAll();
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>
