@@ -49,7 +49,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.web.client.WebClient"><code class="flex name class">
 <span>class <span class="ident">WebClient</span></span>
-<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
+<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://api.slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -70,7 +70,7 @@ el.replaceWith(d);
     Attributes:
         token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is `&#39;https://slack.com/api/&#39;`
+            Default is `&#39;https://api.slack.com/api/&#39;`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
@@ -960,7 +960,7 @@ el.replaceWith(d);
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Delete public or private channels in bulk.
-        https://slack.com/api/admin.conversations.bulkDelete
+        https://api.slack.com/api/admin.conversations.bulkDelete
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
         return self.api_call(&#34;admin.conversations.bulkDelete&#34;, params=kwargs)
@@ -5453,7 +5453,7 @@ as well as parsing any responses received into a <code>SlackResponse</code>.</p>
 <dd>A string specifying an <code>xoxp-*</code> or <code>xoxb-*</code> token.</dd>
 <dt><strong><code>base_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string representing the Slack API base URL.
-Default is <code>'https://slack.com/api/'</code></dd>
+Default is <code>'https://api.slack.com/api/'</code></dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>The maximum number of seconds the client will wait
 to connect and receive a response from Slack.
@@ -6195,13 +6195,13 @@ With an org-level token, enterprise_id or team_ids is required.
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Delete public or private channels in bulk.
-    https://slack.com/api/admin.conversations.bulkDelete
+    https://api.slack.com/api/admin.conversations.bulkDelete
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
     return self.api_call(&#34;admin.conversations.bulkDelete&#34;, params=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Delete public or private channels in bulk.
-<a href="https://slack.com/api/admin.conversations.bulkDelete">https://slack.com/api/admin.conversations.bulkDelete</a></p></div>
+<a href="https://api.slack.com/api/admin.conversations.bulkDelete">https://api.slack.com/api/admin.conversations.bulkDelete</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.admin_conversations_bulkMove"><code class="name flex">
 <span>def <span class="ident">admin_conversations_bulkMove</span></span>(<span>self, *, channel_ids: str | Sequence[str], target_team_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>

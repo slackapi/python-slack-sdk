@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient"><code class="flex name class">
 <span>class <span class="ident">AsyncBaseClient</span></span>
-<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>session: aiohttp.client.ClientSession | None = None,<br>trust_env_in_session: bool = False,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[slack_sdk.http_retry.async_handler.AsyncRetryHandler] | None = None)</span>
+<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://api.slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>session: aiohttp.client.ClientSession | None = None,<br>trust_env_in_session: bool = False,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[slack_sdk.http_retry.async_handler.AsyncRetryHandler] | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -56,7 +56,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AsyncBaseClient:
-    BASE_URL = &#34;https://slack.com/api/&#34;
+    BASE_URL = &#34;https://api.slack.com/api/&#34;
 
     def __init__(
         self,
@@ -81,7 +81,7 @@ el.replaceWith(d);
             base_url += &#34;/&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://api.slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -214,7 +214,7 @@ el.replaceWith(d);
 
         Args:
             http_verb (str): The HTTP verb. e.g. &#39;GET&#39; or &#39;POST&#39;.
-            api_url (str): The Slack API url. e.g. &#39;https://slack.com/api/chat.postMessage&#39;
+            api_url (str): The Slack API url. e.g. &#39;https://api.slack.com/api/chat.postMessage&#39;
             req_args (dict): The request arguments to be attached to the request.
             e.g.
             {
@@ -302,7 +302,7 @@ el.replaceWith(d);
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
 <dd>
 <div class="desc"><p>A string representing the Slack API base URL.
-Default is <code>'https://slack.com/api/'</code>.</p></div>
+Default is <code>'https://api.slack.com/api/'</code>.</p></div>
 </dd>
 <dt id="slack_sdk.web.async_base_client.AsyncBaseClient.headers"><code class="name">var <span class="ident">headers</span></code></dt>
 <dd>

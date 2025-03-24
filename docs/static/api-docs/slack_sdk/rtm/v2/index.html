@@ -48,7 +48,9 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.rtm.v2.RTMClient"><code class="flex name class">
 <span>class <span class="ident">RTMClient</span></span>
-<span>(</span><span>*,<br>token: str | None = None,<br>web_client: <a title="slack_sdk.web.client.WebClient" href="../../web/client.html#slack_sdk.web.client.WebClient">WebClient</a> | None = None,<br>auto_reconnect_enabled: bool = True,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>timeout: int = 30,<br>base_url: str = 'https://slack.com/api/',<br>headers: dict | None = None,<br>ping_interval: int = 5,<br>concurrency: int = 10,<br>logger: logging.Logger | None = None,<br>on_message_listeners: List[Callable[[str], None]] | None = None,<br>on_error_listeners: List[Callable[[Exception], None]] | None = None,<br>on_close_listeners: List[Callable[[int, str | None], None]] | None = None,<br>trace_enabled: bool = False,<br>all_message_trace_enabled: bool = False,<br>ping_pong_trace_enabled: bool = False)</span>
+<span>(</span><span>*,<br>token: str | None = None,<br>web_client: <a
+    title="slack_sdk.web.client.WebClient"
+    href="../../web/client.html#slack_sdk.web.client.WebClient">WebClient</a> | None = None,<br>auto_reconnect_enabled: bool = True,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>timeout: int = 30,<br>base_url: str = 'https://api.slack.com/api/',<br>headers: dict | None = None,<br>ping_interval: int = 5,<br>concurrency: int = 10,<br>logger: logging.Logger | None = None,<br>on_message_listeners: List[Callable[[str], None]] | None = None,<br>on_error_listeners: List[Callable[[Exception], None]] | None = None,<br>on_close_listeners: List[Callable[[int, str | None], None]] | None = None,<br>trace_enabled: bool = False,<br>all_message_trace_enabled: bool = False,<br>ping_pong_trace_enabled: bool = False)</span>
 </code></dt>
 <dd>
 <details class="source">

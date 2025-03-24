@@ -37,7 +37,7 @@ class WebClient(BaseClient):
     Attributes:
         token (str): A string specifying an `xoxp-*` or `xoxb-*` token.
         base_url (str): A string representing the Slack API base URL.
-            Default is `'https://slack.com/api/'`
+            Default is `'https://api.slack.com/api/'`
         timeout (int): The maximum number of seconds the client will wait
             to connect and receive a response from Slack.
             Default is 30 seconds.
@@ -927,7 +927,7 @@ class WebClient(BaseClient):
         **kwargs,
     ) -> SlackResponse:
         """Delete public or private channels in bulk.
-        https://slack.com/api/admin.conversations.bulkDelete
+        https://api.slack.com/api/admin.conversations.bulkDelete
         """
         kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
         return self.api_call("admin.conversations.bulkDelete", params=kwargs)

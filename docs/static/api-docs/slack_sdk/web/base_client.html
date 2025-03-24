@@ -49,7 +49,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.web.base_client.BaseClient"><code class="flex name class">
 <span>class <span class="ident">BaseClient</span></span>
-<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
+<span>(</span><span>token: str | None = None,<br>base_url: str = 'https://api.slack.com/api/',<br>timeout: int = 30,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>headers: dict | None = None,<br>user_agent_prefix: str | None = None,<br>user_agent_suffix: str | None = None,<br>team_id: str | None = None,<br>logger: logging.Logger | None = None,<br>retry_handlers: List[<a title="slack_sdk.http_retry.handler.RetryHandler" href="../http_retry/handler.html#slack_sdk.http_retry.handler.RetryHandler">RetryHandler</a>] | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -57,7 +57,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BaseClient:
-    BASE_URL = &#34;https://slack.com/api/&#34;
+    BASE_URL = &#34;https://api.slack.com/api/&#34;
 
     def __init__(
         self,
@@ -80,7 +80,7 @@ el.replaceWith(d);
             base_url += &#34;/&#34;
         self.base_url = base_url
         &#34;&#34;&#34;A string representing the Slack API base URL.
-        Default is `&#39;https://slack.com/api/&#39;`.&#34;&#34;&#34;
+        Default is `&#39;https://api.slack.com/api/&#39;`.&#34;&#34;&#34;
         self.timeout = timeout
         &#34;&#34;&#34;The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -255,7 +255,7 @@ el.replaceWith(d);
 
         Args:
             token: Slack API Token (either bot token or user token)
-            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://api.slack.com/api/chat.postMessage)
             query_params: Query string
             json_body: JSON data structure (it&#39;s still a dict at this point),
                 if you give this argument, body_params and files will be skipped
@@ -356,7 +356,7 @@ el.replaceWith(d);
         &#34;&#34;&#34;Performs an HTTP request and parses the response.
 
         Args:
-            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://api.slack.com/api/chat.postMessage)
             args: args has &#34;headers&#34;, &#34;data&#34;, &#34;params&#34;, and &#34;json&#34;
                 &#34;headers&#34;: Dict[str, str]
                 &#34;data&#34;: Dict[str, Any]
@@ -743,7 +743,7 @@ should match this.</dd>
 <dt id="slack_sdk.web.base_client.BaseClient.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
 <dd>
 <div class="desc"><p>A string representing the Slack API base URL.
-Default is <code>'https://slack.com/api/'</code>.</p></div>
+Default is <code>'https://api.slack.com/api/'</code>.</p></div>
 </dd>
 <dt id="slack_sdk.web.base_client.BaseClient.headers"><code class="name">var <span class="ident">headers</span></code></dt>
 <dd>

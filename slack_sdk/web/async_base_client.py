@@ -25,7 +25,7 @@ from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 
 
 class AsyncBaseClient:
-    BASE_URL = "https://slack.com/api/"
+    BASE_URL = "https://api.slack.com/api/"
 
     def __init__(
         self,
@@ -50,7 +50,7 @@ class AsyncBaseClient:
             base_url += "/"
         self.base_url = base_url
         """A string representing the Slack API base URL.
-        Default is `'https://slack.com/api/'`."""
+        Default is `'https://api.slack.com/api/'`."""
         self.timeout = timeout
         """The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -183,7 +183,7 @@ class AsyncBaseClient:
 
         Args:
             http_verb (str): The HTTP verb. e.g. 'GET' or 'POST'.
-            api_url (str): The Slack API url. e.g. 'https://slack.com/api/chat.postMessage'
+            api_url (str): The Slack API url. e.g. 'https://api.slack.com/api/chat.postMessage'
             req_args (dict): The request arguments to be attached to the request.
             e.g.
             {

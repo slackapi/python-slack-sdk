@@ -120,17 +120,17 @@ class TestInternalUtils(unittest.TestCase):
 
     def test_get_url_prevent_double_slash(self):
         # Test case: Prevent double slash when both base_url and api_method include slashes
-        api_url = _get_url("https://slack.com/api/", "/chat.postMessage")
+        api_url = _get_url("https://api.slack.com/api/", "/chat.postMessage")
         self.assertEqual(
             api_url,
-            "https://slack.com/api/chat.postMessage",
+            "https://api.slack.com/api/chat.postMessage",
             "Should correctly handle and remove double slashes between base_url and api_method",
         )
 
         # Test case: Handle api_method without leading slash
-        api_url = _get_url("https://slack.com/api/", "chat.postMessage")
+        api_url = _get_url("https://api.slack.com/api/", "chat.postMessage")
         self.assertEqual(
             api_url,
-            "https://slack.com/api/chat.postMessage",
+            "https://api.slack.com/api/chat.postMessage",
             "Should correctly handle api_method without a leading slash",
         )

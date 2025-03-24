@@ -39,7 +39,7 @@ from slack_sdk.proxy_env_variable_loader import load_http_proxy_from_env
 
 
 class BaseClient:
-    BASE_URL = "https://slack.com/api/"
+    BASE_URL = "https://api.slack.com/api/"
 
     def __init__(
         self,
@@ -62,7 +62,7 @@ class BaseClient:
             base_url += "/"
         self.base_url = base_url
         """A string representing the Slack API base URL.
-        Default is `'https://slack.com/api/'`."""
+        Default is `'https://api.slack.com/api/'`."""
         self.timeout = timeout
         """The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
@@ -237,7 +237,7 @@ class BaseClient:
 
         Args:
             token: Slack API Token (either bot token or user token)
-            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://api.slack.com/api/chat.postMessage)
             query_params: Query string
             json_body: JSON data structure (it's still a dict at this point),
                 if you give this argument, body_params and files will be skipped
@@ -338,7 +338,7 @@ class BaseClient:
         """Performs an HTTP request and parses the response.
 
         Args:
-            url: Complete URL (e.g., https://slack.com/api/chat.postMessage)
+            url: Complete URL (e.g., https://api.slack.com/api/chat.postMessage)
             args: args has "headers", "data", "params", and "json"
                 "headers": Dict[str, str]
                 "data": Dict[str, Any]

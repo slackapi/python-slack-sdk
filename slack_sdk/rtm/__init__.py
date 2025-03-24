@@ -48,7 +48,7 @@ class RTMClient(object):
             Default is 30.
         base_url (str): The base url for all HTTP requests.
             Note: This is only used in the WebClient.
-            Default is "https://slack.com/api/".
+            Default is "https://api.slack.com/api/".
         connect_method (str): An string specifying if the client
             will connect with `rtm.connect` or `rtm.start`.
             Default is `rtm.connect`.
