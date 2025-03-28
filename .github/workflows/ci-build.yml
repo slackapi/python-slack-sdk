@@ -36,20 +36,28 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
+          pip install -U pip
           pip install -r requirements/testing.txt
           pip install -r requirements/optional.txt
       - name: Run validation (black/flake8/pytest)
         run: |
           black --check slack/ slack_sdk/ tests/ integration_tests/
           flake8 slack/ slack_sdk/
-          PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ tests/
+          PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ --junitxml=reports/test_report.xml tests/
       - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
         run: |
           # Install v1.4 for testing
           pip install "SQLAlchemy>=1.4,<2"
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          directory: ./reports/
+          flags: ${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
       - name: Run codecov (only with latest supported version)
         if: startsWith(matrix.python-version, '3.13')
         uses: codecov/codecov-action@v5
