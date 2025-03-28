@@ -58,7 +58,7 @@ jobs:
           flags: ${{ matrix.python-version }}
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
-      - name: Run codecov (only with latest supported version)
+      - name: Upload test coverage to Codecov (only with latest supported version)
         if: startsWith(matrix.python-version, '3.13')
         uses: codecov/codecov-action@v5
         with:
