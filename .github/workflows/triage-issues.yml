@@ -4,20 +4,19 @@
 
 name: Close stale issues and PRs
 
-on: 
+on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 1'
-  
-permissions:
-  issues: write
-  pull-requests: write
+    - cron: "0 0 * * 1"
 
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
-      - uses: actions/stale@v9.1.0
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
         with:
           days-before-issue-stale: 30
           days-before-issue-close: 10
@@ -31,4 +30,3 @@ jobs:
           remove-stale-when-updated: true
           enable-statistics: true
           operations-per-run: 60
-
