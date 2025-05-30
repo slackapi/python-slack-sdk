@@ -42,6 +42,13 @@ It's also good to try on the Python REPL.
 
 ## Access Tokens {#handling-tokens}
 
+Making calls to the Slack API often requires a [token](https://docs.slack.dev/authentication/tokens) with associated scopes that grant access to resources.
+
+Collecting a token can be done from app settings or with an OAuth installation depending on your app's requirements:
+
+- [Single Workspace Install](#single-workspace-install)
+- [Multiple Workspace Install](#multiple-workspace-install)
+
 **Always keep your access tokens safe.**
 
 The OAuth token you use to call the Slack API has access to the data on
@@ -84,13 +91,11 @@ Credentials](https://api.slack.com/authentication/best-practices) page within th
 
 ### Single Workspace Install
 
-If you're building an application for a single Slack workspace,
-there's no need to build out the entire OAuth flow.
+If you're building an application for a single Slack workspace, there's no need to build out the entire OAuth flow.
 
-Once you've setup your features, click on the **Install App to Team**
-button found on the **Install App** page. If you add new permission
-scopes or Slack app features after an app has been installed, you must
-reinstall the app to your workspace for changes to take effect.
+After [creating an app](https://api.slack.com/apps?new_app=1) and adding [scopes](http://docs.slack.dev/reference/scopes) on the **OAuth & Permissions** page, go to the **Install App** page and click the **Install to Team** button to authorize the app and generate a token.
+
+If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to your workspace for changes to take effect.
 
 ## Multiple Workspace Install
 
@@ -108,7 +113,7 @@ token once it is granted. The client ID and client secret are available
 from your [app's configuration page](https://api.slack.com/apps). The
 scopes are determined by the functionality of the app — every method
 you wish to access has a corresponding scope and your app will need to
-request that scope in order to be able to access the method. Review the [full list of Slack OAuth scopes](https://api.slack.com/scopes).
+request that scope in order to be able to access the method. Review the [full list of Slack OAuth scopes](http://docs.slack.dev/reference/scopes).
 
 ```python
 import os
