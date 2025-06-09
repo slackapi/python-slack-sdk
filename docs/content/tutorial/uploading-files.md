@@ -4,11 +4,11 @@ This tutorial details how to use the [`slack-sdk` package for Python](https://py
 
 ## Creating an app {#create-app}
 
-First, [create a Slack app](https://api.slack.com/apps/new).
+First, create a [Slack app](https://api.slack.com/apps/new).
 
 ## Configuring your app's settings with an app manifest {#configuration}
 
-Creating your app using this method will include all the required settings for this tutorial, and you won't be bogged down with too many details &mdash; all you'll need to do is decide where this app will live. If you're curious about the inner workings of how this button works, refer to [App Manifests](https://api.slack.com/reference/manifests) for more information.
+Creating your app using this method will include all the required settings for this tutorial, and you won't be bogged down with too many details - all you'll need to do is decide where this app will live. If you're curious about the inner workings of how this button works, refer to [App Manifests](https://docs.slack.dev/app-manifests) for more information.
 
 ```yaml
 _metadata:
@@ -72,7 +72,7 @@ pip install -r requirements.txt
 
 While it's possible to enter the following into the Python shell, we've gathered some code samples and wrote it in script form.
 
-For each of the code samples, make sure to add in the following to the top of your Python file if you're going to run it as a script &mdash; the examples won't run without it.
+For each of the code samples, make sure to add in the following to the top of your Python file if you're going to run it as a script - the examples won't run without it.
 
 ```python
 import logging, os
@@ -254,7 +254,7 @@ Once we run this, the `files` array should be empty. The count for files found w
 
 ![Delete a file](/img/upload-files-delete.png)
 
-## Next steps {#next-steps}
+## Next steps {#next}
 
 This tutorial summarized how to use the Slack API to upload files and share them within a channel, using the Python SDK. The same principles apply to other languages as well, so if Python isn't your fancy, feel free to try out our other SDKs:
 

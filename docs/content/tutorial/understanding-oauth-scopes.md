@@ -2,10 +2,10 @@
 
 In this tutorial, we'll:
 
-* explore Slack app permissioning and distribution using OAuth, and along the way, you'll learn how to identify which scopes your app needs and how to use OAuth to request them.
-* build an app that sends a direct message to users joining a specific channel. Once installed in a workspace, it will create a new channel named **#the-welcome-channel** if it doesn’t already exist. The channel will be used to thank users for joining the channel. We'll also share code snippets from the app, but you can view the full source code on [GitHub](https://github.com/stevengill/slack-python-oauth-example). The code and implementation of OAuth is general enough that you should be able to follow along, even if Python isn't your preferred language.
+* explore Slack app permissions and distribution using OAuth, and along the way, learn how to identify which scopes apps need and how to use OAuth to request them.
+* build an app that sends a direct message to users joining a specific channel. Once installed in a workspace, it will create a new channel named **#the-welcome-channel** if it doesn’t already exist. The channel will be used to thank users for joining the channel. We'll also share code snippets from the app, but the full source code is available on [GitHub](https://github.com/stevengill/slack-python-oauth-example). The code and implementation of OAuth is general enough that you should be able to follow along, even if Python isn't your preferred language.
 
-## Prerequisites
+## Prerequisites {#prerequisites}
 
 Before we get started, ensure you have a development workspace with permissions to install apps. If you don’t have one set up, go ahead and [create one](https://slack.com/create). You also need to [create a new app](https://api.slack.com/apps/new) if you haven’t already. 
 
@@ -51,7 +51,7 @@ To determine which scopes we need, we should take a closer look at what our app 
         resp = client.conversations_create(name="the-welcome-channel")
     ```
 
-3. When a user joins our newly created channel, our app sends them a direct message. To see when a user joins our channel, we need to listen for an event. Looking at our list of events, we see that `member_joined_channel` is the event that we need (_Note: events need to be added to your app’s configuration_). The scopes required for this event are `channels:read` and `groups:read` (same ones from step one). Now to send a direct message, we need to use the `chat.postMessage` method, which requires the `chat:write` scope.
+3. When a user joins our newly created channel, our app sends them a direct message. To see when a user joins our channel, we need to listen for an event. Looking at our list of events, we see that `member_joined_channel` is the event that we need (_Note: events need to be added to your app’s configuration_). The scopes required for this event are `channels:read` and `groups:read` (same ones from step one). Now to send a direct message, we need to use the `chat.postMessage` API method, which requires the `chat:write` scope.
 
     ```
     # Create an event listener for "member_joined_channel" events
@@ -73,9 +73,9 @@ Our final list of scopes required are:
 
 ## Setting up OAuth and requesting scopes {#setup}
 
-If you want users to be able to install your app on additional workspaces or from the [Slack Marketplace](https://api.slack.com/slack-marketplace/review-guide), you'll need to implement an OAuth flow.
+If you want users to be able to install your app on additional workspaces or from the [Slack Marketplace](https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide), you'll need to implement an OAuth flow.
 
-We'll be following the general flow of OAuth with Slack, which is covered in [Installing with OAuth](https://api.slack.com/authentication/oauth-v2) and nicely illustrated in the image below:
+We'll be following the general flow of OAuth with Slack, which is covered in the [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth) guide and nicely illustrated in the image below:
 
 ![OAuth flow](/img/understanding-oauth-flow.png)
 
@@ -118,7 +118,7 @@ We'll be following the general flow of OAuth with Slack, which is covered in [In
 
     After the user approves the app, Slack will redirect the user to your specified Redirect URL. As we mentioned earlier, we did not include a `redirect_uri` in our **Add to Slack** button, so our app will use our Redirect URL specified on the app’s **OAuth and Permissions** page.
 
-    Our Redirect URL function will have to parse the HTTP request for the `code` and `state` query parameters. We need to check that the `state` parameter was created by our app. If it is, we can now exchange the `code` for an access token. To do this, we need to call the `oauth.v2.access` method with the `code`, `client_id`, and `client_secret`. This method will return the access token, which we can now save (preferably in a persistent database) and use for any of the Slack API method calls we make. (_Note: use this access token for all of the Slack API method calls we covered in the scopes section above_)
+    Our Redirect URL function will have to parse the HTTP request for the `code` and `state` query parameters. We need to check that the `state` parameter was created by our app. If it is, we can now exchange the `code` for an access token. To do this, we need to call the `oauth.v2.access` API method with the `code`, `client_id`, and `client_secret`. This method will return the access token, which we can now save (preferably in a persistent database) and use for any of the Slack API method calls we make. (_Note: use this access token for all of the Slack API method calls we covered in the scopes section above_)
 
     ```
     # Grab client Secret from your environment variables
@@ -160,4 +160,4 @@ We'll be following the general flow of OAuth with Slack, which is covered in [In
 At this point, you should feel more comfortable learning what scopes your app needs and using OAuth to request those scopes. A few resources you can check out next include:
 
 *   [Slack-Python-OAuth-Example](https://github.com/stevengill/slack-python-oauth-example): we used code snippets from this app in this tutorial. The README contains more detailed information about running the app locally using ngrok, setting up a Redirect URL for OAuth, and setting up a request URL for events.
-*   Learn more about [Installing with OAuth](https://api.slack.com/authentication/oauth-v2).
+*   Learn more about [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth).

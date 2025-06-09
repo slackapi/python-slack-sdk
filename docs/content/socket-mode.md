@@ -1,46 +1,27 @@
-# Socket Mode Client
+# Socket Mode client
 
-Socket Mode is a method of connecting your app to the Slack APIs using WebSockets instead of HTTP. You can use `slack_sdk.socket_mode.SocketModeClient` for managing [Socket Mode](https://api.slack.com/apis/connections/socket) connections and performing interactions with Slack.
+Socket Mode is a method of connecting your app to the Slack APIs using WebSockets instead of HTTP. You can use `slack_sdk.socket_mode.SocketModeClient` for managing [Socket Mode](https://docs.slack.dev/apis/events-api/using-socket-mode) connections and performing interactions with Slack.
 
-## Using Socket Mode
+## Using Socket Mode {#socket-mode}
 
-First off, let's start with enabling Socket Mode. Visit [the Slack App configuration page](http://api.slack.com/apps), choose the app you're working on, and go to **Settings** on the left pane. There are a few things to do on the page.
+Let's start with enabling Socket Mode. Visit [app page](http://api.slack.com/apps), choose the app you're working on, and go to **Settings** on the left pane. There are a few things to do on this page.
 
--   Go to **Settings** \> **Basic Information**, then add a new
-    **App-Level Token** with the `connections:write` scope
-
--   Go to **Settings** \> **Socket Mode**, then turn on **Enable Socket
-    Mode**
-
--   Go to **Features** \> **App Home**, look under **Show Tabs** \>
-    **Messages Tab** then turn on **Allow users to send Slash commands
-    and messages from the messages tab**
-
--   Go to **Features** \> **Event Subscriptions**, then turn on **Enable
-    Events**
-
--   On the same page expand **Subscribe to bot events** click **Add Bot User Event** and select **message.im**. This will allow the bot to get events for messages that are sent in 1:1 direct messages with itself
-
--   Go to **Features** \> **Interactivity and Shortcuts**, look under
-    *Shortcuts*\* click **Create a New Shortcut** then create a new
-    Global shortcut with the following details
-
+-   Go to **Settings** \> **Basic Information**, then add a new  **App-Level Token** with the `connections:write` scope.
+-   Go to **Settings** \> **Socket Mode**, then toggle on **Enable Socket Mode**.
+-   Go to **Features** \> **App Home**, look under **Show Tabs** \> **Messages Tab**, then toggle on **Allow users to send Slash commands and messages from the messages tab**.
+-   Go to **Features** \> **Event Subscriptions**, then toggle on **Enable Events**.
+-   On the same page, expand **Subscribe to bot events**, click **Add Bot User Event**, and select **message.im**. This will allow the bot to get events for messages that are sent in 1:1 direct messages with itself.
+-   Go to **Features** \> **Interactivity and Shortcuts**, look under *Shortcuts*\*, click **Create a New Shortcut**, then create a new Global shortcut with the following details:
     > **Name**: Hello
 
     > **Short Description**: Receive a Greeting
 
     > **Callback ID**: hello-shortcut
+    
+-   Go to **Features** \> **OAuth & Permissions** under **Scopes** \> **Bot Token Scopes**, click **Add an OAuth Scope**, and select **reactions:write**. This will allow the bot to add emoji reactions (Reacjis) to messages.
+-   Go to **Features** \> **Oauth & Permissions** under **OAuth Tokens for Your Workspace** and click **Install to Workspace**.
 
--   Go to **Features** \> **OAuth & Permissions** under **Scopes** \>
-    **Bot Token Scopes** click **Add an OAuth Scope** and select
-    **reactions:write**. This will allow the bot to add emoji reactions (Reacjis) to messages.
-
--   Go to **Features** \> **Oauth & Permissions** under **OAuth Tokens
-    for Your Workspace** click **Install to Workspace**
-
-You will be using the app-level token that starts with `xapp-` prefix.
-Note that the token here is not the ones starting with either `xoxb-` or
-`xoxp-`.
+You will be using the app-level token that starts with `xapp-`. Note that the token here is not one that starts with either `xoxb-` or `xoxp-`.
 
 ``` python
 import os
@@ -123,12 +104,9 @@ Event().wait()
 
 ---
 
-## Supported Libraries
+## Supported libraries {#supported-libraries}
 
-This SDK offers its own simple WebSocket client covering only required
-features for Socket Mode. In addition to that, `SocketModeClient` is
-implemented with a few 3rd party open-source libraries. If you prefer
-any of the following, you can use it over the built-in one.
+This SDK offers its own WebSocket client covering only required features for Socket Mode. In addition, `SocketModeClient` is implemented with a few 3rd party open source libraries. If you prefer any of the following, you can use it over the built-in one.
 
 |PyPI Project  | SocketModeClient
 |--------------|------------------
@@ -137,10 +115,7 @@ any of the following, you can use it over the built-in one.
 | [`aiohttp`](https://pypi.org/project/aiohttp/) (asyncio-based)       | [`slack_sdk.socket_mode.aiohttp.SocketModeClient`](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/aiohttp)
 | [`websockets`](https://pypi.org/project/websockets/) (asyncio-based) | [`slack_sdk.socket_mode.websockets.SocketModeClient`](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/socket_mode/websockets)
 
-To use the
-[`websocket_client`](https://pypi.org/project/websocket_client/) based
-one, add [`websocket_client`](https://pypi.org/project/websocket_client/)
-dependency and to change the import as below.
+To use the [`websocket_client`](https://pypi.org/project/websocket_client/) based-one, add the[`websocket_client`](https://pypi.org/project/websocket_client/) dependency and change the import as below.
 
 ``` python
 # Note that the pockage is different
@@ -152,17 +127,13 @@ client = SocketModeClient(
 )
 ```
 
-You can pass a few additional arguments that are specific to the
-library. Apart from that, all the functionalities work in the same way
-with the built-in version.
+You can pass a few additional arguments that are specific to the library. Apart from that, all the functionalities work in the same way as the built-in version.
 
 ---
 
-## Asyncio Based Libraries
+## Asyncio-based libraries {#asyncio-libraries}
 
-To use the asyncio-based ones such as aiohttp, your app needs to be
-compatible with asyncio's async/await programming model. The
-`SocketModeClient` only works with `AsyncWebClient` and async listeners.
+To use the asyncio-based ones such as aiohttp, your app needs to be compatible with asyncio's async/await programming model. The `SocketModeClient` only works with `AsyncWebClient` and async listeners.
 
 ``` python
 import asyncio

@@ -1,21 +1,18 @@
-# OAuth Modules
+# OAuth modules
 
-This section explains the details about how to handle the Slack OAuth flow.
+This page explains how to handle the Slack OAuth flow. If you're looking for a much easier way to do this, check out [Bolt for Python](https://github.com/slackapi/bolt-python), a full-stack Slack app framework. With Bolt, you won't need to implement most of the following code on your own.
 
-If you're looking for a much easier way to do the same, check [Bolt for Python](https://github.com/slackapi/bolt-python), which is a full-stack Slack App framework. With Bolt, you don't need to implement most of the following code on your own.
+Refer to the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/) for more details.
 
-View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/)
+## App installation flow {#app-installation}
 
+OAuth allows a user in any Slack workspace to install your app. At the end of the OAuth flow, your app gains an access token. Refer to the [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth) guide for details.
 
-## App Installation Flow
+The Python Slack SDK provides the necessary modules for building the OAuth flow.
 
-OAuth lets a user in any Slack workspace install your app. At the end of OAuth, your app gains an access token. Refer to [Installing with OAuth](https://api.slack.com/authentication/oauth-v2) for details.
+### Starting an OAuth flow {#oauth-flow}
 
-Python Slack SDK provides the necessary modules for building the OAuth flow.
-
-### Starting an OAuth flow
-
-The first step of Slack OAuth flow is to redirect a Slack user to [authorize](https://slack.com/oauth/v2/authorize) with a valid `state` parameter. To implement this process, you can use the following modules.
+The first step of the OAuth flow is to redirect a Slack user to [authorize](https://slack.com/oauth/v2/authorize) with a valid `state` parameter. To implement this process, you can use the following modules.
 
 Module                |    What its for                           |   Default Implementation
 ----------------------|-----------------------------------------|-------------------------
@@ -23,8 +20,7 @@ Module                |    What its for                           |   Default Im
 `OAuthStateStore`      |   Issue and consume `state` parameter value on the server-side. | `FileOAuthStateStore`           
 `AuthorizeUrlGenerator` |  Build https://slack.com/oauth/v2/authorize with sufficient query parameters    |  (same)
                                                                   
-The code snippet below demonstrates how to build it using
-[Flask](https://flask.palletsprojects.com/).
+The code snippet below demonstrates how to build it using [Flask](https://flask.palletsprojects.com/).
 
 ``` python
 import os
@@ -58,20 +54,13 @@ def oauth_start():
            f'<img alt=""Add to Slack"" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
 ```
 
-When accessing `https://(your domain)/slack/install`, you will see \"Add
-to Slack\" button in the webpage. You can start the app's installation
-flow by clicking the button.
+When accessing `https://(your domain)/slack/install`, you will see an \"Add to Slack\" button on the page. You can start the app's installation flow by clicking the button.
 
-### Handling a callback request from Slack
+### Handling a callback request from Slack {#handling-callback-requests}
 
-If all's well, a user goes through the Slack app installation UI and
-okays your app with all the scopes that it requests. After that happens,
-Slack redirects the user back to your specified Redirect URL.
+If all is well, a user goes through the Slack app installation UI and accepts all the scopes your app requests. After that happens, Slack redirects the user back to your specified Redirect URL.
 
-The redirection gives you a `code` parameter. You can exchange the value
-for an access token by calling
-[oauth.v2.access](https://api.slack.com/methods/oauth.v2.access) API
-method.
+The redirection gives you a `code` parameter. You can exchange the value for an access token by calling the [oauth.v2.access](https://docs.slack.dev/reference/methods/oauth.v2.access) API method.
 
 ``` python
 from slack_sdk.web import WebClient
@@ -140,12 +129,9 @@ def oauth_callback():
     return make_response(f"Something is wrong with the installation (error: {html.escape(error)})", 400)
 ```
 
-## Token Lookup
+## Token lookup {#token-lookup}
 
-Now that your Flask app can choose the right access token for incoming
-event requests, let's add the Slack event handler endpoint.
-
-You can use the same `InstallationStore` in the Slack event handler.
+Now that your Flask app can choose the right access token for incoming event requests, let's add the Slack event handler endpoint. You can use the same `InstallationStore` in the Slack event handler.
 
 ``` python
 import json
@@ -158,7 +144,7 @@ signature_verifier = SignatureVerifier(signing_secret=signing_secret)
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
     # Verify incoming requests from Slack
-    # https://api.slack.com/authentication/verifying-requests-from-slack
+    # https://docs.slack.dev/authentication/verifying-requests-from-slack
     if not signature_verifier.is_valid(
         body=request.get_data(),
         timestamp=request.headers.get("X-Slack-Request-Timestamp"),
@@ -234,17 +220,9 @@ def slack_app():
     return make_response("", 404)
 ```
 
-Again, if you're looking for an easier solution, take a look at [Bolt
-for Python](https://github.com/slackapi/bolt-python). With Bolt, you
-don't need to implement most of the above code on your own.
+## Sign in with Slack {#siws}
 
-## Sign in with Slack
-
-[Sign in with Slack](https://api.slack.com/authentication/sign-in-with-slack) helps
-users log into your service using their Slack profile. The platform
-feature was recently upgraded to be compatible with the standard [OpenID
-Connect](https://openid.net/connect/) specification. With slack-sdk
-v3.9+, implementing the auth flow is much easier.
+[Sign in with Slack](https://docs.slack.dev/authentication/sign-in-with-slack) helps users log into your service using their Slack profile. The platform feature was upgraded to be compatible with the standard [OpenID Connect](https://openid.net/connect/) specification. With slack-sdk v3.9+, implementing the OAuth flow is much easier.
 
 When you create a new Slack app, set the following user scopes:
 
@@ -259,23 +237,15 @@ oauth_config:
       - profile  # optional
 ```
 
-Check [the Flask app
-example](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/flask_example.py)
-to learn how to implement your Web app that handles the OpenID Connect
-flow with end-users. It does the following:
+Check [the Flask app example](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/flask_example.py) to learn how to implement an app that handles the OpenID Connect flow with your end-users as follows:
 
 **Build the OpenID Connect authorize URL**
 
--   `slack_sdk.oauth.OpenIDConnectAuthorizeUrlGenerator` helps you
-    easily do this
--   `slack_sdk.oauth.OAuthStateStore` is still available for generating
-    `state` parameter value. It's available for `nonce` management too.
+-  `slack_sdk.oauth.OpenIDConnectAuthorizeUrlGenerator` helps you do this.
+-  `slack_sdk.oauth.OAuthStateStore` is still available for generating the `state` parameter value. It's available for `nonce` management, too.
 
 **openid.connect.\* API calls**
 
-`WebClient` can perform `openid.connect.token` API calls with given
-`code` parameter
+- `WebClient` can perform `openid.connect.token` API calls with given `code` parameter.
 
-If you want to know the way with asyncio, check [the Sanic app
-example](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/sanic_example.py)
-in the same directory.
+If you want to know the way with asyncio, check [the Sanic app example](https://github.com/slackapi/python-slack-sdk/blob/main/integration_tests/samples/openid_connect/sanic_example.py) in the same directory.
