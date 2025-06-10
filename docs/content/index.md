@@ -1,10 +1,10 @@
 # Python Slack SDK
 
-The Slack Python SDK has corresponding package for Slack APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
+The Slack Python SDK has corresponding packages for Slack APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
-The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs.
+The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit your needs.
 
-## Features
+## Features {#features}
 
 | Feature                        | Use              | Package                            |
 |--------------------------------|----------|-------|
@@ -20,16 +20,16 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 
 You can also view the [Python module documents](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/)!
 
-## Getting help
+## Getting help {#getting-help}
 
 These docs have lots of information on the Python Slack SDK. There's also an in-depth Reference section. Please explore!
 
-If you otherwise get stuck, we're here to help. The following are the best ways to get assistance working through your issue:
+If you get stuck, we're here to help. The following are the best ways to get assistance working through your issue:
 
 * [Issue Tracker](http://github.com/slackapi/python-slack-sdk/issues) for questions, bug reports, feature requests, and general discussion related to the Python Slack SDK. Try searching for an existing issue before creating a new one.
 * [Email](mailto:support@slack.com) our developer support team: `support@slack.com`.
 
-## Contributing
+## Contributing {#contributing}
 
 These docs live within the [Python Slack SDK](https://github.com/slackapi/python-slack-sdk) repository and are open source.
 

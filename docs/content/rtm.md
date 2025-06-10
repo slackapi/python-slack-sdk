@@ -1,36 +1,24 @@
-# RTM API Client {#real-time-messaging}
+# RTM API client
 
-The [Real Time Messaging (RTM) API](https://api.slack.com/rtm) is a WebSocket-based API that allows you to receive events from Slack in real time and send messages as users.
+The [Legacy Real Time Messaging (RTM) API](https://docs.slack.dev/legacy/legacy-rtm-api) is a WebSocket-based API that allows you to receive events from Slack in real time and to send messages as users. 
 
-If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API](https://api.slack.com/events-api) along with [Socket Mode](https://api.slack.com/socket-mode) instead. The Events API contains some events that aren't supported in the RTM API (like [app_home_opened event](https://api.slack.com/events/app_home_opened)), and it supports most of the event types in the RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor](https://github.com/slackapi/python-slack-events-api).
+If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API](https://docs.slack.dev/apis/events-api) instead. The Events API contains some events that aren't supported in the Legacy RTM API (such as the [app_home_opened event](https://docs.slack.dev/reference/events/app_home_opened)), and it supports most of the event types in the Legacy RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor](https://github.com/slackapi/python-slack-events-api).
 
-The RTMClient allows apps to communicate with the Slack Platform's RTM API.
+The RTMClient allows apps to communicate with the Legacy RTM API.
 
-The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
+The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs, this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message event](https://api.slack.com/events/message) that contains \"Hello\" and if its received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying \"Hi\" to the user.
+In our example below, we watch for a [message event](https://docs.slack.dev/reference/events/message) that contains \"Hello\" and if it's received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying \"Hi\" to the user.
 
-## Configuring the RTM API
+## Configuring the RTM API {#configuration}
 
-Events using the RTM API **must** use a classic Slack app (with a plain
-`bot` scope).
+Events using the Legacy RTM API **must** use a Slack app with a plain `bot` scope.
 
-If you already have a classic Slack app, you can use those credentials.
-If you don't and need to use the RTM API, you can [create a classic
-Slack app](https://api.slack.com/apps?new_classic_app=1). You can learn
-more in the [API
-documentation](https://api.slack.com/authentication/basics#soon).
+If you already have a Slack app with a plain `bot` scope, you can use those credentials. If you don't and need to use the Legacy RTM API, you can create a Slack app [here](https://api.slack.com/apps?new_classic_app=1). Even if the Slack app configuration pages encourage you to upgrade to a newer permission model, don't upgrade it and continue using the \"classic\" bot permission.
 
-Also, even if the Slack app configuration pages encourage you to upgrade
-to the newer permission model, don't upgrade it and keep using the
-\"classic\" bot permission.
+## Connecting to the RTM API {#connecting}
 
-## Connecting to the RTM API
-
-Note that the import here is not `from slack_sdk.rtm import RTMClient`
-but `from slack_sdk.rtm_v2 import RTMClient` (`_v2` is added in the
-latter one). If you would like to use the legacy version of the client,
-go to the next section.
+Note that the import here is not `from slack_sdk.rtm import RTMClient` but `from slack_sdk.rtm_v2 import RTMClient` (`_v2` is added in the latter one).
 
 ``` python
 import os
@@ -54,13 +42,9 @@ def handle(client: RTMClient, event: dict):
 rtm.start()
 ```
 
-## Connecting to the RTM API (v1 client)
+## Connecting to the RTM API (v1 client) {#connecting-v1}
 
-Below is a code snippet that uses the legacy version of `RTMClient`. For
-new app development, we **do not recommend** using it as it contains
-issues that have been resolved in v2. Please refer to the [list of these
-issues](https://github.com/slackapi/python-slack-sdk/issues?q=is%3Aissue+is%3Aclosed+milestone%3A3.3.0+label%3Artm-client)
-for more details.
+Below is a code snippet that uses the legacy version of `RTMClient`. For new app development, we **do not recommend** using it as it contains issues that have been resolved in v2. Please refer to the [list of these issues](https://github.com/slackapi/python-slack-sdk/issues?q=is%3Aissue+is%3Aclosed+milestone%3A3.3.0+label%3Artm-client) for more details.
 
 ``` python
 import os
@@ -87,18 +71,13 @@ rtm_client = RTMClient(token=slack_token)
 rtm_client.start()
 ```
 
-## rtm.start vs rtm.connect (v1 client)
+## The `rtm.start` vs. `rtm.connect` API methods (v1 client) {#rtm-methods}
 
-By default, the RTM client uses `rtm.connect` to establish a WebSocket
-connection with Slack. The response contains basic information about the
-team and WebSocket url.
+By default, the RTM client uses the [`rtm.connect`](https://docs.slack.dev/reference/methods/rtm.connect) API method to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket URL.
 
-Read the [rtm.connect docs](https://api.slack.com/methods/rtm.connect)
-and the [rtm.start docs](https://api.slack.com/methods/rtm.start) for
-more details. Also, note that `slack.rtm_v2.RTMClient` does not support
-`rtm.start`.
+See the [`rtm.connect`](https://docs.slack.dev/reference/methods/rtm.connect) and [`rtm.start`](https://docs.slack.dev/reference/methods/rtm.start) API methods for more details. Note that `slack.rtm_v2.RTMClient` does not support `rtm.start`.
 
-## RTM Events
+## RTM events {#rtm-events}
 
 ``` javascript
 {
@@ -109,5 +88,4 @@ more details. Also, note that `slack.rtm_v2.RTMClient` does not support
 }
 ```
 
-See [RTM Events](https://api.slack.com/rtm#events) for a complete list
-of events.
+Refer to the [Legacy RTM events](https://docs.slack.dev/legacy/legacy-rtm-api#events) section for a complete list of events.

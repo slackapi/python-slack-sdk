@@ -1,18 +1,14 @@
-# SCIM API Client
+# SCIM API client
 
-[SCIM API](https://api.slack.com/scim) is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.
+[SCIM](http://www.simplecloud.info/) is supported by a myriad of services. The SCIM API is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.
 
-[SCIM (System for Cross-domain Identity Management)](http://www.simplecloud.info/) is supported by a myriad of services. It behaves slightly differently from other Slack APIs.
+Refer to [using the Slack SCIM API](https://docs.slack.dev/admins/scim-api) for more details.
 
-Refer to [the API document](https://api.slack.com/scim) for more details.
+View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/).
 
-View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/)
+## SCIMClient {#scimclient}
 
-## SCIMClient
-
-An OAuth token with [the admin scope](https://api.slack.com/scopes/admin) is required to access the SCIM API.
-
-To fetch provisioned user data, you can use the `search_users` method in the client.
+An OAuth token with [the admin scope](https://docs.slack.dev/reference/scopes/admin) is required to access the SCIM API. To fetch provisioned user data, you can use the `search_users` method in the client.
 
 ``` python
 import os
@@ -30,9 +26,7 @@ response.users  # List[User]
 
 Check out [the class source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/user.py) to learn more about the structure of the `user` in `response.users`.
 
-Similarly, the `search_groups` method is available and the shape of the
-`Group` object can be [found
-here](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py).
+Similarly, the `search_groups` method is available and the shape of the `Group` object can be [found here](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/scim/v1/group.py).
 
 ``` python
 response = client.search_groups(
@@ -42,7 +36,7 @@ response = client.search_groups(
 response.groups  # List[Group]
 ```
 
-For creating, updating, and deleting users/groups:
+For creating, updating, and deleting users or groups:
 
 ``` python
 from slack_sdk.scim.v1.user import User, UserName, UserEmail
@@ -78,10 +72,9 @@ update_result = client.update_user(user=user_to_update)
 delete_result = client.delete_user(user_to_update.id)
 ```
 
-## AsyncSCIMClient
+## AsyncSCIMClient {#asyncscimclient}
 
-Lastly, if you are keen to use asyncio for SCIM API calls, we offer
-`AsyncSCIMClient` for it. This client relies on aiohttp library.
+If you are keen to use asyncio for SCIM API calls, we offer `AsyncSCIMClient`. This client relies on the aiohttp library.
 
 ``` python
 import asyncio
@@ -99,18 +92,11 @@ asyncio.run(main())
 
 ------------------------------------------------------------------------
 
-## RetryHandler
+## RetryHandler {#retryhandler}
 
-With the default settings, only `ConnectionErrorRetryHandler` with its
-default configuration (=only one retry in the manner of [exponential
-backoff and
-jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/))
-is enabled. The retry handler retries if an API client encounters a
-connectivity-related failure (e.g., Connection reset by peer).
+With the default settings, only `ConnectionErrorRetryHandler` with its default configuration (=only one retry in the manner of [exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., connection reset by peer).
 
-To use other retry handlers, you can pass a list of `RetryHandler` to
-the client constructor. For instance, you can add the built-in
-`RateLimitErrorRetryHandler` this way:
+To use other retry handlers, you can pass a list of `RetryHandler` to the client constructor. For instance, you can add the built-in `RateLimitErrorRetryHandler` this way:
 
 ``` python
 import os
@@ -125,11 +111,7 @@ rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 client.retry_handlers.append(rate_limit_handler)
 ```
 
-Creating your own ones is also quite simple. Defining a new class that
-inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for
-asyncio apps) and implements required methods (internals of `can_retry`
-/ `prepare_for_next_retry`). Check the built-in ones' source code for
-learning how to properly implement.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket
@@ -162,10 +144,4 @@ client = SCIMClient(
 )
 ```
 
-For asyncio apps, `Async` prefixed corresponding modules are available.
-All the methods in those methods are async/await compatible. Check [the
-source
-code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py)
-and
-[tests](https://github.com/slackapi/python-slack-sdk/blob/main/tests/slack_sdk_async/web/test_async_web_client_http_retry.py)
-for more details.
+For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
