@@ -437,6 +437,60 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"entity_type": entity_type})
         return await self.api_call("admin.auth.policy.removeEntities", http_verb="POST", params=kwargs)
 
+    async def admin_conversations_createForObjects(
+        self,
+        *,
+        object_id: str,
+        salesforce_org_id: str,
+        invite_object_team: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create a Salesforce channel for the corresponding object provided.
+        https://api.slack.com/methods/admin.conversations.createForObjects
+        """
+        kwargs.update(
+            {"object_id": object_id, "salesforce_org_id": salesforce_org_id, "invite_object_team": invite_object_team}
+        )
+        return await self.api_call("admin.conversations.createForObjects", params=kwargs)
+
+    async def admin_conversations_linkObjects(
+        self,
+        *,
+        channel: str,
+        record_id: str,
+        salesforce_org_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Link a Salesforce record to a channel.
+        https://api.slack.com/methods/admin.conversations.linkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "record_id": record_id,
+                "salesforce_org_id": salesforce_org_id,
+            }
+        )
+        return await self.api_call("admin.conversations.linkObjects", params=kwargs)
+
+    async def admin_conversations_unlinkObjects(
+        self,
+        *,
+        channel: str,
+        new_name: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Unlink a Salesforce record from a channel.
+        https://api.slack.com/methods/admin.conversations.unlinkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "new_name": new_name,
+            }
+        )
+        return await self.api_call("admin.conversations.unlinkObjects", params=kwargs)
+
     async def admin_barriers_create(
         self,
         *,

@@ -427,6 +427,60 @@ class WebClient(BaseClient):
         kwargs.update({"entity_type": entity_type})
         return self.api_call("admin.auth.policy.removeEntities", http_verb="POST", params=kwargs)
 
+    def admin_conversations_createForObjects(
+        self,
+        *,
+        object_id: str,
+        salesforce_org_id: str,
+        invite_object_team: Optional[bool] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Create a Salesforce channel for the corresponding object provided.
+        https://api.slack.com/methods/admin.conversations.createForObjects
+        """
+        kwargs.update(
+            {"object_id": object_id, "salesforce_org_id": salesforce_org_id, "invite_object_team": invite_object_team}
+        )
+        return self.api_call("admin.conversations.createForObjects", params=kwargs)
+
+    def admin_conversations_linkObjects(
+        self,
+        *,
+        channel: str,
+        record_id: str,
+        salesforce_org_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Link a Salesforce record to a channel.
+        https://api.slack.com/methods/admin.conversations.linkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "record_id": record_id,
+                "salesforce_org_id": salesforce_org_id,
+            }
+        )
+        return self.api_call("admin.conversations.linkObjects", params=kwargs)
+
+    def admin_conversations_unlinkObjects(
+        self,
+        *,
+        channel: str,
+        new_name: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Unlink a Salesforce record from a channel.
+        https://api.slack.com/methods/admin.conversations.unlinkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "new_name": new_name,
+            }
+        )
+        return self.api_call("admin.conversations.unlinkObjects", params=kwargs)
+
     def admin_barriers_create(
         self,
         *,
