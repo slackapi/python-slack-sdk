@@ -69,7 +69,7 @@ class TestWebClientCoverage(unittest.TestCase):
                 "admin.audit.anomaly.allow.getItem",
                 "admin.audit.anomaly.allow.updateItem",
                 "assistant.search.context",  # TODO: add this method in follow up PR
-                "conversations.requestSharedInvite.list"  # TODO: add this method in follow up PR
+                "conversations.requestSharedInvite.list",  # TODO: add this method in follow up PR
             ]:
                 continue
             self.api_methods_to_call.append(api_method)
@@ -161,7 +161,9 @@ class TestWebClientCoverage(unittest.TestCase):
                         salesforce_org_id="00DGC00000024hsuWY",
                     )["method"]
                 )
-                await async_method(channel="C1234567890", record_id="0019000000DmehKAAR", salesforce_org_id="00DGC00000024hsuWY")
+                await async_method(
+                    channel="C1234567890", record_id="0019000000DmehKAAR", salesforce_org_id="00DGC00000024hsuWY"
+                )
             elif method_name == "admin_conversations_unlinkObjects":
                 self.api_methods_to_call.remove(
                     method(
