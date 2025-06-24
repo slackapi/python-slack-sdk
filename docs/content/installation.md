@@ -47,11 +47,10 @@ Making calls to the Slack API often requires a [token](https://docs.slack.dev/au
 
 The OAuth token you use to call the Slack Web API has access to the data on the workspace where it is installed. Depending on the scopes granted to the token, it potentially has the ability to read and write data. Treat these tokens just as you would a password — don't publish them, don't check them into source code, and don't share them with others.
 
-:::danger
-
-Never do the following:
+:::danger[Never do the following]
 
 ```python
+# don't do this!
 token = 'xoxb-111-222-xxxxx'
 ```
 

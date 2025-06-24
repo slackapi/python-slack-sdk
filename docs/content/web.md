@@ -97,9 +97,7 @@ client.chat_postMessage(
 )
 ```
 
-:::tip
-
-You can use [Block Kit Builder](https://app.slack.com/block-kit-builder/) to prototype your message's look and feel.
+:::tip[You can use [Block Kit Builder](https://app.slack.com/block-kit-builder/) to prototype your message's look and feel.]
 
 :::
 
@@ -127,9 +125,9 @@ response = client.chat_postMessage(
     reply_broadcast=True
 )
 ```
-:::info
+:::info[While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply and not the reply itself.] 
 
-While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply and not the reply itself. When appearing in the channel, it won't contain any attachments or message buttons. Updates and deletion of threaded replies works the same as regular messages.
+When appearing in the channel, it won't contain any attachments or message buttons. Updates and deletion of threaded replies works the same as regular messages.
 
 :::
 

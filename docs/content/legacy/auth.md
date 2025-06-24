@@ -1,8 +1,8 @@
 # Tokens & installation
 
-:::danger
+:::danger[The [`slackclient`](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode and the [slack-sdk](https://pypi.org/project/slack-sdk/) project is its successor.] 
 
-The [`slackclient`](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode and the [slack-sdk](https://pypi.org/project/slack-sdk/) project is its successor. The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM API, Audit Logs API, better asyncio support, retry handlers, and more.
+The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM API, Audit Logs API, better asyncio support, retry handlers, and more.
 
 :::
 

@@ -61,8 +61,10 @@ If you're using `run_async=True` option, we highly recommend switching to `Async
 
 If you're migrating from v1.x of `slackclient` to v2.x, here's what you need to change to ensure your app continues working after updating.
 
-:::info
-We have completely rewritten this library and you should only upgrade once you have fully tested it in your development environment. If you don't wish to upgrade yet, be sure to pin your module for the Python `slackclient` to `1.3.1`.
+:::info[We have completely rewritten this library and you should only upgrade once you have fully tested it in your development environment.] 
+
+If you don't wish to upgrade yet, be sure to pin your module for the Python `slackclient` to `1.3.1`.
+
 :::
 
 ### Minimum Python versions {#minimum-versions}

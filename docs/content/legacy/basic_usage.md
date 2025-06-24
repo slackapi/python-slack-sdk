@@ -1,8 +1,8 @@
 # Basic usage
 
-:::danger
+:::danger[The [`slackclient`](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode and the [slack-sdk](https://pypi.org/project/slack-sdk/) project is its successor.] 
 
-The [`slackclient`](https://pypi.org/project/slackclient/) PyPI project is in maintenance mode and the [slack-sdk](https://pypi.org/project/slack-sdk/) project is its successor. The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM API, Audit Logs API, better async support, retry handlers, and more.
+The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM API, Audit Logs API, better async support, retry handlers, and more.
 
 :::
 
@@ -100,9 +100,7 @@ client.chat_postMessage(
 )
 ```
 
-:::tip
-
-You can use [Block Kit Builder](https://app.slack.com/block-kit-builder/) to prototype your message's look and feel.
+:::tip[You can use [Block Kit Builder](https://app.slack.com/block-kit-builder/) to prototype your message's look and feel.]
 
 :::
 
@@ -131,9 +129,9 @@ response = client.chat_postMessage(
 )
 ```
 
-:::info
+:::info[While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply and not the reply itself.] 
 
-While threaded messages may contain attachments and message buttons, when your reply is broadcast to the channel, it'll actually be a reference to your reply and not the reply itself. When appearing in the channel, it won't contain any attachments or message buttons. Updates and deletion of threaded replies works the same as regular messages.
+When appearing in the channel, it won't contain any attachments or message buttons. Updates and deletion of threaded replies works the same as regular messages.
 
 :::
 
