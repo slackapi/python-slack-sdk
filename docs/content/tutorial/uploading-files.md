@@ -34,15 +34,15 @@ oauth_config:
 
 Once you've created your app, you'll see an **Install to Workspace** button. Click it to install your app in your workspace.
 
-![Install to workspace](/img/upload-files-install.png)
+![Install to workspace](upload-files-install.png)
 
 Next, click **Allow** to authorize the app in your workspace.
 
-![Authorize app](/img/upload-files-allow.png)
+![Authorize app](upload-files-allow.png)
 
 Navigate to the **Install App** section under **Settings**. Here, you'll find your `Bot User OAuth Token`.
 
-![Get token](/img/upload-files-bot-token.png)
+![Get token](upload-files-bot-token.png)
 
 Set this token value as an environment variable called `SLACK_BOT_TOKEN` by using the following command:
 
@@ -164,7 +164,7 @@ In this example, we've used the channel name `C123456789`, but you'll need to fi
 
 Just like in the image below, mention the File Writer Bot and invite it to the `#random` channel.
 
-![Invite to channel](/img/upload-files-invite-bot.gif)
+![Invite to channel](upload-files-invite-bot.gif)
 
 Next, use the following code to retrieve the file's permalink and post it within a channel.
 
@@ -178,7 +178,7 @@ new_message = client.chat_postMessage(
 
 By doing this, you'll be able to see the file within Slack.
 
-![Upload file](/img/upload-files-first-upload.png)
+![Upload file](upload-files-first-upload.png)
 
 ### Specifying a channel when uploading a file {#specifying-channel}
 
@@ -196,7 +196,7 @@ upload_and_then_share_file = client.files_upload_v2(
 
 By running the above code, you'll share the same file without having to send a message with the file URL.
 
-![Share file with message](/img/upload-files-with-channel.png)
+![Share file with message](upload-files-with-channel.png)
 
 ### Uploading local files {#upload-local-files}
 
@@ -219,7 +219,7 @@ upload_text_file = client.files_upload_v2(
 
 Again, we'll see that the file has been uploaded to Slack and shared within the `#random` channel.
 
-![File uploaded](/img/upload-files-local-file.png)
+![File uploaded](upload-files-local-file.png)
 
 ## Deleting a file {#deleting}
 
@@ -252,7 +252,7 @@ for page in client.files_list(user=bot_user_id):
 
 Once we run this, the `files` array should be empty. The count for files found within the `paging` object may take a moment to reflect the actual number of files. You'll also notice within Slack that there are several `This file was deleted.` messages being shown.
 
-![Delete a file](/img/upload-files-delete.png)
+![Delete a file](upload-files-delete.png)
 
 ## Next steps {#next}
 

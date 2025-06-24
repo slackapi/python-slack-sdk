@@ -77,7 +77,7 @@ If you want users to be able to install your app on additional workspaces or fro
 
 We'll be following the general flow of OAuth with Slack, which is covered in the [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth) guide and nicely illustrated in the image below:
 
-![OAuth flow](/img/understanding-oauth-flow.png)
+![OAuth flow](understanding-oauth-flow.png)
 
 1. **Requesting Scopes** 
 
@@ -112,7 +112,7 @@ We'll be following the general flow of OAuth with Slack, which is covered in the
 
     The user will see the app installation UI (shown below) and will have the option to accept the permissions and allow the app to install to the workspace:
 
-    ![Approve installation](/img/understanding-oauth-approve.png)
+    ![Approve installation](understanding-oauth-approve.png)
 
 3. **Exchanging a temporary authorization code for an access token**
 
