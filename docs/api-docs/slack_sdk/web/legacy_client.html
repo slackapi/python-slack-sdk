@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>slack_sdk.web.legacy_client API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -458,6 +458,60 @@ el.replaceWith(d);
         kwargs.update({&#34;policy_name&#34;: policy_name})
         kwargs.update({&#34;entity_type&#34;: entity_type})
         return self.api_call(&#34;admin.auth.policy.removeEntities&#34;, http_verb=&#34;POST&#34;, params=kwargs)
+
+    def admin_conversations_createForObjects(
+        self,
+        *,
+        object_id: str,
+        salesforce_org_id: str,
+        invite_object_team: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Create a Salesforce channel for the corresponding object provided.
+        https://api.slack.com/methods/admin.conversations.createForObjects
+        &#34;&#34;&#34;
+        kwargs.update(
+            {&#34;object_id&#34;: object_id, &#34;salesforce_org_id&#34;: salesforce_org_id, &#34;invite_object_team&#34;: invite_object_team}
+        )
+        return self.api_call(&#34;admin.conversations.createForObjects&#34;, params=kwargs)
+
+    def admin_conversations_linkObjects(
+        self,
+        *,
+        channel: str,
+        record_id: str,
+        salesforce_org_id: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Link a Salesforce record to a channel.
+        https://api.slack.com/methods/admin.conversations.linkObjects
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;record_id&#34;: record_id,
+                &#34;salesforce_org_id&#34;: salesforce_org_id,
+            }
+        )
+        return self.api_call(&#34;admin.conversations.linkObjects&#34;, params=kwargs)
+
+    def admin_conversations_unlinkObjects(
+        self,
+        *,
+        channel: str,
+        new_name: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Unlink a Salesforce record from a channel.
+        https://api.slack.com/methods/admin.conversations.unlinkObjects
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;new_name&#34;: new_name,
+            }
+        )
+        return self.api_call(&#34;admin.conversations.unlinkObjects&#34;, params=kwargs)
 
     def admin_barriers_create(
         self,
@@ -6312,6 +6366,33 @@ With an org-level token, enterprise_id or team_ids is required.
 <div class="desc"><p>Create a public or private channel-based conversation.
 <a href="https://api.slack.com/methods/admin.conversations.create">https://api.slack.com/methods/admin.conversations.create</a></p></div>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_createForObjects"><code class="name flex">
+<span>def <span class="ident">admin_conversations_createForObjects</span></span>(<span>self,<br>*,<br>object_id: str,<br>salesforce_org_id: str,<br>invite_object_team: bool | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_createForObjects(
+    self,
+    *,
+    object_id: str,
+    salesforce_org_id: str,
+    invite_object_team: Optional[bool] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Create a Salesforce channel for the corresponding object provided.
+    https://api.slack.com/methods/admin.conversations.createForObjects
+    &#34;&#34;&#34;
+    kwargs.update(
+        {&#34;object_id&#34;: object_id, &#34;salesforce_org_id&#34;: salesforce_org_id, &#34;invite_object_team&#34;: invite_object_team}
+    )
+    return self.api_call(&#34;admin.conversations.createForObjects&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Create a Salesforce channel for the corresponding object provided.
+<a href="https://api.slack.com/methods/admin.conversations.createForObjects">https://api.slack.com/methods/admin.conversations.createForObjects</a></p></div>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_delete"><code class="name flex">
 <span>def <span class="ident">admin_conversations_delete</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
 </code></dt>
@@ -6511,6 +6592,37 @@ the corresponding original channel IDs for key revocation with EKM.
 </details>
 <div class="desc"><p>Invite a user to a public or private channel.
 <a href="https://api.slack.com/methods/admin.conversations.invite">https://api.slack.com/methods/admin.conversations.invite</a></p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_linkObjects"><code class="name flex">
+<span>def <span class="ident">admin_conversations_linkObjects</span></span>(<span>self, *, channel: str, record_id: str, salesforce_org_id: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_linkObjects(
+    self,
+    *,
+    channel: str,
+    record_id: str,
+    salesforce_org_id: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Link a Salesforce record to a channel.
+    https://api.slack.com/methods/admin.conversations.linkObjects
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;record_id&#34;: record_id,
+            &#34;salesforce_org_id&#34;: salesforce_org_id,
+        }
+    )
+    return self.api_call(&#34;admin.conversations.linkObjects&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Link a Salesforce record to a channel.
+<a href="https://api.slack.com/methods/admin.conversations.linkObjects">https://api.slack.com/methods/admin.conversations.linkObjects</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup"><code class="name flex">
 <span>def <span class="ident">admin_conversations_lookup</span></span>(<span>self,<br>*,<br>last_message_activity_before: int,<br>team_ids: str | Sequence[str],<br>cursor: str | None = None,<br>limit: int | None = None,<br>max_member_count: int | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
@@ -6858,6 +6970,35 @@ the corresponding original channel IDs for key revocation with EKM.
 </details>
 <div class="desc"><p>Unarchive a public or private channel.
 <a href="https://api.slack.com/methods/admin.conversations.archive">https://api.slack.com/methods/admin.conversations.archive</a></p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unlinkObjects"><code class="name flex">
+<span>def <span class="ident">admin_conversations_unlinkObjects</span></span>(<span>self, *, channel: str, new_name: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_unlinkObjects(
+    self,
+    *,
+    channel: str,
+    new_name: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Unlink a Salesforce record from a channel.
+    https://api.slack.com/methods/admin.conversations.unlinkObjects
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;new_name&#34;: new_name,
+        }
+    )
+    return self.api_call(&#34;admin.conversations.unlinkObjects&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Unlink a Salesforce record from a channel.
+<a href="https://api.slack.com/methods/admin.conversations.unlinkObjects">https://api.slack.com/methods/admin.conversations.unlinkObjects</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_add"><code class="name flex">
 <span>def <span class="ident">admin_emoji_add</span></span>(<span>self, *, name: str, url: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
@@ -14100,6 +14241,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPrivate" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPrivate">admin_conversations_convertToPrivate</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPublic" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_convertToPublic">admin_conversations_convertToPublic</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_create" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_create">admin_conversations_create</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_createForObjects" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_createForObjects">admin_conversations_createForObjects</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_delete" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_delete">admin_conversations_delete</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_disconnectShared">admin_conversations_disconnectShared</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_ekm_listOriginalConnectedChannelInfo">admin_conversations_ekm_listOriginalConnectedChannelInfo</a></code></li>
@@ -14107,6 +14249,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getCustomRetention">admin_conversations_getCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_getTeams">admin_conversations_getTeams</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_invite">admin_conversations_invite</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_linkObjects" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_linkObjects">admin_conversations_linkObjects</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_lookup">admin_conversations_lookup</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_removeCustomRetention">admin_conversations_removeCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_rename">admin_conversations_rename</a></code></li>
@@ -14118,6 +14261,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setCustomRetention" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setCustomRetention">admin_conversations_setCustomRetention</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setTeams" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_setTeams">admin_conversations_setTeams</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unarchive" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unarchive">admin_conversations_unarchive</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unlinkObjects" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_conversations_unlinkObjects">admin_conversations_unlinkObjects</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_add" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_add">admin_emoji_add</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_addAlias" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_addAlias">admin_emoji_addAlias</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.admin_emoji_list">admin_emoji_list</a></code></li>
@@ -14377,7 +14521,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>
