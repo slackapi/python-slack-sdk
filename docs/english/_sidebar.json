@@ -45,7 +45,7 @@
     {
         "type": "link",
         "label": "Reference",
-        "href": "https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/"
+        "href": "https://docs.slack.dev/python-slack-sdk/api-docs/slack_sdk/"
     },
     { "type": "html", "value": "<hr>" },
     {
