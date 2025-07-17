@@ -9,21 +9,14 @@
         "type": "html",
         "value": "<hr>"
     },
-    {
-        "type": "category",
-        "label": "Guides",
-        "collapsed": false,
-        "items": [
-            "python-slack-sdk/installation",
-            "python-slack-sdk/web",
-            "python-slack-sdk/webhook",
-            "python-slack-sdk/socket-mode",
-            "python-slack-sdk/oauth",
-            "python-slack-sdk/audit-logs",
-            "python-slack-sdk/rtm",
-            "python-slack-sdk/scim"
-        ]
-    },
+    "python-slack-sdk/installation",
+    "python-slack-sdk/web",
+    "python-slack-sdk/webhook",
+    "python-slack-sdk/socket-mode",
+    "python-slack-sdk/oauth",
+    "python-slack-sdk/audit-logs",
+    "python-slack-sdk/rtm",
+    "python-slack-sdk/scim",
     { "type": "html", "value": "<hr>" },
     {
         "type": "category",
