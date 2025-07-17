@@ -6,10 +6,6 @@
         "className": "sidebar-title"
     },
     {
-        "type": "doc",
-        "id": "bolt-js/getting-started"
-    },
-    {
         "type": "html",
         "value": "<hr>"
     },
