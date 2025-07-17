@@ -8,7 +8,7 @@ The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM AP
 
 The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack: public channels, private channels, direct messages, group direct messages, and shared channels.
 
-Refer to [using the Conversations API](https://docs.slack.dev/apis/web-api/using-the-conversations-api) for more information.
+Refer to [using the Conversations API](/apis/web-api/using-the-conversations-api) for more information.
 
 ## Direct messages {#direct-messages}
 
@@ -26,7 +26,7 @@ client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 response = client.conversations_open(users=["W123456789", "U987654321"])
 ```
 
-See the [`conversations.open`](https://docs.slack.dev/reference/methods/conversations.open) API method for additional details.
+See the [`conversations.open`](/reference/methods/conversations.open) API method for additional details.
 
 ## Creating channels {#creating-channels}
 
@@ -47,7 +47,7 @@ channel_id = response["channel"]["id"]
 response = client.conversations_archive(channel=channel_id)
 ```
 
-See the [`conversations.create`](https://docs.slack.dev/reference/methods/conversations.create) API method for additional details.
+See the [`conversations.create`](/reference/methods/conversations.create) API method for additional details.
 
 ## Getting conversation information {#more-information}
 
@@ -64,7 +64,7 @@ response = client.conversations_info(
 )
 ```
 
-See the [`conversations.info`](https://docs.slack.dev/reference/methods/conversations.info) API method for more details.
+See the [`conversations.info`](/reference/methods/conversations.info) API method for more details.
 
 ## Listing conversations {#listing-conversations}
 
@@ -91,7 +91,7 @@ response = client.conversations_list(
 )
 ```
 
-See the [`conversations.list`](https://docs.slack.dev/reference/methods/conversations.list) API method for more details.
+See the [`conversations.list`](/reference/methods/conversations.list) API method for more details.
 
 ## Getting members of a conversation {#get-members}
 
@@ -106,7 +106,7 @@ response = client.conversations_members(channel="C16180339")
 user_ids = response["members"]
 ```
 
-See the [`conversations.members`](https://docs.slack.dev/reference/methods/conversations.members) API method for more details.
+See the [`conversations.members`](/reference/methods/conversations.members) API method for more details.
 
 ## Leaving a conversation {#leave-conversations}
 
@@ -120,4 +120,4 @@ client = WebClient(token=os.environ["SLACK_API_TOKEN"])
 response = client.conversations_leave(channel="C27182818")
 ```
 
-See the [`conversations.leave`](https://docs.slack.dev/reference/methods/conversations.leave) API method for more details.
+See the [`conversations.leave`](/reference/methods/conversations.leave) API method for more details.

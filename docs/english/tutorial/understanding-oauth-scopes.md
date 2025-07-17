@@ -73,9 +73,9 @@ Our final list of scopes required are:
 
 ## Setting up OAuth and requesting scopes {#setup}
 
-If you want users to be able to install your app on additional workspaces or from the [Slack Marketplace](https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide), you'll need to implement an OAuth flow.
+If you want users to be able to install your app on additional workspaces or from the [Slack Marketplace](/slack-marketplace/slack-marketplace-review-guide), you'll need to implement an OAuth flow.
 
-We'll be following the general flow of OAuth with Slack, which is covered in the [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth) guide and nicely illustrated in the image below:
+We'll be following the general flow of OAuth with Slack, which is covered in the [installing with OAuth](/authentication/installing-with-oauth) guide and nicely illustrated in the image below:
 
 ![OAuth flow](understanding-oauth-flow.png)
 
@@ -160,4 +160,4 @@ We'll be following the general flow of OAuth with Slack, which is covered in the
 At this point, you should feel more comfortable learning what scopes your app needs and using OAuth to request those scopes. A few resources you can check out next include:
 
 *   [Slack-Python-OAuth-Example](https://github.com/stevengill/slack-python-oauth-example): we used code snippets from this app in this tutorial. The README contains more detailed information about running the app locally using ngrok, setting up a Redirect URL for OAuth, and setting up a request URL for events.
-*   Learn more about [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth).
+*   Learn more about [installing with OAuth](/authentication/installing-with-oauth).

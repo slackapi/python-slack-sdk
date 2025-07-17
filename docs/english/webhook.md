@@ -2,9 +2,9 @@
 
 ## Incoming webhooks {#incoming-webhooks}
 
-You can use `slack_sdk.webhook.WebhookClient` for [incoming webhooks](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks) and message responses using [`response_url`](https://docs.slack.dev/interactivity/handling-user-interaction#message_responses) in payloads.
+You can use `slack_sdk.webhook.WebhookClient` for [incoming webhooks](/messaging/sending-messages-using-incoming-webhooks) and message responses using [`response_url`](/interactivity/handling-user-interaction#message_responses) in payloads.
 
-To use [incoming webhooks](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks), calling the `WebhookClient(url)#send(payload)` method works for you. The call posts a message in a channel associated with the webhook URL.
+To use [incoming webhooks](/messaging/sending-messages-using-incoming-webhooks), calling the `WebhookClient(url)#send(payload)` method works for you. The call posts a message in a channel associated with the webhook URL.
 
 ``` python
 from slack_sdk.webhook import WebhookClient
@@ -16,7 +16,7 @@ assert response.status_code == 200
 assert response.body == "ok"
 ```
 
-It's also possible to use `blocks` using [Block Kit](https://docs.slack.dev/block-kit).
+It's also possible to use `blocks` using [Block Kit](/block-kit).
 
 ``` python
 from slack_sdk.webhook import WebhookClient
@@ -38,7 +38,7 @@ response = webhook.send(
 
 ## The `response_url`
 
-User actions in channels generates a [`response_url`](https://docs.slack.dev/interactivity/handling-user-interaction#message_responses) and includes the URL in its payload. You can use `WebhookClient` to send a message via the `response_url`.
+User actions in channels generates a [`response_url`](/interactivity/handling-user-interaction#message_responses) and includes the URL in its payload. You can use `WebhookClient` to send a message via the `response_url`.
 
 ``` python
 import os

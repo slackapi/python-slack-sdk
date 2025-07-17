@@ -2,13 +2,13 @@
 
 [SCIM](http://www.simplecloud.info/) is supported by a myriad of services. The SCIM API is a set of APIs for provisioning and managing user accounts and groups. SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools, including Slack.
 
-Refer to [using the Slack SCIM API](https://docs.slack.dev/admins/scim-api) for more details.
+Refer to [using the Slack SCIM API](/admins/scim-api) for more details.
 
 View the [Python document for this module](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/).
 
 ## SCIMClient {#scimclient}
 
-An OAuth token with [the admin scope](https://docs.slack.dev/reference/scopes/admin) is required to access the SCIM API. To fetch provisioned user data, you can use the `search_users` method in the client.
+An OAuth token with [the admin scope](/reference/scopes/admin) is required to access the SCIM API. To fetch provisioned user data, you can use the `search_users` method in the client.
 
 ``` python
 import os

@@ -31,21 +31,21 @@ import os
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 ```
 
-Refer to our [best practices for security](https://docs.slack.dev/authentication/best-practices-for-security) page for more information.
+Refer to our [best practices for security](/authentication/best-practices-for-security) page for more information.
 
 ## Installing on a single workspace {#single-workspace}
 
 If you're building an application for a single Slack workspace, there's no need to build out the entire OAuth flow. Once you've set up your features, click the **Install App to Team** button on the **Install App** page. If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to your workspace for the changes to take effect.
 
-Refer to the [quickstart](https://docs.slack.dev/quickstart) guide for more details.
+Refer to the [quickstart](/quickstart) guide for more details.
 
 ## Installing on multiple workspaces {#multi-workspace}
 
-If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. Read more about [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth).
+If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. Read more about [installing with OAuth](/authentication/installing-with-oauth).
 
 The OAuth exchange is facilitated via HTTP and requires a webserver; in this example, we'll use [Flask](https://flask.palletsprojects.com/).
 
-To configure your app for OAuth, you'll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from the [app page](https://api.slack.com/apps). The scopes are determined by the functionality of the app — every method you wish to access has a corresponding scope, and your app will need to request that scope in order to be able to access the method. Review the full list of [OAuth scopes](https://docs.slack.dev/reference/scopes).
+To configure your app for OAuth, you'll need a client ID, a client secret, and a set of one or more scopes that will be applied to the token once it is granted. The client ID and client secret are available from the [app page](https://api.slack.com/apps). The scopes are determined by the functionality of the app — every method you wish to access has a corresponding scope, and your app will need to request that scope in order to be able to access the method. Review the full list of [OAuth scopes](/reference/scopes).
 
 ``` python
 import os
@@ -77,7 +77,7 @@ def pre_install():
 
 ### The OAuth completion page {#oauth-completion}
 
-Once the user has agreed to the permissions you've requested, Slack will redirect the user to your auth completion page, which includes a `code` query string parameter. You'll use the `code` parameter to call the [`oauth.v2.access`](https://docs.slack.dev/reference/methods/oauth.v2.access) API method that will grant you the token.
+Once the user has agreed to the permissions you've requested, Slack will redirect the user to your auth completion page, which includes a `code` query string parameter. You'll use the `code` parameter to call the [`oauth.v2.access`](/reference/methods/oauth.v2.access) API method that will grant you the token.
 
 ``` python
 @app.route("/slack/oauth_redirect", methods=["GET"])

@@ -1,6 +1,6 @@
 # Audit Logs API client
 
-The [Audit Logs API](https://docs.slack.dev/admins/audit-logs-api) is a set of APIs that you can use to monitor what's happening in your [Enterprise Grid](https://docs.slack.dev/enterprise-grid) organization.
+The [Audit Logs API](/admins/audit-logs-api) is a set of APIs that you can use to monitor what's happening in your [Enterprise Grid](/enterprise-grid) organization.
 
 The Audit Logs API can be used by Security Information and Event Management (SIEM) tools to provide an analysis of how your Slack organization is being accessed. You can also use this API to write your own apps to see how members of your organization are using Slack.
 
@@ -10,11 +10,11 @@ You'll need a valid token in order to use the Audit Logs API. In addition, the S
 
 ## AuditLogsClient {#auditlogsclient}
 
-An OAuth token with [the admin scope](https://docs.slack.dev/reference/scopes/admin) is required to access this API.
+An OAuth token with [the admin scope](/reference/scopes/admin) is required to access this API.
 
 You'll likely use the `/logs` endpoint as it's the essential part of this API.
 
-To learn about the available parameters for this endpoint, check out [using the Audit Logs API](https://docs.slack.dev/admins/audit-logs-api). You can also learn more about the data structure of `api_response.typed_body` from [the class source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py).
+To learn about the available parameters for this endpoint, check out [using the Audit Logs API](/admins/audit-logs-api). You can also learn more about the data structure of `api_response.typed_body` from [the class source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/audit_logs/v1/logs.py).
 
 ``` python
 import os

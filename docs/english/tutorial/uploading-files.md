@@ -8,7 +8,7 @@ First, create a [Slack app](https://api.slack.com/apps/new).
 
 ## Configuring your app's settings with an app manifest {#configuration}
 
-Creating your app using this method will include all the required settings for this tutorial, and you won't be bogged down with too many details - all you'll need to do is decide where this app will live. If you're curious about the inner workings of how this button works, refer to [App Manifests](https://docs.slack.dev/app-manifests) for more information.
+Creating your app using this method will include all the required settings for this tutorial, and you won't be bogged down with too many details - all you'll need to do is decide where this app will live. If you're curious about the inner workings of how this button works, refer to [App Manifests](/app-manifests) for more information.
 
 ```yaml
 _metadata:

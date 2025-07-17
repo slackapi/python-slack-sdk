@@ -6,15 +6,15 @@ The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM AP
 
 :::
 
-The [Legacy Real Time Messaging (RTM) API](https://docs.slack.dev/legacy/legacy-rtm-api) is a WebSocket-based API that allows you to receive events from Slack in real time and to send messages as users. 
+The [Legacy Real Time Messaging (RTM) API](/legacy/legacy-rtm-api) is a WebSocket-based API that allows you to receive events from Slack in real time and to send messages as users. 
 
-If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API](https://docs.slack.dev/apis/events-api) instead. The Events API contains some events that aren't supported in the Legacy RTM API (such as the [app_home_opened event](https://docs.slack.dev/reference/events/app_home_opened)), and it supports most of the event types in the Legacy RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor](https://github.com/slackapi/python-slack-events-api).
+If you prefer events to be pushed to your app, we recommend using the HTTP-based [Events API](/apis/events-api) instead. The Events API contains some events that aren't supported in the Legacy RTM API (such as the [app_home_opened event](/reference/events/app_home_opened)), and it supports most of the event types in the Legacy RTM API. If you'd like to use the Events API, you can use the [Python Slack Events Adaptor](https://github.com/slackapi/python-slack-events-api).
 
 The RTMClient allows apps to communicate with the Legacy RTM API.
 
 The event-driven architecture of this client allows you to simply link callbacks to their corresponding events. When an event occurs, this client executes your callback while passing along any information it receives. We also give you the ability to call our web client from inside your callbacks.
 
-In our example below, we watch for a [message event](https://docs.slack.dev/reference/events/message) that contains \"Hello\" and if it's received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying \"Hi\" to the user.
+In our example below, we watch for a [message event](/reference/events/message) that contains \"Hello\" and if it's received, we call the `say_hello()` function. We then issue a call to the web client to post back to the channel saying \"Hi\" to the user.
 
 ## Configuring the RTM API {#configuration}
 
@@ -51,9 +51,9 @@ rtm_client.start()
 
 ## The `rtm.start` vs. `rtm.connect` API methods {#rtm-methods}
 
-By default, the RTM client uses the [`rtm.connect`](https://docs.slack.dev/reference/methods/rtm.connect) API method to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket URL.
+By default, the RTM client uses the [`rtm.connect`](/reference/methods/rtm.connect) API method to establish a WebSocket connection with Slack. The response contains basic information about the team and WebSocket URL.
 
-If you'd rather use the [`rtm.start`](https://docs.slack.dev/reference/methods/rtm.start) API method to establish the connection, which provides more information about the conversations and users on the team, you can set the `connect_method` option to `rtm.start` when instantiating the RTM Client. Note that on larger teams, use of `rtm.start` can be slow and unreliable.
+If you'd rather use the [`rtm.start`](/reference/methods/rtm.start) API method to establish the connection, which provides more information about the conversations and users on the team, you can set the `connect_method` option to `rtm.start` when instantiating the RTM Client. Note that on larger teams, use of `rtm.start` can be slow and unreliable.
 
 ``` python
 import os
@@ -82,7 +82,7 @@ rtm_client = RTMClient(
 rtm_client.start()
 ```
 
-See the [`rtm.connect`](https://docs.slack.dev/reference/methods/rtm.connect) and [`rtm.start`](https://docs.slack.dev/reference/methods/rtm.start) API methods for more details.
+See the [`rtm.connect`](/reference/methods/rtm.connect) and [`rtm.start`](/reference/methods/rtm.start) API methods for more details.
 
 ## RTM events {#rtm-events}
 
@@ -95,4 +95,4 @@ See the [`rtm.connect`](https://docs.slack.dev/reference/methods/rtm.connect) an
 }
 ```
 
-Refer to the [Legacy RTM API](https://docs.slack.dev/legacy/legacy-rtm-api) page for more information.
+Refer to the [Legacy RTM API](/legacy/legacy-rtm-api) page for more information.

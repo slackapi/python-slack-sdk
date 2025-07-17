@@ -6,7 +6,7 @@ Refer to the [Python document for this module](https://tools.slack.dev/python-sl
 
 ## App installation flow {#app-installation}
 
-OAuth allows a user in any Slack workspace to install your app. At the end of the OAuth flow, your app gains an access token. Refer to the [installing with OAuth](https://docs.slack.dev/authentication/installing-with-oauth) guide for details.
+OAuth allows a user in any Slack workspace to install your app. At the end of the OAuth flow, your app gains an access token. Refer to the [installing with OAuth](/authentication/installing-with-oauth) guide for details.
 
 The Python Slack SDK provides the necessary modules for building the OAuth flow.
 
@@ -60,7 +60,7 @@ When accessing `https://(your domain)/slack/install`, you will see an \"Add to S
 
 If all is well, a user goes through the Slack app installation UI and accepts all the scopes your app requests. After that happens, Slack redirects the user back to your specified Redirect URL.
 
-The redirection gives you a `code` parameter. You can exchange the value for an access token by calling the [oauth.v2.access](https://docs.slack.dev/reference/methods/oauth.v2.access) API method.
+The redirection gives you a `code` parameter. You can exchange the value for an access token by calling the [oauth.v2.access](/reference/methods/oauth.v2.access) API method.
 
 ``` python
 from slack_sdk.web import WebClient
@@ -222,7 +222,7 @@ def slack_app():
 
 ## Sign in with Slack {#siws}
 
-[Sign in with Slack](https://docs.slack.dev/authentication/sign-in-with-slack) helps users log into your service using their Slack profile. The platform feature was upgraded to be compatible with the standard [OpenID Connect](https://openid.net/connect/) specification. With slack-sdk v3.9+, implementing the OAuth flow is much easier.
+[Sign in with Slack](/authentication/sign-in-with-slack) helps users log into your service using their Slack profile. The platform feature was upgraded to be compatible with the standard [OpenID Connect](https://openid.net/connect/) specification. With slack-sdk v3.9+, implementing the OAuth flow is much easier.
 
 When you create a new Slack app, set the following user scopes:
 

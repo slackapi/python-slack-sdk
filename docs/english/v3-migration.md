@@ -4,7 +4,7 @@ sidebar_label: Migrating from slackclient
 
 # Migrating from v2.x to v3.x {#migrating}
 
-You may still view the legacy `slackclient` v2 [documentation](/legacy/). However, the **slackclient** project is in maintenance mode and this **slack_sdk** project is the successor.
+You may still view the legacy `slackclient` v2 [documentation](/python-slack-sdk/legacy/). However, the **slackclient** project is in maintenance mode and this **slack_sdk** project is the successor.
 
 ## From `slackclient` 2.x {#fromv2}
 
@@ -168,7 +168,7 @@ def get_team_data(**payload):
 
 RTM usage has been completely redesigned.
 
-For new projects, we recommend using [Events API](https://docs.slack.dev/apis/events-api). This package `slackclient` v2 doesn't have any supports for Events API but you can try https://github.com/slackapi/python-slack-events-api that works as an enhancement of Flask web framework.
+For new projects, we recommend using [Events API](/apis/events-api). This package `slackclient` v2 doesn't have any supports for Events API but you can try https://github.com/slackapi/python-slack-events-api that works as an enhancement of Flask web framework.
 
 In the near future, we'll be providing better supports for Events API in the official SDK.
 

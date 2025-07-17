@@ -1,6 +1,6 @@
 # Socket Mode client
 
-Socket Mode is a method of connecting your app to the Slack APIs using WebSockets instead of HTTP. You can use `slack_sdk.socket_mode.SocketModeClient` for managing [Socket Mode](https://docs.slack.dev/apis/events-api/using-socket-mode) connections and performing interactions with Slack.
+Socket Mode is a method of connecting your app to the Slack APIs using WebSockets instead of HTTP. You can use `slack_sdk.socket_mode.SocketModeClient` for managing [Socket Mode](/apis/events-api/using-socket-mode) connections and performing interactions with Slack.
 
 ## Using Socket Mode {#socket-mode}
 

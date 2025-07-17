@@ -14,7 +14,7 @@ To make it easier for Python programmers to build Slack applications, we've prov
 
 ## Slack platform basics {#platform-basics}
 
-If you're new to the Slack platform, we have a general purpose [quickstart guide](https://docs.slack.dev/quickstart) that isn't specific to any language or framework. Its a great place to learn all about the concepts that go into building a great Slack app.
+If you're new to the Slack platform, we have a general purpose [quickstart guide](/quickstart) that isn't specific to any language or framework. Its a great place to learn all about the concepts that go into building a great Slack app.
 
 Before you get started building on the Slack platform, you need to set up [your app's configuration](https://api.slack.com/apps/new). This is where you define things like your apps permissions and the endpoints that Slack should use for interacting with the backend you'll build using Python.
 
