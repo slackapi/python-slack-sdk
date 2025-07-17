@@ -5,36 +5,36 @@
         "label": "Python Slack SDK",
         "className": "sidebar-title"
     },
-    "python-slack-sdk/content/installation",
-    "python-slack-sdk/content/web",
-    "python-slack-sdk/content/webhook",
-    "python-slack-sdk/content/socket-mode",
-    "python-slack-sdk/content/oauth",
-    "python-slack-sdk/content/audit-logs",
-    "python-slack-sdk/content/rtm",
-    "python-slack-sdk/content/scim",
+    "python-slack-sdk/installation",
+    "python-slack-sdk/web",
+    "python-slack-sdk/webhook",
+    "python-slack-sdk/socket-mode",
+    "python-slack-sdk/oauth",
+    "python-slack-sdk/audit-logs",
+    "python-slack-sdk/rtm",
+    "python-slack-sdk/scim",
     { "type": "html", "value": "<hr>" },
     {
         "type": "category",
         "label": "Legacy slackclient v2",
         "items": [
-            "python-slack-sdk/content/legacy/index",
-            "python-slack-sdk/content/legacy/auth",
-            "python-slack-sdk/content/legacy/basic_usage",
-            "python-slack-sdk/content/legacy/conversations",
-            "python-slack-sdk/content/legacy/real_time_messaging",
-            "python-slack-sdk/content/legacy/faq",
-            "python-slack-sdk/content/legacy/changelog"
+            "python-slack-sdk/legacy/index",
+            "python-slack-sdk/legacy/auth",
+            "python-slack-sdk/legacy/basic_usage",
+            "python-slack-sdk/legacy/conversations",
+            "python-slack-sdk/legacy/real_time_messaging",
+            "python-slack-sdk/legacy/faq",
+            "python-slack-sdk/legacy/changelog"
         ]
     },
-    "python-slack-sdk/content/v3-migration",
+    "python-slack-sdk/v3-migration",
     { "type": "html", "value": "<hr>" },
     {
         "type": "category",
         "label": "Tutorials",
         "items": [
-            "python-slack-sdk/content/tutorial/uploading-files",
-            "python-slack-sdk/content/tutorial/understanding-oauth-scopes"
+            "python-slack-sdk/tutorial/uploading-files",
+            "python-slack-sdk/tutorial/understanding-oauth-scopes"
         ]
     },
     { "type": "html", "value": "<hr>" },
