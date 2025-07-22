@@ -5415,6 +5415,72 @@ class AsyncWebClient(AsyncBaseClient):
         # NOTE: Intentionally using json for the "view" parameter
         return await self.api_call("views.publish", json=kwargs)
 
+    async def workflows_featured_add(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Add featured workflows to a channel.
+        https://api.slack.com/methods/workflows.featured.add
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.add", params=kwargs)
+
+    async def workflows_featured_list(
+        self,
+        *,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List the featured workflows for specified channels.
+        https://api.slack.com/methods/workflows.featured.list
+        """
+        if isinstance(channel_ids, (list, tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return await self.api_call("workflows.featured.list", params=kwargs)
+
+    async def workflows_featured_remove(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Remove featured workflows from a channel.
+        https://api.slack.com/methods/workflows.featured.remove
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.remove", params=kwargs)
+
+    async def workflows_featured_set(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set featured workflows for a channel.
+        https://api.slack.com/methods/workflows.featured.set
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.set", params=kwargs)
+
     async def workflows_stepCompleted(
         self,
         *,
