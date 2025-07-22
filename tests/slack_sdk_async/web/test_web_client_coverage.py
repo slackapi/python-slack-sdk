@@ -835,16 +835,24 @@ class TestWebClientCoverage(unittest.TestCase):
                 await async_method(view_id="V123", view={})
             elif method_name == "workflows_featured_add":
                 self.api_methods_to_call.remove(method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])["method"])
+                method(channel_id="C123", trigger_ids="Ft123,Ft234")
                 await async_method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])
+                await async_method(channel_id="C123", trigger_ids="Ft123,Ft234")
             elif method_name == "workflows_featured_list":
                 self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"])["method"])
+                method(channel_ids="C123,C234")
                 await async_method(channel_ids=["C123", "C234"])
+                await async_method(channel_ids="C123,C234")
             elif method_name == "workflows_featured_remove":
                 self.api_methods_to_call.remove(method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])["method"])
+                method(channel_id="C123", trigger_ids="Ft123,Ft234")
                 await async_method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])
+                await async_method(channel_id="C123", trigger_ids="Ft123,Ft234")
             elif method_name == "workflows_featured_set":
                 self.api_methods_to_call.remove(method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])["method"])
+                method(channel_id="C123", trigger_ids="Ft123,Ft234")
                 await async_method(channel_id="C123", trigger_ids=["Ft123", "Ft234"])
+                await async_method(channel_id="C123", trigger_ids="Ft123,Ft234")
             elif method_name == "workflows_stepCompleted":
                 self.api_methods_to_call.remove(method(workflow_step_execute_id="S123", outputs={})["method"])
                 await async_method(workflow_step_execute_id="S123", outputs={})
