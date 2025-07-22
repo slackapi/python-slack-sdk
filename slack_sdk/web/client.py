@@ -4,23 +4,24 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
-from .base_client import BaseClient, SlackResponse
-from .internal_utils import (
-    _parse_web_class_objects,
-    _update_call_participants,
-    _warn_if_text_or_attachment_fallback_is_missing,
-    _remove_none_values,
-    _to_v2_file_upload_item,
-    _validate_for_legacy_client,
-    _print_files_upload_v2_suggestion,
-)
+
 from ..models.attachments import Attachment
 from ..models.blocks import Block
 from ..models.metadata import Metadata
+from .base_client import BaseClient, SlackResponse
+from .internal_utils import (
+    _parse_web_class_objects,
+    _print_files_upload_v2_suggestion,
+    _remove_none_values,
+    _to_v2_file_upload_item,
+    _update_call_participants,
+    _validate_for_legacy_client,
+    _warn_if_text_or_attachment_fallback_is_missing,
+)
 
 
 class WebClient(BaseClient):
