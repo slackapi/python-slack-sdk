@@ -252,7 +252,7 @@ def _warn_if_message_text_content_is_missing(endpoint: str, kwargs: Dict[str, An
     markdown_text = kwargs.get("markdown_text")
     if (text and len(text.strip()) > 0) or (markdown_text and len(markdown_text.strip()) > 0):
         # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
-        # If a top-level markdown_text arg is provided, we are good. It should not be used in conjunction with blocks or text.
+        # If a top-level markdown_text arg is provided, we are good. It should not be used in conjunction with text.
         return
 
     # for unit tests etc.
