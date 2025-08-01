@@ -17,11 +17,11 @@ class TestBuiltins(unittest.TestCase):
         self.assertEqual(1, len(list))
 
         list = all_builtin_retry_handlers()
-        self.assertEqual(2, len(list))
+        self.assertEqual(3, len(list))
         list.clear()
         self.assertEqual(0, len(list))
         list = all_builtin_retry_handlers()
-        self.assertEqual(2, len(list))
+        self.assertEqual(3, len(list))
 
     def test_fixed_value_retry_interval_calculator(self):
         for fixed_value in [0.1, 0.2]:
