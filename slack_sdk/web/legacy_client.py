@@ -32,7 +32,7 @@ from .internal_utils import (
     _to_v2_file_upload_item,
     _update_call_participants,
     _validate_for_legacy_client,
-    _warn_if_text_or_attachment_fallback_is_missing,
+    _warn_if_message_text_content_is_missing,
 )
 
 
@@ -2697,6 +2697,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends an ephemeral message to a user in a channel.
@@ -2716,11 +2717,12 @@ class LegacyWebClient(LegacyBaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postEphemeral", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postEphemeral", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postEphemeral", json=kwargs)
 
@@ -2744,6 +2746,7 @@ class LegacyWebClient(LegacyBaseClient):
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends a message to a channel.
@@ -2768,11 +2771,12 @@ class LegacyWebClient(LegacyBaseClient):
                 "username": username,
                 "parse": parse,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postMessage", json=kwargs)
 
@@ -2781,7 +2785,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         channel: str,
         post_at: Union[str, int],
-        text: str,
+        text: Optional[str] = None,
         as_user: Optional[bool] = None,
         attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
@@ -2792,6 +2796,7 @@ class LegacyWebClient(LegacyBaseClient):
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Schedules a message.
@@ -2812,11 +2817,12 @@ class LegacyWebClient(LegacyBaseClient):
                 "unfurl_media": unfurl_media,
                 "link_names": link_names,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.scheduleMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.scheduleMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
@@ -2869,6 +2875,7 @@ class LegacyWebClient(LegacyBaseClient):
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates a message in a channel.
@@ -2886,6 +2893,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         if isinstance(file_ids, (list, tuple)):
@@ -2894,7 +2902,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"file_ids": file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.update", kwargs)
+        _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
 
