@@ -27,14 +27,12 @@ from ..models.metadata import Metadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
-    _update_call_participants,
-    _warn_if_message_text_content_is_missing,
     _print_files_upload_v2_suggestion,
     _remove_none_values,
     _to_v2_file_upload_item,
     _update_call_participants,
     _validate_for_legacy_client,
-    _warn_if_text_or_attachment_fallback_is_missing,
+    _warn_if_message_text_content_is_missing,
 )
 
 
