@@ -1,7 +1,7 @@
 # pip install -r requirements/testing.txt
 aiohttp<4  # used for a WebSocket server mock
 pytest>=7.0.1,<9
-pytest-asyncio<1  # for async
+pytest-asyncio<2  # for async
 pytest-cov>=2,<7
 # while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
 # so 5.x should be kept in order to stay compatible with Python 3.6/3.7
