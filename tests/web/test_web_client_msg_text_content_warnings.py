@@ -6,7 +6,7 @@ from tests.web.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server, cleanup_mock_web_api_server
 
 
-class TestWebClient_Issue_891(unittest.TestCase):
+class TestWebClientMessageTextContentWarnings(unittest.TestCase):
     def setUp(self):
         setup_mock_web_api_server(self, MockHandler)
 
