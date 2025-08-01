@@ -249,9 +249,12 @@ def _to_0_or_1_if_bool(v: Any) -> Union[Any, str]:
 
 def _warn_if_message_text_content_is_missing(endpoint: str, kwargs: Dict[str, Any]) -> None:
     text = kwargs.get("text")
-    markdown_text = kwargs.get("markdown_text")
-    if (text and len(text.strip()) > 0) or (markdown_text and len(markdown_text.strip()) > 0):
+    if text and len(text.strip()) > 0:
         # If a top-level text arg is provided, we are good. This is the recommended accessibility field to always provide.
+        return
+
+    markdown_text = kwargs.get("markdown_text")
+    if markdown_text and len(markdown_text.strip()) > 0:
         # If a top-level markdown_text arg is provided, we are good. It should not be used in conjunction with text.
         return
 
