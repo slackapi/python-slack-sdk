@@ -16,23 +16,24 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
-from .legacy_base_client import LegacyBaseClient, SlackResponse
-from .internal_utils import (
-    _parse_web_class_objects,
-    _update_call_participants,
-    _warn_if_text_or_attachment_fallback_is_missing,
-    _remove_none_values,
-    _to_v2_file_upload_item,
-    _validate_for_legacy_client,
-    _print_files_upload_v2_suggestion,
-)
+
 from ..models.attachments import Attachment
 from ..models.blocks import Block
 from ..models.metadata import Metadata
+from .legacy_base_client import LegacyBaseClient, SlackResponse
+from .internal_utils import (
+    _parse_web_class_objects,
+    _print_files_upload_v2_suggestion,
+    _remove_none_values,
+    _to_v2_file_upload_item,
+    _update_call_participants,
+    _validate_for_legacy_client,
+    _warn_if_text_or_attachment_fallback_is_missing,
+)
 
 
 class LegacyWebClient(LegacyBaseClient):
@@ -5416,6 +5417,72 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.publish", json=kwargs)
+
+    def workflows_featured_add(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Add featured workflows to a channel.
+        https://api.slack.com/methods/workflows.featured.add
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.add", params=kwargs)
+
+    def workflows_featured_list(
+        self,
+        *,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List the featured workflows for specified channels.
+        https://api.slack.com/methods/workflows.featured.list
+        """
+        if isinstance(channel_ids, (list, tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call("workflows.featured.list", params=kwargs)
+
+    def workflows_featured_remove(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Remove featured workflows from a channel.
+        https://api.slack.com/methods/workflows.featured.remove
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.remove", params=kwargs)
+
+    def workflows_featured_set(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set featured workflows for a channel.
+        https://api.slack.com/methods/workflows.featured.set
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.set", params=kwargs)
 
     def workflows_stepCompleted(
         self,
