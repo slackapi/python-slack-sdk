@@ -3,7 +3,7 @@
 This package supports Python 3.6 and higher. We recommend using [PyPI](https://pypi.python.org/pypi) for installation. Run the following command:
 
 ```bash
-pip install slack_sdk
+pip install slack-sdk
 ```
 
 Alternatively, you can always pull the source code directly into your project:
