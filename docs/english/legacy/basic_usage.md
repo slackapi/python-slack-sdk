@@ -53,13 +53,13 @@ response = client.chat_postEphemeral(
 )
 ```
 
-See the [`chat.postEphemeral`](/reference/methods/chat.postephemeral) API method for more details.
+See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method for more details.
 
 ## Formatting messages with Block Kit {#block-kit}
 
 Messages posted from apps can contain more than just text; they can also include full user interfaces composed of blocks using [Block Kit](/block-kit).
 
-The [`chat.postMessage method`](/reference/methods/chat.postmessage) takes an optional blocks argument that allows you to customize the layout of a message. Blocks are specified in a single object literal, so just add additional keys for any optional argument.
+The [`chat.postMessage method`](/reference/methods/chat.postMessage) takes an optional blocks argument that allows you to customize the layout of a message. Blocks are specified in a single object literal, so just add additional keys for any optional argument.
 
 To send a message to a channel, use the channel's ID. For DMs, use the user's ID.
 

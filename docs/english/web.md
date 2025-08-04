@@ -10,7 +10,7 @@ Each of these [API methods](/reference/methods) is fully documented on our devel
 
 One of the primary uses of Slack is posting messages to a channel using the channel ID, or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the `channel` parameter.
 
-Your app's bot user needs to be in the channel (otherwise, you will get either `not_in_channel` or `channel_not_found` error code). If your app has the [chat:write.public](/reference/scopes/chat.write.public) scope, your app can post messages without joining a channel as long as the channel is public. See the [chat.postMessage](/reference/methods/chat.postmessage) API method for more info.
+Your app's bot user needs to be in the channel (otherwise, you will get either `not_in_channel` or `channel_not_found` error code). If your app has the [chat:write.public](/reference/scopes/chat.write.public) scope, your app can post messages without joining a channel as long as the channel is public. See the [chat.postMessage](/reference/methods/chat.postMessage) API method for more info.
 
 ``` python
 import logging
@@ -49,13 +49,13 @@ response = client.chat_postEphemeral(
 )
 ```
 
-See the [`chat.postEphemeral`](/reference/methods/chat.postephemeral) API method for more details.
+See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method for more details.
 
 ## Formatting messages with Block Kit {#block-kit}
 
 Messages posted from apps can contain more than just text; they can also include full user interfaces composed of blocks using [Block Kit](/block-kit).
 
-The [`chat.postMessage method`](/reference/methods/chat.postmessage) takes an optional blocks argument that allows you to customize the layout of a message. Blocks can be specified
+The [`chat.postMessage method`](/reference/methods/chat.postMessage) takes an optional blocks argument that allows you to customize the layout of a message. Blocks can be specified
 in a single array of either dict values or [slack_sdk.models.blocks.Block](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html) objects.
 
 To send a message to a channel, use the channel's ID. For DMs, use the user's ID.

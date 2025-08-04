@@ -9,7 +9,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 | Feature | Use | Package |
 |---|---|---|
 | [Web API](/python-slack-sdk/web)  | Send data to or query data from Slack using any of over 200 methods. | `slack_sdk.web`, `slack_sdk.web.async_client` |
-| [Webhooks](/python-slack-sdk/webhooks) / `response_url`  | Send a message using Incoming Webhooks or `response_url` | `slack_sdk.webhook`, `slack_sdk.webhook.async_client`  |
+| [Webhooks](/python-slack-sdk/webhook) / `response_url`  | Send a message using Incoming Webhooks or `response_url` | `slack_sdk.webhook`, `slack_sdk.webhook.async_client`  |
 | [Socket Mode](/python-slack-sdk/socket-mode) | Receive and send messages over Socket Mode connections. | `slack_sdk.socket_mode`  |
 | [OAuth](/python-slack-sdk/oauth)  | Setup the authentication flow using V2 OAuth, OpenID Connect for Slack apps.  | `slack_sdk.oauth` |
 | [Audit Logs API](/python-slack-sdk/audit-logs)   | Receive audit logs API data. | `slack_sdk.audit_logs` |
