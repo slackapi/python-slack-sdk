@@ -1730,7 +1730,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def admin_users_list(
         self,
         *,
-        team_id: Optional[str]=None,
+        team_id: Optional[str] = None,
         include_deactivated_user_workspaces: Optional[bool] = None,
         is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
