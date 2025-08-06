@@ -56,7 +56,7 @@ See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method
 Messages posted from apps can contain more than just text; they can also include full user interfaces composed of blocks using [Block Kit](/block-kit).
 
 The [`chat.postMessage method`](/reference/methods/chat.postMessage) takes an optional blocks argument that allows you to customize the layout of a message. Blocks can be specified
-in a single array of either dict values or [slack_sdk.models.blocks.Block](https://tools.slack.dev/python-slack-sdk/api-docs/slack_sdk/models/blocks/index.html) objects.
+in a single array of either dict values or [slack_sdk.models.blocks.Block](https://docs.slack.dev/tools/python-slack-sdk/reference/models/blocks/index.html) objects.
 
 To send a message to a channel, use the channel's ID. For DMs, use the user's ID.
 

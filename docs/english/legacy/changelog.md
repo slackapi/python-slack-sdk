@@ -7,7 +7,7 @@ This is the first stable version of [slack_sdk](https://pypi.org/project/slack-s
 -   Better async/sync separation for `WebClient` and `WebhookClient`
 -   Renamed packages (from `slack` to `slack_sdk`) with deprecation warnings
 
-Refer to [v3.0.0 milestone](https://github.com/slackapi/python-slack-sdk/milestone/10?closed=1) and [the website](https://tools.slack.dev/python-slack-sdk/) for details. If you're a `slackclient` user, the migration guide for `slackclient` v2.x users is available at http://localhost:3000/python-slack-sdk/v3-migration.
+Refer to [v3.0.0 milestone](https://github.com/slackapi/python-slack-sdk/milestone/10?closed=1) and [the docs website](/tools/python-slack-sdk/) for details. If you're a `slackclient` user, the migration guide for `slackclient` v2.x users is available at http://localhost:3000/python-slack-sdk/v3-migration.
 
 ## v2.9.3 (2020-10-20)
 

@@ -6,7 +6,7 @@ The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM AP
 
 :::
 
-Refer to the [migration guide](https://tools.slack.dev/python-slack-sdk/v3-migration) to learn how to smoothly migrate your existing code.
+Refer to the [migration guide](/tools/python-slack-sdk/v3-migration) to learn how to smoothly migrate your existing code.
 
 Slack APIs allow anyone to build full featured integrations that extend and expand the capabilities of your Slack workspace. These APIs allow you to build applications that interact with Slack just like the people on your team. They can post messages, respond to events that happen, and build complex UIs for getting work done.
 

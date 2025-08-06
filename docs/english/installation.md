@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 Once your user has completed the OAuth flow, you'll be able to use the provided tokens to call any of the Slack Web API methods that require an access token.
 
-Refer to the [basic usage](https://tools.slack.dev/python-slack-sdk/legacy/basic_usage) page for more examples.
+Refer to the [basic usage](/tools/python-slack-sdk/legacy/basic_usage) page for more examples.
 
 ## Installation troubleshooting {#troubleshooting}
 
