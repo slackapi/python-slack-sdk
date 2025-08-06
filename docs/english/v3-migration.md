@@ -4,7 +4,7 @@ sidebar_label: Migrating from slackclient
 
 # Migrating from v2.x to v3.x {#migrating}
 
-You may still view the legacy `slackclient` v2 [documentation](/python-slack-sdk/legacy/). However, the **slackclient** project is in maintenance mode and this **slack_sdk** project is the successor.
+You may still view the legacy `slackclient` v2 [documentation](/tools/python-slack-sdk/legacy/). However, the **slackclient** project is in maintenance mode and this **slack_sdk** project is the successor.
 
 ## From `slackclient` 2.x {#fromv2}
 

@@ -1,44 +1,44 @@
 [
 	{
 		"type": "doc",
-		"id": "python-slack-sdk/index",
-		"label": "Python Slack SDK",
+		"id": "tools/python-slack-sdk/index",
+		"label": "tools/python Slack SDK",
 		"className": "sidebar-title"
 	},
 	{
 		"type": "html",
 		"value": "<hr>"
 	},
-	"python-slack-sdk/installation",
-	"python-slack-sdk/web",
-	"python-slack-sdk/webhook",
-	"python-slack-sdk/socket-mode",
-	"python-slack-sdk/oauth",
-	"python-slack-sdk/audit-logs",
-	"python-slack-sdk/rtm",
-	"python-slack-sdk/scim",
+	"tools/python-slack-sdk/installation",
+	"tools/python-slack-sdk/web",
+	"tools/python-slack-sdk/webhook",
+	"tools/python-slack-sdk/socket-mode",
+	"tools/python-slack-sdk/oauth",
+	"tools/python-slack-sdk/audit-logs",
+	"tools/python-slack-sdk/rtm",
+	"tools/python-slack-sdk/scim",
 	{ "type": "html", "value": "<hr>" },
 	{
 		"type": "category",
 		"label": "Legacy slackclient v2",
 		"items": [
-			"python-slack-sdk/legacy/index",
-			"python-slack-sdk/legacy/auth",
-			"python-slack-sdk/legacy/basic_usage",
-			"python-slack-sdk/legacy/conversations",
-			"python-slack-sdk/legacy/real_time_messaging",
-			"python-slack-sdk/legacy/faq",
-			"python-slack-sdk/legacy/changelog"
+			"tools/python-slack-sdk/legacy/index",
+			"tools/python-slack-sdk/legacy/auth",
+			"tools/python-slack-sdk/legacy/basic_usage",
+			"tools/python-slack-sdk/legacy/conversations",
+			"tools/python-slack-sdk/legacy/real_time_messaging",
+			"tools/python-slack-sdk/legacy/faq",
+			"tools/python-slack-sdk/legacy/changelog"
 		]
 	},
-	"python-slack-sdk/v3-migration",
+	"tools/python-slack-sdk/v3-migration",
 	{ "type": "html", "value": "<hr>" },
 	{
 		"type": "category",
 		"label": "Tutorials",
 		"items": [
-			"python-slack-sdk/tutorial/uploading-files",
-			"python-slack-sdk/tutorial/understanding-oauth-scopes"
+			"tools/python-slack-sdk/tutorial/uploading-files",
+			"tools/python-slack-sdk/tutorial/understanding-oauth-scopes"
 		]
 	},
 	{ "type": "html", "value": "<hr>" },
