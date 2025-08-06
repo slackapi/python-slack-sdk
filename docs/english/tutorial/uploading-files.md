@@ -258,6 +258,6 @@ Once we run this, the `files` array should be empty. The count for files found w
 
 This tutorial summarized how to use the Slack API to upload files and share them within a channel, using the Python SDK. The same principles apply to other languages as well, so if Python isn't your fancy, feel free to try out our other SDKs:
 
-* [Java Slack SDK](/java-slack-sdk/)
-* [Node Slack SDK](/node-slack-sdk/)
-* [Deno Slack SDK](/deno-slack-sdk/)
+* [Java Slack SDK](/tools/java-slack-sdk/)
+* [Node Slack SDK](/tools/node-slack-sdk/)
+* [Deno Slack SDK](/tools/deno-slack-sdk/)
