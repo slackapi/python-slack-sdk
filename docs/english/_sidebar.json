@@ -1,0 +1,66 @@
+[
+	{
+		"type": "doc",
+		"id": "tools/python-slack-sdk/index",
+		"label": "Python Slack SDK",
+		"className": "sidebar-title"
+	},
+	{
+		"type": "html",
+		"value": "<hr>"
+	},
+	"tools/python-slack-sdk/installation",
+	"tools/python-slack-sdk/web",
+	"tools/python-slack-sdk/webhook",
+	"tools/python-slack-sdk/socket-mode",
+	"tools/python-slack-sdk/oauth",
+	"tools/python-slack-sdk/audit-logs",
+	"tools/python-slack-sdk/rtm",
+	"tools/python-slack-sdk/scim",
+	{ "type": "html", "value": "<hr>" },
+	{
+		"type": "category",
+		"label": "Legacy slackclient v2",
+		"items": [
+			"tools/python-slack-sdk/legacy/index",
+			"tools/python-slack-sdk/legacy/auth",
+			"tools/python-slack-sdk/legacy/basic_usage",
+			"tools/python-slack-sdk/legacy/conversations",
+			"tools/python-slack-sdk/legacy/real_time_messaging",
+			"tools/python-slack-sdk/legacy/faq",
+			"tools/python-slack-sdk/legacy/changelog"
+		]
+	},
+	"tools/python-slack-sdk/v3-migration",
+	{ "type": "html", "value": "<hr>" },
+	{
+		"type": "category",
+		"label": "Tutorials",
+		"items": [
+			"tools/python-slack-sdk/tutorial/uploading-files",
+			"tools/python-slack-sdk/tutorial/understanding-oauth-scopes"
+		]
+	},
+	{ "type": "html", "value": "<hr>" },
+	{
+		"type": "link",
+		"label": "Reference",
+		"href": "https://docs.slack.dev/tools/python-slack-sdk/reference/index.html"
+	},
+	{ "type": "html", "value": "<hr>" },
+	{
+		"type": "link",
+		"label": "Release notes",
+		"href": "https://github.com/slackapi/python-slack-sdk/releases"
+	},
+	{
+		"type": "link",
+		"label": "Code on GitHub",
+		"href": "https://github.com/SlackAPI/python-slack-sdk"
+	},
+	{
+		"type": "link",
+		"label": "Contributors Guide",
+		"href": "https://github.com/SlackAPI/python-slack-sdk/blob/main/.github/contributing.md"
+	}
+]

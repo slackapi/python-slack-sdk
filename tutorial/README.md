@@ -54,7 +54,6 @@ Open up your new project folder "PythOnBoardingBot" in your text editor.
 ## Coming up next
 - Add tests to your app.
 - Add starring a message as an onboarding task.
-- Run this app on [Glitch](https://glitch.com/).
 - Creating a Slack "MessageBuilder" object. This would aid in the creation of complex messages.
 - Running this app from the command line with [`$ click_`](https://click.palletsprojects.com/en/7.x/).
 - How to run this app on multiple teams.
