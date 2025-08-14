@@ -216,7 +216,6 @@ def _receive_messages(
                     # Note that bad connections can be detected by monitoring threads
                     # the Socket Mode client automatically reconnects to a new endpoint later.
                     logger.debug("The connection seems to be already closed.")
-                    return bytes()
                 raise e
 
     return _fetch_messages(
