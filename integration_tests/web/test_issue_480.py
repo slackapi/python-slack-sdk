@@ -43,7 +43,7 @@ class TestWebClient(unittest.TestCase):
         after = len(multiprocessing.active_children())
         self.assertEqual(0, after - before)
 
-    # fails with Python 3.6
+    # fails with Python 3.6 (no longer supported)
     def test_issue_480_threads(self):
         client = self.sync_client
         before = threading.active_count()
@@ -53,7 +53,7 @@ class TestWebClient(unittest.TestCase):
         after = threading.active_count()
         self.assertEqual(0, after - before)
 
-    # fails with Python 3.6
+    # fails with Python 3.6 (no longer supported)
     @async_test
     async def test_issue_480_threads_async(self):
         client = self.async_client

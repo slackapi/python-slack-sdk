@@ -44,7 +44,7 @@ def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
 
     Returns:
         The user agent string.
-        e.g. 'Python/3.6.7 slackclient/2.0.0 Darwin/17.7.0'
+        e.g. 'Python/3.7.0 slackclient/2.0.0 Darwin/17.7.0'
     """
     # __name__ returns all classes, we only want the client
     client = "{0}/{1}".format("slackclient", version.__version__)
@@ -91,7 +91,7 @@ def _get_headers(
             e.g. {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer xoxb-1234-1243',
-                'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
+                'User-Agent': 'Python/3.7.0 slack/2.1.0 Darwin/17.7.0'
             }
     """
     final_headers = {

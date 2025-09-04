@@ -56,7 +56,7 @@ With this, all your Slack app configuration is done. Let's start coding.
 
 ### Creating a new project {#create-new-project}
 
-First, ensure you're using Python version 3.6 or above. While the current standard is for the `python3` and `pip3` commands to use Python 3.6 or above, it's best to ensure your runtime is always using the latest version of Python. [pyenv](https://github.com/pyenv/pyenv) is a handy tool that can do this for you. 
+First, ensure you're using Python version 3.7 or above. While the current standard is for the `python3` and `pip3` commands to use Python 3.7 or above, it's best to ensure your runtime is always using the latest version of Python. [pyenv](https://github.com/pyenv/pyenv) is a handy tool that can do this for you. 
 
 We'll create a brand new virtual environment and install the required library dependencies using the following commands.
 

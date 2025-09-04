@@ -69,7 +69,7 @@ If you don't wish to upgrade yet, be sure to pin your module for the Python `sla
 
 ### Minimum Python versions {#minimum-versions}
 
-`slackclient` v2.x requires Python 3.6 (or higher). Support for Python 2.7 is maintained in the existing `slackclient` v1.x.
+`slackclient` v2.x requires Python 3.7 (or higher). Support for Python 2.7 is maintained in the existing `slackclient` v1.x.
 
 Client v1 support:
 - Python 2: Python 2.7 was supported in the 1.x version of the client up until Dec 31st, 2019.
