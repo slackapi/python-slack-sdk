@@ -18,5 +18,5 @@ boto3<=2
 moto>=4.0.13,<6
 mypy<=1.15.0
 # For AsyncSQLAlchemy tests
-greenlet<=
+greenlet<=4git 
 aiosqlite<=1
