@@ -9,7 +9,7 @@ flake8>=5.0.4,<8
 #  Don't change this version without running CI builds;
 #  The latest version may not be available for older Python runtime
 black>=22.8.0; python_version=="3.7"
-black==22.10.0; python_version>"3.7"
+black==22.10.0; python_version>="3.8"
 click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=6.0.0,<8
 #  used only under slack_sdk/*_store
@@ -18,5 +18,5 @@ boto3<=2
 moto>=4.0.13,<6
 mypy<=1.15.0
 # For AsyncSQLAlchemy tests
-greenlet<=4
+greenlet<=
 aiosqlite<=1
