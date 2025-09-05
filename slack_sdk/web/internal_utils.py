@@ -44,7 +44,7 @@ def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
 
     Returns:
         The user agent string.
-        e.g. 'Python/3.7.0 slackclient/2.0.0 Darwin/17.7.0'
+        e.g. 'Python/3.7.17 slackclient/2.0.0 Darwin/17.7.0'
     """
     # __name__ returns all classes, we only want the client
     client = "{0}/{1}".format("slackclient", version.__version__)

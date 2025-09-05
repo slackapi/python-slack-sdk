@@ -25,7 +25,7 @@ Before anything else you'll need a Slack team. You can [Sign into an existing Sl
 Check your installation by running the following command in your terminal:
 ```
 $ python3 --version
--> Python 3.7.0
+-> Python 3.7.17
 ```
 
 You'll need to install Python 3.7 if you receive the following error:

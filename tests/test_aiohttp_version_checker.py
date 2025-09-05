@@ -19,7 +19,7 @@ class TestAiohttpVersionChecker(unittest.TestCase):
 
         validate_aiohttp_version("2.1.3", print)
         self.assertEqual(state["counter"], 1)
-        validate_aiohttp_version("3.7.0", print)
+        validate_aiohttp_version("3.6.3", print)
         self.assertEqual(state["counter"], 2)
         validate_aiohttp_version("3.7.0", print)
         self.assertEqual(state["counter"], 3)
