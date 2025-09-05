@@ -56,7 +56,7 @@ def _get_headers(
             e.g. {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer xoxb-1234-1243',
-                'User-Agent': 'Python/3.7.0 slack/2.1.0 Darwin/17.7.0'
+                'User-Agent': 'Python/3.7.17 slack/2.1.0 Darwin/17.7.0'
             }
     """
     final_headers = {
