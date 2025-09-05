@@ -1,6 +1,6 @@
 # Installation
 
-This package supports Python 3.6 and higher. We recommend using [PyPI](https://pypi.python.org/pypi) for installation. Run the following command:
+This package supports Python 3.7 and higher. We recommend using [PyPI](https://pypi.python.org/pypi) for installation. Run the following command:
 
 ```bash
 pip install slack-sdk
