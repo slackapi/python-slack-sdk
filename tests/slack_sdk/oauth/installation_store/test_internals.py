@@ -39,7 +39,7 @@ def test_timestamp_to_type(ts, target_type, expected_result):
 
 
 def test_timestamp_to_type_invalid_str():
-    match = "Invalid isoformat string" if sys.version_info[:2] > (3, 6) else "time data .* does not match format"
+    match = "Invalid isoformat string"
     with pytest.raises(ValueError, match=match):
         _timestamp_to_type("not-a-timestamp", int)
 

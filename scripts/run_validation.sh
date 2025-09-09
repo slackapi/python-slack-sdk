@@ -7,9 +7,8 @@ set -e
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-pip install -U pip setuptools wheel
-pip install -r requirements/testing.txt \
-  -r requirements/optional.txt
+pip install -U -r requirements/testing.txt \
+  -U -r requirements/optional.txt
 
 echo "Generating code ..." && python scripts/codegen.py --path .
 echo "Running black (code formatter) ..." && black slack_sdk/

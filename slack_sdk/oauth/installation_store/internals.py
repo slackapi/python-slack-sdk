@@ -1,18 +1,11 @@
-import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Type, TypeVar, Union
 
 
 def _from_iso_format_to_datetime(iso_datetime_str: str) -> datetime:
-    if sys.version_info[:2] == (3, 6):
-        format = "%Y-%m-%d %H:%M:%S"
-        if "." in iso_datetime_str:
-            format += ".%f"
-        return datetime.strptime(iso_datetime_str, format).replace(tzinfo=timezone.utc)
-    else:
-        if "+" not in iso_datetime_str:
-            iso_datetime_str += "+00:00"
-        return datetime.fromisoformat(iso_datetime_str)
+    if "+" not in iso_datetime_str:
+        iso_datetime_str += "+00:00"
+    return datetime.fromisoformat(iso_datetime_str)
 
 
 def _from_iso_format_to_unix_timestamp(iso_datetime_str: str) -> float:
