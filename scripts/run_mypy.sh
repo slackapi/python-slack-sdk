@@ -7,7 +7,7 @@ script_dir=$(dirname $0)
 cd ${script_dir}/..
 
 pip install -U pip setuptools wheel
-pip install -r requirements/testing.txt \
-  -r requirements/optional.txt
+pip install -U -r requirements/testing.txt \
+  -U -r requirements/optional.txt
 
 mypy --config-file pyproject.toml
