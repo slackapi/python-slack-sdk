@@ -394,19 +394,19 @@ def _upload_file_via_v2_url(
     else:
         resp = urlopen(req, context=ssl, timeout=timeout)
 
-    charset = resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
+    charset = resp.headers.get_content_charset() or "utf-8"
     # read the response body here
-    body: str = resp.read().decode(charset)  # type: ignore[union-attr]
+    body: str = resp.read().decode(charset)
     if logger.level <= logging.DEBUG:
         message = (
             "Received the following response - "
-            f"status: {resp.status}, "  # type: ignore[union-attr]
-            f"headers: {dict(resp.headers)}, "  # type: ignore[union-attr]
+            f"status: {resp.status}, "
+            f"headers: {dict(resp.headers)}, "
             f"body: {body}"
         )
         logger.debug(message)
 
-    return {"status": resp.status, "headers": resp.headers, "body": body}  # type: ignore[union-attr]
+    return {"status": resp.status, "headers": resp.headers, "body": body}
 
 
 def _validate_for_legacy_client(

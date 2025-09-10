@@ -166,7 +166,7 @@ class Option(JsonObject):
     different required formats in different situations
     """
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
@@ -313,7 +313,7 @@ class OptionGroup(JsonObject):
     different required formats in different situations
     """
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
@@ -395,7 +395,7 @@ class OptionGroup(JsonObject):
 
 
 class ConfirmObject(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
 
     title_max_length = 100
     text_max_length = 300
