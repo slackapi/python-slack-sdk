@@ -313,7 +313,7 @@ class OptionGroup(JsonObject):
     different required formats in different situations
     """
 
-    attributes: Set[str] = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
